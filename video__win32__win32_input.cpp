@@ -620,12 +620,15 @@ sw32 win32_input_class::process(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 		  him=LoadImage(i4_win32_instance,"bitmaps/loading.bmp",IMAGE_BITMAP,640,480,LR_LOADFROMFILE|LR_CREATEDIBSECTION);
 		  if (him)
 			  {
+			  RECT rectangle;
+			  GetClientRect(hWnd,&rectangle);
 			  hdcImage = CreateCompatibleDC( NULL );
-              SelectObject( hdcImage, him );
-			  BitBlt( hdc, 0, 0, 640, 480, 
+              HGDIOBJ origobj=SelectObject( hdcImage, him );
+			  BitBlt( hdc, 0, 0, rectangle.right, rectangle.bottom, 
                  hdcImage, 0, 0, SRCCOPY );
-			  DeleteDC(hdcImage);
+			  SelectObject(hdcImage,origobj);
 			  DeleteObject(him);
+			  DeleteDC(hdcImage);
 			  initbitmapdrawn=i4_T;
 			  }
 		  
