@@ -37,7 +37,8 @@ class i4_menu_item_class;
 
 class i4_list_pick : public i4_parent_window_class
 {
-  sw32 total_items;
+    protected:
+  w32 total_items;
   i4_window_class **items;
   i4_color background;
   w32 length;
@@ -66,6 +67,18 @@ public:
   virtual void update(w32 new_total_items,i4_window_class **new_items);
 
   virtual void reposition_start(sw32 new_start);
+
+  w32 num_items()
+      {
+      return total_items;
+      }
+  i4_window_class *get_item(w32 item)
+      {
+      if (item<total_items)
+          return items[item];
+      else
+          return 0;
+      }
   
   virtual void parent_draw(i4_draw_context_class &context);
 
@@ -75,6 +88,48 @@ public:
 
   virtual void receive_event(i4_event *ev);
 };
+
+//similar to parent, but copies the list to an internal buffer
+class i4_list_pick_cpitems:public i4_list_pick
+    {
+    public:
+        i4_list_pick_cpitems(w16 width, w16 height,
+            w32 _total_items,
+            i4_window_class **_items,
+            w32 scroll_event_id,
+            i4_color background)
+        :i4_list_pick(width,height,
+        _total_items,
+        (items=(i4_window_class**)malloc(_total_items*sizeof(i4_window_class*)),
+        memcpy(items,_items,_total_items*sizeof(i4_window_class*)),
+        items),scroll_event_id,background,i4_T)
+            {
+            }
+        ~i4_list_pick_cpitems()
+            {
+            for (w32 i=0; i<total_items; i++)
+                {
+                if (items[i]->get_parent()==this)
+                    remove_child(items[i]);
+                }
+            if (free_items)
+                {
+                for (w32 i=0; i<total_items; i++)
+                    {
+                    delete items[i];
+                    items[i]=0;
+                    }
+                
+                }
+            free(items);
+            items=0;
+            total_items=0;
+            free_items=i4_F;
+            }
+        void receive_event(i4_event *ev);
+        void update(w32 new_total_items, i4_window_class **new_items);
+
+    };
 
 
 #endif

@@ -38,11 +38,11 @@
 #include "loaders/jpg/jpeglib.h"
 #include "loaders/jpg/jmemsys.h"		/* import the system-dependent declarations */
 
-#ifndef NO_GETENV
-#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare getenv() */
-extern char * getenv JPP((const char * name));
-#endif
-#endif
+//#ifndef NO_GETENV
+//#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare getenv() */
+//extern char * getenv JPP((const char * name));
+//#endif
+//#endif
 
 
 /*

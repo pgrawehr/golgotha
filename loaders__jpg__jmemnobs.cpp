@@ -29,10 +29,10 @@
 #include "loaders/jpg/jmemsys.h"		/* import the system-dependent declarations */
 #include "memory/malloc.h"
 
-#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare malloc(),free() */
-extern void * malloc JPP((size_t size));
-extern void free JPP((void *ptr));
-#endif
+//#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare malloc(),free() */
+//extern void * malloc JPP((size_t size));
+//extern void free JPP((void *ptr));
+//#endif
 
 
 /*

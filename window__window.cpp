@@ -419,7 +419,14 @@ i4_window_class::i4_window_class(w16 w, w16 h) : w(w),h(h)
   global_image=0;
   parent=0;
   cursor=0;
+  next=0;
 }
+
+void i4_window_class::bring_to_front()
+    {
+    if (parent)
+        parent->bring_to_front(this);
+    }
 
 
 i4_parent_window_class::i4_parent_window_class(w16 w, w16 h) : i4_window_class(w,h)
@@ -430,6 +437,18 @@ i4_parent_window_class::i4_parent_window_class(w16 w, w16 h) : i4_window_class(w
   mouse_focus=children.end();
   drag_drop_focus=children.end();
 }
+
+void i4_parent_window_class::bring_to_front(i4_window_class *wnd)
+    {
+    win_iter c=children.begin();
+    for (;c!=children.end();++c)
+        {
+        if (c.get()==wnd)
+            {
+            children.swap(c,children.end());
+            }
+        }
+    }
 
 i4_parent_window_class::win_iter i4_parent_window_class::find_window(i4_coord global_mouse_x, 
                                                                      i4_coord global_mouse_y)
@@ -451,11 +470,7 @@ i4_parent_window_class::win_iter i4_parent_window_class::find_window(i4_coord gl
         global_mouse_x<c->x()+c->width() && 
         global_mouse_y<c->y()+c->height())
 		{
-		
-		
 		find=c;
-		
-		
 		}
   }
   return find;

@@ -26,6 +26,8 @@
 #include <windowsx.h>
 #include <winsock.h>
 #include <mmsystem.h>
+#include <memory.h>
+#include <direct.h>
 // TODO: reference additional headers your program requires here
 
 //{{AFX_INSERT_LOCATION}}

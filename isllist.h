@@ -45,6 +45,8 @@ public:
     T& operator*() const { return *node; }
     T* operator->() const { return node; }
 
+    T* get() const {return node;}
+
     iterator& operator++()
     {
       node = node->next;
@@ -119,6 +121,41 @@ public:
     other.list=list;
     list=other_list;
   }
+
+  void swap(iterator first, iterator second)
+      {
+        if (first==second)
+            return;
+        iterator p=begin();
+        if (p==first)
+            {
+            erase();
+            first->next=0;
+            if (second==end())
+                {
+                insert_end(*first);
+                return;
+                }
+            insert_after(second,*first);
+            }
+        iterator last=begin();
+        iterator cur=begin();
+        while (cur!=first && cur!=end())
+            {
+            last=cur;
+            cur++;
+            }
+        if (cur==end())
+            return;
+        erase_after(last);
+        cur->next=0;
+        if (second==end())
+            {
+            insert_end(*cur);
+            return;
+            }
+        insert_after(second,*cur);
+      }
   
   T *find_and_unlink(T *item)
   {

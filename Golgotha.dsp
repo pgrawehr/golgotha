@@ -154,6 +154,10 @@ SOURCE=.\error__error.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\file__dialog.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\file__file.cpp
 # End Source File
 # Begin Source File

@@ -406,7 +406,7 @@ void i4_language_extend(i4_str &string, i4_str::iterator where)
     LoadString(i4_win32_instance,IDS_LANGUAGE,buf+1,9);
     
 #endif
-    char buf2[255];
+    //char buf2[255];
     //if (i4_get_registry(I4_REGISTRY_USER,0,"language",buf2,255)&&buf2[0])
     //    {
     //    strncpy(buf+1,buf2,9);

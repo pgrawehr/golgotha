@@ -20,19 +20,24 @@ class i4_text_window_class : public i4_window_class
   i4_font_class *font;
 
 public:
-  i4_text_window_class(const i4_const_str &text,
+  i4_text_window_class(const i4_const_str &_text,
                        i4_graphical_style_class *hint,
                        i4_font_class *_font=0)
     : i4_window_class(0, 0),
       hint(hint),
-      text(new i4_str(text)),
+      text(new i4_str(_text)),
       font(_font)
   {
     if (!font)
       font=hint->font_hint->normal_font;
     
-    resize(font->width(text), font->height(text));
+    resize(font->width(_text), font->height(_text));
   }
+
+  void resize_to_fit_text()
+      {
+      resize(font->width(*text),font->height(*text));
+      }
                     
   virtual void draw(i4_draw_context_class &context)
   {

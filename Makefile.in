@@ -75,6 +75,7 @@ OBJS = \
 	$(INTDIR)/editor__solvemap_astar2.o \
 	$(INTDIR)/editor__solvemap_breadth.o \
 	$(INTDIR)/error__error.o \
+	$(INTDIR)/file__dialog.o \
 	$(INTDIR)/font__font.o \
 	$(INTDIR)/golg__border_frame.o \
 	$(INTDIR)/golg__camera.o \

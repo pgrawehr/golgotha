@@ -3549,6 +3549,7 @@ i4_text_input_class::~i4_text_input_class()
   i4_kernel.unrequest_events(this,i4_device_class::FLAG_CHAR_SEND);
   stop_blink();
   delete st;
+  st=0;
 }
 
 
