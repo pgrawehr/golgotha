@@ -379,6 +379,40 @@ void i4_kernel_device_class::end_modal(i4_window_class *ref)
 		};
 	}
 
+void i4_kernel_device_class::flush_handlers()
+    {
+    list_lock.lock();
+    // delete any event handlers that are qued for deletion
+    i4_isl_list<event_handler_delete_node>::iterator i=eh_delete_list.begin(), 
+        last=eh_delete_list.end(), q;
+    
+    
+    while (i!=eh_delete_list.end())
+        {
+        if (!i->who->thinking())
+            {
+            q=i;
+            ++i;
+            
+            if (last!=eh_delete_list.end())
+                eh_delete_list.erase_after(last);
+            else
+                eh_delete_list.erase();
+            
+            list_lock.unlock();     // unlock because deleted object might send events
+#ifdef DEBUG_HANDLER
+            i4_warning("Executing postphoned deletion of handler 0x%x",q->who);
+#endif
+            delete q->who;
+            delete &*q;
+            
+            list_lock.lock();
+            }
+        else ++i;
+        }
+    
+    list_lock.unlock();
+    }
 
 i4_bool i4_kernel_device_class::flush_events()
 {
@@ -386,7 +420,7 @@ i4_bool i4_kernel_device_class::flush_events()
 
   i4_bool ret=i4_F;
 
-  // send any events that were qued
+  // send any events that were queued
   while (list.begin()!=list.end())
   {
     list_lock.lock();
@@ -418,38 +452,7 @@ i4_bool i4_kernel_device_class::flush_events()
   }
 
 
-  list_lock.lock();
-  // delete any event handlers that are qued for deletion
-  i4_isl_list<event_handler_delete_node>::iterator i=eh_delete_list.begin(), 
-    last=eh_delete_list.end(), q;
-
-
-  while (i!=eh_delete_list.end())
-  {
-    if (!i->who->thinking())
-    {
-      q=i;
-      ++i;
-      
-      if (last!=eh_delete_list.end())
-        eh_delete_list.erase_after(last);
-      else
-        eh_delete_list.erase();
-
-      list_lock.unlock();     // unlock because deleted object might send events
-#ifdef DEBUG_HANDLER
-      i4_warning("Executing postphoned deletion of handler 0x%x",q->who);
-#endif
-      delete q->who;
-      delete &*q;
-
-      list_lock.lock();
-    }
-    else ++i;
-  }
-
-
-  list_lock.unlock();
+  flush_handlers();
 
   return ret;
 }
@@ -559,6 +562,7 @@ void i4_kernel_device_class::init()
 void i4_kernel_device_class::uninit()
 	{
 	modal_stack.uninit();
+    flush_handlers();
 	}
 
 i4_kernel_device_class::i4_kernel_device_class():modal_stack(0,20)
@@ -614,6 +618,7 @@ void i4_kernel_device_class::delete_handler(i4_event_handler_class *handler)
             {
             return;//already there, don't do anything. 
             }
+        ++i;
         }
       eh_delete_list.insert(*(new event_handler_delete_node(handler)));
       }
@@ -647,6 +652,7 @@ void i4_kernel_device_class::delete_handler(i4_event_handler_class *handler)
 #endif
             return;
             }
+        ++i;
         }
 #ifdef HANDLER_DEBUG
     i4_warning("Immediate delete of handler 0x%x.",handler);

@@ -114,6 +114,8 @@ class i4_kernel_device_class: public i4_init_class
 
   void broadcast_event_type(i4_event *ev, w32 event_type);
   void delete_handler(i4_event_handler_class *handler);
+  private:
+  void flush_handlers();
 } ;
 
 extern i4_kernel_device_class i4_kernel;

@@ -525,10 +525,12 @@ void g1_map_piece_class::find_target(i4_bool unfog)
 {
   pf_find_target.start();
 
-  if (attack_target.valid() && 
-      (!can_attack(attack_target.get()) || 
-	  (!attack_target->get_flag(DANGEROUS) && 
-	  !get_flag(SPECIALTARGETS))))
+  //if (attack_target.valid() && 
+  //    (!can_attack(attack_target.get()) || 
+//	  (!attack_target->get_flag(DANGEROUS) && 
+//	  !get_flag(SPECIALTARGETS))))
+  if (!attack_target.valid() ||
+      !can_attack(attack_target.get()))
     attack_target = 0;
 
   if (!find_target_now())
@@ -1209,7 +1211,10 @@ i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
 			if (diffangle<-i4_pi()) diffangle += 2*i4_pi();
 			else if (diffangle>i4_pi()) diffangle -= 2*i4_pi();
 			
-			go_reverse = (diffangle>i4_pi()/2) || (diffangle<-i4_pi()/2);
+			go_reverse = 
+                (diffangle>i4_pi()/2) || (diffangle<-i4_pi()/2) ||
+                (c_accel<0);
+
 			if (!reversible) go_reverse=i4_F;//if vehicle cannot move backwards
 			
 			//dont worry about turn radii unless he's actually ready for forward movement

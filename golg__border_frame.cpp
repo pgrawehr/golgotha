@@ -65,8 +65,8 @@ void g1_amount_display_class::update(int new_amount, int max_amount)
 		last_amount=new_amount;
 		last_max=max_amount;
 		request_redraw(i4_F);
-		if (parent)
-			parent->request_redraw();
+		//if (parent)
+		//	parent->request_redraw();
 	}
 }
 
@@ -354,7 +354,7 @@ void g1_border_frame_class::relocate(i4_parent_window_class *w, char *loc,
   for (li_object *o=li_get_value(loc); o; o=li_cdr(o,0), i++)
   {
     if (o==NULL)
-        return;//no more entries in list. 
+        break;//no more entries in list. 
     li_object *v=li_car(o,0);
     
     int x=li_get_int(li_first(v,0),0), y=li_get_int(li_second(v,0),0);
@@ -364,12 +364,26 @@ void g1_border_frame_class::relocate(i4_parent_window_class *w, char *loc,
       if (amount_windows[i]->get_parent())
         amount_windows[i]->get_parent()->remove_child(amount_windows[i]);
     
+      //any windows with negative offsets are not showed at all.
+      //if (x>0&&y>0)
       w->add_child(x+dx,y+dy, amount_windows[i]);
     }   
   }
-
-
-
+  //move the remaining windows (that are obviously not used for the 
+  //current view) out of the way.
+  for (;i<MAX_AMOUNT_WINDOWS;i++)
+      {
+      if (amount_windows[i])
+          {
+          if (amount_windows[i]->get_parent())
+              amount_windows[i]->get_parent()->remove_child(amount_windows[i]);
+          //move far beyound the screen. 
+          //removing them completelly would result in a nasty problem
+          //because the strategy window and the border frame window
+          //share these child windows, and so who's gonna delete them?
+          w->add_child(-100,-100,amount_windows[i]);
+          }
+      }
 
 }
 
@@ -408,7 +422,7 @@ g1_border_frame_class::g1_border_frame_class()
   amount_windows[MISSILES]=new g1_amount_display_class("guided");
   amount_windows[MAINGUN]=new g1_amount_display_class("120mm");
 
-
+  this->radar_window=0;
   //set_cursor(0);
 
 
@@ -763,6 +777,19 @@ void g1_border_frame_class::update()   // check for changes in the game
 
 g1_border_frame_class::~g1_border_frame_class()
 {
+/*
+  for (int i=0;i<MAX_AMOUNT_WINDOWS;i++)
+      {
+      if (amount_windows[i])
+          {
+          amount_windows[i]->call_stack_counter++;
+          i4_kernel.delete_handler(amount_windows[i]);
+          amount_windows[i]->call_stack_counter--;
+          
+          }
+      amount_windows[i]=0;
+      }
+      */
   if (frame)
   {
     delete frame;

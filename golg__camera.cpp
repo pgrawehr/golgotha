@@ -164,9 +164,11 @@ li_object *g1_follow_mode(li_object *o, li_environment *env)
 li_object *g1_goto_stank(li_object *o, li_environment *env)
     {
     g1_player_piece_class *com=g1_player_man.get_local()->get_commander();
+    if (!com)
+        return 0;
     li_call("strategy_on_bottom");
     if (g1_current_view_state() && com)
-        g1_current_view_state()->suggest_camera_mode(G1_FOLLOW_MODE, com->global_id);
+        g1_current_view_state()->suggest_camera_mode(G1_ACTION_MODE, com->global_id);
     return 0;
     }
 
