@@ -153,7 +153,7 @@ void r1_texture_manager_class::reopen()
 void r1_texture_manager_class::uninit()
 {
   sw32 i,j;
-  //before freing memory, we must be shure that no requests are pending
+  //before freing memory, we must be sure that no requests are pending
   while (!i4_async_reader::is_idle())
 	  {
 	  i4_thread_sleep(1);//wait until nothing left in queue 

@@ -1425,6 +1425,7 @@ void r1_dx5_texture_class::next_frame()
 			pf_jpg_texture_decompress.stop();
 			delete rp;
 			r1_image_list_struct *ils=image_list.add();
+			ils->init();
 			ils->usage=30;
 			ils->image=im;
 			ils->id=u->mip->entry->id;
@@ -1442,11 +1443,13 @@ void r1_dx5_texture_class::next_frame()
 					{
 					im=image_list[x].image;
 					image_list[x].usage=30;
+					image_list[x].unlock();
+					break;
 					}
 				//image_list[x].usage--;
 				//if (image_list[x].usage==0) image_list[x].usage=1;
 			}
-			I4_ASSERT(im,"Internal error in texture loader: Image deleted during access.");
+			I4_ASSERT(im,"Internal error in software texture loader: Image deleted during access.");
 			size_image_to_texture(texture_ptr,im,
 				u->mip->width,u->mip->height,tex_by,
 				u->mip->entry->is_transparent(),
@@ -1491,7 +1494,8 @@ void r1_dx5_texture_class::next_frame()
   for(int x=0;x<image_list.size();x++)
 			{				
 				image_list[x].usage--;
-				if (image_list[x].usage==0) image_list[x].usage=1;
+				if (image_list[x].usage==0) 
+					image_list[x].usage=1;
 			}
   array_lock.unlock();
   if (tex_no_heap && tex_no_heap->needs_cleanup)

@@ -568,6 +568,13 @@ void r1_software_texture_class::next_frame()
 
   finished_array.clear();
 
+  for(int x=0;x<image_list.size();x++)
+  {				
+	  image_list[x].usage--;
+	  if (image_list[x].usage==0) 
+		  image_list[x].usage=1;
+  }
+
   array_lock.unlock();
 
   if (tex_heap_man && tex_heap_man->needs_cleanup) //may not yet be initialized
