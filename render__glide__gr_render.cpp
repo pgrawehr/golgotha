@@ -538,10 +538,14 @@ public:
 
   r1_glide_vram_class *vram() { return (r1_glide_vram_class *)tmanager; }
   
-
-  // returns false if display is not compatible with render_api, i.e. if you pass
-  // the directx display to the glide render api it return false
-  // init will create the texture manager, which can be used after this call
+  /*! Initializes the Glide renderer.
+  * Returns false if display is not compatible with render_api, i.e. if you pass
+  * the directx display to the glide render api it return false
+  * init will create the texture manager, which can be used after this call
+  * \note The Glide render api is obsolete and is unsupported.
+  *
+  * \param _display The display we are using
+  */
   virtual i4_bool init(i4_display_class *_display)
   {
 	//GetProcAddresses();

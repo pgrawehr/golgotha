@@ -307,59 +307,9 @@ public:
   }
 
   // return false if display not compatible with render api
-  virtual i4_bool init(i4_display_class *_display)
-  {
-	if (_display == i4_opengl_display) {
-	  display = _display;
-
-	  // initial texture state
-	  texture_mode = i4_T;
-	  glEnable(GL_TEXTURE_2D);
-	  last_node = 0;
-
-	  // initial depth buffer state
-	  glDepthMask(GL_TRUE);
-	  glEnable(GL_DEPTH_TEST);
-	  glDepthFunc(GL_LEQUAL);
-
-	  // set up glBlendColor
-	  set_constant_color(get_constant_color());
-
-	  glViewport(0, 0, display->width(), display->height());
-	  oo_half_width = 2.f / (float)display->width();
-	  oo_half_height = 2.f /(float)display->height();
-
-	  glMatrixMode(GL_PROJECTION);
-	  glLoadIdentity();
-
-	  glMatrixMode(GL_MODELVIEW);
-	  glLoadIdentity();
-
-	}
-	else
-        { //it's not an opengl capable display driver that was instantiated
-	  return i4_F;
-	}
-
-	tmanager = new r1_opengl_texture_manager_class(display->get_palette());
-
-	r1_name_cache_file("opengl");
-	return i4_T;
-  }
-
-  void enable_holy() {
-
-	if (holy_mode != i4_T) {
-	  pre_holy_alpha_mode = get_alpha_mode();
-	  pre_holy_write_mask = get_write_mask();
-
-	  set_write_mode(R1_WRITE_W | R1_COMPARE_W | R1_WRITE_COLOR);
-	  glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
-	  set_alpha_mode(R1_ALPHA_LINEAR);
-
-	  holy_mode = i4_T;
-	}
-  }
+  virtual i4_bool init(i4_display_class *display);
+  
+  void enable_holy();
 
   void disable_holy() {
 
@@ -582,6 +532,61 @@ void r1_opengl_render_class::enable_texture() {
   }
 
 }
+
+i4_bool r1_opengl_render_class::init(i4_display_class *_display)
+    {
+	if (_display == i4_opengl_display) {
+	  display = _display;
+
+	  // initial texture state
+	  texture_mode = i4_T;
+	  glEnable(GL_TEXTURE_2D);
+	  last_node = 0;
+
+	  // initial depth buffer state
+	  glDepthMask(GL_TRUE);
+	  glEnable(GL_DEPTH_TEST);
+	  glDepthFunc(GL_LEQUAL);
+
+	  // set up glBlendColor
+	  set_constant_color(get_constant_color());
+
+	  glViewport(0, 0, display->width(), display->height());
+	  oo_half_width = 2.f / (float)display->width();
+	  oo_half_height = 2.f /(float)display->height();
+
+	  glMatrixMode(GL_PROJECTION);
+	  glLoadIdentity();
+
+	  glMatrixMode(GL_MODELVIEW);
+	  glLoadIdentity();
+
+	}
+	else
+        { //it's not an opengl capable display driver that was instantiated
+	  return i4_F;
+	}
+
+	tmanager = new r1_opengl_texture_manager_class(display->get_palette());
+
+	r1_name_cache_file("opengl");
+	return i4_T;
+    }
+
+void r1_opengl_render_class::enable_holy() 
+    {
+    
+    if (holy_mode != i4_T) {
+        pre_holy_alpha_mode = get_alpha_mode();
+        pre_holy_write_mask = get_write_mask();
+        
+        set_write_mode(R1_WRITE_W | R1_COMPARE_W | R1_WRITE_COLOR);
+        glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
+        set_alpha_mode(R1_ALPHA_LINEAR);
+        
+        holy_mode = i4_T;
+        }
+    }
 
 void r1_opengl_render_class::use_texture(w32 index, r1_texture_handle handle, sw32 desired_width, w32 frame)
 {

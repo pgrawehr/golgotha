@@ -23,19 +23,32 @@
 #include "video/x11/x11_input.h" 
 #endif
 
-//#include "video/glide/glide.h"
-//#define DYNAHEADER _CREATE_STORAGE
+/*! \mainpage Golgotha source code documentation
+ * \par
+ * You are looking at the source code documentation of the
+ * Golgotha real time 3D Engine. The documentation is only partially
+ * complete, so not every class is properly documented and anotaded. 
+ * The information contained herein is mainly thought for developers
+ * working on the project to find their way trough the large code base.
+ * \par
+ * For a better overview of the different modules, refer to the 
+ * manual first. It gives a good overview over the different components
+ * of the engine. 
+ * \par 
+ * To find information on a particular class or method, you can use 
+ * the search facility. Just enter the name of the class or method
+ * you are interested in and you are there in no time. 
+ * \par Developer information
+ * If you are a developer and need more information about how a 
+ * particular feature works, don't hesitate to ask on the golgotha
+ * forums. We are also open for feature requests or bug reports, might
+ * they be real bugs or just incomplete/false documentation. Be aware
+ * that we are talking about a code base of 200'000 lines of code, so 
+ * it's just not possible at the moment to write the documentation in
+ * a completeness we all liked to have. 
+ */
 
-// this global will be used by video/directx/directx.c when opening a window
-//#include <windows.h>
-//#include <windowsx.h>
-//#include <stdio.h>
-//the following is not needed
-//#if 0
-//#include <io.h>
-//#include <fcntl.h>
-//#include <sys/stat.h>
-//#endif
+
 w32           i4_global_argc;
 i4_const_str *i4_global_argv;
 

@@ -201,17 +201,26 @@ public:
 
   //r1_texture_manager_class *set_tmanager(w32 index); //set the default tmanager to the index - not used, too dangerous
 
-  //creates a new texture manager (the kind depends on the subclass) and 
-  //returns the new and its index.  
+  /// Create a new texture manager.
+  /// Creates a new texture manager (the kind depends on the subclass) and 
+  /// returns the new and its index.  
   virtual r1_texture_manager_class *install_new_tmanager(w32 &index)=0;
 
-  // texture handle is obtained from the texture manager, this is enables texture mapping
+  /// Use a texture for rendering.
+  /// The texture handle is obtained from the texture manager, 
+  /// this implicitly enables texture mapping. 
+  /// This function uses the default texture manager. 
+  /// \param material_ref The texture handle to the texture to use.
+  /// \param desired_with How large should the texture be? This is used
+  /// to guess the required miplevel.
+  /// \param frame The current frame number, this is used to handle
+  /// the in-memory texture cache MRU buffer. 
   virtual void use_texture(r1_texture_handle material_ref, 
                            sw32 desired_width,
-                           w32 frame)                                                 = 0;
+                           w32 frame)                                = 0;
   virtual void use_texture(w32 tman_index, //which tman?
 	  r1_texture_handle material_ref,//texture handle
-	  sw32 desired_width,//will mainly be ignored
+	  sw32 desired_width,
 	  w32 frame)=0;
 
   void use_default_texture(w32 tman_index=-1)
@@ -228,22 +237,37 @@ public:
           use_texture(tman_index,mat,8,0);
           }
       }
-
-  // drawing will the constant color to render with if textures are disabled
+  /// Disable texturing. 
+  /// Drawing will use the constant color to render with if textures are disabled
   virtual void disable_texture()                                                      = 0;
-
-  //tints all r g b values (multiplies)
+  
+  /// Registers a color tint (usually a player color)
+  /// Tints are all r g b values (multiplies)
   virtual r1_color_tint_handle register_color_tint(i4_float r, i4_float g, i4_float b);
   
-  //calling this with a handle of 0 disables tinting
+  /// Use a color tint.
+  /// Calling this with a handle of 0 disables tinting
   virtual void set_color_tint(r1_color_tint_handle color_tint_handle);
 
-  // constant color is used by line drawing, and poly draws-if disable_texture 
+  /// Set the constant color for untextured rendering. 
+  /// Constant color is used by line drawing, and poly draws if 
+  /// the textures are disabled.  
   virtual void set_constant_color(w32 color)                          { const_color=color; }
+  /// Sets the shading mode.
+  /// See R1_SHADE* constants.
   virtual void set_shading_mode(r1_shading_type type)                 { shade_mode=type;   }
+  /// Sets the alpha mode.
+  /// See R1_ALPHA* constants
   virtual void set_alpha_mode(r1_alpha_type type)                     { alpha_mode=type;   }
+  /// Sets the write mask.
+  /// This is helpful if you want to prevent writting the z-buffer
+  /// for some reason during a call.
   virtual void set_write_mode(r1_write_mask_type mask)                { write_mask=mask;   }
+  /// Enables/Disables bilinear filtering.
+  /// Might or might not be supported by the current rendering device.
   virtual void set_filter_mode(r1_filter_type type)                   { filter_mode=type;  }
+  /// Enable/Disable fogging.
+  /// This is not yet supported. 
   virtual void set_fogging_mode(w32 fogcolor, i4_float startvalue, i4_float endvalue)
 	  {//currently only supported for d3d rendering
 	  };
@@ -261,7 +285,20 @@ public:
   */
   virtual void set_z_range(float near_z, float far_z)                                 = 0;
   public:
+  /** Render polygons with the current render settings. 
+  * This function is used to render triangle primitives. It draws
+  * \a t_verts - 2 triangles using the current color or texture to the
+  * display. The \a verts parameter must point to the array of vertices
+  * to be used. The vertices must already be transformed and lit.
+  * The triangles are to be rendered as TRIANGLE_FAN.
+  * \param t_verts The number of vertices to use. Since we use 
+  * TRIANGLE_FAN's this number must be 3 or larger.
+  * \param verts The pointer to the transformed and lit vertices.
+  */
   virtual void render_poly(int t_verts, r1_vert *verts)                               = 0;
+  /// Render polygons , indexed.
+  /// This does the same as the 2-parameter version, except that the
+  /// indices must not be in order.
   virtual void render_poly(int t_verts, r1_vert *verts, int *vertex_index);
   virtual void render_poly(int t_verts, r1_vert *verts, w16 *vertex_index);
   virtual void flush_vert_buffer()//Only used for dx right now
