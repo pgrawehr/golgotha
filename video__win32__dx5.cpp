@@ -283,6 +283,11 @@ i4_display_class::mode *i4_dx5_display_class::get_next_mode()
   return &amode;
 }
 
+li_object *show_gdi_surface5(li_object *o, li_environment *env)
+	{
+		i4_dx5_display_class_instance.FlipToGDISurface();
+		return 0;
+	}
 
 i4_bool i4_dx5_display_class::initialize_mode()
 {
@@ -410,6 +415,7 @@ i4_bool i4_dx5_display_class::initialize_mode()
 //    input.set_async_mouse(thread_mouse);
 //  }
 
+    li_add_function("show_gdi_surface",show_gdi_surface5);
   return i4_T;
 }
 
@@ -968,10 +974,9 @@ void i4_dx5_display_class::FlipToGDISurface()
 	return;
 	}
 
-li_object *show_gdi_surface(li_object *o, li_environment *env)
-	{
-		i4_dx5_display_class_instance.FlipToGDISurface();
-		return 0;
-	}
+li_object *show_gdi_surface_null(li_object *o, li_environment *env)
+    {
+    return 0;
+    }
 
-li_automatic_add_function(show_gdi_surface,"show_gdi_surface");
+li_automatic_add_function(show_gdi_surface_null,"show_gdi_surface");

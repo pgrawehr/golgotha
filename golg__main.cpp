@@ -594,6 +594,7 @@ void golgotha_app::do_main_menu()
 
 li_symbol_ref fo_sym("File/Open");
 
+/*
 void check_fo()
 {
   li_symbol *org=fo_sym.get();
@@ -601,7 +602,7 @@ void check_fo()
   
   if (org!=news)
     i4_warning("symbols off!");
-}
+}*/
 
 void golgotha_app::save_savegame()
 {
@@ -1015,6 +1016,7 @@ void golgotha_app::init()
   choice_first_level();
   
   g1_render.r_api = r1_create_api(display);//What does THIS do? 
+  i4_warning("Render api created successfully: %s.",g1_render.r_api->name());
   refresh();
   status->update(0.5f);
   //init the renderer!

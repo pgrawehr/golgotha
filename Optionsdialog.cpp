@@ -7,17 +7,20 @@
 #include "main/win_main.h"
 #include "video/win32/dx5_error.h"
 #include "render/dx5/r1_dx5.h"
+//#include "render/dx9/render.h"
 #include "app/registry.h"
 
-#ifdef _DEBUG
-#undef new
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
+//#ifdef _DEBUG
+//#undef new
+//#define new DEBUG_NEW
+//#undef THIS_FILE
+//static char THIS_FILE[] = __FILE__;
+//#endif
 
 #define ENTRY_AUTO_SELECT 1
 #define ENTRY_PLAIN_SOFTWARE 2
+#define ENTRY_DX9_HAL 3
+#define ENTRY_DX9_REF 4
 /////////////////////////////////////////////////////////////////////////////
 // Dialogfeld OptionsDialog 
 
@@ -34,7 +37,7 @@ OptionsDialog::OptionsDialog(CWnd* pParent /*=NULL*/)
 
 OptionsDialog::~OptionsDialog()
 	{
-	
+	//Cleanup();
 	}
 
 void OptionsDialog::DoDataExchange(CDataExchange* pDX)
@@ -70,6 +73,7 @@ BEGIN_MESSAGE_MAP(OptionsDialog, CPropertyPage)
 	ON_BN_CLICKED(IDC_Tex16, OnTex16)
 	ON_BN_CLICKED(IDC_Tex32, OnTex32)
 	ON_BN_CLICKED(IDC_TEXDEF, OnTexdef)
+	ON_WM_CLOSE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -266,6 +270,22 @@ void OptionsDialog::Apply()
 			i4_win32_startup_options.render_data=0;
 			i4_win32_startup_options.render_data_size=0;
 			}
+        if (indexdata==ENTRY_DX9_HAL)
+			{
+			i4_win32_startup_options.render=R1_RENDER_DIRECTX9_HAL;
+			if (i4_win32_startup_options.render_data)
+				free(i4_win32_startup_options.render_data);
+			i4_win32_startup_options.render_data=0;
+			i4_win32_startup_options.render_data_size=0;
+			}
+        if (indexdata==ENTRY_DX9_REF)
+			{
+			i4_win32_startup_options.render=R1_RENDER_DIRECTX9_REF;
+			if (i4_win32_startup_options.render_data)
+				free(i4_win32_startup_options.render_data);
+			i4_win32_startup_options.render_data=0;
+			i4_win32_startup_options.render_data_size=0;
+			}
 		}
 	else
 		{
@@ -304,10 +324,10 @@ BOOL OptionsDialog::OnInitDialog()
 	m_devices.SetCurSel(0);
 	char buf[256];
     ZeroMemory(buf,256);
-    wsprintf(buf,"Auflösung beim nächsten Programmstart:\n%dx%d mit Farbtiefe %d Bit. %s\n",
+    wsprintf(buf,"Resolution on next startup:\n%dx%d using %d bits per pixel. %s\n",
     i4_win32_startup_options.xres,i4_win32_startup_options.yres,
 	i4_win32_startup_options.bits,
-	i4_win32_startup_options.fullscreen?"":"(in einem Fenster)");
+	i4_win32_startup_options.fullscreen?"":"(Windowed)");
     m_currentmode.SetWindowText(buf);
     m_render_device.AddString("default");//need to change this
 	m_texture_quality.SetRange(3,10,TRUE);
@@ -329,7 +349,19 @@ BOOL OptionsDialog::OnInitDialog()
 	m_render_device.SetItemData(index,ENTRY_AUTO_SELECT);
 	index=m_render_device.AddString("Golgotha plain Software");
 	m_render_device.SetItemData(index,ENTRY_PLAIN_SOFTWARE);
-	if (r1_dx5_class_instance.d3d) r1_dx5_class_instance.d3d->EnumDevices((LPD3DENUMDEVICESCALLBACK) d3denumdevicescallback,&m_render_device);
+	if (r1_dx5_class_instance.d3d) 
+        r1_dx5_class_instance.d3d->EnumDevices((LPD3DENUMDEVICESCALLBACK) d3denumdevicescallback,&m_render_device);
+    else
+        {
+        //We can't really test this here, since including both
+        //dx5 and dx9 headers doesn't work.
+        index=m_render_device.AddString("DX9 HAL (default)");
+        m_render_device.SetItemData(index,ENTRY_DX9_HAL);
+        index=m_render_device.AddString("DX9 Reference (slow)");
+        m_render_device.SetItemData(index,ENTRY_DX9_REF);
+        //index=m_render_device.AddString("DX9 Software (medium)");
+        //m_render_device.SetItemData(index,ENTRY_DX9_SW);
+        }
 	m_render_device.SetCurSel(0);
 	if (i4_win32_startup_options.render==R1_RENDER_DIRECTX5_SOFTWARE)
 		{
@@ -369,6 +401,13 @@ void OptionsDialog::OnBtnCreate()
 	UINT iIndex;
 	LPDIRECTDRAW lpDD=NULL;
 	LPDIRECTDRAW2 lpDD2=NULL;
+    for (int j=0;j<m_resolutions.GetCount();j++)
+        {
+        void *p=m_resolutions.GetItemDataPtr(j);
+        if ((int)p>0x1000)
+            free (p);
+        m_resolutions.SetItemDataPtr(j,0);
+        }
 	m_resolutions.ResetContent();
 	resolutionchanged=true;
 	// GUID des ausgewählten Gerätes aus der Listbox (NULL für das primäre Gerät)
@@ -484,7 +523,8 @@ void OptionsDialog::OnBtnCreate()
 void OptionsDialog::OnDeleteItem(int nIDCtl, LPDELETEITEMSTRUCT lpDeleteItemStruct) 
 {
 	if (nIDCtl==IDC_DEVICES||nIDCtl==IDC_RESOLUTIONS)
-		{//Delete the pointers in the device and resolution list-boxes,
+		{
+        //Delete the pointers in the device and resolution list-boxes,
 		//but don't delete those in the renderers list box 
 		//They point to some data in the directx-dll!! =>BSOD
 		//And don't delete the special-purpose markers.
@@ -502,11 +542,29 @@ void OptionsDialog::OnWindowed()
 	SetModified(TRUE);
 }
 
+void OptionsDialog::Cleanup()
+    {
+    for (int i=0;i<m_devices.GetCount();i++)
+        {
+        void *p=m_devices.GetItemDataPtr(i);
+        if ((int)p>0x1000)
+            free (p);
+        m_devices.SetItemDataPtr(i,0);
+        }
+	m_devices.ResetContent();
+    for (int j=0;j<m_resolutions.GetCount();j++)
+        {
+        void *p=m_resolutions.GetItemDataPtr(j);
+        if ((int)p>0x1000)
+            free (p);
+        m_resolutions.SetItemDataPtr(j,0);
+        }
+	m_resolutions.ResetContent();
+    };
+
 BOOL OptionsDialog::DestroyWindow() 
 {
-	// TODO: Speziellen Code hier einfügen und/oder Basisklasse aufrufen
-	m_devices.ResetContent();
-	m_resolutions.ResetContent();
+	Cleanup();
 	return CPropertyPage::DestroyWindow();
 }
 
@@ -592,4 +650,17 @@ void OptionsDialog::OnTexdef()
 {
 	// TODO: Code für die Behandlungsroutine der Steuerelement-Benachrichtigung hier einfügen
 	SetModified();
+}
+
+void OptionsDialog::OnClose() 
+{
+	Cleanup();
+	
+	CPropertyPage::OnClose();
+}
+
+void OptionsDialog::OnCancel() 
+{
+    Cleanup();	
+	CPropertyPage::OnCancel();
 }

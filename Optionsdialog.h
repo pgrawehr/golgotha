@@ -18,6 +18,7 @@ public:
 	OptionsDialog(CWnd* pParent = NULL);   // Standardkonstruktor
 	virtual ~OptionsDialog();
 	void Apply();
+    void Cleanup();
 	LPGUID lpDevice;
 	bool resolutionchanged;
 // Dialogfelddaten
@@ -42,6 +43,7 @@ public:
 	//{{AFX_VIRTUAL(OptionsDialog)
 	public:
 	virtual BOOL DestroyWindow();
+	virtual void OnCancel();
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
@@ -64,6 +66,7 @@ protected:
 	afx_msg void OnTex16();
 	afx_msg void OnTex32();
 	afx_msg void OnTexdef();
+	afx_msg void OnClose();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

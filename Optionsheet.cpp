@@ -53,9 +53,9 @@ BOOL COptionsheet::OnInitDialog()
 
 BEGIN_MESSAGE_MAP(COptionsheet, CPropertySheet)
 	//{{AFX_MSG_MAP(COptionsheet)
-		// HINWEIS - Der Klassen-Assistent fügt hier Zuordnungsmakros ein und entfernt diese.
-		ON_COMMAND(IDOK,OnOK)
 		ON_COMMAND(ID_APPLY_NOW, OnApplyNow)
+		ON_COMMAND(IDOK,OnOK)
+	ON_WM_CLOSE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -76,6 +76,7 @@ void COptionsheet::OnApplyNow()
 void COptionsheet::OnOK()
 	{
 	OnApplyNow();
+    graphics.Cleanup();
 	CPropertySheet::OnClose();
 	if (!graphics.resolutionchanged)
 		return;
@@ -95,4 +96,11 @@ void COptionsheet::OnOK()
 void COptionsheet::Apply()
 {
 	OnApplyNow();
+}
+
+void COptionsheet::OnClose() 
+{
+	// TODO: Code für die Behandlungsroutine für Nachrichten hier einfügen und/oder Standard aufrufen
+	
+	CPropertySheet::OnClose();
 }

@@ -357,6 +357,9 @@ i4_bool i4_dx9_display_class::initialize_mode()
   D3DFORMAT format;
   format=mode->Format;
   D3DDEVTYPE type=last_mode.adaptor_id&1?D3DDEVTYPE_REF:D3DDEVTYPE_HAL;
+  //If that setting is present, we force the reference device.
+  if (i4_win32_startup_options.render==R1_RENDER_DIRECTX9_REF)
+      type=D3DDEVTYPE_REF;
   //D3DDISPLAYMODE disp;
   if (i4_win32_startup_options.fullscreen && use_exclusive_mode)
   {
@@ -483,17 +486,27 @@ i4_bool i4_dx9_display_class::initialize_mode()
 //	i4_error("SEVERE: Thread mouse support is disabled. Don't try to use it right now.");
 //    input.set_async_mouse(thread_mouse);
 //  }
-  li_add_function("show_gdi_surface",show_gdi_surface9);//this must be mapped depending on the driver
-  if (type==D3DDEVTYPE_REF)
+    //obviously we don't print the warning if the user forced us to 
+    //use the ref device.
+  if ((type==D3DDEVTYPE_REF)&&
+      (i4_win32_startup_options.render!=R1_RENDER_DIRECTX9_REF))
 	  {
 	  if (IDNO==MessageBox(0,"WARNING: The DirectX driver was initialized using the very slow Reference device."
 		  "Possible reason: Your display settings are not supported by the Hardware accelerated driver."
 		  "Do you want to use this device anyway?",
-		  "Reference device",MB_YESNO+MB_ICONWARNING))
+		  "Reference device",MB_YESNO|MB_ICONWARNING|MB_SYSTEMMODAL|
+          MB_TOPMOST|MB_SETFOREGROUND))
 		  {
 		  return i4_F;
 		  }
 	  }
+  //For dx9, this function enables some special mode that 
+  //enables the correct rendering of the mouse. 
+  if (use_page_flip)
+    FlipToGDISurface();
+  //this must be mapped depending on the driver, but not before
+  //we are sure the driver is the one we're going to use.
+  li_add_function("show_gdi_surface",show_gdi_surface9);
   return i4_T;
 };
 
@@ -744,7 +757,8 @@ void i4_dx9_display_class::flush()
 	i4_rect_list_class *use_list;
 	
 	// if page flipped we need to make add the current dirty to the stuff left over from last frame
-#ifdef DX5_NOREALPAGEFLIP
+//#ifdef DX9_NOREALPAGEFLIP
+#if 0
 	use_list=context->both_dirty;
 #else
 	if (use_page_flip) 

@@ -34,6 +34,9 @@ extern HWND      i4_win32_window_handle;    // main window, for some reason dire
 #define R1_RENDER_DIRECTX5_USER_SETTING 8 /* To allow individual render settings */
 #define R1_RENDER_DIRECTX8 9
 #define R1_RENDER_DIRECTX8_USER_SETTING 10
+#define R1_RENDER_DIRECTX9 11 //the all-default now
+#define R1_RENDER_DIRECTX9_HAL 12 //Actually same as previous
+#define R1_RENDER_DIRECTX9_REF 13 //Will always choose the ref device.
 #define R1_RENDER_USEDEFAULT -1
 
 class i4_win32_startup_options_struct
