@@ -46,6 +46,10 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
+				GenerateMapFile="TRUE"
+				MapFileName="$(OutDir)/ivcon.map"
+				MapExports="TRUE"
+				MapLines="TRUE"
 				SubSystem="1"/>
 			<Tool
 				Name="VCMIDLTool"

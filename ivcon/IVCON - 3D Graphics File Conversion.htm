@@ -1,0 +1,453 @@
+<HTML>
+
+  <HEAD>
+    <TITLE>
+      IVCON - 3D Graphics File Conversion
+    </TITLE>
+  </HEAD>
+
+  <BODY>
+
+    <H1>
+      IVCON - 3D Graphics File Conversion
+    </H1>
+
+    <P>
+      <B>IVCON</B> can read and write a small
+      variety of 3D graphics file formats, converting from one to the other.
+      The supported formats include:
+      <UL>
+        <LI>
+          3DS - <A HREF=http://www.autodesk.com>AutoCAD</A> 3D Studio Max binary files;
+        </LI>
+        <LI>
+          ASE - <A HREF=http://www.autodesk.com>AutoCAD</A> ASCII export files;
+        </LI>
+        <LI>
+          BYU - Movie.BYU surface geometry files;
+        </LI>
+        <LI>
+          DXF - <A HREF=http://www.autodesk.com>AutoCAD</A> DXF files;
+        </LI>
+        <LI>
+          GMOD - <A HREF=http://www.golgotha.org/>Golgotha GMOD files</A>;
+        </LI>
+        <LI>
+          HRC - <A HREF=http://www/softimage.com>SoftImage</a> hierarchy files;
+        </LI>
+        <LI>
+          IV - <A HREF=http://www.sgi.com>SGI Inventor</A> files;
+        </LI>
+        <LI>
+          OBJ - <A HREF=http://www.aw.sgi.com/pages/home/index.html>
+          Alias Wavefront</A> files;
+        </LI>
+        <LI>
+          POV - <A HREF=http://www.povray.org/>
+          Persistence of Vision</A> files (output only);
+        </LI>
+        <LI>
+          SMF - Michael Garland's format for 
+          <A HREF=http://www.cs.cmu.edu/afs/cs/user/garland/www/quadrics/qslim.html>QSLIM</A>;
+        </LI>
+        <LI>
+          STL/STLA - ASCII Stereolithography files;
+        </LI>
+        <LI>
+          STLB - binary Stereolithography files;
+        </LI>
+        <LI>
+          TEC - <A HREF=http://www.amtec.com/customer/tecplot.html>TECPLOT</A> 
+          files (output only);
+        </LI>
+        <LI>
+          TRI/TRIA - a simple ASCII triangle format requested by Greg Hood;
+        </LI>
+        <LI>
+          TRIB - a simple binary triangle format requested by Greg Hood;
+        </LI>
+        <LI>
+          TXT - text files (output only);
+        </LI>
+        <LI>
+          UCD - <A HREF=http://www.avs.com>
+          Advanced Visual Systems (AVS)</A> Unstructured Cell Data (output only);
+        </LI>
+        <LI>
+          VLA - Digistar VLA files;
+        </LI>
+        <LI>
+          WRL - VRML (Virtual Reality Modeling Language) files (output only).
+        </LI>
+        <LI>
+          XGL - a format based on XML/OpenGl files (output only).
+        </LI>
+      </UL>
+    </P>
+
+    <P>
+      The program can be used in command line form, as in:
+      <BLOCKQUOTE>
+        ivcon input.iv output.stl
+      </BLOCKQUOTE>
+      or can be used in an interactive mode, in which input and output
+      files can be read or converted in any order.
+    </P>
+
+    <P>
+      Graphics file formats are poorly documented; hence this program
+      was written primarily by examining typical files and struggling
+      to interpret them.  Particularly in the case of Inventor and DXF
+      files, the program is not able to handle all the subtleties of 
+      the file format, and may mangle data, or even crash.  
+    </P>
+
+    <P>
+      Helpful corrections to the 3DS reader were supplied by John F Flanagan.
+      The GMOD reader and writer were written and supplied by 
+      <A HREF = "http://www.zikzak.net/~zik/">Zik Saleeba</A>.
+      Improvements to the DXF routines to handle polygon oriented files
+      were supplied by Zik Saleeba.  The 3DS reader is based on a program 
+      by Martin van Velsen, with the help of Gert van der Spoel.
+    </P>
+
+    <P>
+      <B>IVCON</B> is a C version of the FORTRAN
+      <A HREF=ivread.html>IVREAD</A> program.
+    </P>
+
+    <P>
+      Source code files you may copy include:
+      <UL>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/src/ivcon/ivcon.c">IVCON.C, the source code</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/src/ivcon/ivcon.exe">IVCON.EXE, the PC executable</A>;
+        </LI>
+      </UL>
+    </P>
+
+    <P>
+      Data files you may copy include:
+      <UL>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/3ds/box.3ds">BOX.3DS, a sample 3DS file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/ase/cube.ase">CUBE.ASE, a sample ASE file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/byu/cube.byu">CUBE.BYU, a sample BYU file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/dxf/diamond.dxf">DIAMOND.DXF, a sample DXF file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/hrc/cube.hrc">CUBE.HRC, a sample HRC file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/iv/materials.iv">MATERIALS.IV, a sample Inventor file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/obj/cube.obj">CUBE.OBJ, a sample OBJ file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/pov/cube.pov">CUBE.POV, a sample POV file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/smf/cube_face.smf">CUBE_FACE.SMF, a sample SMF file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/stl/magnolia.stl">MAGNOLIA.STL, a sample STL file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/tec/cube.tec">CUBE.TEC, a sample TECPLOT file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/tri/cube.tria">CUBE.TRIA, a sample ASCII triangle file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/vla/diamond.vla">DIAMOND.VLA, a sample VLA file</A>;
+        </LI>
+        <LI>
+          <A HREF = "http://www.psc.edu/~burkardt/data/xgl/cube.xgl">CUBE.XGL, a sample XGL file</A>;
+        </LI>
+      </UL>
+    </P>
+
+    <P>
+      The list of routines includes:
+      <UL>
+        <LI>
+          <B>MAIN</B> is the main program for converting graphics files.
+        </LI>
+        <LI>
+          <B>ASE_READ</B> reads an AutoCAD ASE file.
+        </LI>
+        <LI>
+          <B>ASE_WRITE</B> writes graphics information to an AutoCAD ASE file.
+        </LI>
+        <LI>
+          <B>BYU_READ</B> reads graphics information from a Movie.BYU file.
+        </LI>
+        <LI>
+          <B>BYU_WRITE</B> writes graphics information to a Movie.BYU file.
+        </LI>
+        <LI>
+          <B>CHR_INDEX_LAST</B> reports the last occurrence of a character in a string.
+        </LI>
+        <LI>
+          <B>CHAR_PAD</B> "pads" a character in a string with a blank on either side.
+        </LI>
+        <LI>
+          <B>COMMAND_LINE</B> carries out a command-line session of file conversion.
+        </LI>
+        <LI>
+          <B>COR3_NORMAL_SET</B> computes node normal vectors.
+        </LI>
+        <LI>
+          <B>COR3_RANGE</B> reports the range of the graphics data.
+        </LI>
+        <LI>
+          <B>DATA_CHECK</B> checks the input data.
+        </LI>
+        <LI>
+          <B>DATA_INIT</B> initializes the internal graphics data.
+        </LI>
+        <LI>
+          <B>DATA_READ</B> reads a file into internal graphics data.
+        </LI>
+        <LI>
+          <B>DATA_REPORT</B> gives a summary of the contents of the data file.
+        </LI>
+        <LI>
+          <B>DATA_WRITE</B> writes the graphics data to the output file.
+        </LI>
+        <LI>
+          <B>DXF_READ</B> reads an AutoCAD DXF file.
+        </LI>
+        <LI>
+          <B>DXF_WRITE</B> writes graphics information to an AutoCAD DXF file.
+        </LI>
+        <LI>
+          <B>EDGE_NULL_DELETE</B> deletes face edges with zero length.
+        </LI>
+        <LI>
+          <B>FACE_AREA_SET</B> sets the area of faces.
+        </LI>
+        <LI>
+          <B>FACE_NORMAL_AVE</B> sets face normals as average of face vertex normals.
+        </LI>
+        <LI>
+          <B>FACE_NULL_DELETE</B> deletes faces of order less than 3.
+        </LI>
+        <LI>
+          <B>FACE_PRINT</B> prints out information about a face.
+        </LI>
+        <LI>
+          <B>FACE_SUBSET</B> selects a subset of the current faces as the new object.
+        </LI>
+        <LI>
+          <B>FACE_TO_LINE</B> converts face information to line information.
+        </LI>
+        <LI>
+          <B>FACE_TO_VERTEX_MAT</B> extends face material definitions to vertices.
+        </LI>
+        <LI>
+          <B>FILE_EXT</B> picks out the extension in a file name.
+        </LI>
+        <LI>
+          <B>GMOD_ARCH_CHECK</B> inquires into some features of the computer architecture.
+        </LI>
+        <LI>
+          <B>GMOD_READ</B> reads graphics information from a Golgotha GMOD file.
+        </LI>
+        <LI>
+          <B>GMOD_READ_FLOAT</B> reads a float from a Golgotha GMOD file.
+        </LI>
+        <LI>
+          <B>GMOD_READ_W16</B> reads a 16 bit word from a Golgotha GMOD file.
+        </LI>
+        <LI>
+          <B>GMOD_READ_W32</B> reads a 32 bit word from a Golgotha GMOD file.
+        </LI>
+        <LI>
+          <B>GMOD_WRITE</B> writes graphics data to a Golgotha GMOD file.
+        </LI>
+        <LI>
+          <B>GMOD_WRITE_FLOAT</B> writes a float to a Golgotha GMOD file.
+        </LI>
+        <LI>
+          <B>GMOD_WRITE_W16</B> writes a 16 bit word to a Golgotha GMOD file.
+        </LI>
+        <LI>
+          <B>GMOD_WRITE</B> writes a 32 bit word to a Golgotha GMOD file.
+        </LI>
+        <LI>
+          <B>HELLO</B> prints an explanatory header message.
+        </LI>
+        <LI>
+          <B>HELP</B> prints a list of the interactive commands.
+        </LI>
+        <LI>
+          <B>HRC_READ</B> reads graphics information from a SoftImage HRC file.
+        </LI>
+        <LI>
+          <B>HRC_WRITE</B> writes graphics data to an HRC SoftImage file.
+        </LI>
+        <LI>
+          <B>INIT_PROGRAM_DATA</B> initializes the internal program information.
+        </LI>
+        <LI>
+          <B>INTERACT</B> carries on an interactive session with the user.
+        </LI>
+        <LI>
+          <B>IV_READ</B> reads graphics information from an Inventor file.
+        </LI>
+        <LI>
+          <B>IV_WRITE</B> writes graphics information to an Inventor file.
+        </LI>
+        <LI>
+          <B>IVEC_MAX</B> returns the maximum element in an integer array.
+        </LI>
+        <LI>
+          <B>LEQI</B> compares two strings for equality, disregarding case.
+        </LI>
+        <LI>
+          <B>NEWS</B> reports the program change history.
+        </LI>
+        <LI>
+          <B>NODE_TO_VERTEX_MAT</B> extends node material definitions to vertices.
+        </LI>
+        <LI>
+          <B>OBJ_READ</B> reads a Wavefront OBJ file.
+        </LI>
+        <LI>
+          <B>OBJ_WRITE</B> writes graphics information to a WaveFront OBJ file.
+        </LI>
+        <LI>
+          <B>POV_WRITE</B> writes graphics information to a POV file.
+        </LI>
+        <LI>
+          <B>RCOL_FIND</B> finds if a vector occurs in a table.
+        </LI>
+        <LI>
+          <B>REVERSE_BYTES_FLOAT</B> reverses byte data representing a float.
+        </LI>
+        <LI>
+          <B>RGB_TO_HUE</B> converts (R,G,B) colors to a hue value between 0 and 1.
+        </LI>
+        <LI>
+          <B>SMF_READ</B> reads an SMF file.
+        </LI>
+        <LI>
+          <B>SMF_WRITE</B> writes an SMF file.
+        </LI>
+        <LI>
+          <B>STLA_READ</B> reads an ASCII STL StereoLithography file.
+        </LI>
+        <LI>
+          <B>STLA_WRITE</B> writes an ASCII STL StereoLithography file.
+        </LI>
+        <LI>
+          <B>STLB_READ</B> reads a binary STL StereoLithography file.
+        </LI>
+        <LI>
+          <B>STLB_WRITE</B> writes a binary STL StereoLithography file.
+        </LI>
+        <LI>
+          <B>TDS_READ</B> reads a 3D Studio Max 3DS file.
+        </LI>
+        <LI>
+          <B>TDS_WRITE</B> writes a 3D Studio Max 3DS file.
+        </LI>
+        <LI>
+          <B>TEC_WRITE</B> writes the graphics data to a TECPLOT file.
+        </LI>
+        <LI>
+          <B>TMAT_INIT </B> initializes the geometric transformation matrix.
+        </LI>
+        <LI>
+          <B>TMAT_MXM</B> multiplies two geometric transformation matrices.
+        </LI>
+        <LI>
+          <B>TMAT_MXP</B> multiplies a geometric transformation matrix times a point.
+        </LI>
+        <LI>
+          <B>TMAT_MXP2</B> multiplies a geometric transformation matrix times N points.
+        </LI>
+        <LI>
+          <B>TMAT_MXV</B> multiplies a geometric transformation matrix times a vector.
+        </LI>
+        <LI>
+          <B>TMAT_ROT_AXIS</B> applies an axis rotation to the geometric transformation matrix.
+        </LI>
+        <LI>
+          <B>TMAT_ROT_VECTOR</B> applies a rotation about a vector to the geometric transformation matrix.
+        </LI>
+        <LI>
+          <B>TMAT_SCALE</B> applies a scaling to the geometric transformation matrix.
+        </LI>
+        <LI>
+          <B>TMAT_SHEAR</B> applies a shear to the geometric transformation matrix.
+        </LI>
+        <LI>
+          <B>TMAT_TRANS</B> applies a translation to the geometric transformation matrix.
+        </LI>
+        <LI>
+          <B>TRIA_READ</B> reads the graphics data from an ASCII triangle file.
+        </LI>
+        <LI>
+          <B>TRIA_WRITE</B> writes the graphics data to an ASCII triangle file.
+        </LI>
+        <LI>
+          <B>TRIB_READ</B> reads the graphics data from a binary triangle file.
+        </LI>
+        <LI>
+          <B>TRIB_WRITE</B> writes the graphics data to a binary triangle file.
+        </LI>
+        <LI>
+          <B>TXT_WRITE</B> writes the graphics data to a text file.
+        </LI>
+        <LI>
+          <B>UCD_WRITE</B> writes graphics data to an AVS UCD file.
+        </LI>
+        <LI>
+          <B>VERTEX_NORMAL_SET</B> recomputes the face vertex normal vectors.
+        </LI>
+        <LI>
+          <B>VERTEX_TO_FACE_MAT</B> extends vertex material definitions to faces.
+        </LI>
+        <LI>
+          <B>VERTEX_TO_NODE_MAT</B> extends vertex material definitions to nodes.
+        </LI>
+        <LI>
+          <B>VLA_READ</B> reads a VLA file.
+        </LI>
+        <LI>
+          <B>VLA_WRITE</B> writes a VLA file.
+        </LI>
+        <LI>
+          <B>WRL_WRITE</B> writes graphics data to a WRL file.
+        </LI>
+        <LI>
+          <B>XGL_WRITE</B> writes graphics data to an XGL file.
+        </LI>
+      </UL>
+
+    </P>
+
+    <P>
+      Back to <A HREF=csoftware.html>the C software page.</A>
+    </P>
+
+    <HR>
+
+    <I>
+      Last revised on 04 July 2000.
+    </I>
+
+  </BODY>
+
+</HTML>
