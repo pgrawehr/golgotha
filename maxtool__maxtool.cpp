@@ -600,7 +600,8 @@ virtual void create_views()
       m1_warn_window=new i4_text_scroll_window_class(wm->get_style(),
                                                      fore, back,
                                                      (w16)(deco->width()-(l+r)),
-                                                     (w16)(deco->height()-(t+b)));   
+                                                     (w16)(deco->height()-(t+b)),
+                                                     500);   
 
       m1_warn_window->output_string("Maxtool is ready...\n");
       deco->add_child((sw16)l,(sw16)t, m1_warn_window);

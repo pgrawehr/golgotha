@@ -1759,11 +1759,23 @@ public:
   void fit_parent()
   {   
     if (vertical())
-      resize((w16)parent->width(), 
-             (w16)(parent->height() * buddy->total_visible_objects / buddy->total_scroll_objects));
+        {
+        w16 he=(w16)(parent->height() * buddy->total_visible_objects / 
+            buddy->total_scroll_objects);
+        //otherwise the scroll button might vanish.
+        if (he<=10)
+            he=10;
+        resize((w16)parent->width(), he);
+        }
     else
-      resize((w16)(parent->width() * buddy->total_visible_objects / buddy->total_scroll_objects),
+        {
+        w16 wi=(w16)(parent->width() * buddy->total_visible_objects / 
+            buddy->total_scroll_objects);
+        if (wi<=10)
+            wi=10;
+        resize(wi,
              (w16)parent->height());
+        }
   }
 
   char *name() { return "scroll_button"; }
@@ -1956,6 +1968,8 @@ i4_scroll_bar::i4_scroll_bar(i4_bool vertical,
   scroll_area->add_child(0,0,scroll_but);
 
 }
+
+
   
 void i4_scroll_bar::receive_event(i4_event *ev)
 {
@@ -2007,6 +2021,12 @@ void i4_scroll_bar::set_bar_pos(sw32 pos)
   }
                    
 }
+
+void i4_scroll_bar::set_pos(sw32 _pos)
+    {
+    pos=_pos;
+    set_bar_pos(pos);
+    }
 
 void i4_scroll_bar::calc_pos()
 {
@@ -3640,32 +3660,55 @@ void i4_text_scroll_window_class::printf(char *fmt, ...)
 i4_text_scroll_window_class::i4_text_scroll_window_class(i4_graphical_style_class *style,
                                                          i4_color text_foreground,
                                                          i4_color text_background,
-                                                         w16 width, w16 height)    // in pixels
+                                                         w16 width, w16 height,    // in pixels
+                                                         w32 scrollback)
   : i4_parent_window_class(width, height),
     style(style),
     fore(text_foreground),
-    back(text_background)
+    back(text_background),
+    max_scrollback(scrollback),
+    scroll_pos(1)
 {
+  
+
   i4_font_class *fnt=style->font_hint->normal_font;
 
   term_height=height/fnt->largest_height();
-  term_size=(width/fnt->largest_width() + 1) * term_height;
+  if (max_scrollback<term_height)
+      max_scrollback=term_height;
+  curr_scrollback=1;
+  scrollbar=new i4_scroll_bar(i4_T,
+      height, //drawing height of scrollbar
+      1,1, //visible/total number of lines (total is all - visible)
+      0, //message id
+      this,  //event handler
+      style);
+  add_child(width-scrollbar->width(),0,scrollbar);
+  width=width-scrollbar->width();
+  //term_width will be >=1
+  term_width=(width/fnt->largest_width() + 1)*2;
 
-  if (!term_size)
-    term_size=512;
+  //if (!term_size)
+  //  term_size=512;
+  term_size=term_width*max_scrollback;
 
   term_out=(i4_char *)I4_MALLOC(term_size, "terminal chars");
+  term_end=term_out+term_size;
 
-  draw_start=term_out;
+  //start at the last line in the window.
+  draw_start=term_out+term_size-(term_width*term_height);
   line_height=fnt->largest_height()+1;
-  *term_out=0;
-  dx=dy=tdx=tdy=0;
+  memset(term_out,0,term_size);
+  dx=tdx=tdy=0;
+  dy=max_scrollback-1;
   need_clear=i4_T;
   used_size = 0;
+  used_lines= 0;
 }
 
 void i4_text_scroll_window_class::skip_first_line()
 {
+/*
   i4_font_class *fnt=style->font_hint->normal_font;
   w32 x=0, wd=width(), count=0;
   i4_char *s=term_out;
@@ -3681,6 +3724,7 @@ void i4_text_scroll_window_class::skip_first_line()
   }
   memmove(term_out, s, used_size-count+1);
   used_size-=count;
+  */
 }
 
 void i4_text_scroll_window_class::output_string(char *string)
@@ -3692,12 +3736,57 @@ void i4_text_scroll_window_class::output_string(char *string)
   }
 }
 
+void i4_text_scroll_window_class::scroll_text_up()
+    {
+    memmove(term_out,term_out+term_width,term_size-term_width);
+    memset(term_end-term_width,0,term_width);
+    if (used_lines<max_scrollback)
+        {
+        used_lines++;
+        if (used_lines>term_height)
+            {
+            curr_scrollback++;
+            }
+        }
+    scrollbar->set_new_total(curr_scrollback);
+    //set to the end.
+    //scrollbar->set_bar_pos(curr_scrollback);
+    if (scroll_pos>=scrollbar->get_pos()-1)
+        {
+        scrollbar->set_pos(curr_scrollback);
+        }
+    dy=max_scrollback-1;
+    dx=0;
+    tdx=0;
+    need_clear=i4_T;
+    request_redraw(i4_T);
+    }
+
+void i4_text_scroll_window_class::receive_event(i4_event *ev)
+    {
+    if (ev->type()==i4_event::USER_MESSAGE)
+        {
+        CAST_PTR(uev, i4_user_message_event_class, ev);
+      
+        if (uev->sub_type==0)  // SCROLLBAR message
+            {      
+            CAST_PTR(sbm, i4_scroll_message, ev);
+            scroll_pos=sbm->amount;
+            need_clear=i4_T;
+            request_redraw(i4_F);
+            return;
+            }
+        }
+    i4_parent_window_class::receive_event(ev);
+    }
+
 void i4_text_scroll_window_class::output_char(const i4_char &ch)
 {
-//  sw32 i;
+  //we need a font for this to work
   if (!style->font_hint || !style->font_hint->normal_font) return;
   i4_font_class *fnt=style->font_hint->normal_font;
 
+  /*
   if (used_size+2>term_size)
   {
     term_size+=100;
@@ -3707,11 +3796,24 @@ void i4_text_scroll_window_class::output_char(const i4_char &ch)
     draw_start=term_out;        
     need_clear=i4_T;    
   }
+  */
 
   if (!redraw_flag)
     request_redraw();
 
-  tdx+=fnt->width(ch);
+  sw32 tempdx=dx+1;
+  sw32 temptdx=tdx+fnt->width(ch);
+  if (tempdx>=term_width ||temptdx>=width()-scrollbar->width()|| ch=='\n')
+      {
+      scroll_text_up();
+      }
+  if (ch!='\n')
+      {
+      term_out[dy*term_width+dx]=ch;
+      dx++;
+      tdx+=fnt->width(ch);
+      }
+  /*
   if (tdx>=width() || ch=='\n')
   {
     tdx=0;
@@ -3728,38 +3830,40 @@ void i4_text_scroll_window_class::output_char(const i4_char &ch)
 
   term_out[used_size++]=ch;  
   term_out[used_size]=0;
+  */
 }
 
 void i4_text_scroll_window_class::clear()
 {
-  draw_start=term_out;
-  *term_out=0;
+  draw_start=term_out+term_size-(term_width*term_height);
+  memset(term_out,0,term_size);
+  scrollbar->set_pos(1);
+  scrollbar->set_new_total(1);
+  
+  curr_scrollback=1;
   dx=dy=tdx=tdy=0;
   need_clear=i4_T;
   used_size = 0;
+  used_lines=0;
   request_redraw(i4_F);
+  request_redraw(i4_T);//redraw the scrollbar
 }
 
 void i4_text_scroll_window_class::resize(w16 new_width, w16 new_height)
 {
   i4_font_class *fnt=style->font_hint->normal_font;
   term_height=new_height/fnt->largest_height();
-  
-  int new_size=(new_width/fnt->largest_width() + 1) * term_height;
+  term_width=new_width/fnt->largest_width();
+  scrollbar->resize(scrollbar->width(),new_height);
+  scrollbar->set_pos(1);
+  scrollbar->set_new_total(max_scrollback-term_height+1);
+  int new_size=term_width+max_scrollback;
   if (new_size>(int)term_size)
   {
-    term_size=new_size;
+      term_size=new_size;
 
-    if (!term_size)
-      term_size=512;
-
-    if (term_out)
       term_out=(i4_char *)i4_realloc(term_out, term_size, "terminal chars");
-    else
-    {
-      term_out=(i4_char *)I4_MALLOC(term_size, "terminal chars");
-      term_out[0]=0;
-    }
+      term_end=term_out+term_size;
   }
 
   dx=dy=tdx=tdy=0;
@@ -3773,6 +3877,46 @@ void i4_text_scroll_window_class::parent_draw(i4_draw_context_class &context)
 {
   i4_font_class *fnt=style->font_hint->normal_font;
 
+  if (!undrawn_area.empty())
+      {
+      need_clear=i4_T;
+      }
+  if (need_clear)
+  {
+    if (back==style->color_hint->neutral())
+      style->deco_neutral_fill(local_image, 0,0, width()-1-scrollbar->width(), height()-1, context);
+    else
+      local_image->bar(0,0,width()-1-scrollbar->width(),height()-1,back,context);
+
+    need_clear=i4_F;
+  }
+  fnt->set_color(fore);
+
+  sw32 pos=scroll_pos-1;
+  sw32 first_scroll_line=max_scrollback-used_lines+pos;
+  //pos*=term_width;
+  pos=term_width*first_scroll_line;
+  i4_char *cpos=term_out+pos;
+  i4_char *linestart=cpos;
+  sw32 xpos=0,ypos=0;
+  while (cpos<term_end)
+      {
+      i4_char c=*cpos;
+      if (c==0 || c=='\n')
+          {
+          xpos=0;
+          ypos+=fnt->largest_height();
+          linestart+=term_width;
+          cpos=linestart;
+          }
+      else
+          {
+          fnt->put_character(local_image, (short)xpos,(short)ypos, c, context);
+          xpos+=fnt->width(c);
+          cpos++;
+          }
+      }
+  /*
   if (!undrawn_area.empty())
   {
     draw_start=term_out;
@@ -3811,6 +3955,7 @@ void i4_text_scroll_window_class::parent_draw(i4_draw_context_class &context)
   } 
   tdx=dx;
   tdy=dy;
+  */
   i4_parent_window_class::parent_draw(context);
 }
 

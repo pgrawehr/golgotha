@@ -11,6 +11,7 @@
 
 #include "window/window.h"
 #include "font/font.h"
+#include "gui/scroll_bar.h"
 class i4_graphical_style_class;
 
 class i4_text_scroll_window_class : public i4_parent_window_class
@@ -21,6 +22,13 @@ class i4_text_scroll_window_class : public i4_parent_window_class
   sw32 dx, dy, tdx, tdy;
 
   sw32 term_height;    // in characters
+  sw32 term_width;
+  i4_char *term_end;
+  sw32 max_scrollback;      // in lines of text
+  sw32 curr_scrollback;
+  sw32 used_lines;
+  i4_scroll_bar *scrollbar;
+  sw32 scroll_pos;
   w32 line_height;
   i4_bool need_clear;
   i4_graphical_style_class *style;
@@ -33,10 +41,15 @@ public:
   i4_text_scroll_window_class(i4_graphical_style_class *style,
                               i4_color text_foreground,
                               i4_color text_background,
-                              w16 width, w16 height);               // in pixels
+                              w16 width, w16 height,  //in pixels
+                              w32 scrollback);        //in lines of text
 
   void clear();
   void skip_first_line();
+
+  void scroll_text_up();
+
+  void receive_event(i4_event *ev);
 
   void output_char(const i4_char &ch);
   void output_string(char *string);

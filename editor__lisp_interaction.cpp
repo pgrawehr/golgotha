@@ -103,7 +103,7 @@ public:
     output=new i4_text_scroll_window_class(style,
                                            fore, back,
                                            w,
-                                           h-inputh);
+                                           h-inputh,500);
 	add_child(0,0,output);
 	add_child(0,h-inputh,input);
     output->printf("Lisp parser ready...\n");

@@ -36,6 +36,7 @@ class i4_scroll_button;
 
 class i4_scroll_bar : public i4_parent_window_class        // up-down scroll bar
 {
+protected:
   friend class i4_scroll_button;
   i4_graphical_style_class *style;
   w32 total_scroll_objects, total_visible_objects;
@@ -47,11 +48,21 @@ class i4_scroll_bar : public i4_parent_window_class        // up-down scroll bar
   i4_bool vertical;
 
   i4_button_class *create_button(i4_button_class *&b, i4_image_class *im);
-public:
+protected:
   void send_position();
   void set_bar_pos(sw32 pos);
   void calc_pos();
+public:
+  sw32 get_pos() const
+      {
+      return pos;
+      }
+  w32 get_total() const
+      {
+      return total_scroll_objects;
+      }
   void set_new_total(int total);              // if total items under control changes
+  void set_pos(sw32 pos);
   i4_scroll_bar(i4_bool vertical,
                 int max_dimention_size,      // width/height depending on vertical
                 int total_visible_objects,   // used to determine scroll bar dragger size
@@ -62,7 +73,7 @@ public:
 
   virtual void receive_event(i4_event *ev);
 
-  char *name() { return "vscroll_bar"; }
+  char *name() { return vertical?"vert_scroll_bar":"horiz_scroll_bar"; }
 };
 
 
