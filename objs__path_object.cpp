@@ -88,7 +88,7 @@ g1_path_object_class::g1_path_object_class(g1_object_type id, g1_loader_class *f
   : g1_object_class(id, fp), link(8,16)
 {
   int i;
-  w16 ver=0,data_size;next=0;
+  w16 ver=0,data_size=0;next=0;
   if (fp) fp->get_version(ver,data_size);
   
   switch (ver)
@@ -292,7 +292,7 @@ void g1_path_object_class::request_remove()
     g1_object_class *o = link[i].get_object();
     g1_map_piece_class *mp;
     
-    while (mp = g1_map_piece_class::cast(o))
+    while ((mp = g1_map_piece_class::cast(o))!=0)
     {
       if (mp->next_path.get() == this)
         o = mp->prev_object.get();

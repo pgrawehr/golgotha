@@ -56,8 +56,8 @@ public:
 class g1_set_minor_mode_event : public g1_set_major_mode_event
 {  
 public:
-  w8 minor_mode;
-  g1_set_minor_mode_event(char *major_mode_name, w8 minor_mode)
+  w32 minor_mode;
+  g1_set_minor_mode_event(char *major_mode_name, w32 minor_mode)
     : g1_set_major_mode_event(major_mode_name), minor_mode(minor_mode)
   {
     sub_type=G1_SET_MINOR_MODE;

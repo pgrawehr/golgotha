@@ -108,7 +108,7 @@ class g1_mode_creator : public i4_event_handler_class
 {
 protected:
 public:
-  w8 minor_mode;
+  w32 minor_mode;
 
   static g1_mode_creator *first;
   g1_mode_creator *next;
@@ -116,9 +116,9 @@ public:
   i4_graphical_style_class *get_style();
 
   g1_mode_creator();
-  w8 get_minor_mode() { return minor_mode; }
+  w32 get_minor_mode() { return minor_mode; }
 
-  virtual i4_bool set_minor_mode(w8 mode) { minor_mode=mode; return i4_T; }
+  virtual i4_bool set_minor_mode(w32 mode) { minor_mode=mode; return i4_T; }
 
   // these buttons will be placed on the right of the major mode buttons
   virtual void create_buttons(i4_parent_window_class *container) = 0;

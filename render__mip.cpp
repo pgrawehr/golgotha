@@ -143,6 +143,7 @@ void get_header_info(mipheader_t &header, i4_image_class *src_texture,
   i4_bool has_alpha  = i4_F;  
 
   w32 rt=0,gt=0,bt=0, t=0;
+  i4_draw_context_class context(0,0,width-1,height-1);
   
   if (src_texture->get_pal()->source.pixel_depth==I4_32BIT)
   {
@@ -170,7 +171,7 @@ void get_header_info(mipheader_t &header, i4_image_class *src_texture,
   }
   else
   {
-    i4_draw_context_class context(0,0,width-1,height-1);
+    
 
     for (int y=0; y<height; y++)
     {    
@@ -195,8 +196,17 @@ void get_header_info(mipheader_t &header, i4_image_class *src_texture,
   }
 
   memset(&header,0,sizeof(mipheader_t));
-
-  header.average_color = ((rt/t)<<16) | ((gt/t)<<8) | (bt/t);
+  if (t!=0)
+      {
+      header.average_color = ((rt/t)<<16) | ((gt/t)<<8) | (bt/t);
+      }
+  else
+      {
+      //avoid a div by zero exception when the texture was
+      //pure transparent. In all other cases, the "transparent"
+      //color does not add to the average color.
+      header.average_color=src_texture->get_pixel(0,0,context);
+      }
 
   char *tname = r1_remove_paths(texture_name);
   if (strlen(tname)>255) tname[255]=0;

@@ -54,7 +54,7 @@ public:
   };
   g1_ai_params():g1_mode_creator(){};
 
-  i4_bool set_minor_mode(w8 m);
+  i4_bool set_minor_mode(w32 m);
 
   void create_buttons(i4_parent_window_class *containter);
 

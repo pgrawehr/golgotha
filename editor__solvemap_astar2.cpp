@@ -370,7 +370,7 @@ void Path::GenerateSucc(struct NODE *BestNode, int x, int y, int dx, int dy)
         //Successor->h = MAX(deltaX, deltaY);//maximum distance extimate
 		//Successor->h=sqrt(deltaX*deltaX+deltaY*deltaY);//euclidean (would require floats)
 		//Successor->h=(deltaX==deltaY)?sqrt2:1;//faster euclidean(dito)
-		Successor->h=deltaX+deltaY;//Manhattan distance extimate
+		Successor->h=(float)deltaX+deltaY;//Manhattan distance extimate
 
         Successor->f = g + Successor->h;
         Successor->x = x;

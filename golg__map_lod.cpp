@@ -807,7 +807,15 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
         vt[3]->get_rgb(poly[3].r, poly[3].g, poly[3].b, x1, y2);
         
         if (post_cell_draw)
-          post_cell_draw(x1,y1, post_cell_draw_context);
+            {
+            //this is a function pointer!
+            post_cell_draw(x1,y1, post_cell_draw_context);
+            //force the following g1_draw_tri to really set the texture
+            //even if it was the same as last time (post_draw_cell might
+            //change the current texture)
+            last_texture_size=0;
+            last_texture=0;
+            }
 
         if (g1_draw_tri(poly, 0,1,2, han))
           han = 0;

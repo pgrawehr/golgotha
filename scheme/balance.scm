@@ -74,11 +74,11 @@
   (b90mm           sing     20       0         0.5   3)    
   (buster_rocket   mult     1000     1         0.2  18)    
   (guided_missile  sing     10       1         0.3  20)    
-  (eletric_beam    sing     5        0         0.0   2)    
+  (electric_beam   sing     5        2         0.0   5)    
   (dropped_bomb    mult     100      1.5       0.08  4)
   (trike           mult     150      2         0.0   5)
   (bomb_truck      mult     50000    3         0.0   0)
-  (electric_car    mult     2000     2         1.0   5)
+  (electric_car    mult     500      2         1.0   1)
   
   (inv_explosion       mult     100      3         0.0   10)
   )

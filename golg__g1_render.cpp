@@ -913,12 +913,21 @@ void g1_render_class::render_3d_line(const i4_3d_point_class &p1,
   v[1].r=g1_table_0_255_to_0_1[(color2&0xff0000)>>16];
   v[1].g=g1_table_0_255_to_0_1[(color2&0xff00)>>8];
   v[1].b=g1_table_0_255_to_0_1[(color2&0xff)>>0];
+
+  r1_shading_type oldshade=r_api->get_shade_mode();
+  r1_alpha_type oldalpha=r_api->get_alpha_mode();
    
   r_api->set_shading_mode(R1_COLORED_SHADING);
   r_api->set_alpha_mode(R1_ALPHA_DISABLED);
   r_api->disable_texture();
 
   r1_clip_render_lines(1, v, center_x, center_y, r_api);
+  //restore old modes. Since lines are realy seldom used primitives,
+  //this is no performance problem compared to what might happen if
+  //the caller unexspectedly finds the render device in a new state. 
+  r_api->set_shading_mode(oldshade);
+  r_api->set_alpha_mode(oldalpha);
+  //r_api->use_default_texture();
   //r_api->set_constant_color(0xffffff);
 }
 

@@ -132,7 +132,7 @@ enum {
 	  };
 
 typedef w32 solve_flags;
-#define GRADE(sflags) (((sflags&SF_GRADEMASK)>>1)-1)
+#define GRADE(sflags) ((w8)(((sflags&SF_GRADEMASK)>>1)-1))
 
 
 enum {//warning: must take care of intersections with G1_MAP* constants
@@ -246,7 +246,9 @@ public:
   g1_breadth_first_graph_solver_class *get_graph_solver()
 	  {return solvegraph;};
 
-  //get the map maker reference
+  //get the map maker reference 
+  //That object reference is actually only needed to build
+  //the map graph. You could always also create your own instance. 
   g1_critical_map_maker_class *get_map_maker(){return &map_maker;};
 
   //calculates the prefered solver for the given map (dependent on user settings)
@@ -317,11 +319,11 @@ public:
   //! away than range specifies.
   sw32 get_objects_in_range(float x, float y, float range, 
                             g1_object_class *dest_array[], w32 array_size,
-						    w32 object_mask_flags=0xffffffff, w32 type_mask_flags=0xffffffff);
+						    w32 object_mask_flags=0xffffffff, w32 type_mask_flags=0xffffffff) const; 
   //! Gets objects in range of the given location satisfying an user definable condition.
   sw32 get_objects_in_range_fn(float x, float y, float range,
 	  g1_object_class *dest_array[], w32 array_size,
-	  OBJ_FILTER_TYPE fn);
+	  OBJ_FILTER_TYPE fn) const;
   //!gets a pointer to the cell at a given location
   //g1_map_cell_class *cell(w16 x, w16 y) const { return cells + y*w + x; };
   template <typename T>
@@ -401,17 +403,32 @@ public:
                                  const i4_3d_vector &point,
                                  i4_3d_vector &ray,
                                  g1_object_class*& hit) const;
-  
+  /* This method is unused. 
   int check_collision(i4_float x, i4_float y, 
 								  i4_float occupancy_radius,
 								  i4_float &dx, i4_float &dy,
 								  sw32 _ix, sw32 _iy,
 								  g1_object_class *_this,
 								  g1_object_class*& hit) const;
+  */
 
-  int check_poly_collision(i4_float x, i4_float y, 
-	  i4_float occupancy_radius, i4_float &dx, i4_float &dy, 
-	  g1_object_class *_this, g1_object_class *&hit);
+  /** Check wheter an object can move in a certain direction.
+  * Checks wheter an obj \a obj can move by \a dx \a dy on the
+  * map without colliding.
+  * \param obj The pointer to the object for which coldet should be
+  * calculated. 
+  * \param dx The amount of requested movement in x-direction. The
+  * value of this might be changed after return (i.e to compensate
+  * for wall-sliding.
+  * \param dy The amount of requested movement in y-direction
+  * \param hit A reference to a pointer which will get the object
+  * we collided with (if any)
+  * \return true if we hit an object (doesn't actually mean no movement
+  * is possible).
+  */
+  i4_bool check_collision(g1_object_class *obj,
+      i4_float &dx, i4_float &dy, i4_float &dz,
+	  g1_object_class *&hit) const;
 
   int check_terrain_location(i4_float x, i4_float y, i4_float z,
                              i4_float occupancy_radius,

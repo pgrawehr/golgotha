@@ -1265,7 +1265,7 @@ void g1_map_class::range_iterator::next()
 sw32 g1_map_class::get_objects_in_range_fn(float x, float y, float range,
 										g1_object_class *dest_array[],
 										w32 array_size,
-										OBJ_FILTER_TYPE fn)
+										OBJ_FILTER_TYPE fn) const
 	{
 	sw32 x_left,x_right,y_top,y_bottom;
   
@@ -1313,7 +1313,7 @@ sw32 g1_map_class::get_objects_in_range_fn(float x, float y, float range,
 
 sw32 g1_map_class::get_objects_in_range(float x, float y, float range,
                                         g1_object_class *dest_array[], w32 array_size,
-                                        w32 object_mask_flags, w32 type_mask_flags)
+                                        w32 object_mask_flags, w32 type_mask_flags) const
 {
   sw32 x_left,x_right,y_top,y_bottom;
   

@@ -151,54 +151,57 @@ void g1_trike_class::skipload(g1_loader_class *fp)
 	};
 
 void g1_trike_class::think()
-{
-  g1_map_piece_class::think();
-
-  if (!alive())
-	  {
-	  request_remove();
-	  return;
-	  }
-
-  if (attack_target.valid())
-  {    
-    request_think();
-
-    dest_x = attack_target->x;
-    dest_y = attack_target->y;
-
-    i4_float dist, dtheta, dx, dy;
-    suggest_move(dist, dtheta, dx, dy, 0);
-    move(dx,dy);
-
-    const i4_float KILL_RADIUS=0.5;
-	//The trike is a self-destructing attacker
-    //if we've run into the guy
-    if (x > dest_x-KILL_RADIUS  &&  y > dest_y-KILL_RADIUS  &&
-        x < dest_x+KILL_RADIUS  &&  y < dest_y+KILL_RADIUS)
     {
-      int damage=g1_trike_def.get_damage_map()->get_damage_for(attack_target.get()->id);
-
-      //hurt the dude
-      attack_target->damage(this,damage,i4_3d_vector(dx,dy,0));
-      
-      //throw some gibs
-      g1_shrapnel_class *shrapnel = NULL;
-      shrapnel = (g1_shrapnel_class *)g1_create_object(shrapnel_type);
-      if (shrapnel)
-      {
-        i4_float rx,ry,rh;
-        rx = (i4_rand()&0xFFFF)/((i4_float)0xFFFF) * 0.2f;
-        ry = (i4_rand()&0xFFFF)/((i4_float)0xFFFF) * 0.2f;
-        rh = (i4_rand()&0xFFFF)/((i4_float)0xFFFF) * 0.2f;
-        shrapnel->setup(x+rx,y+ry,h + rh,6,i4_T);
-      }
-      unoccupy_location();
-      request_remove();
-	  health=0;//be shure that we aren't still alive for the next tick
-	  //Remember: request_remove() may decide that the remove - queue is
-	  //full and don't do anything
-    }      
-  }
-}
+    
+    
+    if (!alive())
+        {
+        unoccupy_location();
+        request_remove();
+        return;
+        }
+    
+    if (attack_target.valid())
+        {    
+        request_think();
+        
+        dest_x = attack_target->x;
+        dest_y = attack_target->y;
+        
+        i4_float dist, dtheta, dx, dy,dz=0;
+        suggest_move(dist, dtheta, dx, dy, 0);
+        if (check_move(dx,dy,dz)==i4_F)
+            move(dx,dy,dz);
+        
+        const i4_float KILL_RADIUS=0.5;
+        //The trike is a self-destructing attacker
+        //if we've run into the guy
+        if (x > dest_x-KILL_RADIUS  &&  y > dest_y-KILL_RADIUS  &&
+            x < dest_x+KILL_RADIUS  &&  y < dest_y+KILL_RADIUS)
+            {
+            int damage=g1_trike_def.get_damage_map()->get_damage_for(attack_target.get()->id);
+            
+            //hurt the dude
+            attack_target->damage(this,damage,i4_3d_vector(dx,dy,0));
+            
+            //throw some gibs
+            g1_shrapnel_class *shrapnel = NULL;
+            shrapnel = (g1_shrapnel_class *)g1_create_object(shrapnel_type);
+            if (shrapnel)
+                {
+                i4_float rx,ry,rh;
+                rx = (i4_rand()&0xFFFF)/((i4_float)0xFFFF) * 0.2f;
+                ry = (i4_rand()&0xFFFF)/((i4_float)0xFFFF) * 0.2f;
+                rh = (i4_rand()&0xFFFF)/((i4_float)0xFFFF) * 0.2f;
+                shrapnel->setup(x+rx,y+ry,h + rh,6,i4_T);
+                }
+            unoccupy_location();
+            request_remove();
+            health=0;//be shure that we aren't still alive for the next tick
+            return;
+            }      
+        
+        }
+    g1_map_piece_class::think();
+    }
 

@@ -2817,7 +2817,7 @@ i4_bool g1_edit_state_class::set_minor_mode(char *major_mode_name, w32 minor_mod
 
   if (strcmp(major_mode, major_mode_name)==0 || set_major_mode(major_mode_name))
   {
-    ret=get_major_mode()->set_minor_mode((w8)minor_mode);
+    ret=get_major_mode()->set_minor_mode(minor_mode);
    
     if (tools)
     {

@@ -832,9 +832,11 @@ void g1_map_piece_class::think()
     dest_y = next_path->y;
   }
 
-  i4_float dist, dtheta, dx, dy, old_pathpos=path_pos;
+  //the suggested movement in z-direction is always null for
+  //non-air units. 
+  i4_float dist, dtheta, dx, dy, old_pathpos=path_pos,dz=0;
   suggest_move(dist, dtheta, dx, dy, 0);
-  if (check_move(dx,dy))
+  if (check_move(dx,dy,dz))
   {
     if ((g1_rand(62)&63)==0)
     {
@@ -844,7 +846,7 @@ void g1_map_piece_class::think()
       g1_current_view_state()->suggest_camera_event(cev);
     }
     
-    move(dx,dy);
+    move(dx,dy,dz);
   }
   else
   {
@@ -1775,7 +1777,7 @@ g2_link *g1_map_piece_class::link_on()
 	return 0;
 	}
 
-i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy)
+i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz)
 {
   pf_check_move.start();
   i4_bool ret=i4_T;
@@ -1795,13 +1797,13 @@ i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy)
 	  }
   */
   float olddx=dx,olddy=dy;
-  if ( g1_get_map()->check_poly_collision(x,y,
-	  occupancy_radius(),dx,dy,this,blocking))
+  if ( g1_get_map()->check_collision(this,dx,dy,dz,blocking))
 	  {
 	  //i4_warning("Hit object %i. Will move by (%f/%f) instead of (%f/%f)",blocking->global_id,dx,dy,olddx,olddy);
 	  // TODO
 	  //if the new dx/dy pair points far from the original
 	  //direction, return false
+      //return false;
 	  }
   //g2_link *own, *other;
   if (next_object.valid())
@@ -2042,7 +2044,7 @@ void g1_map_piece_class::set_path(g1_id_ref *list)
 
 
 i4_bool g1_map_piece_class::move(i4_float x_amount,
-                             i4_float y_amount)
+                             i4_float y_amount,i4_float z_amount)
 {
   pf_map_piece_move.start();  
 
@@ -2050,6 +2052,7 @@ i4_bool g1_map_piece_class::move(i4_float x_amount,
   
   x += x_amount;
   y += y_amount;
+  h += z_amount;
   
   if (!occupy_location())
   {

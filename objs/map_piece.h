@@ -131,10 +131,11 @@ public:
   checks wheter this move is ok. (Collision etc.)
   might adjust dest_x and dest_y to allow a small movement
   in a slightly other direction than requested
-  @param dest_x x coordinate of position I wanna go to, passed as reference, may be changed uppon return
-  @param dest_y y coordinate of position, same limitations
+  @param dx x amount I wanna go in x direction, passed as reference, may be changed uppon return
+  @param dy y amount to go in y direction, same limitations
+  @param dz z amount to move in z (height) direction, same limitations.
   */
-  i4_bool check_move(i4_float &dest_x,i4_float &dest_y);
+  i4_bool check_move(i4_float &dx,i4_float &dy, i4_float &dz);
 
   virtual void change_player_num(int new_player_num);
   virtual i4_bool check_collision(const i4_3d_vector &start, i4_3d_vector &ray)
@@ -218,8 +219,9 @@ public:
     Important: This method is not virtual, it's just an example how to do it.
     @param x_amount Amount of movement in x direction (in world units)
     @param y_amount Movement in y direction
+    @param z_amount Movement in z direction
     */
-  i4_bool move(i4_float x_amount, i4_float y_amount);
+  i4_bool move(i4_float x_amount, i4_float y_amount, i4_float z_amount);
   
   /**
     Static cast Method. 

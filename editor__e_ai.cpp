@@ -307,7 +307,7 @@ void g1_ai_params::create_buttons(i4_parent_window_class *container)
 
 
 
-i4_bool g1_ai_params::set_minor_mode(w8 m) 
+i4_bool g1_ai_params::set_minor_mode(w32 m) 
 { 
   if (m<=CREATE)
     minor_mode=(minor_mode_type)m; 

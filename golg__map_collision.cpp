@@ -61,6 +61,9 @@ with the current one.
 own parameter for historical reasons. 
 @returns True for hit, False for miss.
 */
+
+
+/*
 int g1_map_class::check_poly_collision(i4_float x, i4_float y, 
 									   i4_float occupancy_radius, 
 									   i4_float &dx, i4_float &dy, 
@@ -184,17 +187,17 @@ int g1_map_class::check_poly_collision(i4_float x, i4_float y,
 							objlist=objlist->next_solid();
 							continue;
 							}
-						/*
-						if (othermp && mp && (rcomp<2))
-							{
+						
+						//if (othermp && mp && (rcomp<2))
+						//	{
 							//if other is map_piece and this too, 
 							//occupancy_radius should suffice as test
-							ray.x=0;
-							ray.y=0;
-							hit=obj;
-							continue;
-							}
-						*/
+						//	ray.x=0;
+						//	ray.y=0;
+						//	hit=obj;
+						//	continue;
+						//	}
+						
 						
 						if (g1_model_collide_polygonal(obj, obj->draw_params, start, ray, normal))
 							{
@@ -231,6 +234,10 @@ int g1_map_class::check_poly_collision(i4_float x, i4_float y,
 	g1_map_pf_check_collision.stop();
 	return (hit!=0);
 	}
+
+  */
+
+/*
 
 int g1_map_class::check_collision(i4_float x, i4_float y, 
 								  i4_float occupancy_radius,
@@ -421,6 +428,53 @@ int g1_map_class::check_collision(i4_float x, i4_float y,
 		
 		return 0;
 	}
+*/
+
+i4_bool g1_map_class::check_collision(g1_object_class *obj,
+                                       i4_float &dx, i4_float &dy,
+                                       i4_float &dz,
+                                       g1_object_class *&hit) const
+    {
+    hit=0;
+    if (dx==0 && dy==0)
+        return i4_F;
+    g1_map_pf_check_collision.start();
+    //for now, it should be safe to assume that this cast is
+    //always possible, since non-map-piece objects cannot move and
+    //therefore also cannot collide. 
+    g1_map_piece_class *mp=g1_map_piece_class::cast(obj);
+    if (!mp)
+        return i4_F;
+    i4_bool this_is_on_path=mp->get_next_object()?i4_T:i4_F;
+    g1_object_class *other=0;
+    g1_map_piece_class *other_mp=0;
+    i4_bool other_is_on_path=i4_F;
+    i4_float occupancy_radius=mp->occupancy_radius();
+    g1_object_class *objs_arr[20];
+    sw32 num_objs=get_objects_in_range(mp->x,mp->y,
+        occupancy_radius+0.001,objs_arr,20);
+    i4_3d_vector start(mp->x,mp->y,mp->h);
+    i4_3d_vector ray(dx,dy,dz);
+    i4_bool ret=i4_F;
+    for(int i=0;i<num_objs;i++)
+        {
+        other=objs_arr[i];
+        //don't check collision against myself. 
+        if (other==obj)
+            continue;
+        if (other->check_collision(start,ray))
+            {
+            //dx=0;
+            //dy=0;
+            //hit=objs_arr[i];
+            //ret=i4_T;
+            break;
+            }
+        }
+    g1_map_pf_check_collision.stop();
+    return ret;
+    }
+
 
 int g1_map_class::check_non_player_collision(g1_player_type player_num,
                                              const i4_3d_vector &point,
@@ -491,14 +545,17 @@ int g1_map_class::check_non_player_collision(g1_player_type player_num,
         if ((p->object->player_num!=player_num ||
              !p->object->get_flag(g1_object_class::DANGEROUS)) &&
             p->object->check_collision(point, ray))
-          hit = p->object;
+            {
+            hit = p->object;
+            return 1;
+            }
         
         p = p->next_solid();
       }
     }
   
-  if (hit)
-    return 1;
+  //if (hit)
+  //  return 1;
   
   return 0;
 }
