@@ -537,7 +537,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     AFX_IDS_OCC_SCALEUNITS_PIXELS "Pixel"
-    IDS_RENDERINITFAILED    "The rendering device could not be initialized. Possible causes: You attempted to use an unsupported video mode, the DirectX  drivers are outdated (at least DirectX5 is required), your graphics card has a temporary problem, well, err..."
+    IDS_RENDERINITFAILED    "The rendering device could not be initialized. Possible causes: You attempted to use an unsupported video mode, the DirectX drivers are outdated (at least DirectX5 is required), your graphics card has a temporary problem, well, err..."
     IDS_DIRECTXINITFAILED   "The initialization of DirectX failed\nCheck wheter you have at least DirectX5 installed on your system."
     IDS_INVALIDBITDEPTH     "There is no video mode with the requested color depth available. Please try another mode."
     IDS_ERRORHELPTEXT       "You can terminate the process. (Golgotha will immediatelly quit, without saving anything), terminate the current task (Golgotha will attempt to return to the main loop), debug the process (only senseful if running inside a debugger), or ignore the error. In either case, it is possible that more errors will show up before the game goes on."
