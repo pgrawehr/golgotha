@@ -289,9 +289,21 @@ li_object* g1_get_load_info(g1_loader_class* map_file,
 		int num_add_t=map_file->read_32();
 		for(int k=0;k<num_add_t;k++)
 		{
-			texture_name_array.add(map_file->read_counted_str());
+			i4_str* str=map_file->read_counted_str();
+			w32 flags=map_file->read_32();
+			i4_float friction=map_file->read_float();
+			w16 damage=map_file->read_16();
+			texture_name_array.add(str);
+			li_set_value("texture_object_list",new li_list(
+				li_make_list(new li_string(*str),
+				    li_make_list(new li_string("friction"), new i4_float(friction),0),
+				    li_make_list(new li_string("flags"),new li_int(flags),0),
+					li_make_list(new li_string("damage"),new li_int(damage),0),
+					0),
+				li_get_value("texture_object_list",env)),env);
 			g1_current_t_tiles++;
 		}
+		li_call("reverse",li_get_value("texture_object_list"));
 	}
 
 	if (map_file->goto_section(G1_SECTION_MODEL_NAMES_V1))

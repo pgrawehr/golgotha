@@ -93,9 +93,17 @@ void g1_map_class::save(g1_saver_class *out, w32 sections)
 	  out->write_32(g1_tile_man.total());
 	  for (i=0;i<g1_tile_man.total();i++)
 	  {
+		  g1_tile_class *tile=g1_tile_man.get(i);
 		  i4_const_str *name=g1_tile_man.get_name_from_tile(i);
-		  if (name)
-			out->write_counted_str(*name);
+		  if (tile)
+		  {
+		      out->write_counted_str(*name);
+			  out->write_32(tile->flags);
+			  //out->write_float(tile->damping_fraction);
+			  //out->write_float(tile->damping_e);
+			  out->write_float(tile->friction_fraction);
+			  out->write_16(tile->damage);
+		  }
 		  delete name;
 	  }
   }

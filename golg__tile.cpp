@@ -45,11 +45,9 @@ int g1_tile_man_class::get_remap(int tile_num)
 }
 
 g1_tile_man_class::g1_tile_man_class()
-:original_checksums(256,i4_hashtable<w32>::WAITFORINIT|i4_hashtable<w32>::KEYSONLY)
+:original_checksums(256,i4_hashtable<w32>::WAITFORINIT|i4_hashtable<w32>::KEYSONLY),
+array(0,100)
 {
-  t_tiles=0;
-  max_tiles=0;
-  array=0;
   sorted_by_checksum=0;
 }
 
@@ -67,15 +65,10 @@ void g1_tile_man_class::init()
 
 void g1_tile_man_class::reset(int _max_tiles) 
 { 
-  if (array)
-    i4_free(array);
-    
-  max_tiles=_max_tiles+1;
-  t_tiles=0;
-  if (max_tiles)
-    array=(g1_tile_class *)I4_MALLOC(sizeof(g1_tile_class) * max_tiles,"");
-  else
-    array=0;
+  
+ 
+  array.clear();
+  array.add();
 
   array[0].init();
   array[0].texture=0;
@@ -95,6 +88,14 @@ void g1_tile_class::apply_to_cell(g1_map_cell_class &cell)
 void g1_tile_class::init()
 {
   flags=SELECTABLE;
+  texture=0;
+  filename_checksum=0;
+  selection_order=0;
+  damping_fraction=1.0f;
+  damping_e=1.0f;
+  friction_fraction=1.0f;
+  damage=0;
+
   set_friction(g1_resources.damping_friction); 
 }
 
@@ -135,11 +136,11 @@ int g1_tile_man_class::get_tile_from_name(i4_const_str &name)
 }
 
 
-int g1_tile_compare(const void *a, const void *b)
+int g1_tile_compare(const g1_tile_class *a, const g1_tile_class *b)
 {
-  if (((g1_tile_class *)a)->filename_checksum<((g1_tile_class *)b)->filename_checksum)
+  if (a->filename_checksum<b->filename_checksum)
     return -1;
-  else if (((g1_tile_class *)a)->filename_checksum>((g1_tile_class *)b)->filename_checksum)
+  else if (a->filename_checksum>b->filename_checksum)
     return 1;
   else return 0;
 }
@@ -150,7 +151,7 @@ void g1_tile_man_class::finished_load()
   {
     int i,order_on=0;
 
-    for (i=0; i<t_tiles; i++)
+    for (i=0; i<array.size(); i++)
     {
       if (array[i].flags & g1_tile_class::SELECTABLE)
         array[i].selection_order=order_on++;      
@@ -158,14 +159,15 @@ void g1_tile_man_class::finished_load()
         array[i].selection_order=0;
     }
 
-    qsort(array, t_tiles, sizeof(g1_tile_class), g1_tile_compare);
+    //qsort(array, t_tiles, sizeof(g1_tile_class), g1_tile_compare);
+	array.sort(&g1_tile_compare);
     sorted_by_checksum=1;
 
     select_remap.clear();
     for (i=0; i<order_on; i++)
       select_remap.add();
 
-    for (i=0; i<t_tiles;i++)
+    for (i=0; i<array.size();i++)
       if (array[i].flags & g1_tile_class::SELECTABLE)
         select_remap[array[i].selection_order]=i;
 
@@ -176,7 +178,7 @@ void g1_tile_man_class::finished_load()
 
 i4_const_str *g1_tile_man_class::get_name_from_tile(w32 tileno)
 	{
-	if (tileno>=(w32)t_tiles) return 0;
+	if (tileno>=(w32)array.size()) return 0;
 	w32 checksum=array[tileno].filename_checksum;
 	i4_const_str *nm=r1_get_texture_name(checksum);
 	if (!nm)//not found?
@@ -197,11 +199,11 @@ i4_const_str *g1_tile_man_class::get_name_from_tile(w32 tileno)
 
 int g1_tile_man_class::get_tile_from_checksum(w32 checksum)
 {
-  if (!t_tiles)
+  if (!array.size())
     return 0;
 
  
-  sw32 lo=0,hi=t_tiles-1,mid;
+  sw32 lo=0,hi=array.size()-1,mid;
 
   mid=(lo+hi+1)/2;
   for(;;)
@@ -226,8 +228,8 @@ int g1_tile_man_class::get_tile_from_checksum(w32 checksum)
 
 void g1_tile_man_class::add(li_object *o, li_environment *env)
 {
-  if (t_tiles==max_tiles)
-    i4_error("WARNING: Too many tile textures in level.");
+  //if (t_tiles==max_tiles)
+  //  i4_error("WARNING: Too many tile textures in level.");
 
   li_object *prop=0;
 
@@ -245,11 +247,11 @@ void g1_tile_man_class::add(li_object *o, li_environment *env)
 
 
   i4_const_str i4_tname=i4_const_str(tname->value());
-  array[t_tiles].texture=tman->register_texture(i4_tname, i4_tname); 
-  array[t_tiles].filename_checksum=i4_str_checksum(i4_tname);
-
-
-  array[t_tiles++].get_properties(prop, env);
+  g1_tile_class *newtile=array.add();
+  newtile->init();
+  newtile->texture=tman->register_texture(i4_tname, i4_tname); 
+  newtile->filename_checksum=i4_str_checksum(i4_tname);
+  newtile->get_properties(prop, env);
   sorted_by_checksum=0;
 }
 
@@ -260,8 +262,6 @@ static li_symbol *g1_block=0, *g1_wave=0, *g1_selectable=0, *g1_friction=0, *g1_
 // format of ("texture_name" (property_name prop_value)..)
 void g1_tile_class::get_properties(li_object *properties, li_environment *env)
 {
-  init();
-
   while (properties)
   {
     li_symbol *sym=li_symbol::get(li_car(li_car(properties,env),env),env);
@@ -280,6 +280,7 @@ void g1_tile_class::get_properties(li_object *properties, li_environment *env)
     }
     else if (sym==li_get_symbol("selectable", g1_selectable))
     {
+		//By default, this property is true. 
       if (li_get_bool(value, env)) flags|=SELECTABLE; else flags&=~SELECTABLE;
     }
     else if (sym==li_get_symbol("friction", g1_friction))
@@ -293,8 +294,13 @@ void g1_tile_class::get_properties(li_object *properties, li_environment *env)
 		g1_tile_man.store_alternate_checksum(newkey,filename_checksum);
 		filename_checksum=newkey;
 		}
+	else if (sym==li_get_symbol("flags"))
+	{
+		//Used internally for flag saving
+		flags=li_int::get(value,env)->value();
+	}
     else
-      i4_error("bad texture flag '%s' should be block, wave, selectable, friction, save_name", 
+      i4_error("bad texture flag '%s' should be block, wave, selectable, friction, save_name or flags", 
                sym->name()->value());
 
     properties=li_cdr(properties,env);
@@ -314,9 +320,7 @@ w32 g1_tile_man_class::get_original_checksum(w32 newchecksum)
 void g1_tile_man_class::uninit()
 {
   select_remap.uninit();
-  if (array)
-    i4_free(array);
-  array=0;
+  array.uninit();
   original_checksums.reset();
 }
 

@@ -953,7 +953,8 @@ void r1_dx9_texture_class::async_load_finished(used_node *u)
 		  //if (image_list[x].usage==0) image_list[x].usage=1;
 	  }
 	  array_lock.unlock();
-	  I4_ASSERT(im,"Internal error in texture loader: Image deleted during access.");
+	  if (!im)
+		i4_error("Internal error in texture loader: Image deleted during access.");
 	  delete u->data;
 	  tex_by=2;
 	  if (u->mip->flags & R1_MIPLEVEL_LOAD_32BIT)
