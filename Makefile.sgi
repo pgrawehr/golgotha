@@ -1,0 +1,372 @@
+# on sun, use gmake, not make
+# and implement the required functions to convert from big-endian (sun) to little-endian (intel)
+# remember that the files are always to be stored in little-endian format!
+
+# under linux, use this:
+CC=g++
+LIBDIRS=-L/usr/X11/lib
+
+# under SUN, use this instead (untested):
+# CC=g++ -fpermissive  # change missing types into warnings
+# LIBDIRS=
+
+############################################
+# the rest so far works under both
+
+CPP=gcc
+
+MYINCDIR=.
+
+#INTDIR=.
+INTDIR=unix_debug
+
+INCDIRS=-I${MYINCDIR} -I/usr/X11/include -I/usr/openwin/include -I/usr/X11R6/include
+LIBS= -lm -lX11 -lGL -lrt -lXext -lpthread
+LIBDIRS=-L/usr/X11R6/lib 
+
+#the following flags work under cygwin (without opengl render) - this is not sensefull anyway.
+#CFLAGS= $(INCDIRS) -D __linux -W -Wcast-qual \
+#	-Wmissing-declarations -static -fno-strict-prototypes \
+#	-ffor-scope -Wstrict-prototypes  
+
+
+#these flags work for real unix
+#Backup settings
+#CFLAGS= $(INCDIRS) -x c++ -D SUN4 -W -Wcast-qual \
+#	-ffor-scope   
+
+#DBG=-g -D _DEBUG
+
+CFLAGS= $(INCDIRS) -x c++ -D SUN4 -D _REENTRANT -W -Wcast-qual \
+	-ffor-scope   
+
+DBG=-g -D _DEBUG
+
+# -Wconversion 
+
+######################
+
+#the top files of this list are os-dependent and must therefore be checked first to
+#ensure they compile on a given platform
+
+#temporarily removed
+#	$(INTDIR)/net__startup.o
+#	$(INTDIR)/network__tcpip.o	
+#       $(INTDIR)/quantize__dither_quantize.o
+#	$(INTDIR)/quantize__histogram.o
+#	$(INTDIR)/quantize__median.o
+
+#The following doesn't work on SUN 
+#	$(INTDIR)/video__x11__mitshm.o
+
+OBJS = \
+	$(INTDIR)/file__file.o \
+	$(INTDIR)/video__display.o \
+	$(INTDIR)/video__opengl__opengl_display.o \
+	$(INTDIR)/dll__dll_man.o \
+	$(INTDIR)/dll__linux_dll.o \
+	$(INTDIR)/video__x11__x11_input.o \
+	$(INTDIR)/video__x11__x11_display.o \
+	$(INTDIR)/video__opengl__x11_opengl.o \
+	$(INTDIR)/render__opengl_render.o \
+	$(INTDIR)/render__opengl_tman.o \
+	$(INTDIR)/app__app.o \
+	$(INTDIR)/area__rectlist.o \
+	$(INTDIR)/checksum__checksum.o \
+	$(INTDIR)/device__device.o \
+	$(INTDIR)/editor__critical_graph.o \
+	$(INTDIR)/editor__critical_map.o \
+	$(INTDIR)/editor__e_ai.o \
+	$(INTDIR)/editor__editor.o \
+	$(INTDIR)/editor__lisp_interaction.o \
+	$(INTDIR)/editor__path_api.o \
+	$(INTDIR)/editor__solvegraph_breadth.o \
+	$(INTDIR)/editor__solvemap_astar2.o \
+	$(INTDIR)/editor__solvemap_breadth.o \
+	$(INTDIR)/error__error.o \
+	$(INTDIR)/font__font.o \
+	$(INTDIR)/golg__border_frame.o \
+	$(INTDIR)/golg__camera.o \
+	$(INTDIR)/golg__cheat.o \
+	$(INTDIR)/golg__controller.o \
+	$(INTDIR)/golg__cwin_man.o \
+	$(INTDIR)/golg__demo.o \
+	$(INTDIR)/golg__draw_context.o \
+	$(INTDIR)/golg__f_tables.o \
+	$(INTDIR)/golg__fli_load.o \
+	$(INTDIR)/golg__g1_file.o \
+	$(INTDIR)/golg__g1_object.o \
+	$(INTDIR)/golg__g1_rand.o \
+	$(INTDIR)/golg__g1_render.o \
+	$(INTDIR)/golg__g1_texture_id.o \
+	$(INTDIR)/golg__g1_tint.o \
+	$(INTDIR)/golg__global_id.o \
+	$(INTDIR)/golg__human.o \
+	$(INTDIR)/golg__image_man.o \
+	$(INTDIR)/golg__input.o \
+	$(INTDIR)/golg__level_load.o \
+	$(INTDIR)/golg__li_interface.o \
+	$(INTDIR)/golg__li_objref.o \
+	$(INTDIR)/golg__light.o \
+	$(INTDIR)/golg__load3d.o \
+	$(INTDIR)/golg__m_flow.o \
+	$(INTDIR)/golg__main.o \
+	$(INTDIR)/golg__make_tlist.o \
+	$(INTDIR)/golg__map.o \
+	$(INTDIR)/golg__map_cell.o \
+	$(INTDIR)/golg__map_collision.o \
+	$(INTDIR)/golg__map_data.o \
+	$(INTDIR)/golg__map_light.o \
+	$(INTDIR)/golg__map_lod.o \
+	$(INTDIR)/golg__map_man.o \
+	$(INTDIR)/golg__map_movi.o \
+	$(INTDIR)/golg__map_save.o \
+	$(INTDIR)/golg__map_vars.o \
+	$(INTDIR)/golg__map_vert.o \
+	$(INTDIR)/golg__map_view.o \
+	$(INTDIR)/golg__map_vis.o \
+	$(INTDIR)/golg__menu.o \
+	$(INTDIR)/golg__obj3d.o \
+	$(INTDIR)/golg__options.o \
+	$(INTDIR)/golg__overhead.o \
+	$(INTDIR)/golg__path.o \
+	$(INTDIR)/golg__player.o \
+	$(INTDIR)/golg__reference.o \
+	$(INTDIR)/golg__remove_man.o \
+	$(INTDIR)/golg__resources.o \
+	$(INTDIR)/golg__saver.o \
+	$(INTDIR)/golg__screen_shot.o \
+	$(INTDIR)/golg__selection.o \
+	$(INTDIR)/golg__sky.o \
+	$(INTDIR)/golg__solvemap_astar.o \
+	$(INTDIR)/golg__sound_man.o \
+	$(INTDIR)/golg__statistics.o \
+	$(INTDIR)/golg__team_api.o \
+	$(INTDIR)/golg__tick_count.o \
+	$(INTDIR)/golg__tile.o \
+	$(INTDIR)/golg__vert_table.o \
+	$(INTDIR)/golg__visible.o \
+	$(INTDIR)/gui__browse_tree.o \
+	$(INTDIR)/gui__butbox.o \
+	$(INTDIR)/gui__list_pick.o \
+	$(INTDIR)/image__image.o \
+	$(INTDIR)/inc__search.o \
+	$(INTDIR)/init__init.o \
+	$(INTDIR)/lisp__functions.o \
+	$(INTDIR)/lisp__lisp.o \
+	$(INTDIR)/lisp__math.o \
+	$(INTDIR)/lisp__file.o \
+	$(INTDIR)/loaders__bmp_load.o \
+	$(INTDIR)/loaders__bmp_write.o \
+	$(INTDIR)/loaders__dir_load.o \
+	$(INTDIR)/loaders__dir_save.o \
+	$(INTDIR)/loaders__jpg__jcapistd.o \
+	$(INTDIR)/loaders__jpg__jdapistd.o \
+	$(INTDIR)/loaders__jpg__jdatasrc.o \
+	$(INTDIR)/loaders__jpg__jerror.o \
+	$(INTDIR)/loaders__jpg__jfdctflt.o \
+	$(INTDIR)/loaders__jpg__jfdctfst.o \
+	$(INTDIR)/loaders__jpg__jfdctint.o \
+	$(INTDIR)/loaders__jpg__jidctflt.o \
+	$(INTDIR)/loaders__jpg__jidctfst.o \
+	$(INTDIR)/loaders__jpg__jidctint.o \
+	$(INTDIR)/loaders__jpg__jidctred.o \
+	$(INTDIR)/loaders__jpg__jmemmgr.o \
+	$(INTDIR)/loaders__jpg__jmemnobs.o \
+	$(INTDIR)/loaders__jpg__jquant1.o \
+	$(INTDIR)/loaders__jpg__jquant2.o \
+	$(INTDIR)/loaders__jpg__jutils.o \
+	$(INTDIR)/loaders__jpg__wrtarga.o \
+	$(INTDIR)/loaders__jpg_load.o \
+	$(INTDIR)/loaders__jpg_write.o \
+	$(INTDIR)/loaders__load.o \
+	$(INTDIR)/loaders__pcx_load.o \
+	$(INTDIR)/loaders__tga_load.o \
+	$(INTDIR)/loaders__tga_write.o \
+	$(INTDIR)/loaders__wav_load.o \
+	$(INTDIR)/main__win_main.o \
+	$(INTDIR)/math__random.o \
+	$(INTDIR)/math__spline.o \
+	$(INTDIR)/math__transform.o \
+	$(INTDIR)/maxtool__anim_dialog.o \
+	$(INTDIR)/maxtool__animate.o \
+	$(INTDIR)/maxtool__drag_select.o \
+	$(INTDIR)/maxtool__draw_modes.o \
+	$(INTDIR)/maxtool__get_dir.o \
+	$(INTDIR)/maxtool__m1_commands.o \
+	$(INTDIR)/maxtool__m1_info.o \
+	$(INTDIR)/maxtool__m1_test.o \
+	$(INTDIR)/maxtool__max_load.o \
+	$(INTDIR)/maxtool__max_object.o \
+	$(INTDIR)/maxtool__maxcomm.o \
+	$(INTDIR)/maxtool__maxtool.o \
+	$(INTDIR)/maxtool__mount_win.o \
+	$(INTDIR)/maxtool__navigate.o \
+	$(INTDIR)/maxtool__pan.o \
+	$(INTDIR)/maxtool__render.o \
+	$(INTDIR)/maxtool__saveas.o \
+	$(INTDIR)/maxtool__st_edit.o \
+	$(INTDIR)/maxtool__translate.o \
+	$(INTDIR)/memory__malloc.o \
+	$(INTDIR)/menu__menu.o \
+	$(INTDIR)/music__stream.o \
+	$(INTDIR)/objs__ai_builder.o \
+	$(INTDIR)/objs__ai_jim.o \
+	$(INTDIR)/objs__ai_joe.o \
+	$(INTDIR)/objs__armor.o \
+	$(INTDIR)/objs__bank.o \
+	$(INTDIR)/objs__base_launcher.o \
+	$(INTDIR)/objs__bases.o \
+	$(INTDIR)/objs__beam_weapon.o \
+	$(INTDIR)/objs__bird.o \
+	$(INTDIR)/objs__bolt.o \
+	$(INTDIR)/objs__bomb_truck.o \
+	$(INTDIR)/objs__bomber.o \
+	$(INTDIR)/objs__bridger.o \
+	$(INTDIR)/objs__bullet.o \
+	$(INTDIR)/objs__buster_rocket.o \
+	$(INTDIR)/objs__car.o \
+	$(INTDIR)/objs__carcass.o \
+	$(INTDIR)/objs__chunk_explosion.o \
+	$(INTDIR)/objs__cloud.o \
+	$(INTDIR)/objs__cobra_tank.o \
+	$(INTDIR)/objs__controllers.o \
+	$(INTDIR)/objs__convoy.o \
+	$(INTDIR)/objs__crate.o \
+	$(INTDIR)/objs__damager.o \
+	$(INTDIR)/objs__debris.o \
+	$(INTDIR)/objs__def_object.o \
+	$(INTDIR)/objs__defaults.o \
+	$(INTDIR)/objs__dropped_bomb.o \
+	$(INTDIR)/objs__eleccar.o \
+	$(INTDIR)/objs__engineer.o \
+	$(INTDIR)/objs__explode_model.o \
+	$(INTDIR)/objs__explosion1.o \
+	$(INTDIR)/objs__field_camera.o \
+	$(INTDIR)/objs__fire.o \
+	$(INTDIR)/objs__fire_angle.o \
+	$(INTDIR)/objs__flak.o \
+	$(INTDIR)/objs__goal.o \
+	$(INTDIR)/objs__guided_missile.o \
+	$(INTDIR)/objs__gun_port.o \
+	$(INTDIR)/objs__helicopter.o \
+	$(INTDIR)/objs__jet.o \
+	$(INTDIR)/objs__lawfirm.o \
+	$(INTDIR)/objs__light_o.o \
+	$(INTDIR)/objs__map_piece.o \
+	$(INTDIR)/objs__miracle.o \
+	$(INTDIR)/objs__miscobjs.o \
+	$(INTDIR)/objs__model_collide.o \
+	$(INTDIR)/objs__model_draw.o \
+	$(INTDIR)/objs__model_id.o \
+	$(INTDIR)/objs__moneycrate.o \
+	$(INTDIR)/objs__moneyplane.o \
+	$(INTDIR)/objs__old_ids.o \
+	$(INTDIR)/objs__particle_emitter.o \
+	$(INTDIR)/objs__path_object.o \
+	$(INTDIR)/objs__peontank.o \
+	$(INTDIR)/objs__popup_turret.o \
+	$(INTDIR)/objs__repairer.o \
+	$(INTDIR)/objs__rocket.o \
+	$(INTDIR)/objs__rocktank.o \
+	$(INTDIR)/objs__sfx_obj.o \
+	$(INTDIR)/objs__shockwave.o \
+	$(INTDIR)/objs__shrapnel.o \
+	$(INTDIR)/objs__smoke_trail.o \
+	$(INTDIR)/objs__sprite.o \
+	$(INTDIR)/objs__sprite_object.o \
+	$(INTDIR)/objs__stank.o \
+	$(INTDIR)/objs__stank_factory.o \
+	$(INTDIR)/objs__structure_death.o \
+	$(INTDIR)/objs__super_mortar.o \
+	$(INTDIR)/objs__supergun.o \
+	$(INTDIR)/objs__takeover_pad.o \
+	$(INTDIR)/objs__tank_buster.o \
+	$(INTDIR)/objs__target.o \
+	$(INTDIR)/objs__tower_electric.o \
+	$(INTDIR)/objs__tower_missile.o \
+	$(INTDIR)/objs__trike.o \
+	$(INTDIR)/objs__turret.o \
+	$(INTDIR)/objs__vehic_sounds.o \
+	$(INTDIR)/objs__verybiggun.o \
+	$(INTDIR)/palette_pal.o \
+	$(INTDIR)/render__gtext_load.o \
+	$(INTDIR)/render__mip.o \
+	$(INTDIR)/render__mip_average.o \
+	$(INTDIR)/render__r1_api.o \
+	$(INTDIR)/render__r1_clip.o \
+	$(INTDIR)/render__r1_font.o \
+	$(INTDIR)/render__r1_res.o \
+	$(INTDIR)/render__r1_win.o \
+	$(INTDIR)/render__tex_id.o \
+	$(INTDIR)/render__tmanage.o \
+	$(INTDIR)/sound__unix_sound.o \
+	$(INTDIR)/sound__sfx_id.o \
+	$(INTDIR)/sound__sound.o \
+	$(INTDIR)/status__status.o \
+	$(INTDIR)/string__string.o \
+	$(INTDIR)/threads__unixthreads.o \
+	$(INTDIR)/time__timedev.o \
+	$(INTDIR)/time__unixtime.o \
+	$(INTDIR)/transport__loader.o \
+	$(INTDIR)/transport__randomize.o \
+	$(INTDIR)/transport__transport.o \
+	$(INTDIR)/video__x11__mitshm.o \
+	$(INTDIR)/window__window.o
+
+######################
+
+all:	golgotha.elf
+
+######################
+
+ifeq (depend,$(wildcard depend))
+include depend
+endif
+
+######################
+depend: 
+#	$(CC) -M $(CFLAGS) %.c > depend
+	$(CC) -MM -MG $(CFLAGS) *.cpp >> depend
+
+# (generates dependencies for *.C -> *.o, but still need to do
+#  *.o -> *.exe by hand)
+
+
+######################
+
+#%.o: %.cpp depend Makefile
+#	$(CPP) $(CFLAGS) $(DBG) -c $< -o $@ 
+
+$(INTDIR)/%.o:	%.cpp depend Makefile
+	$(CPP) $(CFLAGS) $(DBG) -c $< -o $@
+
+#######################
+golgotha.elf:	$(OBJS)
+	$(CC) $(DBG) $(LIBDIRS) $(LIBS) $^ -o $@
+
+## what does the ``$^'' do???
+
+###########
+#
+
+
+#
+######################
+
+clean:
+	- rm *.elf $(INTDIR)/*.o *~ depend
+
+untouch:
+	- rm golgotha.elf all
+
+touch:
+	- touch -c $(OBJS)
+
+
+
+######################
+
+# Local Variables:
+# mode: font-lock
+# End:

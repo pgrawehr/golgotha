@@ -1,0 +1,1120 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+101 DIALOG DISCARDABLE  0, 0, 312, 95
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Choose a display"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,249,6,50,14
+    PUSHBUTTON      "Cancel",2,249,23,50,14
+END
+
+102 DIALOGEX 0, 0, 297, 46
+STYLE DS_ABSALIGN | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE
+EXSTYLE WS_EX_CLIENTEDGE
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",1,7,25,50,14
+    PUSHBUTTON      "Cancel",2,57,25,50,14
+    EDITTEXT        1000,7,7,283,14,ES_AUTOHSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    102, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 290
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 39
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_SKULL               ICON    DISCARDABLE     "resource\\error.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_NODROP              CURSOR  DISCARDABLE     "resource\\cur00002.cur"
+#endif    // Neutral resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Englisch (USA) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+101 DIALOG DISCARDABLE  0, 0, 312, 95
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Choose a display"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,249,6,50,14
+    PUSHBUTTON      "Cancel",2,249,23,50,14
+END
+
+102 DIALOGEX 0, 0, 297, 46
+STYLE DS_ABSALIGN | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE
+EXSTYLE WS_EX_CLIENTEDGE
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",1,7,25,50,14
+    PUSHBUTTON      "Cancel",2,57,25,50,14
+    EDITTEXT        1000,7,7,283,14,ES_AUTOHSCROLL
+END
+
+AFX_IDD_NEWTYPEDLG DIALOG DISCARDABLE  9, 26, 183, 70
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "New"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT           "&New",IDC_STATIC,6,5,123,8,NOT WS_GROUP
+    LISTBOX         AFX_IDC_LISTBOX,6,15,125,49,WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "&OK",IDOK,137,6,40,14
+    PUSHBUTTON      "&Cancel",IDCANCEL,137,23,40,14
+    PUSHBUTTON      "&Help",ID_HELP,137,43,40,14
+END
+
+IDD_ERRORDIALOG DIALOGEX 0, 0, 340, 165
+STYLE DS_MODALFRAME | DS_NOIDLEMSG | DS_SETFOREGROUND | DS_3DLOOK | 
+    DS_NOFAILCREATE | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_NOPARENTNOTIFY
+CAPTION "Error"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Terminate &Program",IDABORT,7,144,81,14
+    PUSHBUTTON      "End T&ask",IDCANCEL,89,144,81,14
+    PUSHBUTTON      "&Debug",IDC_DEBUG,171,144,81,14
+    PUSHBUTTON      "&Ignore message",IDIGNORE,253,144,81,14
+    ICON            IDI_SKULL,IDC_STATIC,7,62,21,20
+    LTEXT           "There seems to be a big problem accessing the resources to show more help about this message.",
+                    IDC_ERRORHELP,45,89,288,43
+    EDITTEXT        IDC_ERRORMESSAGE,45,45,288,40,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_NOHIDESEL | ES_READONLY | 
+                    ES_WANTRETURN | WS_VSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_SEVERITY,45,6,288,38,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_NOHIDESEL | ES_READONLY | ES_WANTRETURN | NOT 
+                    WS_BORDER | WS_VSCROLL | NOT WS_TABSTOP
+    CONTROL         "Pause the game before the next frame",IDC_PAUSE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,45,132,276,9
+END
+
+IDD_INFORMATION DIALOG DISCARDABLE  0, 0, 264, 186
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "&Informations"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_INFORMATIONTEXT,7,7,250,172,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_NOHIDESEL | 
+                    ES_READONLY | ES_WANTRETURN
+END
+
+IDD_OPTIONS DIALOG DISCARDABLE  0, 0, 345, 186
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "&Graphic settings"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Device",IDC_STATIC,19,14,91,10
+    COMBOBOX        IDC_DEVICES,19,24,210,66,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Show &Modes of this device",IDC_CREATE,20,39,209,13
+    LTEXT           "Available resolutions",IDC_STATIC,21,56,206,9
+    LISTBOX         IDC_RESOLUTIONS,21,67,206,64,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Use &Windowed Mode",IDC_WINDOWED,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,21,132,106,14
+    LTEXT           "Current Resolution: Unknown",IDC_CURRENTMODE,19,147,115,
+                    32
+    LTEXT           "In windowed mode, the choosen resolution will be used as size of the window. The color depth will be ignored and replaced by the color depth of your desktop.",
+                    IDC_STATIC,138,136,126,43
+    COMBOBOX        IDC_RENDER_DEVICE,235,24,103,58,CBS_DROPDOWNLIST | 
+                    CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Renderer (ignored)",IDC_STATIC,235,14,72,10
+    CONTROL         "Slider1",IDC_TEXTURE_QUALITY,"msctls_trackbar32",
+                    TBS_AUTOTICKS | TBS_TOP | WS_TABSTOP,237,66,101,21
+    LTEXT           "Texture quality",IDC_STATIC,241,57,47,8
+    CONTROL         "Slider2",IDC_VIEW_RANGE,"msctls_trackbar32",TBS_TOP | 
+                    TBS_NOTICKS | WS_TABSTOP,237,100,101,15
+    LTEXT           "Viewing far terrain",IDC_STATIC,242,92,57,8
+    LTEXT           "<-worse                      better->",IDC_STATIC,243,
+                    118,95,9
+    RTEXT           "256",IDC_TEXTURE_QUAL_TEXT,298,57,40,8
+    RTEXT           "256",IDC_VIEW_QUAL_TEXT,298,92,40,8
+    GROUPBOX        "Texture color depth",IDC_TexQualCombo,269,129,69,50,
+                    WS_GROUP
+    CONTROL         "16 Bit",IDC_Tex16,"Button",BS_AUTORADIOBUTTON,274,141,
+                    58,10
+    CONTROL         "32 Bit",IDC_Tex32,"Button",BS_AUTORADIOBUTTON,274,152,
+                    58,10
+    CONTROL         "Automatic",IDC_TEXDEF,"Button",BS_AUTORADIOBUTTON,274,
+                    163,56,10
+END
+
+IDD_SOUND DIALOG DISCARDABLE  0, 0, 248, 183
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "&Sound"
+FONT 8, "MS Sans Serif"
+BEGIN
+    GROUPBOX        "Sound",IDC_SOUNDGROUP,14,71,102,54,WS_GROUP
+    CONTROL         "3D-Sound",IDC_3DSOUND,"Button",BS_AUTORADIOBUTTON,20,84,
+                    87,10
+    CONTROL         "2D-Sound",IDC_2DSOUND,"Button",BS_AUTORADIOBUTTON,20,97,
+                    72,11
+    CONTROL         "No sound",IDC_NOSOUND,"Button",BS_AUTORADIOBUTTON,20,
+                    108,81,12
+    LTEXT           "Volume",IDC_STATIC,125,94,45,9
+    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,119,106,93,16
+    COMBOBOX        IDC_SOUNDCARD,13,50,204,40,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Device",IDC_STATIC,14,36,91,10
+    PUSHBUTTON      "Activate Sound",IDC_ENABLE_SOUND,14,127,101,22
+    PUSHBUTTON      "Device information",IDC_SOUNDCAPABILITIES,125,75,92,15
+END
+
+IDD_SOUNDINFO DIALOG DISCARDABLE  37, 31, 238, 158
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Capabilities of this device"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Close",IDC_DSCAPS_CLOSE,174,138,64,15
+    LTEXT           "Property",-1,5,3,58,12,NOT WS_GROUP
+    LTEXT           "Value",-1,176,4,57,10,NOT WS_GROUP
+    LTEXT           "",IDC_DSCAPS_VALUE,174,15,57,23,SS_SUNKEN | NOT 
+                    WS_GROUP
+    LISTBOX         IDC_DSCAPSLIST,5,15,163,139,LBS_HASSTRINGS | WS_VSCROLL | 
+                    WS_HSCROLL | WS_TABSTOP
+END
+
+IDD_EXTRAS DIALOG DISCARDABLE  0, 0, 345, 186
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "&Extras"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Use special stereoscopic glasses (Win95 or 98 only!)",
+                    IDC_STEREOMODE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,
+                    12,191,11
+    COMBOBOX        IDC_STEREOPORTS,17,42,160,14,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Select the port where the glasses are attached",
+                    IDC_STATIC,17,30,158,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    102, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 290
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 39
+    END
+
+    IDD_ERRORDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 333
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 158
+    END
+
+    IDD_INFORMATION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 257
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 179
+    END
+
+    IDD_OPTIONS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 338
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 179
+    END
+
+    IDD_SOUND, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 241
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 176
+    END
+
+    IDD_EXTRAS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 338
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 179
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+102                     ICON    DISCARDABLE     "resource\\ico102.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_POINTER             CURSOR  DISCARDABLE     "resource\\pointer.cur"
+IDC_NODROP              CURSOR  DISCARDABLE     "resource\\nodrop.cur"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DES)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 7, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""resource\\mfctest.rc2""  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen\r\n"
+    "//#include ""l.deu\\afxres.rc""          // Standardkomponenten\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_OPENFILE        "Open"
+    AFX_IDS_SAVEFILE        "Save as"
+    AFX_IDS_ALLFILTER       "All files (*.*)"
+    AFX_IDS_UNTITLED        "Unnamed"
+    AFX_IDS_UNNAMED_FILE    "an unnamed file"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_HIDE            "&Hide"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_NO_ERROR_AVAILABLE "No error message available."
+    AFX_IDS_NOT_SUPPORTED_EXCEPTION 
+                            "There was an attempt to execute an unsupported operation."
+    AFX_IDS_RESOURCE_EXCEPTION "A required resource is missing."
+    AFX_IDS_MEMORY_EXCEPTION "Insufficient Memory."
+    AFX_IDS_USER_EXCEPTION  "An unexspected error occured."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_INVALID_FILENAME "Ungültiger Dateiname."
+    AFX_IDP_FAILED_TO_OPEN_DOC "Fehler beim Öffnen des Dokuments."
+    AFX_IDP_FAILED_TO_SAVE_DOC "Fehler beim Speichern des Dokuments."
+    AFX_IDP_ASK_TO_SAVE     "Änderungen in %1 speichern?"
+    AFX_IDP_FAILED_TO_CREATE_DOC 
+                            "Fehler beim Erzeugen eines leeren Dokuments."
+    AFX_IDP_FILE_TOO_LARGE  "Die Datei ist zu groß zum Öffnen."
+    AFX_IDP_FAILED_TO_START_PRINT 
+                            "Der Druckauftrag konnte nicht gestartet werden."
+    AFX_IDP_FAILED_TO_LAUNCH_HELP "Die Hilfe konnte nicht aufgerufen werden."
+    AFX_IDP_INTERNAL_FAILURE "Interner Anwendungsfehler."
+    AFX_IDP_COMMAND_FAILURE "Befehl fehlgeschlagen."
+    AFX_IDP_FAILED_MEMORY_ALLOC 
+                            "Insufficient memory (or lack of system resources) for this operation."
+    AFX_IDP_UNREG_DONE      "Einträge in der Systemregistrierung wurden entfernt, und die INI-Datei (falls vorhanden) wurde gelöscht."
+    AFX_IDP_UNREG_FAILURE   "Es wurde nicht jeder Eintrag in der Systemregistrierung (oder die ganze INI-Datei) entfernt."
+    AFX_IDP_DLL_LOAD_FAILED "This program requires the dll file %s which was not found on your system. Please check your installation."
+    AFX_IDP_DLL_BAD_VERSION "This programm is linked to export-%s (missing) in File %s. The installed version of %s is probably outdated"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_NOT_DOCOBJECT   "Die Datei wird nicht von einem Dokumentobjekt-Server unterstützt."
+    AFX_IDP_FAILED_TO_NOTIFY 
+                            "%1\nRegistrierung des Dokuments nicht möglich.\nDas Dokument ist vielleicht schon geöffnet."
+    AFX_IDP_GET_NOT_SUPPORTED 
+                            "Lesen ist wegen der Eigenschaft Nur-Schreiben nicht möglich."
+    AFX_IDP_SET_NOT_SUPPORTED 
+                            "Schreiben ist wegen der Eigenschaft Nur-Lesen nicht möglich."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_FAILED_INVALID_FORMAT "Unerwartetes Dateiformat."
+    AFX_IDP_FAILED_INVALID_PATH 
+                            "%1\nDiese Datei konnte nicht gefunden werden.\nÜberprüfen Sie, ob der korrekte Pfad und Dateiname angegeben wurde."
+    AFX_IDP_FAILED_DISK_FULL "The target drive is full."
+    AFX_IDP_FAILED_ACCESS_READ 
+                            "Lesen von %1 ist nicht möglich, da von anderem Anwender geöffnet."
+    AFX_IDP_FAILED_ACCESS_WRITE 
+                            "Schreiben auf %1 ist nicht möglich, da schreibgeschützt oder von anderem Anwender geöffnet."
+    AFX_IDP_FAILED_IO_ERROR_READ 
+                            "Beim Lesen von %1 ist ein unerwarteter Fehler aufgetreten."
+    AFX_IDP_FAILED_IO_ERROR_WRITE 
+                            "Beim Schreiben von %1 ist ein unerwarteter Fehler aufgetreten."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_PARSE_INT       "Geben Sie bitte eine ganze Zahl ein."
+    AFX_IDP_PARSE_REAL      "Geben Sie bitte eine Zahl ein."
+    AFX_IDP_PARSE_INT_RANGE "Geben Sie bitte eine ganze Zahl zwischen %1 und %2 ein."
+    AFX_IDP_PARSE_REAL_RANGE 
+                            "Geben Sie bitte eine Zahl zwischen %1 und %2 ein."
+    AFX_IDP_PARSE_STRING_SIZE "Geben Sie bitte nicht mehr als %1 Zeichen ein."
+    AFX_IDP_PARSE_RADIO_BUTTON "Wählen Sie bitte eine Schaltfläche."
+    AFX_IDP_PARSE_BYTE      "Geben Sie bitte eine ganze Zahl zwischen 0 und 255 ein."
+    AFX_IDP_PARSE_UINT      "Geben Sie bitte eine positive ganze Zahl ein."
+    AFX_IDP_PARSE_DATETIME  "Geben Sie bitte ein Datum und/oder eine Zeit ein."
+    AFX_IDP_PARSE_CURRENCY  "Geben Sie bitte eine Währung ein."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_PASTELINKEDTYPE "Verknüpft: %s"
+    AFX_IDS_UNKNOWNTYPE     "Unbekannter Typ"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_FILE_NONE       "Kein Fehler aufgetreten."
+    AFX_IDP_FILE_GENERIC    "Ein unbekannter Fehler ist beim Zugriff auf %1 aufgetreten."
+    AFX_IDP_FILE_NOT_FOUND  "%1 wurde nicht gefunden."
+    AFX_IDP_FILE_BAD_PATH   "%1 enthält eine ungültige Pfadangabe."
+    AFX_IDP_FILE_TOO_MANY_OPEN 
+                            "%1 konnte nicht geöffnet werden, da zu viele Dateien geöffnet sind."
+    AFX_IDP_FILE_ACCESS_DENIED "Zugriff auf %1 wurde verwehrt."
+    AFX_IDP_FILE_INVALID_FILE 
+                            "Eine ungültige Dateikennung war mit %1 verbunden."
+    AFX_IDP_FILE_REMOVE_CURRENT 
+                            "Das Verzeichnis %1 konnte nicht entfernt werden, da es das aktuelle Verzeichnis ist. "
+    AFX_IDP_FILE_DIR_FULL   "%1 konnte nicht erstellt werden, da das Verzeichnis voll ist."
+    AFX_IDP_FILE_BAD_SEEK   "Positionierungsfehler auf %1."
+    AFX_IDP_FILE_HARD_IO    "Ein Hardware-E/A-Fehler wurde während des Zugriffs auf %1 gemeldet."
+    AFX_IDP_FILE_SHARING    "Eine Zugriffsverletzung ist während des Zugriffs auf %1 aufgetreten."
+    AFX_IDP_FILE_LOCKING    "Eine Sperrverletzung ist während des Zugriffs auf %1 aufgetreten."
+    AFX_IDP_FILE_DISKFULL   "Beim Zugriff auf %1 wurde ein voller Datenträger gemeldet."
+    AFX_IDP_FILE_EOF        "Es wurde versucht, auf eine Stelle hinter dem Ende von %1 zuzugreifen."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_ARCH_NONE       "Kein Fehler aufgetreten."
+    AFX_IDP_ARCH_GENERIC    "Ein unbekannter Fehler ist beim Zugriff auf %1 aufgetreten."
+    AFX_IDP_ARCH_READONLY   "%1 ist nur lesbar. Es wurde versucht, darauf zu schreiben."
+    AFX_IDP_ARCH_ENDOFFILE  "Es wurde versucht, auf eine Stelle hinter dem Ende von %1 zuzugreifen."
+    AFX_IDP_ARCH_WRITEONLY  "%1 ist lesegeschützt. Es wurde versucht, davon zu lesen."
+    AFX_IDP_ARCH_BADINDEX   "%1 besitzt ein falsches Format."
+    AFX_IDP_ARCH_BADCLASS   "%1 enthielt ein unerwartetes Objekt."
+    AFX_IDP_ARCH_BADSCHEMA  "%1 enthält ein falsches Schema."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_FAILED_MAPI_LOAD 
+                            "Systemunterstützung für elektronische Post kann nicht geladen werden."
+    AFX_IDP_INVALID_MAPI_DLL 
+                            "Die System-DLL für elektronische Post (MAPI.DLL) ist ungültig."
+    AFX_IDP_FAILED_MAPI_SEND 
+                            """Nachricht senden"" scheiterte beim Senden der Nachricht."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_OCC_SCALEUNITS_PIXELS "Pixel"
+    IDS_RENDERINITFAILED    "The rendering device could not be initialized. Possible causes: You attempted to use an unsupported video mode, the DirectX  drivers are outdated (at least DirectX5 is required), your graphics card has a temporary problem, well, err..."
+    IDS_DIRECTXINITFAILED   "The initialization of DirectX failed\nCheck wheter you have at least DirectX5 installed on your system."
+    IDS_INVALIDBITDEPTH     "There is no video mode with the requested color depth available. Please try another mode."
+    IDS_ERRORHELPTEXT       "You can terminate the process. (Golgotha will immediatelly quit, without saving anything), terminate the current task (Golgotha will attempt to return to the main loop), debug the process (only senseful if running inside a debugger), or ignore the error. In either case, it is possible that more errors will show up before the game goes on."
+    IDS_INITIALISATION      "Initialisation, please wait..."
+    IDS_ERROR_USER          "User Error\r\nThis class of errors usually results from incorrect user data input. Most syntax errors in Lisp code result in such problems."
+    IDS_ERROR_ERROR         "Non-Critical Error\r\nThe system is pointing you at some problem that might result in reduced functionality. Usually, you can recover manually from such problems."
+    IDS_ERROR_FATAL         "Fatal Error\r\nThe system reports an error that cannot be recovered from. This usually happens if some important file is not present or required hardware is unavailable. Fix the error and then try to restart the game."
+    IDS_ERROR_CRITICAL      "Critical Error\r\nWe will probably encounter a big problem if nothing changes immediatelly. If the error persists, the engine might fail completelly. A typical reason for this error is an out-of-memory condition."
+    IDS_ERROR_INFO          "Information\r\nThis is only an informational message."
+    IDS_ERROR_WARNING       "Warning\r\nThere's something wrong, but the engine attempts to ignore the problem with default settings."
+    IDS_ERROR_SEVERE        "Very critical problem\r\nSomething has happened that might result in a failure of the engine. "
+    IDS_ERROR_INTERNAL      "Internal Error\r\nThis error class is caused by internal problems in the code. It usually only happens if there's a serious bug somewhere in the game. As user, you should newer see such an error..."
+    IDS_ERROR_UNKNOWN       "This error has no class associated with it."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SETQUESTION         "Should this mode be enabled right now? Mode change is mainly unimplemented yet, so clicking yes might result in an error. "
+    IDS_LANGUAGE            "EN"
+END
+
+#endif    // Englisch (USA) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral (Sys.-Standard) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUSD)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_SYS_DEFAULT
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+AFX_IDD_NEWTYPEDLG DIALOG DISCARDABLE  9, 26, 183, 70
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "New"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT           "&New",IDC_STATIC,6,5,123,8,NOT WS_GROUP
+    LISTBOX         AFX_IDC_LISTBOX,6,15,125,49,WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "&OK",IDOK,137,6,40,14
+    PUSHBUTTON      "&Cancel",IDCANCEL,137,23,40,14
+    PUSHBUTTON      "&Help",ID_HELP,137,43,40,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_POINTER             CURSOR  DISCARDABLE     "resource\\cur00001.cur"
+#endif    // Neutral (Sys.-Standard) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Deutsch (Schweiz) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+#ifdef _WIN32
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN_SWISS
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+101 DIALOG DISCARDABLE  0, 0, 312, 95
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Wählen Sie ein Anzeigegerät"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,249,6,50,14
+    PUSHBUTTON      "Abbrechen",2,249,23,50,14
+END
+
+102 DIALOGEX 0, 0, 297, 46
+STYLE DS_ABSALIGN | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE
+EXSTYLE WS_EX_CLIENTEDGE
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",1,7,25,50,14
+    PUSHBUTTON      "Abbrechen",2,57,25,50,14
+    EDITTEXT        1000,7,7,283,14,ES_AUTOHSCROLL
+END
+
+IDD_OPTIONS DIALOG DISCARDABLE  0, 0, 345, 186
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "&Grafik"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Gerät",IDC_STATIC,19,14,91,10
+    COMBOBOX        IDC_DEVICES,19,24,210,66,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Modi dieses Geräts &anzeigen",IDC_CREATE,20,39,209,13
+    LTEXT           "Verfügbare Auflösungen",IDC_STATIC,21,56,206,9
+    LISTBOX         IDC_RESOLUTIONS,21,67,206,64,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "&Fenstermodus verwenden",IDC_WINDOWED,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,21,132,106,14
+    LTEXT           "Aktuelle Auflösung: Unbekannt",IDC_CURRENTMODE,19,147,
+                    115,32
+    LTEXT           "Hinweis: Im Fenstermodus gibt die eingestellte Auflösung die Fenstergrösse an. Die Farbtiefe wird ignoriert und derjenigen des Desktops angepasst. ",
+                    IDC_STATIC,138,136,126,43
+    COMBOBOX        IDC_RENDER_DEVICE,235,24,103,58,CBS_DROPDOWNLIST | 
+                    CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Renderer",IDC_STATIC,235,14,72,10
+    CONTROL         "Slider1",IDC_TEXTURE_QUALITY,"msctls_trackbar32",
+                    TBS_AUTOTICKS | TBS_TOP | WS_TABSTOP,237,66,101,21
+    LTEXT           "Texturqualität",IDC_STATIC,241,57,44,8
+    CONTROL         "Slider2",IDC_VIEW_RANGE,"msctls_trackbar32",TBS_TOP | 
+                    TBS_NOTICKS | WS_TABSTOP,237,100,101,15
+    LTEXT           "Fernsicht",IDC_STATIC,242,92,30,8
+    LTEXT           "<-schlechter              besser->",IDC_STATIC,243,118,
+                    95,9
+    RTEXT           "256",IDC_TEXTURE_QUAL_TEXT,298,57,40,8
+    RTEXT           "256",IDC_VIEW_QUAL_TEXT,298,92,40,8
+    GROUPBOX        "Textur-Farbtiefe",IDC_TexQualCombo,269,129,69,50,
+                    WS_GROUP
+    CONTROL         "16 Bit",IDC_Tex16,"Button",BS_AUTORADIOBUTTON,274,141,
+                    58,10
+    CONTROL         "32 Bit",IDC_Tex32,"Button",BS_AUTORADIOBUTTON,274,152,
+                    58,10
+    CONTROL         "Automatisch",IDC_TEXDEF,"Button",BS_AUTORADIOBUTTON,274,
+                    163,56,10
+END
+
+AFX_IDD_NEWTYPEDLG DIALOG DISCARDABLE  9, 26, 183, 70
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Neu"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT           "&Neu",IDC_STATIC,6,5,123,8,NOT WS_GROUP
+    LISTBOX         AFX_IDC_LISTBOX,6,15,125,49,WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,137,6,40,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,137,23,40,14
+    PUSHBUTTON      "&Hilfe",ID_HELP,137,43,40,14
+END
+
+IDD_SOUND DIALOG DISCARDABLE  0, 0, 248, 183
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "&Sound"
+FONT 8, "MS Sans Serif"
+BEGIN
+    GROUPBOX        "Sound",IDC_SOUNDGROUP,14,71,102,54,WS_GROUP
+    CONTROL         "3D-Sound",IDC_3DSOUND,"Button",BS_AUTORADIOBUTTON,20,84,
+                    87,10
+    CONTROL         "2D-Sound",IDC_2DSOUND,"Button",BS_AUTORADIOBUTTON,20,97,
+                    72,11
+    CONTROL         "Kein Sound",IDC_NOSOUND,"Button",BS_AUTORADIOBUTTON,20,
+                    108,81,12
+    LTEXT           "Lautstärke",IDC_STATIC,125,94,45,9
+    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,119,106,93,16
+    COMBOBOX        IDC_SOUNDCARD,13,50,204,40,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Gerät",IDC_STATIC,14,36,91,10
+    PUSHBUTTON      "Sound aktivieren",IDC_ENABLE_SOUND,14,127,101,22
+    PUSHBUTTON      "Informationen zum Gerät",IDC_SOUNDCAPABILITIES,125,75,
+                    92,15
+END
+
+IDD_INFORMATION DIALOG DISCARDABLE  0, 0, 264, 186
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "&Informationen"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_INFORMATIONTEXT,7,7,250,172,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_NOHIDESEL | 
+                    ES_READONLY | ES_WANTRETURN
+END
+
+IDD_SOUNDINFO DIALOG DISCARDABLE  37, 31, 238, 158
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Fähigkeiten dieses Geräts"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Schliessen",IDC_DSCAPS_CLOSE,174,138,64,15
+    LTEXT           "Eigenschaft",-1,5,3,58,12,NOT WS_GROUP
+    LTEXT           "Wert:",-1,176,4,57,10,NOT WS_GROUP
+    LTEXT           "",IDC_DSCAPS_VALUE,174,15,57,23,SS_SUNKEN | NOT 
+                    WS_GROUP
+    LISTBOX         IDC_DSCAPSLIST,5,15,163,139,LBS_HASSTRINGS | WS_VSCROLL | 
+                    WS_HSCROLL | WS_TABSTOP
+END
+
+IDD_ERRORDIALOG DIALOGEX 0, 0, 340, 166
+STYLE DS_MODALFRAME | DS_NOIDLEMSG | DS_SETFOREGROUND | DS_3DLOOK | 
+    DS_NOFAILCREATE | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_NOPARENTNOTIFY
+CAPTION "Fehler"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Programm &beenden",IDABORT,7,145,81,14
+    PUSHBUTTON      "Vorgang &abbrechen",IDCANCEL,89,145,81,14
+    PUSHBUTTON      "Prozess &debuggen",IDC_DEBUG,171,145,81,14
+    PUSHBUTTON      "Fehler &ignorieren",IDIGNORE,253,145,81,14
+    ICON            IDI_SKULL,IDC_STATIC,7,62,21,20
+    LTEXT           "Ein offenbar schwerwiegendes Problem verunmöglicht den Zugriff auf die String-Resourcen zum Laden der Hilfe.",
+                    IDC_ERRORHELP,45,89,288,40
+    EDITTEXT        IDC_ERRORMESSAGE,45,45,288,40,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_NOHIDESEL | ES_READONLY | 
+                    ES_WANTRETURN | WS_VSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_SEVERITY,45,6,288,38,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_NOHIDESEL | ES_READONLY | ES_WANTRETURN | NOT 
+                    WS_BORDER | WS_VSCROLL | NOT WS_TABSTOP
+    CONTROL         "Vor dem nächsten Spiel-Frame in den Pause-Modus wechseln",
+                    IDC_PAUSE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,46,135,
+                    287,9
+END
+
+IDD_EXTRAS DIALOG DISCARDABLE  0, 0, 345, 186
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "&Extras"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Spezialmodus für Stereobrille (Nur Win95/98!)",
+                    IDC_STEREOMODE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,
+                    12,191,11
+    COMBOBOX        IDC_STEREOPORTS,17,42,160,54,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Adresse des LPT-Ports für die Brille",IDC_STATIC,17,30,
+                    158,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    102, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 290
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 39
+    END
+
+    IDD_OPTIONS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 338
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 179
+    END
+
+    IDD_SOUND, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 241
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 176
+    END
+
+    IDD_INFORMATION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 257
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 179
+    END
+
+    IDD_ERRORDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 333
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 159
+    END
+
+    IDD_EXTRAS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 338
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 179
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+102                     ICON    DISCARDABLE     "resource\\ico00001.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_POINTER             CURSOR  DISCARDABLE     "resource\\pointer.cur"
+IDC_NODROP              CURSOR  DISCARDABLE     "resource\\nodrop.cur"
+AFX_IDC_CONTEXTHELP     CURSOR  DISCARDABLE     "resource\\help.cur"
+AFX_IDC_SMALLARROWS     CURSOR  DISCARDABLE     "resource\\sarrows.cur"
+AFX_IDC_HSPLITBAR       CURSOR  DISCARDABLE     "resource\\splith.cur"
+AFX_IDC_VSPLITBAR       CURSOR  DISCARDABLE     "resource\\splitv.cur"
+AFX_IDC_NODROPCRSR      CURSOR  DISCARDABLE     "resource\\nodrop.cur"
+AFX_IDC_TRACKNWSE       CURSOR  DISCARDABLE     "resource\\trcknwse.cur"
+AFX_IDC_TRACKNESW       CURSOR  DISCARDABLE     "resource\\trcknesw.cur"
+AFX_IDC_TRACKNS         CURSOR  DISCARDABLE     "resource\\trckns.cur"
+AFX_IDC_TRACKWE         CURSOR  DISCARDABLE     "resource\\trckwe.cur"
+AFX_IDC_TRACK4WAY       CURSOR  DISCARDABLE     "resource\\trck4way.cur"
+AFX_IDC_MOVE4WAY        CURSOR  DISCARDABLE     "resource\\move4way.cur"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "< Cannot change standard MFC resources! >\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+26567                   BITMAP  MOVEABLE PURE   "resource\\3dcheck.bmp"
+AFX_IDB_MINIFRAME_MENU  BITMAP  DISCARDABLE     "resource\\minifwnd.bmp"
+AFX_IDB_CHECKLISTBOX_NT BITMAP  DISCARDABLE     "resource\\ntcheck.bmp"
+AFX_IDB_CHECKLISTBOX_95 BITMAP  DISCARDABLE     "resource\\95check.bmp"
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,8,2
+ PRODUCTVERSION 1,0,8,2
+ FILEFLAGSMASK 0x2fL
+#ifdef _DEBUG
+ FILEFLAGS 0x9L
+#else
+ FILEFLAGS 0x8L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "This is a debug Build of the Golgotha - Revival Group \0"
+            VALUE "CompanyName", "Public Domain\0"
+            VALUE "FileDescription", "Golgotha Real Time Engine Master Executable\0"
+            VALUE "FileVersion", "1, 0, 8, 2\0"
+            VALUE "InternalName", "Golgotha\0"
+            VALUE "LegalCopyright", "Copyright © 1996 - 2003 Crack dot Com et al.\0"
+            VALUE "LegalTrademarks", "Golgotha is a Trademark of Crack dot Com and others\0"
+            VALUE "OriginalFilename", "Golgotha.exe\0"
+            VALUE "PrivateBuild", "TRUE\0"
+            VALUE "ProductName", "Golgotha\0"
+            VALUE "ProductVersion", "1, 0, 8, 2\0"
+            VALUE "SpecialBuild", "\0"
+        END
+        BLOCK "080704b0"
+        BEGIN
+            VALUE "Comments", "This is a debug Build of the Golgotha - Revival Group\0"
+            VALUE "CompanyName", "Public Domain\0"
+            VALUE "FileDescription", "Golgotha Main Executable debug build\0"
+            VALUE "FileVersion", "1, 0, 8, 2\0"
+            VALUE "InternalName", "Golgotha\0"
+            VALUE "LegalCopyright", "Copyright © 1996-2003 Crack.com et. al.\0"
+            VALUE "LegalTrademarks", "Golgotha is Trademark of Crack.com, others names may be registered by their respective owners. \0"
+            VALUE "OriginalFilename", "Golgotha.exe\0"
+            VALUE "PrivateBuild", "Built by Patrick Grawehr\0"
+            VALUE "ProductName", "Golgotha\0"
+            VALUE "ProductVersion", "1, 0, 8, 2\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200, 0x807, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_OPENFILE        "Öffnen"
+    AFX_IDS_SAVEFILE        "Speichern unter"
+    AFX_IDS_ALLFILTER       "Alle Dateien (*.*)"
+    AFX_IDS_UNTITLED        "Unbenannt"
+    AFX_IDS_UNNAMED_FILE    "eine unbenannte Datei"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_HIDE            "&Verbergen"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_NO_ERROR_AVAILABLE "Keine Fehlermeldung verfügbar."
+    AFX_IDS_NOT_SUPPORTED_EXCEPTION 
+                            "Es wurde versucht, eine nicht unterstützte Operation auszuführen."
+    AFX_IDS_RESOURCE_EXCEPTION "Eine benötigte Ressource ist nicht verfügbar."
+    AFX_IDS_MEMORY_EXCEPTION "Nicht genügend Speicher."
+    AFX_IDS_USER_EXCEPTION  "Ein unerwarteter Fehler ist aufgetreten."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_INVALID_FILENAME "Ungültiger Dateiname."
+    AFX_IDP_FAILED_TO_OPEN_DOC "Fehler beim Öffnen des Dokuments."
+    AFX_IDP_FAILED_TO_SAVE_DOC "Fehler beim Speichern des Dokuments."
+    AFX_IDP_ASK_TO_SAVE     "Änderungen in %1 speichern?"
+    AFX_IDP_FAILED_TO_CREATE_DOC 
+                            "Fehler beim Erzeugen eines leeren Dokuments."
+    AFX_IDP_FILE_TOO_LARGE  "Die Datei ist zu groß zum Öffnen."
+    AFX_IDP_FAILED_TO_START_PRINT 
+                            "Der Druckauftrag konnte nicht gestartet werden."
+    AFX_IDP_FAILED_TO_LAUNCH_HELP "Die Hilfe konnte nicht aufgerufen werden."
+    AFX_IDP_INTERNAL_FAILURE "Interner Anwendungsfehler."
+    AFX_IDP_COMMAND_FAILURE "Befehl fehlgeschlagen."
+    AFX_IDP_FAILED_MEMORY_ALLOC 
+                            "Nicht genügend Speicher vorhanden, um Operation auszuführen."
+    AFX_IDP_UNREG_DONE      "Einträge in der Systemregistrierung wurden entfernt, und die INI-Datei (falls vorhanden) wurde gelöscht."
+    AFX_IDP_UNREG_FAILURE   "Es wurde nicht jeder Eintrag in der Systemregistrierung (oder die ganze INI-Datei) entfernt."
+    AFX_IDP_DLL_LOAD_FAILED "Dieses Programm benötigt die Datei %s, die auf diesem System nicht gefunden wurde. Kopieren Sie die Datei in den Systemordner."
+    AFX_IDP_DLL_BAD_VERSION "Programm verbunden mit Export-%s (fehlt) in Datei %s. Auf diesem Computer ist evtl. eine nichtkompatible Version von %s installiert."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_NOT_DOCOBJECT   "Die Datei wird nicht von einem Dokumentobjekt-Server unterstützt."
+    AFX_IDP_FAILED_TO_NOTIFY 
+                            "%1\nRegistrierung des Dokuments nicht möglich.\nDas Dokument ist vielleicht schon geöffnet."
+    AFX_IDP_GET_NOT_SUPPORTED 
+                            "Lesen ist wegen der Eigenschaft Nur-Schreiben nicht möglich."
+    AFX_IDP_SET_NOT_SUPPORTED 
+                            "Schreiben ist wegen der Eigenschaft Nur-Lesen nicht möglich."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_FAILED_INVALID_FORMAT "Unerwartetes Dateiformat."
+    AFX_IDP_FAILED_INVALID_PATH 
+                            "%1\nDiese Datei konnte nicht gefunden werden.\nÜberprüfen Sie, ob der korrekte Pfad und Dateiname angegeben wurde."
+    AFX_IDP_FAILED_DISK_FULL "Das Ziellaufwerk ist voll."
+    AFX_IDP_FAILED_ACCESS_READ 
+                            "Lesen von %1 ist nicht möglich, da von anderem Anwender geöffnet."
+    AFX_IDP_FAILED_ACCESS_WRITE 
+                            "Schreiben auf %1 ist nicht möglich, da schreibgeschützt oder von anderem Anwender geöffnet."
+    AFX_IDP_FAILED_IO_ERROR_READ 
+                            "Beim Lesen von %1 ist ein unerwarteter Fehler aufgetreten."
+    AFX_IDP_FAILED_IO_ERROR_WRITE 
+                            "Beim Schreiben von %1 ist ein unerwarteter Fehler aufgetreten."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_PARSE_INT       "Geben Sie bitte eine ganze Zahl ein."
+    AFX_IDP_PARSE_REAL      "Geben Sie bitte eine Zahl ein."
+    AFX_IDP_PARSE_INT_RANGE "Geben Sie bitte eine ganze Zahl zwischen %1 und %2 ein."
+    AFX_IDP_PARSE_REAL_RANGE 
+                            "Geben Sie bitte eine Zahl zwischen %1 und %2 ein."
+    AFX_IDP_PARSE_STRING_SIZE "Geben Sie bitte nicht mehr als %1 Zeichen ein."
+    AFX_IDP_PARSE_RADIO_BUTTON "Wählen Sie bitte eine Schaltfläche."
+    AFX_IDP_PARSE_BYTE      "Geben Sie bitte eine ganze Zahl zwischen 0 und 255 ein."
+    AFX_IDP_PARSE_UINT      "Geben Sie bitte eine positive ganze Zahl ein."
+    AFX_IDP_PARSE_DATETIME  "Geben Sie bitte ein Datum und/oder eine Zeit ein."
+    AFX_IDP_PARSE_CURRENCY  "Geben Sie bitte eine Währung ein."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_PASTELINKEDTYPE "Verknüpft: %s"
+    AFX_IDS_UNKNOWNTYPE     "Unbekannter Typ"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_FILE_NONE       "Kein Fehler aufgetreten."
+    AFX_IDP_FILE_GENERIC    "Ein unbekannter Fehler ist beim Zugriff auf %1 aufgetreten."
+    AFX_IDP_FILE_NOT_FOUND  "%1 wurde nicht gefunden."
+    AFX_IDP_FILE_BAD_PATH   "%1 enthält eine ungültige Pfadangabe."
+    AFX_IDP_FILE_TOO_MANY_OPEN 
+                            "%1 konnte nicht geöffnet werden, da zu viele Dateien geöffnet sind."
+    AFX_IDP_FILE_ACCESS_DENIED "Zugriff auf %1 wurde verwehrt."
+    AFX_IDP_FILE_INVALID_FILE 
+                            "Eine ungültige Dateikennung war mit %1 verbunden."
+    AFX_IDP_FILE_REMOVE_CURRENT 
+                            "Das Verzeichnis %1 konnte nicht entfernt werden, da es das aktuelle Verzeichnis ist. "
+    AFX_IDP_FILE_DIR_FULL   "%1 konnte nicht erstellt werden, da das Verzeichnis voll ist."
+    AFX_IDP_FILE_BAD_SEEK   "Positionierungsfehler auf %1."
+    AFX_IDP_FILE_HARD_IO    "Ein Hardware-E/A-Fehler wurde während des Zugriffs auf %1 gemeldet."
+    AFX_IDP_FILE_SHARING    "Eine Zugriffsverletzung ist während des Zugriffs auf %1 aufgetreten."
+    AFX_IDP_FILE_LOCKING    "Eine Sperrverletzung ist während des Zugriffs auf %1 aufgetreten."
+    AFX_IDP_FILE_DISKFULL   "Beim Zugriff auf %1 wurde ein voller Datenträger gemeldet."
+    AFX_IDP_FILE_EOF        "Es wurde versucht, auf eine Stelle hinter dem Ende von %1 zuzugreifen."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_ARCH_NONE       "Kein Fehler aufgetreten."
+    AFX_IDP_ARCH_GENERIC    "Ein unbekannter Fehler ist beim Zugriff auf %1 aufgetreten."
+    AFX_IDP_ARCH_READONLY   "%1 ist nur lesbar. Es wurde versucht, darauf zu schreiben."
+    AFX_IDP_ARCH_ENDOFFILE  "Es wurde versucht, auf eine Stelle hinter dem Ende von %1 zuzugreifen."
+    AFX_IDP_ARCH_WRITEONLY  "%1 ist lesegeschützt. Es wurde versucht, davon zu lesen."
+    AFX_IDP_ARCH_BADINDEX   "%1 besitzt ein falsches Format."
+    AFX_IDP_ARCH_BADCLASS   "%1 enthielt ein unerwartetes Objekt."
+    AFX_IDP_ARCH_BADSCHEMA  "%1 enthält ein falsches Schema."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_FAILED_MAPI_LOAD 
+                            "Systemunterstützung für elektronische Post kann nicht geladen werden."
+    AFX_IDP_INVALID_MAPI_DLL 
+                            "Die System-DLL für elektronische Post (MAPI.DLL) ist ungültig."
+    AFX_IDP_FAILED_MAPI_SEND 
+                            """Nachricht senden"" scheiterte beim Senden der Nachricht."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_OCC_SCALEUNITS_PIXELS "Pixel"
+    IDS_RENDERINITFAILED    "Die Initialisierung des Renderers ist fehlgeschlagen. Prüfen Sie folgendes:\n-Versuchen Sie einen Videomodus mit geringerer Auflösung zu verwenden.\n-Versuchen Sie, einen Videomodus mit 16 Bit Farbtiefe zu verwenden.\n-Setzen Sie die Farbtiefe des Desktops auf 16 Bit und führen Sie das Programm im Fenster aus.\n-Vergewissern Sie sich (z.B. mit DXDIAG), dass Ihre DirectX- Installation einwandfrei arbeitet.\n-Uh, äh...."
+    IDS_DIRECTXINITFAILED   "Die Initialisierung von DirectX ist fehlgeschlagen.\nÜberprüfen Sie die DirectX-Installation. Sie müssen mindestens DirectX 5 installiert haben."
+    IDS_INVALIDBITDEPTH     "Es konnte kein Videomodus mit der angegeben Farbtiefe gefunden werden. Wählen Sie eine andere Farbtiefe."
+    IDS_ERRORHELPTEXT       "Sie können das Programm beenden (Golgotha wird sofort beendet, ohne irgendetwas zu speichern), den aktuellen Vorgang abbrechen (Golgotha wird versuchen, wieder zum top-level-loop zurückzukehren), den Prozess debuggen (nur möglich, falls ein Debugger aktiv ist), oder den Fehler ignorieren. Auf jeden Fall ist es möglich, dass weitere Fehler auftreten, bevor das Programm normal weiterläuft (Falls dies überhaupt möglich ist)."
+    IDS_INITIALISATION      "Initialisierung, bitte warten..."
+    IDS_ERROR_USER          "Anwenderfehler\r\nDieser Fehler wurde wahrscheinlich ausgelöst wegen Problemen mit den Eingabedaten. Häufige Ursache für diese Fehlerkategorie sind Syntax- oder logische Fehler in Lisp-Code."
+    IDS_ERROR_ERROR         "Nichtkritischer Fehler\r\nDas System macht Sie auf eine Tatsache aufmerksam, die zu Funktionseinschränkungen oder ähnlichen Problemen führen kann. Eventuell können Sie die Ursache manuell beheben."
+    IDS_ERROR_FATAL         "Nichtreparierbarer Fehler\r\nEs ist ein Fehler aufgetreten, der das Programm zum sofortigen Beenden zwingt. Dies wird ausgelöst, wenn eine notwendige Resource wie der Bildschirmtreiber oder Initialisierungsdaten nicht verfügbar sind. Überprüfen Sie die Installation von Golgotha und starten Sie gegebenenfalls ihren Computer neu."
+    IDS_ERROR_CRITICAL      "Kritischer Fehler\r\nDiese Fehlerkategorie wird ausgelöst, falls das System einen Zustand erkennt, der demnächst zu einem noch schwereren Problem führen könnte, falls Sie nicht etwas unternehmen. Typisches Beispiel ist zuwenig Speicher."
+    IDS_ERROR_INFO          "Information\r\nDieser Hinweis dient der Information."
+    IDS_ERROR_WARNING       "Warnung\r\nDas System versucht Sie auf einen Umstand aufmerksam zu machen, der eventuell zu einem Problem führen könnte."
+    IDS_ERROR_SEVERE        "Schwerwiegender Fehler\r\nDas System befindet sich in einem kritischen Zustand. Wenn Sie trotzdem fortsetzen wollen, sollten Sie damit rechnen, dass weitere Probleme auftreten können. Mögliche Ursache: Überlauf interner Datenstrukturen."
+    IDS_ERROR_INTERNAL      "Interner Fehler\r\nDieser Fehler deutet auf ein Problem im System selbst hin. Er wird meistens ausgelöst durch den Überlauf interner Strukturen oder durch die Zerstörung von Speicherbereichen."
+    IDS_ERROR_UNKNOWN       "Der Fehler ist keiner Kategorie zugeordnet."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SETQUESTION         "Soll dieser Videomodus sofort aktiviert werden? Dieses Feature ist nicht implementiert, weshalb dieser Versuch vermutlich zu einer Fehlermeldung führen wird."
+    IDS_LANGUAGE            "DE"
+END
+
+#endif    // Deutsch (Schweiz) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DES)
+#ifdef _WIN32
+LANGUAGE 7, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "resource\mfctest.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
+//#include "l.deu\afxres.rc"          // Standardkomponenten
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

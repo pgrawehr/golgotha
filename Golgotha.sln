@@ -1,0 +1,55 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Golgotha", "Golgotha.vcproj", "{C293A64C-E1FB-4E57-8B79-E674B1FB422F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ivcon", "ivcon\ivcon.vcproj", "{47B0299D-811A-44B0-9EF5-31E16F65F692}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "map2def", "map2def\map2def.vcproj", "{E0160ED3-7D75-44AE-9F23-53AA8C753F97}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 3
+		SccProjectUniqueName0 = Golgotha.vcproj
+		SccProjectName0 = \u0022$/Golgotha\u0022,\u0020GNOAAAAA
+		SccLocalPath0 = .
+		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectUniqueName1 = ivcon\\ivcon.vcproj
+		SccProjectName1 = \u0022$/Golgotha/ivcon\u0022,\u0020ZBVAAAAA
+		SccLocalPath1 = ivcon
+		SccProvider1 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectUniqueName2 = map2def\\map2def.vcproj
+		SccProjectName2 = \u0022$/Golgotha/map2def\u0022,\u0020FCVAAAAA
+		SccLocalPath2 = map2def
+		SccProvider2 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{C293A64C-E1FB-4E57-8B79-E674B1FB422F}.Debug.ActiveCfg = Debug|Win32
+		{C293A64C-E1FB-4E57-8B79-E674B1FB422F}.Debug.Build.0 = Debug|Win32
+		{C293A64C-E1FB-4E57-8B79-E674B1FB422F}.Release.ActiveCfg = Release|Win32
+		{C293A64C-E1FB-4E57-8B79-E674B1FB422F}.Release.Build.0 = Release|Win32
+		{47B0299D-811A-44B0-9EF5-31E16F65F692}.Debug.ActiveCfg = Debug|Win32
+		{47B0299D-811A-44B0-9EF5-31E16F65F692}.Debug.Build.0 = Debug|Win32
+		{47B0299D-811A-44B0-9EF5-31E16F65F692}.Release.ActiveCfg = Release|Win32
+		{47B0299D-811A-44B0-9EF5-31E16F65F692}.Release.Build.0 = Release|Win32
+		{E0160ED3-7D75-44AE-9F23-53AA8C753F97}.Debug.ActiveCfg = Debug|Win32
+		{E0160ED3-7D75-44AE-9F23-53AA8C753F97}.Debug.Build.0 = Debug|Win32
+		{E0160ED3-7D75-44AE-9F23-53AA8C753F97}.Release.ActiveCfg = Release|Win32
+		{E0160ED3-7D75-44AE-9F23-53AA8C753F97}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
