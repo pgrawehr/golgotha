@@ -10558,6 +10558,7 @@ void g1_path_window_class::parent_draw(i4_draw_context_class &context)
 	  }
   local_image->clear(0x0,context);  
   bitmap->put_image(local_image, -left_point, -top_point, context);
+  local_image->bar(radar_x_pos,RADAR_SIZEY,width(),height(),0x0,context);
 
   int x,y;
   x = start.x * CELL_SIZE + CELL_SIZE/2+1 - start_icon->width()/2;
