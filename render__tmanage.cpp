@@ -272,7 +272,7 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 	i4_pixel_format *convfor=&regular_format;
 	
 	const i4_pixel_depth format=image->get_pal()->source.pixel_depth;
-	int convert_depth;
+	int convert_depth=0;
 		
 	if (!((((format==I4_16BIT) && (target_depth==2)) || ((format==I4_24BIT) && (target_depth==3))) || ((format==I4_32BIT) && (target_depth==4))))
 	{
@@ -325,9 +325,9 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 		
 		w8 *dst=(w8 *)dest;
 		
-		for (j=0; j<height; j++)
+		for (j=0; j<height; ++j)
 			{
-			for (i=0; i<width; i++)
+			for (i=0; i<width; ++i)
 				{    
 				w32 c = image->get_pixel((i4_coord) i4_f_to_i((float) i * (float) width_ratio),
 					(i4_coord) i4_f_to_i((float) j * (float) height_ratio));
@@ -365,9 +365,9 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 		
 		w8 *textu=(w8 *)dest;
 		
-		for(w16 apy=0;apy<height;apy++)
+		for(w16 apy=0;apy<height;++apy)
 			{
-			for(w16 apx=0;apx<width;apx++)
+			for(w16 apx=0;apx<width;++apx)
 				{
 
 				w32 oldc=image->get_pixel(apx,apy);
