@@ -967,6 +967,7 @@ void golgotha_app::init()
   li_add_function("set_default_level", g1_set_default_level);
 
   li_load("scheme/start.scm");
+  i4_mkdir("savegame");//create the savegame directory if it doesn't exist
 #ifdef _WINDOWS
   CheckDXVersion();
 #endif
@@ -1017,8 +1018,8 @@ void golgotha_app::init()
 
 
   choice_first_level();
-  
-  g1_render.r_api = r1_create_api(display);//What does THIS do? 
+  //Attempt to initialize a rendering api suitable for the current display.
+  g1_render.r_api = r1_create_api(display);
   i4_warning("Render api created successfully: %s.",g1_render.r_api->name());
   refresh();
   status->update(0.5f);
@@ -1123,19 +1124,11 @@ void golgotha_app::init()
   li_add_function("is_paused",g1_is_paused);
   status->update(1.0f);
   
-//   Why is this disabled? Generates Error.
   hide_main_menu();
   main_menu=new g1_help_screen_class(wm->width(), wm->height(), wm->get_style(),
                                       i4gets("startup_screen"), G1_PLOT_SCREEN);
   wm->add_child(0,0,main_menu);
-  //main_menu=0;//?? There's a memory leak lying around here.
-
-   //i4_const_str *tlist=i4_string_man.get_array("texture_array");
-   //g1_load_texture_list(tlist);
-   //i4_free(tlist);
-
   
-  //start_new_game();
   delete status;
   status=0;
   i4_kernel.request_events(this,
