@@ -801,6 +801,7 @@ li_object *li_load(li_object *name, li_environment *env, i4_status_class *status
   li_object *ret=0;
 
   char old_file[256];
+  I4_ASSERT(li_last_file,"The last file is NULL");
   strcpy(old_file, li_last_file);
   int old_line=li_last_line;
   
@@ -3965,6 +3966,7 @@ int li_memory_manager_class::gc()
 		return 0; //The Lisp engine is not ready, cannot do anything.
     int t_free=0;
 
+    i4_warning("Starting Garbage collector run.");
     if (i4_get_thread_id()!=i4_get_main_thread_id())
     {
       // if this is called from a thread stop and let main program do gc()

@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.57])
-AC_INIT(Golgotha, V1.0.8.3 , golgotha@qbic.vipnet.ro)
+AC_INIT(Golgotha, V1.0.9.4 , golgotha@qbic.vipnet.ro)
 
 
 AC_CONFIG_SRCDIR([golg__main.cpp])
@@ -25,7 +25,9 @@ LINKER_NEEDS_PTHREAD=No])
 AC_MSG_RESULT([$LINKER_NEEDS_PTHREAD])
 AC_PATH_X
 AC_PATH_XTRA
- 
+
+#libsave=$LIBS
+LIBS="$X_LIBS $LIBS"
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lGL':
 #AC_CHECK_LIB([GL], [glEnable])
@@ -33,6 +35,7 @@ AC_PATH_XTRA
 # AC_CHECK_LIB([GLU], [main])
 # FIXME: Replace `main' with a function in `-lX11':
 AC_CHECK_LIB([X11], [XOpenDisplay])
+AC_CHECK_LIB([Xext], [XShmCreateImage])
 # FIXME: Replace `main' with a function in `-lc_r':
 #if present, we use libc_r (the reentrant c runtime) before libc
 AC_CHECK_LIB([c_r], [open])
@@ -44,9 +47,10 @@ AC_CHECK_LIB([cipher],[encrypt])
 AC_CHECK_LIB([pthread], [pthread_mutexattr_setkind_np])
 AC_CHECK_LIB([pthread], [pthread_mutexattr_settype])
 
+
 if test "$with_x" = no; then
 AC_MSG_ERROR([Golgotha requires the X window system to compile and run.
-Please do not use cthe configure option '--without-x'.])
+Please do not use the configure option '--without-x'.])
 fi
 #We leave this out. Some os's (i.e BSD) fail the test for -lX11 because
 #the library doesn't need to be linked explicitly.
@@ -207,6 +211,32 @@ fi
 AC_MSG_RESULT([$debug_or_release])
 ],
 [AC_MSG_RESULT([$debug_or_release])])
+
+AC_MSG_CHECKING([Wheter the network socket functions exspect signed values])
+ac_cv_SIZE_TYPE=integer
+#AC_DEFINE([NETSOCK_SIZE_TYPE],1,"SIZE_TYPE for Netsock")
+AC_COMPILE_IFELSE(
+[
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+void accept()
+  {
+    sockaddr_in a;
+    unsigned int size=sizeof(a);
+    int fd=2;
+    int new_fd=::accept(fd, (sockaddr *)&a, &size);
+    return;
+
+  }
+
+],
+[
+AC_DEFINE([NETSOCK_SIZE_TYPE_UNSIGNED],1,"SIZE_TYPE for Netsock")
+ac_cv_SIZE_TYPE=unsigned_integer
+])
+
+AC_MSG_RESULT([$ac_cv_SIZE_TYPE])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

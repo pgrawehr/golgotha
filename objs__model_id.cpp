@@ -145,7 +145,7 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
     pf_model_load_open.start();
 	li_object *fmt=li_get_value("object_format", 0);
 	char *n=li_string::get(fmt,0)->value();
-	_snprintf(nbuf,MAX_PATH,n,model_names[i]->c_str());
+	sprintf(nbuf,n,model_names[i]->c_str());
     i4_file_class *in_file=i4_open(nbuf);
     if (in_file)
     {

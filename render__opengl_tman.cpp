@@ -253,6 +253,7 @@ void r1_opengl_texture_manager_class::async_load_finished(used_node *u)
 
       array_lock.lock();
       r1_image_list_struct *ils=image_list.add();
+      ils->init();
       ils->usage=30;
       ils->image=im;
       ils->id=u->mip->entry->id;
@@ -420,6 +421,7 @@ i4_bool r1_opengl_texture_manager_class::async_mip_load(r1_mip_load_info *load_i
 			if(image_list[i1].id==mip->entry->id)
 				{
 				image_list[i1].usage=30;//be shure that this don't gets removed just now
+                image_list[i1].lock();
 				mip->flags|=R1_MIPLEVEL_JPG_ALREADY_LOADED;
 				mip->flags &= (~R1_MIPLEVEL_LOAD_JPG); //if already loaded, reset this flag.
 				array_lock.unlock();
@@ -440,7 +442,7 @@ i4_bool r1_opengl_texture_manager_class::async_mip_load(r1_mip_load_info *load_i
 		//the image-cache is allowed. You must not delete anything that
 		//has an usage count of 28 or above (They will be accessed on next
 		//next_frame() call)
-		if ((image_list.size()>13) && (image_list[most_unused].usage<28))
+		if ((image_list.size()>13) && (!image_list[most_unused].is_locked()))
 			{
 			delete image_list[most_unused].image;
 			image_list.remove(most_unused);
@@ -449,7 +451,7 @@ i4_bool r1_opengl_texture_manager_class::async_mip_load(r1_mip_load_info *load_i
 			//The image list to shrink if appropriate.
 			for (int i3=13;i3<image_list.size();i3++)
 				{
-				if(image_list[i3].usage==1)//some really old guy found
+				if(!image_list[i3].is_locked())//some really old guy found
 					{
 					delete image_list[i3].image;
 					image_list.remove(i3);
@@ -594,6 +596,7 @@ void r1_opengl_texture_manager_class::next_frame()
 					{
 					im=image_list[x].image;
 					image_list[x].usage=30;
+                    image_list[x].unlock();
 					}
 				//image_list[x].usage--;
 				//if (image_list[x].usage==0) image_list[x].usage=1;

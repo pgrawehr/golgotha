@@ -948,7 +948,7 @@ void golgotha_app::init()
 	if (i4_litend!=1)
 	{
 		i4_error("FATAL: Golgotha was compiled with big-endian settings"
-" included. Please rebuild Golgotha with the correct endianness setting in arch.h");
+    " included. Please rebuild Golgotha with the correct endianness setting in arch.h");
 		exit(92);
         };
   }
@@ -962,10 +962,11 @@ void golgotha_app::init()
 		exit(92);
 	};
   }
+  i4_warning("Loading resource Manager...");
   resource_init("resource.res",0);
   strcpy(first_level, "test.level");//Hardcoded first level
   li_add_function("set_default_level", g1_set_default_level);
-
+  i4_warning("Executing scheme/start.scm");
   li_load("scheme/start.scm");
   i4_mkdir("savegame");//create the savegame directory if it doesn't exist
 #ifdef _WINDOWS

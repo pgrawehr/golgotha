@@ -1,10 +1,10 @@
-# Doxyfile 1.3.9.1
+# Doxyfile 1.4.0
 
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = Golgotha
-PROJECT_NUMBER         = V1.0.9.0
+PROJECT_NUMBER         = V1.0.9.4
 OUTPUT_DIRECTORY       = doxygen_docs
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -56,6 +56,7 @@ ENABLED_SECTIONS       =
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES
 SHOW_DIRECTORIES       = YES
+FILE_VERSION_FILTER    = 
 #---------------------------------------------------------------------------
 # configuration options related to warning and progress messages
 #---------------------------------------------------------------------------
@@ -63,6 +64,7 @@ QUIET                  = NO
 WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = NO
 WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           = doxygen.warn.txt
 #---------------------------------------------------------------------------
@@ -82,7 +84,7 @@ EXCLUDE                = Tests \
                          coredll.cpp \
                          utildll.cpp \
                          geomdll.cpp \
-			 backup  
+                         backup
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = .svn
 EXAMPLE_PATH           = 
@@ -206,18 +208,22 @@ HIDE_UNDOC_RELATIONS   = NO
 HAVE_DOT               = YES
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
+GROUP_GRAPHS           = YES
 UML_LOOK               = NO
 TEMPLATE_RELATIONS     = YES
 INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = NO
 CALL_GRAPH             = NO
 GRAPHICAL_HIERARCHY    = YES
+DIRECTORY_GRAPH        = YES
 DOT_IMAGE_FORMAT       = gif
 DOT_PATH               = D:/Programme/ATT/Graphviz/bin
 DOTFILE_DIRS           = 
 MAX_DOT_GRAPH_WIDTH    = 1024
 MAX_DOT_GRAPH_HEIGHT   = 1024
 MAX_DOT_GRAPH_DEPTH    = 10
+DOT_TRANSPARENT        = NO
+DOT_MULTI_TARGETS      = NO
 GENERATE_LEGEND        = YES
 DOT_CLEANUP            = NO
 #---------------------------------------------------------------------------

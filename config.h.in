@@ -217,6 +217,9 @@
 /* "need pthread mutexattr def" */
 #undef NEED_PTHREAD_MUTEXATTR_SETTYPE_DEF
 
+/* "SIZE_TYPE for Netsock" */
+#undef NETSOCK_SIZE_TYPE_UNSIGNED
+
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
 
@@ -254,9 +257,11 @@
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
-/* Define as `__inline' if that's what the C compiler calls it, or to nothing
-   if it is not supported. */
+/* Define to `__inline__' or `__inline' if that's what the C compiler
+   calls it, or to nothing if 'inline' is not supported under any name.  */
+#ifndef __cplusplus
 #undef inline
+#endif
 
 /* Define to rpl_malloc if the replacement function should be used. */
 #undef malloc
