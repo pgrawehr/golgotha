@@ -1724,7 +1724,7 @@ inline void draw_out_deco(i4_image_class *screen,
                           i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
                           i4_color bright, i4_color medium, i4_color dark, i4_color black)
 {
-  //screen->add_dirty(x1,y1,x2,y2,context);
+  screen->add_dirty(x1,y1,x2,y2,context);
 
   screen->bar(x1,y1,x2-1,y1, bright, context);
   screen->bar(x1,y1,x1,y2-1, bright, context);
@@ -2000,15 +2000,23 @@ void i4_scroll_bar::receive_event(i4_event *ev)
 void i4_scroll_bar::set_bar_pos(sw32 pos)
 { 
   sw32 reverse_pos;
-
+  sw32 realpos;
   if (vertical)
   {
     if (total_scroll_objects<=1)
       reverse_pos=0;
     else
       reverse_pos=pos*(scroll_area->height()-scroll_but->height())/(total_scroll_objects-1);
-
-    scroll_but->move(0,reverse_pos- (scroll_but->y()-scroll_area->y()));
+    //This would actually not be needed if the caller always correctly
+    //computed the size of the scrollbar. But it might fix a small 
+    //inconvenience in case where the caller repeadedly increases
+    //the size of the controlled contents (i.e a terminal window).
+    //In such cases it might otherwise happen that the scroll button
+    //vanishes after an automatic scroll. 
+    if (reverse_pos>(scroll_area->height()-scroll_but->height()))
+        reverse_pos=(scroll_area->height()-scroll_but->height());
+    realpos=reverse_pos - (scroll_but->y()- scroll_area->y());
+    scroll_but->move(0,realpos);
   }
   else
   {
@@ -2017,6 +2025,8 @@ void i4_scroll_bar::set_bar_pos(sw32 pos)
     else
       reverse_pos=pos*(scroll_area->width()-scroll_but->width())/(total_scroll_objects-1);
 
+    if (reverse_pos>(scroll_area->width()- scroll_but->width()))
+        reverse_pos=(scroll_area->width()- scroll_but->width());
     scroll_but->move(reverse_pos- (scroll_but->x()-scroll_area->x()),0);
   }
                    
@@ -3754,6 +3764,7 @@ void i4_text_scroll_window_class::scroll_text_up()
     if (scroll_pos>=scrollbar->get_pos()-1)
         {
         scrollbar->set_pos(curr_scrollback);
+        scroll_pos++;
         }
     dy=max_scrollback-1;
     dx=0;

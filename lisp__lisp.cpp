@@ -1886,18 +1886,38 @@ li_object *li_if(li_object *o, li_environment *env)
     return li_eval(li_second(o,env),env);
   
   o=li_cdr(li_cdr(o,env),env);
-  if (o)
-    return li_eval(li_car(o,env), env);
-  else return li_nil;
+  li_object *ret=li_nil;
+  while (o)
+      {
+      ret=li_eval(li_car(o,env), env);
+      o=li_cdr(o,env);
+      }
+  return ret;
 }
 
 
 
 LI_HEADER(eq)//compare addresses only
 	{//don't do any evaluation
-	li_object *o1=li_first(o,env);
-	li_object *o2=li_second(o,env);
-	if (o1==o2) return li_true_sym;
+    li_object *o1=li_first(o,env);
+    li_object *o2=li_second(o,env);
+    if (o1==o2)
+        return li_true_sym;
+    if (o1->type()==LI_INT && o2->type()==LI_INT)
+        {
+        if (li_int::get(o1,env)->value()==li_int::get(o2,env)->value())
+            return li_true_sym;
+        return li_nil;
+        }
+	
+    if (o1->type()==LI_LIST &&
+        o2->type()==LI_LIST &&
+        (li_car(o1,env)==li_quote) 
+        && (li_car(o2,env)==li_quote))
+        {
+        if (li_eval(o1,env)==li_eval(o2,env))
+            return li_true_sym;
+        }
 	return li_nil;
 	}
 
@@ -3193,6 +3213,64 @@ LI_HEADER(defvar)//same as (setf symbol value) but doesn't do anything if
 	return s;
 	}
 
+LI_HEADER(make_local_variable)
+    {
+    li_symbol *sym=li_symbol::get(li_eval(li_first(o,env),env),env);
+    if (!env)
+        {
+        li_set_value(sym,li_nil,0);
+        }
+    li_environment *varenv=env->env_for_symbol(li_get_symbol("window_identifier"));
+    if (varenv==0)
+        {
+        //This is non-standard, but we can just do anything here, since
+        //it never happens on emacs.
+        env->define_value(sym,li_nil);
+        }
+    else
+        {
+        varenv->define_value(sym,li_nil);
+        }
+    return sym;
+    }
+
+LI_HEADER(memq)
+    {
+    li_object *lookfor=li_eval(li_first(o,env),env);
+    li_object *list=li_eval(li_second(o,env),env);
+    while(list)
+        {
+        if (li_car(list,env)==lookfor)
+            {
+            return list;
+            }
+        list=li_cdr(list,env);
+        }
+    return li_nil;
+    }
+
+li_object *li_while(li_object *o, li_environment *env)
+    {
+    for (;;)
+        {
+        li_object *cond=li_first(o,env);
+        li_object *ret=li_eval(cond,env);
+        if (ret==0 || ret==li_nil)
+            break;
+        li_object *list=li_cdr(o,env);
+        while (list && list!=li_nil)
+            {
+            li_object *expr=li_car(list,env);
+            li_eval(expr,env);
+            list=li_cdr(list,env);
+            }
+        }
+    //GNU emacs manual mentions that the value of while is always nil.
+    return li_nil;
+
+
+    }
+
 
 LI_HEADER(defconstant)
 	{
@@ -3238,13 +3316,19 @@ li_object *li_setf(li_object *o, li_environment *env)
 					env->set_fun(s, value);
 				else 
 					s->set_fun(value);  
+                //setf/setq always has global effect.
+                //s->set_fun(value);
 				}
 			else
-			li_set_value(s, value, env); 
+                {
+			    //li_set_value(s, value, env); 
+                s->set_value(value);
+                }
 			
 			}
 		else
 			{
+            //what's this used for???
 			li_eval_lvalue(li_car(o,env),
 				env,
 				value=li_eval(li_car(li_cdr(o,env),env),env));//where the new object is to be stored
@@ -3850,6 +3934,9 @@ void li_memory_manager_class::init()
 	li_add_function("get",li_get);
 	li_add_function("symbol-plist",li_symbol_plist);
 	li_add_function("setplist",li_setplist);
+    li_add_function("make-local-variable",li_make_local_variable);
+    li_add_function("while",li_while);
+    li_add_function("memq",li_memq);
     active=i4_T;
 	
   }
@@ -6607,6 +6694,18 @@ li_object *li_environment::value(li_symbol *s)
 
   return s->value();
 }
+
+li_environment *li_environment::env_for_symbol(li_symbol *s)
+    {
+    for (value_data *p=data->value_list; p; p=p->next)
+    if (p->symbol==s)
+      return this;
+
+    if (data->next)
+      return data->next->env_for_symbol(s);
+
+    return 0;
+    }
 
 
 li_object *li_environment::fun(li_symbol *s)

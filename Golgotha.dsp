@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 ddraw.lib dinput.lib dsound.lib dxguid.lib wsock32.lib comctl32.lib winmm.lib version.lib d3d9.lib dxerr9.lib /nologo /version:1.1 /stack:0x27018e,0x100000 /subsystem:windows /profile /map:"Golgotha_VC6Rel.map" /debug /debugtype:cv /machine:I386 /out:"Golgotha_VC6Rel.exe"
+# ADD LINK32 ddraw.lib dinput.lib dsound.lib dxguid.lib wsock32.lib comctl32.lib winmm.lib version.lib d3d9.lib dxerr9.lib /nologo /version:1.1 /stack:0x27018e,0x100000 /subsystem:windows /profile /map:"Golgotha_VC6Rel.map" /debug /machine:I386 /out:"Golgotha_VC6Rel.exe"
 
 !ELSEIF  "$(CFG)" == "Golgotha - Win32 Debug"
 
@@ -80,7 +80,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo /o"Golgotha_VC6.bsc"
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ddraw.lib dinput.lib dsound.lib dxguid.lib wsock32.lib comctl32.lib winmm.lib version.lib dxerr9.lib d3d9.lib /nologo /version:1.1 /stack:0x27018e,0x100000 /subsystem:windows /map:"Golgotha.map" /debug /machine:I386 /out:"d:\Golgotha\Golgotha_VC6.exe" /pdbtype:sept
+# ADD LINK32 ddraw.lib dinput.lib dsound.lib dxguid.lib wsock32.lib comctl32.lib winmm.lib version.lib dxerr9.lib d3d9.lib /nologo /version:1.1 /stack:0x27018e,0x100000 /subsystem:windows /map:"Golgotha_VC6.map" /debug /machine:I386 /out:"d:\Golgotha\Golgotha_VC6.exe" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
@@ -1894,10 +1894,6 @@ SOURCE=.\render\software\inline_fpu.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\maxtool\sdk_inc\inode.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\input.h
 # End Source File
 # Begin Source File
@@ -2235,14 +2231,6 @@ SOURCE=.\loaders\mp3_load.h
 # Begin Source File
 
 SOURCE=.\loaders\mp3\mpg123.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\maxtool\sdk_inc\mtl.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\maxtool\sdk_inc\nametab.h
 # End Source File
 # Begin Source File
 

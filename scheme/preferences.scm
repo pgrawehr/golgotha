@@ -14,6 +14,16 @@
 (defun 1+ (x) (+ x 1))
 (defun 1- (x) (- x 1))
 (defun insert (x) (print x));; inserts into current buffer, I suppose
+(defun interactive () nil)
+;;Let's see wheter we need special buffers for such stuff.
+;;We could probably assign st to the (window-local) variable window_identifier
+(defun switch-to-buffer (st) (print st))
+(defun text-mode () nil)
+;;Defines keyboard-interactive commands. Should probably really implement
+;;this somehow (but more game-like than for emacs)
+(defun use-local-map (map-to-use) nil)
+(defun turn-on-auto-fill () nil)
+
 
 ;some special list-processing functions
 (defun revappend (x y) (append (reverse x) y)) ;;implement the easy way
@@ -48,5 +58,43 @@
 	"Close: Closes a given file"
 	(close-file hfile)
 )
+
+;;The following definitions come from abuse - just copied for simplicity
+;;PG: I was quite surprised that golg ate them just right away
+(defun select_place (x place) 
+  (- (/ x place) (* (/ x (* place 10)) 10)))
+
+(defun dig2char (x) 
+  (code-char (+ x (char-code "0"))))
+
+;; this creates a list of dpaint numbered antimation from a base name
+;; i.e. (seq "hi" 2 5)  -> '("hi0002.pcx" "hi0003.pcx" "hi0004.pcx" "hi0005.pcx")
+;; will take into acount reverse sequences
+(defun seq (name first last)
+  (if (<= first last)
+      (forward-seq name first last)
+    (reverse-seq name first last))
+)
+(defun forward-seq (name first last) 
+  (if (> first last) 
+      nil 
+    (cons (concatenate 'string name (digstr first 4) ".pcx") 
+	  (forward-seq name (+ 1 first) last))))
+(defun reverse-seq (name last first) 
+  (if (< last first) 
+      nil 
+    (cons (concatenate 'string name (digstr last 4) ".pcx") 
+	  (reverse-seq name (- last 1) first))))
+
+(defun rep (name count)
+  (if (eq count 0)
+      nil
+    (cons name (rep name (- count 1)))))
+
+
+;; appends something to the end of a list
+(defun app (head tail) (if (null head) tail (cons (car head) (app (cdr head) tail))))
+
+
 
 

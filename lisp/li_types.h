@@ -601,6 +601,7 @@ public:
 	  
 
   li_object *value(li_symbol *s);
+  li_environment *env_for_symbol(li_symbol *s);
   li_object *fun(li_symbol *s);
 
   void set_value(li_symbol *s, li_object *value);//changes symbol in the nearest env, newer creates new symbol

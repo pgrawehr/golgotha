@@ -110,7 +110,10 @@ public:
 
     i4_lisp_interaction_on=1;
 	i4_kernel.request_events(this,i4_device_class::FLAG_USER_MESSAGE);
-	window_env=new li_environment(0,i4_F);//let everything run in same env.
+    //let everything run in same env. The second parameter tells the
+    //system wheter it's acceptable to declare local variables in this env.
+	window_env=new li_environment(0,i4_T);
+    li_define_value("window_identifier",new li_string("lisp_parser"),window_env);
   }
 
   virtual void mark_objects(int set)
