@@ -100,7 +100,10 @@ void i4_menu_class::note_reaction_sent(i4_menu_item_class *who,       // this is
 void i4_menu_class::receive_event(i4_event *ev)
 {
   if (deleted)
-    i4_warning("getting events after death, talk about wierd");
+      {
+      i4_error("INTERNAL: i4_menu_class::receive_event() Getting events after death. ");
+      return;
+      }
 
   if (ev->type()==i4_event::OBJECT_MESSAGE)
   {

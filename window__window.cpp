@@ -1912,6 +1912,15 @@ public:
       i4_kernel.delete_handler(shadow.get());
   }
 
+  //if a context help window receives an event, it is most
+  //certainly in the way. 
+  void receive_event(i4_event *ev)
+      {
+      call_stack_counter++;
+      i4_kernel.delete_handler(this);
+      call_stack_counter--;
+      }
+
   char *name() { return "i4_mwm_context_help"; }
 };
 
