@@ -317,7 +317,7 @@ OBJS = \
 
 ######################
 
-all:	depend prereq golgotha.elf
+all:	depend prereq golgotha.elf ivcon.elf
 
 ######################
 
@@ -353,12 +353,18 @@ prereq:
 
 $(INTDIR)/%.o:	%.cpp
 	$(CPP) $(CFLAGS) $(DBG) -c $< -o $@
+	
+ivcon/ivcon.o:	ivcon/ivcon.cpp
+	$(CPP) $(CFLAGS) $(DBG) -c $< -o $@
 
 #######################
 golgotha.elf:	depend $(OBJS)
 	$(LD) $(DBG) $(OBJS) $(LIBDIRS) $(LIBS) -o $@
 
-## what does the ``$^'' do???
+
+
+ivcon.elf:	ivcon/ivcon.o
+	$(LD) $(DBG) ivcon/ivcon.o $(LIBDIRS) $(LIBS) -o $@
 
 ###########
 #
@@ -368,7 +374,7 @@ golgotha.elf:	depend $(OBJS)
 ######################
 
 clean:
-	- rm $(INTDIR)/*.o *~ depend depend1 
+	- rm $(INTDIR)/*.o *~ depend depend1 prereq
 
 untouch:
 	- rm golgotha.elf all
