@@ -553,10 +553,10 @@ public:
 		  //and create a new one.
 		  if (building.valid())
 			  {
-			newconv=new g1_typed_reference_class<g1_convoy_class>(building.get());
-			convoys.add(newconv);
-			time.add(100);//immediatelly suggest a new way for this convoy.
-			building=0;
+			  newconv=new g1_typed_reference_class<g1_convoy_class>(building.get());
+			  convoys.add(newconv);
+			  time.add(100);//immediatelly suggest a new way for this convoy.
+			  building=0;
 			  };
 		  where=toobj;
 		  }

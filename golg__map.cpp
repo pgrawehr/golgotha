@@ -950,9 +950,10 @@ void g1_map_class::make_block_maps()
 		  //were skipped on creation as the blockmap didn't exist yet)
           while (ch &&
                  (!ch->object->get_flag(g1_object_class::BLOCKING) ||
-                  g1_object_type_array[ch->object->id]->
-                  get_flag(g1_object_definition_class::MOVABLE) ||
-				  ch->object->occupied_squares.size()<=4))
+				 ch->object->get_flag(g1_object_class::CAN_DRIVE_ON) ||
+                 g1_object_type_array[ch->object->id]->
+                 get_flag(g1_object_definition_class::MOVABLE) ||
+				 ch->object->occupied_squares.size()<=4))
             ch = ch->next;
 
           if (ch)
