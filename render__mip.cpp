@@ -110,7 +110,7 @@ sw32 num_mips(sw32 width, sw32 height)
   sw32 mipwidth;
   sw32 mipheight;
 
-  while (1)
+  for(;;)
   {
     mipwidth  = width  / (1<<num_mip_levels);
     mipheight = height / (1<<num_mip_levels);
@@ -223,10 +223,10 @@ void get_header_info(mipheader_t &header, i4_image_class *src_texture,
   {
     for ( ; new_width < (new_height>>3); new_width *= 2);  
   }
-  header.base_width=new_width;
-  header.base_height=new_height;
+  header.base_width=(sw16)new_width;
+  header.base_height=(sw16)new_height;
   //wtf?
-  header.num_mip_levels = num_mips(new_width, new_height);
+  header.num_mip_levels = (sw8) num_mips(new_width, new_height);
   //header.num_mip_levels = 1;
   
   header.offsets[0] = r1_mip_header_disk_size();
