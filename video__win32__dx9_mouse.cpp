@@ -193,7 +193,7 @@ void dx9_mouse_class::save_and_draw(int x, int y)
 	  w16 c16;
 	  w32 c32;
 	  w16 *d,*s;
-	  w32* d2;
+	  w32 *d2,*s2;
 	  if (sfcby==2)
 	  {
 		  for (xp=0;xp<cwidth;xp++)
@@ -211,8 +211,12 @@ void dx9_mouse_class::save_and_draw(int x, int y)
 	  {
 		  for (xp=0;xp<cwidth;xp++)
 		  {
-			c32=*(((w32*)cursor.pict->data)+xp+cbpl);
-			d2=(w32*)(((w8*)lock.pBits)+(linelen*yp+xp*4));
+            
+			//c32=*(((w32*)cursor.pict->data)+(xp+yp*cbpl));
+			//d2=(w32*)(((w8*)lock.pBits)+(linelen*yp+xp*4));
+            s2=(w32*)(((w8*)cursor.pict->data)+(xp*4+yp*cbpl));
+            c32=*s2;
+            d2=(w32*)(((w8*)lock.pBits)+(linelen*yp+xp*4));
 			if ((c32&0xffffff)!=0)
 				*d2=c32;
 		  }

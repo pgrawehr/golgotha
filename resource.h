@@ -62,6 +62,10 @@
 #define IDS_ERROR_UNKNOWN               61903
 #define IDS_SETQUESTION                 61904
 #define IDS_LANGUAGE                    61905
+#define IDS_RESOLUTIONDESC              61906
+#define IDS_MONITORDESC                 61907
+#define IDS_RESOLUTIONSTRING            61908
+#define IDS_WINDOWEDSTRING              61909
 
 // Next default values for new objects
 // 

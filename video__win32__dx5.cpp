@@ -978,5 +978,18 @@ li_object *show_gdi_surface_null(li_object *o, li_environment *env)
     {
     return 0;
     }
+class li_add_null_gdi_surface_class : public i4_init_class             
+{                                                                  
+  int init_type() { return I4_INIT_TYPE_LISP_FUNCTIONS; }          
+  void init()  
+      { 
+      li_add_function("show_gdi_surface", show_gdi_surface_null);
+      li_add_function("hide_gdi_surface", show_gdi_surface_null);
+      }
+} li_add_function_gdi_null;
 
-li_automatic_add_function(show_gdi_surface_null,"show_gdi_surface");
+//li_automatic_add_function(show_gdi_surface_null,"show_gdi_surface");
+//li_automatic_add_function(show_gdi_surface_null,"hide_gdi_surface");
+
+
+

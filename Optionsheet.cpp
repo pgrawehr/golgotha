@@ -103,4 +103,5 @@ void COptionsheet::OnClose()
 	// TODO: Code für die Behandlungsroutine für Nachrichten hier einfügen und/oder Standard aufrufen
 	
 	CPropertySheet::OnClose();
+    li_call("hide_gdi_surface");
 }

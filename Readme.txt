@@ -347,6 +347,12 @@ the original Crack dot com team. If anyone knows, please add them above.
 
 Release History:
 ----------------
+V1.0.8.4
+	(common)
+	Lots of cleanups. 
+	Made the golgotha source code including the version control
+	available on qbic.vipnet.ro. 
+
 V1.0.8.3
 	(FreeBSD)
 	Golgotha compiles and runs under freebsd. Checked with gcc-3.3.

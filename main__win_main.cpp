@@ -506,7 +506,7 @@ int i4_win32_error(const char *st)
 	  LoadString(i4_win32_instance,(UINT)st,stv,1000);
 	  g1_debug_printf(stv);
 	  OutputDebugString(stv);
-	  ans=MessageBox(i4_win32_window_handle,stv,"Fehler",MB_ABORTRETRYIGNORE+MB_ICONSTOP+MB_APPLMODAL);
+	  ans=MessageBox(i4_win32_window_handle,stv,"Golgotha",MB_ABORTRETRYIGNORE+MB_ICONSTOP+MB_APPLMODAL);
 	  }
   else
 	  {
@@ -528,6 +528,13 @@ int i4_win32_error(const char *st)
 	  _exit(22);
 	  }
 
+  try
+	  {
+	  li_call("hide_gdi_surface");
+	  }
+  catch(...)//most probably already out of mem
+	  {
+	  }
   if (ans==-1)//there was some problem calling DialogBoxParam()
 	  //i.e the template doesn't exist.
 	  {

@@ -169,6 +169,7 @@ li_object *show_gdi_surface9(li_object *o, li_environment *env)
 void i4_dx9_display_class::init()
 {
   int id=0;
+  screen_is_gdi=i4_T;
   //actually returns the list of adaptors
   dx9_common.initialize_driver();
   CArrayList *list=dx9_common.get_driver_list();
@@ -377,7 +378,14 @@ i4_bool i4_dx9_display_class::initialize_mode()
 	  dx9_common.present.EnableAutoDepthStencil=TRUE;
 	  dx9_common.present.FullScreen_RefreshRateInHz=mode->RefreshRate;
 	  dx9_common.present.Flags=D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
-      dx9_common.present.PresentationInterval=D3DPRESENT_INTERVAL_IMMEDIATE;
+      //For the following setting, the two values
+      //D3DPRESENT_INTERVAL_IMMEDIATE
+      //D3DPRESENT_INTERVAL_DEFAULT
+      //make sense. The first disables VSYNC, therefore allows higher
+      //refresh rates, but increases the risk of a very flickering 
+      //display and of hidden dialogs. Should try to find a bether
+      //solution for this.
+      dx9_common.present.PresentationInterval=D3DPRESENT_INTERVAL_DEFAULT;
 
 	  if (!i4_dx9_check(dx9_common.pD3D9->CreateDevice(D3DADAPTER_DEFAULT,
 		  type,
@@ -504,11 +512,12 @@ i4_bool i4_dx9_display_class::initialize_mode()
 	  }
   //For dx9, this function enables some special mode that 
   //enables the correct rendering of the mouse. 
-  if (use_page_flip)
-    FlipToGDISurface();
+  //if (use_page_flip)
+  //  FlipToGDISurface();
   //this must be mapped depending on the driver, but not before
   //we are sure the driver is the one we're going to use.
   li_add_function("show_gdi_surface",show_gdi_surface9);
+  screen_is_gdi=i4_T;
   return i4_T;
 };
 
@@ -597,6 +606,7 @@ i4_bool i4_dx9_display_class::change_mode(w16 newwidth, w16 newheight,
 	cur_mode.xres=newwidth;//must be shure that these settings are correct as code depends on them
 	cur_mode.yres=newheight;
 	cur_mode.bits_per_pixel=(w8)newbitdepth;//Actually, this shan't change here.
+    screen_is_gdi=i4_T;
 	return i4_T;
 	}
 
@@ -718,6 +728,7 @@ void i4_dx9_display_class::flush()
 			i4_warning("WARNING: Could not restore D3D device.");
 			return;
 		}
+        screen_is_gdi=i4_T;
 		context->add_both_dirty(0,0,width(),height());//Be shure everything gets redrawn.
 
 		//due to a bug i'm gona fix soon, these are not commutative 
@@ -821,12 +832,16 @@ void i4_dx9_display_class::flush()
 	//start of flip stuff
 	pf_dx9_flip.start();  
 	hres=dx9_common.device->Present(NULL,NULL,NULL,NULL);
+    screen_is_gdi=!screen_is_gdi;
 	if (!i4_dx9_check(hres))
 		{
 			i4_error("INTERNAL: Strange error on Present()");
 		}
 	pf_dx9_flip.stop();
 	//end of flip stuff
+    
+    //PG: Disabled for security reasons. 
+    /*
 	if (g1_current_controller.get())
 		{
 		if (g1_current_controller->view.stereomode==g1_view_state_class::STEREO_LEFT)
@@ -840,7 +855,7 @@ void i4_dx9_display_class::flush()
 			g1_current_controller->view.stereomode=g1_view_state_class::STEREO_LEFT;
 			}
 		}
-	
+	*/
 	
 #ifdef I4_TRACE
 	i4_warning("TRACE: End of flush()");	
@@ -861,7 +876,18 @@ void i4_dx9_display_class::FlipToGDISurface()
 	if (use_page_flip)
 		{
 		//if (dx9_common.ddraw) dx9_common.ddraw->FlipToGDISurface();
+            //i4_warning("Switching to GDI surface.");
+            if (!screen_is_gdi)
+                {
+                dx9_common.device->Present(NULL,NULL,NULL,NULL);
+                screen_is_gdi=i4_T;
+                }
+            //may yield "Invalid Call", because it only works
+            //with SWAPEFFECT_DISCARD, but we must use 
+            //SWAPEFFECT_FLIP to be semantically correct. 
 			i4_dx9_check(dx9_common.device->SetDialogBoxMode(TRUE));
+            
+            context->both_dirty->add_area(0,0,width()-1, height()-1);
 		}
 	return;
 	}

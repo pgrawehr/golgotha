@@ -103,7 +103,10 @@ BOOL WINAPI EnumDDrawDevice( GUID FAR *lpGUID,
     LPVOID  lpDevice = NULL;
     //lpDriverName=lpDriverName;//Disable Warning
 	char buf[500];
-	wsprintf(buf,"%s auf Monitor ID %i",lpDriverDescription,hm);
+    char tbuf[200];
+    strcpy(tbuf,"%s auf Monitor ID %i");
+    LoadString(i4_win32_instance,IDS_MONITORDESC,tbuf,200);
+	wsprintf(buf,tbuf,lpDriverDescription,hm);
 	iIndex=m->AddString(buf);
     //iIndex = SendMessage( hWnd, CB_ADDSTRING, 0,( LPARAM )lpDriverDescription );
 	//SendMessage(hWnd,CB_ADDSTRING,0,(LPARAM)lpDriverName);
@@ -146,8 +149,10 @@ BOOL WINAPI EnumDisplayModes( LPDDSURFACEDESC lpDDSurfaceDesc,
     //HWND    hWnd = ( HWND )lpContext;
 	CListBox *m=(CListBox*)lpContext;
     LPVOID  lpDesc = NULL;
-
-    wsprintf( buff, "%dx%d, Farbtiefe %d Bit", 
+    char templateb[200];
+    strcpy(templateb,"%dx%dx%d");
+    LoadString(i4_win32_instance,IDS_RESOLUTIONDESC,templateb,200);
+    wsprintf( buff, templateb, //"%dx%d, Farbtiefe %d Bit", 
               lpDDSurfaceDesc->dwWidth,
               lpDDSurfaceDesc->dwHeight,
               lpDDSurfaceDesc->ddpfPixelFormat.dwRGBBitCount);
@@ -230,10 +235,13 @@ void OptionsDialog::Apply()
 		}
 	char buf[256];
 	ZeroMemory(buf,256);
-	wsprintf(buf,"Auflösung beim nächsten Programmstart:\n%dx%d mit Farbtiefe %d Bit. %s\n",
+    char tbuf[256];
+    strcpy(tbuf,"Auflösung beim nächsten Programmstart:\n%dx%d mit Farbtiefe %d Bit. %s\n");
+    LoadString(i4_win32_instance,IDS_RESOLUTIONSTRING,tbuf,256);
+	wsprintf(buf,tbuf,
     i4_win32_startup_options.xres,i4_win32_startup_options.yres,
 	i4_win32_startup_options.bits,
-	i4_win32_startup_options.fullscreen?"":"(in einem Fenster)");
+	i4_win32_startup_options.fullscreen?"":"(Windowed)");
 	m_currentmode.SetWindowText(buf);
 	double d=m_texture_quality.GetPos();
 	d=pow(2.0,d);
@@ -324,7 +332,10 @@ BOOL OptionsDialog::OnInitDialog()
 	m_devices.SetCurSel(0);
 	char buf[256];
     ZeroMemory(buf,256);
-    wsprintf(buf,"Resolution on next startup:\n%dx%d using %d bits per pixel. %s\n",
+    char tbuf[256];
+    strcpy(tbuf,"Auflösung beim nächsten Programmstart:\n%dx%d mit Farbtiefe %d Bit. %s\n");
+    LoadString(i4_win32_instance,IDS_RESOLUTIONSTRING,tbuf,256);
+    wsprintf(buf,tbuf,
     i4_win32_startup_options.xres,i4_win32_startup_options.yres,
 	i4_win32_startup_options.bits,
 	i4_win32_startup_options.fullscreen?"":"(Windowed)");
@@ -504,7 +515,7 @@ void OptionsDialog::OnBtnCreate()
 		( LPVOID )&m_resolutions,
 		( LPDDENUMMODESCALLBACK )EnumDisplayModes ) ) )
 		{
-		i4_warning("Fehler beim Abzählen der Videomodi.\n" );
+		i4_warning("Error enumerating display modes.\n" );
 		return;
 		}
 	

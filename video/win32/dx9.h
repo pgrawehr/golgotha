@@ -30,6 +30,7 @@ class i4_dx9_display_class : public i4_display_class
 
   i4_rect_list_class next_frame_copy;
   i4_rect_list_class next_frame_two;
+  i4_bool screen_is_gdi;
 
 public:
   class i4_dx9_mode : public i4_display_class::mode

@@ -2271,7 +2271,9 @@ void i4_create_file_open_dialog(i4_graphical_style_class *style,
     i4_user_message_event_class o(cancel_id);
     i4_kernel.send_event(tell_who, &o);
   }
-
+#ifndef _CONSOLE
+  li_call("hide_gdi_surface");
+#endif
   _chdir(curdir);
 
   ShowCursor(FALSE);
@@ -2366,7 +2368,9 @@ void i4_create_file_save_dialog(i4_graphical_style_class *style,
     i4_user_message_event_class o(cancel_id);
     i4_kernel.send_event(tell_who, &o);
   }
-
+#ifndef _CONSOLE
+  li_call("hide_gdi_surface");
+#endif
   _chdir(curdir);
 }
 #else
