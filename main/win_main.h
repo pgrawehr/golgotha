@@ -61,6 +61,7 @@ public:
   char stereo;
   int stereoport;
   float eyedifference;//not yet used (hardcoded now)
+  char langcode[10];
   
   i4_win32_startup_options_struct()
 	  {//Gives default values
@@ -83,6 +84,7 @@ public:
 	stereo=false;
 	ZeroMemory(&guid_sound,sizeof(GUID));
 	ZeroMemory(&guid_screen,sizeof(GUID));
+    ZeroMemory(langcode,10);
 	  }
     ~i4_win32_startup_options_struct();
   

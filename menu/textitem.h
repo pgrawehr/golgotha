@@ -21,12 +21,11 @@ class i4_text_item_class : public i4_menu_item_class
   i4_font_class *font;
 
   i4_str *text;
+  i4_str *check_enable_fn;
   w16 pad_lr;
 
   public :
   w32 bg_color;
-
-  
   i4_text_item_class(
                const i4_const_str &_text,      
                i4_graphical_style_class *style,
@@ -40,11 +39,13 @@ class i4_text_item_class : public i4_menu_item_class
                i4_event_reaction_class *activate=0,
                i4_event_reaction_class *deactivate=0,
                w16 pad_left_right=0,
-               w16 pad_up_down=0
+               w16 pad_up_down=0,
+               const char *_check_enable_fn=0
                );
   ~i4_text_item_class()
   {
     delete text;
+    delete check_enable_fn;
   }
 
   char *name() { return "text_item"; }
@@ -53,6 +54,7 @@ class i4_text_item_class : public i4_menu_item_class
   virtual void receive_event(i4_event *ev);
   void change_text(const i4_const_str &new_st);
   i4_const_str get_text() { return *text; }
+  void check_enable();
 
   virtual i4_menu_item_class *copy();
 } ;

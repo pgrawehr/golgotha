@@ -1426,11 +1426,16 @@ static li_object *li_add_sub(li_object *o, li_environment *env)
     else
     {
       li_object *s=li_car(o,env);
-      char *view_name=li_string::get(li_eval(li_car(s,env),env),env)->value(); s=li_cdr(s,env);
+      char *view_name=li_string::get(li_eval(li_car(s,env),env),env)->value(); 
+      s=li_cdr(s,env);
       char *com_name=li_string::get(li_eval(li_car(s,env),env),env)->value();
+      char *check_name=0;
+      s=li_cdr(s,env);
+      if (s)
+          {
+          check_name=li_string::get(li_eval(li_car(s,env),env),env)->value();
+          }
 
-
-      
       int command_id=i4_key_man.get_command_id(com_name);
 
       i4_do_command_event_class *do_cmd=new i4_do_command_event_class(com_name, command_id);
@@ -1446,7 +1451,8 @@ static li_object *li_add_sub(li_object *o, li_environment *env)
                                                     0,
                                                    command, end_command,
                                                    0,0,
-                                                   10,3);
+                                                   10,3,
+                                                   check_name);
       sub->add_item(ki);
     }
   }

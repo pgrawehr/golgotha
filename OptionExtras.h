@@ -22,14 +22,15 @@ public:
 // Dialogfelddaten
 	//{{AFX_DATA(OptionExtras)
 	enum { IDD = IDD_EXTRAS };
-		// HINWEIS - Der Klassen-Assistent fügt hier Datenelemente ein.
-		//    Innerhalb dieser generierten Quellcodeabschnitte NICHTS BEARBEITEN!
+	CComboBoxEx	m_langselect;
 	//}}AFX_DATA
 
 
 // Überschreibungen
 	// Der Klassen-Assistent generiert virtuelle Funktionsüberschreibungen
 	//{{AFX_VIRTUAL(OptionExtras)
+	public:
+	virtual BOOL OnApply();
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
@@ -40,6 +41,8 @@ protected:
 	//{{AFX_MSG(OptionExtras)
 	afx_msg void OnStereomode();
 	virtual BOOL OnInitDialog();
+	afx_msg void OnEditchangeLangselect();
+	afx_msg void OnSelendokLangselect();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

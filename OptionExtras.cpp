@@ -6,6 +6,7 @@
 //#include "golgotha.h"
 #include "OptionExtras.h"
 #include "main/win_main.h"
+#include "string/string.h"
 
 /*
 #ifdef _DEBUG
@@ -34,7 +35,7 @@ void OptionExtras::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(OptionExtras)
-		// HINWEIS: Der Klassen-Assistent fügt hier DDX- und DDV-Aufrufe ein
+	DDX_Control(pDX, IDC_LANGSELECT, m_langselect);
 	//}}AFX_DATA_MAP
 }
 
@@ -42,6 +43,8 @@ void OptionExtras::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(OptionExtras, CPropertyPage)
 	//{{AFX_MSG_MAP(OptionExtras)
 	ON_BN_CLICKED(IDC_STEREOMODE, OnStereomode)
+	ON_CBN_EDITCHANGE(IDC_LANGSELECT, OnEditchangeLangselect)
+	ON_CBN_SELENDOK(IDC_LANGSELECT, OnSelendokLangselect)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -61,7 +64,30 @@ void OptionExtras::Apply()
 	
 	i4_win32_startup_options.stereo=IsDlgButtonChecked(IDC_STEREOMODE);
 
-	//SetModified(FALSE);
+    //CEdit *ed=m_langselect.GetEditCtrl();
+    
+    char mybuf[255];
+    m_langselect.GetWindowText(mybuf,255);
+
+    if (strlen(mybuf)==0)
+        {
+        ZeroMemory(i4_win32_startup_options.langcode,10);
+        }
+    else
+        {
+        i4_str langstring(mybuf);
+        int st=langstring.find_first_of("[")+1;
+        int en=langstring.find_last_of("]");
+        i4_str langsubstr;
+        if ((st==-1)||(en==-1))
+            langsubstr=langstring;
+        else
+            {
+            en=en-st;//need the length
+            langsubstr=langstring.substr(st,en);
+            }
+        strncpy(i4_win32_startup_options.langcode,langsubstr.c_str(),9);
+        }
 	}
 
 BOOL OptionExtras::OnInitDialog() 
@@ -69,7 +95,29 @@ BOOL OptionExtras::OnInitDialog()
 	CPropertyPage::OnInitDialog();
 	
 	CheckDlgButton(IDC_STEREOMODE,i4_win32_startup_options.stereo);
+
+    m_langselect.SetWindowText("");
+    //CEdit *ed=m_langselect.GetEditCtrl();
+    //ed->SetWindowText(i4_win32_startup_options.langcode);
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben
 }
+
+BOOL OptionExtras::OnApply() 
+{
+	// TODO: Speziellen Code hier einfügen und/oder Basisklasse aufrufen
+	
+	return CPropertyPage::OnApply();
+}
+
+void OptionExtras::OnEditchangeLangselect() 
+{
+    SetModified(TRUE);
+	
+}
+
+void OptionExtras::OnSelendokLangselect() 
+    {
+	SetModified(TRUE);
+    }

@@ -124,6 +124,7 @@ i4_win32_startup_options_struct::~i4_win32_startup_options_struct()
 		free(render_data);
 	}
 
+/*
 void i4_win32_startup_options_struct::check_option(char *opt)
 {//only maxtool is currently using this one
 #ifndef _CONSOLE
@@ -170,6 +171,7 @@ void i4_win32_startup_options_struct::check_option(char *opt)
   fullscreen=i4_F;
 #endif
 }
+*/
 
 void i4_win32_startup_options_struct::check_option(w32 argc,i4_const_str *argv)
 	{
@@ -197,6 +199,14 @@ void i4_win32_startup_options_struct::check_option(w32 argc,i4_const_str *argv)
 			render_data_size=strlen(buf)+1;
 			render_data=(char*)malloc(render_data_size);
 			strcpy(render_data,buf);
+			}
+		}
+    buf[0]=0;
+    if (i4_get_registry(I4_REGISTRY_USER,0,"language",buf,256))
+		{
+		if (strlen(buf)>0&&strlen(buf)<9)
+			{
+			strcpy(langcode,buf);
 			}
 		}
 #ifdef _WINDOWS
@@ -278,6 +288,8 @@ int i4_win32_startup_options_struct::save_option (void)
 	i4_set_int("stereo_port",stereoport);
 	i4_set_int("render_type",render);
 	i4_set_registry(I4_REGISTRY_USER,0,"RenderDevice",render_data);
+    if (langcode[0])
+        i4_set_registry(I4_REGISTRY_USER,0,"language",langcode);
 	//i4_set_registry(I4_REGISTRY_USER,0,"display",display_device);
 #ifdef _WINDOWS
 	HKEY key;

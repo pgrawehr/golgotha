@@ -407,10 +407,12 @@ void i4_language_extend(i4_str &string, i4_str::iterator where)
     
 #endif
     char buf2[255];
-    if (i4_get_registry(I4_REGISTRY_USER,0,"language",buf2,255)&&buf2[0])
-        {
-        strncpy(buf+1,buf2,9);
-        };
+    //if (i4_get_registry(I4_REGISTRY_USER,0,"language",buf2,255)&&buf2[0])
+    //    {
+    //    strncpy(buf+1,buf2,9);
+    //    };
+    if (i4_win32_startup_options.langcode[0])
+        strncpy(buf+1,i4_win32_startup_options.langcode,9);
     if (buf[1]==0)
         strcpy(buf+1,"en");
     //string.insert(where,'_');

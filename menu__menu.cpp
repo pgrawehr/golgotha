@@ -26,6 +26,8 @@
 #include "menu/boxmenu.h"
 #include "menu/pull.h"
 
+#include "lisp/lisp.h"
+
 class i4_depress_menu_item : public i4_object_message_event_class
 {
   public :
@@ -658,16 +660,22 @@ i4_text_item_class::i4_text_item_class(const i4_const_str &_text,
                                        i4_event_reaction_class *activate,
                                        i4_event_reaction_class *deactivate,
                                        w16 pad_left_right,
-                                       w16 pad_up_down)
+                                       w16 pad_up_down,
+                                       const char *_check_enable_fn)
       
   : i4_menu_item_class(0, style, 0,0, press,depress,activate,deactivate),
     color(_color),
     font(_font),
     text(new i4_str(_text,(w16)_text.length()+1)),
+    check_enable_fn(0),
     pad_lr(pad_left_right)
 {
   if (!color) color=style->color_hint;
   if (!font)  font=style->font_hint->normal_font;
+  if (_check_enable_fn)
+      {
+      check_enable_fn=new i4_str(_check_enable_fn);
+      };
 
   bg_color=style->color_hint->neutral();
 
@@ -692,9 +700,21 @@ i4_text_item_class::i4_text_item_class(const i4_const_str &_text,
 
 }
 
+void i4_text_item_class::check_enable()
+    {
+    if (check_enable_fn)
+        {
+        li_object *r=li_call(check_enable_fn->c_str());
+        if (r==li_nil)
+            disabled=i4_T;
+        else
+            disabled=i4_F;
+        }
+    }
 
 void i4_text_item_class::parent_draw(i4_draw_context_class &context)
 {
+  check_enable();
   local_image->add_dirty(0,0,width()-1,height()-1,context);
 
   i4_color fg,bg;
@@ -764,6 +784,7 @@ void i4_text_item_class::receive_event(i4_event *ev)
 {
   //if this entry is disabled, NOTHING shall happen at all
   //This also includes that the menu should not go away.
+  check_enable();
   if (disabled)
 	  return;
   if (ev->type()==i4_event::MOUSE_BUTTON_DOWN)

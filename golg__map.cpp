@@ -1369,6 +1369,13 @@ LI_HEADER(map_recalc)
 
 li_automatic_add_function(li_map_recalc,"Map/Recalculate");
 
+LI_HEADER(has_map)
+    {
+    if (g1_get_map())
+        return li_true_sym;
+    return li_nil;
+    }
+
 LI_HEADER(unload_map)
 	{
 	g1_destroy_map();
@@ -1376,3 +1383,4 @@ LI_HEADER(unload_map)
 	}
 
 li_automatic_add_function(li_unload_map,"Map/Unload");
+li_automatic_add_function(li_has_map,"has_map");

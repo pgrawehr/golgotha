@@ -744,7 +744,12 @@ void i4_async_reader::uninit()
 		{
       i4_thread_yield();
 #ifdef _WINDOWS
-	  WaitForSingleObject((HANDLE)hPRIVATE_thread,INFINITE);
+	  if (WaitForSingleObject((HANDLE)hPRIVATE_thread,5000)==WAIT_TIMEOUT)
+          {
+          //if it doesn't go down on his own, kill it. 
+          TerminateThread((HANDLE)hPRIVATE_thread,99);
+          }
+      break;
 #else
 	  i4_thread_sleep(1000);//for systems wich don't support waiting for a thread
 	  //(at least I don't know)

@@ -45,6 +45,7 @@
 #define IDC_STEREOMODE                  1042
 #define IDC_STEREOPORTS                 1043
 #define IDC_PAUSE                       1044
+#define IDC_LANGSELECT                  1046
 #define IDD_EXTRAS                      30722
 #define IDS_RENDERINITFAILED            61889
 #define IDS_DIRECTXINITFAILED           61891
@@ -72,9 +73,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        115
+#define _APS_NEXT_RESOURCE_VALUE        116
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1046
+#define _APS_NEXT_CONTROL_VALUE         1047
 #define _APS_NEXT_SYMED_VALUE           2001
 #endif
 #endif
