@@ -32,8 +32,8 @@
   (default         0.08    0.2    0.020     0    100      3      0         nil)
   (electric_car    0.08    0.2    0.020   800     50      0      3         electric_beam)
   (peon_tank       0.08    0.20   0.020   300     50     10      4         b90mm)
-  (helicopter      0.08    0.8    0.020  1000     70     30      5         guided_missile);;health offset 20
-  (jet             0.10    0.07   0.020  1500     70      0      5         chain_gun)
+  (helicopter      0.16    0.8    0.020  1000     70     30      10        guided_missile);;health offset 20
+  (jet             0.17    0.07   0.020  1500     70      0      5         chain_gun)
   (engineer        0.08    0.2    0.020   300     30      0      1         nil)
   (trike           0.08    0.2    0.020   500     80      0      5         trike)
   (tank_buster     0.08    0.2    0.020   800     30      0      18        buster_rocket)
@@ -73,7 +73,7 @@
 
   (b90mm           sing     20       0         0.5   3)    
   (buster_rocket   mult     1000     1         0.2  18)    
-  (guided_missile  sing     10       1         0.3  20)    
+  (guided_missile  mult     50       1.5         0.3  20)    
   (electric_beam   sing     5        2         0.0   5)    
   (dropped_bomb    mult     100      1.5       0.08  4)
   (trike           mult     1000     2         0.2   5)

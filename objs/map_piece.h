@@ -178,6 +178,10 @@ public:
   i4_bool suggest_air_move(i4_float &dist,
                            i4_float &dtheta,
                            i4_3d_vector &d);
+  virtual i4_bool can_strafe()
+  {
+	  return i4_F;
+  }
   //! Returns true if the object is currently under user control
   i4_bool controled();
   i4_bool grab_user_controls(i4_float &accel, 

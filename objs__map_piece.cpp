@@ -1442,6 +1442,7 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 		i4_float dx=0,dy=0,dz=0;
         i4_float angle,t ,diffangle;
 		i4_bool can_get_there = i4_T;
+		i4_bool strafing=i4_F;
         i4_float height=g1_get_map()->terrain_height(x,y);
         if (ctrl)
             {
@@ -1455,13 +1456,36 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
                 braking_friction=0.1f;
             //angle is the ABSOLUTE target angle, not relative!
             angle=theta+c_angle;
-            dx = (float)cos(theta) * c_accel;
-		    dy = (float)sin(theta) * c_accel;
+            dx = (i4_float)cos(theta) * c_accel;
+		    dy = (i4_float)sin(theta) * c_accel;
+			
+			if (can_strafe())
+			{
+				i4_float strafe_dir=0;
+				if (c_right!=0)
+				{
+					strafing=i4_T;
+					strafe_dir=theta-i4_pi_2();
+					i4_normalize_angle(strafe_dir);
+					//Todo: Maybe this limitation should take place in grab_user_controls()
+					if (c_right>defaults->speed)
+						c_right=defaults->speed;
+					if (c_right<-defaults->speed)
+						c_right=-defaults->speed;
+					dx+=(i4_float)cos(strafe_dir)*c_right; //goes left if c_right is <0
+					dy+=(i4_float)sin(strafe_dir)*c_right;
+					
+				}
+			}
+			if (c_height>defaults->speed)
+				c_height=defaults->speed;
+			if (c_height<-defaults->speed)
+				c_height=-defaults->speed;
             dz= c_height;
-            if (dz>VSPEED)
-                dz=VSPEED;
-            else if (dz<-VSPEED)
-                dz=-VSPEED;
+            //if (dz>VSPEED)
+            //    dz=VSPEED;
+            //else if (dz<-VSPEED)
+            //    dz=-VSPEED;
             if (h<(height+2))
                 {
                 dz=dz/3;
@@ -1483,8 +1507,8 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 				dz=-VSPEED;
 				}
 			//avoid crashing in the ground
-			if (h<(height+1.7))
-				braking_friction=0.2f;
+			//if (h<(height+1.7))
+			braking_friction=0.2f;
 			
 			
 			//aim the vehicle    
@@ -1505,13 +1529,15 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 			dtheta = diffangle;
 			
 			//distance to move squared
-			t = dx*dx + dy*dy;
+			t = dx*dx + dy*dy+0.00001;//ensure t is newer zero
 			
 			//how far will the vehicle go if he slows down from his maximum speed?
-			//if (t>speed*speed+0.0025 || braking_friction==0.0)
+			//if (t>speed*speed+0.0025)
 			//	{
-				if (dtheta<-defaults->turn_speed) dtheta = -defaults->turn_speed;
-				else if (dtheta>defaults->turn_speed) dtheta = defaults->turn_speed;
+				if (dtheta<-defaults->turn_speed) 
+					dtheta = -defaults->turn_speed;
+				else if (dtheta>defaults->turn_speed) 
+					dtheta = defaults->turn_speed;
 				theta += dtheta;
 				i4_normalize_angle(theta);
 				
@@ -1524,8 +1550,8 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 					//just in case our calculations were off, dont let him slow to less than 0.01
 					//hm, on roads, due to scaling, these constants must be much less.
 					//we don't consider planes here
-					if (speed <= 0.01)
-						speed = 0.01f;
+					if (speed <= 0.001)
+						speed = 0.0f;
 					else
 						speed *= (1.0f-braking_friction);
 					}
@@ -1540,10 +1566,16 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 							braking_friction=0.1f;
 						speed *= (1.0f-braking_friction);
 						}
-					else 
+					else if (strafing)
+					{
+						accel+=c_right;
+						accel += (float)sin(pitch)*g1_resources.gravity;
+
+					}
+					else
 						{
                         if (path_info)
-                            accel = defaults->accel;
+                            accel += defaults->accel;
                         if (ctrl)
 						    accel += c_accel;
 						
@@ -1554,45 +1586,88 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 						}
 					}
                 //Check that we don't get too fast
-                //airbourne units usually don't move backwards. 
-				if ((speed*1.1f)>defaults->speed)
+                //airbourne units usually don't move backwards. Exception: The helicopter, which
+				//is currently the only user-controllable airbourne unit anyway. 
+				if ((speed)>defaults->speed*1.1f)
+				{
 					speed=defaults->speed*1.1f;
-                if ((speed*0.3f)<-defaults->speed)
+				}
+                if ((speed)<-(defaults->speed*0.3f))
+				{
                     speed=-0.3f*defaults->speed;
+				}
+				//limit the movement to speed. This is a bit try-and-error since speed and t
+				//depend on each other
+				i4_float maxdiff=i4_fabs(speed)/t;
+				if (!strafing)
+				{
+					if (maxdiff<1) 
+					{
+						dx=dx*maxdiff;
+						dy=dy*maxdiff;
+					}
+					else
+					{
 
-				dist = speed*(float)cos(pitch);
-				dx = (float)cos(theta) * dist;
-				dy = (float)sin(theta) * dist;
+						dx = (float)cos(theta) * speed;
+						dy = (float)sin(theta) * speed;
+					}
+				}
 				d.x=dx;
 				d.y=dy;
 				d.z=dz;
-				//dist = t;
+				dist = dx*dx + dy*dy;
 				pf_suggest_move.stop();
 				return i4_T;
-				//}
+				}
 			
+			//}
+		//dtheta = 0;
+		//dist = 0;
+		//speed = 0;
+		////dx = 0;
+		////dy = 0;
+		//d.x=0;
+		//d.y=0;
+		//d.z=0;
+		//pf_suggest_move.stop();
+		//return i4_F;
+		
+		}
+	if (!prev_object.get() || !next_object.get())
+	{
+		//we don't have a global assigned path nor a local command: Just break and stop. 
+		if (speed!=0) //slight performance improvement. 
+		{
+			if ((speed)>defaults->speed*1.1f)
+			{
+				speed=defaults->speed*1.1f;
 			}
-		dtheta = 0;
-		dist = 0;
-		speed = 0;
-		//dx = 0;
-		//dy = 0;
-		d.x=0;
-		d.y=0;
-		d.z=0;
+			if ((speed)<-(defaults->speed*1.1f))
+			{
+				speed=-1.1f*defaults->speed;
+			}
+			d.x = (i4_float)cos(theta) * speed;
+			d.y = (i4_float)sin(theta) * speed;
+			d.z=0;
+			dist=d.x*d.x+d.y*d.y;
+			dtheta=0;
+			speed*=0.9;
+			if (speed<0.0001f)
+				speed=0;
+		}
+		else
+		{
+			d.x=0;
+			d.y=0;
+			d.z=0;
+			speed=0;
+			dist=0;
+			dtheta=0;
+		}
 		pf_suggest_move.stop();
 		return i4_F;
-		
-	  }
-	  if (!prev_object.get() || !next_object.get())
-		  {//we don't have a global assigned path nor a local command
-		  d.x=d.y=d.z=0;
-		  dist=0;
-		  dtheta=0;
-		  speed=0;
-		  pf_suggest_move.stop();
-		  return i4_F;
-		  }
+	}
 	//code bellow for following paths only
 
 	i4_float angle, scale=0.0,pl,curlen;

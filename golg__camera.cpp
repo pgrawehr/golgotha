@@ -30,6 +30,7 @@
 #include "demo.h"
 #include "main/win_main.h"
 #include "lisp/li_init.h"
+#include "device/key_man.h"
 
 
 i4_profile_class   pf_suggest_camera_event("suggest_camera_event");
@@ -1011,6 +1012,7 @@ void g1_view_state_class::suggest_camera_mode(g1_view_mode_type mode,
       circle.dist_vel=0.2f;
       circle.looking_at=i4_3d_vector(o->x, o->y, o->h);
       end.gz=o->h+0.1f;
+	  i4_key_man.set_context("strategy");
     }
     else return ;
   }

@@ -84,19 +84,26 @@ g1_factory_class::g1_factory_class(g1_object_type g1_ot_id, g1_loader_class *g1_
   sprintf(lod_n, "%s_lod", n);
   draw_params.setup(n,0,lod_n);
 
+  set_flag(BLOCKING      |
+	  CAN_DRIVE_ON  |
+	  TARGETABLE    |
+	  GROUND
+	  ,1);
   if (!strcmp(n, "garage"))
+  {
     radar_image=&garage_radar_im;
+	set_flag(CAN_DRIVE_ON,0);
+  }
   else if (!strcmp(n, "airbase"))
+  {
     radar_image=&airbase_radar_im;
+	set_flag(CAN_DRIVE_ON,0); //this must not be true, otherwise planes might crash into it when starting
+  }
   else if (!strcmp(n, "mainbasepad"))
     radar_image=&mainbasepad_radar_im;
 
   radar_type=G1_RADAR_BUILDING;
-  set_flag(BLOCKING      |
-           CAN_DRIVE_ON  |
-		   TARGETABLE    |
-           GROUND
-           ,1);
+  
 }
 
 i4_bool g1_factory_class::occupy_location()

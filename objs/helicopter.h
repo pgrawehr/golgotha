@@ -33,6 +33,11 @@ public:
 	  {
 	  return 20;
 	  }
+
+  i4_bool can_strafe()
+  {
+	  return i4_T;
+  }
         
   void damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir);
   int get_chunk_names(char **&list);

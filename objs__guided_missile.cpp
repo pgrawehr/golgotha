@@ -98,7 +98,7 @@ void g1_guided_missile_class::think()
     if (track)
     {
       i4_3d_vector pos(x,y,h);
-      i4_3d_vector lead(track->x, track->y, track->h + 0.01f);
+      i4_3d_vector lead(track->x, track->y, track->h);
       i4_3d_vector mp_diff(track->x - track->lx, track->y - track->ly, track->h - track->lh);
       i4_3d_vector tvel(vel);
 
