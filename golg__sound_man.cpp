@@ -137,8 +137,8 @@ static void set_music_volume(int vol)
 
 
 //set take_mutex to false ONLY if the calling function already owns it.
-static void restart_song(char *newfn,i4_bool take_mutex=i4_T) //BUG: Currently searching for inexistent wav-File 
-//Should be MP3
+static void restart_song(char *newfn,i4_bool take_mutex=i4_T)
+//Should be upgraded to be able to read MP3
 {
   //WaitForSingleObject(m_hmutex,INFINITE);
   if (take_mutex) m_hmutex.wait_signal();

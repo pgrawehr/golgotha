@@ -32,7 +32,7 @@ int show_sfx=0;
 static char sfx_path[80];
 
 
-static void get(char *var, char *buffer, int max_buffer, char *def)
+static void get_reg(char *var, char *buffer, int max_buffer, char *def)
 {
   if (i4_get_registry(I4_REGISTRY_USER,
                       "SOFTWARE\\Crack dot Com\\Golgotha\\1.0",
@@ -55,7 +55,7 @@ char *s1_get_sfx_path()
 {
   if (!sfx_path[0])
   {
-    get("G_SFX_PATH", sfx_path, 80, "sfx");
+    get_reg("G_SFX_PATH", sfx_path, 80, "sfx");
   }
 
   return sfx_path;

@@ -28,8 +28,9 @@ i4_file_class *mp3_out=0;
  *
  */
 
-#include <stdlib.h>
-#include <sys/types.h>
+//Included from pch.h if required (and if present)
+//#include <stdlib.h>
+//#include <sys/types.h>
 
 /* #define SET_PRIO */
 
@@ -156,7 +157,7 @@ void init_output(void)
   }
 
 }
-
+/*
 char *get_next_file (int argc, char *argv[])
 {
   static char line[1024];
@@ -192,6 +193,7 @@ char *get_next_file (int argc, char *argv[])
     return (argv[loptind++]);
   return (NULL);
 }
+*/
 
 void set_synth (char *arg)
 {
