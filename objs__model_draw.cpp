@@ -113,7 +113,8 @@ void g1_model_draw(g1_object_class *_this,
     return;
 
   g1_current_controller->get_pos(cpos);
-  float dist_sqrd=1.0f;//fix this if forcedraw, so that we always use the default model
+  //set this to a very small value if forcedraw, so that we always use the default model
+  float dist_sqrd=1.0f;
   if (! (params.flags&g1_model_draw_parameters::FORCEDRAW))
 	  {
 	  dist_sqrd=(cpos.x-_this->x)*(cpos.x-_this->x)+
@@ -124,7 +125,7 @@ void g1_model_draw(g1_object_class *_this,
 	  if (dist_sqrd>g1_resources.lod_disappear_dist)
 		return ;
 
-      if (dist_sqrd>g1_resources.lod_switch_dist && !params.lod_model)
+      if (dist_sqrd>g1_resources.lod_nolodmodel_disappear_dist && !params.lod_model)
         return ;
 	  }
 
@@ -228,7 +229,10 @@ void g1_model_draw(g1_object_class *_this,
   {
     g1_render.r_api->set_filter_mode(R1_NO_FILTERING);
 
-    g1_render.render_object(params.lod_model,
+	g1_quad_object_class* mod=params.lod_model;
+	if (mod==NULL)
+		mod=params.model;
+    g1_render.render_object(mod,
                             &view_transform,                          
                             params.flags & g1_model_draw_parameters::NO_LIGHTING ? 
                             0 : _this->world_transform,

@@ -192,7 +192,7 @@ LI_HEADER(unload_transims)
 
 /*LISPFUN*
 Name: adjust_lod_dist
-Syntax: (adjust_lod_dist [disapear_dist [switch_dist]])
+Syntax: (adjust_lod_dist [disappear_dist [switch_dist [extra_disappear_dist]]])
 Returns: t
 */
 
@@ -208,6 +208,13 @@ LI_HEADER(adjust_lod_dist)
 		{
 		g1_resources.lod_switch_dist=li_get_float(li_eval(ob,env),env);
 		}
+	ob=li_third(o,env);
+	if (ob)
+	{
+		g1_resources.lod_nolodmodel_disappear_dist=li_get_float(li_eval(ob,env),env);
+	}
+	else
+		g1_resources.lod_nolodmodel_disappear_dist=g1_resources.lod_disappear_dist*5;
 	return li_true_sym;
 	}
 

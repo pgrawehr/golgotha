@@ -48,55 +48,6 @@ extern w32 allowed_texture_formats;
 //LPDDSURFACEDESC first_tex_format=0;
 
 
-
-HRESULT WINAPI texture_enum9(LPDDSURFACEDESC lpddsd, LPVOID _regular_format)
-{
-  if ((lpddsd->ddpfPixelFormat.dwFlags & DDPF_ALPHAPIXELS)==0 &&
-       lpddsd->ddpfPixelFormat.dwRGBBitCount==16)
-  {
-    //find the best non-alpha surface format
-    i4_pixel_format *regular_format = (i4_pixel_format *)_regular_format;
-
-    sw32 total_new_bits = lpddsd->ddpfPixelFormat.dwRBitMask +
-                          lpddsd->ddpfPixelFormat.dwGBitMask +
-                          lpddsd->ddpfPixelFormat.dwBBitMask;
-
-    sw32 total_reg_bits = regular_format->red_mask   + 
-                          regular_format->green_mask +
-                          regular_format->blue_mask;
-
-    if (total_new_bits > total_reg_bits)
-    {
-      regular_format->red_mask   = lpddsd->ddpfPixelFormat.dwRBitMask;
-      regular_format->green_mask = lpddsd->ddpfPixelFormat.dwGBitMask;
-      regular_format->blue_mask  = lpddsd->ddpfPixelFormat.dwBBitMask;
-      regular_format->alpha_mask = 0;
-      regular_format->lookup     = 0;
-      regular_format->calc_shift();
-      regular_format->pixel_depth = I4_16BIT;
-    }
-  }
-  //Bad code bellow. Prevents more than one enumeration per game-run(!)
-  //Do we really have to care about the enumeration being circular?
-/*
-  if (first_tex_format)
-  {
-    if (lpddsd==first_tex_format) 
-      return D3DENUMRET_CANCEL;
-  }
-  else
-    first_tex_format = lpddsd;
-*/
-  if (lpddsd->ddpfPixelFormat.dwRGBBitCount==8)
-	  allowed_texture_formats|=R1_MIPFLAGS_USE8;
-  if (lpddsd->ddpfPixelFormat.dwRGBBitCount==16)
-	  allowed_texture_formats|=R1_MIPFLAGS_USE16;
-  if (lpddsd->ddpfPixelFormat.dwRGBBitCount==24)
-	  allowed_texture_formats|=R1_MIPFLAGS_USE24;
-  if (lpddsd->ddpfPixelFormat.dwRGBBitCount==32)
-	  allowed_texture_formats|=R1_MIPFLAGS_USE32;
-  return D3D_OK;
-}
 static i4_bool decomp_dir_loaded=i4_F;
 /*typedef struct _decomp_entry{
 	w32 id;
@@ -142,7 +93,7 @@ void r1_dx9_texture_class::init()
 	r1_texture_manager_class::init();
 	
 	memset(&regular_format,0,sizeof(i4_pixel_format));
-	allowed_texture_formats=R1_MIPFLAGS_USE16|R1_MIPFLAGS_USE24|R1_MIPFLAGS_USE32;
+	allowed_texture_formats=R1_MIPFLAGS_USE16;
 	default_texture_flags=R1_MIPFLAGS_USE16;
 	regular_format.alpha_bits=0;
 	regular_format.alpha_mask=0;
@@ -152,17 +103,37 @@ void r1_dx9_texture_class::init()
 	regular_format.lookup=0;
 	regular_format.calc_shift();
 	regular_format.pixel_depth=I4_16BIT;
-	//if (r1_dx9_class_instance.d3d_device->EnumTextureFormats(texture_enum,(LPVOID)&regular_format) != D3D_OK)
+	//if (r1_dx9_class_instance.d3d_device->EnumTextureFormats(texture_enum9,(LPVOID)&regular_format) != D3D_OK)
 	//	i4_error("FATAL: Couldn't determine Direct3D Texture Formats");
 
 	//TODO: Find the real value for allowed_texture_formats
 	//which might depend on the current video mode.
 	//Duh, where should we get the correct values from for this call?
-	//dx9_common.device->CheckDeviceFormat(D3DADAPTER_DEFAULT,
-	//	D3DDEVTYPE_HAL,D3DFMT_A8R8G8B8,0,D3DRTYPE_TEXTURE,
-	//	D3DFMT_A8R8G8B8);
-	
-	
+	D3DDEVTYPE type=D3DDEVTYPE_HAL;
+	//If that setting is present, we force the reference device.
+	if (i4_win32_startup_options.render==R1_RENDER_DIRECTX9_REF)
+		type=D3DDEVTYPE_REF;
+	if (i4_dx9_check(dx9_common.pD3D9->CheckDeviceFormat(D3DADAPTER_DEFAULT,
+		type,D3DFMT_X8R8G8B8,0,D3DRTYPE_TEXTURE,
+		D3DFMT_A8R8G8B8)))
+	{
+		allowed_texture_formats|=R1_MIPFLAGS_USE32;
+	}
+	D3DFORMAT curmode=D3DFMT_X8R8G8B8;
+	if (i4_win32_startup_options.bits==24)
+	{
+		curmode=D3DFMT_R8G8B8;
+	}
+	//Check wheter the the current mode (24 or 32 bits) supports 24 bit textures)
+	//A lot of recent video cards don't support 24 bit color depth at all. 
+	if (i4_dx9_check(dx9_common.pD3D9->CheckDeviceFormat(D3DADAPTER_DEFAULT,
+		type,curmode,0,D3DRTYPE_TEXTURE,
+		D3DFMT_R8G8B8)))
+	{
+		allowed_texture_formats|=R1_MIPFLAGS_USE24;
+	}
+
+
 	if ((allowed_texture_formats&R1_MIPFLAGS_USE16) ==0)
 		{
 		i4_warning("16 Bit textures are not supported in this mode. Strange things might happen");
@@ -305,6 +276,13 @@ void r1_dx9_texture_class::init()
 					default_texture_flags|=R1_MIPFLAGS_USE24;
 				}
 			}
+		if (i4_win32_startup_options.texture_bitdepth==0)
+		{
+			if (i4_current_app->get_display()->get_palette()->source.pixel_depth==I4_32BIT)
+			{
+				default_texture_flags=R1_MIPFLAGS_USE32;
+			}
+		}
 		
 		}//16 bit available
 	else

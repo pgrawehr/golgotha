@@ -147,6 +147,12 @@ irgendwas sonst machen, da die Leertaste genau garnichts bewirkt. - Gefixt.
 If an object does not have a lod texture, it is not displayed at all if it passes beyond some
 distance. This distance is usually too close (at least on fast computers and large displays)
 objs__model_draw.cpp(Line 124) handles this with constants from constants.res. 
+Changed, there's a new configuration setting that defines what is done when no lod object 
+is available. Up to some configurable distance, the original model is now drawn.
+Maybe the constants need to be fine-adjusted. 
+->Need to improve the texture minification filter (has visible problems with chroma-textures)
+Must not use chroma-color pixels in minification, since that causes the edges of the minificated
+textures to become ugly-chroma-colored. 
 
 Peon-tank doesn't fire upwards if he targets a plane. 
 Fixed, but does optically not look very good. Need to split the peon tank's 

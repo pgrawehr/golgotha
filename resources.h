@@ -148,9 +148,10 @@ public:
     follow_camera_height,
     follow_camera_rotation;
 
-  float lod_switch_dist, 
-        lod_disappear_dist,
-         skimpy_details_dist;
+  float lod_switch_dist, //beyond this distance, we switch to lod models
+        lod_disappear_dist,  //beyond this distance, we don't show models
+		//if no lod model is present, we show the normal model up to this distance
+        lod_nolodmodel_disappear_dist; 
     
 
   i4_3d_point_class player_top_attach;

@@ -3718,7 +3718,7 @@ i4_text_scroll_window_class::i4_text_scroll_window_class(i4_graphical_style_clas
     fore(text_foreground),
     back(text_background),
     max_scrollback(scrollback),
-    scroll_pos(1)
+    scroll_pos(-1) //scroll once when the first line is drawn. 
 {
   
 

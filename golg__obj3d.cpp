@@ -454,6 +454,7 @@ g1_quad_object_class *g1_base_object_loader_class::load(i4_loader_class *fp)
 
   pf_load_quads.start();
   fp->read_16();                // repeat of num quads (why?)
+  w16 highest_ref=0;
   for (i=0; i<quads; i++)
   {
     w16 ref[4];
@@ -464,10 +465,11 @@ g1_quad_object_class *g1_base_object_loader_class::load(i4_loader_class *fp)
     for (j=0; j<4; ++j)
     {
       ref[j]=fp->read_16();
-	  if ((ref[j]!=0xffff)&&(ref[j]>(quads*4)))//estimate about maximum number of vertices
+	  if (ref[j]!=0xffff)
 		  {
-		  if (i4_error("WARNING: g1_base_object_loader_class::load: Reference to high vertex number found. GMOD file damaged?")==2)//IDCANCEL
-			  return 0;
+		  // Check validity of references (the actual number of vertices in the file is stored
+		  //further down. 
+		  highest_ref=ref[j];
 		  }
 	  if ((ref[j]==0xffff) && j!=3)
 		  {
@@ -497,6 +499,11 @@ g1_quad_object_class *g1_base_object_loader_class::load(i4_loader_class *fp)
   
   pf_load_verts.start();
   w16 nv=fp->read_16();  // number of vertexes in object
+  if (nv<highest_ref)
+  {
+	  if (i4_error("WARNING: g1_base_object_loader_class::load: Reference to high vertex number found. GMOD file damaged?")==2)//IDCANCEL
+		  return 0;
+  }
   w16 na=fp->read_16();  // number of animations
 
   set_num_vertex(nv);

@@ -310,6 +310,12 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 		}
 	
 	}
+	if (target_depth==4 && chroma)
+	{
+		convert_depth=true;
+		convfor=&reg32_format;
+		extend_chroma=true;
+	}
 	if ((width!=image->width()) || (height!=image->height()))
 		{
 		//need to scale the image
@@ -338,15 +344,26 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
  	 				c2=image->pal->convert(c,convfor);
 					if (target_depth==4)
 					{
-						if (extend_chroma && (c2!=G1_CHROMA_COLOR))
+						if (extend_chroma)
 						{
-							c2|=0xff000000;
+							if (c2!=G1_CHROMA_COLOR)
+								c2|=0xff000000;
+							else 
+								c2=0; //set the chroma color in the image to black
+							    //this prevents the nasty pink borders
 						}
+						
 					}
 					else if (target_depth==2)		
 					{
-						if (extend_chroma && (c2!=G1_16BIT_CHROMA))
-							c2|=0x8000;
+						if (extend_chroma)
+						{
+							if (c2!=G1_16BIT_CHROMA)
+								c2|=0x8000;
+							else
+								c2=0;
+						}
+						
 					}
 				}
 				else
@@ -377,15 +394,25 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 					convfor);
 				if (target_depth==4)
 					{
-					if (extend_chroma && (c!=G1_CHROMA_COLOR))
+					if (extend_chroma )
 						{
-						c|=0xff000000;
+							if (c!=G1_CHROMA_COLOR)
+							{
+								c|=0xff000000;
+							}
+							else 
+								c=0;
 						}
 					}
 				else if (target_depth==2)
 					{
-					if (extend_chroma && (c!=G1_16BIT_CHROMA))
-						c|=0x8000;
+						if (extend_chroma )
+						{
+							if (c!=G1_16BIT_CHROMA)
+								c|=0x8000;
+							else
+								c=0;
+						}
 					}
 				
 				write_to_image(textu,c,target_depth);
@@ -393,6 +420,11 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 				}
 			}
 		}
+	else
+	{
+		//No resizing and no re-coloring required. Just bulk-copy the data
+		memcpy(dest,image->data,height*width*target_depth);
+	}
 	//write_to_image((w8*)dest,0x00ffff,target_depth);
 	pf_size_texture.stop();
 	return i4_T;

@@ -87,9 +87,9 @@ balance        =    { 295     5  395 14 }   // left,top,right & bottom
 
 rocket_tank_top_attach         { -0.0821 0.0 0.1482}
 
-lod_switch_dist                  200   //these two settings should be user-definable
+lod_switch_dist                  300   //these three settings should be user-definable
 lod_disappear_dist               2500
-skimpy_details_dist              25    // beyond this distance things lights/explosions don't show
+lod_nolodmodel_disappear_dist    1000   
 
 visual_radii_low                 15 
 visual_radii_med                 20

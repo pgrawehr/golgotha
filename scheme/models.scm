@@ -88,7 +88,7 @@ Programmer's resource file
 
   "b120mm" "b90mm" "napalm"  "acid" "chain_gun"
 
-  "bank"
+  "bank" "bank_lod"
 
   "selection_arrow"
   "target"
@@ -110,8 +110,9 @@ Programmer's resource file
   "powerup_weapons"
   "powerup_engine"  
   "powerup_repair"
-  "garage"
+  "garage" "garage_lod"
   "airbase"
+  "mainbasefull010698" "mainbasefull010698_lod"
   "mainbase"
   "mainbasepad"
   "camera"

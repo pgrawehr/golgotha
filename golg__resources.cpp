@@ -263,7 +263,7 @@ void g1_resource_class::load()
 
   g_float(lod_switch_dist,                         "lod_switch_dist");
   g_float(lod_disappear_dist,                      "lod_disappear_dist");
-  g_float(skimpy_details_dist,                     "skimpy_details_dist");
+  g_float(lod_nolodmodel_disappear_dist,           "lod_nolodmodel_disappear_dist");
 
   g_float(view_radii[0],                           "visual_radii_low");
   g_float(view_radii[1],                           "visual_radii_med");
