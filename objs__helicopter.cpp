@@ -65,7 +65,8 @@ g1_object_definer<g1_helicopter_class>
 g1_helicopter_def("helicopter",
                   g1_object_definition_class::TO_MAP_PIECE |
                   g1_object_definition_class::EDITOR_SELECTABLE |
-                  g1_object_definition_class::MOVABLE,
+                  g1_object_definition_class::MOVABLE|
+				  g1_object_definition_class::HAS_ALPHA,
                   g1_helicopter_init);
 
 g1_helicopter_class::g1_helicopter_class(g1_object_type id,

@@ -146,6 +146,7 @@ irgendwas sonst machen, da die Leertaste genau garnichts bewirkt. - Gefixt.
 
 If an object does not have a lod texture, it is not displayed at all if it passes beyond some
 distance. This distance is usually too close (at least on fast computers and large displays)
+objs__model_draw.cpp(Line 124) handles this with constants from constants.res. 
 
 Peon-tank doesn't fire upwards if he targets a plane. 
 Fixed, but does optically not look very good. Need to split the peon tank's 

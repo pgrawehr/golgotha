@@ -709,7 +709,7 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
 {
   pf_map_fast.start();
   //This code is HIGHLY time critical
-  //avoid unessesary stack operations at all costs
+  //avoid unessesary stack operations be pre-declaring all variables
   //optimize for SPEEEEED.
   r1_render_api_class *api = g1_render.r_api;
   i4_transform_class t(*context->transform);
@@ -721,7 +721,6 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
 //   g1_lod.cont->view.get_camera_pos(pos);
   pos = g1_lod.pos;
 
-  //g1_num_objs_in_view = 0;
   g1_objs_in_view_dyn.clear();
   g1_obj_transforms_in_view.clear();
 
@@ -913,7 +912,6 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
           }
       }
   
-  //for (i=g1_num_objs_in_view-1;i>=0;i--)
   for (i=0;i<g1_objs_in_view_dyn.size();i++)
   {
     o=g1_objs_in_view_dyn[i];
@@ -924,8 +922,6 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
       o->set_flag(g1_object_class::SCRATCH_BIT, 0);
       if (o->world_transform!=0)
         o->draw(context);
-      //else
-      //  i4_warning("null transform");
     }
   }
 
