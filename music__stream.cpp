@@ -39,7 +39,7 @@ void i4_stream_wav_player::load_buffer(i4_bool async)
   {
     wait_read = i4_T; //we're waiting for this read to finish now
 
-    if (!fp->async_read(locked_buffer_start, locked_buffer_size, i4_wav_callback, this, 10))
+    if (!fp->async_read(locked_buffer_start, locked_buffer_size, i4_wav_callback, this, 10,1001))
     {
       wait_read = i4_F;
 
@@ -148,7 +148,7 @@ void i4_stream_wav_player::PRIVATE_callback(w32 count)
       
       prev_total += count;
 
-      if (!fp->async_read(((w8 *)locked_buffer_start) + prev_total, locked_buffer_size - prev_total, i4_wav_callback, this, 10))
+      if (!fp->async_read(((w8 *)locked_buffer_start) + prev_total, locked_buffer_size - prev_total, i4_wav_callback, this, 10,1002))
       {
         wait_read = i4_F;
 

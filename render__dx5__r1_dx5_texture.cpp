@@ -1026,7 +1026,7 @@ i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info *load_info)
     async_worked = load_info->src_file->async_read(new_used->data,
                                                    mip->width*mip->height*tex_by,
                                                    dx5_async_callback,
-                                                   new_used);
+                                                   new_used,255,51);
   }
   else
   {
@@ -1065,7 +1065,7 @@ i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info *load_info)
 		async_worked = fp->async_read(new_used->data,
                                   mip->width*mip->height*2,
                                   dx5_async_callback,
-                                  new_used,110);
+                                  new_used,110,51);
 		}
 	else
 		{
@@ -1137,7 +1137,7 @@ i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info *load_info)
 			mip->flags|=R1_MIPLEVEL_LOAD_JPG;
 			async_worked=new_used->async_fp->async_read(new_used->data,
 				datasize,
-				dx5_async_callback,new_used);
+				dx5_async_callback,new_used,255,53);
 			}
 		else
 			{

@@ -24,7 +24,10 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_AFXEXT"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -43,7 +46,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="ddraw.lib dinput.lib dsound.lib dxguid.lib wsock32.lib comctl32.lib winmm.lib version.lib"
+				AdditionalDependencies="ddraw.lib dinput.lib dsound.lib dxguid.lib wsock32.lib comctl32.lib winmm.lib version.lib d3d9.lib dxerr9.lib"
 				OutputFile=".\Release/Golgotha.exe"
 				Version="1.1"
 				LinkIncremental="1"
@@ -51,6 +54,8 @@
 				GenerateDebugInformation="TRUE"
 				GenerateMapFile="TRUE"
 				MapFileName=".\Release/Golgotha.map"
+				MapExports="TRUE"
+				MapLines="TRUE"
 				SubSystem="2"
 				StackReserveSize="2556302"
 				StackCommitSize="1048576"/>
@@ -1714,10 +1719,10 @@
 				RelativePath=".\maxtool\max_object.h">
 			</File>
 			<File
-				RelativePath=".\maxtool\maxcomm.h">
+				RelativePath=".\maxcomm.h">
 			</File>
 			<File
-				RelativePath=".\maxcomm.h">
+				RelativePath=".\maxtool\maxcomm.h">
 			</File>
 			<File
 				RelativePath=".\quantize\median.h">
@@ -1888,10 +1893,10 @@
 				RelativePath=".\pragma.h">
 			</File>
 			<File
-				RelativePath=".\Processor.h">
+				RelativePath=".\device\processor.h">
 			</File>
 			<File
-				RelativePath=".\device\processor.h">
+				RelativePath=".\Processor.h">
 			</File>
 			<File
 				RelativePath=".\time\profile.h">
@@ -2239,7 +2244,7 @@
 				RelativePath=".\objs\vehic_sounds.h">
 			</File>
 			<File
-				RelativePath=".\loaders\mp3\version.h">
+				RelativePath=".\version.h">
 			</File>
 			<File
 				RelativePath=".\objs\verybiggun.h">

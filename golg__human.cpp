@@ -570,9 +570,9 @@ void g1_human_class::think()
         i4_float cy=g1_border->last_mouse_y();
         i4_float ly=g1_border->prev_mouse_y();
         if (cy<7)
-          heh=-0.6f;
+          heh=-0.2f;
         else if (cy>(g1_border->height()-7))
-          heh=0.6f;
+          heh=0.2f;
         else
           heh = ((cy - ly)*0.01f);
         mouse_look_increment_y += heh;

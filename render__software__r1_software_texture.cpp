@@ -339,7 +339,8 @@ i4_bool r1_software_texture_class::async_mip_load(r1_mip_load_info *load_info)
   {
     //new_used->data=new w8[need_size];
     //directly load to new_used->node->start
-    async_worked = load_info->src_file->async_read((w16 *)f->start,mip->width*mip->height*2,software_async_callback,new_used);    
+    async_worked = load_info->src_file->async_read((w16 *)f->start,
+		mip->width*mip->height*2,software_async_callback,new_used,255,11);    
   }
   else
   {
@@ -429,7 +430,7 @@ i4_bool r1_software_texture_class::async_mip_load(r1_mip_load_info *load_info)
 			mip->flags|=R1_MIPLEVEL_LOAD_JPG;
 			async_worked=f->async_fp->async_read(f->data,
 				datasize,
-				software_async_callback,new_used);
+				software_async_callback,new_used,255,12);
 			}
 		else
 			{
@@ -496,10 +497,10 @@ void r1_software_texture_class::async_load_finished(used_node *u)
 	  //  u->mip->entry->is_alphatexture());
 	  size_image_to_texture((void*)f->start,im,f->mip->width,f->mip->height,
 		  2,f->mip->entry->is_transparent(),
-		  f->mip->entry->is_alphatexture());
-      f->mip->flags &=~R1_MIPLEVEL_LOAD_JPG;
-
+		  f->mip->entry->is_alphatexture());      
       array_lock.lock();
+	  f->mip->flags &=~R1_MIPLEVEL_LOAD_JPG;
+
       r1_image_list_struct *ils=image_list.add();
       ils->usage=30;
       ils->image=im;

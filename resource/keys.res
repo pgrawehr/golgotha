@@ -27,6 +27,7 @@
 (def_key  "Right"                  "Move Right"                  strategy)
 (def_key  "Up"                     "Move Forward"                strategy)
 (def_key  "Down"                   "Move Backward"               strategy)
+(def_key  "Space"                  "Goto_stank"                  strategy)
 
 #(def_key  "Alt+Up"                 "Pan Up"                     strategy)
 #(def_key  "Alt+Down"               "Pan Down"                   strategy)       
@@ -55,8 +56,10 @@
 (def_key  "Backspace"              "strategy_toggle"            follow strategy action)
 
 (def_key  "C"                      "camera_mode"                action)
+#the lisp command "edit_camera" can be used to set these explicitly to some value
 (def_key  "Y"                      "Zoom In"                    follow)
 (def_key  "X"                      "Zoom Out"                   follow)
+(def_key  "Y"                      "toggle_glasses"             action)
 (def_key  "C"                      "Zoom Up"                    follow)
 (def_key  "V"                      "Zoom Down"                  follow)
 (def_key  "B"                      "Zoom Left"                  follow)
@@ -103,7 +106,7 @@
 
   
 (def_key  "Q"                      "Build stank"                action follow strategy)       
-(def_key  "Shift+Q"                "Goto_stank"                 action follow strategy)
+(def_key  "Shift+Q"                  "Goto_stank"                 action follow strategy)
 (def_key  "W"                      "Build peon_tank"            action follow strategy)       
 (def_key  "E"                      "Build trike"                action follow strategy)       
 (def_key  "R"                      "Build rocket_tank"          action follow strategy)       

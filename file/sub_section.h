@@ -32,7 +32,7 @@ public:
 
   virtual i4_bool async_read (void *buffer, w32 size, 
                               async_callback call,
-                              void *context=0, w32 priority=255);
+                              void *context, w32 priority, int caller_id);
 
   i4_sub_section_file(i4_file_class *fp, int start, int size);
   ~i4_sub_section_file();

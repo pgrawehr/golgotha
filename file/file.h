@@ -66,11 +66,11 @@ public:
   // returns i4_F if an immediate error occured
   virtual i4_bool async_read (void *buffer, w32 size, 
                               async_callback call,
-                              void *context=0, w32 priority=255);
+                              void *context, w32 priority, int caller_id);
 
   virtual i4_bool async_write(const void *buffer, w32 size, 
                               async_callback call,
-                              void *context=0);
+                              void *context);
 
   // abort current operation
   virtual void abort() {}

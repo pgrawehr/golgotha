@@ -177,7 +177,7 @@ i4_bool i4_file_class::async_write(const void *buffer, w32 size,
 
 i4_bool i4_file_class::async_read (void *buffer, w32 size, 
                                    async_callback call,
-                                   void *context, w32 priority)
+                                   void *context, w32 priority, int caller_id)
 {
   (*call)(read(buffer, size), context);
   return i4_T;
@@ -728,7 +728,9 @@ request_que(i4_async_priority_sorter)
   stop=i4_F;
 }
 
-i4_bool i4_async_reader::request_for_callback(void *buffer, w32 size, i4_file_class::async_callback call, void *context, w32 priority/* =255 */)
+i4_bool i4_async_reader::request_for_callback(void *buffer, w32 size, 
+	i4_file_class::async_callback call, void *context, 
+	w32 priority, int caller_id)
 {
 	if (readers.size()==0)
 	{
@@ -737,7 +739,7 @@ i4_bool i4_async_reader::request_for_callback(void *buffer, w32 size, i4_file_cl
 	}
 	else if (readers.size()==1)
 	{
-		return readers[0]->start_read(0,buffer,size,call,context,priority);
+		return readers[0]->start_read(0,buffer,size,call,context,priority,caller_id);
 	}
 	else
 	{
@@ -747,7 +749,7 @@ i4_bool i4_async_reader::request_for_callback(void *buffer, w32 size, i4_file_cl
 		{
 			i++;
 		}
-		return readers[i]->start_read(0,buffer,size,call,context,priority);
+		return readers[i]->start_read(0,buffer,size,call,context,priority,caller_id);
 
 	}
 }
@@ -799,7 +801,7 @@ void i4_async_reader::uninit()
 
 i4_bool i4_async_reader::start_read(int fd, void *buffer, w32 size, 
                                     i4_file_class::async_callback call,
-                                    void *context, w32 priority)
+                                    void *context, w32 priority, int caller_id)
 {
   //if (!i4_threads_supported())
   //  i4_error("FATAL: Threads are not supported in this OS. Check your makefile.");
@@ -812,7 +814,7 @@ i4_bool i4_async_reader::start_read(int fd, void *buffer, w32 size,
 	  return i4_F;
 	  }
   */
-  read_request r(fd, buffer, size, call, context, priority);
+  read_request r(fd, buffer, size, call, context, priority, caller_id);
   if (!request_que.insert(r))
   {
     que_lock.unlock();
@@ -1054,7 +1056,7 @@ void i4_async_buf_read_callback(w32 count, void *context)
 
 i4_bool i4_buffered_file_class::async_read (void *buffer, w32 size, 
                                             async_callback call,
-                                            void *context, w32 priority)
+                                            void *context, w32 priority, int caller_id)
 {
   if (!(offset>=buf_start && offset<buf_end))
   {
@@ -1064,7 +1066,7 @@ i4_bool i4_buffered_file_class::async_read (void *buffer, w32 size,
 
 
   if (t_callbacks_used>=MAX_ASYNC_READS)
-    return i4_file_class::async_read(buffer, size, call, context,priority);
+    return i4_file_class::async_read(buffer, size, call, context,priority, caller_id);
   else
   {    
     w32 avail_size;
@@ -1098,7 +1100,7 @@ i4_bool i4_buffered_file_class::async_read (void *buffer, w32 size,
       c->prev_callback=call;
       c->bfile=this;
       return from->async_read((w8 *)buffer + avail_size, size-avail_size, 
-                              i4_async_buf_read_callback, c,priority);
+                              i4_async_buf_read_callback, c,priority,caller_id);
     }
     else
     {
@@ -1234,14 +1236,14 @@ i4_sub_section_file::~i4_sub_section_file()
 
 i4_bool i4_sub_section_file::async_read (void *buffer, w32 size, 
                                          async_callback call,
-                                         void *context, w32 priority)
+                                         void *context, w32 priority, int caller_id)
 {
   if (foffset-fstart+size> (w32)fsize)  // don't allow reads past the sub section
     size=fstart+fsize-foffset;
 
 
   foffset+=size;  
-  return fp->async_read(buffer, size, call, context, priority);
+  return fp->async_read(buffer, size, call, context, priority, caller_id);
 }
 // WIN32\WIN_FILE.CPP
 
@@ -1392,13 +1394,13 @@ public:
   // returns i4_F if an immediate error occured
   i4_bool async_read (void *buffer, w32 size, 
                               async_callback call,
-                              void *context=0, w32 priority=255)
+                              void *context, w32 priority, int caller_id)
   {
     if (i4_threads_supported())
 		if (priority<i4_win32_async_priority_instance.max_priority())
-			return i4_win32_async_priority_instance.start_read(fd,buffer,size,call,context,priority);
+			return i4_win32_async_priority_instance.start_read(fd,buffer,size,call,context,priority, caller_id);
 		else
-            return i4_win32_async_instance.start_read(fd, buffer, size, call, context,priority);
+            return i4_win32_async_instance.start_read(fd, buffer, size, call, context,priority, caller_id);
     else
       call(read(buffer,size),context);
     return i4_T;
@@ -1422,18 +1424,18 @@ public:
   i4_normal_file_class(w32 fd) : fd(fd) {}
 
 
-  virtual i4_bool async_read (void *buffer, w32 size, async_callback call, void *context, w32 priority=255)
+  virtual i4_bool async_read (void *buffer, w32 size, async_callback call, void *context, w32 priority, int caller_id)
   {
 
     if (i4_threads_supported())
     {
 //#ifdef SUN4
-	return i4_unix_async_instance.start_read(fd,buffer,size,call,context,priority);
+	//  return i4_unix_async_instance.start_read(fd,buffer,size,call,context,priority);
 //#else
 		if (i4_unix_async_priority_instance.max_priority()>priority)
-			return i4_unix_async_priority_instance.start_read(fd,buffer,size,call,context,priority);
+			return i4_unix_async_priority_instance.start_read(fd,buffer,size,call,context,priority, caller_id);
 		else
-		    return i4_unix_async_instance.start_read(fd, buffer, size, call, context, priority);
+		    return i4_unix_async_instance.start_read(fd, buffer, size, call, context, priority, caller_id);
 //#endif
     }
     else 

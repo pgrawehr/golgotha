@@ -140,3 +140,11 @@ Prüfen dass, falls kein Geld vorhanden, auch keine Bestellungen in die Liste kom
 Wo sind die Build-Window-Tooltips?!?
 Gefixt, Problem mit unerwartetem Verhalten von Windows (sendet WM_MOUSEMOVE 
 auch wenn nicht nötig)
+
+"Press spacebar to return to base" - Meldung, wenn der stank zerstört wird: Meldung ändern und
+irgendwas sonst machen, da die Leertaste genau garnichts bewirkt. 
+
+If an object does not have a lod texture, it is not displayed at all if it passes beyond some
+distance. This distance is usually too close (at least on fast computers and large displays)
+
+

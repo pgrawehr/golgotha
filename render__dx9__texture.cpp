@@ -946,6 +946,7 @@ void r1_dx9_texture_class::async_load_finished(used_node *u)
 			  else
 			  {
 				  image_list[x].image=im;
+				  image_list[x].unlock();
 			  }
 			  break;
 		  }
@@ -1239,6 +1240,7 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
 			ils_1->init();
 			ils_1->id=mip->entry->id;
 			ils_1->usage=30;
+			ils_1->lock();
 			array_lock.unlock();
 			async_worked=new_used->async_fp->async_read(new_used->data,
 				datasize,

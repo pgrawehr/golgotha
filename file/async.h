@@ -39,11 +39,12 @@ class i4_async_reader : public i4_init_class
     i4_file_class::async_callback callback;
     void *context;
 	w32 prio;
+	int caller_id; //identifies the caller, simplfies debugging
     read_request(sw32 fd, void *buffer,
                  w32 size, i4_file_class::async_callback callback, 
-                 void *context, w32 prio)
+                 void *context, w32 prio, int caller_id)
       : fd(fd), buffer(buffer), size(size), callback(callback), 
-	  context(context), prio(prio) {}
+	  context(context), prio(prio), caller_id(caller_id) {}
     read_request() { ; }
   };
 	  protected:
@@ -78,10 +79,10 @@ public:
   // ques up a request
   i4_bool start_read(int fd, void *buffer, w32 size, 
                      i4_file_class::async_callback call,
-                     void *context, w32 priority=255);
+                     void *context, w32 priority, int caller_id);
 
   static i4_bool request_for_callback(void *buffer, w32 size,
-	  i4_file_class::async_callback call, void *context, w32 priority=255);
+	  i4_file_class::async_callback call, void *context, w32 priority, int caller_id);
 
   void PRIVATE_thread();  // don't call this!
 };

@@ -1147,7 +1147,25 @@ li_object *g1_edit_camera_params(li_object *o, li_environment *env)
   return 0;
 };
 
+//This zooms the view to a factor of 3.0 or back to normal (sensefull only in action mode). Hint: Changing the view state
+//to something other than action mode resets the camera to normal. 
+li_object *g1_toggle_glasses(li_object *o, li_environment *env)
+{
+	if (g1_current_controller->view.current.scale_y<1.1)
+	{
+		g1_current_controller->scale(3.0f,3.0,g1_current_controller->view.current.scale_z);
+	}
+	else
+	{
+		g1_current_controller->scale(1.0f,1.0f,1.0f);
+	}
+	g1_current_controller->view.start=g1_current_controller->view.end;
+	g1_current_controller->request_redraw(i4_F);
+	return li_true_sym;
+}
+
 li_automatic_add_function(g1_edit_camera_params, "edit_camera");
+li_automatic_add_function(g1_toggle_glasses,"toggle_glasses");
 
 
 void g1_object_controller_class::roll(i4_float r)
