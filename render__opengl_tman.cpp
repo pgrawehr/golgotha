@@ -376,7 +376,7 @@ i4_bool r1_opengl_texture_manager_class::async_mip_load(r1_mip_load_info *load_i
 		async_worked= load_info->src_file->async_read(new_used->data,
 			mip->width * mip->height * 2,
 			opengl_async_callback,
-			new_used);
+			new_used,255,101);
 		}
 	else 
 		{
@@ -481,7 +481,7 @@ i4_bool r1_opengl_texture_manager_class::async_mip_load(r1_mip_load_info *load_i
 			mip->flags|=R1_MIPLEVEL_LOAD_JPG;
 			async_worked=new_used->async_fp->async_read(new_used->data,
 				datasize,
-				opengl_async_callback,new_used);
+				opengl_async_callback,new_used,255,102);
 			}
 		else
 			{

@@ -13,7 +13,7 @@
 #include "file/file.h"
 #include "file/ram_file.h"
 #include "app/app.h"
-#include "app/registry.h" //for language support
+#include "app/registry.h" //for locale support
 #include "memory/array.h"
 
 #include "status/status.h"
@@ -801,7 +801,7 @@ li_object *li_load(li_object *name, li_environment *env, i4_status_class *status
   li_object *ret=0;
 
   char old_file[256];
-  I4_ASSERT(li_last_file,"The last file is NULL");
+  // I4_ASSERT(li_last_file,"The last file is NULL");
   strcpy(old_file, li_last_file);
   int old_line=li_last_line;
   
@@ -3966,7 +3966,7 @@ int li_memory_manager_class::gc()
 		return 0; //The Lisp engine is not ready, cannot do anything.
     int t_free=0;
 
-    i4_warning("Starting Garbage collector run.");
+    //i4_warning("Starting Garbage collector run.");
     if (i4_get_thread_id()!=i4_get_main_thread_id())
     {
       // if this is called from a thread stop and let main program do gc()
@@ -5733,8 +5733,10 @@ li_type_number *li_load_type_info(i4_loader_class *fp, li_environment *env)
   {
     char buf[300];
     int l=fp->read_16();
-    if (l>sizeof(buf)) 
-      li_error(env, "INTERNAL: load type name too long");
+    if (l>(int)sizeof(buf)) 
+		//Bail out with a fatal error, since recovering would be nasty without
+		//possible buffer overrun problems. 
+      li_error(env, "FATAL: Name of type to load too long. Exiting for security reasons.");
 
     fp->read(buf, l);
    
