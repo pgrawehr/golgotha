@@ -3409,8 +3409,10 @@ void i4_text_input_class::receive_event(i4_event *ev)
     case i4_event::MOUSE_MOVE : 
     {
       CAST_PTR(mev,i4_mouse_move_event_class,ev);
-      last_x=mev->x;
-      last_y=mev->y;
+      last_x=mouse_x;
+      last_y=mouse_y;
+      mouse_x=mev->x;
+      mouse_y=mev->y;
       if (selecting)
       {
         w32 old_hi_x2=hi_x2;

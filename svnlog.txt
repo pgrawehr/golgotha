@@ -1,4 +1,58 @@
 ------------------------------------------------------------------------
+r104 | pgrawehr | 2004-03-20 22:12:03 +0100 (Sat, 20 Mar 2004) | 7 lines
+Changed paths:
+   M \worksrc\Readme.txt
+   M \worksrc\device\vssver.scc
+   M \worksrc\file\vssver.scc
+   M \worksrc\golg__player.cpp
+   M \worksrc\golg__team_api.cpp
+   M \worksrc\gui\vssver.scc
+   M \worksrc\memory\vssver.scc
+   M \worksrc\net__startup.cpp
+   M \worksrc\objs\vssver.scc
+   M \worksrc\objs__ai_builder.cpp
+   M \worksrc\objs__ai_jim.cpp
+   M \worksrc\objs__ai_joe.cpp
+   M \worksrc\objs__bomb_truck.cpp
+   M \worksrc\objs__map_piece.cpp
+   M \worksrc\objs__stank.cpp
+   M \worksrc\objs__stank_factory.cpp
+   M \worksrc\player.h
+   M \worksrc\string\vssver.scc
+   A \worksrc\svnlog.txt
+
+- Further improved commanding different units. 
+- Some more cleanups.
+- Added the svn log itself to the controled files, is helpful to get a quick overview of the log offline. Unfortunatelly,
+  it'll always lack the most recent update, since it's just being commited with that update. 
+  (Maybe I'll add a svn status to it?)
+
+
+------------------------------------------------------------------------
+r103 | pgrawehr | 2004-03-20 15:06:55 +0100 (Sat, 20 Mar 2004) | 12 lines
+Changed paths:
+   M \worksrc\device\kernel.h
+   M \worksrc\device\vssver.scc
+   M \worksrc\device__device.cpp
+   M \worksrc\file\vssver.scc
+   M \worksrc\golg__border_frame.cpp
+   M \worksrc\golg__camera.cpp
+   M \worksrc\memory\vssver.scc
+   M \worksrc\objs__map_piece.cpp
+
+- Fixed a severe lockup-bug introduced in rev 100.
+- Fixed the status bar display of non-stank units.
+- Fixed several other minor bugs.
+- Note to self: Mark the previous revision as very unstable ;-)
+
+I'll now mark every revision with a number from 1-10 for the supposed stability. 10 means rev should be super-stable,
+1 means rev is most probably crashing very badly or doesn't even compile. 
+It'll be a guess, but maybe it helps for development.
+
+Supposed stability: 7
+
+
+------------------------------------------------------------------------
 r102 | pgrawehr | 2004-03-19 17:08:04 +0100 (Fri, 19 Mar 2004) | 1 line
 Changed paths:
    M \worksrc\border_frame.h

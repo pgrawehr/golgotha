@@ -70,7 +70,7 @@ protected:
   i4_bool cursor_on;                     // this gets toggled by the timer event
   i4_time_device_class::id blink_timer;  // if we have a time ever scheduled
   i4_bool selecting;
-  i4_coord last_x,last_y;
+  //i4_coord last_x,last_y;
   i4_bool changed, sent_change;
 
 

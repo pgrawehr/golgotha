@@ -22,7 +22,7 @@ class m1_st_edit_window_class : public i4_window_class
 private:
   enum { LEFT = 1, RIGHT = 2, MIDDLE = 3 };
   int grab;
-  int last_x, last_y, last_but;
+  int last_but;
 
   i4_image_class *texture;
   int preselect_x, preselect_y;

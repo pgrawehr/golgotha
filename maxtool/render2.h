@@ -29,7 +29,8 @@ class m1_utility_window_class : public i4_parent_window_class
 {                                            
 private:
   int grab;
-  int last_x, last_y, last_but;
+  //int last_x, last_y, last_but;
+  int last_but;
 
   i4_float center_x, center_y, scale_x, scale_y;
   void calc_params()

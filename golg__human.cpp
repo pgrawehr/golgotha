@@ -558,12 +558,43 @@ void g1_human_class::think()
       if (stank)
         stank->toggle_stank_flag(g1_player_piece_class::ST_GODMODE);
     }
+
+    //This would actually belong the receive_event() function of
+    //the border frame class, but it needs to be executed regardless
+    //of wheter an event is outstanding. 
 	if (g1_border.get())
 		{
-		if (g1_border->last_mouse_x()<20)
-			mouse_look_increment_x-=0.5;
-		if (g1_border->last_mouse_x()>(g1_border->width()-20))
-			mouse_look_increment_x+=0.5;
+        i4_float heh;
+        i4_float cx=g1_border->last_mouse_x();
+        i4_float lx=g1_border->prev_mouse_x();
+        i4_float cy=g1_border->last_mouse_y();
+        i4_float ly=g1_border->prev_mouse_y();
+        if (cy<7)
+          heh=-0.6f;
+        else if (cy>(g1_border->height()-7))
+          heh=0.6f;
+        else
+          heh = ((cy - ly)*0.01f);
+        mouse_look_increment_y += heh;
+
+        //if (mev->x<5)
+        //  heh=-1.0f;
+        //else if (mev->x>(width()-5))
+        //  heh=1.0f;
+        //else
+        //if (mev->x>20&&mev->x<(width()-20))
+        //    heh = (((sw32)mev->x - (sw32)mev->lx)*0.01f);
+        //else
+        //  heh=0;
+
+        if (cx<20)
+          heh=-0.1f;
+        else if (cx>(g1_border->width()-20))
+          heh=0.1f;
+        else
+          heh = ((cx - lx)*0.01f);
+        mouse_look_increment_x += heh;   
+        g1_border->clear_mouse_move();
 		}
     g1_map_piece_class *whofor=controlled();
        

@@ -531,7 +531,7 @@ void g1_border_frame_class::receive_event(i4_event *ev)
       if (!g1_options_window.get())
       {
         g1_options_window=new g1_option_window(style);
-        add_child(-g1_options_window->width(), 0, g1_options_window.get());
+        add_child(0,-g1_options_window->height(), g1_options_window.get());
       }
       else
       {
@@ -542,6 +542,8 @@ void g1_border_frame_class::receive_event(i4_event *ev)
   }
   else if (ev->type()==i4_event::MOUSE_MOVE)
   {
+    //Handled in g1_human_class now
+    /*
     if (!strategy_on_top)
     {
       CAST_PTR(mev,i4_mouse_move_event_class,ev);
@@ -559,13 +561,20 @@ void g1_border_frame_class::receive_event(i4_event *ev)
 	  //else if (mev->x>(width()-5))
 		//  heh=1.0f;
 	  //else
-	  if (mev->x>20&&mev->x<(width()-20))
-	      heh = (((sw32)mev->x - (sw32)mev->lx)*0.01f);
-	  else
-		  heh=0;
-      g1_human->mouse_look_increment_x += heh;        
-    }
+	  //if (mev->x>20&&mev->x<(width()-20))
+	  //    heh = (((sw32)mev->x - (sw32)mev->lx)*0.01f);
+	  //else
+		//  heh=0;
 
+      if (mev->x<20)
+	      heh=-0.1f;
+	  else if (mev->x>(width()-20))
+		  heh=0.1f;
+	  else
+	      heh = (((sw32)mev->x - (sw32)mev->lx)*0.01f);
+	  g1_human->mouse_look_increment_x += heh;        
+    }
+    */
     i4_parent_window_class::receive_event(ev);
   }
   else if (ev->type()==i4_event::KEY_PRESS || ev->type()==i4_event::WINDOW_MESSAGE)        

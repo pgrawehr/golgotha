@@ -58,6 +58,7 @@ protected:
   /// Position of the window relative to the screen. 
   i4_coord global_x,global_y,   // returned by x() & y()
            mouse_x, mouse_y;
+  i4_coord last_x, last_y;  //last position of the mouse (for movement)
 
   /// Width and Height of the Window.
   /// Returned by width() and height();
@@ -101,6 +102,19 @@ public:
   /// Last position in the window mouse was at.
   i4_coord last_mouse_x() const { return mouse_x; }  
   i4_coord last_mouse_y() const { return mouse_y; }
+  i4_coord prev_mouse_x() const { return last_x;}
+  i4_coord prev_mouse_y() const { return last_y;}
+
+  /// Clear last mouse position.
+  /// Call this method after obtaining the current and the last mouse
+  /// position, to avoid getting the same movement for the next frame
+  /// if the user actually didn't move the mouse (and therefore 
+  /// no move event was generated to update the values).
+  void clear_mouse_move() 
+      {
+      last_x=mouse_x;
+      last_y=mouse_y;
+      };
 
 
   /// Internal function for window lists. 

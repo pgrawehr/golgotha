@@ -74,6 +74,8 @@ void i4_window_class::receive_event(i4_event *ev)
   if (ev->type()==i4_event::MOUSE_MOVE)
   {
     CAST_PTR(move, i4_mouse_move_event_class, ev);
+    last_x=mouse_x;
+    last_y=mouse_y;
     mouse_x=move->x;
     mouse_y=move->y;
   }
@@ -87,8 +89,8 @@ void i4_window_class::receive_event(i4_event *ev)
       {
         CAST_PTR(mev, i4_window_got_mouse_focus_class, ev);
 
-        mouse_x=mev->x;
-        mouse_y=mev->y;
+        last_x=mouse_x=mev->x;
+        last_y=mouse_y=mev->y;
 
         i4_window_change_cursor_class c(this,cursor);
         i4_kernel.send_event(parent,&c); 
@@ -195,13 +197,13 @@ void i4_window_class::reparent(i4_image_class *draw_area, i4_parent_window_class
   parent=Parent;
   if (parent)
   {
-    mouse_x=parent->last_mouse_x()+parent->x()-x();
-    mouse_y=parent->last_mouse_y()+parent->y()-y();
+    last_x=mouse_x=parent->last_mouse_x()+parent->x()-x();
+    last_y=mouse_y=parent->last_mouse_y()+parent->y()-y();
   }
   else
   {
-    mouse_x=-10000;
-    mouse_y=-10000;
+    last_x=mouse_x=-10000;
+    last_y=mouse_y=-10000;
   }
 
   //if (local_image) //do not delete
@@ -410,8 +412,8 @@ void i4_window_class::show_context(i4_draw_context_class &context)
 
 i4_window_class::i4_window_class(w16 w, w16 h) : w(w),h(h)
 {
-  mouse_x=-10000;
-  mouse_y=-10000;
+  last_x=mouse_x=-10000;
+  last_y=mouse_y=-10000;
 
   global_x=0; 
   global_y=0;
@@ -545,6 +547,8 @@ i4_bool i4_parent_window_class::find_new_mouse_focus()
 void i4_parent_window_class::mouse_move(i4_event *ev)
 {
   CAST_PTR(move, i4_mouse_move_event_class, ev);
+  last_x=mouse_x;
+  last_y=mouse_y;
   mouse_x=move->x;
   mouse_y=move->y;
 
@@ -851,8 +855,9 @@ void i4_parent_window_class::receive_event(i4_event *ev)
           have_mouse_focus=i4_T;
 
           CAST_PTR(mev, i4_window_got_mouse_focus_class, ev);
-          mouse_x=mev->x;
-          mouse_y=mev->y;
+
+          last_x=mouse_x=mev->x;
+          last_y=mouse_y=mev->y;
 
           i4_window_change_cursor_class c(this,cursor);
           i4_kernel.send_event(parent,&c); 
