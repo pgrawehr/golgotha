@@ -38,11 +38,17 @@ class radtablescalcer:public i4_init_class
 
 i4_profile_class g1_map_pf_check_collision("map::check_collision");
 
-/** 
+/** Generic collision checking entry point. 
 *Checks wheter a given object can move in the given direction.
 *Returns True if a collision occured and false if not.
 *the dx/dy values might be adjusted to something that works
 *after this function returns.
+*Idee für verbesserten Algorithmus: Verwende Hashtabelle 
+*mit bijektiv-konkateniertem Key je 2er Objekte um inkrementell
+*den Abstand zwischen den zwei Objekten zu bestimmen. 
+
+*Weitere Verbesserung: Die while-Schleife nach aussen ziehen,
+*da es Bedingungen gibt, die nur 1x getestet werden müssen.
 @param x The x coordinate of @a _this
 @param y The y coordinate of @a _this
 @param dx The amount we want to go in x direction
@@ -55,13 +61,6 @@ with the current one.
 own parameter for historical reasons. 
 @returns True for hit, False for miss.
 */
-/*Idee für verbesserten Algorithmus: Verwende Hashtabelle 
-mit bijektiv-konkateniertem Key je 2er Objekte um inkrementell
-den Abstand zwischen den zwei Objekten zu bestimmen. 
-
-  Weitere Verbesserung: Die while-Schleife nach aussen ziehen,
-  da es Bedingungen gibt, die nur 1x getestet werden müssen.
-  */
 int g1_map_class::check_poly_collision(i4_float x, i4_float y, 
 									   i4_float occupancy_radius, 
 									   i4_float &dx, i4_float &dy, 
