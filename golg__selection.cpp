@@ -28,7 +28,7 @@ void g1_selection_list::add(g1_object_class *o)
   if (t==list_size)
   {
     list_size+=64;
-    list=(g1_object_class **)i4_realloc(list, 
+    list=(g1_object_class **)I4_REALLOC(list, 
                                        list_size * sizeof(g1_object_class *),
                                        "selection list");
   }

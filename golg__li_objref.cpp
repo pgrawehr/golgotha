@@ -159,7 +159,7 @@ void li_g1_ref_list::add(w32 id)
   if (find(id)==-1)
   {
     int t=size()+2;
-    list=(w32 *)i4_realloc(list, t * sizeof(w32),"li_g1_ref_list::list");
+    list=(w32 *)I4_REALLOC(list, t * sizeof(w32),"li_g1_ref_list::list");
     list[0]=t-1;
     list[t-1]=id;
   }

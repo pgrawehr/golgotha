@@ -485,7 +485,7 @@ void i4_str::insert(i4_str::iterator p, const i4_char ch)
 {
     if (len==buf_len&&buf_len<0xfff0)//increase buffer size by 4 characters
 	{
-		char *nptr=(char *)i4_realloc(ptr,sizeof(char_type)*(buf_len+4),"i4_str_bufexpand_char");
+		char *nptr=(char *)I4_REALLOC(ptr,sizeof(char_type)*(buf_len+4),"i4_str_bufexpand_char");
 		w32 diff=nptr-ptr;
 		buf_len=buf_len+4;
 		ptr=nptr;
@@ -531,7 +531,7 @@ void i4_str::insert(i4_str::iterator p, const i4_const_str &other)
   if (l>buf_len)//increase buffer size
 	  {
 	  
-	  char *nptr=(char *)i4_realloc(ptr,sizeof(char_type)*(l+2),"i4_str_bufexpand");
+	  char *nptr=(char *)I4_REALLOC(ptr,sizeof(char_type)*(l+2),"i4_str_bufexpand");
 	  w32 diff=nptr-ptr;//realloc might change ptr, 
 	  //but the iterator still points to the old ptr
 	  buf_len=(w16)(l+1);

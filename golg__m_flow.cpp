@@ -24,7 +24,7 @@ g1_cut_scene_class *g1_movie_flow_class::add_cut_scene(const i4_const_str &name)
 {
   w32 i=t_cut_scenes;
   t_cut_scenes++;
-  set=(g1_cut_scene_class **)i4_realloc(set, 
+  set=(g1_cut_scene_class **)I4_REALLOC(set, 
                                         sizeof(g1_cut_scene_class *)*t_cut_scenes, 
                                         "cut_scene list");
 

@@ -62,7 +62,7 @@ public:
       grow = _grow;
 
     entries = _entries;
-    T* new_entry = (T*)i4_realloc(entry, sizeof(T)*entries, "grow array");
+    T* new_entry = (T*)I4_REALLOC(entry, sizeof(T)*entries, "grow array");
     I4_ASSERT(new_entry, "SEVERE: i4_array::resize(): Out of memory.");
     entry = new_entry;
   }
@@ -105,7 +105,7 @@ public:
     {
       entries += grow;
 
-      T* new_entry = (T*)i4_realloc(entry, sizeof(T)*entries, "grow array");
+      T* new_entry = (T*)I4_REALLOC(entry, sizeof(T)*entries, "grow array");
         
       I4_ASSERT(new_entry, "SEVERE: i4_array::grow_bigger(): Out of memory");
 

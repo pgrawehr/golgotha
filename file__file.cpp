@@ -40,6 +40,7 @@
 
 #include "lisp/lisp.h"
 #include "status/status.h"
+#include "gui/smp_dial.h"
 
 
 #ifdef _WINDOWS
@@ -1510,7 +1511,7 @@ public:
         break;
 
       default: 
-        i4_warning("i4_file_class::Bad open flags!");
+        i4_error("INTERNAL: i4_file_class::open() called with bad open flags.");
 		whatfor="actually nothing";
         return NULL;     
     }
@@ -1547,9 +1548,14 @@ public:
 		if (f&O_CREAT) 
 			{
 			//The creation of the file has failed
-			MessageBox(0,
-				"Unable to create a file in the current directory. Check wheter you have the correct permissions.",
-				"File system permission problem",MB_OK+MB_ICONSTOP+MB_SYSTEMMODAL);
+			//MessageBox(0,
+			//	"Unable to create a file in the current directory. Check wheter you have the correct permissions.",
+			//	"File system permission problem",MB_OK+MB_ICONSTOP+MB_SYSTEMMODAL);
+            i4_str msg("Unable to write to file %s. Check that you have appropriate permissions.");
+            i4_str *rmsg=msg.sprintf(200,name.c_str());
+            i4_message_box("File system permission problem",
+                *rmsg);
+            delete rmsg;
 			return NULL;
 			}
 		if (!get_first_cd_letter(drivebuf))
@@ -1678,7 +1684,7 @@ public:
       if (fdat.attrib & _A_SUBDIR)
       {
         dir_struct.tdirs++;
-        dir_struct.dirs=(i4_str **)i4_realloc(dir_struct.dirs,
+        dir_struct.dirs=(i4_str **)I4_REALLOC(dir_struct.dirs,
                                               sizeof(i4_str *)*dir_struct.tdirs,"dir list");
         dir_struct.dirs[dir_struct.tdirs-1]=new i4_str(i4_const_str(fdat.name));
       }
@@ -1692,7 +1698,7 @@ public:
 		s->size=fdat.size;
 
         dir_struct.tfiles++;
-        dir_struct.files=(i4_str **)i4_realloc(dir_struct.files,
+        dir_struct.files=(i4_str **)I4_REALLOC(dir_struct.files,
                                                sizeof(i4_str *)*dir_struct.tfiles,"dir list");
         dir_struct.files[dir_struct.tfiles-1]=new i4_str(i4_const_str(fdat.name));
       }
@@ -1944,7 +1950,12 @@ public:
 #ifdef file_load_debug
       i4_warning("i4_unix_file_class::open() failed for %s.",i4_os_string(name,buf,256));
 #endif
-      return 0;
+      i4_str msg("Unable to write to file %s. Check that you have appropriate permissions.");
+        i4_str *rmsg=msg.sprintf(200,name.c_str());
+        i4_message_box("File system permission problem",
+            *rmsg);
+        delete rmsg;
+		return NULL;
       }
 
     if (!no_buffer)

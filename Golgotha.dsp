@@ -2710,10 +2710,6 @@ SOURCE=.\StdAfx.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\memory\stlinc.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\string\str_checksum.h
 # End Source File
 # Begin Source File

@@ -44,7 +44,7 @@ public:
       if (grow)
       {
         entries += grow;
-        T* new_entry = (T*)i4_realloc(entry, sizeof(T *)*entries, name);
+        T* new_entry = (T*)I4_REALLOC(entry, sizeof(T *)*entries, name);
         entry = new_entry;
       }
       else

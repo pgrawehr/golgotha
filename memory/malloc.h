@@ -24,24 +24,36 @@ void *i4_realloc(void *old_memory, w32 new_size, char *file, int line);
 // these logs can be obtained by calling i4_mem_report
 // this is avaiable only under gcc
 
-#ifdef i4_NEW_CHECK
-#include <stdlib.h>
+//#ifdef i4_NEW_CHECK
+//#include <stdlib.h>
 //extern void *operator new( size_t size, char *file, w32 line);
 //extern void *operator new [](size_t size, char *file, w32 line);
 //#define new new(__FILE__,__LINE__)
-
+#ifdef _DEBUG
 #define I4_MALLOC(size, reason) i4_malloc(size, __FILE__, __LINE__)
-#define i4_realloc(old, new_size, reason) i4_realloc(old, new_size, __FILE__, __LINE__);
+#define I4_REALLOC(old, new_size, reason) i4_realloc(old, new_size, __FILE__, __LINE__);
 #else
-#define I4_MALLOC(size, reason) i4_malloc(size, 0, 0)
-#define i4_realloc(old, new_size, reason) i4_realloc(old, new_size, 0,0)
+#define I4_MALLOC(size, reason) i4_malloc(size, 0,0)
+#define I4_REALLOC(old, new_size, reason) i4_realloc(old, new_size, 0,0)
 
 #endif
+
+#define I4_FREE(ptr) i4_free(ptr)
 
 void i4_set_max_memory_used(int bytes);
 void i4_set_min_memory_required(int bytes);
 
 void i4_free(void *ptr);
+
+inline void *i4_malloc(w32 size)
+    {
+    return i4_malloc(size,0,0);
+    }
+
+inline void *i4_realloc(void *ptr,w32 size)
+    {
+    return i4_realloc(ptr,size,0,0);
+    }
 
 void i4_mem_report(char *filename);
 long i4_allocated();

@@ -6,6 +6,10 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+//This obviously causes a circular reference, but in this
+//special case, this is intended. 
+//Note that there is no include guard on this file, but there 
+//is one on malloc.h
 #include "memory/malloc.h"
 
 #ifdef _DEBUG

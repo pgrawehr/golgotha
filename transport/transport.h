@@ -9,7 +9,7 @@
 #include "file/file.h"
 #include "g1_object.h"
 #include "reference.h"
-#include "memory/stlinc.h"
+//#include "memory/stlinc.h"
 #include <math.h>
 #include "map_singleton.h"
 #include "transport/randomize.h"

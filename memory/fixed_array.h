@@ -42,7 +42,7 @@ public:
 
   void resize(int new_size)
   {
-    entry = (T*)i4_realloc(entry, sizeof(T) * new_size,"grow array");
+    entry = (T*)I4_REALLOC(entry, sizeof(T) * new_size,"grow array");
     if (new_size)
       I4_ASSERT(entry, "i4_array::can't allocate entries");
 

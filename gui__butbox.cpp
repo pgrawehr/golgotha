@@ -3902,7 +3902,7 @@ void i4_text_scroll_window_class::resize(w16 new_width, w16 new_height)
   {
       term_size=new_size;
 
-      term_out=(i4_char *)i4_realloc(term_out, term_size, "terminal chars");
+      term_out=(i4_char *)I4_REALLOC(term_out, term_size, "terminal chars");
       term_end=term_out+term_size;
   }
 
