@@ -31,12 +31,12 @@
 #include <stdlib.h>
 #include "memory/new.h"
 
-#ifdef _DEBUG
-#undef new
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
+//#ifdef _DEBUG
+//#undef new
+//#define new DEBUG_NEW
+//#undef THIS_FILE
+//static char THIS_FILE[] = __FILE__;
+//#endif
 
 i4_device_class::i4_device_class()
 {

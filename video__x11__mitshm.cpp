@@ -111,6 +111,9 @@ x11_shm_extension_class::x11_shm_extension_class()
 i4_bool x11_shm_extension_actual_class::available(Display *display, char *display_name)
 {  
   int major_op;
+  
+  //if (i4_win32_startup_options.render!=-1)
+  //	return i4_F;
 
   if (XQueryExtension(display,"MIT-SHM",&major_op,&shm_base,&shm_error_base))
   {

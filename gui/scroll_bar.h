@@ -73,7 +73,7 @@ public:
 
   virtual void receive_event(i4_event *ev);
 
-  char *name() { return vertical?"vert_scroll_bar":"horiz_scroll_bar"; }
+  char *name() { return "scroll_bar"; }
 };
 
 
