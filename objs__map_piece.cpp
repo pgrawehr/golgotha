@@ -836,7 +836,8 @@ void g1_map_piece_class::think()
   //non-air units. 
   i4_float dist, dtheta, dx, dy, old_pathpos=path_pos,dz=0;
   suggest_move(dist, dtheta, dx, dy, 0);
-  if (check_move(dx,dy,dz))
+  g1_object_class *blocking=0;
+  if (check_move(dx,dy,dz,blocking))
   {
     if ((g1_rand(62)&63)==0)
     {
@@ -1853,25 +1854,12 @@ g2_link *g1_map_piece_class::link_on()
 	return 0;
 	}
 
-i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz)
+i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz, g1_object_class*& blocking)
 {
   pf_check_move.start();
   i4_bool ret=i4_T;
   i4_bool calced=i4_F;
-  //check_collision(from,to);//that function can only be tested to see wheter 
-  //we hit a given (known) target
-  g1_object_class *blocking=0;
-  //sw32 _ix=x,_iy=y;
-  /*
-  if (g1_get_map()->check_collision(x,y,
-	  occupancy_radius(),dx,dy,_ix,_iy, this, blocking))
-	  {
-	  //the "blocking" object blocks our way.
-	  dx=0;dy=0;
-	  pf_check_move.stop();
-	  return i4_F;
-	  }
-  */
+
   float olddx=dx,olddy=dy;
   if ( g1_get_map()->check_collision(this,dx,dy,dz,blocking))
 	  {

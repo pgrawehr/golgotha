@@ -246,12 +246,13 @@ void g1_helicopter_class::fire()
   }
 }
 
-i4_bool g1_helicopter_class::move(i4_float x_amount, i4_float y_amount)
+i4_bool g1_helicopter_class::move(i4_float x_amount, i4_float y_amount, i4_float z_amount)
 {
   
   unoccupy_location();
   x+=x_amount;
   y+=y_amount;
+  h+=z_amount;
 
   g1_add_to_sound_average(rumble_type, i4_3d_vector(x,y,h));
   if (occupy_location())
@@ -331,18 +332,29 @@ void g1_helicopter_class::think()
       i4_float dist, dtheta;
       i4_3d_vector d;
       suggest_air_move(dist, dtheta, d);
-      
-	  if (my_solver)
+	  g1_object_class *blocking=0;
+	  i4_float save_z=d.z;
+      if (check_move(d.x,d.y,d.z,blocking))
+	  {
+		  //if we're colliding with the airbase we just go up vertically.
+		  if (blocking && (blocking->id==g1_get_object_type("airbase")))
 		  {
-		  if (h>terrain_height+0.3)//fly vertical upwards if just above the floor
-		     move(d.x,d.y);
-		  h += d.z;
+			d.x=0;
+			d.y=0; 
+			d.z=save_z>0.05f?save_z:0.05f;
 		  }
-	  else
-		  {
-		  move(d.x,d.y);
-		  h+=d.z;
-		  }
+		if (my_solver)
+			{
+			if (h>terrain_height+0.3)//fly vertical upwards if just above the floor
+				move(d.x,d.y,d.z);
+			else 
+				move(0,0,d.z);
+			}
+		else
+			{
+			move(d.x,d.y,d.z);
+			}
+	  }
 
 	  if (h<terrain_height)
 		  {

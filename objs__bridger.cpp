@@ -132,7 +132,7 @@ public:
                           i4_3d_vector &ray)
 	  {	
 	  i4_3d_vector normal;
-      return g1_model_collide_polygonal_ex(this, source, draw_params, start, ray, normal);
+      return g1_model_collide_polygonal_ex(this, source, ray, normal);
 	  }
 
   void request_remove()

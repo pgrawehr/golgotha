@@ -6,24 +6,28 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+//! \file
+//! Asynchrounous file operations class definition.
 #ifndef I4_ASYNC_READ_HH
 #define I4_ASYNC_READ_HH
-
-// This class should probably only be used by files in "i4/files/*"
-
-// This class is a portable implemented of async file reading
-// A thread gets created during init() which runs as long as
-// there is stuff to read and then blocks for a signal from the main
-// program so if nothing needs reading, it runs efficiently.  Request
-// to be read are qued up (max of 16).  The request are processed
-// serially.  If you want to read from multiple devices in parallel,
-// you should create two i4_async_reads, one for each device.
 
 #include "memory/dynque.h"
 #include "threads/threads.h"
 #include "init/init.h"
 #include "file/file.h"
 
+//! Asynchrounous file reader thread. 
+//! This class is a portable implementation of async file reading.
+//! A thread gets created during init() which runs as long as
+//! there is stuff to read and then blocks for a signal from the main
+//! program, so if nothing needs reading, it runs efficiently.  Request
+//! to be read are queued up.  The request are processed
+//! serially.  If you want to read from multiple devices in parallel,
+//! you should create two i4_async_reads, one for each device.
+//! Golgotha currently uses two such threads at once, one for high-priority data (sound data)
+//! and the other for high-overhead data (such as textures).
+//! Under most circumstances, you won't have to cope directly with this class, but use the
+//! file's i4_file_class::async_read() operation instead. 
 class i4_async_reader : public i4_init_class
 {
   volatile i4_bool stop;
@@ -52,10 +56,14 @@ class i4_async_reader : public i4_init_class
   enum { STACK_SIZE=8096 };
   i4_critical_section_class que_lock;
   i4_dynamic_que<read_request, 0, MAX_REQUEST> request_que;
+  //! Static member that counts the number of pending requests. 
+  //! This will be used when the map is unloaded, since we must not kill the texture manager
+  //! or the loader thread while it still has tasks pending. 
   static volatile w32 num_pending;
-  void emulate_speeds(read_request &r);
+  static i4_critical_section_class static_pending_lock;
   static i4_array<i4_async_reader*> readers; 
 
+  void emulate_speeds(read_request &r);
 protected:
 
   virtual w32 read(sw32 fd, void *buffer, w32 count) = 0;
@@ -73,8 +81,7 @@ public:
 
   void init();   // creates thread (called by i4_init()
   void uninit(); // waits for thread to die (called by i4_uninit()
-  static i4_bool is_idle()
-	  {return num_pending==0;}
+  static i4_bool is_idle();
 
   // ques up a request
   i4_bool start_read(int fd, void *buffer, w32 size, 

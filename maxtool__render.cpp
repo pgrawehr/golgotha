@@ -757,7 +757,7 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
   {
   i4_3d_vector cam_in_object_space;
   transform.inverse_transform(i4_3d_vector(0,0,0),cam_in_object_space);
-    if (!obj->octree)
+    if (!draw_as_octree)
 		{
 		//if we have an octree, we already did the transform and 
 		//lighting of the vertices at this point

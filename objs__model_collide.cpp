@@ -17,8 +17,6 @@
 
 i4_bool g1_model_collide_polygonal_ex(g1_object_class *_this,
 									  g1_object_class *source,
-									  g1_model_draw_parameters &params,
-									  const i4_3d_vector &notused_start,
 									  i4_3d_vector &ray,
 									  i4_3d_vector &hit_normal,
 									  i4_float *minimum_t)
@@ -34,31 +32,6 @@ i4_bool g1_model_collide_polygonal_ex(g1_object_class *_this,
 	for (int i=0; i<nc; i++)
 	{
 		start.set(source->x+rad*(float)cos(2.0*i4_pi()*(0.5+i)/nc),source->y+rad*(float)sin(2.0*i4_pi()*(0.5+i)/nc),source->h+0.07f);
-
-		/*
-		if (ray.x<0) 
-		{ 
-			x2 = i4_f_to_i(start.x); 
-			x1 = i4_f_to_i(start.x+ray.x); 
-		}
-		else         
-		{ 
-			x1 = i4_f_to_i(start.x); 
-			x2 = i4_f_to_i(start.x+ray.x); 
-		}
-		if (ray.y<0) 
-		{ 
-			y2 = i4_f_to_i(start.y); 
-			y1 = i4_f_to_i(start.y+ray.y); 
-		}
-		else         
-		{ 
-			y1 = i4_f_to_i(start.y); 
-			y2 = i4_f_to_i(start.y+ray.y); 
-		}
-		*/
-		//          i4_float dist, dx,dy;
-
 		
 		oray = ray;
 		if (g1_model_collide_polygonal(_this, _this->draw_params, start, ray, hit_normal,minimum_t))
@@ -78,7 +51,7 @@ i4_bool g1_model_collide_polygonal_ex(g1_object_class *_this,
 
 				i4_3d_vector diff(ray);
 				diff -= oray;
-				hit_normal.z = 0;
+				//hit_normal.z = 0;
 				hit_normal.normalize();
 				hit_normal *= diff.dot(hit_normal) + 0.05f;
 				ray = oray;

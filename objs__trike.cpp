@@ -170,8 +170,9 @@ void g1_trike_class::think()
         
         i4_float dist, dtheta, dx, dy,dz=0;
         suggest_move(dist, dtheta, dx, dy, 0);
-        if (check_move(dx,dy,dz)==i4_F)
-            move(dx,dy,dz);
+		g1_object_class *blocking=0;
+        check_move(dx,dy,dz,blocking);
+        move(dx,dy,dz);
         
         const i4_float KILL_RADIUS=0.5;
         //The trike is a self-destructing attacker
@@ -202,6 +203,7 @@ void g1_trike_class::think()
             }      
         
         }
-    g1_map_piece_class::think();
+	else
+		g1_map_piece_class::think();
     }
 

@@ -134,10 +134,28 @@ public:
   @param dx x amount I wanna go in x direction, passed as reference, may be changed uppon return
   @param dy y amount to go in y direction, same limitations
   @param dz z amount to move in z (height) direction, same limitations.
+  @param blocking The object we collided with (if any)
+  @return True if movement is possible
   */
-  i4_bool check_move(i4_float &dx,i4_float &dy, i4_float &dz);
+  i4_bool check_move(i4_float &dx,i4_float &dy, i4_float &dz, g1_object_class*& blocking);
 
+  /** Called on the object if the owner changes.
+  This method is called if the owner of the current object changes. Use it i.e to change
+  your color. Call the base class implementation when you are done. 
+  @param new_player_num The player number of the new owner (the old player number is still present
+  int player_num)
+  */
   virtual void change_player_num(int new_player_num);
+  /**Checks collision from this object agains something else in the world. 
+  This method checks wheter we would collide with something if we moved in the given direction. 
+  This method can be implemented either by g1_model_collide_radial() or
+  g1_model_collide_polygonal() or g1_model_collide_polygonal_ex() depending on the 
+  desired accuracy. 
+  @param source Usually the this pointer
+  @param start The location of this
+  @param ray The desired movement vector (might be updated on return)
+  @return True if ray was changed. 
+  */
   virtual i4_bool check_collision(
 	  g1_object_class *source,
 	  const i4_3d_vector &start, i4_3d_vector &ray)

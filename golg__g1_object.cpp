@@ -1257,38 +1257,7 @@ i4_bool g1_object_class::check_collision(g1_object_class* source,
   i4_3d_vector normal;
   if (occupancy_radius()>=0.5f||this->draw_params.model->octree)
   {
-	  return g1_model_collide_polygonal_ex(this,source,draw_params,
-		  start,ray,normal);
-	  /*
-	  oray=ray;
-      i4_bool ret=g1_model_collide_polygonal(this, draw_params, start, ray, normal);
-	  if (ret)
-		{
-		if (normal.z>0.8)
-		{
-			// incline more than 45 degrees.  let it go
-			ray = oray;
-		}
-		else
-		{
-			// slide perp. to the normal
-			// NOTE: we really should resubmit the new movement vector to objects
-			//       in the list we already tried to collide against for more robust
-			//       sliding.  just hope we catch most of the errors on the next frame
-			// we've hit the object 'obj'
-
-			i4_3d_vector diff(ray);
-			diff -= oray;
-			normal.z = 0;
-			normal.normalize();
-			normal *= diff.dot(normal) + 0.05f;
-			ray = oray;
-			ray += normal;
-			ret = i4_T;
-		}
-	  }
-	  return ret;
-	  */
+	  return g1_model_collide_polygonal_ex(this,source,ray,normal);
   }
   else
       return g1_model_collide_radial(this, draw_params, start, ray);

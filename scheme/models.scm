@@ -93,7 +93,6 @@ Programmer's resource file
   "selection_arrow"
   "target"
 
-  "repair_boom" "repair_tip" "repair_base" "repair_turret"
   "metal_chunk" "fire_chunk"
   "sky"
   "cloud"

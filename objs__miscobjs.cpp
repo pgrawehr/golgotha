@@ -94,7 +94,7 @@ i4_bool g1_deco_object_class::check_collision(g1_object_class *source,const i4_3
   i4_3d_vector normal;
   if (decoflags&DECO_USEPOLYCOLDET)
 	  {
-	  return g1_model_collide_polygonal_ex(this, source, draw_params, start, ray, normal);
+	  return g1_model_collide_polygonal_ex(this, source, ray, normal);
 	  }
   else if (decoflags&DECO_GHOST)
 	  {
