@@ -29,6 +29,7 @@ class i4_list_box_class : public i4_menu_class
   int current;
   i4_parent_window_class *root_window;
   w32 l,r,t,b;
+  i4_event_reaction_class *reaction;
   void set_top(i4_menu_item_class *item);
 
 public:
@@ -36,7 +37,8 @@ public:
   i4_menu_item_class *get_current_item() { return entries[current]; }
   i4_list_box_class(w16 width,                               // height is determined by first item
                     i4_graphical_style_class *style,         // uses normal font if none specified
-                    i4_parent_window_class *root_window);
+                    i4_parent_window_class *root_window,
+                    i4_event_reaction_class *react=0);
   ~i4_list_box_class();
 
   void add_item(i4_menu_item_class *item);

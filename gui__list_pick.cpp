@@ -129,11 +129,13 @@ void i4_list_pick::reposition_start(sw32 new_start)
 
   i4_window_class *c;
 
-  for (i=new_start; x1<x2 && i<(sw32)total_items;)
+  for (i=new_start; x1<x2 && y1<y2 && i<(sw32)total_items;)
   {
     c=items[i];
 
 
+    //This code would allow multiple rows in a list, but
+    //I couldn't find a use for this at the moment. 
     //if (c->height()+y1>=y2)
     //{
     //  x1+=(short)length;
@@ -148,7 +150,7 @@ void i4_list_pick::reposition_start(sw32 new_start)
     else
     {
       //      i4_warning("move   %d",i);
-      c->move(x1-c->x(),y1-c->y());
+        c->move(x1-c->x(),y1-c->y());
     }
 
     y1+=c->height();
@@ -258,31 +260,41 @@ void i4_list_pick_cpitems::update(w32 new_total_items,
             items[i]=0;
             }
         }
-    items=(i4_window_class**)realloc(items,new_total_items*sizeof(i4_window_class*));
-    total_items=new_total_items;
-    memcpy(items,new_items,new_total_items*sizeof(i4_window_class*));
+    if (new_items!=0)
+        {
+        items=(i4_window_class**)realloc(items,new_total_items*sizeof(i4_window_class*));
+        total_items=new_total_items;
+        memcpy(items,new_items,new_total_items*sizeof(i4_window_class*));
+        }
+    else
+        {
+        if (items)
+            free(items);
+        items=0;
+        total_items=0;
+        }
     need_draw_all=i4_T;
     start=0;
-  end=-1;
-  length=0;
-  for (i=0; i<total_items; i++)
-  {
+    end=-1;
+    length=0;
+    for (i=0; i<total_items; i++)
+    {
     if (items[i]->width()>length)
       length=items[i]->width();
-  }
-  length+=10;
+    }
+    length+=10;
 
-  sw32 visible_items=0;
-  if (total_items>0)
-	visible_items=height()/items[0]->height();//assume all items have same size
-  else
-	visible_items=1;
-  if (scrollbar)
-      {
-      scrollbar->set_new_total(total_items);
-      scrollbar->bring_to_front();
-      scrollbar->set_pos(0);
-      }
+    sw32 visible_items=0;
+    if (total_items>0)
+    visible_items=height()/items[0]->height();//assume all items have same size
+    else
+    visible_items=1;
+    if (scrollbar)
+        {
+        scrollbar->set_new_total(total_items);
+        scrollbar->bring_to_front();
+        scrollbar->set_pos(0);
+        }
     reposition_start(0);
     request_redraw();
     request_redraw(i4_T);

@@ -349,7 +349,7 @@ void i4_parent_window_class::draw(i4_draw_context_class &context)
 
 	  // remove the area of other children above us
         i4_window_class *d=c->next;
-        for (;d;d=d->next)
+        for (;d&&(!child_clip.empty());d=d->next)
           child_clip.remove_area(d->x()-c->x(), 
                                  d->y()-c->y(),
                                  d->x()+d->width()-1-c->x(),

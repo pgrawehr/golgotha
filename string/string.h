@@ -247,6 +247,16 @@ public:
 
   i4_bool operator!= (const i4_const_str &other) const 
   { return !(other==*this); }
+
+  i4_bool operator<(const i4_const_str &other) const
+      {
+      return ::strncmp(other.ptr,ptr,len)>0?i4_T:i4_F;
+      }
+
+  i4_bool operator>(const i4_const_str &other) const
+      {
+      return ::strncmp(other.ptr,ptr,len)<0?i4_T:i4_F;
+      }
   
   int strncmp(const i4_const_str &other, w32 max_cmp) const
   {

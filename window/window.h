@@ -90,17 +90,17 @@ public:
   i4_window_class(w16 w, w16 h);  
 
   /// Returns the global x position of the window.
-  i4_coord x() { return global_x; }
+  i4_coord x() const { return global_x; }
   /// Returns the global y position of the window.
-  i4_coord y() { return global_y; } 
+  i4_coord y() const { return global_y; } 
   /// Returns the width of the window.
-  w16 width() { return w; }
+  w16 width() const { return w; }
   /// Returns the height of the window.
-  w16 height() { return h; }
+  w16 height() const { return h; }
 
   /// Last position in the window mouse was at.
-  i4_coord last_mouse_x() { return mouse_x; }  
-  i4_coord last_mouse_y() { return mouse_y; }
+  i4_coord last_mouse_x() const { return mouse_x; }  
+  i4_coord last_mouse_y() const { return mouse_y; }
 
 
   /// Internal function for window lists. 

@@ -100,9 +100,10 @@ class i4_list_pick_cpitems:public i4_list_pick
             i4_color background)
         :i4_list_pick(width,height,
         _total_items,
+        (_total_items>0)?
         (items=(i4_window_class**)malloc(_total_items*sizeof(i4_window_class*)),
         memcpy(items,_items,_total_items*sizeof(i4_window_class*)),
-        items),scroll_event_id,background,i4_T)
+        items):0,scroll_event_id,background,i4_T)
             {
             }
         ~i4_list_pick_cpitems()
@@ -121,7 +122,8 @@ class i4_list_pick_cpitems:public i4_list_pick
                     }
                 
                 }
-            free(items);
+            if (items)
+                free(items);
             items=0;
             total_items=0;
             free_items=i4_F;

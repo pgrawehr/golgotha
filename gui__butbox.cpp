@@ -1534,14 +1534,18 @@ i4_list_box_class::~i4_list_box_class()
 
   if (top)
     delete top;
+  if (reaction)
+      delete reaction;
 
 }
 
 i4_list_box_class::i4_list_box_class(w16 w,         
                                      i4_graphical_style_class *style,
-                                     i4_parent_window_class *root_window)
+                                     i4_parent_window_class *root_window,
+                                     i4_event_reaction_class *react)
 
-  : i4_menu_class(i4_F), entries(0,8), style(style), root_window(root_window)
+  : i4_menu_class(i4_F), entries(0,8), style(style), 
+  root_window(root_window),reaction(react)
 {
   i4_image_class *down_im=style->icon_hint->down_icon;
 
@@ -1553,8 +1557,6 @@ i4_list_box_class::i4_list_box_class(w16 w,
   l=1;  r=1;  t=1;  b=1;
 
   resize((w16)w, (w16)(down->height()+(t+b)));
-
-
 
   i4_parent_window_class::add_child((short)(w-down->width()-r), (short)t, down);
   top=0;
@@ -1699,9 +1701,17 @@ void i4_list_box_class::note_reaction_sent(i4_menu_item_class *who,       // thi
     else
     {
       for (int i=0; i<entries.size(); i++)
-        if (entries[i]==who)        
-          set_current_item(i);
-
+          if (entries[i]==who)        
+              set_current_item(i);
+      
+          //if this is a listbox that should immediatelly trigger
+          //an action if something changed (like in the file-open dialog)
+          //we send this event around.
+      if (reaction&&reaction->handler_reference.get())
+          {
+          i4_kernel.send_event(reaction->handler_reference.get(),
+            reaction->event);
+          }
       hide();
     }
   }
@@ -1766,8 +1776,11 @@ public:
   {   
     if (vertical())
         {
-        w16 he=(w16)(parent->height() * buddy->total_visible_objects / 
-            buddy->total_scroll_objects);
+        w16 he=parent->height();
+        //must not divide if we have zero elements in the list.
+        if (buddy->total_scroll_objects)
+            he=(w16)(parent->height() * buddy->total_visible_objects / 
+                buddy->total_scroll_objects);
         //otherwise the scroll button might vanish.
         if (he<=10)
             he=10;
@@ -1775,8 +1788,10 @@ public:
         }
     else
         {
-        w16 wi=(w16)(parent->width() * buddy->total_visible_objects / 
-            buddy->total_scroll_objects);
+        w16 wi=parent->width();
+        if (buddy->total_scroll_objects)
+            wi=(w16)(parent->width() * buddy->total_visible_objects / 
+                buddy->total_scroll_objects);
         if (wi<=10)
             wi=10;
         resize(wi,

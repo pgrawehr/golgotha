@@ -211,7 +211,7 @@ public:
   /// this implicitly enables texture mapping. 
   /// This function uses the default texture manager. 
   /// \param material_ref The texture handle to the texture to use.
-  /// \param desired_with How large should the texture be? This is used
+  /// \param desired_width How large should the texture be? This is used
   /// to guess the required miplevel.
   /// \param frame The current frame number, this is used to handle
   /// the in-memory texture cache MRU buffer. 
