@@ -76,9 +76,9 @@
   (guided_missile  sing     10       1         0.3  20)    
   (electric_beam   sing     5        2         0.0   5)    
   (dropped_bomb    mult     100      1.5       0.08  4)
-  (trike           mult     150      2         0.0   5)
+  (trike           mult     1000     2         0.2   5)
   (bomb_truck      mult     50000    3         0.0   0)
-  (electric_car    mult     500      2         1.0   1)
+  (electric_car    sing     5        2         0.2   1)
   
   (inv_explosion       mult     100      3         0.0   10)
   )

@@ -138,7 +138,8 @@ void g1_explosion1_class::draw(g1_draw_context_class *context)
     calc_world_transform(g1_render.frame_ratio, &world_transform);
 
     i4_float growth_ratio = (exp_frame + g1_render.frame_ratio) / (float)num_exp_frames;
-    
+    if (growth_ratio>1.0f)
+        growth_ratio=1.0f;
     i4_float angle = (i4_pi() * growth_ratio);
 
     i4_transform_class out;
@@ -212,7 +213,7 @@ void g1_explosion1_class::draw(g1_draw_context_class *context)
 
     r_api->disable_texture();
     r_api->set_shading_mode(R1_COLORED_SHADING);
-    //r_api->set_alpha_mode(R1_ALPHA_LINEAR);
+    r_api->set_alpha_mode(R1_ALPHA_LINEAR);
 	
 
     //set their lighting values to 1
@@ -222,10 +223,10 @@ void g1_explosion1_class::draw(g1_draw_context_class *context)
     
     for (i=0; i<num_vertices; i++, v++, src_v++)
     {
-      //v->r = 0.75f;
-      //v->b = v->g = (growth_ratio);
+      v->r = 0.75f;
+      v->b = v->g = (growth_ratio);
 
-      v->r = v->g = v->b = 1.f;
+      //v->r = v->g = v->b = 1.f;
       
 /*
       i4_float dot = -src_vert[i].normal.dot(light_in_object_space);
@@ -240,9 +241,9 @@ void g1_explosion1_class::draw(g1_draw_context_class *context)
         dot = 1.f;
 
       v->r = v->g = v->b = 0.25f + dot;
-      */
-      
-      v->a = 1;//-(growth_ratio*growth_ratio);
+*/
+    
+      v->a = 1-(growth_ratio*growth_ratio);
     }  
   
     g1_quad_class *q_ptr = obj->quad, *q;

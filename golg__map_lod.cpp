@@ -811,7 +811,7 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
             //this is a function pointer!
             post_cell_draw(x1,y1, post_cell_draw_context);
             //force the following g1_draw_tri to really set the texture
-            //even if it was the same as last time (post_draw_cell might
+            //even if it was the same as last time (post_cell_draw might
             //change the current texture)
             last_texture_size=0;
             last_texture=0;

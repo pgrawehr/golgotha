@@ -133,6 +133,8 @@ public:
     y=from->y;
     h=from->h;
     grab_old();
+    delete model_name;
+    model_name=0;
 	model_name=new i4_const_str(model_n);
 
     draw_params.setup(model, 0, lod_model);
