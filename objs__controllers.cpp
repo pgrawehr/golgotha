@@ -105,20 +105,30 @@ i4_bool g1_trigger_class::triggable_object(g1_object_class *o)
     return i4_F;
   }
 
-  // send our trigger message to all the object our list 
-void g1_trigger_class::send_to_trigger_objects(li_symbol *sym,g1_object_class *who)
-  {
-    if (sym==none.get()) return; // don't send none, it means "no message"
-  
-    li_g1_ref_list *l=li_g1_ref_list::get(objects_to_trigger(),0);
-    int t=l->size();
-    for (int i=0; i<t; i++)
+// send our trigger message to all the objects in our list 
+void g1_trigger_class::send_to_trigger_objects(li_object *sym,g1_object_class *who)
     {
-      g1_object_class *o=l->value(i);
-      if (o)
-        o->message(sym, new li_g1_ref(who),0);
-    }        
-  }
+    if (sym->type()==LI_SYMBOL)
+        {
+        if (sym==none.get()) return; // don't send none, it means "no message"
+        
+        li_g1_ref_list *l=li_g1_ref_list::get(objects_to_trigger(),0);
+        int t=l->size();
+        for (int i=0; i<t; i++)
+            {
+            g1_object_class *o=l->value(i);
+            if (o)
+                o->message((li_symbol*)sym, new li_g1_ref(who),0);
+            }
+        }
+    else
+        {
+        li_environment *locenv=new li_environment(0,i4_F);
+        li_define_value("triggered_obj",new li_g1_ref(who),locenv);
+        li_define_value("trigger_obj",new li_g1_ref(this),locenv);
+        li_eval(sym,locenv);
+        }
+    }
 
 void g1_trigger_class::note_enter_range(g1_object_class *who)
    {
@@ -552,6 +562,8 @@ g1_extended_trigger_class::g1_extended_trigger_class(g1_object_type id,
                                                      :g1_trigger_class(id,fp)
     {
     };
+
+
 
 
 g1_object_definer<g1_extended_trigger_class>

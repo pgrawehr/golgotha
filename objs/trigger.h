@@ -1,5 +1,7 @@
 //This is a new file of the revival project. 
 //It contains the new definitions for triggerable objects.
+//The implementations of these classes can be found in objs__controllers.cpp
+
 
 #include "g1_object.h"
 
@@ -25,7 +27,7 @@ public:
   i4_bool triggable_object(g1_object_class *o);
 
   // send our trigger message to all the object our list 
-  void send_to_trigger_objects(li_symbol *sym,g1_object_class *who);
+  void send_to_trigger_objects(li_object *sym,g1_object_class *who);
 
   
 
