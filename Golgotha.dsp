@@ -2234,6 +2234,10 @@ SOURCE=.\loaders\mp3\mpg123.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\loaders\mp3\mpversion.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\network\net_addr.h
 # End Source File
 # Begin Source File
@@ -2870,7 +2874,7 @@ SOURCE=.\objs\vehic_sounds.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\loaders\mp3\version.h
+SOURCE=.\version.h
 # End Source File
 # Begin Source File
 
