@@ -342,9 +342,9 @@ public:
   {
 	  int x1=(int)x;
 	  int y1=(int)y;
-	  if (x1<0 || x1=>w)
+	  if (x1<0 || x1>=(int)w)
 		  return i4_F;
-	  if (y1<0 || y1=>h)
+	  if (y1<0 || y1>=(int)h)
 		  return i4_F;
 	  return i4_T;
   }

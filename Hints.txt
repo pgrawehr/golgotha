@@ -1,4 +1,8 @@
-Hints
+Hints.txt
+---------
+This file contains hints and ideas directly from the developpers mind, so
+they might be unordered, obsolete, impossible or whatever. They might also
+be in any language - just as quick note. 
 
 Checkout:
 
@@ -128,4 +132,6 @@ Funktioniert noch nicht richtig.
 
 Der Wert von used_path_len für normale Objekte muss vermutlich erhöht werden.
 
+Texturen sollen über mehrere Kartenzellen verteilbar sein (künstliche Vergrösserung)
+Vielleicht gibt es da auch eine einfache Lösung? Eventueller Nachteil währe ein Qualitätsverlust.
 

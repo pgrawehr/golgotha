@@ -303,14 +303,16 @@ public:
     queue[num_queued++] = p;
     root->flags = 0;
 	max_fly_height=3.0f;
-	i4_float terrain_height=g1_get_map()->vertex(pos.x,pos.y)->get_height();
-	i4_float diff=i4_fabs(pos.z-terrain_height);
-	if (diff>max_fly_height)
-		max_fly_height=diff;
-	show_all=false;
-	if (pos.z<terrain_height-3.0f)
-		show_all=true;
-
+	if (g1_get_map()->inside_map(pos.x,pos.y))
+	{
+		i4_float terrain_height=g1_get_map()->vertex(pos.x,pos.y)->get_height();
+		i4_float diff=i4_fabs(pos.z-terrain_height);
+		if (diff>max_fly_height)
+			max_fly_height=diff;
+		show_all=false;
+		if (pos.z<terrain_height-3.0f)
+			show_all=true;
+	}
     while (front<num_queued)
     {
       p = queue[front++];
