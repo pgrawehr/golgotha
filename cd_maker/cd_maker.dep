@@ -1,0 +1,422 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von cd_maker.mak
+
+..\area__rectlist.cpp : \
+	"..\arch.h"\
+	"..\area\rectlist.h"\
+	"..\dll_export.h"\
+	"..\error\error.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\memory\lalloc.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	
+
+..\cd_maker.cpp : \
+	"..\arch.h"\
+	"..\dll_export.h"\
+	"..\error\alert.h"\
+	"..\error\error.h"\
+	"..\file\file.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\main\main.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\string\str_checksum.h"\
+	"..\string\string.h"\
+	
+
+..\checksum__checksum.cpp : \
+	"..\arch.h"\
+	
+
+..\device__device.cpp : \
+	"..\app\app.h"\
+	"..\arch.h"\
+	"..\area\rectlist.h"\
+	"..\device\device.h"\
+	"..\device\event.h"\
+	"..\device\kernel.h"\
+	"..\device\key_man.h"\
+	"..\device\keys.h"\
+	"..\device\processor.h"\
+	"..\dll_export.h"\
+	"..\error\alert.h"\
+	"..\error\error.h"\
+	"..\file\file.h"\
+	"..\image\image.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\math\num_type.h"\
+	"..\math\point.h"\
+	"..\math\random.h"\
+	"..\math\vector.h"\
+	"..\memory\array.h"\
+	"..\memory\binary_tree.h"\
+	"..\memory\growheap.h"\
+	"..\memory\lalloc.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\memory\stack.h"\
+	"..\palette\pal.h"\
+	"..\pch.h"\
+	"..\resources.h"\
+	"..\StdAfx.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	"..\time\profile.h"\
+	"..\time\time.h"\
+	"..\time\timedev.h"\
+	"..\video\display.h"\
+	"..\window\cursor.h"\
+	
+
+..\dll__dll_man.cpp : \
+	"..\arch.h"\
+	"..\dll\dll.h"\
+	"..\dll\dll_man.h"\
+	"..\dll_export.h"\
+	"..\error\alert.h"\
+	"..\error\error.h"\
+	"..\file\file.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\string\string.h"\
+	
+
+..\error__error.cpp : \
+	"..\arch.h"\
+	"..\dll_export.h"\
+	"..\error\alert.h"\
+	"..\error\error.h"\
+	"..\file\file.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\string\string.h"\
+	{$(INCLUDE)}"sys\djtypes.h"\
+	{$(INCLUDE)}"unistd.h"\
+	
+
+..\file__file.cpp : \
+	"..\app\app.h"\
+	"..\arch.h"\
+	"..\area\rectlist.h"\
+	"..\device\device.h"\
+	"..\device\event.h"\
+	"..\device\kernel.h"\
+	"..\dll_export.h"\
+	"..\error\error.h"\
+	"..\file\async.h"\
+	"..\file\buf_file.h"\
+	"..\file\file.h"\
+	"..\file\file_man.h"\
+	"..\file\get_filename.h"\
+	"..\file\ram_file.h"\
+	"..\file\ram_file_man.h"\
+	"..\file\sub_section.h"\
+	"..\font\font.h"\
+	"..\image\context.h"\
+	"..\image\image.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\lisp\li_alloc.h"\
+	"..\lisp\li_error.h"\
+	"..\lisp\li_optr.h"\
+	"..\lisp\li_types.h"\
+	"..\lisp\lisp.h"\
+	"..\main\win_main.h"\
+	"..\math\num_type.h"\
+	"..\math\point.h"\
+	"..\math\random.h"\
+	"..\math\vector.h"\
+	"..\memory\array.h"\
+	"..\memory\lalloc.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\memory\que.h"\
+	"..\memory\stack.h"\
+	"..\menu\menu.h"\
+	"..\menu\menuitem.h"\
+	"..\palette\pal.h"\
+	"..\pch.h"\
+	"..\resources.h"\
+	"..\StdAfx.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	"..\time\profile.h"\
+	"..\time\time.h"\
+	"..\time\timedev.h"\
+	"..\video\display.h"\
+	"..\window\cursor.h"\
+	"..\window\style.h"\
+	"..\window\window.h"\
+	
+
+..\image__image.cpp : \
+	"..\arch.h"\
+	"..\area\rectlist.h"\
+	"..\dll_export.h"\
+	"..\error\error.h"\
+	"..\image\context.h"\
+	"..\image\image.h"\
+	"..\image\image16.h"\
+	"..\image\image24.h"\
+	"..\image\image32.h"\
+	"..\image\image8.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\math\num_type.h"\
+	"..\memory\lalloc.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\palette\pal.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	
+
+..\init__init.cpp : \
+	"..\app\app.h"\
+	"..\arch.h"\
+	"..\area\rectlist.h"\
+	"..\device\device.h"\
+	"..\dll_export.h"\
+	"..\error\error.h"\
+	"..\file\file.h"\
+	"..\image\image.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\math\num_type.h"\
+	"..\math\point.h"\
+	"..\math\random.h"\
+	"..\math\vector.h"\
+	"..\memory\lalloc.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\palette\pal.h"\
+	"..\pch.h"\
+	"..\resources.h"\
+	"..\StdAfx.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	"..\time\profile.h"\
+	"..\time\time.h"\
+	"..\time\timedev.h"\
+	"..\video\display.h"\
+	"..\window\cursor.h"\
+	
+
+..\jj_error.cpp : \
+	"..\jj_error.h"\
+	{$(INCLUDE)}"dxfile.h"\
+	
+
+..\main__win32_self_modify.cpp : \
+	"..\arch.h"\
+	"..\dll_export.h"\
+	"..\error\error.h"\
+	"..\init\init.h"\
+	
+
+..\main__win_main.cpp : \
+	"..\app\app.h"\
+	"..\app\registry.h"\
+	"..\arch.h"\
+	"..\area\rectlist.h"\
+	"..\device\device.h"\
+	"..\device\event.h"\
+	"..\device\kernel.h"\
+	"..\dll_export.h"\
+	"..\editor\dialogs\debug_win.h"\
+	"..\error\alert.h"\
+	"..\error\error.h"\
+	"..\file\file.h"\
+	"..\font\font.h"\
+	"..\image\context.h"\
+	"..\image\image.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\lisp\li_alloc.h"\
+	"..\lisp\li_error.h"\
+	"..\lisp\li_optr.h"\
+	"..\lisp\li_types.h"\
+	"..\lisp\lisp.h"\
+	"..\main\main.h"\
+	"..\main\win_main.h"\
+	"..\math\num_type.h"\
+	"..\math\point.h"\
+	"..\math\random.h"\
+	"..\math\vector.h"\
+	"..\memory\array.h"\
+	"..\memory\lalloc.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\memory\stack.h"\
+	"..\menu\menu.h"\
+	"..\menu\menuitem.h"\
+	"..\mess_id.h"\
+	"..\palette\pal.h"\
+	"..\pch.h"\
+	"..\resources.h"\
+	"..\StdAfx.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	"..\time\profile.h"\
+	"..\time\time.h"\
+	"..\time\timedev.h"\
+	"..\video\display.h"\
+	"..\window\cursor.h"\
+	"..\window\style.h"\
+	"..\window\window.h"\
+	
+
+..\math__random.cpp : \
+	"..\arch.h"\
+	
+
+..\math__spline.cpp : \
+	"..\arch.h"\
+	"..\dll_export.h"\
+	"..\error\error.h"\
+	"..\file\file.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\math\matrix.h"\
+	"..\math\num_type.h"\
+	"..\math\point.h"\
+	"..\math\spline.h"\
+	"..\math\vector.h"\
+	"..\memory\lalloc.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	
+
+..\math__transform.cpp : \
+	"..\arch.h"\
+	"..\math\num_type.h"\
+	"..\math\point.h"\
+	"..\math\transform.h"\
+	"..\math\vector.h"\
+	
+
+..\memory__malloc.cpp : \
+	"..\app\app.h"\
+	"..\arch.h"\
+	"..\area\rectlist.h"\
+	"..\device\device.h"\
+	"..\dll_export.h"\
+	"..\error\error.h"\
+	"..\file\file.h"\
+	"..\file\static_file.h"\
+	"..\image\image.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\math\num_type.h"\
+	"..\math\point.h"\
+	"..\math\random.h"\
+	"..\math\vector.h"\
+	"..\memory\bmanage.h"\
+	"..\memory\growheap.h"\
+	"..\memory\lalloc.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\palette\pal.h"\
+	"..\pch.h"\
+	"..\resources.h"\
+	"..\StdAfx.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	"..\time\profile.h"\
+	"..\time\time.h"\
+	"..\time\timedev.h"\
+	"..\video\display.h"\
+	"..\window\cursor.h"\
+	
+
+..\palette_pal.cpp : \
+	"..\arch.h"\
+	"..\file\file.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\math\num_type.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\palette\pal.h"\
+	
+
+..\string__string.cpp : \
+	"..\arch.h"\
+	"..\dll_export.h"\
+	"..\error\error.h"\
+	"..\file\file.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\memory\growheap.h"\
+	"..\memory\lalloc.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\string\str_checksum.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	
+
+..\threads__win32_threads.cpp : \
+	"..\arch.h"\
+	"..\dll_export.h"\
+	"..\error\error.h"\
+	"..\init\init.h"\
+	"..\main\main.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	
+
+..\time__timedev.cpp : \
+	"..\arch.h"\
+	"..\area\rectlist.h"\
+	"..\device\device.h"\
+	"..\device\event.h"\
+	"..\device\kernel.h"\
+	"..\dll_export.h"\
+	"..\error\error.h"\
+	"..\file\file.h"\
+	"..\font\font.h"\
+	"..\image\context.h"\
+	"..\image\image.h"\
+	"..\init\init.h"\
+	"..\isllist.h"\
+	"..\lisp\li_alloc.h"\
+	"..\lisp\li_error.h"\
+	"..\lisp\li_init.h"\
+	"..\lisp\li_optr.h"\
+	"..\lisp\li_types.h"\
+	"..\lisp\lisp.h"\
+	"..\memory\array.h"\
+	"..\memory\lalloc.h"\
+	"..\memory\malloc.h"\
+	"..\memory\new.h"\
+	"..\memory\stack.h"\
+	"..\menu\menu.h"\
+	"..\menu\menuitem.h"\
+	"..\palette\pal.h"\
+	"..\string\string.h"\
+	"..\threads\threads.h"\
+	"..\time\profile.h"\
+	"..\time\profile_stack.h"\
+	"..\time\time.h"\
+	"..\time\timedev.h"\
+	"..\video\display.h"\
+	"..\window\cursor.h"\
+	"..\window\style.h"\
+	"..\window\win_evt.h"\
+	"..\window\window.h"\
+	
