@@ -95,7 +95,15 @@ LI_HEADER(get_height_aequidistance)
 	if (g_bIsAequidistant)
 		return new li_float(diff);
 	else
-		return li_nil;
+	{
+		double sum=0;
+		for (int i=0;i<255;i++)
+		{
+			sum+=g1_vert_height_table[i+1]-g1_vert_height_table[i];
+
+		}
+		return new li_float(sum/255.0);
+	}
 }
 
 li_automatic_add_function(li_set_height_aequidistance,"set_height_aequidistance");

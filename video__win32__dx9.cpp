@@ -578,6 +578,11 @@ i4_bool i4_dx9_display_class::change_mode(w16 newwidth, w16 newheight,
 		return i4_F;
 	*/
 	D3DSURFACE_DESC ddsd;
+	//This might happen if another directx app has just popped up. 
+	//this is a rare case, so we don't investigate this further
+	//(Golg just crashed at me once here)
+	if (dx9_common.primary_surface==NULL)
+		return i4_F; 
 	dx9_common.get_surface_description(dx9_common.primary_surface, ddsd); 
 	fake_screen=new i4_dx9_image_class(newwidth, newheight);
 	//fake_screen->surface->PageLock(0);

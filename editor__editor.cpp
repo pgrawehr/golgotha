@@ -1129,12 +1129,14 @@ void g1_controller_edit_class::move_selected_heights(sw32 z_change)
   w32 w=(get_map()->width()+1), h=(get_map()->height()+1);//,c;
   g1_map_vertex_class *v=get_map()->vertex(0,0);
 
-  i4_status_class *status = i4_create_status(g1_ges("moving vertices"));
+  //Having a status window here is more anoying than helpfull 
+  //because this is a short, but repeating operation
+  //i4_status_class *status = i4_create_status(g1_ges("moving vertices"));
 
   for (sw32 vy=0; vy<(sw32)h; vy++)
   {
-    if (status)
-      status->update(vy/(float)h);
+    //if (status)
+    //  status->update(vy/(float)h);
 
     for (sw32 vx=0; vx<(sw32)w; vx++, v++)
     {
@@ -1154,8 +1156,8 @@ void g1_controller_edit_class::move_selected_heights(sw32 z_change)
     }
   }
 
-  if (status)
-    delete status;
+  //if (status)
+  //  delete status;
 
   changed();
   refresh();
@@ -4990,9 +4992,15 @@ g1_mode_handler::state g1_tile_mode::current_state()
 void g1_tile_mode::move_selected(i4_float xc, i4_float yc, i4_float zc,
                                  sw32 mouse_x, sw32 mouse_y)
 {
-  vert_exact_z-=mouse_y/50.0f;
-  int z_int=(sw32)(vert_exact_z/0.05f);
-  c->move_selected_heights(z_int-move_pivot->height);
+  //vert_exact_z-=mouse_y/50.0f;
+  double aequidist=((li_float*)li_call("get_height_aequidistance",0,0))->value();
+  //int z_int=(sw32)(vert_exact_z/(aequidist*10));
+  int z_diff=zc/aequidist;
+  if (zc>0 && z_diff==0)
+	z_diff=1;
+  else if (zc<0 && z_diff==0)
+	  z_diff=-1;
+  c->move_selected_heights(z_diff);
 
 }
 
@@ -5078,7 +5086,7 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
       show_focus();
     } break;
 
-    case '`' :
+    case '3' :
     {
       hide_focus();
 
@@ -5098,7 +5106,7 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
     } break;
 
 
-    case '\'':
+    case '4':
     {
       hide_focus();
       g1_e_tile.set_mirrored((i4_bool)!g1_e_tile.get_mirrored());
@@ -5106,7 +5114,7 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
       show_focus();
     } break;
 
-    case '[' :
+    case '9' :
     {
       if (g1_e_tile.get_minor_mode()==g1_tile_params::PLACE)
       {
@@ -5123,7 +5131,7 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
 
     } break;
 
-    case ']' :
+    case '0' :
     {
       if (g1_e_tile.get_minor_mode()==g1_tile_params::PLACE)
       {
@@ -5140,7 +5148,7 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
     } break;
 
     
-    case '\\' :    
+    case '2' :    
     {
       hide_focus();
       if (g1_e_tile.get_cell_rotation()==G1_ROTATE_270)

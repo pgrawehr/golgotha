@@ -200,7 +200,7 @@ private:
   
   
 
-  // this is a hook so the level editor can draw selected verts
+  //! this is a hook so the level editor can draw selected verts
   typedef void (*cell_draw_function_type)(sw32 x, sw32 y, void *context);
   cell_draw_function_type post_cell_draw;
   void *post_cell_draw_context;
@@ -213,51 +213,49 @@ private:
   i4_bool movie_in_progress;
 
 public:
-  // only use this if you know what you are doing
+  //! only use this if you know what you are doing
   void change_map(int w, int h, g1_map_cell_class *cells, g1_map_vertex_class *vertex);
   
-  //enum { THINK_QUE_SIZE=G1_MAX_OBJECTS };
-  //g1_object_class *think_que[THINK_QUE_SIZE];
-  //i4_array<g1_object_class *> think_que_dyn;
-  //was formerly private, is now public to allow flexible changes
-  //to the think que.
-  //Be shure to know what you are doing and state clearly what you do!
+  
+  //! This is the queue of object that are thinking each tick.
+  //! Be shure to know what you are doing and state clearly what you do
+  //! if you need to modify this. 
   i4_dynamic_que<g1_object_class *,8096,8096> think_que_dyn;
   w32 think_head, think_tail;
   i4_str *sky_name;
 
-  void recalc_static_stuff();//update the map data structures
+  void recalc_static_stuff();///< update the map data structures
 
-  void remove_from_think_list(g1_object_class *o);//do not think any more
+  void remove_from_think_list(g1_object_class *o);/// <do not think any more
 
-  void mark_for_recalc(w32 flags) { recalc |= flags; }//will recalc on next frame
+  void mark_for_recalc(w32 flags) { recalc |= flags; }/// <will recalc on next frame
 
-  //gets block map for this grade
+  ///gets block map for this grade
   g1_block_map_class *get_block_map(w8 grade) const { return const_cast<g1_block_map_class*>(&block[grade]); }
 
-  //get astar solver (usefull for stank only)
+  ///get astar solver (usefull for stank only)
   g1_astar_map_solver_class *get_astar_solver() {return astar_solver;}
 
-  //usefull way solver
+  ///usefull way solver
   g1_breadth_first_map_solver_class *get_breadth_solver(w8 grade)
 	  {return solvemap[grade];};
 
-  //faster way solver (uses precalculated data)
+  ///faster way solver (uses precalculated data)
   g1_breadth_first_graph_solver_class *get_graph_solver()
 	  {return solvegraph;};
 
-  //get the map maker reference 
-  //That object reference is actually only needed to build
-  //the map graph. You could always also create your own instance. 
+  //!Get the map maker reference.
+  //!That object reference is actually only needed to build
+  //!the map graph. You could always also create your own instance. 
   g1_critical_map_maker_class *get_map_maker(){return &map_maker;};
 
-  //calculates the prefered solver for the given map (dependent on user settings)
+  //! Calculates the prefered solver for the given map (dependent on user settings)
   g1_map_solver_class *get_prefered_solver();
 
-  //has this map a fast graph solving algo?
+  //! Has this map a fast graph for solving paths?
   i4_bool has_graph();
 
-  //has it paths?
+  //! has it paths?
   i4_bool has_paths();
   solve_flags solvehint;
 
@@ -324,17 +322,32 @@ public:
   sw32 get_objects_in_range_fn(float x, float y, float range,
 	  g1_object_class *dest_array[], w32 array_size,
 	  OBJ_FILTER_TYPE fn) const;
-  //!gets a pointer to the cell at a given location
-  //g1_map_cell_class *cell(w16 x, w16 y) const { return cells + y*w + x; };
+  //! Gets a pointer to the cell at a given location.
+  //! This method is templatized, such that you can use any type of numerical
+  //! variables as input.
   template <typename T>
   g1_map_cell_class *cell(T x, T y) const { return cells + ((w32)y)*w + ((w32)x); }
   g1_map_cell_class *cell(w32 offset) const { return cells + offset; };
+  //! Gets the vertex at the given location. 
   template <typename T>
   g1_map_vertex_class *vertex(T x, T y) const 
   { 
 	  return 
 	  verts + (w32)y*(w+1) + (w32)x; 
   };
+
+  //! Returns true if the given coordinates lie within the map
+  template <typename T>
+  i4_bool inside_map(T x, T y) const
+  {
+	  int x1=(int)x;
+	  int y1=(int)y;
+	  if (x1<0 || x1=>w)
+		  return i4_F;
+	  if (y1<0 || y1=>h)
+		  return i4_F;
+	  return i4_T;
+  }
 
   //! Call this to receive the coordinates from an offset
   template <typename T>
@@ -343,18 +356,6 @@ public:
 	  x=(T)(offset % w);
 	  y=(T)(offset / w);
   }
-
-  /*void request_think(g1_object_class *obj)
-  {
-    think_que[think_head]=obj;
-
-    think_head++;
-    if (think_head>=THINK_QUE_SIZE)
-      think_head=0;
-    
-    if (think_head==think_tail)
-      i4_error("g1_map_class::request_think - thinkers exceeded maximum");
-  }*/
 
   //! Requests that an object is added to the think list.
   //! Usually, you will have to call the same method on the object,
