@@ -40,6 +40,8 @@ public:
     BUTTON_3,
     STRAFE_LEFT,
     STRAFE_RIGHT,
+    STRAFE_UP,
+    STRAFE_DOWN,
     STRAFE_MODIFIER,
     ZOOM_IN,
     ZOOM_OUT,

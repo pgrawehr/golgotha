@@ -348,15 +348,15 @@ void g1_team_api_class::guide_hero()
 				};
         } // JJ
         if (dist2<9.0f)
-          strafe(-0.7f,NULL);
+          strafe(-0.7f,0,NULL);
         else if (dist2<64.0f)
         {
-          strafe(0.5f,NULL);
+          strafe(0.5f,0,NULL);
           accelerate(0.1f,NULL);
         }
         else
         {
-          strafe(-0.1f,NULL);
+          strafe(-0.1f,0,NULL);
           accelerate(1.0f,NULL);
         }
       }
@@ -569,15 +569,15 @@ public:
 				};
         } // JJ
         if (dist2<9.0f)
-          strafe(-0.7f,NULL);
+          strafe(-0.7f,0,NULL);
         else if (dist2<64.0f)
         {
-          strafe(0.5f,NULL);
+          strafe(0.5f,0,NULL);
           accelerate(0.1f,NULL);
         }
         else
         {
-          strafe(-0.1f,NULL);
+          strafe(-0.1f,0,NULL);
           accelerate(1.0f,NULL);
         }
       }

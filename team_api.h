@@ -34,7 +34,8 @@ public:
   sw32 lastnewpos;
 public:
     //These values are used for passing direct unit commands around
-    i4_float user_accel, user_angle, user_height, user_strafe;
+    i4_float user_accel, user_angle, user_straferight;
+    i4_float user_strafeup;
     i4_float user_lookx, user_looky;
     i4_bool user_fire1, user_fire2, user_fire3;
     i4_3d_vector user_fire_at;
@@ -68,7 +69,8 @@ public:
   // accelerate ratio of maximum acceleration
   void accelerate(i4_float ratio, g1_map_piece_class *p);               
   // slide right ratio of maximum acceleration
-  void strafe(i4_float ratio, g1_map_piece_class *p);                    
+  void strafe(i4_float strafe_right, 
+      i4_float strafe_up, g1_map_piece_class *p);                    
   // set turret direction relative to heading
   void look(i4_float dax, i4_float day, g1_map_piece_class *p);  
   i4_bool fire0(g1_map_piece_class *p);           // fire first weapon

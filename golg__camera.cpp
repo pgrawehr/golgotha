@@ -425,8 +425,10 @@ void g1_view_state_class::update_action_mode()
     if (!obj)
         {
         follow_object_id=g1_global_id.invalid_id();
-        view_mode=G1_WATCH_MODE;
-        update();
+        //To suggest circle_wait mode, we need a valid object
+        //to circle around, so the object must do this itself when it dies.
+        //suggest_camera_mode()
+        //update();
         }
     else
         {

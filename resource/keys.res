@@ -45,7 +45,11 @@
 (def_key  ","                      "Strafe Left"                action follow)                
 (def_key  "Insert"                 "Strafe Left"                action follow)                
 (def_key  "."                      "Strafe Right"               action follow)                
-(def_key  "PageUp"                 "Strafe Right"               action follow)                
+(def_key  "PageUp"                 "Strafe Right"               action follow)
+(def_key  "Shift+Up"               "Strafe Up"                  action follow)
+(def_key  "Shift+Down"             "Strafe Down"                action follow)
+(def_key  "Shift+Left"             "Strafe Left"                action follow)
+(def_key  "Shift+Right"            "Strafe Right"               action follow)
               
 (def_key  "Tab"                    "strategy_toggle"            follow strategy action)
 (def_key  "Backspace"              "strategy_toggle"            follow strategy action)

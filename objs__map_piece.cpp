@@ -263,7 +263,7 @@ g1_map_piece_class::g1_map_piece_class(g1_object_type id,
   my_solver=0;
   //prefered_solver();
   death=0;
-  damping_fraction=0.8;
+  damping_fraction=0.8f;
   dest_theta=0;
   defaults=g1_object_type_array[id]->defaults;
 
@@ -508,6 +508,13 @@ void g1_map_piece_class::damage(g1_object_class *obj, int hp, i4_3d_vector _dama
 //       scream1.play();
 //     else
 //       scream2.play();
+       if (g1_current_controller.get() &&
+           g1_current_controller->view.view_mode==G1_ACTION_MODE &&
+           g1_current_controller->view.follow_object_id==global_id)
+           {
+           g1_current_controller->view.suggest_camera_mode(
+               G1_CIRCLE_WAIT,global_id);
+           }
   }
   else
     ticks_to_blink=20;
@@ -666,7 +673,13 @@ void g1_map_piece_class::calc_action_cam(g1_camera_info_struct &cam,
   
   //hardcoded position of the camera, relative to (0,0,0) of the model.
   //for most objects, (0,0,0) is the floor contact point. 
-  cam_transform.transform(i4_3d_vector(0,0.1f,0.3f), tmp);
+  i4_3d_vector screen_vect(0,0,0);
+  if (draw_params.model&&draw_params.model->get_mount_point("Viewpos",screen_vect))
+      {
+      cam_transform.transform(screen_vect,tmp);
+      }
+  else
+      cam_transform.transform(i4_3d_vector(0,0.1f,0.3f), tmp);
 
   cam.gx = tmp.x;
   cam.gy = tmp.y;
@@ -1113,20 +1126,24 @@ void g1_map_piece_class::request_remove()
 
 //this function must only be called if controled() returns true for
 //this object!
-i4_bool g1_map_piece_class::grab_user_controls(i4_float &speed, 
+i4_bool g1_map_piece_class::grab_user_controls(i4_float &accel, 
                                             i4_float &angle,
-                                            i4_float &height)
+                                            i4_float &right,
+                                            i4_float &up)
     {
     g1_team_api_class *ta=g1_player_man.get(player_num)->get_ai();
     
-    speed=ta->user_accel;
+    accel=ta->user_accel;
     ta->user_accel=0;
     angle=ta->user_angle;
     ta->user_angle=0;
-    height=ta->user_height;
-    ta->user_height=0;
+    right=ta->user_straferight;
+    ta->user_straferight=0;
+    up=ta->user_strafeup;
+    ta->user_strafeup=0;
+    
 
-    return (speed!=0 || angle!=0 || height !=0 );
+    return (accel!=0 || angle!=0 || up !=0 || right!= 0);
     };
 
 i4_bool g1_map_piece_class::controled()
@@ -1147,8 +1164,8 @@ i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
                                          i4_bool reversible)
 	{
     i4_bool ctrl=controled();
-    i4_float c_accel=0,c_angle=0,c_height=0;
-	if (path|| (ctrl && grab_user_controls(c_accel,c_angle,c_height))
+    i4_float c_accel=0,c_angle=0,c_height=0,c_right;
+	if (path|| (ctrl && grab_user_controls(c_accel,c_angle,c_right,c_height))
         ||(!(solveparams&SF_OK) && prefered_solver()))
 		{
 		w32 path_info=follow_path();
@@ -1391,8 +1408,10 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
                                              i4_3d_vector &d)
 	{
 	pf_suggest_move.start();
-	
-	if (path|| (!(solveparams&SF_OK) && prefered_solver()))
+	i4_bool ctrl=controled();
+    i4_float c_accel=0,c_angle=0, c_right=0, c_height=0;
+	if (path|| (ctrl&&grab_user_controls(c_accel,c_angle,c_right,c_height))||
+        (!(solveparams&SF_OK) && prefered_solver()))
 		{
 		w32 path_info=follow_path();
 		i4_float braking_friction;
@@ -1405,14 +1424,40 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 			braking_friction=0;
 			}
 		i4_float dx=0,dy=0,dz=0;
+        i4_float angle,t ,diffangle;
+		i4_bool can_get_there = i4_T;
+        i4_float height=g1_get_map()->terrain_height(x,y);
+        if (ctrl)
+            {
+            
+            if (!path_info)
+                {
+                dest_x=x;
+                dest_y=y;
+                }
+            if (c_accel==0&&braking_friction<0.1f)
+                braking_friction=0.1f;
+            //angle is the ABSOLUTE target angle, not relative!
+            angle=theta+c_angle;
+            dx = (float)cos(theta) * c_accel;
+		    dy = (float)sin(theta) * c_accel;
+            dz= c_height;
+            if (dz>VSPEED)
+                dz=VSPEED;
+            else if (dz<-VSPEED)
+                dz=-VSPEED;
+            if (h<(height+2))
+                {
+                dz=dz/3;
+                }
+            }
 		if (path_info)
 			{
-			i4_float angle,t ,diffangle;
-			i4_bool can_get_there = i4_T;
+			
 			
 			dx = (dest_x - x);
 			dy = (dest_y - y);
-			i4_float height=g1_get_map()->terrain_height(x,y);
+			
 			if (h<(height+FLY_HEIGHT-4*VSPEED))
 				{
 				dz=VSPEED;
@@ -1428,6 +1473,9 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 			
 			//aim the vehicle    
 			angle = i4_atan2(dy,dx);
+            }
+        if (path_info||ctrl)
+            {
 			i4_normalize_angle(angle);    
 			
 			diffangle = angle - theta;
@@ -1444,8 +1492,8 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 			t = dx*dx + dy*dy;
 			
 			//how far will the vehicle go if he slows down from his maximum speed?
-			if (t>speed*speed+0.0025 || braking_friction==0.0)
-				{
+			//if (t>speed*speed+0.0025 || braking_friction==0.0)
+			//	{
 				if (dtheta<-defaults->turn_speed) dtheta = -defaults->turn_speed;
 				else if (dtheta>defaults->turn_speed) dtheta = defaults->turn_speed;
 				theta += dtheta;
@@ -1468,7 +1516,7 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 				else
 					{
 					
-					i4_float /*target_speed,*/ accel;
+					i4_float accel=0;
 					
 					if (!can_get_there)
 						{
@@ -1478,7 +1526,10 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 						}
 					else 
 						{
-						accel = defaults->accel;
+                        if (path_info)
+                            accel = defaults->accel;
+                        if (ctrl)
+						    accel += c_accel;
 						
 						accel += (float)sin(pitch)*g1_resources.gravity;
 						
@@ -1487,8 +1538,11 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 						}
 					}
                 //Check that we don't get too fast
-				if ((speed*1.1)>defaults->speed)
-					speed=defaults->speed*1.1;
+                //airbourne units usually don't move backwards. 
+				if ((speed*1.1f)>defaults->speed)
+					speed=defaults->speed*1.1f;
+                if ((speed*0.3f)<-defaults->speed)
+                    speed=-0.3f*defaults->speed;
 
 				dist = speed*(float)cos(pitch);
 				dx = (float)cos(theta) * dist;
@@ -1499,7 +1553,7 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 				//dist = t;
 				pf_suggest_move.stop();
 				return i4_T;
-				}
+				//}
 			
 			}
 		dtheta = 0;

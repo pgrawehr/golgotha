@@ -2257,7 +2257,7 @@ void i4_slider_class::receive_event(i4_event *ev)
 
 g1_message_box *g1_message_box::dialog_active=0;
 w32 g1_message_box::modal_result=0;
-i4_str *g1_message_box::text=0;
+//i4_str *g1_message_box::text=0;
 g1_message_box::g1_message_box(w16 w, w16 h, i4_graphical_style_class *style,
 							   //i4_const_str &title, i4_const_str &message,
 							   w32 flags)
@@ -2273,16 +2273,24 @@ g1_message_box::g1_message_box(w16 w, w16 h, i4_graphical_style_class *style,
 	checkbox_event=0;
 	send_to=0;
 	modal=(flags&MSG_NOTMODAL)?0:1;
-	text=0;
+	//text=0;
 	};
 
 g1_message_box::~g1_message_box()
 	{
 	//i4_color_window_class::~i4_color_window_class();
-	text=0;
+	//text=0;
 	//modal_result=0;//will be read just after destruction of the window.
 	//dialog_active=0;
 	}
+
+i4_str g1_message_box::get_text()
+    {
+	if (inputwindow)
+        return *inputwindow->get_edit_string();
+    else 
+        return i4_str("");
+    }
 
 
 void g1_message_box::receive_event(i4_event *ev)
@@ -2298,8 +2306,8 @@ void g1_message_box::receive_event(i4_event *ev)
       }*/
       
 	  modal_result=uev->sub_type;
-	  if (inputwindow) text=inputwindow->get_edit_string();
-	  else text=0;
+	  //if (inputwindow) text=inputwindow->get_edit_string();
+	  //else text=0;
 	  if (flags&MSG_NOTMODAL) 
 		  {
 		  style->close_mp_window(parent);
@@ -2314,7 +2322,7 @@ void g1_message_box::receive_event(i4_event *ev)
 			CAST_PTR(oev,i4_object_message_event_class,ev);
 			if (oev->object==inputwindow)
 				{
-				text=inputwindow->get_edit_string();
+				//text=inputwindow->get_edit_string();
 				return;
 				}
 			}
@@ -2560,11 +2568,10 @@ w32 i4_input_box(const i4_const_str &title, const i4_const_str &message, const i
 		  i4_current_app->get_input();//force message to be modal
 		  //let's try wheter this helps. (at least it's modal to current context)
 		  i4_current_app->refresh();
-		  rettext.set_length(0);//we need to get the text before the window is closed
-		  //or the string won't be valid.
-		  const i4_const_str &s=g1_message_box::get_text();
-		  i4_str::iterator rb(rettext.begin());
-	      rettext.insert(rb,s);
+
+	      rettext=sd->get_text();
+          //this will automatically close and delete the window
+          //when the return value is non-zero.
 		  result= g1_message_box::get_result();
 		  }
 	  

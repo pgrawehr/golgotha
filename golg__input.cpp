@@ -65,6 +65,8 @@ void g1_input_class::init()
                 "Chain Gun",            // BUTTON_3,
                 "Strafe Left",          // STRAFE_LEFT,
                 "Strafe Right",         // STRAFE_RIGHT,
+                "Strafe Up",            // STRAFE_UP,
+                "Strafe Down",          // STRAFE_DOWN,
                 "Strafe Mode",          // STRAFE_MODIFIER,
                 "Zoom In",
                 "Zoom Out",

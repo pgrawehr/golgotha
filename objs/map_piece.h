@@ -177,9 +177,9 @@ public:
                            i4_3d_vector &d);
   //! Returns true if the object is currently under user control
   i4_bool controled();
-  i4_bool grab_user_controls(i4_float &speed, 
-      i4_float &angle, 
-      i4_float &height);
+  i4_bool grab_user_controls(i4_float &accel, 
+      i4_float &angle, i4_float &right,
+      i4_float &up);
   //checks the health to make sure the object is still alive
   //if health is <0, the object is removed from the map, and i4_F returned
   i4_bool check_life(i4_bool remove_if_dead=i4_T);

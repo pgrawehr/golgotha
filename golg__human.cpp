@@ -532,6 +532,8 @@ void g1_human_class::think()
     g1_input.deque_time(g1_input_class::DOWN);
     g1_input.deque_time(g1_input_class::STRAFE_LEFT);
     g1_input.deque_time(g1_input_class::STRAFE_RIGHT);
+    g1_input.deque_time(g1_input_class::STRAFE_UP);
+    g1_input.deque_time(g1_input_class::STRAFE_DOWN);
 	g1_input.deque_time(g1_input_class::ZOOM_IN);
 	g1_input.deque_time(g1_input_class::ZOOM_OUT);
 	g1_input.deque_time(g1_input_class::ZOOM_LEFT);
@@ -573,6 +575,8 @@ void g1_human_class::think()
       down_ms=g1_input.deque_time(g1_input_class::DOWN),
       sleft_ms=g1_input.deque_time(g1_input_class::STRAFE_LEFT),
       sright_ms=g1_input.deque_time(g1_input_class::STRAFE_RIGHT);
+    sw32 sup_ms=g1_input.deque_time(g1_input_class::STRAFE_UP);
+    sw32 sdown_ms=g1_input.deque_time(g1_input_class::STRAFE_DOWN);
 	sw32 zoom_in=g1_input.deque_time(g1_input_class::ZOOM_IN),
 		zoom_out=g1_input.deque_time(g1_input_class::ZOOM_OUT),
 		zoom_left=g1_input.deque_time(g1_input_class::ZOOM_LEFT),
@@ -584,7 +588,8 @@ void g1_human_class::think()
     mouse_look_increment_y = mouse_look_increment_x = 0;
     turn( g1_resources.player_turn_speed*(left_ms-right_ms)*G1_HZ/1000.0f, whofor );
     accelerate( (up_ms-down_ms)*G1_HZ/1000.0f ,whofor);
-    strafe( (sright_ms-sleft_ms)*G1_HZ/1000.0f, whofor);
+    strafe( (sright_ms-sleft_ms)*G1_HZ/1000.0f,
+        (sup_ms-sdown_ms)*G1_HZ/1000.0f,whofor);
 	if (g1_current_controller->view.get_view_mode()==G1_FOLLOW_MODE)
 		{
 		g1_resources.follow_camera_dist+=(zoom_out-zoom_in)*G1_HZ/1000.0f;
@@ -593,8 +598,8 @@ void g1_human_class::think()
 		g1_resources.follow_camera_rotation+=(zoom_right-zoom_left)*G1_HZ/1000.0f;
 		}
 
-    if (sright_ms>0)
-      sright_ms=sright_ms+1;
+    //if (sright_ms>0)
+    //  sright_ms=sright_ms+1;
 
     if (g1_input.button_1()) fire0(whofor);
     if (g1_input.button_2()) fire1(whofor);

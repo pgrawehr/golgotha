@@ -67,7 +67,7 @@ class g1_message_box: public i4_color_window_class
 	i4_event_handler_class *send_to;
 	i4_graphical_style_class *style;
 	w32 flags;
-	static i4_str *text;
+	//static i4_str *text;
 	public:
 	virtual char *name() {return "Message Box class";};
 	virtual void receive_event(i4_event *ev);
@@ -87,12 +87,8 @@ class g1_message_box: public i4_color_window_class
 		return modal_result;
 		}
 
-	static i4_const_str get_text()//specifications say that this returns
-		//a copy of the object. I hope this is correct.
-		{
-		if (text) return *text;
-		return i4_const_str("");
-		}
+	i4_str get_text();
+		
 	virtual void parent_draw(i4_draw_context_class &context)
 		{
         local_image->clear(bg_color, context);

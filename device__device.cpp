@@ -1021,6 +1021,8 @@ static i4_bool i4_go_key_start(char *&s)
   
   if (*s)
   {
+    //This entirely skips the command, so the leading def_key
+    //is newer actually interpreted at all. 
     while (*s && *s!=' ') s++;
     skip_white(s);
     return i4_T;

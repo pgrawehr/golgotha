@@ -1741,8 +1741,10 @@ void g1_player_piece_class::damage(g1_object_class *obj, int hp, i4_3d_vector _d
       {
 	    //only switch to circle_wait if action or camera mode
 	    //otherwise, this is usually of no use.
-	    if ((g1_current_controller->view.get_view_mode()==G1_ACTION_MODE) ||
-			(g1_current_controller->view.get_view_mode()==G1_CAMERA_MODE))
+	    if (((g1_current_controller->view.follow_object_id==0)  ||
+            (g1_current_controller->view.follow_object_id==global_id ) ) &&
+            ((g1_current_controller->view.get_view_mode()==G1_ACTION_MODE) ||
+			(g1_current_controller->view.get_view_mode()==G1_CAMERA_MODE)))
 			{
 			g1_current_controller->view.suggest_camera_mode(G1_CIRCLE_WAIT,
                                                          global_id);

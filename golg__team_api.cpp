@@ -42,7 +42,8 @@ g1_team_api_class::g1_team_api_class()
 {
 reload=0;
 lastnewpos=300;
-user_accel= user_angle= user_height= user_strafe=0;
+user_accel= user_angle= user_straferight=0;
+user_strafeup=0;
 user_lookx= user_looky=0;
 user_fire1= user_fire2= user_fire3=i4_F;
 }
@@ -215,24 +216,29 @@ void g1_team_api_class::accelerate(i4_float ratio,g1_map_piece_class *forwho)
 }
 //}}}
 
-void g1_team_api_class::strafe(i4_float ratio,g1_map_piece_class *forwho)
+void g1_team_api_class::strafe(i4_float strafe_right,
+                               i4_float strafe_up,
+                               g1_map_piece_class *forwho)
 //{{{
 {
   if (record)
   {
     write_playback_checker(record);
     record->write_8(G1_COMMAND_STRAFE);
-    record->write_float(ratio);
+    record->write_float(strafe_right);
+    record->write_float(strafe_up);
   }
 
   if (!forwho&&commander())
-    commander()->strafe_accel_ratio = (ratio>1.0f)?1.0f:(ratio<-1.0f)?-1.0f:ratio;
+    commander()->strafe_accel_ratio = (strafe_right>1.0f)?1.0f:(strafe_right<-1.0f)?-1.0f:strafe_right;
   if (forwho)
       {
-      if (forwho->get_flag(g1_object_class::SELECTABLE)&&ratio!=0)
+      if (forwho->get_flag(g1_object_class::SELECTABLE)&&
+          (strafe_right!=0||strafe_up!=0))
           {
           forwho->unlink();
-          user_strafe=ratio;
+          user_straferight=strafe_right;
+          user_strafeup=strafe_up;
           }
       }
 }
@@ -592,7 +598,7 @@ i4_bool g1_team_api_class::playback_think()
       case G1_COMMAND_STRAFE:
       {
         i4_float ratio = playback->read_float();
-        strafe(ratio,0);
+        strafe(ratio,0,0);
       } break;
       case G1_COMMAND_LOOK:
       {
