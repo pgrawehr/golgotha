@@ -158,6 +158,7 @@ void r1_texture_manager_class::uninit()
 	  {
 	  i4_thread_sleep(1);//wait until nothing left in queue 
 	  //might bomb if a texture request is pending.
+      next_frame();
 	  }
   i4_thread_sleep(10);
   next_frame();

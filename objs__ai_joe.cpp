@@ -41,8 +41,6 @@
 #include "g1_rand.h"
 #include "player.h"
 
-//(OLI) hack for reloading this AI
-//extern w16 ai_joe_dll_ref;
 
 char *unit_name_joe[] = 
 {
@@ -81,7 +79,6 @@ static i4_bool goodies_filter(g1_object_class *who)
 
 
 char *formation_joe[] =
-//{{{
 {
   "      "
   "      "
@@ -174,7 +171,7 @@ char *formation_joe[] =
   "      "
   "      ", // ouch!
 };
-//}}}
+
 const int num_formations=sizeof(formation_joe)/sizeof(char*);
 
 static const float xoffs[6]={-1.5f,-1.0f,-0.5f,0.5f,1.0f,1.5f}; //not really good...
@@ -207,9 +204,9 @@ public:
   enum eBuildMode 
   { INIT, INITWAIT, IDLE, BUILDWAIT, BUILD, WAITFORPIECE, FORMANDMOVE, RESURRECT, COLLECT_GOALS };
 
-  //i4_float tx,ty;
+  
   float bdiffx,bdiffy;
-  //i4_float prodx,prody;
+
   w8 dir1, dir2; //actually of type eDir.
 
   //i4_array<unit_class> troop;
@@ -219,11 +216,11 @@ public:
   //Smart pointers cannot work then. 
   i4_array<g1_typed_reference_class<g1_convoy_class> * > convoys;
   i4_array<sw32> time;
-  //i4_array<unit_class> build;
+
   g1_typed_reference_class<g1_convoy_class> building;
   g1_typed_reference_class<g1_object_class> where;
   i4_array<g1_typed_reference_class<g1_object_class> *> goals;
-  //i4_array<unit_class> group;
+
   int form, place, formation_size;
   int build_count;
   int build_wait, retry;
@@ -235,7 +232,6 @@ public:
   //int reload;  // supertank is going to reload ammo
 
   ai_joe(g1_loader_class *f=0) 
-    //: troop(100,20), time(50,20), build(18,0), goal(20,10),group(20,20)
 	: convoys(40,40), time(40,40), goals(40,40)
   {
     build_mode = INIT;
@@ -246,7 +242,6 @@ public:
 	build_wait=1;
 	retry=1;
   }
-  //}}}
 
   void clear_unitlists()
 	  {
@@ -271,13 +266,8 @@ public:
 	goals.uninit();
   }
 
-//  w32 convoy_id(unit_class &u)
-//	  {
-//	  return u.id();
-//	  }
 
   void setup_production(i4_float _prodx,i4_float _prody)
-  //{{{
   {
 //    pf_ai_joe_setup_production.start();
     // setup around production site at location
@@ -312,25 +302,18 @@ public:
     reload=0;
 //    pf_ai_joe_setup_production.stop();
   }
-  //}}}
 
   virtual void init()
-  //{{{
   {
     int i;
 
-//    troop.clear();
-//    time.clear();
-//    build.clear();
-//	goal.clear();
-//	group.clear();
+
 	clear_unitlists();
 
     for (i=0; i<num_unit_types; i++)
       unit_type_joe[i] = object_type(unit_name_joe[i]);
     for (i=0; i<num_goodies_types; i++)
       goodies_type[i] = object_type(goodies_name[i]);
-	//goal=0;
     goal_type = object_type("goal");
 	convoy_type=object_type("convoy");
 
@@ -343,21 +326,12 @@ public:
     dir1 = w8(g1_rand(20)%4);
     dir2 = ((dir1+1)%4);
   }
-  //}}}
 
   void cleanup()
-  //{{{
   {
 	clear_unitlists();
-//    pf_ai_joe_cleanup.start();
-    //int i;
-    
-    //for (i=troop.size()-1; i>=0; i--)
-    //  if (!troop[i].alive())
-    //    troop.remove(i);
-//    pf_ai_joe_cleanup.stop();
   }
-  //}}}
+
 
   int next_spot()
   //{{{ sets next formation spot.. returns false if no more left
@@ -386,90 +360,7 @@ public:
     return 1;
   }
   //}}}
-/*
-  void guide_hero()
-  //{{{
-  {
-//    pf_ai_joe_guide_hero.start();
 
-    if (health()<=0)
-    {
-//#if 0
-//      if (build_mode == IDLE)
-//        build_mode = RESURRECT;
-//#endif      
-//      pf_ai_joe_cleanup.stop();
-      return;
-    }
-
-    if (ammo0()==0 && ammo1()==0 && ammo2()==0 && !reload)
-    {
-      
-//        jc fixme : send supertank to home base
-//      tx = map()->player_pad_info[player->get_player_num()].bases[0].x;
-//      ty = map()->player_pad_info[player->get_player_num()].bases[0].y;
-
-      
-//      send_convoy(commander()->convoy->global_id, tx, ty);
-//      reload = 1;
-      
-    }
-    
-    if (reload)
-    {
-      if (full0() && full1() && full2())
-        reload=0;
-
-      pf_ai_joe_cleanup.stop();
-      return;
-    }
-
-    if (!commander()->attack_target.valid())
-    {
-      commander()->find_target();
-      if (!commander()->attack_target.valid())
-      {
-        tx = g1_rand(50)%map_width()  + 0.5f;
-        ty = g1_rand(60)%map_height() + 0.5f;
-
-        deploy_unit(commander()->global_id, tx, ty);
-      }
-    }
-    else
-    {
-      g1_object_class *mp = commander()->attack_target.get();
-
-      if (mp)
-      {
-
-        i4_float dx,dy,angle, adiff;
-        
-        //this will obviously only be true if me->attack_target.ref != NULL    
-        dx = (mp->x - (commander()->x+commander()->turret->x));
-        dy = (mp->y - (commander()->y+commander()->turret->y));
-        
-        //aim the turet
-        
-        angle = i4_atan2(dy,dx);
-        i4_normalize_angle(angle);    
-        adiff = i4_angle_diff(commander()->base_angle, angle);
-
-        if (adiff<0.04)
-          if (mp->id == g1_supertank_type)
-            fire2() || fire1() || fire0();
-          else
-            fire1() || fire0();
-        if (angle>commander()->base_angle)
-          turn(adiff);
-        else
-          turn(-adiff);
-        strafe(0.4f);
-      }
-    }
-    
-    pf_ai_joe_guide_hero.stop();
-  }
-  */
 
   void guide_units()
 	  //{{{
@@ -525,9 +416,7 @@ public:
 					  {
 					  time[i]=15;
 					  }
-				  //doesn't work anymore
-				  //no clue where and what this definition once was.
-				  //deploy_unit(commander()->global_id,tx,ty);
+				  
 				  
 				  }
 			  }
@@ -539,8 +428,6 @@ public:
   //{{{
   {
     g1_team_api_class::object_built(id);
-
-    //build.add(unit(id));
   }
   
   virtual void object_added(g1_object_class *which, g1_object_class *toobj)
@@ -666,22 +553,7 @@ public:
       case INIT:
         //{{{
       {
-        /*jc fixme
-        w32 p = build_unit(unit_names[3]);  // rocket sentinel
-
-        if (p)
-        {
-          int i=troop.add(unit(p));
-          setup_production(troop[i].x(), troop[i].y());
-          int c=group.add(convoy(built_convoy_id()));
-          time.add(-1);
-
-          bx = prodx - dirx[dir1]*3;
-          by = prody - diry[dir1]*3;
-          send_convoy(built_convoy_id(), bx, by);
-          build_mode = INITWAIT;
-          build_wait = 50;
-        } */
+       
         build_mode = INITWAIT;
         build_wait = 50;
       } break;
@@ -695,7 +567,6 @@ public:
       case IDLE:
         //{{{
       {
-        //if (convoys.size()<100)
           build_mode = BUILD;
       } break;
         //}}}

@@ -346,16 +346,7 @@ void reset_decompressed_cache9(void);
 
 void r1_dx9_texture_class::uninit()
 {  
-  /*
-  while (!i4_async_reader::is_idle())
-	  {
-	  i4_thread_yield();//wait until nothing left in queue 
-	  //might bomb if a texture request is pending.
-	  }
-  i4_thread_sleep(10);
-  next_frame();//clears out the just finished requests and deletes memory
-  */
-
+  
   while (!i4_async_reader::is_idle())
 	  {
 	  i4_thread_sleep(1);//wait until nothing left in queue 
@@ -1456,8 +1447,8 @@ void r1_dx9_texture_class::next_frame()
   //if (finished_array.size()>0)
 //	i4_warning("Finished array size %d. Image List size %d", finished_array.size(),
 //	image_list.size());
-  //sw32 max_work=finished_array.size()>3?3:finished_array.size();
-  sw32 max_work=finished_array.size();
+  sw32 max_work=finished_array.size()>3?3:finished_array.size();
+  //sw32 max_work=finished_array.size();
   
   for (i=0; i<max_work; i++)
   {

@@ -214,7 +214,12 @@ g1_map_solver_class *g1_map_class::get_prefered_solver()
 			}
 		else if (sf==path_gref.get())
 			{
-			solvehint|=SF_FORCE_GRAPH|SF_USE_GRAPH;
+			//solvehint|=SF_FORCE_GRAPH|SF_USE_GRAPH;
+            solvehint|=SF_USE_GRAPH;
+            //if we have a graph AND a path, we start out by
+            //using the path, so we return null. 
+            if (solvehint&SF_USE_PATHS)
+                return 0;
 			return solvegraph;
 			}
 		solvehint|=SF_FORCE_MAP|SF_GRADE1|SF_USE_MAP;

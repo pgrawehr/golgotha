@@ -237,7 +237,7 @@ void g1_factory_class::think()
     {
       o->set_path(item.path);
       char msg[100];
-      sprintf(msg, "Vehicle advancing : %s", o->name());
+      sprintf(msg, "Vehicle advancing: %s", o->name());
       g1_player_man.show_message(msg, 0x00ff00, player_num);
     }
     else

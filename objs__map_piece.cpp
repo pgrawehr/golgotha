@@ -219,7 +219,8 @@ void g1_map_piece_class::add_team_flag()
 g1_map_solver_class *g1_map_piece_class::prefered_solver()
 	{
 	g1_map_solver_class *ms=0;
-	if (my_solver&&(solveparams&SF_OK)) return my_solver;
+	if (my_solver&&(solveparams&SF_OK)) 
+        return my_solver;
 	g1_map_class *map=g1_get_map();
 	ms=map->get_prefered_solver();
 	if (!(solveparams&SF_OK))
@@ -277,6 +278,8 @@ g1_map_piece_class::g1_map_piece_class(g1_object_type id,
   path_pos=0;
   path_sin=0;
   path_tan_phi=0;
+  terrain_height=0;
+  groundpitch=lgroundpitch=groundroll=lgroundroll=0;
   stagger=0;
   if (fp)
     fp->get_version(ver,data_size);
@@ -920,7 +923,8 @@ void g1_map_piece_class::advance_path()
 	  if (!my_solver) 
 		  my_solver=prefered_solver();
 	  }	  
-  if (my_solver) return;
+  if (my_solver) 
+      return;
 	  
   //g1_team_type type=g1_player_man.get(player_num)->get_team();
       
@@ -937,7 +941,7 @@ void g1_map_piece_class::advance_path()
     {
       g1_id_ref *r;
       for (r=path_to_follow; r->id && r->id!=next_path.id; r++);
-      if (r->id) r++;//Irgendetwas läuft hier schief.
+      if (r->id) r++;
       if (r->id)
         next_path=*r;
       else
@@ -1000,22 +1004,23 @@ void g1_map_piece_class::advance_path()
       link(from);
 	  return;
     }
-    //else
-    //{
-      //unoccupy_location();//I want to see these objects once!
-      //request_remove();
-    //}
+    
   }
-//  else//no more valid paths
-//	  {
-	  if (g1_get_map()->solvehint&SF_BOUND_FORCE)
-		  damage(0,health,i4_3d_vector(0,0,1));
-	  else
-		  {
-		  solveparams&= ~SF_USE_PATHS;//cannot use paths any longer
-		  enter_formation(FO_ENDPATH,0);
-		  }
-//	  }
+
+  if (g1_get_map()->solvehint&SF_BOUND_FORCE)
+	  damage(0,health,i4_3d_vector(0,0,1));
+  else
+	  {
+      if ((solveparams&SF_USE_PATHS)==0)
+          return; //we are already unlinked and/or have entered a formation
+	  solveparams&= ~SF_USE_PATHS;//cannot use paths any longer
+      unlink(); //Unlink from last edge, otherwise
+                //the units will move on top of each other
+                //at the end of the path (since coldet between
+                //two units on the path is disabled)
+	  enter_formation(FO_ENDPATH,0);
+	  }
+
 }
 
 void g1_map_piece_class::return_to_path()
