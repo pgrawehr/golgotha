@@ -477,6 +477,7 @@ i4_bool x11_input_class::create_window(sw32 x, sw32 y, w32 w, w32 h,
 
   int attribmask = CWColormap | CWBorderPixel;
   XSetWindowAttributes attribs;
+  ZeroMemory(&attribs,sizeof(XSetWindowAttributes));
   attribs.border_pixel = 0;
   attribs.colormap = tmpcmap;
 

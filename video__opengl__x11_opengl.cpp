@@ -221,13 +221,18 @@ XVisualInfo *i4_x11_opengl_display_class::find_visual() {
 
 	if (!input.display && !input.open_display())
 		return NULL;
-  XVisualInfo *v;
-  v = glXChooseVisual(input.display, DefaultScreen(input.display), glx_attribs);
+  XVisualInfo vis_info, *v;
+  input.screen_num=DefaultScreen(input.display);
+  v = glXChooseVisual(input.display, input.screen_num, glx_attribs);
   if (!v) {
 	i4_alert("X11 OpenGL renderer: no visual found with attribute list\n",100,NULL);
 	return NULL;
   }
-
+  vis_info.depth=v->depth;
+  vis_info.c_class=v->c_class;
+  XMatchVisualInfo(input.display, input.screen_num, vis_info.depth, vis_info.c_class, v);
+  //v->visual = vis_info.visual;
+  
   return v;
 }
 
