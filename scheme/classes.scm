@@ -106,16 +106,33 @@
 
 (def_class trigger_vars nil
   (range_when_activated   3.0     '(list_box 1.0 2.0 3.0 4.0 5.0 6.0))
-  (range_when_deactivated 4.0     '(list_box 1.0 2.0 3.0 4.0 5.0 6.0))
-  (who_can_trigger        'enemy '(list_box anyone team_mates enemy
-                                   supertanks enemy_supertanks))
+  ;;(range_when_deactivated 4.0     '(list_box 1.0 2.0 3.0 4.0 5.0 6.0))
+  (team_can_trigger        'everybody '(list_box everybody friend enemy))
+  (units_can_trigger        'anyone '(list_box anyone stank
+  					engineer bomb_truck ))
   (objects_to_trigger    (new object_ref_list))
-  (send_on_trigger       'on)
-  (send_on_untrigger     'off)
+  (send_on_enter       'enter) ;; use none to send no message
+  (send_on_leave       'leave) ;; use none to send no message
   (objects_in_range      (new object_ref_list))
-  (current_state         'on  '(list_box on off))
+  ;(current_state         'on  '(list_box on off))
+  (check_time            10) ;; check interval
+  (check_cur_time        0)  ;; current interval value.
 )
 
+(def_class switch_vars trigger_vars
+  (current_state        'on '(list_box on off))
+  (sendon_on           'on)
+  (sendon_off          'off)
+)
+
+(def_class toggable_switch_vars switch_vars
+;; for this type, current_state determines wheter switching is
+;; possible at all.
+  (toggle_state        'off '(list_box on off))
+)
+
+(def_class extended_trigger trigger_vars
+)
 
 (def_class garage_vars nil
   (can_build  '(electric_car peon_tank engineer 

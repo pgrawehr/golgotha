@@ -442,6 +442,8 @@ public:
 
   //! Remove yourself from the think-list. 
   //! This is an expensive function and should only be used if needed.
+  //! You usually only call this one just before you call request_remove().
+  //! Otherwise it's usually better just not to call request_think() any more.
   virtual void stop_thinking();
 
   //! Get some info about pos.
@@ -449,6 +451,7 @@ public:
 
   //! The name of the object type. 
   //! Use some descriptive name, as it's not only used internally!
+  //! Avoid using spaces in the name.
   char *name();
   
   //! Passes some messages around.
@@ -456,7 +459,10 @@ public:
                              li_object *message_params, 
                              li_environment *env) { return 0; }
 
-  //! Called for every object when you click 'ok' in the vars edit dialog for an object
+  //! Called for every object when you click 'ok' in the vars edit dialog for an object.
+  //! Carefully read what this means! This method is called for EVERY object
+  //! when the user clicks on ok in the edit dialog of ANY object. 
+  //! Therefore, you usually do something like if (who==this) in here.
   virtual void object_changed_by_editor(g1_object_class *who, li_class *old_values) {}
   virtual int get_chunk_names(char **&list) { return 0; }
 
@@ -487,8 +493,10 @@ public:
   //! Returns i4_T if this object can build objects of the given type.
   virtual i4_bool build(int type)
 	  {return i4_F;};//can't build anything
+  //! Returns the color of the path used for objects of this building.
   virtual w32 get_path_color()
 	  {return 0xffa00000;}
+  //! Returns the color of the path used for objects of this building if selected.
   virtual w32 get_selected_path_color()
 	  {return 0xffff0000;}
 };
@@ -501,37 +509,46 @@ inline g1_object_chain_class *g1_object_chain_class::next_solid()
   else return next;
 }
 
-
+//! This enum contains the reasons why a build might fail. 
+//! Be aware that you cannot always depend on these, since build requests
+//! are usually queued. If inserting into the queue works, but later on
+//! we discover that we can't build anyway (i.e to few money) the build
+//! is postphoned. 
 enum eBuildError
 {
-  G1_BUILD_OK=0,                       // successful build
-  G1_BUILD_WAIT,                       // needs more time to build
-  G1_BUILD_TOO_EXPENSIVE,              // needs more money to build
-  G1_BUILD_OCCUPIED,                   // space to build is occupied
-  G1_BUILD_NO_SPACE,                   // no space to build
-  G1_BUILD_INVALID_OBJECT,             // invalid object or object parameters
-  G1_BUILD_ALREADY_EXISTS,             // unique object already exists
-  G1_BUILD_PLAYBACK,                   // playback in progress, can't build manually
+  G1_BUILD_OK=0,                       //< successful build
+  G1_BUILD_WAIT,                       //< needs more time to build
+  G1_BUILD_TOO_EXPENSIVE,              //< needs more money to build
+  G1_BUILD_OCCUPIED,                   //< space to build is occupied
+  G1_BUILD_NO_SPACE,                   //< no space to build
+  G1_BUILD_INVALID_OBJECT,             //< invalid object or object parameters
+  G1_BUILD_ALREADY_EXISTS,             //< unique object already exists
+  G1_BUILD_PLAYBACK,                   //< playback in progress, can't build manually
 };
 
 class g1_object_definition_class;
 
-// this is the call to add a new object_type to the game.
+//! This is the call to add a new object_type to the game.
 g1_object_type g1_add_object_type(g1_object_definition_class *def);
 
-// this is the call to find the object_type of a specified object
+//! This is the call to find the object_type of a specified object
 g1_object_type g1_get_object_type(const char *name);
 g1_object_type g1_get_object_type(li_symbol *name);
 
-// remove probably doesn't need to used during a normal game, but can be useful for
-// adding and removing a dll during a running session instead of restarting the game
+//! Remove an object from the list.
+//! Remove probably doesn't need to be used during a normal game, but can be useful for
+//! adding and removing a dll during a running session instead of restarting the game.
+//! It is automatically called for each dynamic object of a map on unloading or
+//! reloading of the level. 
 void g1_remove_object_type(g1_object_type type);
 
-
-// this class defines an object to golgotha, primarly how to create such an object and
-// load it from disk.  The object then has virtual functions that allow it do things like
-// think, save, and draw.  Objects can be created at anytime in the game, and should be
-// able to linked in through dlls.
+//! Object definition class. 
+//! This class defines an object to golgotha, primarly how to create such an object and
+//! load it from disk.  The object then has virtual functions that allow it do things like
+//! think, save, and draw.  Objects can be created at anytime in the game, and should be
+//! able to be linked in through dlls or created dynamically using lisp code. 
+//! In the current implementation, you should avoid adding dynamic objects while
+//! a level is loaded.
 class g1_object_definition_class
 {
 protected:
@@ -543,20 +560,27 @@ protected:
   g1_damage_map_struct          *damage;     // loaded from scheme/balance.scm
 
 public:
+    //! Object type flags.
+    //! These flags define some properties of the object type. 
+    //! The members that start with TO_ are used for casting. 
+    //! If you have an instance of g1_object_class whose type has 
+    //! TO_MAP_PIECE set, you know that it is actually an instance
+    //! of g1_map_piece_class or a subclass of that one. 
   enum 
   {
-    EDITOR_SELECTABLE = (1<<0),      // object shows up in editor
-    DELETE_WITH_LEVEL = (1<<1),      // delete this type with the map
-    MOVABLE           = (1<<2),      // objects
-    TO_MAP_PIECE      = (1<<3),
+    EDITOR_SELECTABLE = (1<<0),      //< object shows up in editor
+    DELETE_WITH_LEVEL = (1<<1),      //< delete this type with the map objects
+    MOVABLE           = (1<<2),      //< The object can move
+    TO_MAP_PIECE      = (1<<3),      //< Can be cast to g1_map_piece_class. See above.
     TO_PLAYER_PIECE   = (1<<4),
     TO_DYNAMIC_OBJECT = (1<<5),
     TO_PATH_OBJECT    = (1<<6),
     TO_DECO_OBJECT    = (1<<7),
 	TO_FACTORY        = (1<<8),
 	TO_BUILDING       = (1<<9),
-    HAS_ALPHA         = (1<<10),      // if object has alpha polys it will draw after non-alpha objects
-	TO_MOVABLE_DYNAMIC_OBJECT = (1<<11)
+    HAS_ALPHA         = (1<<10),      //< if object has alpha polys it will draw after non-alpha objects
+	TO_MOVABLE_DYNAMIC_OBJECT = (1<<11),
+    TO_TRIGGER        = (1<<12)
   };
 
   special_function_type special_init_function;//used for dynamically created objects

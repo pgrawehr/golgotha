@@ -4835,13 +4835,14 @@ int li_class::get_offset(const li_class_member &c) const
   return ct->get_var_offset(li_get_symbol(c.name), 1);
 }
 
-
-
+//These are inlined on release builds. 
+#ifdef _DEBUG
 li_class *li_class::get(li_object *o, li_environment *env)
 { 
   check_type(o, ((li_class_type *)li_get_type(o->type()))->type, env);   
   return ((li_class *)o); 
 }
+
 
 li_class *li_class::get_all(li_object *o, li_environment *env)
 	{
@@ -4849,7 +4850,7 @@ li_class *li_class::get_all(li_object *o, li_environment *env)
 		return (li_class *)o;
 	return 0;
 	}
-
+#endif
 
 li_object *li_class::value(int member)
 {

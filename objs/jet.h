@@ -36,8 +36,9 @@ public:
 
   virtual void fire();
   virtual void think();
-  virtual void note_leave_range(g1_object_class *who, 
-                                g1_fire_range_type _range) {}
+  //This virtual function doesn't exist.
+  //virtual void note_leave_range(g1_object_class *who, 
+  //                              g1_fire_range_type _range) {}
   
   void damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir);
 };

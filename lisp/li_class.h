@@ -142,6 +142,7 @@ public:
   li_symbol *&get(li_symbol_class_member &c) { return symbol_value(member_offset(c, LI_SYMBOL)); }
   li_object *&get(li_class_member &c) { return object_value(member_offset(c)); }
   li_object *get_member(const char *member) {return value(member);}
+  li_object *get_member(li_class_member &c) {return value(c.name);}
   //WARN: The following function will give wrong results if used
   //on ints or floats.
   li_object *&get(const char *member){ return object_value(member_offset(member));}
@@ -154,12 +155,23 @@ public:
   void set(li_class_member &c, li_object *value) { set_value(member_offset(c), value); }
   li_object *set(char *member_name, li_object *value); // slow, but easy way to access data
 
-//#ifdef LI_TYPE_CHECK
+
+#ifdef _DEBUG
   static li_class *get(li_object *o, li_environment *env); 
   static li_class *get_all(li_object *o, li_environment *env);
-//#else
-//  static li_class *get(li_object *o, li_environment *env)  { return ((li_class *)o); }
-//#endif
+#else
+  static li_class *get(li_object *o, li_environment *env)
+      {
+      return (li_class*)o;
+      }
+  static li_class *get_all(li_object *o, li_environment *env)
+      {
+      if (li_get_type(o->type())->type==0)
+          return 0;
+      return (li_class*)o;
+      }
+#endif
+
 
 
 };

@@ -2846,6 +2846,10 @@ SOURCE=.\math\trig.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\objs\trigger.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\objs\trike.h
 # End Source File
 # Begin Source File
