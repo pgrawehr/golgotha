@@ -397,7 +397,7 @@ i4_bool i4_dx9_display_class::initialize_mode()
 	  dx9_common.present.BackBufferFormat=D3DFMT_UNKNOWN;
 	  dx9_common.present.BackBufferCount=1;
 	  dx9_common.present.MultiSampleType=D3DMULTISAMPLE_NONE;
-	  dx9_common.present.SwapEffect= D3DSWAPEFFECT_FLIP;//D3DSWAPEFFECT_COPY;
+	  dx9_common.present.SwapEffect= D3DSWAPEFFECT_DISCARD;//D3DSWAPEFFECT_COPY;
 	  dx9_common.present.hDeviceWindow=input.get_window_handle();
 	  dx9_common.present.Windowed=TRUE;
 	  dx9_common.present.AutoDepthStencilFormat=D3DFMT_D16;

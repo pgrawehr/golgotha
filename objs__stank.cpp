@@ -1205,7 +1205,7 @@ void g1_player_piece_class::track_base(i4_float desired_angle)
 
 
 extern w32 g1_num_objs_in_view;
-extern i4_array<w32> g1_objs_in_view_dyn;
+extern i4_array<g1_object_class*> g1_objs_in_view_dyn;
 
 g1_object_class *g1_player_piece_class::find_view_target(const i4_3d_vector &view_pos,
                                                          const i4_3d_vector &view_dir,
@@ -1229,9 +1229,9 @@ g1_object_class *g1_player_piece_class::find_view_target(const i4_3d_vector &vie
   w32 objs_to_check=g1_num_objs_in_view>256?256:g1_num_objs_in_view;
   for (i=0;i<(int)objs_to_check;i++)
   {
-    if (g1_global_id.check_id(g1_objs_in_view_dyn[i]))
+    if (g1_objs_in_view_dyn[i])
     {
-      g1_object_class *p = g1_global_id.get(g1_objs_in_view_dyn[i]);
+      g1_object_class *p = g1_objs_in_view_dyn[i];
 
       if (p && can_attack(p) && p->get_flag(DANGEROUS) && p!=(g1_object_class *)this)
       {

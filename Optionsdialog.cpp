@@ -335,7 +335,7 @@ BOOL OptionsDialog::OnInitDialog()
 	//Set the slider to the base-2 log of the texture size
 	double lg2=log((double) i4_win32_startup_options.max_texture_quality)/log(2.0);
 	m_texture_quality.SetPos((int)lg2);
-	m_view_range.SetRange(50,100000,TRUE);
+	m_view_range.SetRange(50,300,TRUE);
 	m_view_range.SetPos(i4_win32_startup_options.max_view_distance);
 	m_view_range.SetPageSize(100);
 	m_view_range.SetLineSize(1);

@@ -26,7 +26,7 @@ void init_d3d_vert_buffer();
 r1_dx9_class r1_dx9_class_instance;
     
 i4_profile_class pf_dx9_use_texture("dx9::use_texture");
-i4_profile_class pf_dx9_vertex_setup("dx9::vertex_setup");
+//i4_profile_class pf_dx9_vertex_setup("dx9::vertex_setup");
 i4_profile_class pf_dx9_drawprimitive("dx9::drawprimitive");
 
 CR1_dx9_render_window_class::~CR1_dx9_render_window_class()
@@ -1141,7 +1141,7 @@ void r1_dx9_class::render_poly(int t_verts, r1_vert *verts)
 
   sw32 i;
 
-  pf_dx9_vertex_setup.start();
+  //pf_dx9_vertex_setup.start();
   if (color_tint_on)
   {
     for (i=0; i<t_verts; i++)
@@ -1153,7 +1153,7 @@ void r1_dx9_class::render_poly(int t_verts, r1_vert *verts)
   }
   
   make_d3d_verts(r1_dx9_tmp_verts+used_verts9,verts,this,t_verts);
-  pf_dx9_vertex_setup.stop();
+  //pf_dx9_vertex_setup.stop();
 
 #ifdef USE_BUFFER  
   

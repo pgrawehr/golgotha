@@ -59,8 +59,8 @@ static const i4_float div_table[] =
 
 static i4_profile_class pf_map_fast("map_fast"), 
   pf_calc_map_lod("calc_map_lod"),
-  pf_gather_objects("gather_objects"),
-  pf_draw_tri("draw_tri");
+  pf_gather_objects("gather_objects");
+  //pf_draw_tri("draw_tri");
 
 
 i4_image_class *render_map_section(int x1, int y1, int x2, int y2, int im_w, int im_h);
@@ -468,7 +468,7 @@ w32                g1_num_objs_in_view = 0;
 r1_vert temp_buf_1[9];
 r1_vert temp_buf_2[9];
 
-i4_array<w32> g1_objs_in_view_dyn(0, g1_max_objs_in_view);
+i4_array<g1_object_class *> g1_objs_in_view_dyn(0, g1_max_objs_in_view);
 i4_array<i4_transform_class> g1_obj_transforms_in_view(0, g1_max_objs_in_view);
 class transform_killer_class : public i4_init_class
 {
@@ -481,16 +481,19 @@ class transform_killer_class : public i4_init_class
 	  }
 } transform_killer;
 
-
-i4_bool g1_draw_tri(r1_vert *points, 
+static r1_texture_handle last_texture=0;
+static sw32 last_texture_size=0;
+static w32 num_terrain_polys=0;
+static i4_bool g1_draw_tri(r1_vert *points, 
                            w16 a, w16 b, w16 c,
                            r1_texture_handle texture, w16 clip=1)
 //{{{
 {
-  pf_draw_tri.start();
+  //pf_draw_tri.start();
 
-  g1_stat_counter.increment(g1_statistics_counter_class::TERRAIN_POLYS);            
-  g1_stat_counter.increment(g1_statistics_counter_class::TOTAL_POLYS);
+  //g1_stat_counter.increment(g1_statistics_counter_class::TERRAIN_POLYS);            
+  //g1_stat_counter.increment(g1_statistics_counter_class::TOTAL_POLYS);
+  num_terrain_polys++;
 
   i4_bool ret = i4_F;
   r1_render_api_class *api = g1_render.r_api;
@@ -517,7 +520,7 @@ i4_bool g1_draw_tri(r1_vert *points,
   normal.cross(vt2,vt1);
   if (normal.dot(clipped_poly[b].v)>0)
   {
-    pf_draw_tri.stop();
+    //pf_draw_tri.stop();
     return i4_F;
   }
 
@@ -566,7 +569,10 @@ i4_bool g1_draw_tri(r1_vert *points,
     if (texture)
     {
       sw32 texture_size=i4_f_to_i(g1_render.center_x * near_w * 0.5f * 0.5f);
-      api->use_texture(texture, texture_size, 0);
+      if ((texture!=last_texture)||(texture_size>last_texture_size))
+        api->use_texture(texture, texture_size, 0);
+      last_texture=texture;
+      last_texture_size=texture_size;
     }
 
     if (g1_render.draw_mode==g1_render_class::WIREFRAME)
@@ -590,7 +596,7 @@ i4_bool g1_draw_tri(r1_vert *points,
     ret = i4_T;
   }
 
-  pf_draw_tri.stop();
+  //pf_draw_tri.stop();
   return ret;
 }
 
@@ -618,11 +624,12 @@ static void gather_objects(int x1, int y1, int x2, int y2)
           //{              
           
             //g1_objs_in_view[g1_num_objs_in_view] = obj->global_id;
-			if (obj->global_id)//these are "Managed"
+			if (obj->global_id)
+                //otherwise they are "Managed"
 				//meaning that somebody else (a "parent") is supposed
 				//to draw them
 				{
-				g1_objs_in_view_dyn.add(obj->global_id);
+				g1_objs_in_view_dyn.add(obj);
 				obj->world_transform = g1_obj_transforms_in_view.add();
           
 				g1_num_objs_in_view++;
@@ -694,7 +701,8 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
   //optimize for SPEEEEED.
   r1_render_api_class *api = g1_render.r_api;
   i4_transform_class t(*context->transform);
-  context->dtransform=new i4_dtransform_class(*context->transform);
+  //we corrently don't need this one. 
+  //context->dtransform=new i4_dtransform_class(*context->transform);
   i4_3d_vector pos;
 
 
@@ -716,6 +724,9 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
   g1_map_cell_class *map_cell;
   const float u_s[4]={0,1,1,0},v_s[4]={1,1,0,0};
   r1_texture_handle han=0;
+  last_texture=0;
+  last_texture_size=0;
+  num_terrain_polys=0;
   sw32 mw_p1;
   i4_3d_vector mid;
   r1_vert poly[4];
@@ -726,6 +737,10 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
   li_class *old_this=li_this;
   comp_t = *context->transform;
   g1_lod.last_context=0;
+  float scale_x=g1_render.scale_x;
+  float scale_y=g1_render.scale_y;
+  float center_x=g1_render.center_x;
+  float center_y=g1_render.center_y;
   for (j=0; j<g1_lod.num_quads; j++)
   {
     p= g1_lod.quad[j];
@@ -740,19 +755,19 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
     vt[2]=v + x2 + y2 * mw_p1;          
     vt[3]=v + x1 + y2 * mw_p1;          
 
-    vt[0]->transform(t, x1, y1, g1_render.scale_x,g1_render.scale_y);
-    vt[1]->transform(t, x2, y1, g1_render.scale_x,g1_render.scale_y);
-    vt[2]->transform(t, x2, y2, g1_render.scale_x,g1_render.scale_y);
-    vt[3]->transform(t, x1, y2, g1_render.scale_x,g1_render.scale_y);
+    vt[0]->transform(t, x1, y1, scale_x,scale_y);
+    vt[1]->transform(t, x2, y1, scale_x,scale_y);
+    vt[2]->transform(t, x2, y2, scale_x,scale_y);
+    vt[3]->transform(t, x1, y2, scale_x,scale_y);
 
     if (vt[0]->calc_clip_code()==0)
-      vt[0]->project(g1_render.center_x, g1_render.center_y);
+      vt[0]->project(center_x, center_y);
     if (vt[1]->calc_clip_code()==0)
-      vt[1]->project(g1_render.center_x, g1_render.center_y);
+      vt[1]->project(center_x, center_y);
     if (vt[2]->calc_clip_code()==0)
-      vt[2]->project(g1_render.center_x, g1_render.center_y);
+      vt[2]->project(center_x, center_y);
     if (vt[3]->calc_clip_code()==0)      
-      vt[3]->project(g1_render.center_x, g1_render.center_y);
+      vt[3]->project(center_x, center_y);
 
     // collect objects
     mid.set(i4_float(x2+x1)/2.0f,i4_float(y2+y1)/2.0f,i4_float(p->z2+p->z1)/2.0f);
@@ -849,12 +864,39 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
   //draw the objects BACK TO FRONT
   
   //qsort(g1_objs_in_view, g1_num_objs_in_view, sizeof(g1_objs_in_view[0]), object_compare);
-  g1_objs_in_view_dyn.sort(object_compare);
+
+  //TEST: Disabled for performance tests.
+  //We have a z-buffer, so all we really need to do is ensure
+  //objects with alpha get drawn last.
+  //this can be accomplished much faster than with qsort,
+  //because we only need to partition the set which is O(n), not O(n*log(n))
+  //This actually corresponds to doing one iteration of qsort.
+  //g1_objs_in_view_dyn.sort(object_compare);
+  int last_non_alpha=g1_num_objs_in_view-1;
+  while (last_non_alpha>=0&&
+      g1_objs_in_view_dyn[last_non_alpha]->get_type()->get_flag(g1_object_definition_class::HAS_ALPHA))
+      {
+      last_non_alpha--;
+      }
+  //this will iterate zero times in the rare cases ALL visible objects
+  //have alpha.
+  //this solution is not entirelly correct if multiple alpha objects overlap
+  g1_object_class *temp;
+  for (i=0;i<last_non_alpha;i++)
+      {
+      if (g1_objs_in_view_dyn[i]->get_type()->get_flag(g1_object_definition_class::HAS_ALPHA))
+          {
+          temp=g1_objs_in_view_dyn[i];
+          g1_objs_in_view_dyn[i]=g1_objs_in_view_dyn[last_non_alpha];
+          g1_objs_in_view_dyn[last_non_alpha]=temp;
+          last_non_alpha--;
+          }
+      }
   
-  
-  for (i=g1_num_objs_in_view-1;i>=0;i--)
+  //for (i=g1_num_objs_in_view-1;i>=0;i--)
+  for (i=0;i<g1_num_objs_in_view;i++)
   {
-    o=g1_global_id.checked_get(g1_objs_in_view_dyn[i]);
+    o=g1_objs_in_view_dyn[i];
     if (o)
     {
       li_this=o->vars;
@@ -871,7 +913,7 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
   {
     for (i=g1_num_objs_in_view-1;i>=0;i--)
     {
-      o=g1_global_id.checked_get(g1_objs_in_view_dyn[i]);
+      o=g1_objs_in_view_dyn[i];
       if (o)
       {
         li_this=o->vars;
@@ -904,9 +946,12 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
   }
 
   g1_stat_counter.increment(g1_statistics_counter_class::FRAMES);
-
-  delete context->dtransform;
-  context->dtransform=0;
+  g1_stat_counter.add(g1_statistics_counter_class::TERRAIN_POLYS,
+      num_terrain_polys);
+  g1_stat_counter.add(g1_statistics_counter_class::TOTAL_POLYS,
+      num_terrain_polys);
+  //delete context->dtransform;
+  //context->dtransform=0;
 
   pf_map_fast.stop();
 }
