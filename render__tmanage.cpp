@@ -2905,22 +2905,41 @@ r1_texture_handle r1_texture_manager_class::register_image(i4_image_class *image
   memset(&new_entry,0,sizeof(r1_texture_entry_struct));
 
 
-  const i4_pal *put_pal=i4_pal_man.register_pal(&regular_format);
+ /* const i4_pal *put_pal=0;
+  put_pal=i4_pal_man.register_pal(&regular_format);
   if (image->pal->source.alpha_bits)
   {
     put_pal=i4_pal_man.register_pal(&alpha_format);
     new_entry.flags|=R1_MIP_IS_ALPHATEXTURE;
   }
+  if (this->default_texture_flags&R1_MIPFLAGS_USE24)
+  {
+	  put_pal=i4_pal_man.register_pal(&reg24_format);
+	  if (image->pal->source.alpha_bits)
+	  {
+		  put_pal=i4_pal_man.register_pal(&alpha32_format);
+		  new_entry.flags|=R1_MIP_IS_ALPHATEXTURE;
+	  }
+  }
+  if (this->default_texture_flags&R1_MIPFLAGS_USE32)
+  {
+	  put_pal=i4_pal_man.register_pal(&reg32_format);
+	  if (image->pal->source.alpha_bits)
+	  {
+		  put_pal=i4_pal_man.register_pal(&alpha32_format);
+		  new_entry.flags|=R1_MIP_IS_ALPHATEXTURE;
+	  }
+  }*/
 
 
-  i4_image_class *temp_image    = i4_create_image(image->width(),image->height(), put_pal);
+  i4_image_class *temp_image    = i4_create_image(image->width(),image->height(), image->pal);
   i4_image_class *texture_image = temp_image;
   
   image->put_image(temp_image,0,0,context);
   
   if (new_width != temp_image->width() || new_height != temp_image->height())
   {
-    texture_image = i4_create_image(new_width,new_height, put_pal);
+    texture_image = i4_create_image(new_width,new_height, image->pal);
     
     sw32 old_width  = temp_image->width();
     sw32 old_height = temp_image->height();

@@ -752,10 +752,13 @@ i4_bool r1_dx9_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 		const i4_pal *p=i4_current_app->get_display()->get_palette();//the 32bit pal
 		for (i=0;i<mip->width*mip->height;i++)
 			{
-			load_info->src_file->read_8();//dummy
+			//The order here is a bit strange (argb backwards).
+			//I don't know why it should be like this (testing shows it's right on my system,
+			//but it might as well be hardware dependent)
 			b=load_info->src_file->read_8();
 			g=load_info->src_file->read_8();
 			r=load_info->src_file->read_8();
+			load_info->src_file->read_8();//dummy read to skip alpha
 			co=p->convert(r<<16|g<<8|b,&regular_format);
 			tex[i]=(w16)co;
 			}
