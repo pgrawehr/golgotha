@@ -1,0 +1,131 @@
+Hints
+
+Checkout:
+
+Todo:
+A missing gmod file should give a visible alert, not only a silent one. Golg crashes
+with unexspected messages if one of these files are missing. Silent Message: 
+"Alert: File missing: xxxx.gmod"
+
+
+Check operation of software renderer under unix.
+Fix transparency and alpha of softrenderer.
+Fix window sizing bug of dd_softrenderer
+Check that golg works on winnt4.
+
+Remove self-modifying code.
+Done.
+
+Implement correct options to use gdi only mode. 
+Working.
+
+Recheck linux build with new error window. 
+
+Fix error in list processing of objs__path_object. 
+Fix error that causes ai to fail on sgi (where else?).
+These two errors were related and have been fixed. See Source Safe History of golg__saver.cpp for more details.
+ 
+Fix display refresh on X. 
+
+
+------
+Senseful profile flags
+/EXCALL /INC objs__car.obj /INC transport__loader.obj /INC objs__map_piece.obj /INC golg__g1_object.obj /INC golg__human.obj /INC objs__path_object.obj
+
+Transport-Sim, current state (no start-time change)
+First day: Last car arrives at 12:22, 43824337 seconds travel time used.
+Third day: Last arrival at 12:11, 41515295 seconds used 
+Fourth day: Last arrival at 11:53, 38795006 seconds used
+5. : 11:45, 36844695 s
+6. : 11:22, 33145556 s
+7. : 10:58, 28395209 s
+On day 10, the latest car arrived at 10:26.
+The total amount of time used is 23117277.000000.
+On day 11, the latest car arrived at 10:24.
+The total amout of time used is 22995959.000000.
+On day 12, the latest car arrived at 10:18.
+The total amout of time used is 21712626.000000.
+On day 13, the latest car arrived at 10:17.
+The total amout of time used is 21550365.000000.
+On day 14, the latest car arrived at 10:15.
+The total amout of time used is 21193815.000000.
+On day 15, the latest car arrived at 10:11.
+The total amout of time used is 20312905.000000.
+On day 16, the latest car arrived at 10:09.
+The total amout of time used is 19689477.000000.
+On day 17, the latest car arrived at 10:05.
+The total amout of time used is 19728549.000000.
+On day 18, the latest car arrived at 10:04.
+The total amout of time used is 20225023.000000.
+On day 19, the latest car arrived at 10:02.
+The total amout of time used is 19652944.000000.
+On day 20, the latest car arrived at 10:02.
+The total amout of time used is 19663887.000000.
+On day 21, the latest car arrived at 10:03.
+The total amout of time used is 19820457.000000.
+Tomorrow, simulation starts at 7:26.
+On day 25, the latest car arrived at 10:08
+The total amount of time used is 20351440.
+(continue at axhausen10.level)
+
+With start time replaning:
+On day 1, the latest car arrived at 12:47.
+The total amout of time used is 49200062.000000.
+Tomorrow, simulation starts at 5:35.
+On day 2, the latest car arrived at 12:28.
+The total amout of time used is 41354014.000000.
+Tomorrow, simulation starts at 3:48.
+On day 3, the latest car arrived at 12:06.
+The total amout of time used is 34618714.000000.
+Tomorrow, simulation starts at 3:47.
+
+APPLY_WAVE_FUNCTION, zusammen mit g1_tile_class::friction_fraction. Wann wird diese gesetzt?
+
+g1_object_class::get_min_health() für Objekte (etwa Moneyplane) die explodieren, obwohl health noch
+grösser als 0 ist.
+implementiert.
+
+SELECTABLE flag bei allen Einheiten richtig setzen.
+Sollte stimmen.
+
+cobra_tank "beleben"
+
+music__stream.cpp und loaders__mp3... so umschreiben, dass eine mp3-datei
+auch als stream abgespielt werden kann. Siehe auch mp3_2_wav in lisp__setup.cpp
+Alternative: Code komplett entfernen (Rechtliche Situation?)
+
+Gebäude wählen können.
+Zur Zeit geringe Priorität.
+
+Befehle zuordnen.
+Grundsätzliches API vorhanden, noch wenig sinnvolle Befehle, keine Symbole.
+
+Flugzeuge mit Pfadwahl versehen.
+Teilweise OK.
+
+Die Verkehrssimulation implementieren durch skalieren der Objekte. Das einfachste wird sein, 
+die Objekte beim Laden entsprechend zu skalieren, um auch die Kollisionserkennung anzupassen.
+Grundsätzlich OK, Tests nötig. Kameraposition im Stank, Geschwindigkeit, etc müssen auch angepasst werden.
+
+Wie funktioniert die Graphen-solver-Klasse?
+
+Beim nächsten BUILD (Anpassung von G1_LIMITS):
+Evtl. Richtung des STACK-Growth eintragen in arch.h
+G1_MAX_OBJECTS anpassen
+map.h make_obj_list() mit zusätzlichem Parameter (Filter) versehen.
+g1_saver_class: global_ids must always support 32 bit.
+
+Possible problem: Must not update display while saving (done by progress bar)
+This probably solved the "array index out of bound" error on large maps.
+
+Ich sollte mich nochmals um golg__solvemap_astar kümmern. Vermutlich lassen sich die Probleme
+lösen.
+
+Global_ids können nun 0 sein, wenn das objekt keine ID braucht. Es sollte dann aber extern verwaltet werden, 
+d.h. nicht allein auf der Karte erscheinen. Make_obj_list()/3 sollte normalerweise keine Objekte liefern
+die ungültige ID's haben. Mit make-obj_list()/4 kann man sie aber trotzdem abholen.
+Funktioniert noch nicht richtig.
+
+Der Wert von used_path_len für normale Objekte muss vermutlich erhöht werden.
+
+
