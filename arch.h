@@ -172,7 +172,7 @@ enum  { i4_F=0,
 typedef w64 wptr;
 typedef sw64 swptr;
 #else
-#ifdef _WINDOWS
+#if defined (_MSC_VER) && (_MSC_VER>=1300)
 typedef __w64 unsigned long wptr;
 typedef __w64 signed long swptr;
 #else

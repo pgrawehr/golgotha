@@ -360,9 +360,15 @@ void r1_dx9_texture_class::uninit()
 	  {
 	  i4_thread_sleep(1);//wait until nothing left in queue 
 	  //might bomb if a texture request is pending.
+      next_frame();
 	  }
   i4_thread_sleep(10);
   next_frame();
+  while (finished_array.size()>0)
+      {
+      next_frame();
+      i4_thread_sleep(20);
+      }
   reset_decompressed_cache9();
   r1_texture_manager_class::uninit();
   if (tex_no_heap)
@@ -909,6 +915,7 @@ void r1_dx9_texture_class::async_load_finished(used_node *u)
 	int x=0;
 	w32 tex_by;
 	r1_image_list_struct *ils=0;
+    I4_ASSERT(u->mip->entry!=0,"SEVERE: Texture manager internal inconsistency");
   if (u->mip->flags & R1_MIPLEVEL_LOAD_JPG)
 	  {
 	  i4_ram_file_class *rp=new i4_ram_file_class(u->data,u->async_fp->size());
@@ -1449,7 +1456,8 @@ void r1_dx9_texture_class::next_frame()
   //if (finished_array.size()>0)
 //	i4_warning("Finished array size %d. Image List size %d", finished_array.size(),
 //	image_list.size());
-  sw32 max_work=finished_array.size()>3?3:finished_array.size();
+  //sw32 max_work=finished_array.size()>3?3:finished_array.size();
+  sw32 max_work=finished_array.size();
   
   for (i=0; i<max_work; i++)
   {

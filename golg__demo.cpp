@@ -24,7 +24,7 @@
 #include "file/sub_section.h"
 //#include "file/get_filename.h"
 //#include "device/kernel.h"
-#include "menu.h"
+#include "g1_menu.h"
 #include "cwin_man.h"
 //#include "mess_id.h"
 /*

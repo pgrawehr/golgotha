@@ -8,7 +8,7 @@
 
 #include "pch.h"
 #include "loaders/load.h"
-#include "menu.h"
+#include "g1_menu.h"
 #include "image/image.h"
 #include "window/style.h"
 #include "device/event.h"

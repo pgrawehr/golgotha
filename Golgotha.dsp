@@ -1754,6 +1754,10 @@ SOURCE=.\g1_limits.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\g1_menu.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\g1_object.h
 # End Source File
 # Begin Source File
@@ -2171,10 +2175,6 @@ SOURCE=.\maxtool\maxcomm.h
 # Begin Source File
 
 SOURCE=.\quantize\median.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\menu.h
 # End Source File
 # Begin Source File
 

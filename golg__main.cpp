@@ -17,7 +17,7 @@
 #include "player.h"
 #include "math/random.h"
 #include "resources.h"
-#include "menu.h"
+#include "g1_menu.h"
 #include "border_frame.h"
 #include "sound/sfx_id.h"
 #include "remove_man.h"

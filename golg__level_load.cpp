@@ -173,7 +173,14 @@ i4_bool g1_load_level(const i4_const_str &filename, int reload_textures_and_mode
     }
 	else
 		{
-		i4_error("WARNING: Cannot find scm file for current level. Strange things may happen.");
+		i4_error("WARNING: Cannot find scm file for current level. Strange things might happen.");
+        li_load("scheme/map_init.scm");
+        //Load a default scm file (it's actually the same as for test.level)
+        i4_str *rn=new i4_str("scheme/empty.scm");
+        res_file=i4_open(*rn);
+        g1_load_res_info(res_file,exclude_flags);
+        delete res_file;
+        delete rn;
 		}
   }
    
