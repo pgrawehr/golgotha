@@ -183,6 +183,7 @@ enum { I4_READ=1,
        I4_APPEND=4,
        I4_NO_BUFFER=8,
        I4_SUPPORT_ASYNC=16,  // this flag is needed if you intend to call async_read/write
+	   I4_OPEN_MASK=32-1,
 	   I4_NO_ERROR=32  //If this flag is set, no error message will be displayed to the user
 	                   //if the file can't be opened for writting. 
 };

@@ -1474,7 +1474,7 @@ public:
 	char drivebuf[5];
 	int res=0;
 	char *whatfor;//used for debugging.
-    switch (flags)
+    switch (flags&I4_OPEN_MASK)
     {
       case I4_READ: 
         f|=O_RDONLY;
@@ -1909,7 +1909,7 @@ public:
     }
 
 
-    switch (flags)
+    switch (flags&I4_OPEN_MASK)
     {
       case I4_READ | I4_APPEND :
       case I4_READ | I4_WRITE | I4_APPEND :
@@ -1936,7 +1936,7 @@ public:
         break;
 
       default: 
-        i4_warning("i4_file_class::Bad open flags!");
+		  i4_error("INTERNAL: i4_file_class::Bad open flags!");
         return NULL;     
     }
 
