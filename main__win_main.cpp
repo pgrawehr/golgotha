@@ -739,7 +739,7 @@ int main(int argc, char **argv)
   i4_global_argv=tmp;
   debug_init();
   inifile=0;
-  printf("Golgotha version %s loading.",GOLGOTHA_VERSION_STR);
+  printf("Golgotha version %s loading.\n",GOLGOTHA_VERSION_STR);
   inifile=new CDataFile("golgotha.ini");
   i4_win32_startup_options.check_option(argc,tmp);
   i4_main(argc,tmp);
@@ -748,7 +748,7 @@ int main(int argc, char **argv)
   delete inifile;
   inifile=0;
   free(tmp);
-  
+  printf("Golgotha has shut down properly.\n");
   return 0;
 }
 #endif
