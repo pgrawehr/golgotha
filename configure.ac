@@ -1,16 +1,16 @@
 # Process this file with autoconf to produce a configure script.
+AC_PREREQ([2.57])
 AC_INIT(Golgotha, V1.0.8.3 , golgotha@qbic.vipnet.ro)
 
 
-
 AC_CONFIG_SRCDIR([golg__main.cpp])
-#AC_PREREQ(2.57)
+#AC_CONFIG_AUX_DIR([.])
 AC_CONFIG_HEADER([config.h])
 
 
 # Checks for programs.
 AC_PROG_CXX([icc gcc34 gcc33 gcc32 gcc31 gcc30 gcc])
-AC_PROG_CC([gcc34 gcc33 gcc32 gcc31 gcc30 gcc])
+AC_PROG_CC([icc gcc34 gcc33 gcc32 gcc31 gcc30 gcc])
 AC_PROG_MAKE_SET
 AC_PROG_CPP
 AC_LANG([C++])
@@ -41,6 +41,8 @@ AC_CHECK_LIB([c_r], [open])
 # FIXME: Replace `main' with a function in `-lm':
 #AC_CHECK_LIB([m], [sqrt])
 AC_CHECK_LIB([cipher],[encrypt])
+AC_CHECK_LIB([pthread], [pthread_mutexattr_setkind_np])
+AC_CHECK_LIB([pthread], [pthread_mutexattr_settype])
 
 if test "$with_x" = no; then
 AC_MSG_ERROR([Golgotha requires the X window system to compile and run.
@@ -106,7 +108,7 @@ int main(void)
 AC_DEFINE([HAVE_PTHREAD_MUTEX_RECURSIVE],1,"How to set recursive mutexes?")
 ac_cv_mutex_recursive1=PTHREAD_MUTEX_RECURSIVE
 ])
-if test $ac_cv_mutex_recursive1 = default; then
+if test $ac_cv_mutex_recursive1 = unknown; then
 AC_COMPILE_IFELSE(
 [
 #include <pthread.h>
@@ -123,7 +125,7 @@ ac_cv_mutex_recursive1=PTHREAD_MUTEX_RECURSIVE_NP
 fi
 AC_MSG_RESULT([$ac_cv_mutex_recursive1])
 AC_MSG_CHECKING([how to set mutexes recursive])
-ac_cv_mutex_recursive2="unknown"
+ac_cv_mutex_recursive2=unknown
 AC_COMPILE_IFELSE(
 [#include <pthread.h>
 int main(void)
@@ -149,6 +151,47 @@ AC_DEFINE([HAVE_PTHREAD_MUTEXATTR_SETTYPE],1,"settype")
 ac_cv_mutex_recursive2="settype"
 ])
 AC_MSG_RESULT([$ac_cv_mutex_recursive2])
+
+#second try.
+if test $ac_cv_mutex_recursive2 = unknown; then
+AC_MSG_CHECKING([wheter defining it helps])
+AC_MSG_RESULT([maybe])
+AC_MSG_CHECKING([how to set mutexes recursive])
+ac_cv_mutex_recursive2=unknown
+AC_LINK_IFELSE(
+[#include <pthread.h>
+extern "C" int pthread_mutexattr_setkind_np(void *attr, int __kind);
+int main(void)
+{
+  pthread_mutexattr_t attr;
+  pthread_mutexattr_init(&attr);
+  pthread_mutexattr_setkind_np(&attr,$ac_cv_mutex_recursive1);
+}
+],
+[AC_DEFINE([HAVE_PTHREAD_MUTEXATTR_SETKIND_NP],1,"setkind")
+AC_DEFINE([NEED_PTHREAD_MUTEXATTR_SETKIND_NP_DEF],1,
+"We need to manualy declare a function")
+ac_cv_mutex_recursive2="setkind_np"
+])
+if test $ac_cv_mutex_recursive2 = unknown; then
+AC_LINK_IFELSE(
+[#include <pthread.h>
+extern "C" int pthread_mutexattr_settype(void *attr, int __kind);
+int main(void)
+{
+pthread_mutexattr_t attr;
+pthread_mutexattr_init(&attr);
+pthread_mutexattr_settype(&attr,$ac_cv_mutex_recursive1);
+}],
+[
+AC_DEFINE([HAVE_PTHREAD_MUTEXATTR_SETTYPE],1,"settype")
+AC_DEFINE([NEED_PTHREAD_MUTEXATTR_SETTYPE_DEF],1,"need pthread mutexattr def")
+ac_cv_mutex_recursive2="settype"
+])
+fi
+AC_MSG_RESULT([$ac_cv_mutex_recursive2])
+fi
+
 AC_SUBST(debug_or_release)
 debug_or_release="release"
 AC_MSG_CHECKING([for --with-debug flag])

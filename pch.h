@@ -153,6 +153,13 @@
 #error Initializer for recursive mutexes not found. 
 #endif
 
+#ifdef NEED_PTHREAD_MUTEXATTR_SETKIND_NP_DEF
+extern "C" int pthread_mutexattr_setkind_np(void *attr, int __kind);
+#endif
+#ifdef NEED_PTHREAD_MUTEXATTR_SETTYPE_DEF
+extern "C" int pthread_mutexattr_settype(void *attr, int __kind);
+#endif
+
 #ifdef HAVE_PTHREAD_MUTEXATTR_SETKIND_NP
 #define I4_MUTEX_SETTYPE(a,b) pthread_mutexattr_setkind_np((a),(b))
 #else

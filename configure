@@ -1300,8 +1300,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-
-#AC_PREREQ(2.57)
+#AC_CONFIG_AUX_DIR([.])
           ac_config_headers="$ac_config_headers config.h"
 
 
@@ -1836,7 +1835,7 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 if test -n "$ac_tool_prefix"; then
-  for ac_prog in gcc34 gcc33 gcc32 gcc31 gcc30 gcc
+  for ac_prog in icc gcc34 gcc33 gcc32 gcc31 gcc30 gcc
   do
     # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
 set dummy $ac_tool_prefix$ac_prog; ac_word=$2
@@ -1878,7 +1877,7 @@ fi
 fi
 if test -z "$CC"; then
   ac_ct_CC=$CC
-  for ac_prog in gcc34 gcc33 gcc32 gcc31 gcc30 gcc
+  for ac_prog in icc gcc34 gcc33 gcc32 gcc31 gcc30 gcc
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -4272,6 +4271,134 @@ if test $ac_cv_lib_cipher_encrypt = yes; then
 _ACEOF
 
   LIBS="-lcipher $LIBS"
+
+fi
+
+
+echo "$as_me:$LINENO: checking for pthread_mutexattr_setkind_np in -lpthread" >&5
+echo $ECHO_N "checking for pthread_mutexattr_setkind_np in -lpthread... $ECHO_C" >&6
+if test "${ac_cv_lib_pthread_pthread_mutexattr_setkind_np+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lpthread  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char pthread_mutexattr_setkind_np ();
+int
+main ()
+{
+pthread_mutexattr_setkind_np ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_pthread_pthread_mutexattr_setkind_np=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_pthread_pthread_mutexattr_setkind_np=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_pthread_pthread_mutexattr_setkind_np" >&5
+echo "${ECHO_T}$ac_cv_lib_pthread_pthread_mutexattr_setkind_np" >&6
+if test $ac_cv_lib_pthread_pthread_mutexattr_setkind_np = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBPTHREAD 1
+_ACEOF
+
+  LIBS="-lpthread $LIBS"
+
+fi
+
+
+echo "$as_me:$LINENO: checking for pthread_mutexattr_settype in -lpthread" >&5
+echo $ECHO_N "checking for pthread_mutexattr_settype in -lpthread... $ECHO_C" >&6
+if test "${ac_cv_lib_pthread_pthread_mutexattr_settype+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lpthread  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char pthread_mutexattr_settype ();
+int
+main ()
+{
+pthread_mutexattr_settype ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_pthread_pthread_mutexattr_settype=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_pthread_pthread_mutexattr_settype=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_pthread_pthread_mutexattr_settype" >&5
+echo "${ECHO_T}$ac_cv_lib_pthread_pthread_mutexattr_settype" >&6
+if test $ac_cv_lib_pthread_pthread_mutexattr_settype = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBPTHREAD 1
+_ACEOF
+
+  LIBS="-lpthread $LIBS"
 
 fi
 
@@ -7918,7 +8045,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
-if test $ac_cv_mutex_recursive1 = default; then
+if test $ac_cv_mutex_recursive1 = unknown; then
 cat >conftest.$ac_ext <<_ACEOF
 
 #include <pthread.h>
@@ -7960,7 +8087,7 @@ echo "$as_me:$LINENO: result: $ac_cv_mutex_recursive1" >&5
 echo "${ECHO_T}$ac_cv_mutex_recursive1" >&6
 echo "$as_me:$LINENO: checking how to set mutexes recursive" >&5
 echo $ECHO_N "checking how to set mutexes recursive... $ECHO_C" >&6
-ac_cv_mutex_recursive2="unknown"
+ac_cv_mutex_recursive2=unknown
 cat >conftest.$ac_ext <<_ACEOF
 #include <pthread.h>
 int main(void)
@@ -8033,6 +8160,104 @@ fi
 rm -f conftest.$ac_objext conftest.$ac_ext
 echo "$as_me:$LINENO: result: $ac_cv_mutex_recursive2" >&5
 echo "${ECHO_T}$ac_cv_mutex_recursive2" >&6
+
+#second try.
+if test $ac_cv_mutex_recursive2 = unknown; then
+echo "$as_me:$LINENO: checking wheter defining it helps" >&5
+echo $ECHO_N "checking wheter defining it helps... $ECHO_C" >&6
+echo "$as_me:$LINENO: result: maybe" >&5
+echo "${ECHO_T}maybe" >&6
+echo "$as_me:$LINENO: checking how to set mutexes recursive" >&5
+echo $ECHO_N "checking how to set mutexes recursive... $ECHO_C" >&6
+ac_cv_mutex_recursive2=unknown
+cat >conftest.$ac_ext <<_ACEOF
+#include <pthread.h>
+extern "C" int pthread_mutexattr_setkind_np(void *attr, int __kind);
+int main(void)
+{
+  pthread_mutexattr_t attr;
+  pthread_mutexattr_init(&attr);
+  pthread_mutexattr_setkind_np(&attr,$ac_cv_mutex_recursive1);
+}
+
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PTHREAD_MUTEXATTR_SETKIND_NP 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define NEED_PTHREAD_MUTEXATTR_SETKIND_NP_DEF 1
+_ACEOF
+
+ac_cv_mutex_recursive2="setkind_np"
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+if test $ac_cv_mutex_recursive2 = unknown; then
+cat >conftest.$ac_ext <<_ACEOF
+#include <pthread.h>
+extern "C" int pthread_mutexattr_settype(void *attr, int __kind);
+int main(void)
+{
+pthread_mutexattr_t attr;
+pthread_mutexattr_init(&attr);
+pthread_mutexattr_settype(&attr,$ac_cv_mutex_recursive1);
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PTHREAD_MUTEXATTR_SETTYPE 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define NEED_PTHREAD_MUTEXATTR_SETTYPE_DEF 1
+_ACEOF
+
+ac_cv_mutex_recursive2="settype"
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_mutex_recursive2" >&5
+echo "${ECHO_T}$ac_cv_mutex_recursive2" >&6
+fi
+
 
 debug_or_release="release"
 echo "$as_me:$LINENO: checking for --with-debug flag" >&5
