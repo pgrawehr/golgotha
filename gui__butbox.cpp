@@ -127,7 +127,7 @@ void i4_button_group_class::note_reaction_sent(i4_menu_item_class *who,       //
 {
   i4_checkbox_class *but=(i4_checkbox_class *)who;
 
-  if (flags&i4_checkbox_class::TYPE_MASK!=i4_checkbox_class::CHECKBOX)
+  if ((flags&i4_checkbox_class::TYPE_MASK)!=i4_checkbox_class::CHECKBOX)
 	  {
 	  return;
 	  }
@@ -2517,10 +2517,10 @@ w32 i4_input_box(const i4_const_str &title, const i4_const_str &message, const i
   //                                          new i4_user_message_event_class(0), style);
   //i4_button_class *n=i4_simple_create_button(no, sd,
   //                                          new i4_user_message_event_class(1), style);
-  i4_text_window_class *t=new i4_text_window_class(message, style);
+  i4_text_window_class *t=new i4_text_window_class(message, style, 0, 300);
   w=t->width()+2;
   if (w<150) w=150;//avoid that the input-box gets to small. 
-  sd->inputwindow=new i4_text_input_class(style,preset,w-4,200,
+  sd->inputwindow=new i4_text_input_class(style,preset,w-4,300,
 	  sd);
   h+=sd->inputwindow->height()+4;
 
@@ -2626,7 +2626,7 @@ w32 i4_message_box(const i4_const_str &title, const i4_const_str &message, w32 f
   //                                          new i4_user_message_event_class(0), style);
   //i4_button_class *n=i4_simple_create_button(no, sd,
   //                                          new i4_user_message_event_class(1), style);
-  i4_text_window_class *t=new i4_text_window_class(message, style);
+  i4_text_window_class *t=new i4_text_window_class(message, style, 0, 300);
 
   w=t->width()+2;
   h+=t->height()+4;

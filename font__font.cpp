@@ -362,7 +362,12 @@ void i4_anti_proportional_font_class::put_string(i4_image_class *screen,
     for (i4_const_str::iterator p=string.begin(); p!=string.end(); ++p)
     {
       char ch=p.get().ascii_value();
-      if (offsets[ch])
+	  if (ch=='\n')
+	  {
+		  y+=height(ch);
+		  x=0;
+	  }
+      else if (offsets[ch])
       {
         aim->put_part(screen, x,y, offsets[ch], 0, offsets[ch]+widths[ch]-1, aim->height()-1, 
                       context);

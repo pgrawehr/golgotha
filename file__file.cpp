@@ -1551,11 +1551,14 @@ public:
 			//MessageBox(0,
 			//	"Unable to create a file in the current directory. Check wheter you have the correct permissions.",
 			//	"File system permission problem",MB_OK+MB_ICONSTOP+MB_SYSTEMMODAL);
-            i4_str msg("Unable to write to file %s. Check that you have appropriate permissions.");
-            i4_str *rmsg=msg.sprintf(200,name.c_str());
-            i4_message_box("File system permission problem",
-                *rmsg);
-            delete rmsg;
+			if (!(flags&I4_NO_ERROR))
+			{
+				i4_str msg("Unable to write to file %s. Check that you have appropriate permissions.");
+				i4_str *rmsg=msg.sprintf(200,name.c_str());
+				i4_message_box("File system permission problem",
+					*rmsg);
+				delete rmsg;
+			}
 			return NULL;
 			}
 		if (!get_first_cd_letter(drivebuf))
@@ -1950,11 +1953,14 @@ public:
 #ifdef file_load_debug
       i4_warning("i4_unix_file_class::open() failed for %s.",i4_os_string(name,buf,256));
 #endif
+	  if (!(flags&I4_NO_ERROR))
+	  {
       i4_str msg("Unable to write to file %s. Check that you have appropriate permissions.");
         i4_str *rmsg=msg.sprintf(200,name.c_str());
         i4_message_box("File system permission problem",
             *rmsg);
         delete rmsg;
+	  }
 		return NULL;
       }
 

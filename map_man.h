@@ -44,10 +44,10 @@ inline i4_bool g1_map_is_loaded()
 */
 inline g1_map_class *g1_get_map()
 {
-#ifdef DEBUG
-  if (!g1_current_map_PRIVATE)
-    i4_error("map missing");
-#endif
+//#ifdef _DEBUG
+//  if (!g1_current_map_PRIVATE)
+//    i4_error("map missing");
+//#endif
   return g1_current_map_PRIVATE;
 }
 

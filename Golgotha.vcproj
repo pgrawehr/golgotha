@@ -209,6 +209,9 @@
 				RelativePath=".\error__error.cpp">
 			</File>
 			<File
+				RelativePath=".\file__dialog.cpp">
+			</File>
+			<File
 				RelativePath=".\file__file.cpp">
 			</File>
 			<File
@@ -1704,10 +1707,10 @@
 				RelativePath=".\maxtool\max_object.h">
 			</File>
 			<File
-				RelativePath=".\maxcomm.h">
+				RelativePath=".\maxtool\maxcomm.h">
 			</File>
 			<File
-				RelativePath=".\maxtool\maxcomm.h">
+				RelativePath=".\maxcomm.h">
 			</File>
 			<File
 				RelativePath=".\quantize\median.h">
@@ -2110,9 +2113,6 @@
 			</File>
 			<File
 				RelativePath=".\StdAfx.h">
-			</File>
-			<File
-				RelativePath=".\memory\stlinc.h">
 			</File>
 			<File
 				RelativePath=".\string\str_checksum.h">

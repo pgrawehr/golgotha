@@ -9846,7 +9846,7 @@ void g1_editor_class::save_undo_info(w32 sections, i4_const_str &fname)
 
   changed();  // note that map is about to be changed so the user can save if they want
 
-  i4_file_class *fp=i4_open(fname, I4_WRITE);
+  i4_file_class *fp=i4_open(fname, I4_WRITE|I4_NO_ERROR);
   if (!fp)
   {
     i4_mkdir(g1_ges("undo_dir"));
