@@ -6,7 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
-/// \file string.h
+/// \file
 /// String Classes
 ///
 ///   Strings are hidden behind the two classes :

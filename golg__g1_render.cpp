@@ -291,7 +291,7 @@ static int g1_quad_sorter(g1_quad_class *const *a,
 	else return 1;
 	}
 
-void g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
+i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 											   g1_quad_object_class *obj,
 											   g1_vert_class *src_vert,
 											   i4_transform_class *tf, 
@@ -302,7 +302,10 @@ void g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 	g1_octree *oc=obj->octree;
 	//quads in frustrum
 	
-	oc->DrawOctree(tf,qif);
+	if (oc->DrawOctree(tf,qif,object_to_world?0:1)==i4_F)
+		{
+		return i4_F;
+		}
 	//now: We first sort qif, such that we can later drop duplicate
 	//quads.
 	//Then we iterate trough it and grab all the vertices
@@ -314,19 +317,21 @@ void g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 	//(which is very probable)
 	memset(t_vertices,0,(obj->num_vertex+1)*sizeof(r1_vert));
 	if (qif.empty())
-		return;//will break completelly out, as andcode is still 0xff
+		return i4_T;//will break completelly out, as andcode is still 0xff
 	qif.sort(g1_quad_sorter);
 	
 	g1_quad_class *curquad;
 	g1_vert_class *src_v=0;
 
 	i4_3d_vector t_light;
+
 	i4_float ar=0.5f,ag=0.5f,ab=0.5f;
 	
 	float dir_int=g1_lights.directional_intensity;
 	// get the ambient contribution from the map at the object's center point
 	
 	i4_3d_vector light = g1_lights.direction;
+	t_light=light;
 
 	if (object_to_world)
 		{
@@ -335,9 +340,8 @@ void g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 		get_ambient(object_to_world, ar,ag,ab);
 		object_to_world->inverse_transform_3x3(light,t_light);
 		}
-
 	
-
+		
 	for (int curquadidx=0;curquadidx<qif.size();curquadidx++)
 		{
 		curquad=qif[curquadidx];
@@ -387,6 +391,7 @@ void g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 			v->flags=1;
 			}
 		}
+	return i4_T;
 	}
 
 void g1_render_class::ensure_capacity(int num_vertices)
@@ -453,17 +458,18 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 	//if we have an octree, we need to iterate over a 
 	//limited set of polys and vertices only. 
 	i4_array<g1_quad_class*> qif(0,200);
+	i4_bool use_ot=i4_T;
 	if (obj->octree)
 		{
 		//hiddenly modificates the t_vertices array
-		prepare_octree_rendering(qif,obj,src_vert,
+		use_ot=prepare_octree_rendering(qif,obj,src_vert,
 			&view_transform,
 			object_to_world,
 			ANDCODE,ORCODE);
-		if (ANDCODE)
+		if (ANDCODE&&use_ot)
 			return;
 		}
-	else
+	if (!obj->octree || (use_ot==i4_F))
 		{
 		for (i=0; i<num_vertices; i++, src_v++, v++)
 			{
@@ -1622,6 +1628,63 @@ i4_bool g1_render_class::cube_in_frustrum(const i4_3d_point_class center,
 		return i4_T;
 	return i4_F;
 	}
+
+void g1_render_class::cube_in_frustrum(const i4_3d_point_class center,
+										  i4_float xsize,
+										  i4_float ysize,
+										  i4_float zsize,
+										  i4_transform_class *transform,
+										  w8 &ANDCODE,
+										  w8 &ORCODE)
+	{
+	//check wheter all 8 vertices of the cube lie on the same 
+	//side of the frustrum (otherwise, it might be that the cube
+	//is larger than the frustrum and we need to draw anyway)
+	//remember that we use this code to check all nodes of the octree,
+	//not only the leaves. And it is very probable that the root-node
+	//is REALLY large. 
+	i4_float xs=xsize/2;
+	i4_float ys=ysize/2;
+	i4_float zs=zsize/2;
+	//if the andcode becomes zero at one point, at least one part
+	//of the cube lies in the frustrum
+	ANDCODE=0xff;
+	ORCODE=0x0;
+	w8 code;
+	code=point_classify(i4_3d_point_class(center.x+xs,center.y+ys,center.z+zs),
+		transform);
+	ANDCODE&=code;
+	ORCODE|=code;
+	code=point_classify(i4_3d_point_class(center.x-xs,center.y+ys,center.z+zs),
+		transform);
+	ANDCODE&=code;
+	ORCODE|=code;
+	code=point_classify(i4_3d_point_class(center.x+xs,center.y-ys,center.z+zs),
+		transform);
+	ANDCODE&=code;
+	ORCODE|=code;
+	code=point_classify(i4_3d_point_class(center.x-xs,center.y-ys,center.z+zs),
+		transform);
+	ANDCODE&=code;
+	ORCODE|=code;
+	code=point_classify(i4_3d_point_class(center.x+xs,center.y+ys,center.z-zs),
+		transform);
+	ANDCODE&=code;
+	ORCODE|=code;
+	code=point_classify(i4_3d_point_class(center.x-xs,center.y+ys,center.z-zs),
+		transform);
+	ANDCODE&=code;
+	ORCODE|=code;
+	code=point_classify(i4_3d_point_class(center.x+xs,center.y-ys,center.z-zs),
+		transform);
+	ANDCODE&=code;
+	ORCODE|=code;
+	code=point_classify(i4_3d_point_class(center.x-xs,center.y-ys,center.z-zs),
+		transform);
+	
+	
+	}
+
 
 void g1_render_class::draw_rectangle(int sx1, int sy1, int sx2, int sy2, i4_color col,
                                      i4_draw_context_class &context)

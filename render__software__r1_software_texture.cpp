@@ -586,7 +586,8 @@ void r1_software_texture_class::free_mip(r1_vram_handle_type vram_handle)
   pf_software_free_vram.stop();
 }
 
-void r1_software_texture_class::select_texture(r1_vram_handle_type handle,
+void r1_software_texture_class::select_texture(
+										 r1_local_texture_handle_type handle,
                                          float &smul, float &tmul)
 {
   r1_tex_heap_used_node *u = (r1_tex_heap_used_node *)handle;

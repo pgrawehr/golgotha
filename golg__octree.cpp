@@ -1124,7 +1124,7 @@ void g1_octree::AssignTrianglesToNode(g1_quad_object_class *pWorld, int numberOf
 /////
 //////////////////////////////// DRAW OCTREE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads)
+i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads, int depth)
 {
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
@@ -1138,13 +1138,27 @@ i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads)
 	// Make sure a valid node was passed in, otherwise go back to the last node
 	if(!this) return i4_F;
 
-	// Check if the current node is in our frustum
-	//r1_vert v;
-	
-	if (!g1_render.cube_in_frustrum(m_vCenter,m_xWidth,m_yWidth, m_zWidth, transform))
+	if (depth==0)
 		{
-		return i4_F;
-		};
+		w8 andcode=0,orcode=0;
+		g1_render.cube_in_frustrum(m_vCenter,m_xWidth,m_yWidth,m_zWidth,
+			transform,andcode,orcode);
+		if (orcode==0) //All corners inside?
+			{
+			return i4_F;
+			}
+		if (andcode!=0)
+			return i4_T; //we can draw as octree, but don't need to do anything
+		}
+	else
+		{
+
+		// Check if the current node is (at least partially) in our frustum
+		if (!g1_render.cube_in_frustrum(m_vCenter,m_xWidth,m_yWidth, m_zWidth, transform))
+			{
+			return i4_T;
+			};
+		}
 
 
 	//if(!g_Frustum.CubeInFrustum(pNode->m_vCenter.x, pNode->m_vCenter.y, 
@@ -1169,14 +1183,14 @@ i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads)
 		//DrawOctree(pNode->m_pOctreeNodes[BOTTOM_LEFT_BACK],		pRootWorld);
 		//DrawOctree(pNode->m_pOctreeNodes[BOTTOM_RIGHT_BACK],	pRootWorld);
 		//DrawOctree(pNode->m_pOctreeNodes[BOTTOM_RIGHT_FRONT],	pRootWorld);
-		m_pOctreeNodes[TOP_LEFT_FRONT]->DrawOctree(transform,quads);
-		m_pOctreeNodes[TOP_LEFT_BACK]->DrawOctree(transform,quads);
-		m_pOctreeNodes[TOP_RIGHT_BACK]->DrawOctree(transform,quads);
-		m_pOctreeNodes[TOP_RIGHT_FRONT]->DrawOctree(transform,quads);
-		m_pOctreeNodes[BOTTOM_LEFT_FRONT]->DrawOctree(transform,quads);
-		m_pOctreeNodes[BOTTOM_LEFT_BACK]->DrawOctree(transform,quads);
-		m_pOctreeNodes[BOTTOM_RIGHT_BACK]->DrawOctree(transform,quads);
-		m_pOctreeNodes[BOTTOM_RIGHT_FRONT]->DrawOctree(transform,quads);
+		m_pOctreeNodes[TOP_LEFT_FRONT]->DrawOctree(transform,quads, depth+1);
+		m_pOctreeNodes[TOP_LEFT_BACK]->DrawOctree(transform,quads, depth+1);
+		m_pOctreeNodes[TOP_RIGHT_BACK]->DrawOctree(transform,quads, depth+1);
+		m_pOctreeNodes[TOP_RIGHT_FRONT]->DrawOctree(transform,quads, depth+1);
+		m_pOctreeNodes[BOTTOM_LEFT_FRONT]->DrawOctree(transform,quads, depth+1);
+		m_pOctreeNodes[BOTTOM_LEFT_BACK]->DrawOctree(transform,quads, depth+1);
+		m_pOctreeNodes[BOTTOM_RIGHT_BACK]->DrawOctree(transform,quads, depth+1);
+		m_pOctreeNodes[BOTTOM_RIGHT_FRONT]->DrawOctree(transform,quads, depth+1);
 		}
 	else
 		{

@@ -220,7 +220,7 @@ class g1_octree
 	/// a large number of duplicate entries.
 	/// \return i4_T if it makes sense to draw using the octree, false
 	/// if not. 
-	i4_bool DrawOctree(i4_transform_class *transform, g1_quadlist &quads);
+	i4_bool DrawOctree(i4_transform_class *transform, g1_quadlist &quads, int depth);
 
 	// This recursively creates a display list ID for every end node in the octree
 	//PG: We can't use display lists with the golg engine, so this

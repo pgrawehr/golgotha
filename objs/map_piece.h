@@ -155,7 +155,7 @@ public:
   void advance_path();//go to the next path node, starting from current node
   virtual void return_to_path();//go to the next node, starting from actual pos
   virtual i4_bool deploy_to(float x, float y, g1_path_handle ph);//go there using path-solving methods
-  void set_path(g1_path_class *path);//set a path specific for this unit
+  void set_path(g1_path_handle path);//set a path specific for this unit
   w32 follow_path();
 
   virtual short get_max_health() {return defaults->health;};

@@ -39,19 +39,22 @@ class radtablescalcer:public i4_init_class
 i4_profile_class g1_map_pf_check_collision("map::check_collision");
 
 /** 
-*Checks wheter a given object can move in the given direction
-*Returns True if a collision occured and false if not
+*Checks wheter a given object can move in the given direction.
+*Returns True if a collision occured and false if not.
 *the dx/dy values might be adjusted to something that works
 *after this function returns.
-@param x the x coordinate of this
-@param y the y coordinate of this
-@param dx the amount we want to go in x direction
-@param dy the amount we want to go in y direction
-@param _this the this pointer of the object being tested
-@param hit if a collision occured, this returns the other object
-@returns true for hit, false for miss.
+@param x The x coordinate of @a _this
+@param y The y coordinate of @a _this
+@param dx The amount we want to go in x direction
+@param dy The amount we want to go in y direction
+@param _this The this pointer of the object being tested
+@param hit If a collision occured, this returns the other object. 
+Be aware that it might be that this is not the only object that collides
+with the current one. 
+@param occupancy_radius The occupancy radius of _this. Passed as its
+own parameter for historical reasons. 
+@returns True for hit, False for miss.
 */
-
 /*Idee für verbesserten Algorithmus: Verwende Hashtabelle 
 mit bijektiv-konkateniertem Key je 2er Objekte um inkrementell
 den Abstand zwischen den zwei Objekten zu bestimmen. 

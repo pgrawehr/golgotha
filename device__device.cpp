@@ -471,8 +471,12 @@ void i4_kernel_device_class::unrequest_events(i4_event_handler_class *for_who, w
         
       
       if (!p)
-        //i4_error("unrequesting events & not installed");
-		return;//unrequesting something that has newer been requested, just ignore.
+		  {
+          //i4_error("unrequesting events & not installed");
+		  event_types>>=1;
+		  type++;
+		  continue;//unrequesting something that has newer been requested, just ignore.
+		  }
       else
       {
         //        for_who->dereference();

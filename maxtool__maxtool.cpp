@@ -54,7 +54,7 @@
 #include "mess_id.h"
 #include "editor/dialogs/debug_win.h"
 
-#include <string.h>
+//#include <string.h>
 
 #ifdef _WINDOWS
 //#include "render/dx5/r1_dx5.h"
@@ -64,7 +64,7 @@
 
 //int G1_HZ=10;
 
-#include <stdio.h>
+//#include <stdio.h>
 
 
 r1_render_api_class *api=0;
@@ -758,6 +758,11 @@ virtual void set_edit_mode(i4_bool yes_no){
 
   virtual void uninit()
 	  {
+	  //This needs to be done explicitly because set_edit_mode(false)
+	  //will not be called when the user quits directly from maxtool.
+	  i4_kernel.unrequest_events(this,
+							   i4_device_class::FLAG_DISPLAY_CHANGE|
+							   i4_device_class::FLAG_USER_MESSAGE);
 	  kill_obj();
 	  if (menu) delete menu;
 		  menu=0;

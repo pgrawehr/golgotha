@@ -514,7 +514,7 @@ void g1_object_controller_class::stop_scroll()
 }
 
 
-void g1_object_controller_class::scroll_message(const i4_const_str &m, w32 color)
+void g1_object_controller_class::scroll_message(const i4_const_str &m, i4_color color)
 {
   start_scroll();
 
@@ -1099,7 +1099,7 @@ void g1_object_controller_class::rotate(i4_float about_game_z, i4_float up_down)
   request_redraw(i4_F);
 }
 
-void g1_object_controller_class::scale(float x, float y, float z)
+void g1_object_controller_class::scale(i4_float x, i4_float y, i4_float z)
 	{
 	view.scale(x,y,z);
 	request_redraw(i4_F);

@@ -736,6 +736,7 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
   i4_array<g1_quad_class*> qif(0,400);
   if (draw_as_octree)
 	  {
+
 	  g1_render.prepare_octree_rendering(qif,m1_info.obj,src_vert,
 		  &transform,NULL,
 		  ANDCODE,ORCODE);

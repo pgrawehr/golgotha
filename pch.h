@@ -10,7 +10,7 @@
 #ifdef _WINDOWS
 //Those are needed only for windows
 //Stdafx includes windows.h
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <ddraw.h>
 //#include <d3d.h>
 #endif
