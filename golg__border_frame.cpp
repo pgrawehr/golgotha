@@ -58,11 +58,24 @@ S1_SFX(press_tab_to_switch_to_action_mode, "computer_voice/press_tab_to_switch_t
 
 class i4_profile_class pf_border_draw("border frame draw");
 
+void g1_amount_display_class::update(int new_amount, int max_amount)
+{
+	if (new_amount!=last_amount || last_max!=max_amount)
+	{
+		last_amount=new_amount;
+		last_max=max_amount;
+		request_redraw(i4_F);
+		if (parent)
+			parent->request_redraw();
+	}
+}
 
 void g1_amount_display_class::draw(i4_draw_context_class &context)
   {
     if (last_max==-1)
+	{
         return;
+	}
 
     if (refresh_as_text)
     {

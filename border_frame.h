@@ -153,17 +153,7 @@ public:
 
   g1_amount_display_class(char *image_name=0);
 
-  void update(int new_amount, int max_amount)
-  {
-    if (new_amount!=last_amount || last_max!=max_amount)
-    {
-      last_amount=new_amount;
-      last_max=max_amount;
-      request_redraw(i4_F);
-	  if (parent)
-		  parent->request_redraw();
-    }
-  }
+  void update(int new_amount, int max_amount);
 
   void draw(i4_draw_context_class &context);
 
