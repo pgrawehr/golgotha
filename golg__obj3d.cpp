@@ -184,14 +184,29 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
         while (curnode)
             {
             q=curnode->GetQuad(i);
-            den = q->normal.dot(ray);
-            if (den>=0)
-                // wrong direction, next quad
-                goto next_loop;
+			i4_3d_vector qnorm=q->normal;
+            den = qnorm.dot(ray);
+			if (den>=0)
+			{
+				// wrong direction, next quad
+				// if we aren't supposed to ignore this and draw the quad from both sides
+				if (q->flags&g1_quad_class::BOTHSIDED)
+				{
+					//Just inverse the normal vector and try again
+					qnorm=-qnorm;
+					den=qnorm.dot(ray);
+					//Cannot handle this case (isn't a problem, because ray and norm are paralell
+					//and cannot intersect)
+					if (den==0) 
+						goto next_loop;
+				}
+				else
+					goto next_loop;
+			}
         
             // find intersection point in polygon's plane
-            d = q->normal.dot(verts[q->vertex_ref[0]].v);
-            num = d - q->normal.dot(point);
+            d = qnorm.dot(verts[q->vertex_ref[0]].v);
+            num = d - qnorm.dot(point);
         
             //originally, the line t=num/den was before the following
             //line and we tested for t<0, but since we now here that
@@ -214,7 +229,7 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
         
             // determine orthogonal plane for 2D point in polygon test
         
-            abs_normal.set((float)fabs(q->normal.x), (float)fabs(q->normal.y), (float)fabs(q->normal.z));
+            abs_normal.set((float)fabs(qnorm.x), (float)fabs(qnorm.y), (float)fabs(qnorm.z));
         
             if (abs_normal.x>abs_normal.y && abs_normal.x>abs_normal.z)
                 {
@@ -275,7 +290,7 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
                 if (hit_poly) 
                     *hit_poly=i;
                 if (normal) 
-                    *normal=q->normal;
+                    *normal=qnorm;
                 hit = i4_T;
                 }
 next_loop:
@@ -297,14 +312,29 @@ next_loop:
         {
         for (i=0; i<num_quad; i++, q++)
             {
-            den = q->normal.dot(ray);
+			i4_3d_vector norm=q->normal;
+            den = norm.dot(ray);
             if (den>=0)
-                // wrong direction, next quad
-                continue;
+            {
+				// wrong direction, next quad
+				// if we aren't supposed to ignore this and draw the quad from both sides
+				if (q->flags&g1_quad_class::BOTHSIDED)
+				{
+					//Just inverse the normal vector and try again
+					norm=-norm;
+					den=norm.dot(ray);
+					//Cannot handle this case (isn't a problem, because ray and norm are paralell
+					//and cannot intersect)
+					if (den==0) 
+						continue;
+				}
+				else
+					continue;
+			}
         
             // find intersection point in polygon's plane
-            d = q->normal.dot(verts[q->vertex_ref[0]].v);
-            num = d - q->normal.dot(point);
+            d = norm.dot(verts[q->vertex_ref[0]].v);
+            num = d - norm.dot(point);
         
             //originally, the line t=num/den was before the following
             //line and we tested for t<0, but since we now here that
@@ -331,7 +361,7 @@ next_loop:
         
             // determine orthogonal plane for 2D point in polygon test
         
-            abs_normal.set((float)fabs(q->normal.x), (float)fabs(q->normal.y), (float)fabs(q->normal.z));
+            abs_normal.set((float)fabs(norm.x), (float)fabs(norm.y), (float)fabs(norm.z));
         
             if (abs_normal.x>abs_normal.y && abs_normal.x>abs_normal.z)
                 {
@@ -392,7 +422,7 @@ next_loop:
                 if (hit_poly) 
                     *hit_poly=i;
                 if (normal) 
-                    *normal=q->normal;
+                    *normal=norm;
                 hit = i4_T;
                 }
             }
@@ -417,6 +447,99 @@ i4_bool g1_quad_object_class::get_mount_point(char *name, i4_3d_vector& vect) co
   return i4_F;
 }
 
+
+void g1_quad_object_class::calc_quad_normal(g1_vert_class *v,
+											g1_quad_class &q)
+											//{{{
+{
+	// find the surface normal used for lighting and collision detection
+	i4_3d_point_class p[4];
+
+	for (w32 i=0; i<q.num_verts();  i++)
+		p[i]=v[q.vertex_ref[i]].v;
+
+	p[1] -= p[0];
+	p[2] -= p[0];
+
+	q.set_flags(g1_quad_class::INVALID_QUAD,0);
+	if (q.num_verts()==3)
+		q.normal.cross(p[1], p[2]);
+	else
+	{
+		i4_3d_vector normal1, normal2;
+
+		p[3] -= p[0];
+		normal1.cross(p[1], p[2]);
+		normal2.cross(p[2], p[3]);
+
+		i4_float len1 = normal1.length();
+		i4_float len2 = normal2.length();
+
+		if (len1>len2)
+			q.normal = normal1;
+		else
+			q.normal = normal2;
+
+		if (len1==0.0 || len2==0.0)
+			// bad normal lengths
+			q.set_flags(g1_quad_class::INVALID_QUAD);
+		else
+		{
+			normal1 /= len1;
+			normal2 /= len2;
+
+			if (normal1.dot(normal2)<0.5)
+				q.set_flags(g1_quad_class::INVALID_QUAD);
+		}
+	}
+
+	if (q.normal.x==0 && q.normal.y==0 && q.normal.z==0)
+	{
+		// 0 check - invalid polygon!
+		q.normal=i4_3d_vector(0,0,1);
+		q.set_flags(g1_quad_class::INVALID_QUAD);
+		// i4_warning("very invalid polygon detected!");
+	}
+	else
+		q.normal.normalize();
+}
+//}}}
+
+void g1_quad_object_class::calc_vert_normals()
+//{{{
+{
+	for (int a=0; a<num_animations; a++)
+	{
+		// calculate normal for each face
+		for (w32 i=0; i<num_quad; i++)
+			calc_quad_normal(get_verts(a,0), quad[i]);
+
+		for (w32 v=0; v<num_vertex; v++)
+		{
+			w32 t=0;
+			i4_3d_vector sum=i4_3d_vector(0,0,0);
+
+			for (w32 j=0; j<num_quad; j++)
+			{             
+				if (quad[j].vertex_ref[0]==v ||
+					quad[j].vertex_ref[1]==v ||
+					quad[j].vertex_ref[2]==v ||
+					quad[j].vertex_ref[3]==v)
+				{
+					t++;
+					sum+=quad[j].normal;
+				}      
+			}
+
+			if (sum.x==0 && sum.y==0 && sum.z==0)
+				sum.set(0,0,1);
+			else
+				sum.normalize();
+			(get_verts(a,0)+v)->normal=sum;
+		}
+	}
+}
+//}}}
 
 static i4_profile_class pf_load_tnames("models:load_tname");
 static i4_profile_class pf_load_quads("models:load_quads");
@@ -623,5 +746,6 @@ g1_quad_object_class *g1_base_object_loader_class::load(i4_loader_class *fp)
 
   return obj;
 }
+
 
 

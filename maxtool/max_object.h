@@ -25,14 +25,14 @@ class m1_poly_object_class : public g1_quad_object_class
   void save_mount_points(i4_saver_class *fp);
   void save_specials(i4_saver_class *fp);
   void save_octree(i4_saver_class *fp);
-  void calc_quad_normal(g1_vert_class *v, g1_quad_class &q);
+  
   
   g1_vert_class *vert_backup;
   i4_array<w32> vert_offsets;
 
 public:
   void calc_texture_scales();
-  void calc_vert_normals();
+  
   void backup_references();//for add() methods when adresses change.
   void restore_references();
 

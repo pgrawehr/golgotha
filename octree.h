@@ -2,6 +2,14 @@
 /*! \file octree.h
 The definition file for the octree classes.
 This file contains the declarations for creating octrees. 
+
+\par Disclaimer 
+This code has been adapted from an octree tutorial by \n
+Ben Humphrey (DigiBen) \n
+Game Programmer \n
+mailto:DigiBen@GameTutorials.com \n
+http://www.GameTutorials.com \n
+
 */
 
 #ifndef _OCTREE_H
@@ -275,6 +283,13 @@ class g1_octree
         return m_zWidth;
         }
 
+	void GetNodeSize(float &x, float &y, float &z) const
+	{
+		x=m_xWidth;
+		y=m_yWidth;
+		z=m_zWidth;
+	}
+
     i4_bool isLeaf() const
         {
         return !IsSubDivided();
@@ -291,10 +306,11 @@ class g1_octree
     /// Returns the Leaf node the point is in.
     /// The vector must already have been transformed to local coordinates.
     /// May return 0 if point is outside object. 
-    g1_octree *GetLeafAt(i4_3d_vector where);
+    g1_octree *GetLeafAt(i4_3d_vector where) const;
 
 protected:
     i4_bool PointInCube(i4_3d_vector p) const;
+	i4_bool RayShorterThanCubeSize(i4_3d_vector ray) const;
 private:
 
 	/// This tells us if we have divided this node into more sub nodes
@@ -318,32 +334,19 @@ protected:
 	/// This is the center (X, Y, Z) point in this node
 	i4_3d_vector m_vCenter;
 
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-	/// This holds all the scene information (verts, normals, texture info, etc..) for this node
+	/// This holds all the scene information (verts, normals, texture info, etc..) for this node.
+	/// It is actually a reference to the object this octree belongs to (the reference is needed
+	/// since we need to have access to the vertices and quads defined there. 
 	g1_quad_object_class *m_pWorld;
 
 	/// This stores a list of all the quads in this node.
 	i4_array<int>	m_pQuadList;
-
-	// This holds the display list ID for the current node, which increases the rendering speed
-	//int m_DisplayListID;
-
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-
 
 	/// These are the eight nodes branching down from this current node
 	g1_octree *m_pOctreeNodes[8];	
 };
 
 
-// This returns the cross product between 2 vectors
-//CVector3 Cross(CVector3 vVector1, CVector3 vVector2);
-
-// This returns the magnitude of a vector
-//float Magnitude(CVector3 vNormal);
-
-// This returns a normalized vector
-//CVector3 Normalize(CVector3 vVector);
 class i4_grow_heap_class;
 extern i4_grow_heap_class *g1_object_heap;
 
@@ -352,19 +355,3 @@ extern g1_octree_debug g_Debug;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// * QUICK NOTES * 
-//
-// This file added the new tFaceList structure, along with a couple functions
-// and member variables to the COctree class.  Most of the functions were changed
-// to handle a t3DModel instead of just pure vertices.  Since we are using display
-// lists, a bunch of display list data and functions were added.  
-//
-//
-// Ben Humphrey (DigiBen)
-// Game Programmer
-// DigiBen@GameTutorials.com
-// www.GameTutorials.com
-//
-//

@@ -16,11 +16,21 @@
 #define G1_WIN32_VECTOR_ASM
 #endif
 
-
+//! Main vector class.
+//! This is the vector class (actually the template for it)
+//! that is used troughout the whole engine. It defines a 3D-Vector with
+//! all required operations. 
+//! In the current implementation, this class is always instantiated with a float
+//! type as class parameter (which is typedefe'd as i4_3d_vector). This is required because
+//! this class uses assembly which is specific for this instantiation parameter. (From that 
+//! point of view, it is actually dumb to have a template here). 
+//! \see d_vector.h
 template <class Coord>
 class i4_vector3_template
 {
 public:
+  //! The tree member value fields. 
+  //! Neither reorder nor move them somewhere else in the class.
   Coord x,y,z;
 
   Coord& operator()(int pos) const { return ((Coord*)&x)[pos]; }
@@ -37,6 +47,8 @@ public:
 
     return *this;
   }
+
+  //! Assignment operator
   i4_vector3_template& operator=(const i4_vector3_template& p)
   {
     x = p.x;
@@ -46,6 +58,7 @@ public:
     return *this;
   }
   
+  //! Addition operator
   i4_vector3_template& operator+=(const i4_vector3_template& b)
   {
     x += b.x;
@@ -54,6 +67,8 @@ public:
 
     return *this;
   }
+
+  //! Subtraction
   i4_vector3_template& operator-=(const i4_vector3_template& b)
   {
     x -= b.x;
@@ -91,6 +106,21 @@ public:
     tmp.z = z + b;
 
     return tmp;
+  }
+
+  //! Unary operator plus (don't do anything).
+  i4_vector3_template operator+()
+  {
+	  return *this;
+  }
+  //! Unary operator minus (inverse the vector).
+  i4_vector3_template operator-()
+  {
+	  i4_vector3_template tmp;
+	  tmp.x=-x;
+	  tmp.y=-y;
+	  tmp.z=-z;
+	  return tmp;
   }
 
   /*i4_vector3_template operator+(i4_vector3_template v)

@@ -53,7 +53,7 @@ public:
     TINT =         (1<<5),
     SELECTED =     (1<<6),
 	BOTHSIDED =    (1<<7),
-    ON =           0xff
+    ON =           0xffffffff
   };
 
   void set_flags(w8 mask, w8 value = ON) { flags = (flags&~mask) | (value&mask); }
@@ -128,6 +128,8 @@ public:
   void translate(i4_float xadd, i4_float yadd, i4_float zadd);
 
   void calc_extents(void);
+  void calc_vert_normals();
+  static void calc_quad_normal(g1_vert_class *v, g1_quad_class &q);
 
   void init() 
 	  { 

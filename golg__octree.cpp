@@ -1246,7 +1246,14 @@ i4_bool g1_octree::PointInCube(i4_3d_vector p) const
     return true;
     }
 
-g1_octree *g1_octree::GetLeafAt(i4_3d_vector where)
+i4_bool g1_octree::RayShorterThanCubeSize(i4_3d_vector ray) const
+	{
+		i4_bool ret;
+		ret=m_xWidth<ray.x && m_yWidth<ray.y && m_zWidth <ray.z;
+		return ret;
+	}
+
+g1_octree *g1_octree::GetLeafAt(i4_3d_vector where) const
     {
     if (!this)
         return 0;
@@ -1257,7 +1264,8 @@ g1_octree *g1_octree::GetLeafAt(i4_3d_vector where)
         return NULL;
     if (isLeaf())
         {
-        return this;
+		//otherwise, the compiler is complaining about conversion from (g1_octree * const) to g1_octree*
+        return const_cast<g1_octree*>(this);
         }
     int i;
     for (i=0;(i<8)&&(node==NULL);++i)
