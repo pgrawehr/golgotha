@@ -720,6 +720,7 @@ int i4_async_priority_sorter(const i4_async_reader::read_request *a,
 
 volatile w32 i4_async_reader::num_pending=0;
 i4_array<i4_async_reader*> i4_async_reader::readers(0,10); 
+i4_critical_section_class i4_async_reader::static_pending_lock;
 
 i4_async_reader::i4_async_reader(char *name) : sig(name), 
 request_que(i4_async_priority_sorter)  
@@ -796,6 +797,7 @@ void i4_async_reader::uninit()
 	request_que.reset();//must be uninited before the memman goes down.
 	readers.uninit(); //just drop all of these at once, won't be used
 	//later. 
+	
   }
 }
 
@@ -820,8 +822,10 @@ i4_bool i4_async_reader::start_read(int fd, void *buffer, w32 size,
     que_lock.unlock();
     return i4_F;
   }
-  num_pending++;
   que_lock.unlock();
+  static_pending_lock.lock();
+  num_pending++;
+  static_pending_lock.unlock();
 
   sig.signal();
   return i4_T;
@@ -880,7 +884,10 @@ void i4_async_reader::PRIVATE_thread()
 		if (r.fd!=0)
 			amount = read(r.fd, r.buffer, r.size);          
         r.callback(amount, r.context);
+		static_pending_lock.lock();
+		I4_ASSERT(num_pending!=0,"Async-Reader request queue underrun");
 		num_pending--;
+		static_pending_lock.unlock();
       }
       else que_lock.unlock();
     }
@@ -891,6 +898,15 @@ void i4_async_reader::PRIVATE_thread()
 #endif
   stop=i4_F;
 }
+
+i4_bool i4_async_reader::is_idle()
+{
+	static_pending_lock.lock();
+	i4_bool ret= num_pending==0;
+	static_pending_lock.unlock();
+	return ret;
+}
+
 // buf_file
 /********************************************************************** <BR>
   This file is part of Crack dot Com's free source code release of
