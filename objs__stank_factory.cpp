@@ -41,28 +41,6 @@ public:
     request_think();
 
   }
-  
-  virtual i4_bool occupy_location() 
-  { 
-	  if (g1_factory_class::occupy_location())
-		{
-		g1_factory_list.insert(*this);
-		return i4_T;
-		}
-      else return i4_F;
-  }
-
-  virtual void unoccupy_location()
-  {
-	  g1_factory_class::unoccupy_location();
-	  g1_factory_list.find_and_unlink(this);
-  }
-
-
-  //void continue_game()
-  //{
-  //  
-  //}
 
   void request_remove()
 	  {

@@ -32,7 +32,7 @@
 #include "image_man.h"
 
 class g1_radar_view_class;
-static g1_radar_view_class *list=0;
+static g1_radar_view_class *g_radar_list=0;
 
 
 void g1_calc_map_area(int max_width, int max_height, int &x1, int &y1, int &x2, int &y2)
@@ -612,8 +612,8 @@ public:
       flags(_flags)
   {
     restore_strategy_on_top=i4_F;
-    next=list;
-    list=this;
+    next=g_radar_list;
+    g_radar_list=this;
     background=0;
 
     grabbing=i4_F;
@@ -1083,11 +1083,11 @@ public:
       background=0;
     }
 
-    if (this==list)
-      list=list->next;
+    if (this==g_radar_list)
+      g_radar_list=g_radar_list->next;
     else
     {
-      g1_radar_view_class *p=list;
+      g1_radar_view_class *p=g_radar_list;
       while (p->next!=this)
         p=p->next;
       p->next=next;
@@ -1103,8 +1103,12 @@ public:
 
 void g1_radar_recalculate_backgrounds()
 {
-  for (g1_radar_view_class *v=list; v; v=v->next)
-    v->recalc_background();
+	g1_radar_view_class* v=g_radar_list;
+	while (v!=NULL)
+	{
+		v->recalc_background();
+		v=v->next;
+	}
 }
 
 void g1_radar_looking_at(float x1, float y1, float x2, float y2)
@@ -1122,13 +1126,13 @@ i4_parent_window_class *g1_create_radar_view(int max_w, int max_h, int _flags)
 
 void g1_radar_refresh(int game_x1, int game_y1, int game_x2, int game_y2)
 {
-  for (g1_radar_view_class *v=list; v; v=v->next)
+  for (g1_radar_view_class *v=g_radar_list; v; v=v->next)
     v->refresh_area(game_x1, game_y1, game_x2, game_y2);
 }
 
 void g1_radar_update()
 {
-  for (g1_radar_view_class *v=list; v; v=v->next)
+  for (g1_radar_view_class *v=g_radar_list; v; v=v->next)
     v->request_redraw(i4_F);
 }
 

@@ -129,7 +129,6 @@ void operator delete(void *ptr)
 
 #include "memory/bmanage.h"
 
-extern void free_up_memory();
 
 #ifdef i4_MEM_CHECK
 // can be set in debugger, break mem fun will be called when this address is allocated
@@ -199,7 +198,7 @@ void small_allocation_summary(int &total, int *&list)
 void i4_malloc_uninit()
 {
 #ifdef i4_MEM_CHECK
-  i4_mem_report("end.mem");
+  i4_mem_report("end_mem.log");
 #endif
 
   mem_lock.lock();
@@ -349,8 +348,7 @@ void *i4_malloc(w32 size, char *file, int line)
   size=(size+3)&(0xffffffff-3);
   mem_lock.lock();
 
-  do
-  {
+
     for (int i=0;i<bmanage_total;i++)
     {
       void *a=bmanage[i].alloc(size, reason);
@@ -362,16 +360,12 @@ void *i4_malloc(w32 size, char *file, int line)
       }
     }
 
-#if 1//def i4_MEM_CHECK    
     mem_lock.unlock();
-    i4_mem_report("no_mem");
-#endif
+    i4_mem_report("no_mem.log");
 
-    mem_lock.unlock();
-    i4_error("i4_memory_manager: Out of memory!");
+	i4_error("CRITICAL: i4_memory_manager: Out of memory!");
 	return 0;
-    //    free_up_memory();
-  } while (1);  
+  
 }
 
 
@@ -475,7 +469,7 @@ void *i4_realloc(void *ptr, w32 size, char *file, int line)
 
 void dmem_report()
 {
-  i4_mem_report("debug.mem");
+  i4_mem_report("debug_mem.log");
 }
 
 static i4_static_file_class mem_report;
@@ -491,6 +485,7 @@ void i4_mem_report(char *filename)
   
     fp->printf("Total available=%d, allocated=%d\n", i4_available(), i4_allocated());    
   }
+  
 }
 
 
@@ -723,17 +718,7 @@ void i4_block_manager_class::inspect()
     }
   }
 }
-/*
-static char *check_allocation(char *s)
-{
-  char tmp[200];
-  strcpy(tmp,s);
-  ::free(s);
-  s=(char *)::malloc(strlen(tmp)+1);
-  strcpy(s,tmp);
-  return s;
-}
-*/
+
 
 void i4_block_manager_class::report(i4_file_class *fp)
 {
@@ -752,7 +737,7 @@ void i4_block_manager_class::report(i4_file_class *fp)
 
 #ifdef i4_MEM_CHECK
     if (f->size>0)    
-      fp->printf("%s",check_allocation(f->name));
+      fp->printf("%s",f->name);
     else 
       fp->printf("FREE");
 #endif
@@ -771,7 +756,7 @@ void i4_block_manager_class::report(i4_file_class *fp)
 	if (s->alloc_list&bit)
 	{
 #ifdef i4_MEM_CHECK
-	  fp->printf("%s\n",check_allocation(s->name[j]));
+	  fp->printf("%s\n",s->name[j]);
 #else
 	  fp->printf("allocated\n");
 #endif	  

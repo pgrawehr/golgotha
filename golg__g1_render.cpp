@@ -361,11 +361,6 @@ i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 			ANDCODE &= code;
 			ORCODE  |= code;
 			i4_float ooz;
-			if (code)
-				{
-				continue;
-				}
-				//valid point
 			ooz = r1_ooz(v->v.z);
 			v->px = v->v.x * ooz * center_x + center_x;
 			v->py = v->v.y * ooz * center_y + center_y;

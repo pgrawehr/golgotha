@@ -17,13 +17,14 @@ class i4_graphical_style_class;
 class i4_text_scroll_window_class : public i4_parent_window_class
 {
   i4_color fore,back;
-  i4_char *term_out, *draw_start;
+  i4_char *term_out; //the pointer to the actual start of the character data
+  i4_char *draw_start; //don't free, it points somewhere within term_out
   w32 term_size, used_size;
   sw32 dx, dy, tdx, tdy;
 
   sw32 term_height;    // in characters
   sw32 term_width;
-  i4_char *term_end;
+  i4_char *term_end; //don't free either, it points to the end of term_out
   sw32 max_scrollback;      // in lines of text
   sw32 curr_scrollback;
   sw32 used_lines;
@@ -43,6 +44,7 @@ public:
                               i4_color text_background,
                               w16 width, w16 height,  //in pixels
                               w32 scrollback);        //in lines of text
+  ~i4_text_scroll_window_class();
 
   void clear();
   void skip_first_line();

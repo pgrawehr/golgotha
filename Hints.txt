@@ -4,7 +4,8 @@ This file contains hints and ideas directly from the developpers mind, so
 they might be unordered, obsolete, impossible or whatever. They might also
 be in any language - just as quick note. 
 
-Checkout:
+The file is also used as a list for known bugs. Just add any bugs you might find to the end. 
+Make a note if you fixed the bug or have an idea what could be the cause for it. 
 
 Todo:
 A missing gmod file should give a visible alert, not only a silent one. Golg crashes
@@ -161,4 +162,14 @@ turret from the top.
 Should finally implement adding of textures in the editor. 
 It's everything prepared.
 
+Maxtool: If "Show vertex numbers" is active and an object with an octree is open, nothing is 
+visible.
+
+Octree: Collision detection does not use the benefits of the octree, but checks against all polys
+of the objects (asfaik).
+
+Octree: I've seen cases where the octree rendering code spits out 2500 polys to be rendered for
+an object that has only 9(!) faces at all. So each face is classified 250 times. Maybe it's just
+because I forced the engine to crate an octree from such a small object, but investigation on this
+issue might be needed.
 

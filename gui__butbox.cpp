@@ -3757,6 +3757,16 @@ i4_text_scroll_window_class::i4_text_scroll_window_class(i4_graphical_style_clas
   used_lines= 0;
 }
 
+i4_text_scroll_window_class::~i4_text_scroll_window_class()
+{
+	i4_free(term_out);
+	term_out=0;
+	term_end=0;
+	draw_start=0;
+	used_size=0;
+	used_lines=0;
+}
+
 void i4_text_scroll_window_class::skip_first_line()
 {
 /*

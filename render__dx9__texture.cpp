@@ -126,9 +126,9 @@ void r1_dx9_texture_class::init()
 	}
 	//Check wheter the the current mode (24 or 32 bits) supports 24 bit textures)
 	//A lot of recent video cards don't support 24 bit color depth at all. 
-	if (dx9_common.pD3D9->CheckDeviceFormat(D3DADAPTER_DEFAULT,
+	if (i4_dx9_check(dx9_common.pD3D9->CheckDeviceFormat(D3DADAPTER_DEFAULT,
 		type,curmode,0,D3DRTYPE_TEXTURE,
-		D3DFMT_R8G8B8))
+		D3DFMT_R8G8B8)))
 	{
 		allowed_texture_formats|=R1_MIPFLAGS_USE24;
 	}
@@ -387,7 +387,7 @@ IDirect3DTexture9 *dx9_make_texture(sw32 w, sw32 h, w8 flags)
 		fmt=D3DFMT_R5G6B5;
 		break;
 	}
-	LPDIRECT3DTEXTURE9 ptex;
+	LPDIRECT3DTEXTURE9 ptex=0;
 	int someusage=0;
 	i4_dx9_check(dx9_common.device->CreateTexture(w,h,1,someusage,fmt,D3DPOOL_MANAGED,&ptex,0));
 	return ptex;
