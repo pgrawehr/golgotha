@@ -161,10 +161,44 @@ typedef w8 i4_bool;
 enum  { i4_F=0, 
         i4_T=1 };
 
+//Are we compiling for a 64 bit target?
+//This is msvc-specific, you might want to add other tests here for other compilers.
+#ifdef _M_IA64
+#define I4_64BITCPU 1
+#endif
+
+//use the type wptr instead of w32 wherever a value might be assigned a pointer.
+#ifdef I4_64BITCPU
+typedef w64 wptr;
+typedef sw64 swptr;
+#else
+#ifdef _WINDOWS
+typedef __w64 unsigned long wptr;
+typedef __w64 signed long swptr;
+#else
+typedef w32 wptr;
+typedef sw32 swptr;
+#endif
+#endif
+
 
 // use this mainly for events, to cast to a known event type
 #define CAST_PTR(var_name, type, source_obj) type *var_name=(type *)(source_obj)
 
+#ifdef I4_64BITCPU
+inline void *ALIGN_FORWARD(void *addr)
+{
+	return (void*)(((w64)addr+7)&~7);
+}
+
+inline void *ALIGN_BACKWARD(void *addr)
+{
+	return (void*)(((w64)addr)&~7);
+}
+#else
+#ifdef _WINDOWS
+#pragma warning (disable:4311 4312) //pointer truncation for IA64.
+#endif
 inline void *ALIGN_FORWARD(void *addr)
 {
   return (void*)(((w32)addr+3)&~3);
@@ -174,7 +208,10 @@ inline void *ALIGN_BACKWARD(void *addr)
 {
   return (void*)(((w32)addr)&~3);
 }
-
+#ifdef _WINDOWS
+#pragma warning (3:4311 4312)
+#endif
+#endif
 #ifdef _WINDOWS
 //Apply some modifications to the warning levels of the compiler
 #include "pragma.h"

@@ -144,7 +144,7 @@ public:
   i4_const_str(const char *ptr) : ptr(const_cast<char*>(ptr)) 
   { 
     if (ptr) 
-      len=strlen(ptr); 
+      len=(w16)strlen(ptr); 
     else 
       len=0;
   }
@@ -235,7 +235,7 @@ public:
   w32 ascii_length() const { return len+1; } 
 
   /** Difference between two iterators */
-  sw32 ptr_diff(const iterator first, const iterator last) const
+  swptr ptr_diff(const iterator first, const iterator last) const
   { return last.node-first.node; }
   /** Compares two strings */
   i4_bool operator== (const i4_const_str &other) const 

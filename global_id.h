@@ -134,7 +134,7 @@ public:
 
   i4_bool check_id(w32 id) const 
 	  { 
-	  return ((id==obj_id[id&ID_MASK]) && ((w32)obj[id&ID_MASK]>=ID_INCREMENT )); /*&& ((id & ID_MASK) < num_reserved)*/ 
+	  return ((id==obj_id[id&ID_MASK]) && ((wptr)obj[id&ID_MASK]>=ID_INCREMENT )); /*&& ((id & ID_MASK) < num_reserved)*/ 
 	  //the second test is actually only required, if the game is played over the network
 	  //we haven't ever used an id above num_reserved, therefore, the third test is useless
 	  }

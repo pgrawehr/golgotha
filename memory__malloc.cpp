@@ -280,23 +280,23 @@ public:
 } i4_memory_init_instance;
 
 
-long i4_available()
+swptr i4_available()
 {
   mem_lock.lock();
-  long size=0;
+  swptr size=0;
   for (int i=0;i<bmanage_total;i++) 
     size+=bmanage[i].available();
   mem_lock.unlock();
   return size;
 }
 
-long i4_largest_free_block()
+swptr i4_largest_free_block()
 {
   mem_lock.lock();
-  long l=0;
+  swptr l=0;
   for (int i=0;i<bmanage_total;i++)
   {
-    long t=bmanage[i].largest_free_block();
+    swptr t=bmanage[i].largest_free_block();
     if (t>l)
       l=t;
   }
@@ -304,11 +304,11 @@ long i4_largest_free_block()
   return l;
 }
 
-long i4_allocated()
+swptr i4_allocated()
 {
   mem_lock.lock();
   
-  long size=0;
+  swptr size=0;
   for (int i=0;i<bmanage_total;i++) 
     size+=bmanage[i].allocated();
   
@@ -448,7 +448,7 @@ void *i4_realloc(void *ptr, w32 size, char *file, int line)
     return NULL; 
   }
 
-  sw32 old_size=0;
+  swptr old_size=0;
   for (int i=0;i<bmanage_total;i++)
     if (ptr>=(void *)bmanage[i].sfirst && 
         ptr<=(void *)(((char *)bmanage[i].sfirst)+bmanage[i].block_size))
@@ -494,9 +494,9 @@ void i4_mem_report(char *filename)
 }
 
 
-long small_ptr_size(void *ptr)
+swptr small_ptr_size(void *ptr)
 {
-  return ((small_block *)(((long *)ptr)[-1]))->size;
+  return ((small_block *)(((swptr *)ptr)[-1]))->size;
 }
 
 
@@ -674,7 +674,7 @@ static void str_free(char *s)
 
 int i4_block_manager_class::valid_ptr(void *ptr)
 {
-  void *next=(void *)(*(((long *)ptr)-1));
+  void *next=(void *)(*(((swptr *)ptr)-1));
   if (next && next<ptr)                        // small allocation
   {
     small_block *s=(small_block *)next;
@@ -710,8 +710,8 @@ void i4_block_manager_class::inspect()
       {
         if (s->alloc_list&bit)
         {
-          void *next=(void *)(*(((long *)addr)));
-          if ((long)next!=(long)s)
+          void *next=(void *)(*(((swptr *)addr)));
+          if (next!=s)
           {
             i4_warning("inspect : bad pointer\n");
             return;
@@ -740,7 +740,7 @@ void i4_block_manager_class::report(i4_file_class *fp)
   fp->printf("************** Block size = %d ***************\n",block_size);
   int i=0;
   memory_node *f=sfirst;
-  int f_total=0, a_total=0;
+  swptr f_total=0, a_total=0;
 
   for (;f;f=f->next,i++)
   {    
@@ -786,10 +786,10 @@ void i4_block_manager_class::report(i4_file_class *fp)
 
 }
 
-long i4_block_manager_class::pointer_size(void *ptr)
+swptr i4_block_manager_class::pointer_size(void *ptr)
 {
-  long ret;
-  void *next=(void *)(*(((long *)ptr)-1));
+  swptr ret;
+  void *next=(void *)(*(((swptr *)ptr)-1));
   if (next>ptr)
     ret=((memory_node *)(((char *)ptr)-sizeof(memory_node)))->size;
   else
@@ -799,9 +799,9 @@ long i4_block_manager_class::pointer_size(void *ptr)
 }
 
 
-long i4_block_manager_class::largest_free_block()
+swptr i4_block_manager_class::largest_free_block()
 {
-  long l=0;
+  swptr l=0;
   memory_node *f;
   for (f=sfirst;f;f=f->next)
     if (-f->size>l)
@@ -810,9 +810,9 @@ long i4_block_manager_class::largest_free_block()
   return l;
 }
 
-long i4_block_manager_class::available()
+swptr i4_block_manager_class::available()
 {
-  long size=0;
+  swptr size=0;
   memory_node *f;
   for (f=sfirst;f;f=f->next)
     if (f->size<0) size-=f->size;
@@ -820,9 +820,9 @@ long i4_block_manager_class::available()
   return size;
 }
 
-long i4_block_manager_class::allocated()
+swptr i4_block_manager_class::allocated()
 {
-  long size=0;
+  swptr size=0;
   memory_node *f;
   for (f=sfirst;f;f=f->next)
     if (f->size>0) size+=f->size;
@@ -865,8 +865,8 @@ void *i4_block_manager_class::alloc(long size, char *name)
 #ifdef i4_MEM_CHECK
       s->name[0]=str_alloc(name);
 #endif      
-      long *addr=(long *)(((char *)s)+sizeof(small_block));
-      *addr=(long)s;
+      swptr *addr=(long *)(((char *)s)+sizeof(small_block));
+      *addr=(swptr)s;
       return (void *)(addr+1);  // return first block
     } else
     {
@@ -880,7 +880,7 @@ void *i4_block_manager_class::alloc(long size, char *name)
 #ifdef i4_MEM_CHECK
 	  s->name[i]=str_alloc(name);
 #endif      	 
-	  *((long *)addr)=(long)s;
+	  *((swptr *)addr)=(swptr)s;
 
 	  return (void *)(addr+4);
 	}
@@ -927,7 +927,7 @@ int i4_show_frees=0;
 void i4_block_manager_class::free(void *ptr)
 {
   // see if this was a small_block allocation
-  void *next=(void *)(*(((long *)ptr)-1));
+  void *next=(void *)(*(((swptr *)ptr)-1));
   if (next && next<ptr)  // small allocation
   {
     small_block *s=(small_block *)next;
@@ -940,7 +940,7 @@ void i4_block_manager_class::free(void *ptr)
     memset(ptr,0,s->size);
 #endif
 
-    int field=(((char *)ptr)-((char *)s)-sizeof(small_block))/(s->size+4);
+    swptr field=(((char *)ptr)-((char *)s)-sizeof(small_block))/(s->size+4);
 #ifdef i4_MEM_CHECK
     if (i4_show_frees)
       i4_warning("small free : %s",s->name[field]);

@@ -3020,12 +3020,12 @@ void li_mark_memory_region(li_list **start, li_list **end,
   //if so, mark it.
   
     for (li_list **s=start; s!=end; s++)          
-      if ( ((long)(*s)&mask)==0 &&  *s>=c1 && *s<c2 && (*s)->type() && !(*s)->is_marked())
+      if ( ((wptr)(*s)&mask)==0 &&  *s>=c1 && *s<c2 && (*s)->type() && !(*s)->is_marked())
         li_get_type( (*s)->unmarked_type() )->mark(*s,1);
   }
   else
     for (li_list **s=start; s!=end; s++)
-      if (((long)(*s)&mask)==0 && *s>=c1 && *s<c2 && (*s)->is_marked())
+      if (((wptr)(*s)&mask)==0 && *s>=c1 && *s<c2 && (*s)->is_marked())
         li_get_type( (*s)->unmarked_type() )->mark(*s,0);
   
 }
@@ -3428,7 +3428,7 @@ class li_memory_manager_class : public i4_init_class
 
     li_list **stack_start=((li_list **)i4_stack_base);
 
-    if ((long)stack_start<(long)current_stack) 
+    if ((swptr)stack_start<(swptr)current_stack) 
     { 
       start=(li_object *)stack_start; 
       end=current_stack; 
@@ -3505,15 +3505,15 @@ class memory_block_list
 		li_free8_list *small_cells;
 		li_free8_list *small_first_free;
 		li_free8_list *small_cells_end;
-		long num_cells;
-		long num_cells_free;
+		swptr num_cells;
+		swptr num_cells_free;
 		li_list *big_cells;
 		li_list *big_first_free;
 		li_list *big_cells_end;
 		memory_block_list *next;
 		li_memory_manager_class *parent; //for calling gc() on it.
 		void *memblock; //the exact address obtained from malloc()
-		long blocksize;
+		swptr blocksize;
 	private:
 		memory_block_list()
 			{
@@ -3546,24 +3546,24 @@ class memory_block_list
 			blocksize=size;
 			if (type==BIG)
 				{
-				if (((int)memblock&0xf)==0)
+				if (((swptr)memblock&0xf)==0)
 					{
 					big_cells=(li_list*)memblock;
-					big_cells_end=(li_list*)((int)big_cells+blocksize);
+					big_cells_end=(li_list*)((swptr)big_cells+blocksize);
 					}
 				else
 					{
 					big_cells=(li_list*)memblock;
 					//big_cells must be at a multiple of 16, so we increase
 					//the block start address to the next that matches this.
-					big_cells=(li_list*)(((int)big_cells+16)&(~15));
+					big_cells=(li_list*)(((swptr)big_cells+16)&(~15));
 					//we loose one cell because of this.
-					big_cells_end=(li_list*)(((int)big_cells+blocksize-16));
+					big_cells_end=(li_list*)(((swptr)big_cells+blocksize-16));
 					}
-				num_cells=(int)big_cells_end-(int)big_cells;
+				num_cells=(swptr)big_cells_end-(swptr)big_cells;
 				num_cells/=16;
 				num_cells_free=num_cells;
-				int i;
+				swptr i;
 				for (i=num_cells_free-1;i>0;i--)
 					{
 					big_cells[i]._data=0;
@@ -3582,21 +3582,21 @@ class memory_block_list
 			else
 				{
 				//small block addresses must be at a multiple of 8.
-				if (((int)memblock&0x7)==0)
+				if (((swptr)memblock&0x7)==0)
 					{
 					small_cells=(li_free8_list*)memblock;
-					small_cells_end=(li_free8_list*)((int)small_cells+blocksize);
+					small_cells_end=(li_free8_list*)((swptr)small_cells+blocksize);
 					}
 				else
 					{
 					small_cells=(li_free8_list*)memblock;
-					small_cells=(li_free8_list*)(((int)small_cells+8)&(~7));
-					small_cells_end=(li_free8_list*)(((int)small_cells+blocksize-8));
+					small_cells=(li_free8_list*)(((swptr)small_cells+8)&(~7));
+					small_cells_end=(li_free8_list*)(((swptr)small_cells+blocksize-8));
 					}
-				num_cells=(int)small_cells_end-(int)small_cells;
+				num_cells=(swptr)small_cells_end-(swptr)small_cells;
 				num_cells/=8;
 				num_cells_free=num_cells;
-				int j;
+				swptr j;
 				for (j=num_cells_free-1;j>0;j--)
 					{
 					small_cells[j].mark_free();
@@ -3721,7 +3721,7 @@ class memory_block_list
 		void free_cell(li_list *l)
 			{
 			cell_lock.lock();
-			int i;
+			swptr i;
 			
 			if (small_cells)
 				{
@@ -3792,7 +3792,7 @@ class memory_block_list
 					}
 				}
 			}
-		int num_free()
+		swptr num_free()
 			{
 			return num_cells_free;
 			}
@@ -4296,7 +4296,7 @@ void li_memory_manager_class::uninit()
 	  while (curr!=0)
 		  {
 		  if ((o>=curr->big_cells) && (o<(curr->big_cells_end))
-			  && (((w32)o & 0x0F)==0))
+			  && (((wptr)o & 0x0F)==0))
 			  {
 			     return curr;
 			  }
@@ -4306,7 +4306,7 @@ void li_memory_manager_class::uninit()
 	  while (curr!=0)
 		  {
 		  if ((o>=curr->small_cells) && (o<(curr->small_cells_end))
-			  && (((w32)o & 0x7)==0))
+			  && (((wptr)o & 0x7)==0))
 			  {
 			     return curr;
 			  }

@@ -27,7 +27,7 @@ public:
       fclose(f);
     f=0;
 
-    if (f = fopen(name, "wt"))
+    if ((f = fopen(name, "wt"))!=0)
       return this;
     else
       return 0;

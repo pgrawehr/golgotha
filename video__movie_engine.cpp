@@ -95,7 +95,7 @@ class i4_win32_movie_engine_class: public i4_movie_engine_class, public i4_init_
 			i4_warning("ERROR: Playback of %s failed: %s",buf,ret);
 			retval=MOVIE_PLAYBACKFAILED;	
 			};
-		while (true)
+		for (;;)
 			{
 			//if (currms+2000>ms) break;
 			mciSendString("status golgothaplaybackfile position",ret,MAX_PATH*2,0);

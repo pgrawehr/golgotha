@@ -125,7 +125,7 @@ public:
   w32 *paddr(int x, int y)
 	  {
 	  w32 x1=x;
-	w32 target=0;
+	wptr target=0;
 	switch (pal->source.pixel_depth)
 		{
 		case I4_32BIT:
@@ -142,7 +142,7 @@ public:
 			break;
 		}
 	target=x1;
-	target=((w32)data)+target;
+	target=((wptr)data)+target;
 	target=target+(y*bpl);
 	return (w32 *)target; 
 	  };

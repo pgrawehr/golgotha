@@ -15,7 +15,7 @@ class i4_file_class;  // file/file.hh
 
 struct memory_node
 {
-  sw32 size;
+  swptr size;
 #ifdef i4_MEM_CHECK
   char *name;                     // name is allocated on regular heap
 #endif                            // because it is used for debugging purposes
@@ -26,8 +26,8 @@ struct memory_node
 
 struct small_block
 {  
-  sw32 size;                     // size of blocks...
-  w32 alloc_list;               // bit field saying weither each block is allocated or not.
+  swptr size;                     // size of blocks...
+  wptr alloc_list;               // bit field saying weither each block is allocated or not.
   small_block *next;                      // next small block of same size
 #ifdef i4_MEM_CHECK
   char *name[32];
@@ -41,7 +41,7 @@ class i4_block_manager_class
 {
   public :
 
-  sw32 block_size;                             // size of this memory_block
+  swptr block_size;                             // size of this memory_block
   small_block *sblocks[JM_SMALL_SIZE];
   void *addr;
 
@@ -52,10 +52,10 @@ class i4_block_manager_class
   void *alloc(long size, char *name);
   void free(void *ptr);
 
-  long largest_free_block();
-  long available();
-  long allocated();
-  long pointer_size(void *ptr);
+  swptr largest_free_block();
+  swptr available();
+  swptr allocated();
+  swptr pointer_size(void *ptr);
   void report(i4_file_class *fp);
   void inspect();
 
