@@ -313,7 +313,7 @@ i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 	
 	//we have to initialize the vertices array, such that we
 	//can check their validity later
-	//hmmm... this is very expensive if num_vertices is large 
+	//hmmm... this is quite expensive if num_vertices is large 
 	//(which is very probable)
 	memset(t_vertices,0,(obj->num_vertex+1)*sizeof(r1_vert));
 	if (qif.empty())
@@ -341,36 +341,38 @@ i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 		object_to_world->inverse_transform_3x3(light,t_light);
 		}
 	
-		
-	for (int curquadidx=0;curquadidx<qif.size();curquadidx++)
+	w32 vertex;
+	w32 n_vert;
+	int vertid;
+	int curquadidx;
+	r1_vert* v;
+	w8 code;
+	i4_float ooz,dot,reflected_intensity;
+	for (curquadidx=0;curquadidx<qif.size();curquadidx++)
 		{
 		curquad=qif[curquadidx];
 		if ((curquadidx>0)&&(curquad==qif[curquadidx-1]))
 			continue;//skip duplicate quads
 		
-		//set_quad_vertices(src_vert,t_vertices,aqu,tf);
-		for (w32 vertex=0;vertex<curquad->num_verts();vertex++)
+		n_vert=curquad->num_verts();
+		for (vertex=0;vertex<n_vert;vertex++)
 			{
-			int vertid=curquad->vertex_ref[vertex];
-			r1_vert *v=&t_vertices[vertid];
+			vertid=curquad->vertex_ref[vertex];
+			v=&t_vertices[vertid];
 			if (v->flags)
 				continue;
 			src_v=&src_vert[vertid];
 			fast_transform(tf,src_v->v,v->v);
-			w8 code = r1_calc_outcode(v);
+			code = r1_calc_outcode(v);
 			ANDCODE &= code;
 			ORCODE  |= code;
-			i4_float ooz;
 			ooz = r1_ooz(v->v.z);
 			v->px = v->v.x * ooz * center_x + center_x;
 			v->py = v->v.y * ooz * center_y + center_y;
 			v->w  = ooz;
-			
-			
-			//pf_render_object_light.start();
 
-			i4_float dot=-src_v->normal.dot(t_light);
-			i4_float reflected_intensity = dir_int * dot;
+			dot=-src_v->normal.dot(t_light);
+			reflected_intensity = dir_int * dot;
 			
 			
 			if (reflected_intensity<0) 
@@ -419,7 +421,7 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 	i4_transform_class view_transform;
 	
 	num_vertices            = obj->num_vertex;
-	ensure_capacity(num_vertices);
+	ensure_capacity(num_vertices+1);
 	
 	
 	

@@ -216,7 +216,7 @@ public:
 
   g1_quadlist quad_object_list;
 
-  g1_render_class():quad_object_list(0,200)
+  g1_render_class():quad_object_list(0,1000)
   {
     rendered_font=0;
     draw_mode=TEXTURED;

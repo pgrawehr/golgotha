@@ -713,7 +713,7 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
         }
 
     }*/
-  g1_render.ensure_capacity(num_vertices);
+  g1_render.ensure_capacity(num_vertices+1);
   t_vertices=g1_render.t_vertices;
   
   g1_vert_class *src_vert = obj->get_verts(m1_info.current_animation, 
