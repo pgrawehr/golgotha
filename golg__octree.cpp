@@ -1124,7 +1124,7 @@ void g1_octree::AssignTrianglesToNode(g1_quad_object_class *pWorld, int numberOf
 /////
 //////////////////////////////// DRAW OCTREE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-void g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads)
+i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads)
 {
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
@@ -1136,15 +1136,16 @@ void g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads)
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 
 	// Make sure a valid node was passed in, otherwise go back to the last node
-	if(!this) return;
+	if(!this) return i4_F;
 
 	// Check if the current node is in our frustum
 	//r1_vert v;
 	
 	if (!g1_render.cube_in_frustrum(m_vCenter,m_xWidth,m_yWidth, m_zWidth, transform))
 		{
-		return;
+		return i4_F;
 		};
+
 
 	//if(!g_Frustum.CubeInFrustum(pNode->m_vCenter.x, pNode->m_vCenter.y, 
 	//							pNode->m_vCenter.z, pNode->m_Width / 2) )
@@ -1207,6 +1208,7 @@ void g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads)
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 
 		}
+	return i4_T;
 }
 
 
