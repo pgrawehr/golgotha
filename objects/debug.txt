@@ -1,0 +1,4 @@
+File debug.txt opened for appending and writing
+
+i4_win32_file_manager_class::open() failed for sfx/music/splash_screen_opus_22khz.wav
+
