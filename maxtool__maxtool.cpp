@@ -605,10 +605,10 @@ virtual void create_views()
       m1_warn_window->output_string("Maxtool is ready...\n");
       deco->add_child((sw16)l,(sw16)t, m1_warn_window);
 
-#ifndef __linux
+//#ifndef __linux
       //    i4_set_warning_function(m1_warning);
       //i4_set_alert_function(m1_alert);
-#endif
+//#endif
 
 
     

@@ -11,8 +11,12 @@
 #endif // _MSC_VER > 1000
 
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
-#include "pch.h"
+//StdAfx.h is included BY pch.h.
+//#include "pch.h"
 #include <stdio.h>
+#include <io.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include <afx.h>
 #include <afxext.h>
 #include <afxdisp.h>
@@ -20,6 +24,8 @@
 #include <afxcmn.h>
 #include <windows.h>
 #include <windowsx.h>
+#include <winsock.h>
+#include <mmsystem.h>
 // TODO: reference additional headers your program requires here
 
 //{{AFX_INSERT_LOCATION}}

@@ -11,11 +11,11 @@
 //$Id: app.hh,v 1.22 1998/06/02 23:50:20 jc Exp $
 #ifndef I4_APP_HH
 #define I4_APP_HH
-#ifdef __linux
-#include <unistd.h>
+//#ifdef __linux
+//#include <unistd.h>
 //don't want this one
 #undef quad
-#endif
+//#endif
 
 class i4_window_manager_class;
 class i4_parent_window_class;

@@ -163,6 +163,10 @@
 #endif
 #endif
 
+//One thing that probably needs to be done:
+//If the compiler is sgi MIPSPRO, #define __sgi 
+//That one is merely a compiler specific directive, not system specific.
+
 #endif
 //include architecture specifics
 #include "arch.h"

@@ -8,6 +8,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+// This is a windows-only file.
 #include "error/error.h"
 #include "error/alert.h"
 

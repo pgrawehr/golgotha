@@ -29,7 +29,7 @@ static const char * const cdjpeg_message_table[] = {
 };
 
 //Doesn't this give trouble with endianess???
-#ifdef I4_WORDALIGN
+#if 1
 static inline w32 read_colorbgr(w8 *cp)
 {
    w8 r=cp[0];

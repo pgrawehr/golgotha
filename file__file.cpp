@@ -1231,14 +1231,14 @@ public:
   }
 } i4_unix_async_instance("hd_async_reader");
 
-#ifndef SUN4
+//#ifndef SUN4
 class i4_unix_async_priority_reader:public i4_unix_async_reader
 	{
 	public:
 		w32 max_priority(){return 100;};
 		i4_unix_async_priority_reader(char *name):i4_unix_async_reader(name){};
 	}i4_unix_async_priority_instance("hd_async_reader_4");
-#endif
+//#endif
 
 #endif
 
@@ -1350,14 +1350,14 @@ public:
 
     if (i4_threads_supported())
     {
-#ifdef SUN4
+//#ifdef SUN4
 	return i4_unix_async_instance.start_read(fd,buffer,size,call,context,priority);
-#else
+//#else
 		if (i4_unix_async_priority_instance.max_priority()>priority)
 			return i4_unix_async_priority_instance.start_read(fd,buffer,size,call,context,priority);
 		else
 		    return i4_unix_async_instance.start_read(fd, buffer, size, call, context, priority);
-#endif
+//#endif
     }
     else 
       (*call)(read(buffer, size), context);

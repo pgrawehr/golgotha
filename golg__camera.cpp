@@ -612,7 +612,7 @@ static li_symbol_ref strategy_rotate_accel("strategy_rotate_accel");
 void g1_view_state_class::update_strategy_mode()
 {
   i4_angle a=end.ground_rotate;
-  i4_angle move_speed=(i4_float)g1_srotate_speed+li_get_float(li_get_value(strategy_pan_accel.get()),0);
+  i4_angle move_speed=(i4_float)(g1_srotate_speed+li_get_float(li_get_value(strategy_pan_accel.get()),0));
   
   start=end;
 

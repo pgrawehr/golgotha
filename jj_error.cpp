@@ -9,13 +9,10 @@
  *                                                                         *
  *  Author:     Jan Jasinski (TRACE)                                       * 
  *                                                                         *
+ *  Remarks:    This file can be used under windows ONLY.                  *
  *=========================================================================*/
-#include <WINDOWS.h>
-#include <STDIO.H>
-#include <IO.H>
-#include <FCNTL.H>
-#include <SYS/STAT.H>
 #define DIRECTINPUT_VERSION 0x0500
+#include <mmsystem.h>
 #include <D3D.H>
 #include <DSOUND.H>
 //#include "DSOUND.H"

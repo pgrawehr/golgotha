@@ -1449,7 +1449,7 @@ i4_bool g1_object_class::enter_formation(int formationcode, g1_object_class *whe
 	g1_object_class *objs[50];
 	int numobjs=0;
 	float dist,sum;
-	float nearest=1E20;//a very large number
+	float nearest=1E20f;//a very large number
 	if (where==0)
 		{
 		numobjs=g1_get_map()->get_objects_in_range_fn(x,y,20,objs,50,

@@ -69,18 +69,20 @@
 #include "network/login.h"
 
 
-#ifdef _WINDOWS
-#include <windows.h>
+//#ifdef _WINDOWS
+//#include <windows.h>
 //the following is defined for winsock2 only, we use winsock1
+#ifndef SO_MAX_MSG_SIZE
 #define SO_MAX_MSG_SIZE 0x2003
-#else
-#include <unistd.h>
 #endif
+//#else
+//#include <unistd.h>
+//#endif
 
 
 
-#include <stdio.h>
-#include <string.h>
+//#include <stdio.h>
+//#include <string.h>
 
 class i4_tcpip_protocol;
 extern i4_tcpip_protocol i4_tcpip_protocol_instance;
@@ -566,7 +568,7 @@ public:
   }
 };
 
-#ifdef __linux
+#ifdef I4_UNIX
 
 // linux gethostname doesn't seem to be thread-safe, so I'm making a system call
 int linux_name_to_address(char *hostname, unsigned int &ip)

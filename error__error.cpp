@@ -11,20 +11,20 @@
 #include "init/init.h"
 #include "error/error.h"
 #include "error/alert.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-#ifdef __sgi
-#include <unistd.h>
-#endif 
+//#include <stdlib.h>
+//#include <stdio.h>
+//#include <ctype.h>
+//#include <stdlib.h>
+//#include <string.h>
+//#include <stdarg.h>
+//#ifdef __sgi
+//#include <unistd.h>
+//#endif 
 const char *i4_error_file_on;
 int i4_error_line_on;
-#ifdef __linux
-#include <unistd.h>
-#endif
+//#ifdef __linux
+//#include <unistd.h>
+//#endif
 i4_file_class *i4_debug=0;//&default_debug;     // stream you can print debug messages to
 
 class i4_debug_file_class : public i4_file_class

@@ -29,13 +29,13 @@
 // this global will be used by video/directx/directx.c when opening a window
 //#include <windows.h>
 //#include <windowsx.h>
-#include <stdio.h>
+//#include <stdio.h>
 //the following is not needed
-#if 0
-#include <io.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#endif
+//#if 0
+//#include <io.h>
+//#include <fcntl.h>
+//#include <sys/stat.h>
+//#endif
 w32           i4_global_argc;
 i4_const_str *i4_global_argv;
 
@@ -94,7 +94,7 @@ int i4_win32_error(const char *st)
 #define TRUE i4_T
 #define FALSE i4_F
 #define DWORD w32
-#include <string.h>
+//#include <string.h>
 #endif
 int i4_win32_alert(const i4_const_str &ret)
 {

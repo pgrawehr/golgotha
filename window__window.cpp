@@ -390,11 +390,11 @@ void i4_parent_window_class::draw(i4_draw_context_class &context)
 
 }
     
-#if ( __linux || __sgi)
+//#if ( __linux || __sgi)
 //extern void db_show();
-#else
+//#else
 //void db_show() { ; }
-#endif
+//#endif
 
 void i4_window_class::show_context(i4_draw_context_class &context)
 {
