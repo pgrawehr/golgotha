@@ -39,6 +39,7 @@ class g1_3d_tile_window : public g1_3d_pick_window
 
   i4_bool selected();
   void do_press();
+  void do_edit();
   void draw_object(g1_draw_context_class *context);
   i4_menu_item_class *copy() { return new g1_3d_tile_window(width(), height(),
                                                             tile_num,

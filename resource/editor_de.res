@@ -456,6 +456,25 @@ y+(8)
 ]
 "
 
+tile_edit_dialog = 
+"
+[down x+(5) y+(20)     
+ [right text('Friction fraction                       ') %p=text_input(50 '%d')]
+y+(8)
+ [right text('Damage                                  ') %p=text_input(50 '%d')]
+y+(8)
+ [right text('Block                                   ') %p=bool_input('%d')]
+y+(8)
+ [right text('Wave                                    ') %p=bool_input('%d')]
+
+ y+(20)
+ [right
+  button(text('  Ok  ') user_ev(%p %d))
+  x+(2)
+  button(text('Cancel') user_ev(%p %d))]]
+]
+"
+
 
 bad_volume_dialog
 "[down x+(5) y+(20) 
@@ -583,6 +602,10 @@ e_icons = {
        bitmaps/editor/waypointcalc.jpg   // 43
        bitmaps/editor/waypointblock.jpg  // 44
        bitmaps/editor/info.bmp   // 45
+
+       bitmaps/editor/tileadd.bmp //46
+       bitmaps/editor/tiledel.bmp //47
+       bitmaps/editor/tileedit.bmp //48
        
 
 }
@@ -597,6 +620,12 @@ tp_grow          20
 tp_grow_help     "Enlarge tile size"
 tp_shrink        21
 tp_shrink_help   "Shrink tile size"
+tp_add           46
+tp_add_help      "Add a new tile texture"
+tp_remove        47
+tp_remove_help   "Remove this tile from the list"
+tp_edit          48
+tp_edit_help     "Edit the properties of this tile"
 
 
 path_start       22

@@ -21,14 +21,19 @@ class g1_tile_picker_class : public g1_scroll_picker_class
 {
   i4_image_class *active_back;
   i4_image_class *passive_back;
-
+  i4_text_input_class *edit_fract;
+  i4_checkbox_class *edit_wave;
+  i4_checkbox_class *edit_blocking;
+  enum {KEY_OK=2000,KEY_CANCEL=2001};
 
   // this should return 0 if scroll_object_num is too big
-  virtual i4_window_class *create_window(w16 w, w16 h, int scroll_object_num);
+  virtual i4_menu_item_class *create_window(w16 w, w16 h, int scroll_object_num);
   virtual void change_window_object_num(i4_window_class *win, int new_scroll_object_num);
   virtual void rotate();
   virtual void mirror();
   virtual int total_objects();
+  virtual i4_bool remove(i4_menu_item_class *window);
+  virtual i4_bool edit(i4_menu_item_class *window);
 public:
 
   g1_tile_picker_class(i4_graphical_style_class *style, 

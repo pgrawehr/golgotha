@@ -80,6 +80,9 @@ class i4_menu_item_class : public i4_parent_window_class
   virtual void do_press();
   virtual void do_depress();
   virtual void do_idle();
+  // Perform an edit operation on the object (i.e a tile type)
+  virtual void do_edit() {};
+  virtual i4_bool selected() { return i4_F; }
   virtual void push_button(i4_menu_item_class *which, i4_bool send_event){};
 
   virtual i4_menu_item_class *copy() = 0;

@@ -373,9 +373,10 @@ i4_bool r1_software_texture_class::async_mip_load(r1_mip_load_info *load_info)
 			{
 			if(image_list[i1].id==mip->entry->id)
 				{
-				image_list[i1].usage=30;//be shure that this don't gets removed just now
+				image_list[i1].usage=30;//be sure that this don't gets removed just now
 				mip->flags|=R1_MIPLEVEL_JPG_ALREADY_LOADED;
 				mip->flags &= (~R1_MIPLEVEL_LOAD_JPG); //if already loaded, reset this flag.
+				image_list[i1].lock();
 				array_lock.unlock();
 				software_async_callback(0,new_used);
 				async_worked=i4_T;
@@ -476,6 +477,7 @@ void r1_software_texture_class::async_load_finished(used_node *u)
 	  i4_ram_file_class *rp=new i4_ram_file_class(f->data,f->async_fp->size());
 	  //i4_thread_sleep(10);
       i4_image_class *im=i4_load_image(rp,NULL);
+	  I4_ASSERT(im,"Image must not be NULL at this point");
       delete rp;
       delete f->data;
 	  f->data=0;
@@ -539,6 +541,7 @@ void r1_software_texture_class::next_frame()
 				{
 				im=image_list[x].image;
 				image_list[x].usage=30;
+				image_list[x].unlock();
 				}
 			//image_list[x].usage--;
 			//if (image_list[x].usage==0) image_list[x].usage=1;

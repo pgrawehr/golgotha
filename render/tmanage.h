@@ -78,18 +78,41 @@ struct r1_image_list_struct{
 	w32 id;
 	union
 		{
-	w32 usage;
-	w32 average_color;
+		w32 usage;
+		w32 average_color;
 		};
 	i4_image_class *image;
-	i4_bool locked;
+private:
+	w32 lock_count;
+public:
 	r1_image_list_struct()
 	{
 		id=0;
 		usage=30;
 		image=0;
-		locked=i4_F;
+		lock_count=0;
 	};
+	void init()
+	{
+		id=0;
+		usage=30;
+		image=0;
+		lock_count=0;
+	}
+	void lock()
+	{
+		lock_count++;
+	}
+	void unlock()
+	{
+		lock_count--;
+	}
+	i4_bool is_locked()
+	{
+		if (lock_count>0)
+			return i4_T;
+		return i4_F;
+	}
 	};
 //#define RENDER_VERYMUCHSLOWER
 

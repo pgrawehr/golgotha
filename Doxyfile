@@ -77,11 +77,12 @@ EXCLUDE                = Tests \
                          sdk_inc \
                          .svn \
                          cd_maker \
-                         /work/golgotha/map2def/ \
-                         /work/golgotha/make/ \
-                         /work/golgotha/coredll.cpp \
-                         /work/golgotha/utildll.cpp \
-                         /work/golgotha/geomdll.cpp
+                         map2def/ \
+                         make/ \
+                         coredll.cpp \
+                         utildll.cpp \
+                         geomdll.cpp \
+			 backup  
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = .svn
 EXAMPLE_PATH           = 

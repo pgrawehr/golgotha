@@ -513,8 +513,11 @@ void i4_expected(char *why, i4_const_str::iterator i, const i4_const_str &s)
 {
   i4_str *er=new i4_str(i4gets("expected"),2000);
   i4_str::iterator x=er->end();
+  er->insert(x,why);
+  er->insert(er->end()," parsing ");
+  er->insert(er->end(),s);
   
-  while (i!=s.end())
+ /* while (i!=s.end())
   {
     x.set(i.get());
     ++i;
@@ -523,8 +526,9 @@ void i4_expected(char *why, i4_const_str::iterator i, const i4_const_str &s)
   }
 
   i4_warning(why);
-  i4_alert(*er, 2000);
-  i4_error("expected error : see error output");
+  i4_alert(*er, 2000);*/
+  i4_error(er->c_str());
+  delete er;
 }
 
 int i4_is_space(i4_const_str::iterator i)
@@ -729,8 +733,8 @@ i4_window_class *i4_read_object(i4_parent_window_class *parent,
                                 va_list &ap,
                                 int in_buttonbox)
 {
-  sw32 x;
-  void *p;
+  sw32 x=0;
+  void *p=0;
   i4_const_str::iterator start_i=i;
   i4_window_class *ret=0;
 

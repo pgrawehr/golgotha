@@ -7594,7 +7594,7 @@ void g1_scroll_picker_class::create_windows()
     while (x+obj_size<=info->max_object_size && !done)
     {
 
-      i4_window_class *w=create_window(obj_size, obj_size, on);
+      i4_menu_item_class *w=create_window(obj_size, obj_size, on);
       if (!w)
         done=1;
       else
@@ -7643,6 +7643,16 @@ g1_scroll_picker_class::g1_scroll_picker_class(i4_graphical_style_class *style,
   if (option_flags & (1<<SHRINK))
     add_child(0,0, g1_edit_state.create_button("tp_shrink", SHRINK, i4_T, this));
   
+  if (option_flags & (1<<ADD))
+	  add_child(0,0, g1_edit_state.create_button("tp_add", ADD, i4_T, this));
+
+  if (option_flags & (1<<REMOVE))
+	  add_child(0,0, g1_edit_state.create_button("tp_remove", REMOVE, i4_T, this));
+
+  if (option_flags & (1<<EDIT))
+	  add_child(0,0, g1_edit_state.create_button("tp_edit", EDIT, i4_T, this));
+
+
   arrange_down_right();
   
   resize_to_fit_children();
@@ -7745,6 +7755,34 @@ void g1_scroll_picker_class::receive_event(i4_event *ev)
         rotate();
         refresh();
       } break;
+	  case EDIT:
+		  {
+			  for (int win=0;win<windows.size();win++)
+			  {
+				  if (windows[win]->selected())
+				  {
+					  if (edit(windows[win]))
+						  refresh();
+				  }
+			  }
+			  
+		  }break;
+	  case ADD:
+		  {
+			  add();
+			  refresh(i4_T);
+		  }break;
+	  case REMOVE:
+		  {
+			  for (int win=0;win<windows.size();win++)
+			  {
+				  if (windows[win]->selected())
+				  {
+					  if (remove(windows[win]))
+						  refresh(i4_T);
+				  }
+			  }
+		  }
     }
    
   }
@@ -7752,10 +7790,17 @@ void g1_scroll_picker_class::receive_event(i4_event *ev)
     i4_parent_window_class::receive_event(ev);
 }
 
-void g1_scroll_picker_class::refresh()
+void g1_scroll_picker_class::refresh(i4_bool list_has_changed)
 {
-  for (int i=0; i<windows.size(); i++)
-    windows[i]->request_redraw(i4_F);
+  if (list_has_changed)
+  {
+	  create_windows();
+  }
+  else
+  {
+	for (int i=0; i<windows.size(); i++)
+		windows[i]->request_redraw(i4_F);
+  }
 }
 
 // dialogs/sky_picker.cpp
@@ -7818,12 +7863,17 @@ g1_tile_picker_class::g1_tile_picker_class(i4_graphical_style_class *style,
                                            i4_image_class *passive_back)
   :
     g1_scroll_picker_class(style,
-                           (1<<ROTATE) | (1<<MIRROR) | (1<<GROW) | (1<<SHRINK) | (1<<SCROLL),
+                           (1<<ROTATE) | (1<<MIRROR) | (1<<GROW) | 
+						   (1<<SHRINK) | (1<<SCROLL)| (1<<ADD) |
+						   /*(1<<REMOVE) | */ (1<<EDIT),
                            info,
                            g1_tile_man.remap_size()
                            ),
     active_back(active_back),
-    passive_back(passive_back)
+    passive_back(passive_back),
+	edit_blocking(0),
+	edit_fract(0),
+	edit_wave(0)
     
 {
 
@@ -7834,7 +7884,7 @@ int g1_tile_picker_class::total_objects()
   return g1_tile_man.remap_size();
 }
 
-i4_window_class *g1_tile_picker_class::create_window(w16 w, w16 h, int scroll_object_num)
+i4_menu_item_class *g1_tile_picker_class::create_window(w16 w, w16 h, int scroll_object_num)
 {
   int t=g1_tile_man.remap_size();
   if (scroll_object_num>=t)
@@ -7879,6 +7929,34 @@ void g1_tile_picker_class::rotate()
 void g1_tile_picker_class::mirror()
 {
   g1_e_tile.set_mirrored((i4_bool)(!g1_e_tile.get_mirrored()));
+}
+
+i4_bool g1_tile_picker_class::remove(i4_menu_item_class *window)
+{
+	// This is currently not supported -> Would cause mayor headaches,
+	// since we first had to make sure it's not used and then the handles
+	// for the remaining textures had to be changed all over the place. 
+	g1_3d_tile_window *tile=(g1_3d_tile_window*)window;
+	int t=g1_tile_man.get_remap(tile->tile_num);
+	//g1_tile_man.get(t)->filename_checksum=0; //Mark as empty
+	//g1_tile_man.get(t)->texture=0;
+	return i4_F;
+}
+
+i4_bool g1_tile_picker_class::edit(i4_menu_item_class *window)
+{
+	g1_3d_tile_window *tilewin=(g1_3d_tile_window*)window;
+	int t=g1_tile_man.get_remap(tilewin->tile_num);
+	g1_tile_class *tile=g1_tile_man.get(t);
+	
+	i4_create_dialog(g1_ges("tile_edit_dialog"), this, style,
+		&edit_fract, tile->friction_fraction,
+		&(tile->damage), tile->damage,
+		&edit_wave, tile->flags&g1_tile_class::WAVE?i4_T:i4_F,
+		&edit_blocking, tile->flags&g1_tile_class::BLOCKING?i4_T:i4_F,
+		this, KEY_OK,
+		this, KEY_CANCEL);
+	return i4_T;
 }
 
 // dialogs/tile_win.cpp
@@ -7932,9 +8010,14 @@ void g1_3d_tile_window::do_press()
   }
 }
 
+void g1_3d_tile_window::do_edit()
+{
+	//Todo: Needs body. 
+}
+
 i4_bool g1_3d_tile_window::selected()
 {
-  if (tile_num==g1_e_tile.get_cell_type())
+  if (g1_tile_man.get_remap(tile_num)==g1_e_tile.get_cell_type())
     return i4_T;
   else
     return i4_F;

@@ -583,6 +583,10 @@ e_icons = {
        bitmaps/editor/waypointcalc.jpg   // 43
        bitmaps/editor/waypointblock.jpg  // 44
        bitmaps/editor/info.bmp   // 45
+
+       bitmaps/editor/tileadd.bmp //46
+       bitmaps/editor/tiledel.bmp //47
+       bitmaps/editor/tileedit.bmp //48
        
 
 }
@@ -597,6 +601,12 @@ tp_grow          20
 tp_grow_help     "Enlarge tile size"
 tp_shrink        21
 tp_shrink_help   "Shrink tile size"
+tp_add           46
+tp_add_help      "Add a new tile texture"
+tp_remove        47
+tp_remove_help   "Remove this tile from the list"
+tp_edit          48
+tp_edit_help     "Edit the properties of this tile"
 
 
 path_start       22

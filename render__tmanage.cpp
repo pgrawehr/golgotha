@@ -427,7 +427,8 @@ i4_bool r1_texture_manager_class::load_texture_from_file(const i4_const_str &n,w
 			else
 				{
 				image_list[x].usage--;
-				if (image_list[x].usage==0) image_list[x].usage=1;
+				if (image_list[x].usage==0) 
+					image_list[x].usage=1;
 				}
 			}
 		if (!im)
@@ -438,7 +439,7 @@ i4_bool r1_texture_manager_class::load_texture_from_file(const i4_const_str &n,w
 			i4_bool must_free_mem=i4_largest_free_block()<0x0100000;
 			for (int x2=0;x2<image_list.size();++x2)//cleanup old entries
 				{
-				if (image_list[x2].usage<2&&(!image_list[x2].locked))
+				if (image_list[x2].usage<2&&(!image_list[x2].is_locked()))
 					{
 					delete image_list[x2].image;
 					image_list.remove(x2);
@@ -446,10 +447,10 @@ i4_bool r1_texture_manager_class::load_texture_from_file(const i4_const_str &n,w
 					}
 				}
 			if (must_free_mem&&image_list.size()>5)
-				{//We immediatelly need some free mem
+				{//We immediately need some free mem
 				for (int x3=0;x3<3;++x3)
 					{//just delete some of the oldest entries
-						if (image_list[0].locked)
+						if (image_list[0].is_locked())
 							continue;
 					delete image_list[0].image;
 					image_list.remove(0);
@@ -471,10 +472,9 @@ i4_bool r1_texture_manager_class::load_texture_from_file(const i4_const_str &n,w
 			pf_jpg_texture_load.stop();
 			
 			r1_image_list_struct *ils=image_list.add();
-			ils->usage=30;
+			ils->init();
 			ils->image=im;
 			ils->id=id;
-			ils->locked=i4_F;
 			}
 		
 		}

@@ -913,6 +913,7 @@ void r1_dx5_texture_class::async_load_finished(used_node *u)
       array_lock.lock();
       
 	  r1_image_list_struct *ils=image_list.add();
+	  ils->init();
       ils->usage=30;
       ils->image=im;
       ils->id=u->mip->entry->id;
@@ -1076,6 +1077,7 @@ i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info *load_info)
 			if(image_list[i1].id==mip->entry->id)
 				{
 				image_list[i1].usage=30;//be shure that this don't gets removed just now
+				image_list[i1].lock();
 				mip->flags|=R1_MIPLEVEL_JPG_ALREADY_LOADED;
 				mip->flags &= (~R1_MIPLEVEL_LOAD_JPG); //if already loaded, reset this flag.
 				array_lock.unlock();

@@ -931,10 +931,9 @@ void r1_dx9_texture_class::async_load_finished(used_node *u)
       array_lock.lock();
       
 	  ils=image_list.add();
-      ils->usage=30;
-      ils->image=im;
-	  ils->locked=i4_F;
+      ils->init();
       ils->id=u->mip->entry->id;
+	  ils->image=im;
 	  
 	  }
   else if (u->mip->flags&R1_MIPLEVEL_JPG_ALREADY_LOADED)
@@ -947,6 +946,7 @@ void r1_dx9_texture_class::async_load_finished(used_node *u)
 			  im=image_list[x].image;
 			  image_list[x].usage=30;
 			  ils=&image_list[x];
+			  I4_ASSERT(ils->is_locked()&&im,"CRITICAL: Object being accessed is not locked or is invalid");
 			  break;
 		  }
 		  //image_list[x].usage--;
@@ -968,8 +968,16 @@ void r1_dx9_texture_class::async_load_finished(used_node *u)
 		  u->mip->entry->is_alphatexture());
 	  u->mip->flags &=~R1_MIPLEVEL_JPG_ALREADY_LOADED;
 	  array_lock.lock();
-	  ils->locked=i4_F;
-
+	  //We MUST search the entry again, since it might have been moved
+	  //due to removals (but the index can only be smaller than before)
+	  for(int x2=x;x2>=0;x2--)
+	  {
+		  if (image_list[x2].id==u->mip->entry->id)
+		  {
+			  image_list[x2].unlock();			  
+			  break;
+		  }
+	  }
   }
   else
 	  {
@@ -1127,8 +1135,8 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
 			{
 			if(image_list[i1].id==mip->entry->id)
 				{
-				image_list[i1].usage=30;//be shure that this don't gets removed just now
-				image_list[i1].locked=i4_T;
+				image_list[i1].usage=30;//be sure that this don't gets removed just now
+				image_list[i1].lock();
 				mip->flags|=R1_MIPLEVEL_JPG_ALREADY_LOADED;
 				mip->flags &= (~R1_MIPLEVEL_LOAD_JPG); //if already loaded, reset this flag.
 				array_lock.unlock();
@@ -1143,7 +1151,7 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
 				return async_worked;
 				}
 			if ((image_list[i1].usage<=image_list[most_unused].usage)
-				&&(!image_list[i1].locked))
+				&&(!image_list[i1].is_locked()))
 				most_unused=i1;
 			}
 		
@@ -1160,7 +1168,7 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
 		//was found above, since we don't need to reduce the cache if we're
 		//not going to add anything new. 
 		if ((image_list.size()>13) && (image_list[most_unused].usage<28)
-			&&(image_list[most_unused].locked==i4_F))
+			&&(!image_list[most_unused].is_locked()))
 			{
 			delete image_list[most_unused].image;
 			image_list.remove(most_unused);
@@ -1169,7 +1177,7 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
 			//The image list to shrink if appropriate.
 			for (int i3=13;i3<image_list.size();i3++)
 				{
-				if(image_list[i3].usage==1&&(image_list[i3].locked==i4_F))//some really old guy found
+				if(image_list[i3].usage==1&&(!image_list[i3].is_locked()))//some really old guy found
 					{
 					delete image_list[i3].image;
 					image_list.remove(i3);
@@ -1177,16 +1185,6 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
 					}
 				}
 			}
-			/*
-			if (async_worked)
-			{
-				array_lock.unlock();
-				bytes_loaded += mip->width*mip->height*2;
-				no_of_textures_loaded++;
-				pf_dx9_install_vram.stop();
-				return async_worked;
-			}
-			*/
 		array_lock.unlock();
 		i4_const_str *n=NULL;
 		n=r1_get_texture_name(mip->entry->id);
@@ -1524,13 +1522,14 @@ void r1_dx9_texture_class::next_frame()
 				}*/
 			pf_jpg_texture_decompress.start();
 			im=i4_load_image(rp,NULL);
+			I4_ASSERT(im,"CRITICAL: Image decompression failed.");
 			pf_jpg_texture_decompress.stop();
 			delete rp;
 			r1_image_list_struct *ils=image_list.add();
+			ils->init();
 			ils->usage=30;
 			ils->image=im;
-			ils->id=u->mip->entry->id;
-			ils->locked=i4_F;
+			ils->id=u->mip->entry->id;;
 		size_image_to_texture(texture_ptr,im,u->mip->width,u->mip->height,tex_by,
 			u->mip->entry->is_transparent(),u->mip->entry->is_alphatexture());
 		u->mip->flags &=~R1_MIPLEVEL_LOAD_JPG;
@@ -1551,7 +1550,7 @@ void r1_dx9_texture_class::next_frame()
 				//if (image_list[x].usage==0) image_list[x].usage=1;
 			}
 			I4_ASSERT(im,"Internal error in texture loader: Image deleted during access.");
-			image_list[x].locked=i4_F;
+			image_list[x].unlock();
 			size_image_to_texture(texture_ptr,im,
 				u->mip->width,u->mip->height,tex_by,
 				u->mip->entry->is_transparent(),

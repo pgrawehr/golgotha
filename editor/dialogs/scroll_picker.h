@@ -17,6 +17,7 @@
 
 class i4_graphical_style_class;
 class i4_scroll_bar;
+class i4_menu_item_class;
 
 struct g1_scroll_picker_info
 {
@@ -41,7 +42,7 @@ struct g1_scroll_picker_info
 class g1_scroll_picker_class : public i4_color_window_class
 {
 protected:
-  i4_array<i4_window_class *> windows;
+  i4_array<i4_menu_item_class *> windows;
   i4_array<r1_render_window_class *> render_windows;
 
   int start_y, show_area_w;
@@ -51,16 +52,28 @@ protected:
 
 
   // this should return 0 if scroll_object_num is too big
-  virtual i4_window_class *create_window(w16 w, w16 h, int scroll_object_num) = 0;
+  virtual i4_menu_item_class *create_window(w16 w, w16 h, int scroll_object_num) = 0;
   virtual void change_window_object_num(i4_window_class *win, int new_scroll_object_num) = 0;
   virtual int total_objects() = 0;
   virtual void rotate() { ; }
   virtual void mirror() { ; }
+  virtual void add() 
+  {
+  }
+  virtual i4_bool remove(i4_menu_item_class *window)
+  {
+	  return i4_F;
+  }
+  // Return i4_T if something changed. 
+  virtual i4_bool edit(i4_menu_item_class *window)
+  {
+	  return i4_F; 
+  }
 
 public:
-  enum { ROTATE, MIRROR, GROW, SHRINK, SCROLL };
+  enum { ROTATE, MIRROR, GROW, SHRINK, SCROLL, ADD, REMOVE, EDIT };
 
-  void refresh();
+  void refresh(i4_bool list_has_changed=i4_F);
   void create_windows();
   // option_flags can include (1<<ROTATE) | (1<<MIRROR) | (1<<GROW) | (1<<SHRINK) | (1<<SCROLL))
   g1_scroll_picker_class(i4_graphical_style_class *style, 
