@@ -246,7 +246,7 @@ inline void write_to_image(w8 *dst,w32 col,w32 tex_by)
 		*dst=(w8)col;
 		}
 	}
-/** Convert from any source format to any destination format.
+/** Convert Images from any source format to any destination format.
 This method converts an image from any source format to any 
 destination format. Arbitrary shrinking and stretching is performed
 if necessary.
@@ -254,7 +254,7 @@ Hint 1: This function must be static and thread-safe.
 Hint 2: One can assume that the static *_format members have been set up correctly 
 and won't change at runtime.
 Flaw: This function is time critical, and could still be further optimized
-by avoiding the virual calls to the i4_image_class::get_pixel() methods.
+by avoiding the virtual calls to the i4_image_class::get_pixel() methods.
 @param dest Pointer to the raw data block where to put the target image
 @param image The source image. Its palette must be set correctly.
 @param width Desired target width
@@ -269,15 +269,15 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 	pf_size_texture.start();
 	i4_bool extend_chroma=i4_F;//used if chroma needs to be converted to alpha (32 bit only)
 
-//#ifdef _WINDOWS
-	i4_pixel_format *convfor=&regular_format; //&dx5_common.i4_fmt_565;
+	i4_pixel_format *convfor=&regular_format;
 	if (target_depth==2)
 		{
 		if (chroma)
 			{
 			convfor=&chroma_format;
-			if (chroma_format.alpha_bits>0)  //chroma might also be 
-				extend_chroma=i4_T;  //handled in the renderer.
+			if (chroma_format.alpha_bits>0)  
+				extend_chroma=i4_T;  
+            //chroma might also be handled in the renderer.
 			//so extend_chroma is only set if chroma format is 1444
 			//otherwise, we assume the renderer checks each pixel
 			//before drawing (using G1_16BIT_CHROMA_565)
@@ -298,15 +298,6 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 			}
 		extend_chroma=chroma;
 		}
-//#else
-//	i4_pixel_format *convfor=&(g1_render.r_api->get_tmanager()->regular_format);
-//	if (target_depth==3)
-//		convfor=&reg24_format;
-//	else if (target_depth==4)
-//		convfor=&reg32_format;
-//#endif
-//	extend_chroma=convfor->alpha_bits==8 && image->pal->source.alpha_bits==0;
-
 	if ((width!=image->width()) || (height!=image->height()))
 		{
 		//need to scale the image
@@ -379,15 +370,11 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 					if (extend_chroma && (c!=G1_16BIT_CHROMA))
 						c|=0x8000;
 					}
-				//*textu=c;
 				
 				write_to_image(textu,c,target_depth);
 				textu+=target_depth;
 				}
-			//textu=(w16 *)data;
-			//textu+=(((apy+1) * pitch));
 			}
-		//ZeroMemory(data,width,height*2);
 		}
 	//write_to_image((w8*)dest,0x00ffff,target_depth);
 	pf_size_texture.stop();
@@ -2681,7 +2668,7 @@ i4_bool r1_texture_manager_class::load_textures()
 	  
     }
 
-    if (stat) //PG:FIXME!! (May crash if called during object load)
+    if (stat) 
       stat->update((float)(i+1) / (float)texture_file_ids.size());
   }
         

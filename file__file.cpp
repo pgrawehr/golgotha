@@ -804,6 +804,13 @@ void i4_async_reader::PRIVATE_thread()
   stop=i4_F;
 #ifdef _WINDOWS
   hPRIVATE_thread=GetCurrentThreadId();
+  //This clearly reduces the time the game stays in the jpg loader
+  //at startup, but unfortunatelly (due to the quite strange scheduling
+  //algo of windows) the textures get loaded unacceptably slow. 
+  //if (max_priority()==0xFFFFFFFF)//must take anything anyway
+  //    {
+  //    SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_BELOW_NORMAL);
+  //    }
 #else
   hPRIVATE_thread=1;//non-null value
 #endif
@@ -1211,7 +1218,7 @@ i4_profile_class pf_win32_write("Win32File::Write");
 class i4_win32_async_reader : public i4_async_reader
 {
 	public:
-		w32 max_priority(){return 100;};//the maximum priority that is handled differently
+		w32 max_priority(){return 0xFFFFFFFF;};//the maximum priority that is handled differently
 public:
   i4_win32_async_reader(char *name) : i4_async_reader(name) {}
   virtual w32 read(sw32 fd, void *buffer, w32 count) 
@@ -1344,7 +1351,7 @@ public:
                               void *context=0, w32 priority=255)
   {
     if (i4_threads_supported())
-		if (i4_win32_async_priority_instance.max_priority()>priority)
+		if (priority<i4_win32_async_priority_instance.max_priority())
 			return i4_win32_async_priority_instance.start_read(fd,buffer,size,call,context,priority);
 		else
             return i4_win32_async_instance.start_read(fd, buffer, size, call, context,priority);
