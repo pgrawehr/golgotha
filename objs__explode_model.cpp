@@ -95,8 +95,10 @@ void g1_explode_model_class::grab_model(g1_object_class *o, i4_3d_vector &obj_ce
     num_vertices += (short)base_m->quad[i].num_verts();
 
   //allocate space
-  faces    = (g1_explode_face_class *)   I4_MALLOC(sizeof(g1_explode_face_class)   * num_faces,"");
-  vertices = (g1_explode_vertex_class *)I4_MALLOC(sizeof(g1_explode_vertex_class)*num_vertices,"");
+  faces    = (g1_explode_face_class *)   I4_MALLOC(sizeof(g1_explode_face_class)   * num_faces,
+	  "Explode model faces");
+  vertices = (g1_explode_vertex_class *)I4_MALLOC(sizeof(g1_explode_vertex_class)*num_vertices,
+	  "Explode model vertices");
 
   //copy information. this is ugly, has to use transforms
   //to get everything into world space, etc..  
@@ -284,9 +286,10 @@ void g1_explode_model_class::draw(g1_draw_context_class *context)
   i4_float scale_x = g1_render.scale_x;
   i4_float scale_y = g1_render.scale_y;    
   
-  r1_vert t_vertices[2048];
-  r1_vert clip_buf_1[64];
-  r1_vert clip_buf_2[64];
+  g1_render.ensure_capacity(num_vertices);
+  r1_vert *t_vertices=g1_render.t_vertices;
+  //r1_vert clip_buf_1[64];
+  //r1_vert clip_buf_2[64];
 
   g1_explode_vertex_class *src_v = vertices;
   r1_vert *v                     = t_vertices;

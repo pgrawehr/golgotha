@@ -70,8 +70,18 @@ int g1_model_info_compare(const void *a, const void *b)
                 ((g1_model_list_class::model_info *)b)->name_start);
 }
 
+void g1_model_list_class::free_array()
+	{
+	for (int act=0;act<total_models;act++)
+		{
+		array[act].model->~g1_quad_object_class();
+		array[act].model=0;
+		}
+	}
+
 void g1_model_list_class::cleanup()
 {
+  free_array();
   if (g1_object_heap)  
     delete g1_object_heap;
 
@@ -99,6 +109,8 @@ void g1_model_list_class::scale_models(i4_float to)
 
 void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_manager_class *tmap)
 {
+
+  free_array();
   if (g1_object_heap)  
     g1_object_heap->clear();
 
@@ -126,7 +138,7 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
     if (stat) 
       stat->update(i/(float)model_names.size());
 
-	model_scaling=0.1;
+	model_scaling=0.1f;
     pf_model_load_open.start();
     i4_file_class *in_file=i4_open(*model_names[i]);
     if (in_file)
@@ -189,7 +201,7 @@ w16 g1_model_list_class::find_handle(char *name) const
   sw32 lo=0,hi=total_models-1,mid;
 
   mid=(lo+hi+1)/2;
-  while (1)
+  for(;;)
   {
     int comp=strcmp(array[mid].name_start,name);
     if (comp==0)

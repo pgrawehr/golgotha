@@ -1,6 +1,7 @@
 //  A file of the revival project. 
 /*! \file octree.h
 The definition file for the octree classes.
+This file contains the declarations for creating octrees. 
 */
 
 #ifndef _OCTREE_H
@@ -130,7 +131,8 @@ class g1_octree
 
 	protected:
 
-	/// The constructor and deconstructor.
+	/// Protected default constructor.
+	/// This constructor is only used internally when building the tree.
 	g1_octree();
 	
 	public:
@@ -143,9 +145,20 @@ class g1_octree
 	/// few vertices. 
 	static g1_octree *Build(g1_quad_object_class *pWorld);
 
-	
+	/// The deserialization constructor. 
+	/// This constructor loads the octree from the stream fp.
+	/// The stream position must already be at set properly.
+	/// \param pWorld The (already loaded) object we are loading the
+	/// octree for.
+	/// \param fp The file stream to be loaded from. 
+	g1_octree(g1_quad_object_class *pWorld, i4_loader_class *fp);
 	/// The destructor. 
 	~g1_octree();
+
+	/// Saves an octree.
+	/// Writes a serialized version of the octree to the disk.
+	/// \param fp The file pointer to be used.
+	void save(i4_saver_class *fp);
 
 	/// This returns the center of this node.
 	i4_3d_vector GetCenter() {	 return m_vCenter;	}
@@ -157,7 +170,7 @@ class g1_octree
 	//float GetWidth() {	 return m_Width;	}
 
 	/// This returns if this node is subdivided or not.
-	bool IsSubDivided()  {   return m_bSubDivided;	}
+	i4_bool IsSubDivided()  {   return m_bSubDivided;	}
 
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
@@ -218,9 +231,21 @@ class g1_octree
 	/// \param quads A reference to an array that will contain the list of
 	/// quads to be drawn. The list will be returned unsorted and can contain
 	/// a large number of duplicate entries.
+	/// \param depth The current depth of the tree iteration. Used for internal
+	/// bookkeeping. You should usualy pass 0 as this argument. If you
+	/// pass anything else, the quad list is always constructed and the
+	/// method returns never false. 
 	/// \return i4_T if it makes sense to draw using the octree, false
 	/// if not. 
 	i4_bool DrawOctree(i4_transform_class *transform, g1_quadlist &quads, int depth);
+
+	/// Scale the octree cubes.
+	/// If the models are scaled to fit the size of the world (the common
+	/// scaling factor for golgotha is 0.1), we also need to scale the
+	/// size of the nodes. Otherwise, the clipping yields bogus results.
+	/// \param value A factor to scale the model with (relative to the
+	/// current size. )
+    void scale(i4_float value);
 
 	// This recursively creates a display list ID for every end node in the octree
 	//PG: We can't use display lists with the golg engine, so this
@@ -233,7 +258,7 @@ class g1_octree
 private:
 
 	/// This tells us if we have divided this node into more sub nodes
-	bool m_bSubDivided;
+	i4_bool m_bSubDivided;
 
 	/// The current subdivision we are at. 
 	/// We need this to be static, because the subdivision goes trough

@@ -1,5 +1,5 @@
 //***********************************************************************//
-//																		 //
+//	\file   															 //
 //		- "Talk to me like I'm a 3 year old!" Programming Lessons -		 //
 //                                                                       //
 //		$Author:		DigiBen		digiben@gametutorials.com			 //
@@ -18,6 +18,7 @@
 #include "octree.h"
 #include "g1_render.h"
 #include "load3d.h"
+#include "global_id.h"
 
 // This is the final version of our octree code.  It will allow you to take  
 // a 3D model, regardless of the file format (as long as it conforms to the t3DModel struct).
@@ -259,6 +260,74 @@ g1_octree::g1_octree():m_pQuadList(0,200)
 	memset(m_pOctreeNodes, 0, sizeof(m_pOctreeNodes));		
 }
 
+g1_octree::g1_octree(g1_quad_object_class *pWorld, i4_loader_class *fp)
+:m_pQuadList(0,200)
+	{
+	m_pWorld=pWorld;
+	m_bSubDivided=false;
+	m_xWidth=m_yWidth=m_zWidth=0;
+	m_vCenter=i4_3d_vector(0,0,0);
+	m_TriangleCount=0;
+	memset(m_pOctreeNodes, 0, sizeof (m_pOctreeNodes));
+	if (!fp)
+		return;
+	fp->read_format("4ffffff4", &m_bSubDivided,
+		&m_xWidth,&m_yWidth,&m_zWidth,&m_vCenter.x,&m_vCenter.y,
+		&m_vCenter.z,&m_TriangleCount);
+	fp->read_32(); //skip a word
+	int numquads=fp->read_32();
+	while (numquads)
+		{
+		m_pQuadList.add(fp->read_16());
+		numquads--;
+		}
+	w32 q1,q2,q3,q4,q5,q6,q7,q8;
+	q1=fp->read_32();
+	q2=fp->read_32();
+	q3=fp->read_32();
+	q4=fp->read_32();
+	q5=fp->read_32();
+	q6=fp->read_32();
+	q7=fp->read_32();
+	q8=fp->read_32();
+	if (q1)
+		m_pOctreeNodes[0]=new g1_octree(pWorld,fp);
+	if (q2)
+		m_pOctreeNodes[1]=new g1_octree(pWorld,fp);
+	if (q3)
+		m_pOctreeNodes[2]=new g1_octree(pWorld,fp);
+	if (q4)
+		m_pOctreeNodes[3]=new g1_octree(pWorld,fp);
+	if (q5)
+		m_pOctreeNodes[4]=new g1_octree(pWorld,fp);
+	if (q6)
+		m_pOctreeNodes[5]=new g1_octree(pWorld,fp);
+	if (q7)
+		m_pOctreeNodes[6]=new g1_octree(pWorld,fp);
+	if (q8)
+		m_pOctreeNodes[7]=new g1_octree(pWorld,fp);
+	}
+
+void g1_octree::save(i4_saver_class *fp)
+	{
+	fp->write_format("4ffffff4",&m_bSubDivided,
+		&m_xWidth,&m_yWidth,&m_zWidth,&m_vCenter.x,&m_vCenter.y,
+		&m_vCenter.z,&m_TriangleCount);
+	fp->write_32(0xdeadbeef);//reserved entry
+	fp->write_32(m_pQuadList.size());
+	int i=0;
+	for (i=0;i<m_pQuadList.size();i++)
+		{
+		fp->write_16(m_pQuadList[i]);
+		}
+	for (i=0;i<8;i++)
+		fp->write_32(m_pOctreeNodes[i]?1:0);
+	for (i=0;i<8;i++)
+		{
+		if (m_pOctreeNodes[i])
+			m_pOctreeNodes[i]->save(fp);//recursivelly save all the stuff.
+		}
+	}
 
 ///////////////////////////////// ~OCTREE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////
@@ -1225,6 +1294,19 @@ i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads,
 	return i4_T;
 }
 
+
+void g1_octree::scale(i4_float value)
+	{
+	m_xWidth*=value;
+	m_yWidth*=value;
+	m_zWidth*=value;
+	m_vCenter*=value;//if the model size changes, the center point moves, too.
+	for (int i=0;i<8;i++)
+		{
+		if (m_pOctreeNodes[i])
+			m_pOctreeNodes[i]->scale(value);
+		}
+	}
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 

@@ -147,7 +147,9 @@ void g1_explosion1_class::draw(g1_draw_context_class *context)
     out.mult_uniscale(texture_scale);
 
     int i,j/*,k*/,num_vertices;
-    r1_vert t_vertices[512], clip_buf_1[64], clip_buf_2[64];
+	g1_render.ensure_capacity(obj->num_vertex);
+    r1_vert clip_buf_1[64], clip_buf_2[64];
+	r1_vert *t_vertices=g1_render.t_vertices;
     int src_quad[4];
     i4_transform_class view_transform;
   

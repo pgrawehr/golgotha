@@ -141,6 +141,8 @@ public:
 	  mount=0;
 	  special=0;
 	  octree=0;
+	  mount_id=0;
+	  extent=0;
 	  }
   g1_quad_object_class() {init();}
   //This class is used in many lists, so we won't make this destructor

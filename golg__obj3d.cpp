@@ -44,6 +44,11 @@ void g1_quad_object_class::scale(i4_float value)
   for (w32 m=0; m<num_mounts; m++)
     mount[m] *= value;
 
+  if (octree)
+	  {
+	  octree->scale(value);
+	  }
+
   //extent *= value;
   calc_extents();
   //if (extent<0.8) extend*=2;//cheat a bit.
@@ -445,6 +450,14 @@ g1_quad_object_class *g1_base_object_loader_class::load(i4_loader_class *fp)
 	fp->end_version(I4_LF);
 	}
   */
+  if (fp->goto_section("Embedded GMOD OCTANT Tree"))
+	  {
+	  if (fp->check_version(1))
+		  {
+		  obj->octree=new g1_octree(obj,fp);
+		  fp->end_version(I4_LF);
+		  }
+	  }
 
   finish_object();
 

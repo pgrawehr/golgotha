@@ -40,6 +40,7 @@ class g1_model_list_class : public i4_init_class
 
   virtual void init();
   virtual void uninit();
+  void free_array();
 
 public:
   void reset(i4_array<i4_str *> &model_names, r1_texture_manager_class *tmap);

@@ -5,12 +5,13 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "maxtool/max_object.h"
 #include "saver_id.h"
 #include "loaders/dir_save.h"
 #include "checksum/checksum.h"
 #include "string/str_checksum.h"
+#include "octree.h"
 //#include "gui/smp_dial.h"
 
 // Save section
@@ -258,6 +259,16 @@ void m1_poly_object_class::save_bsp_tree(i4_saver_class *fp)
 }
 */
 
+void m1_poly_object_class::save_octree(i4_saver_class *fp)
+	{
+	if (!octree)
+		return;
+	fp->mark_section("Embedded GMOD OCTANT Tree");
+	fp->start_version(1);
+	octree->save(fp);
+	fp->end_version();
+	}
+
 void m1_poly_object_class::save(i4_saver_class *fp)
 //{{{
 {
@@ -272,6 +283,7 @@ void m1_poly_object_class::save(i4_saver_class *fp)
   //BSPCODE
   //here is the right place to call your new function to save a bsp tree
   //save_bsp_tree(fp);
+  save_octree(fp);
 }
 //}}}
 

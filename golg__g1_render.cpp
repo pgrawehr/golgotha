@@ -458,7 +458,7 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 	//if we have an octree, we need to iterate over a 
 	//limited set of polys and vertices only. 
 	i4_array<g1_quad_class*> qif(0,200);
-	i4_bool use_ot=i4_T;
+	i4_bool use_ot=i4_F;
 	if (obj->octree)
 		{
 		//hiddenly modificates the t_vertices array
@@ -576,16 +576,16 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 	//pf_render_object_light.stop();     
 	
 	pf_render_object_pack.start();
-	g1_quad_class *q_ptr = obj->quad, *q;
+	g1_quad_class *q_ptr = obj->quad, *q; 
 	int allquads=obj->num_quad;
-	if (obj->octree)
+	if (use_ot)
 		{
 		allquads=qif.size();
 		q_ptr=qif[0];
 		}
 	for (i=0; i<allquads; i++, q_ptr++)
 		{
-		if (obj->octree)
+		if (use_ot)
 			{
 			q_ptr=qif[i];
 			if (i>0 && q_ptr==qif[i-1]) //we've already drawn this quad.
@@ -1513,11 +1513,32 @@ i4_bool g1_render_class::project_point(const i4_3d_point_class &p,
 w8 g1_render_class::point_classify(const i4_3d_point_class &p,
 										   i4_transform_class *transform)
 	{
+	//This method seems to deliver wrong results. Need to fix it.	
 	i4_3d_vector temp;
 	transform->transform(p,temp);
 	temp.x *= scale_x;
     temp.y *= scale_y;
-	w8 code=r1_calc_outcode(temp);
+	w8 code=0;
+	if (temp.z<r1_near_clip_z)
+		{
+		//no further investigation ( a real vertex can't be outside of
+		//all planes)
+		code=0xff;
+		return code;
+		}
+	float ooz=r1_ooz(temp.z);
+	float px,py;
+	px = temp.x * ooz * center_x + center_x;
+    py = temp.y * ooz * center_y + center_y;
+	if (px<0)
+		code|=2;
+	if (px>2*center_x)
+		code|=1;
+	if (py<0)
+		code|=8;
+	if (py>2*center_y)
+		code|=4;
+	//w8 code=r1_calc_outcode(temp);
 	//if code is non-null it is outside of at least one plane of the frustrum
 	return code;
 	}
@@ -1576,6 +1597,7 @@ i4_bool g1_render_class::sphere_in_frustrum(const i4_3d_point_class center,
 		return i4_T;
 	return i4_F;
 	}
+
 i4_bool g1_render_class::cube_in_frustrum(const i4_3d_point_class center,
 										  i4_float xsize,
 										  i4_float ysize,
