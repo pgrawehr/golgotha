@@ -34,7 +34,7 @@
 #include "render/tex_no_heap.h"
 #include "render/tnode.h"
 #include <GL/gl.h>
-#include <GL/glu.h>
+//#include <GL/glu.h>
 
 #define R1_OPENGL_TEXFORMAT_HOLY 1   // 1555
 #define R1_OPENGL_TEXFORMAT_ALPHA 2  // 4444

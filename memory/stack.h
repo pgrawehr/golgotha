@@ -46,14 +46,15 @@ template <class T, int i> T i4_static_stack< T, i >::pop( void )
      throw "Stack-Unterlauf.";
 }
 
-template <class T>
-class i4_stack:public i4_array<T>
+template <typename T>
+class i4_stack:
+		public i4_array<T>
 {
 	public:
 	i4_stack(int entries,int grow=20):i4_array<T>(entries,grow){};
     T *push()
 		{
-        return add();
+        return i4_array<T>::add();
 		};
 
 	int push(T item)
@@ -63,14 +64,14 @@ class i4_stack:public i4_array<T>
 
 	T& top()
 		{
-		return entry[used-1];
+		return i4_array<T>::entry[i4_array<T>::used-1];
 		};
 
 	T pop()
 		{
-		I4_ASSERT(used>0,"FATAL: i4_stack: stack underflow");
-		T r=entry[used-1];
-		used--;
+		I4_ASSERT(i4_array<T>::used>0,"FATAL: i4_stack: stack underflow");
+		T r=i4_array<T>::entry[i4_array<T>::used-1];
+		i4_array<T>::used--;
 		return r;
 		};
 };

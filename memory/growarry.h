@@ -32,9 +32,9 @@ public:
     : entries(entries), name(name), grow(grow), entry(0), used(0)
   {
     if (entries>0)
-      entry = (T*)i4_malloc(sizeof(T)*entries, name);
+      entry = (T*)I4_MALLOC(sizeof(T)*entries, name);
     else
-      entry = (T*)i4_malloc(sizeof(T)*grow, name);
+      entry = (T*)I4_MALLOC(sizeof(T)*grow, name);
   }
 
   w32 add(T item)

@@ -36,7 +36,7 @@
 #include "error/alert.h"
 #include "app/app.h"
 #include <GL/gl.h>
-#include <GL/glu.h>
+//#include <GL/glu.h>
 
 class i4_cursor_class;
 

@@ -29,7 +29,7 @@
 #include "pch.h"
 #include <stdio.h>
 #include <GL/gl.h>
-#include <GL/glu.h>
+//#include <GL/glu.h>
 #include "image/image.h"
 #include "render/r1_api.h"
 #include "video/opengl/opengl_display.h"

@@ -52,8 +52,8 @@
 #define closesocket ::close
 #define OPTION_TYPE int
 //#define SIZE_TYPE int //defined by config.h
-#ifdef NETWORK_SIZE_TYPE_UNSIGNED
-#define SIZE_TYPE unsigned int
+#ifdef NETSOCK_SIZE_TYPE_UNSIGNED
+#define SIZE_TYPE unsigned int 
 #else
 #define SIZE_TYPE int
 #endif

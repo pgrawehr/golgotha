@@ -31,8 +31,8 @@ protected:
   T *entry;
   int used,entries,grow;
 public:
-	void set_used(int _new_used)//use with care!
-		{used=new_used;}
+	//void set_used(int _new_used)//use with care!
+	//	{used=new_used;}
 	void set_used()//sets used to entries
 		{used=entries;}
 	void set_grow(int _new_grow)//adjust growth
