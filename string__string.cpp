@@ -521,6 +521,12 @@ void i4_str::insert(i4_str::iterator p, const i4_const_str &other)
 {
   w32 l=length()+other.length();
   if (l>0xfff0) l=0xfff0;//Try to avoid vulnerability to buffer-overrun attacks
+  if (ptr==0)
+  {
+     ptr=(char*)I4_MALLOC(other.length(),"strbuf");
+     strncpy(ptr,other.c_str(),other.length());
+     return;
+  } //no here. thats enough.
   if (l>buf_len)//increase buffer size
 	  {
 	  
@@ -567,7 +573,7 @@ void i4_str::insert(i4_str::iterator p, const i4_const_str &other)
     len=buf_len-1;
     ptr[buf_len-1]=0;
   }
-      
+ //}}} ??? here end it?     
   iterator p3(p);
   // now see how much we can insert
   sw16 insert_len=(short)other.length();

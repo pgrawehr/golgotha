@@ -313,7 +313,7 @@ void i4_application_class::display_init()
 //      i4_error((char*)IDS_INVALIDBITDEPTH);
 //#else
     if (!use||found_width==0||found_height==0)
-      i4_error("FATAL: Invalid bit depth or resolution chosen or DirectX/OpenGL renderer is not ready.");
+      i4_warning("WARNING: Invalid bit depth or resolution chosen or DirectX/OpenGL renderer is not ready.");
 //#endif
   }
   i4_warning("INFO: About to initialize display to (%ix%ix%i) (Internal name %s) using driver %s.",
