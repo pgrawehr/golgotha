@@ -265,6 +265,7 @@ public:
   /** Returns true if this string is null */
   i4_bool null() const { return (i4_bool)(ptr==0); }
 
+  /// Pattern expansion.
   /// max_length is the maximum expanded length sprintf will create.
   /// sprintf uses it's own internal string as the format, and returns the
   /// result of the sprintf operation as a new i4_str
@@ -275,8 +276,10 @@ public:
   /** Find some substring */
   iterator strstr(const i4_const_str &needle_to_find) const;
   
-  ///this function is implemented for compatibility with stl. 
+  ///Return the C representation of this string. 
+  ///This function is implemented for compatibility with stl. 
   ///Do NOT delete the return value!
+  ///The method newer returns 0.
   char_type *c_str() const //c_str() must not return 0
   {
   if (ptr)
@@ -316,7 +319,7 @@ public:
     void set(i4_char ch) { *((char_type *)node)=(char_type)ch.value(); }
 	char_type& operator*() {return *((char_type*)node);}
   };
-  i4_str():buf_len(0){}
+  i4_str():i4_const_str(),buf_len(0){}
   i4_str(const i4_str &str) : i4_const_str(0) { init_from_string(str, (w16)str.length()); }
   i4_str(const i4_const_str &str) : i4_const_str(0) { init_from_string(str, (w16)str.length()); }
   i4_str(const i4_const_str &str, w16 _len) : i4_const_str(0) { init_from_string(str, _len); }
@@ -330,6 +333,15 @@ public:
   when the functions return, p still points to same character, but node 
   might have changed anyway, meaning the iterator is no more valid.
   First kind: Insert other before p.
+  \par Warning
+  Insert invalidates all iterators pointing to the string. 
+  Do not use code like the following.
+  \code
+  i4_str str("my tiny little string");
+  i4_str::iterator it=str.begin();
+  str.insert(it,"is ");
+  str.insert(it,"This "); //bang! it is no more valid.
+  \endcode
   */
   void insert(i4_str::iterator p, const i4_const_str &other);   // insert other before p
   /** More insertion.

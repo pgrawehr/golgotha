@@ -99,6 +99,7 @@ w32 i4_input_box(const i4_const_str &title, const i4_const_str &message, const i
 
 w32 i4_message_box(const i4_const_str &title, const i4_const_str &message, w32 flags=MSG_OK);
 
+/*
 w32 i4_message_box(i4_parent_window_class *parent,
                    i4_graphical_style_class *style,
                    const i4_const_str &title,
@@ -106,6 +107,6 @@ w32 i4_message_box(i4_parent_window_class *parent,
                    const i4_const_str &extra,
 				   i4_event *finished_event,
 				   w32 flags=4);
-
+*/
 
 #endif

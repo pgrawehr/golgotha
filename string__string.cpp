@@ -491,6 +491,11 @@ void i4_str::insert(i4_str::iterator p, const i4_char ch)
 		ptr=nptr;
 		p.node+=diff;
 	}
+    else if (buf_len>=0xfff0)
+        {
+        i4_warning("WARNING: String buffer exceeded maximum size. Character dropped");
+        return; 
+        }
 	iterator p2(p);
     if (p2==end())
     {
