@@ -96,13 +96,21 @@ li_object *g1_camera_key_depress(li_object *o, li_environment *env)
 
 li_object *g1_toggle_follow_mode(li_object *_o, li_environment *env)
 {
+  if (!g1_current_controller.get() )
+      return 0;
   g1_object_class *o=g1_player_man.get_local()->get_commander();
-  if (g1_current_controller.get() && o)
-    if (g1_current_controller->view.view_mode==G1_FOLLOW_MODE)
-      g1_current_controller->view.suggest_camera_mode(G1_ACTION_MODE, o->global_id);
-    else
-      g1_current_controller->view.suggest_camera_mode(G1_FOLLOW_MODE, o->global_id);
-
+  
+  if (g1_current_controller->view.follow_object_id)
+      {
+      o=g1_global_id.get(g1_current_controller->view.follow_object_id);
+      }
+  if (o)
+      {
+      if (g1_current_controller->view.view_mode==G1_FOLLOW_MODE)
+          g1_current_controller->view.suggest_camera_mode(G1_ACTION_MODE, o->global_id);
+      else
+          g1_current_controller->view.suggest_camera_mode(G1_FOLLOW_MODE, o->global_id);
+      }
   return 0;
 }
 
@@ -130,7 +138,7 @@ public:
 } g1_add_camera_funs_instance;
 
 
-
+//Warn: These don't really set the mode, they only set the camera
 li_object *g1_action_mode(li_object *o, li_environment *env)
 {
   if (g1_current_view_state())
@@ -149,9 +157,18 @@ li_object *g1_follow_mode(li_object *o, li_environment *env)
 {
   g1_player_piece_class *com=g1_player_man.get_local()->get_commander();
   if (g1_current_view_state() && com)
-    g1_current_view_state()->suggest_camera_mode(G1_FOLLOW_MODE, com->global_id);
+    g1_current_view_state()->suggest_camera_mode(G1_FOLLOW_MODE, 0);
   return 0;
 }
+
+li_object *g1_goto_stank(li_object *o, li_environment *env)
+    {
+    g1_player_piece_class *com=g1_player_man.get_local()->get_commander();
+    li_call("strategy_on_bottom");
+    if (g1_current_view_state() && com)
+        g1_current_view_state()->suggest_camera_mode(G1_FOLLOW_MODE, com->global_id);
+    return 0;
+    }
 
 li_object *g1_camera_mode(li_object *o, li_environment *env)
 {
@@ -162,7 +179,8 @@ li_object *g1_camera_mode(li_object *o, li_environment *env)
 		  curr_mode=G1_ACTION_MODE;
 	  else 
 		  curr_mode=G1_WATCH_MODE;
-	  g1_current_view_state()->suggest_camera_mode(curr_mode);
+	  g1_current_view_state()->suggest_camera_mode(curr_mode,
+          g1_current_view_state()->follow_object_id);
 	  }
   return 0;
 }
@@ -342,7 +360,7 @@ void g1_view_state_class::update_follow_mode()
   start=end;
   
   g1_object_class *follow = g1_global_id.check_id(follow_object_id) ?
-  g1_global_id.get(follow_object_id) : 0;
+        g1_global_id.get(follow_object_id) : 0;
   if (follow)
   {
     g1_player_piece_class *stank=g1_player_man.get_local()->get_commander();
@@ -397,10 +415,26 @@ void g1_view_state_class::update_follow_mode()
 void g1_view_state_class::update_action_mode()
 {
   g1_player_piece_class *stank=g1_player_man.get_local()->get_commander();
-  if (!stank)
+  //if the id was previously unassigned, use the stank.
+  if (stank&&!follow_object_id)
+      follow_object_id=stank->global_id;
+  if (!stank||(stank->global_id!= follow_object_id))
   {
-    view_mode=G1_WATCH_MODE;
-    update();
+    g1_map_piece_class *obj=
+        g1_map_piece_class::cast(g1_global_id.checked_get(follow_object_id));
+    if (!obj)
+        {
+        follow_object_id=g1_global_id.invalid_id();
+        view_mode=G1_WATCH_MODE;
+        update();
+        }
+    else
+        {
+        obj->calc_action_cam(start,0);
+        obj->calc_action_cam(end,1);
+        start_end_interpolate_fraction=0.0;
+        start_end_interpolate_fraction_step=1.0;
+        }
   }
   else
   {
@@ -980,7 +1014,10 @@ void g1_view_state_class::suggest_camera_mode(g1_view_mode_type mode,
   if (view_mode!=mode)
 	  mode_changed=i4_T;
   view_mode=mode;
-  follow_object_id=follow_object_global_id;
+  if (0!=follow_object_global_id)
+    follow_object_id=follow_object_global_id;
+  if (g1_global_id.checked_get(follow_object_id)==0)
+      follow_object_id=0;
 
 
   switch (mode)
@@ -1138,6 +1175,7 @@ li_automatic_add_function(g1_action_mode, "action_mode");
 li_automatic_add_function(g1_strategy_mode, "strategy_mode");  
 li_automatic_add_function(g1_follow_mode, "follow_mode");  
 li_automatic_add_function(g1_set_camera_position, "set_camera_pos");  
+li_automatic_add_function(g1_goto_stank, "Goto_stank");
 
 li_automatic_add_function(g1_camera_mode, "camera_mode");
 li_automatic_add_function(g1_set_current_camera, "set_current_camera");  

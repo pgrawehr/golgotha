@@ -1247,6 +1247,7 @@ void g1_object_class::editor_draw(g1_draw_context_class *context)
 }
 
 
+
 static li_symbol_ref acid("acid");
 
 i4_bool g1_object_class::check_collision(const i4_3d_vector &start, 

@@ -359,7 +359,13 @@ g1_editor_class::g1_editor_class()
   memset(&movement, 0, sizeof(movement));
   t_views=1;//show only 1 view by default
   for (int i=0; i<MAX_VIEWS; i++)
-    view_states[i].suggest_camera_mode(G1_EDIT_MODE);
+      {
+      //must do it manually here, since some prerequisites
+      //are not yet met when we first use this constructor. 
+      //view_states[i].suggest_camera_mode(G1_EDIT_MODE);
+      view_states[i].view_mode=G1_EDIT_MODE;
+      view_states[i].mode_changed=i4_T;
+      }
 
   vert_noise_amount=3;
   use_view_state=i4_F;

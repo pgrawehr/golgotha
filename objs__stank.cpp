@@ -798,16 +798,6 @@ void g1_player_piece_class::think()
 
   w32 pathinfo = follow_path();
   
-  /*
-  //This seems to be a bit wrong, as the ai player can also get inputs...
-  if (player_num==g1_human->team() &&
-      (!g1_current_controller.get() ||
-       (g1_current_controller->view.get_view_mode()!=G1_ACTION_MODE) &&
-       g1_current_controller->view.get_view_mode()!=G1_FOLLOW_MODE &&
-       g1_current_controller->view.get_view_mode()!=G1_WATCH_MODE
-       ))
-    process_input = i4_F;
-*/
 
   if (!g1_current_controller.get() ||
        (g1_current_controller->view.get_view_mode()!=G1_ACTION_MODE) &&
@@ -1159,12 +1149,10 @@ void g1_player_piece_class::think()
   if (process_input)
 	  {
 	  set_flag(NEEDS_SYNC,1);//always needs sync
+      }
 #ifdef NETWORK_INCLUDED
- 	  g1_network_time_man_ptr->updatecomplete(global_id,g1_tick_counter);
+   g1_network_time_man_ptr->updatecomplete(global_id,g1_tick_counter);
 #endif
-	  }
-
-  //Nope, only needs sync if user - controlled
 
   pf_stank_think.stop();
 }
@@ -1204,8 +1192,8 @@ void g1_player_piece_class::track_base(i4_float desired_angle)
 }
 
 
-extern w32 g1_num_objs_in_view;
-extern i4_array<g1_object_class*> g1_objs_in_view_dyn;
+//extern w32 g1_num_objs_in_view;
+//extern i4_array<g1_object_class*> g1_objs_in_view_dyn;
 
 g1_object_class *g1_player_piece_class::find_view_target(const i4_3d_vector &view_pos,
                                                          const i4_3d_vector &view_dir,
@@ -1225,15 +1213,15 @@ g1_object_class *g1_player_piece_class::find_view_target(const i4_3d_vector &vie
 
   g1_object_class *fire_at_this = 0;
 
-  if (g1_num_objs_in_view <= 0) return 0;
-  w32 objs_to_check=g1_num_objs_in_view>256?256:g1_num_objs_in_view;
+  if (g1_objs_in_view_dyn.size()<= 0) return 0;
+  w32 objs_to_check=g1_objs_in_view_dyn.size()>256?256:g1_objs_in_view_dyn.size();
   for (i=0;i<(int)objs_to_check;i++)
   {
     if (g1_objs_in_view_dyn[i])
     {
       g1_object_class *p = g1_objs_in_view_dyn[i];
 
-      if (p && can_attack(p) && p->get_flag(DANGEROUS) && p!=(g1_object_class *)this)
+      if (can_attack(p) && p->get_flag(DANGEROUS) && p!=(g1_object_class *)this)
       {
         i4_3d_vector source_to_target = i4_3d_vector(p->x, p->y, p->h);
         source_to_target -= view_pos;

@@ -181,8 +181,12 @@ public:
 void g1_bomb_truck_init()
 	{
 	special_command_entry *sce=0;
-	const w32 NUMCOMMANDS=2;
-	char *cmdnames[NUMCOMMANDS]={"command-stop","command-self_destruct"};
+	const w32 NUMCOMMANDS=5;
+	char *cmdnames[NUMCOMMANDS]={"command-stop",
+        "command-self_destruct",
+        "command-control",
+        "command-toggle_switch",
+        "command-to_far_switch"};
 	for (int i=0;i<NUMCOMMANDS;i++)
 		{
 		li_get_symbol(cmdnames[i]);//to be sure the names pop up in the symbol table

@@ -332,32 +332,32 @@ void g1_team_api_class::guide_hero()
         else if (bangle<-i4_pi())
           bangle += i4_2pi();
 
-        turn(bangle*0.45);//this should be slower than the turret.
+        turn(bangle*0.45,0);//this should be slower than the turret.
 
         if (dangle>-commander()->defaults->turn_speed && 
 			dangle<commander()->defaults->turn_speed)
         { // JJ
-			if(mp->id == g1_supertank_type && in_range1() && fire1()) 
+			if(mp->id == g1_supertank_type && in_range1() && fire1(0)) 
 				{
 				}
-			else if (in_range0() && fire0()) 
+			else if (in_range0() && fire0(0)) 
 				{
 				}
-			else if (in_range2() && fire2()) 
+			else if (in_range2() && fire2(0)) 
 				{
 				};
         } // JJ
         if (dist2<9.0f)
-          strafe(-0.7f);
+          strafe(-0.7f,NULL);
         else if (dist2<64.0f)
         {
-          strafe(0.5f);
-          accelerate(0.1f);
+          strafe(0.5f,NULL);
+          accelerate(0.1f,NULL);
         }
         else
         {
-          strafe(-0.1f);
-          accelerate(1.0f);
+          strafe(-0.1f,NULL);
+          accelerate(1.0f,NULL);
         }
       }
     }
@@ -554,31 +554,31 @@ public:
         else if (dangle<-i4_pi())
           dangle += 2*i4_pi();
 
-        turn(dangle);
+        turn(dangle,NULL);
 
         if (dangle>-0.04 && dangle<0.04)
         { // JJ
-			if(mp->id == g1_supertank_type && in_range1() && fire1()) 
+			if(mp->id == g1_supertank_type && in_range1() && fire1(NULL)) 
 				{
 				}
-			else if (in_range0() && fire0()) 
+			else if (in_range0() && fire0(NULL)) 
 				{
 				}
-			else if (in_range2() && fire2()) 
+			else if (in_range2() && fire2(NULL)) 
 				{
 				};
         } // JJ
         if (dist2<9.0f)
-          strafe(-0.7f);
+          strafe(-0.7f,NULL);
         else if (dist2<64.0f)
         {
-          strafe(0.5f);
-          accelerate(0.1f);
+          strafe(0.5f,NULL);
+          accelerate(0.1f,NULL);
         }
         else
         {
-          strafe(-0.1f);
-          accelerate(1.0f);
+          strafe(-0.1f,NULL);
+          accelerate(1.0f,NULL);
         }
       }
     }

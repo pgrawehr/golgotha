@@ -643,7 +643,48 @@ void g1_map_piece_class::lead_target(i4_3d_point_class &lead, i4_float shot_spee
   }
 }
 
+void g1_map_piece_class::calc_action_cam(g1_camera_info_struct &cam,
+                                            float fr)
+{  
+  i4_transform_class cam_transform;
+  
+  i4_3d_vector interp_pos,tmp;
+  interp_pos.interpolate(i4_3d_vector(lx,ly,lh), i4_3d_vector(x,y,h), fr);
 
+  cam.ground_rotate = i4_interpolate_angle(ltheta,theta, fr);
+  cam.horizon_rotate = i4_interpolate_angle(lpitch,pitch, fr);
+  cam.roll  = i4_interpolate_angle(lroll, roll, fr);
+  cam.ground_x_rotate = i4_interpolate_angle(lgroundroll,  groundroll, fr);
+  cam.ground_y_rotate = i4_interpolate_angle(lgroundpitch, groundpitch, fr);
+    
+  cam_transform.translate(interp_pos.x, interp_pos.y, interp_pos.z);
+
+  cam_transform.mult_rotate_x(cam.ground_x_rotate);
+  cam_transform.mult_rotate_y(cam.ground_y_rotate);
+  cam_transform.mult_rotate_z(cam.ground_rotate);
+  cam_transform.mult_rotate_y(cam.horizon_rotate);
+  
+  //hardcoded position of the camera, relative to (0,0,0) of the model.
+  //for most objects, (0,0,0) is the floor contact point. 
+  cam_transform.transform(i4_3d_vector(0,0.1f,0.3f), tmp);
+
+  cam.gx = tmp.x;
+  cam.gy = tmp.y;
+  cam.gz = tmp.z;
+}
+
+void g1_map_piece_class::set_as_controlled_object(g1_view_mode_type mode)
+    {
+    if (g1_current_controller.get())
+        {
+        if (g1_current_controller->view.view_mode==G1_STRATEGY_MODE)
+            {
+            li_call("strategy_on_bottom",0,0);
+            }
+        g1_current_controller->view.suggest_camera_mode(mode,global_id);
+        }
+
+    }
 
 void g1_map_piece_class::init()
 {
@@ -1070,30 +1111,81 @@ void g1_map_piece_class::request_remove()
 }
 //}}}
 
+//this function must only be called if controled() returns true for
+//this object!
+i4_bool g1_map_piece_class::grab_user_controls(i4_float &speed, 
+                                            i4_float &angle,
+                                            i4_float &height)
+    {
+    g1_team_api_class *ta=g1_player_man.get(player_num)->get_ai();
+    
+    speed=ta->user_accel;
+    ta->user_accel=0;
+    angle=ta->user_angle;
+    ta->user_angle=0;
+    height=ta->user_height;
+    ta->user_height=0;
+
+    return (speed!=0 || angle!=0 || height !=0 );
+    };
+
+i4_bool g1_map_piece_class::controled()
+    {
+    if (g1_current_controller.get()&&
+        ((g1_current_controller->view.follow_object_id==global_id )) 
+        &&
+        ((g1_current_controller->view.view_mode==G1_ACTION_MODE)||
+        (g1_current_controller->view.view_mode==G1_FOLLOW_MODE)))
+        return i4_T;
+    return i4_F;
+    }
+
 i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
                                          i4_float &dtheta,
                                          i4_float &dx, i4_float &dy,
                                          i4_float braking_friction,
                                          i4_bool reversible)
 	{
-	if (path|| (!(solveparams&SF_OK) && prefered_solver()))
+    i4_bool ctrl=controled();
+    i4_float c_accel=0,c_angle=0,c_height=0;
+	if (path|| (ctrl && grab_user_controls(c_accel,c_angle,c_height))
+        ||(!(solveparams&SF_OK) && prefered_solver()))
 		{
 		w32 path_info=follow_path();
 		if (path_info==FINAL_POINT)
 			braking_friction=0.1f;
-
+        
+        i4_float angle,t ,diffangle;
+        //copied from stank
+		i4_bool go_reverse    = i4_F;
+		i4_bool can_get_there = i4_T;
+		dx=dy=0;
+        if (ctrl)
+            {
+            if (!path_info)
+                {
+                dest_x=x;
+                dest_y=y;
+                }
+            if (c_accel==0)
+                braking_friction=0.1f;
+            //angle is the ABSOLUTE target angle, not relative!
+            angle=theta+c_angle;
+            dx = (float)cos(theta) * c_accel;
+		    dy = (float)sin(theta) * c_accel;
+            }
 		if (path_info)
 			{
-			i4_float angle,t ,diffangle;
-			//copied from stank
-			i4_bool go_reverse    = i4_F;
-			i4_bool can_get_there = i4_T;
 			
 			dx = (dest_x - x);
 			dy = (dest_y - y);
 			
 			//aim the vehicle    
-			angle = i4_atan2(dy,dx);
+			angle = i4_atan2(dy,dx)+c_angle;
+            }
+
+        if (path_info||ctrl)
+            {
 			i4_normalize_angle(angle);    
 			
 			diffangle = angle - theta;
@@ -1116,8 +1208,9 @@ i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
 			t = dx*dx + dy*dy;
 			
 			//how far will the vehicle go if he slows down from his maximum speed?
-			if (t>speed*speed+0.0025 || braking_friction==0.0)
-				{
+            //No idea when skipping this makes sense
+			//if (t>speed*speed+0.0025 || braking_friction==0.0)
+			//	{
 				if (dtheta<-defaults->turn_speed) dtheta = -defaults->turn_speed;
 				else if (dtheta>defaults->turn_speed) dtheta = defaults->turn_speed;
 				theta += dtheta;
@@ -1130,8 +1223,8 @@ i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
 				if (!go_reverse && braking_friction>0.0 && t<=(stop_dist*stop_dist))
 					{            
 					//just in case our calculations were off, dont let him slow to less than 0.01
-					if (speed <= 0.01)
-						speed = 0.01f;
+					if (speed <= 0.001)
+						speed = 0.0f;
 					else
 						speed *= (1.0f-braking_friction);
 					}
@@ -1155,23 +1248,38 @@ i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
 						speed *= (1.0f-braking_friction);
 					else 
 						{
-						if (go_reverse) 
-							accel = -defaults->accel*0.30f;
+                        if (path_info)
+                            {
+						    if (go_reverse) 
+							    accel = -defaults->accel*0.30f;
+						    else
+							    accel = defaults->accel;
+                            }
 						else
-							accel = defaults->accel;
-						
+                            {
+                            accel=c_accel;
+                            }
 						accel += (float)sin(pitch)*g1_resources.gravity;
 						
 						speed -= speed*damping_fraction;
 						speed += accel;
 						}
 					}
-				dist = speed*(float)cos(pitch);
+                if (speed>defaults->speed)
+                    speed=defaults->speed;
+                if (speed<(-defaults->speed*0.3f))
+                    speed=defaults->speed*-0.3f;
+                dist = speed*(float)cos(pitch);
 				dx = (float)cos(theta) * dist;
 				dy = (float)sin(theta) * dist;
 				//dist = t;
 				return i4_T;
-				}
+//				}
+//            else
+//                {
+//                i4_error("Unreconized case");
+//                }
+				
 			
 			}
 		dtheta = 0;
@@ -1378,8 +1486,10 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 						speed += accel;
 						}
 					}
+                //Check that we don't get too fast
 				if ((speed*1.1)>defaults->speed)
 					speed=defaults->speed*1.1;
+
 				dist = speed*(float)cos(pitch);
 				dx = (float)cos(theta) * dist;
 				dy = (float)sin(theta) * dist;
@@ -1941,12 +2051,12 @@ void g1_map_piece_class::calc_world_transform(i4_float ratio, i4_transform_class
 }
 //The different commands are now registered in the bomb_truck class initer
 static li_symbol_ref commands_ask("commands-ask"),
-	commands_exec("commands-exec"),
+	commands_exec("commands-exec"),command_control("command-control"),
 	command_stop("command-stop");
 li_object *g1_map_piece_class::message(li_symbol *message, li_object *message_param, li_environment *env)
 	{
 	if (message==commands_ask.get())
-		return li_make_list(command_stop.get(),g1_object_class::message(message,message_param,env),0);
+		return li_make_list(command_stop.get(),command_control.get(),g1_object_class::message(message,message_param,env),0);
 	if (message==commands_exec.get())
 		{
 		if (message_param==command_stop.get())
@@ -1958,7 +2068,12 @@ li_object *g1_map_piece_class::message(li_symbol *message, li_object *message_pa
 			set_path((g1_path_class *)NULL);
 			return li_true_sym;
 			}
-		else
+		else if (message_param==command_control.get())
+            {
+            set_as_controlled_object(G1_ACTION_MODE);
+            return li_true_sym;
+            }
+        else
 			{
 			return g1_object_class::message(message,message_param,env);
 			}

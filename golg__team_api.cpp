@@ -37,11 +37,14 @@ void write_playback_checker(i4_file_class *fp)
 }
 
 g1_team_api_class::g1_team_api_class()
-  : record(0), playback(0),name(0)
+  : record(0), playback(0),name(0),user_fire_at(0,0,0)
 //{{{
 {
 reload=0;
 lastnewpos=300;
+user_accel= user_angle= user_height= user_strafe=0;
+user_lookx= user_looky=0;
+user_fire1= user_fire2= user_fire3=i4_F;
 }
 //}}}
 
@@ -51,6 +54,18 @@ g1_player_piece_class *g1_team_api_class::commander() const
   return player->get_commander();
 }
 //}}}
+
+g1_map_piece_class *g1_team_api_class::controlled() const
+    {
+    if (!g1_current_controller.get())
+        return 0;
+    g1_map_piece_class *obj=
+    g1_map_piece_class::cast(
+        g1_global_id.checked_get(g1_current_controller->view.follow_object_id));
+    if (obj==commander())
+        return 0;
+    return obj;
+    }
 
 sw16 g1_team_api_class::health() const
 //{{{
@@ -152,7 +167,7 @@ i4_bool g1_team_api_class::in_range2() const
 }
 //}}}
 
-void g1_team_api_class::turn(i4_float angle)
+void g1_team_api_class::turn(i4_float angle, g1_map_piece_class *forwho)
 //{{{
 {
   if (record)
@@ -163,12 +178,21 @@ void g1_team_api_class::turn(i4_float angle)
   }
 
   i4_float max = g1_resources.player_turn_speed;
-  if (commander())
+  if (!forwho&&commander())
     commander()->dtheta = (angle>max)?max:(angle<-max)?-max:angle;
+  if (forwho)
+      {
+      if (forwho->get_flag(g1_object_class::SELECTABLE)&&angle!=0)
+          {
+          forwho->unlink();
+          user_angle=angle;
+          }
+      }
+
 }
 //}}}
 
-void g1_team_api_class::accelerate(i4_float ratio)
+void g1_team_api_class::accelerate(i4_float ratio,g1_map_piece_class *forwho)
 //{{{
 {
   if (record)
@@ -178,12 +202,20 @@ void g1_team_api_class::accelerate(i4_float ratio)
     record->write_float(ratio);
   }
 
-  if (commander())
+  if (!forwho&&commander())
     commander()->accel_ratio = (ratio>1.0f)?1.0f:(ratio<-1.0f)?-1.0f:ratio;
+  if (forwho)
+      {
+      if (forwho->get_flag(g1_object_class::SELECTABLE)&&ratio!=0)
+          {
+          forwho->unlink();
+          user_accel=ratio;
+          }
+      }
 }
 //}}}
 
-void g1_team_api_class::strafe(i4_float ratio)
+void g1_team_api_class::strafe(i4_float ratio,g1_map_piece_class *forwho)
 //{{{
 {
   if (record)
@@ -193,12 +225,20 @@ void g1_team_api_class::strafe(i4_float ratio)
     record->write_float(ratio);
   }
 
-  if (commander())
+  if (!forwho&&commander())
     commander()->strafe_accel_ratio = (ratio>1.0f)?1.0f:(ratio<-1.0f)?-1.0f:ratio;
+  if (forwho)
+      {
+      if (forwho->get_flag(g1_object_class::SELECTABLE)&&ratio!=0)
+          {
+          forwho->unlink();
+          user_strafe=ratio;
+          }
+      }
 }
 //}}}
 
-void g1_team_api_class::look(i4_float dax, i4_float day)
+void g1_team_api_class::look(i4_float dax, i4_float day,g1_map_piece_class *forwho)
 //{{{
 {
   if (record)
@@ -209,15 +249,26 @@ void g1_team_api_class::look(i4_float dax, i4_float day)
     record->write_float(day);
   }
 
-  if (commander())
+  if (!forwho&&commander())
   {
     commander()->mouse_look_increment_x = dax;
     commander()->mouse_look_increment_y = day;
   }
+
+  if (forwho)
+      {
+      if (forwho->get_flag(g1_object_class::SELECTABLE))
+          {
+          //forwho->unlink();
+          user_lookx=dax;
+          user_looky=day;
+          }
+      }
+
 }
 //}}}
 
-i4_bool g1_team_api_class::fire0()
+i4_bool g1_team_api_class::fire0(g1_map_piece_class *forwho)
 //{{{
 {
   if (record)
@@ -226,10 +277,18 @@ i4_bool g1_team_api_class::fire0()
     record->write_8(G1_COMMAND_FIRE0);
   }
 
-  if (ammo0()==0)
-    return i4_F;
+  
+  if (!forwho)
+      {
+      if (ammo0()==0)
+        return i4_F;
 
-  commander()->fire[0] = i4_T;
+      commander()->fire[0] = i4_T;
+      }
+  else
+      {
+      user_fire1=i4_T;
+      }
   return i4_T;
 }
 //}}}
@@ -252,9 +311,11 @@ i4_bool g1_team_api_class::continue_game()
 }
 
 
-i4_bool g1_team_api_class::fire1()
+i4_bool g1_team_api_class::fire1(g1_map_piece_class *forwho)
 //{{{
 {
+  if (forwho)
+      return i4_F;
   if (record)
   {
     write_playback_checker(record);
@@ -270,9 +331,11 @@ i4_bool g1_team_api_class::fire1()
 //}}}
 
 
-i4_bool g1_team_api_class::fire2()
+i4_bool g1_team_api_class::fire2(g1_map_piece_class *forwho)
 //{{{
 {
+  if (forwho)
+      return i4_F;
   if (record)
   {
     write_playback_checker(record);
@@ -511,29 +574,32 @@ i4_bool g1_team_api_class::playback_think()
   {
     read_playback_checker(playback);
     com = playback->read_8();
+    //Todo: Fix playback for other units than stank.
+    //But playback is currently not working anyway, so ignore this
+    //for the moment
     switch (com)
     {
       case G1_COMMAND_TURN:
       {
         i4_float angle = playback->read_float();
-        turn(angle);
+        turn(angle,0);
       } break;
       case G1_COMMAND_ACCEL:
       {
         i4_float ratio = playback->read_float();
-        accelerate(ratio);
+        accelerate(ratio,0);
       } break;
       case G1_COMMAND_STRAFE:
       {
         i4_float ratio = playback->read_float();
-        strafe(ratio);
+        strafe(ratio,0);
       } break;
       case G1_COMMAND_LOOK:
       {
         i4_float dx,dy;
         dx = playback->read_float();
         dy = playback->read_float();
-        look(dx,dy);
+        look(dx,dy,0);
       } break;
       case G1_COMMAND_DEPLOY:
       {
@@ -555,13 +621,13 @@ i4_bool g1_team_api_class::playback_think()
         set_current_target(id);
       } break;
       case G1_COMMAND_FIRE0:
-        fire0();
+        fire0(0);
         break;
       case G1_COMMAND_FIRE1:
-        fire1();
+        fire1(0);
         break;
       case G1_COMMAND_FIRE2:
-        fire2();
+        fire2(0);
         break;
       case G1_COMMAND_END: 
         break;

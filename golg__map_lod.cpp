@@ -463,7 +463,7 @@ void g1_map_class::calc_map_lod(g1_object_controller_class *cont)
 
 static r1_texture_ref g1_default_texture("tron_grid");
 const w32          g1_max_objs_in_view = 2048;
-w32                g1_num_objs_in_view = 0;
+//w32                g1_num_objs_in_view = 0;
 //w32 g1_objs_in_view[g1_max_objs_in_view];
 r1_vert temp_buf_1[9];
 r1_vert temp_buf_2[9];
@@ -476,7 +476,7 @@ class transform_killer_class : public i4_init_class
   void uninit() 
 	  { 
 	  g1_obj_transforms_in_view.uninit(); 
-	  g1_num_objs_in_view=0;
+	  //g1_num_objs_in_view=0;
 	  g1_objs_in_view_dyn.uninit();
 	  }
 } transform_killer;
@@ -632,7 +632,7 @@ static void gather_objects(int x1, int y1, int x2, int y2)
 				g1_objs_in_view_dyn.add(obj);
 				obj->world_transform = g1_obj_transforms_in_view.add();
           
-				g1_num_objs_in_view++;
+				//g1_num_objs_in_view++;
           
 				//have the object update his transform
 				obj->calc_world_transform(g1_render.frame_ratio);          
@@ -709,7 +709,7 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
 //   g1_lod.cont->view.get_camera_pos(pos);
   pos = g1_lod.pos;
 
-  g1_num_objs_in_view = 0;
+  //g1_num_objs_in_view = 0;
   g1_objs_in_view_dyn.clear();
   g1_obj_transforms_in_view.clear();
 
@@ -872,7 +872,7 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
   //because we only need to partition the set which is O(n), not O(n*log(n))
   //This actually corresponds to doing one iteration of qsort.
   //g1_objs_in_view_dyn.sort(object_compare);
-  int last_non_alpha=g1_num_objs_in_view-1;
+  int last_non_alpha=g1_objs_in_view_dyn.size()-1;
   while (last_non_alpha>=0&&
       g1_objs_in_view_dyn[last_non_alpha]->get_type()->get_flag(g1_object_definition_class::HAS_ALPHA))
       {
@@ -894,7 +894,7 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
       }
   
   //for (i=g1_num_objs_in_view-1;i>=0;i--)
-  for (i=0;i<g1_num_objs_in_view;i++)
+  for (i=0;i<g1_objs_in_view_dyn.size();i++)
   {
     o=g1_objs_in_view_dyn[i];
     if (o)
@@ -911,7 +911,7 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
 
   if (context->draw_editor_stuff)
   {
-    for (i=g1_num_objs_in_view-1;i>=0;i--)
+    for (i=g1_objs_in_view_dyn.size()-1;i>=0;i--)
     {
       o=g1_objs_in_view_dyn[i];
       if (o)
@@ -962,7 +962,8 @@ class num_in_view_reset_class : public g1_global_id_reset_notifier
 public:
   virtual void reset() 
   {
-    g1_num_objs_in_view=0;   
+    //g1_num_objs_in_view=0;   
 	g1_objs_in_view_dyn.clear();
+    g1_obj_transforms_in_view.clear();
   }
 } num_in_view_reset_inst;

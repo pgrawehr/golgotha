@@ -19,18 +19,21 @@ class g1_saver_class;      // golg/saver.hh
 class i4_transform_class;  // i4/math/transform.hh
 class g1_object_class;     // golg/g1_object.hh
 
+/// This enum defines different possibilities to set the camera location.
 enum g1_view_mode_type
 {
-  G1_EDIT_MODE,          // camera is set exactly by someone without outside influence
-  G1_STRATEGY_MODE,      // camera looks down from fixed hieght above ground
-  G1_ACTION_MODE,        // camera follow objects from 1st person
-  G1_FOLLOW_MODE,        // camera follows objects from 3rd person
-  G1_CAMERA_MODE,        // camera follows spline set down by the editor
-  G1_WATCH_MODE,         // camera wanders around looking at interesting things
-  G1_CIRCLE_WAIT,        // camera is circling an object/location until the user presses a key
-  G1_MAXTOOL_MODE,	     // camera shows single object, context is maxtool
-  G1_INTELLIGENT_MODE,	 // unimplemented: camera behaves like in tomb raider
-  G1_LOOK_OUT_MODE		 // unimplemented: camera looks around from a fixed point
+  G1_EDIT_MODE,          /// camera is set exactly by someone without outside influence
+  G1_STRATEGY_MODE,      /// camera looks down from fixed height above ground
+  G1_ACTION_MODE,        /// camera follow the stank from 1st person
+  G1_FOLLOW_MODE,        /// camera follows the stank from 3rd person
+  G1_CAMERA_MODE,        /// camera follows spline set down by the editor
+  G1_WATCH_MODE,         /// camera wanders around looking at interesting things
+  G1_CIRCLE_WAIT,        /// camera is circling an object/location until the user presses a key
+  G1_MAXTOOL_MODE,	     /// camera shows single object, context is maxtool
+  G1_INTELLIGENT_MODE,	 /// unimplemented: camera behaves like in tomb raider
+  G1_LOOK_OUT_MODE,		 /// unimplemented: camera looks around from a fixed point
+  G1_AUX_ACTION_MODE,    /// camera follows object from 1st person
+  G1_AUX_FOLLOW_MODE,    /// camera follows object form 3rd person    
 };
 
 enum g1_watch_type       // priorities for the camera

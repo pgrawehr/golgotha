@@ -710,7 +710,8 @@ public:
                 li_call("strategy_on_top");
               }
 
-              g1_current_view_state()->suggest_camera_mode(G1_ACTION_MODE);
+              g1_current_view_state()->suggest_camera_mode(G1_ACTION_MODE,
+                  g1_current_view_state()->follow_object_id);
             }
 
             i4_window_request_mouse_ungrab_class ungrab(this);

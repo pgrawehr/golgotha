@@ -279,9 +279,10 @@ w32 g1_human_class::show_selection(g1_object_controller_class *for_who,
 				}
 
 			}
-		if (!thisbb)
-			continue;
-		g1_render.draw_outline(thisbb,o);
+		//if (!thisbb)
+		//	continue;
+        if (thisbb)
+		    g1_render.draw_outline(thisbb,o);
         w32 commands_flags=o->get_selection_flags();
         if ((o->player_num==team()) || 
             (commands_flags&g1_object_class::SEL_ENEMYCANSENDCMD))
@@ -292,7 +293,7 @@ w32 g1_human_class::show_selection(g1_object_controller_class *for_who,
 		}
 	//The list has the following format (I suppose?!?)
 	//((command-a1,command-a2,command-a3),(command-b1,command-b2),...,0);
-	if (nums==1 && thisbb)
+	if (nums==1)
 		{//the easy case: only one unit selected
 		//lians=special_commands[0];
 		lians=li_car(lians,0);//first element of first entry
@@ -304,7 +305,10 @@ w32 g1_human_class::show_selection(g1_object_controller_class *for_who,
 		//buty=thisbb->y2+10;
 		butx=10;
 		buty=2*g1_render.center_y-30;
-		butz=thisbb->z1;
+        if (thisbb)
+		    butz=thisbb->z1;
+        else
+            butz=r1_near_clip_z;
 		while(liobj!=0)
 			{
 			lisym=li_symbol::get(liobj,0);
@@ -517,8 +521,7 @@ void g1_human_class::think()
 
   g1_player_piece_class *stank = commander();  
   if ((g1_current_controller->view.get_view_mode()!=G1_ACTION_MODE &&
-       g1_current_controller->view.get_view_mode()!=G1_FOLLOW_MODE) ||
-      !stank || stank->health<=0)
+       g1_current_controller->view.get_view_mode()!=G1_FOLLOW_MODE))
     process_input=i4_F;
   
   if (!process_input)//are we controlling the stank?
@@ -529,13 +532,13 @@ void g1_human_class::think()
     g1_input.deque_time(g1_input_class::DOWN);
     g1_input.deque_time(g1_input_class::STRAFE_LEFT);
     g1_input.deque_time(g1_input_class::STRAFE_RIGHT);
-	sw32 strategy_in=g1_input.deque_time(g1_input_class::ZOOM_IN);
-	sw32 strategy_out=g1_input.deque_time(g1_input_class::ZOOM_OUT);
+	g1_input.deque_time(g1_input_class::ZOOM_IN);
+	g1_input.deque_time(g1_input_class::ZOOM_OUT);
 	g1_input.deque_time(g1_input_class::ZOOM_LEFT);
 	g1_input.deque_time(g1_input_class::ZOOM_RIGHT);
 	
-	sw32 strategy_up=g1_input.deque_time(g1_input_class::ZOOM_UP);
-	sw32 strategy_down=g1_input.deque_time(g1_input_class::ZOOM_DOWN);
+	g1_input.deque_time(g1_input_class::ZOOM_UP);
+	g1_input.deque_time(g1_input_class::ZOOM_DOWN);
 //	if (g1_current_controller->view.get_view_mode()==G1_STRATEGY_MODE)
 //		{
 //		g1_resources.startegy_camera_dist+=(strategy_up-strategy_down)*G1_HZ/1000.0f;
@@ -550,8 +553,8 @@ void g1_human_class::think()
     if (memcmp(g1_input.grab_cheat_keys(),"DOG",3)==0)
     {
       g1_input.clear_cheat_keys();
-
-      stank->toggle_stank_flag(g1_player_piece_class::ST_GODMODE);
+      if (stank)
+        stank->toggle_stank_flag(g1_player_piece_class::ST_GODMODE);
     }
 	if (g1_border.get())
 		{
@@ -560,8 +563,8 @@ void g1_human_class::think()
 		if (g1_border->last_mouse_x()>(g1_border->width()-20))
 			mouse_look_increment_x+=0.5;
 		}
-    look(mouse_look_increment_x, mouse_look_increment_y);
-    mouse_look_increment_y = mouse_look_increment_x = 0;
+    g1_map_piece_class *whofor=controlled();
+       
     
     sw32
       left_ms=g1_input.deque_time(g1_input_class::LEFT),
@@ -577,10 +580,11 @@ void g1_human_class::think()
 		zoom_up=g1_input.deque_time(g1_input_class::ZOOM_UP),
 		zoom_down=g1_input.deque_time(g1_input_class::ZOOM_DOWN);
 
-
-    turn( g1_resources.player_turn_speed*(left_ms-right_ms)*G1_HZ/1000.0f );
-    accelerate( (up_ms-down_ms)*G1_HZ/1000.0f );
-    strafe( (sright_ms-sleft_ms)*G1_HZ/1000.0f);
+    look(mouse_look_increment_x, mouse_look_increment_y,whofor);
+    mouse_look_increment_y = mouse_look_increment_x = 0;
+    turn( g1_resources.player_turn_speed*(left_ms-right_ms)*G1_HZ/1000.0f, whofor );
+    accelerate( (up_ms-down_ms)*G1_HZ/1000.0f ,whofor);
+    strafe( (sright_ms-sleft_ms)*G1_HZ/1000.0f, whofor);
 	if (g1_current_controller->view.get_view_mode()==G1_FOLLOW_MODE)
 		{
 		g1_resources.follow_camera_dist+=(zoom_out-zoom_in)*G1_HZ/1000.0f;
@@ -592,9 +596,9 @@ void g1_human_class::think()
     if (sright_ms>0)
       sright_ms=sright_ms+1;
 
-    if (g1_input.button_1()) fire0();
-    if (g1_input.button_2()) fire1();
-    if (g1_input.button_3()) fire2();
+    if (g1_input.button_1()) fire0(whofor);
+    if (g1_input.button_2()) fire1(whofor);
+    if (g1_input.button_3()) fire2(whofor);
   }
 
 

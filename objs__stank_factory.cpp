@@ -113,7 +113,8 @@ public:
                 //li_call("strategy_toggle");
 				  }
               else
-                g1_current_controller->view.suggest_camera_mode(G1_ACTION_MODE);
+                g1_current_controller->view.suggest_camera_mode(G1_ACTION_MODE,
+                  stank->global_id);
             }
           }
 

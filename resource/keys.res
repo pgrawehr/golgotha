@@ -99,6 +99,7 @@
 
   
 (def_key  "Q"                      "Build stank"                action follow strategy)       
+(def_key  "Shift+Q"                "Goto_stank"                 action follow strategy)
 (def_key  "W"                      "Build peon_tank"            action follow strategy)       
 (def_key  "E"                      "Build trike"                action follow strategy)       
 (def_key  "R"                      "Build rocket_tank"          action follow strategy)       

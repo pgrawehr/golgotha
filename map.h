@@ -484,6 +484,8 @@ public:
   ~g1_map_class();
 } ;
 
+extern i4_array<g1_object_class *> g1_objs_in_view_dyn;
+extern i4_array<i4_transform_class> g1_obj_transforms_in_view;
 
 #endif
 

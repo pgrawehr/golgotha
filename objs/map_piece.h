@@ -24,9 +24,11 @@
 #include "objs/vehic_sounds.h"
 #include "path.h"
 #include "map.h"
+#include "camera.h"
 
 class g1_path_object_class;     // objs/path_object.hh
 class g1_road_object_class;
+class g1_camera_info_struct;
 class g2_link;
 
 const i4_float VSPEED = 0.04f;
@@ -139,6 +141,10 @@ public:
   { return g1_model_collide_radial(this, draw_params, start, ray); }
 
   virtual void calc_world_transform(i4_float ratio, i4_transform_class *transform=0);
+  virtual void calc_action_cam(g1_camera_info_struct &cam,
+                                            float fr);
+
+  void set_as_controlled_object(g1_view_mode_type mode);
   
   void set_path(g1_id_ref *path);  // null terminated array of global id's
 
@@ -169,6 +175,11 @@ public:
   i4_bool suggest_air_move(i4_float &dist,
                            i4_float &dtheta,
                            i4_3d_vector &d);
+  //! Returns true if the object is currently under user control
+  i4_bool controled();
+  i4_bool grab_user_controls(i4_float &speed, 
+      i4_float &angle, 
+      i4_float &height);
   //checks the health to make sure the object is still alive
   //if health is <0, the object is removed from the map, and i4_F returned
   i4_bool check_life(i4_bool remove_if_dead=i4_T);

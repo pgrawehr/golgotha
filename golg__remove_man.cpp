@@ -6,6 +6,7 @@ information about compiling & licensing issues visit this URL</a>
 golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 #include "pch.h"
+#include "map.h"
 #include "memory/array.h"
 #include "error/error.h"
 #include "remove_man.h"
@@ -98,7 +99,8 @@ void g1_remove_manager_class::process_requests()
 	remove_array.sort(objs_sorter);
 	for (w32 j=0; j<(w32)remove_array.size(); j++)
 		{
-		if (j>0&& remove_array[j]==remove_array[j-1]) 
+        g1_object_class *remobj=remove_array[j];
+		if (j>0&& remobj==remove_array[j-1]) 
 			continue;//skip if same object requested more than one delete
 		i4_isl_list<g1_reference_class> *ref_list = &remove_array[j]->ref_list;
 		
@@ -109,7 +111,11 @@ void g1_remove_manager_class::process_requests()
 			
 			i->ref = 0;
 			}
-		
+		for (int k=0;k<g1_objs_in_view_dyn.size();k++)
+            {
+            if (g1_objs_in_view_dyn[k]==remobj)
+                g1_objs_in_view_dyn[k]=0;
+            }
 		delete remove_array[j];
 		}
 	remove_array.clear();

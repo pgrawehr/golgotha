@@ -32,9 +32,16 @@ public:
   g1_player_info_class *player;
   int reload;
   sw32 lastnewpos;
+public:
+    //These values are used for passing direct unit commands around
+    i4_float user_accel, user_angle, user_height, user_strafe;
+    i4_float user_lookx, user_looky;
+    i4_bool user_fire1, user_fire2, user_fire3;
+    i4_3d_vector user_fire_at;
   // required by human to set mode of stank
   friend class g1_human_class;
   g1_player_piece_class *commander() const;       // get supertank pointer (NULL = dead)
+  g1_map_piece_class *controlled() const; //get pointer to object under user control
 
   const g1_team_api_definition_class *definer() const { return def; }
   g1_team_api_class();
@@ -54,15 +61,19 @@ public:
   i4_bool in_range2() const;
  
   virtual void guide_hero();
-  // super tank input (mainly useful to human player)
-  void turn(i4_float angle);                      // turn supertank clockwise
-  void accelerate(i4_float ratio);                // accelerate ratio of maximum acceleration
-  void strafe(i4_float ratio);                    // slide right ratio of maximum acceleration
-
-  void look(i4_float dax, i4_float day);          // set turret direction relative to heading
-  i4_bool fire0();                                // fire first weapon
-  i4_bool fire1();                                // fire second weapon
-  i4_bool fire2();                                // fire third weapon
+  // These are used by the human player to directly control an unit.
+  // if the last parameter passed is 0 (or ommited), the stank is used.
+  // Turn supertank clockwise
+  void turn(i4_float angle, g1_map_piece_class *p); 
+  // accelerate ratio of maximum acceleration
+  void accelerate(i4_float ratio, g1_map_piece_class *p);               
+  // slide right ratio of maximum acceleration
+  void strafe(i4_float ratio, g1_map_piece_class *p);                    
+  // set turret direction relative to heading
+  void look(i4_float dax, i4_float day, g1_map_piece_class *p);  
+  i4_bool fire0(g1_map_piece_class *p);           // fire first weapon
+  i4_bool fire1(g1_map_piece_class *p);           // fire second weapon
+  i4_bool fire2(g1_map_piece_class *p);           // fire third weapon
 
   i4_bool continue_game();                        // when dead/game over etc, this indicates game continues
 
