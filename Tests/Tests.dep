@@ -1,0 +1,9 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von Tests.mak
+
+.\StdAfx.cpp : \
+	".\StdAfx.h"\
+	
+
+.\Tests.cpp : \
+	".\StdAfx.h"\
+	

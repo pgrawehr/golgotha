@@ -1,0 +1,13 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von map2def.mak
+
+.\map2def.cpp : \
+	".\StdAfx.h"\
+	
+
+.\map2def.rc : \
+	".\icon1.ico"\
+	
+
+.\StdAfx.cpp : \
+	".\StdAfx.h"\
+	

@@ -1,0 +1,28 @@
+<html>
+<body>
+<pre>
+<h1>Erstellungsprotokoll</h1>
+<h3>
+--------------------Konfiguration: map2def - Win32 Debug--------------------
+</h3>
+<h3>Befehlszeilen</h3>
+Creating command line "rc.exe /l 0x807 /fo"Debug/map2def.res" /d "_DEBUG" "D:\golgotha\map2def\map2def.rc"" 
+Erstellen der temporären Datei  "c:\windows\TEMP\RSP2115.TMP" mit Inhalten
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"..\map2def.pdb" /debug /machine:I386 /out:"..\map2def.exe" /pdbtype:sept 
+.\Debug\map2def.obj
+.\Debug\StdAfx.obj
+.\Debug\map2def.res
+]
+Erstellen der Befehlzeile "link.exe @c:\windows\TEMP\RSP2115.TMP"
+<h3>Ausgabefenster</h3>
+Ressourcen werden kompiliert...
+Linker-Vorgang läuft...
+
+
+
+<h3>Ergebnisse</h3>
+map2def.exe - 0 Fehler, 0 Warnung(en)
+</pre>
+</body>
+</html>
