@@ -122,7 +122,7 @@ i4_bool x11_display_class::open_X_window(w32 width, w32 height, i4_display_class
       w32 i;
       for (i=1; i<i4_global_argc; i++)
 	{
-	  if (i4_global_argv[i] == "-nomitshm")
+	  if (i4_global_argv[i] == "-no_mitshm")
 	    {
 	      i4_warning("x11_display_class::open_X_window() - MITSHM explicitly disabled");
 	      shm_extension = 0;

@@ -42,7 +42,9 @@ For unix type systems, the registry is replaced by a file called "golgotha.ini".
 -display <location> Specify the connection to the X-Server (i.e localhost:2) 
                 (Only for unix versions)
 -ron		Enable alternative handling or keyboard reapeat events.
-		Usually not required (X server drivers only)
+		    Usually not required (X server drivers only)
+-no_mitshm  Disable MITSHM extension on X Windows display driver. Try this if you find
+			that golgotha crashes with strange X warnings. 		
 
 
 File Search-Path

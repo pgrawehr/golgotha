@@ -308,10 +308,11 @@ i4_bool i4_opengl_display_class::close()
 	delete back_screen;
 	back_screen = 0;
 
-	if (back_pal) {
-	  delete back_pal;
-	  back_pal = 0;
-	}
+	//must not delete any paletes, this is done by the pal manager
+	//if (back_pal) {
+	//  delete back_pal;
+	//  back_pal = 0;
+	//}
 	
   }
 
@@ -381,8 +382,8 @@ i4_bool i4_opengl_display_class::initialize_mode(mode *m)
   back_f.alpha_mask = 0;
   back_f.calc_shift();
 
-  if (back_pal)
-	delete back_pal;
+  //if (back_pal)
+  //	delete back_pal;
   back_pal = i4_pal_man.register_pal(&back_f);
 
   if (back_screen)

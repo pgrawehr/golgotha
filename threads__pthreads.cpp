@@ -252,7 +252,9 @@ public:
   void uninit()
   {
      //i4_warning("UnInit threads");
-     remove_thread(i4_main_thread_id);
+	  //don't attempt to kill the main thread. (will leave a small
+	  //memory leak, but who cares..?)
+     //remove_thread(i4_main_thread_id);
   }
 }pthread_initer_instance;
 void i4_set_thread_priority(int thread_id, i4_thread_priority_type priority)
