@@ -54,8 +54,8 @@ public:
 
   virtual void unoccupy_location()
   {
-	  g1_factory_class::unoccupy_location()
-	  g1_factory_list.find_and_unlink(*this);
+	  g1_factory_class::unoccupy_location();
+	  g1_factory_list.find_and_unlink(this);
   }
 
 
