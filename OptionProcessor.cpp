@@ -197,7 +197,7 @@ PPPS: Don't forget to link winmm.lib now, or you'll run into linker errors.
 #include <stdio.h>
 #include <string.h>
 #include <memory.h>
-#include "Processor.h"
+#include "x86_proc.h"
 
 
 #ifdef PROCESSOR_FREQUENCY_MEASURE_AVAILABLE

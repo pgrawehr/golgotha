@@ -1890,9 +1890,6 @@
 				RelativePath=".\pragma.h">
 			</File>
 			<File
-				RelativePath=".\Processor.h">
-			</File>
-			<File
 				RelativePath=".\device\processor.h">
 			</File>
 			<File
@@ -2271,6 +2268,9 @@
 				RelativePath=".\window\wmanager.h">
 			</File>
 			<File
+				RelativePath=".\x86_proc.h">
+			</File>
+			<File
 				RelativePath=".\loaders\mp3\xfermem.h">
 			</File>
 		</Filter>
@@ -2362,5 +2362,8 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="Golgotha.rc"/>
 	</Globals>
 </VisualStudioProject>

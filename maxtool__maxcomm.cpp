@@ -27,7 +27,7 @@ int m1_mail_slot_class::create(const i4_const_str &name)
 }
 //}}}
 
-int m1_mail_slot_class::close()
+void m1_mail_slot_class::close()
 {
 	if (slot!=INVALID_HANDLE_VALUE)
 	{

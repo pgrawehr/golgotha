@@ -58,7 +58,7 @@
 
 #ifdef _WINDOWS
 //#include "render/dx5/r1_dx5.h"
-#include "maxcomm.h"
+#include "maxtool/maxcomm.h"
 #include "main/win_main.h"
 #endif
 

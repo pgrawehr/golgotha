@@ -1,7 +1,7 @@
 #if !defined(AFX_OPTIONINFO_H__DE83BCA3_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_)
 #define AFX_OPTIONINFO_H__DE83BCA3_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_
 
-#include "Processor.h"
+#include "x86_proc.h"
 
 #if _MSC_VER > 1000
 #pragma once
@@ -44,6 +44,8 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+public:
+	virtual BOOL OnSetActive();
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -5,8 +5,8 @@
 ///////////////////////////////////////////
 
 
-#ifndef PROCESSOR_H
-#define PROCESSOR_H
+#ifndef X86_PROCESSOR_H
+#define X86_PROCESSOR_H
 
 
 // Options:

@@ -4,7 +4,8 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "OptionInfo.h"
-#include "Processor.h"
+#include "x86_proc.h"
+#include ".\optioninfo.h"
 
 #ifdef _DEBUG
 #undef new
@@ -223,8 +224,15 @@ BOOL COptionInfo::OnInitDialog()
 
 	m_informationtext.SetFont(&font,TRUE);
 	*/
-	m_informationtext.SetSel(0,0,TRUE);
+	m_informationtext.SetSel(-1,-1,TRUE);
 	return TRUE;
 	};
 
 
+
+	BOOL COptionInfo::OnSetActive()
+	{
+		m_informationtext.SetSel(-1,-1,TRUE);
+
+		return CPropertyPage::OnSetActive();
+	}
