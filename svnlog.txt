@@ -1,0 +1,4170 @@
+------------------------------------------------------------------------
+r102 | pgrawehr | 2004-03-19 17:08:04 +0100 (Fri, 19 Mar 2004) | 1 line
+Changed paths:
+   M \worksrc\border_frame.h
+   M \worksrc\golg__border_frame.cpp
+
+A small change only, just to be able to continue working at home.
+------------------------------------------------------------------------
+r101 | pgrawehr | 2004-03-17 10:03:05 +0100 (Wed, 17 Mar 2004) | 5 lines
+Changed paths:
+   M \worksrc\border_frame.h
+   M \worksrc\file__file.cpp
+   M \worksrc\golg__border_frame.cpp
+   A \worksrc\objects\command-control.gmod
+   M \worksrc\render__dx9__texture.cpp
+   M \worksrc\scheme\models.scm
+
+- Some minor cleanups
+- Still need to investigate why the status bar is sometimes drawn when it shouldn't be.
+- Added a bogus model for command-control (a red arrow) to bypass a warning of the renderer.
+
+
+------------------------------------------------------------------------
+r100 | pgrawehr | 2004-03-16 17:00:50 +0100 (Tue, 16 Mar 2004) | 4 lines
+Changed paths:
+   M \worksrc\file\async.h
+   M \worksrc\file__file.cpp
+   M \worksrc\memory\dynque.h
+   M \worksrc\render\tmanage.h
+   M \worksrc\render__dx9__texture.cpp
+   M \worksrc\render__tmanage.cpp
+
+- Improved the performance of the texture loader, mainly for the dx9 interfaces by optimizing the way texture
+  load requests are handled and by moving some time-consuming operations to a special thread. 
+
+
+------------------------------------------------------------------------
+r99 | pgrawehr | 2004-03-15 17:04:44 +0100 (Mon, 15 Mar 2004) | 4 lines
+Changed paths:
+   M \worksrc\golg__sky.cpp
+   M \worksrc\objs__bullet.cpp
+   M \worksrc\objs__particle_emitter.cpp
+   M \worksrc\render\r1_api.h
+   M \worksrc\render__dx9__render.cpp
+   M \worksrc\render__r1_api.cpp
+
+- Fixed an anoying filtering bug under dx9 which caused textures to be randomly rendered with or without
+  filtering applied.  Now the textures look smooth again. 
+
+
+------------------------------------------------------------------------
+r98 | pgrawehr | 2004-03-14 23:23:08 +0100 (Sun, 14 Mar 2004) | 5 lines
+Changed paths:
+   M \worksrc\debug.cpp
+   M \worksrc\debug.h
+   D \worksrc\golg__mfcwindows.cpp
+
+- Delete a file with zero contents
+- Due to an error, the files debug.h and debug.cpp where checked in empty. These are not used right now,
+  therefore I didn't notice. 
+
+
+------------------------------------------------------------------------
+r97 | pgrawehr | 2004-03-14 23:15:11 +0100 (Sun, 14 Mar 2004) | 8 lines
+Changed paths:
+   D \worksrc\bitmaps\background
+   D \worksrc\bitmaps\old
+   D \worksrc\bitmaps\options\Kopie von strategy_layout.jpg
+   D \worksrc\bitmaps\options\lit_options.jpg
+   M \worksrc\bitmaps\options\strategy_layout.jpg
+   D \worksrc\bitmaps\options\topbar.jpg
+   D \worksrc\bitmaps\options\topbar.tga
+   M \worksrc\bitmaps\options\vssver.scc
+   D \worksrc\bitmaps\stank\frame_level_0.jpg
+   D \worksrc\bitmaps\stank\frame_level_0.tga
+   D \worksrc\bitmaps\stank\frame_level_1.jpg
+   D \worksrc\bitmaps\stank\frame_level_1.tga
+   D \worksrc\bitmaps\stank\frame_level_2.jpg
+   D \worksrc\bitmaps\stank\frame_level_2.tga
+   D \worksrc\bitmaps\stank\status_bar.jpg
+   A \worksrc\bitmaps\stank\status_default.jpg
+   A \worksrc\bitmaps\stank\status_stank_level_0.jpg
+   A \worksrc\bitmaps\stank\status_stank_level_1.jpg (from \worksrc\bitmaps\stank\status_bar.jpg:96)
+   A \worksrc\bitmaps\stank\status_stank_level_2.jpg
+   M \worksrc\border_frame.h
+   M \worksrc\device__device.cpp
+   M \worksrc\g1_object.h
+   M \worksrc\golg__border_frame.cpp
+   M \worksrc\main__win_main.cpp
+   M \worksrc\objs\stank.h
+   M \worksrc\objs\vssver.scc
+   M \worksrc\objs__stank.cpp
+   M \worksrc\resource\g1_de.res
+   M \worksrc\resource\g1_en.res
+   M \worksrc\scheme\start.scm
+
+- Removed some old and/or duplicate files from the bitmaps folder.
+- Redesigned the code that calculates and shows the border-frame window (that is the status bar
+  in action mode)
+- The supertank-status bar now properly reflects the state of the upgrade-level.
+- Fixed a severe memory corruption bug in the event handler core. 
+- Increased stability of error handler. 
+
+
+------------------------------------------------------------------------
+r96 | pgrawehr | 2004-03-12 17:02:00 +0100 (Fri, 12 Mar 2004) | 4 lines
+Changed paths:
+   M \worksrc\golg__border_frame.cpp
+   M \worksrc\objs__stank.cpp
+
+- Did a first improvement to change the border (the ammo display) depending on the object under control.
+- Fixed a bug that caused the stank-rockets to be fired in a direction completelly unrelated to the heading. 
+
+
+------------------------------------------------------------------------
+r95 | pgrawehr | 2004-03-08 10:14:59 +0100 (Mon, 08 Mar 2004) | 5 lines
+Changed paths:
+   A \worksrc\Golgotha_net.vcproj (from \worksrc\Golgotha.vcproj:92)
+   M \worksrc\arch.h
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\loaders__jpg__jdapistd.cpp
+   M \worksrc\loaders__jpg__jquant2.cpp
+   M \worksrc\quantize__median.cpp
+   M \worksrc\string__string.cpp
+
+- Golgotha compiles with managed extensions enabled (don't know what use this might have, but I needed 
+  this for a test)
+- It doesn't run then, though.
+
+
+------------------------------------------------------------------------
+r94 | pgrawehr | 2004-03-07 20:16:37 +0100 (Sun, 07 Mar 2004) | 6 lines
+Changed paths:
+   M \worksrc\file__dialog.cpp
+   M \worksrc\g1_render.h
+   M \worksrc\golg__g1_object.cpp
+   M \worksrc\golg__g1_render.cpp
+   M \worksrc\golg__obj3d.cpp
+   M \worksrc\golg__octree.cpp
+   M \worksrc\gui\text.h
+   M \worksrc\gui\vssver.scc
+   M \worksrc\objects\vssver.scc
+   M \worksrc\octree.h
+
+- Slight optimization of default polygonal collision test.
+- Added optimzized octree based collision test.
+- Hope the file__dialog will finally compile ok on all platforms.
+- Some documentation work.
+
+
+------------------------------------------------------------------------
+r93 | qbic | 2004-03-06 10:20:26 +0100 (Sat, 06 Mar 2004) | 3 lines
+Changed paths:
+   M \worksrc\file__file.cpp
+   M \worksrc\render__tmanage.cpp
+
+Optimized the render__tmanage.cpp even further. Fixed some bugs.
+
+
+------------------------------------------------------------------------
+r92 | pgrawehr | 2004-03-05 17:11:19 +0100 (Fri, 05 Mar 2004) | 4 lines
+Changed paths:
+   M \worksrc\gui\smp_dial.h
+   M \worksrc\gui\vssver.scc
+   M \worksrc\string\string.h
+   M \worksrc\string__string.cpp
+
+- Added some coments.
+- Some minor cleanups.
+
+
+------------------------------------------------------------------------
+r91 | pgrawehr | 2004-03-05 14:44:51 +0100 (Fri, 05 Mar 2004) | 3 lines
+Changed paths:
+   M \worksrc\file\file.h
+   M \worksrc\file__file.cpp
+
+- Fixed a bug introduced in the last revision (invalid file access qualifiers)
+
+
+------------------------------------------------------------------------
+r90 | pgrawehr | 2004-03-05 14:13:20 +0100 (Fri, 05 Mar 2004) | 5 lines
+Changed paths:
+   M \worksrc\Golgotha.vcproj
+   M \worksrc\editor__editor.cpp
+   M \worksrc\file\file.h
+   M \worksrc\file__dialog.cpp
+   M \worksrc\file__file.cpp
+   M \worksrc\font__font.cpp
+   M \worksrc\gui\text.h
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\map_man.h
+   M \worksrc\objects\barrerblock.gmod
+
+- Updated VS.NET project files
+- Fixed a small compilation issue on VS.NET
+- Added support for multiline message boxes. (Automatic word wrapping)
+
+
+------------------------------------------------------------------------
+r89 | pgrawehr | 2004-03-04 22:09:42 +0100 (Thu, 04 Mar 2004) | 5 lines
+Changed paths:
+   M \worksrc\Golgotha.dsp
+   M \worksrc\file__file.cpp
+   M \worksrc\golg__li_objref.cpp
+   M \worksrc\golg__m_flow.cpp
+   M \worksrc\golg__selection.cpp
+   M \worksrc\gui\vssver.scc
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\memory\array.h
+   M \worksrc\memory\fixed_array.h
+   M \worksrc\memory\growarry.h
+   D \worksrc\memory\hash_map.h
+   M \worksrc\memory\malloc.h
+   M \worksrc\memory\new.h
+   D \worksrc\memory\stl_hash_fun.h
+   D \worksrc\memory\stl_hashtable.h
+   D \worksrc\memory\stlinc.h
+   M \worksrc\memory\vssver.scc
+   M \worksrc\objects\vssver.scc
+   M \worksrc\objs\vssver.scc
+   M \worksrc\render\vssver.scc
+   M \worksrc\string\vssver.scc
+   M \worksrc\string__string.cpp
+   M \worksrc\transport\transport.h
+   M \worksrc\window\vssver.scc
+
+This is only a small cleanup revision. Removed a few old unused files and fixed the naming conventions
+of the memory allocation methods. 
+Removed the OS-dependent error dialog when file access permission problems occured.
+
+
+------------------------------------------------------------------------
+r88 | qbic | 2004-03-01 19:00:12 +0100 (Mon, 01 Mar 2004) | 3 lines
+Changed paths:
+   M \worksrc\render__tmanage.cpp
+
+Fixed an initialization problem, a few more optimizations done (preincrement instead of postincrement).
+Some other optimization possible.
+
+------------------------------------------------------------------------
+r87 | qbic | 2004-03-01 15:44:43 +0100 (Mon, 01 Mar 2004) | 3 lines
+Changed paths:
+   M \worksrc\Doxyfile
+   M \worksrc\render__tmanage.cpp
+
+Optimized the texture convertor. Further optimizations possible.
+
+
+------------------------------------------------------------------------
+r86 | pgrawehr | 2004-02-29 17:58:11 +0100 (Sun, 29 Feb 2004) | 8 lines
+Changed paths:
+   M \worksrc\device__device.cpp
+   M \worksrc\golg__camera.cpp
+   M \worksrc\golg__human.cpp
+   M \worksrc\golg__input.cpp
+   M \worksrc\golg__team_api.cpp
+   M \worksrc\gui\smp_dial.h
+   M \worksrc\gui\vssver.scc
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\input.h
+   M \worksrc\objects\heli_blades-alpha.gmod
+   M \worksrc\objects\heli_body.gmod
+   M \worksrc\objects\vssver.scc
+   M \worksrc\objs\map_piece.h
+   M \worksrc\objs__ai_jim.cpp
+   M \worksrc\objs__guided_missile.cpp
+   M \worksrc\objs__map_piece.cpp
+   M \worksrc\objs__stank.cpp
+   M \worksrc\resource\keys.res
+   M \worksrc\team_api.h
+
+Improved unit handling (see last revision)
+Can now also control airborne units (currently only the helicopter, because it's the only selectable airborne unit)
+Fixed a bug in the input box dialog, that caused a problem with editing mount points in maxtool. 
+Fixed the helicopter models to properly align the blades with the body. 
+Added strafe and up/down commands for units. Will need more when implementing FPS with people. 
+
+
+
+------------------------------------------------------------------------
+r85 | pgrawehr | 2004-02-27 18:38:50 +0100 (Fri, 27 Feb 2004) | 13 lines
+Changed paths:
+   M \worksrc\camera.h
+   M \worksrc\editor__editor.cpp
+   M \worksrc\golg__camera.cpp
+   M \worksrc\golg__g1_object.cpp
+   M \worksrc\golg__human.cpp
+   M \worksrc\golg__map_lod.cpp
+   M \worksrc\golg__map_view.cpp
+   M \worksrc\golg__remove_man.cpp
+   M \worksrc\golg__team_api.cpp
+   M \worksrc\map.h
+   M \worksrc\objs\map_piece.h
+   M \worksrc\objs\vssver.scc
+   M \worksrc\objs__ai_jim.cpp
+   M \worksrc\objs__bomb_truck.cpp
+   M \worksrc\objs__map_piece.cpp
+   M \worksrc\objs__stank.cpp
+   M \worksrc\objs__stank_factory.cpp
+   M \worksrc\resource\keys.res
+   M \worksrc\team_api.h
+
+This upgrade adds a mayor new feature. 
+It is now possible to select and command every selectable unit, not only the supertank.
+Needs some improvements still for firing and for controling airborne units. Will do this with
+the next rev. 
+We definitelly need a modeler to draw all those buttons :P
+Fixed a bug in the object remove handler. 
+To realize the above change, I had to change the team api interface. The change is only 
+relevant for new ai implementations. Need to adapt the record/playback functions to the
+new api. These are not properly working anyway now, so I move this for later. 
+
+- Patrick
+
+
+------------------------------------------------------------------------
+r84 | pgrawehr | 2004-02-25 17:54:13 +0100 (Wed, 25 Feb 2004) | 1 line
+Changed paths:
+   A \worksrc\objects\arrow_green.gmod
+   M \worksrc\objs\trigger.h
+   M \worksrc\objs__controllers.cpp
+
+Some minor improvements for trigger handling. Needs to be completed by a modeller :) 
+------------------------------------------------------------------------
+r83 | qbic | 2004-02-24 11:28:54 +0100 (Tue, 24 Feb 2004) | 1 line
+Changed paths:
+   M \worksrc\Makefile.in
+   M \worksrc\file__file.cpp
+
+Fixed compilation on bsd for the new file dialogs.
+------------------------------------------------------------------------
+r82 | pgrawehr | 2004-02-24 10:24:32 +0100 (Tue, 24 Feb 2004) | 6 lines
+Changed paths:
+   M \worksrc\file__dialog.cpp
+   M \worksrc\gui\list_box.h
+   M \worksrc\gui\list_pick.h
+   M \worksrc\gui\vssver.scc
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\gui__list_pick.cpp
+   M \worksrc\render\r1_api.h
+   M \worksrc\string\string.h
+   M \worksrc\window\window.h
+   M \worksrc\window__window.cpp
+
+Improved file open/save dialogs. They now look exactly the same, regardless of the OS in use.
+Fixed a few minor issues with the list box control that showed up in the progress of implementing 
+the new dialog. 
+Improved performance of window manager when lots of child windows are displayed.
+
+
+------------------------------------------------------------------------
+r81 | pgrawehr | 2004-02-20 14:10:54 +0100 (Fri, 20 Feb 2004) | 1 line
+Changed paths:
+   M \worksrc\Golgotha.dsp
+   M \worksrc\Makefile.in
+   M \worksrc\StdAfx.h
+   M \worksrc\app__app.cpp
+   M \worksrc\cd_maker\vssver.scc
+   A \worksrc\file__dialog.cpp
+   M \worksrc\file__file.cpp
+   M \worksrc\gui\list_pick.h
+   M \worksrc\gui\text.h
+   M \worksrc\gui\vssver.scc
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\gui__list_pick.cpp
+   M \worksrc\isllist.h
+   M \worksrc\loaders__jpg__jmemmgr.cpp
+   M \worksrc\loaders__jpg__jmemnobs.cpp
+   M \worksrc\window\vssver.scc
+   M \worksrc\window\window.h
+   M \worksrc\window__window.cpp
+
+Implemented a new file open/file save dialog that uses golg's own windowing engine and is therefore portable. Not yet complete.
+------------------------------------------------------------------------
+r80 | pgrawehr | 2004-02-17 13:26:07 +0100 (Tue, 17 Feb 2004) | 1 line
+Changed paths:
+   M \worksrc\Golgotha.dsp
+   M \worksrc\app\vssver.scc
+   M \worksrc\cd_maker\vssver.scc
+   M \worksrc\editor\dialogs\vssver.scc
+   M \worksrc\lisp\vssver.scc
+   M \worksrc\loaders\jpg\vssver.scc
+   M \worksrc\loaders\vssver.scc
+   M \worksrc\main\vssver.scc
+   M \worksrc\menu\vssver.scc
+   M \worksrc\objs\vssver.scc
+   M \worksrc\render\software\vssver.scc
+   M \worksrc\render\vssver.scc
+   M \worksrc\resource\vssver.scc
+   M \worksrc\scheme\vssver.scc
+   M \worksrc\video\win32\vssver.scc
+
+Maintenance operations for backup operations
+------------------------------------------------------------------------
+r78 | pgrawehr | 2004-02-10 15:16:53 +0100 (Tue, 10 Feb 2004) | 1 line
+Changed paths:
+   M \worksrc\main__win_main.cpp
+
+Forgot a \n :| 
+------------------------------------------------------------------------
+r77 | pgrawehr | 2004-02-10 14:56:05 +0100 (Tue, 10 Feb 2004) | 1 line
+Changed paths:
+   M \worksrc\Golgotha.rc
+   M \worksrc\Makefile.in
+   A \worksrc\loaders\mp3\mpversion.h (from \worksrc\loaders\mp3\version.h:67)
+   D \worksrc\loaders\mp3\version.h
+   M \worksrc\loaders\mp3\vssver.scc
+   M \worksrc\loaders__mp3__mpg123.cpp
+   M \worksrc\loaders__mp3_load.cpp
+   M \worksrc\main__win_main.cpp
+   A \worksrc\version.h
+   M \worksrc\video__x11__x11_input.cpp
+
+Improved version handling. Version.h should now be the only file to be modified for a new version.
+------------------------------------------------------------------------
+r76 | pgrawehr | 2004-02-10 11:35:30 +0100 (Tue, 10 Feb 2004) | 3 lines
+Changed paths:
+   M \worksrc\main__win_main.cpp
+   M \worksrc\render\r1_api.h
+   M \worksrc\render__glide__gr_render.cpp
+   M \worksrc\render__opengl_render.cpp
+
+Fixed a renderer documentation issue and added some main page content to the documentation.
+
+
+------------------------------------------------------------------------
+r75 | pgrawehr | 2004-02-08 15:57:39 +0100 (Sun, 08 Feb 2004) | 5 lines
+Changed paths:
+   M \worksrc\Golgotha.rc
+   M \worksrc\OptionExtras.cpp
+   M \worksrc\OptionExtras.h
+   M \worksrc\app__app.cpp
+   M \worksrc\file__file.cpp
+   M \worksrc\golg__map.cpp
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\main\win_main.h
+   M \worksrc\main__win_main.cpp
+   M \worksrc\menu\textitem.h
+   M \worksrc\menu\vssver.scc
+   M \worksrc\menu__menu.cpp
+   M \worksrc\resource.h
+   M \worksrc\scheme\menu_de.scm
+   M \worksrc\scheme\menu_en.scm
+
+-Added a language choose option to the options dialog.
+-Extended the pull-down menu to properly support enabling and disabling of menu entries. 
+-Circumvented a rare shutdown deadlock problem
+
+
+------------------------------------------------------------------------
+r74 | pgrawehr | 2004-02-07 10:11:59 +0100 (Sat, 07 Feb 2004) | 1 line
+Changed paths:
+   M \worksrc\loaders\jpg_load.h
+   M \worksrc\loaders__jpg_load.cpp
+   M \worksrc\render__mip.cpp
+
+Fixed a nasty compiler warning in the jpg loader.
+------------------------------------------------------------------------
+r73 | pgrawehr | 2004-02-06 18:30:13 +0100 (Fri, 06 Feb 2004) | 16 lines
+Changed paths:
+   M \worksrc\Golgotha.rc
+   M \worksrc\app\registry.h
+   M \worksrc\app\vssver.scc
+   M \worksrc\app__app.cpp
+   A \worksrc\debug.cpp
+   A \worksrc\debug.h
+   M \worksrc\lisp__lisp.cpp
+   M \worksrc\render\r1_api.h
+   M \worksrc\render\software\r1_software.h
+   M \worksrc\render\software\vssver.scc
+   M \worksrc\resource\editor.res
+   A \worksrc\resource\editor_de.res
+   M \worksrc\resource\editor_en.res
+   D \worksrc\resource\g1.res
+   A \worksrc\resource\g1_de.res
+   M \worksrc\resource\g1_en.res
+   M \worksrc\resource.res
+   D \worksrc\scheme\menu.scm
+   A \worksrc\scheme\menu_de.scm (from \worksrc\scheme\menu.scm:67)
+   M \worksrc\scheme\menu_en.scm
+   M \worksrc\string__string.cpp
+
+Added dynamic language support. 
+Whenever an scm file loaded it is now first checked wheter there exists a localized version. 
+Localized versions have an underscore and a language identifier as suffix before the extension, ie menu_en.scm.
+Localized resource files (res) can be loaded by #includelang instead of just #include. But don't add the extension,
+it will be added automatically!
+
+The language is choosed the following way: 
+If there exists a user setting (registry or ini file) called "language" which is non-empty,
+that string will be used as suffix.
+Otherwise, if running windows, the system language will be used. (or better, the language of the resources in use.)
+As final fallback, english is assumed.
+
+Hint: The windows options dialog is not affected by user language settings. It always uses the system language.
+
+
+
+------------------------------------------------------------------------
+r72 | pgrawehr | 2004-02-06 10:47:02 +0100 (Fri, 06 Feb 2004) | 12 lines
+Changed paths:
+   M \worksrc\Golgotha.rc
+   M \worksrc\Optionsdialog.cpp
+   M \worksrc\Optionsheet.cpp
+   M \worksrc\Readme.txt
+   M \worksrc\file__file.cpp
+   M \worksrc\main__win_main.cpp
+   M \worksrc\resource.h
+   M \worksrc\video\win32\dx9.h
+   M \worksrc\video__win32__dx5.cpp
+   M \worksrc\video__win32__dx9.cpp
+   M \worksrc\video__win32__dx9_mouse.cpp
+
+We are in trouble: To be correct, we must use flip and not discard on a dx9 page switch. 
+Unfortunatelly, SetDialogBoxMode() doesn't work in a flipped chain, so I'm now trying to count the switches.
+A first test showed that it might work, but this is not yet sure. The Reset() function could probably
+be used to change the behaviour at runtime. It can also be used to implement runtime-resolution changes or to
+enable/disable vsync at runtime.
+
+Fixed the mouse cursor in dx9 32 bit modes. Still has an ugly trail in fullscreen, but otherwise looks ok.
+
+Moved some hardcoded strings from the option dialog to the resources, to allow translation. 
+Still need to find a simple way of switching the language-dependent files at runtime. 
+
+
+------------------------------------------------------------------------
+r71 | pgrawehr | 2004-02-03 16:36:31 +0100 (Tue, 03 Feb 2004) | 3 lines
+Changed paths:
+   M \worksrc\golg__sound_man.cpp
+   M \worksrc\loaders__mp3_load.cpp
+   M \worksrc\sound__sfx_id.cpp
+
+Removed some obsolete comments and cleaned up a bit.
+
+
+------------------------------------------------------------------------
+r70 | pgrawehr | 2004-02-01 16:15:38 +0100 (Sun, 01 Feb 2004) | 2 lines
+Changed paths:
+   M \worksrc\file__file.cpp
+   M \worksrc\render__tmanage.cpp
+
+Some cleanups.
+
+------------------------------------------------------------------------
+r69 | pgrawehr | 2004-01-31 12:54:35 +0100 (Sat, 31 Jan 2004) | 4 lines
+Changed paths:
+   M \worksrc\Optionsdialog.cpp
+   M \worksrc\golg__map_lod.cpp
+   M \worksrc\objs__stank.cpp
+   M \worksrc\render__dx9__render.cpp
+   M \worksrc\video__win32__dx9.cpp
+
+- Fixed a flickering bug introduced in the last revision.
+- Slight performance increment of the map renderer. Probably needs much more, but I don't know how.
+
+
+------------------------------------------------------------------------
+r68 | pgrawehr | 2004-01-29 17:50:07 +0100 (Thu, 29 Jan 2004) | 6 lines
+Changed paths:
+   M \worksrc\g1_object.h
+   M \worksrc\golg__controller.cpp
+   M \worksrc\golg__human.cpp
+   M \worksrc\golg__map_save.cpp
+   M \worksrc\objs\trigger.h
+   M \worksrc\objs__controllers.cpp
+   M \worksrc\video\win32\dx9.h
+   M \worksrc\video\win32\vssver.scc
+   M \worksrc\video__win32__dx9.cpp
+
+- Improved some triggering features.
+- Disabled vsync for dx9 (gives around 20% speed gain sometimes, but increases mouse flickering again)
+- (hopefully) fixed a bug in the map loader
+
+
+
+------------------------------------------------------------------------
+r67 | pgrawehr | 2004-01-27 11:35:08 +0100 (Tue, 27 Jan 2004) | 2 lines
+Changed paths:
+   D \worksrc\map2def\Debug
+   D \worksrc\map2def\map2def.plg
+
+Removed.
+
+------------------------------------------------------------------------
+r66 | pgrawehr | 2004-01-27 11:31:28 +0100 (Tue, 27 Jan 2004) | 3 lines
+Changed paths:
+   M \worksrc\Golgotha.sln
+   M \worksrc\Golgotha.vcproj
+   M \worksrc\ivcon\ivcon.vcproj
+   M \worksrc\map2def\Debug\StdAfx.obj
+   M \worksrc\map2def\Debug\map2def.obj
+   M \worksrc\map2def\Debug\map2def.pch
+   M \worksrc\map2def\Debug\vc70.idb
+   M \worksrc\map2def\Debug\vc70.pdb
+   M \worksrc\map2def\map2def.vcproj
+
+Updated VS.NET project files.
+
+
+------------------------------------------------------------------------
+r65 | pgrawehr | 2004-01-27 11:11:04 +0100 (Tue, 27 Jan 2004) | 3 lines
+Changed paths:
+   D \worksrc\Tests\Release
+   D \worksrc\Tests\StdAfx.obj
+   D \worksrc\Tests\StdAfx.sbr
+   D \worksrc\Tests\Tests.exe
+   D \worksrc\Tests\Tests.ilk
+   D \worksrc\Tests\Tests.obj
+   D \worksrc\Tests\Tests.plg
+   D \worksrc\Tests\Tests.sbr
+   D \worksrc\Tests\vc60.idb
+   D \worksrc\Tests\vc60.pdb
+
+These files certainly don't belong in the repository.
+
+
+------------------------------------------------------------------------
+r64 | pgrawehr | 2004-01-25 23:44:27 +0100 (Sun, 25 Jan 2004) | 6 lines
+Changed paths:
+   M \worksrc\Golgotha.dsp
+   A \worksrc\bitmaps\setup.jpg
+   A \worksrc\bitmaps\setup2.jpg
+   M \worksrc\g1_object.h
+   M \worksrc\lisp\li_class.h
+   M \worksrc\lisp\vssver.scc
+   M \worksrc\lisp__lisp.cpp
+   M \worksrc\maxtool\vssver.scc
+   M \worksrc\objs\jet.h
+   A \worksrc\objs\trigger.h
+   M \worksrc\objs\vssver.scc
+   M \worksrc\objs__controllers.cpp
+   M \worksrc\render\vssver.scc
+   M \worksrc\scheme\classes.scm
+
+- Reimplemented the trigger objects. Layd out their new layout, implemented new classes (see objs/trigger.h)
+- Some documentation. 
+- Added class definitions for new objects to classes.scm
+
+-Patrick
+
+------------------------------------------------------------------------
+r63 | pgrawehr | 2004-01-24 15:53:27 +0100 (Sat, 24 Jan 2004) | 5 lines
+Changed paths:
+   D \worksrc\Kopie von egypt.scm
+   D \worksrc\Kopie von test.level
+   D \worksrc\Makefile.bsd
+   D \worksrc\Makefile.gcc.bsd
+   D \worksrc\Makefile.linux.gcc
+   D \worksrc\Makefile.linux.gcc.296
+   D \worksrc\Makefile.linux.gcc.opt
+   D \worksrc\Makefile.linux.icc
+   D \worksrc\Makefile.sgi
+   D \worksrc\Makefile.sgi.CC
+   D \worksrc\Makefile.sgi.gcc
+   D \worksrc\Makefile.sun
+   D \worksrc\clip.h
+   D \worksrc\debug.cpp
+   D \worksrc\debug.h
+   D \worksrc\drive_map.h
+   D \worksrc\font_test.cpp
+   D \worksrc\frustrum_clip.h
+   D \worksrc\golg__map_fast.cpp
+   D \worksrc\obj_dll.h
+   D \worksrc\render\dx5\r1_dx5.hh
+   D \worksrc\render\dx5\r1_dx5_texture.hh
+   D \worksrc\tconvert.cpp
+
+Removed some old and unused stuff from the distribution.
+I hope this is really unused :D
+
+
+
+------------------------------------------------------------------------
+r62 | pgrawehr | 2004-01-23 14:52:52 +0100 (Fri, 23 Jan 2004) | 3 lines
+Changed paths:
+   M \worksrc\config.h.in
+   M \worksrc\configure
+   M \worksrc\configure.ac
+   M \worksrc\lisp\vssver.scc
+   M \worksrc\pch.h
+
+Tested and modified the configure script to run under linux. I tested my mandrake 8.1, others might still fail.
+
+
+------------------------------------------------------------------------
+r61 | pgrawehr | 2004-01-22 15:49:21 +0100 (Thu, 22 Jan 2004) | 3 lines
+Changed paths:
+   M \worksrc\lisp__functions.cpp
+   M \worksrc\lisp__lisp.cpp
+   M \worksrc\scheme\flame.scm
+
+Fixed some bugs in the lisp core functions, mainly in the macro expression evaluator.
+
+
+------------------------------------------------------------------------
+r60 | qbic | 2004-01-22 12:17:10 +0100 (Thu, 22 Jan 2004) | 2 lines
+Changed paths:
+   M \worksrc\Makefile.in
+
+Added ivcon to the build process.
+
+------------------------------------------------------------------------
+r59 | pgrawehr | 2004-01-19 23:06:41 +0100 (Mon, 19 Jan 2004) | 10 lines
+Changed paths:
+   M \worksrc\Golgotha.dsp
+   M \worksrc\editor__lisp_interaction.cpp
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\lisp\li_types.h
+   M \worksrc\lisp__lisp.cpp
+   M \worksrc\scheme\preferences.scm
+
+- Added some new emacs compatibility definitions for lisp.
+- Added some brand new emacs functions.
+- Fixed bugs in the lisp eq and if functions
+- Fixed a bug in the terminal window scroll-bar.
+- Added window-local storage using make-local-variable.
+It shan't take much longer till the emacs doctor works.
+
+-Patrick
+
+
+------------------------------------------------------------------------
+r58 | qbic | 2004-01-19 22:57:47 +0100 (Mon, 19 Jan 2004) | 16 lines
+Changed paths:
+   M \worksrc\app__app.cpp
+
+When looking for a display driver, X Windows is now also tested when
+OpenGL fails, or more generally: The failure of one driver to initalize
+now properly tells the next to try so. Also fixed a bug that caused
+the initialization to abort if the driver failed because it had not 
+valid modes that could be used. 
+Fixed a bug in the ini-reader/registry wrapper code that made it return
+bogus values instead of an error when the value wasn't there.
+
+
+
+
+
+
+
+ 
+
+------------------------------------------------------------------------
+r57 | qbic | 2004-01-19 18:24:52 +0100 (Mon, 19 Jan 2004) | 3 lines
+Changed paths:
+   M \worksrc\app__app.cpp
+   M \worksrc\string__string.cpp
+
+Fixed a bug in i4_str::insert
+
+
+------------------------------------------------------------------------
+r56 | pgrawehr | 2004-01-18 13:12:56 +0100 (Sun, 18 Jan 2004) | 5 lines
+Changed paths:
+   M \worksrc\file__file.cpp
+   M \worksrc\gui\vssver.scc
+   M \worksrc\maxtool__maxtool.cpp
+
+Fixed a bug in the method that calculates relative file paths.
+This in turn resolved a bug in maxtool's browse for texture feature.
+
+-Patrick
+
+------------------------------------------------------------------------
+r55 | qbic | 2004-01-18 12:51:05 +0100 (Sun, 18 Jan 2004) | 1 line
+Changed paths:
+   M \worksrc\config.h.in
+   M \worksrc\configure
+   M \worksrc\configure.ac
+   M \worksrc\net__startup.cpp
+
+Experimented with some additional tests in the config scripts
+------------------------------------------------------------------------
+r54 | qbic | 2004-01-17 14:59:16 +0100 (Sat, 17 Jan 2004) | 9 lines
+Changed paths:
+   M \worksrc\Readme.txt
+   M \worksrc\app__app.cpp
+   M \worksrc\golg__main.cpp
+   M \worksrc\video__opengl__x11_opengl.cpp
+   M \worksrc\video__x11__x11_input.cpp
+
+Fixed a bug that caused the game to hang at startup
+when the connection to the X-Server failed.
+Also fixed a bug that caused the X-Error window to be much to small.
+
+The xgetfile command is not available on bsd (once again). We'll need to
+write our own dialog routines for opening files on unix once and for all.
+
+-Patrick
+
+------------------------------------------------------------------------
+r53 | qbic | 2004-01-17 11:08:42 +0100 (Sat, 17 Jan 2004) | 4 lines
+Changed paths:
+   M \worksrc\device__device.cpp
+   M \worksrc\gui\scroll_bar.h
+   M \worksrc\video__x11__mitshm.cpp
+
+The #ifdef _DEBUG / #define new ... construct did not compile
+under unix.
+
+
+------------------------------------------------------------------------
+r52 | pgrawehr | 2004-01-15 23:01:40 +0100 (Thu, 15 Jan 2004) | 13 lines
+Changed paths:
+   M \worksrc\Optionsdialog.cpp
+   M \worksrc\Optionsdialog.h
+   M \worksrc\Optionsheet.cpp
+   M \worksrc\Optionsheet.h
+   M \worksrc\golg__main.cpp
+   M \worksrc\gui\vssver.scc
+   M \worksrc\main\win_main.h
+   M \worksrc\video__win32__dx5.cpp
+   M \worksrc\video__win32__dx9.cpp
+
+- Fixed a few minor bugs in the dx9 code.
+- Fixed the mouse flinkering in dx9 HAL fullscreen mode (not solved for REF, but that is only used for testing
+  purposes anyway) I'm not sure yet wheter the solution is good, though. I just leave SetDialogMode(TRUE) set 
+  all the time, which might be a performance problem. Did also not test OpenGL modes for quite some time. 
+  And then, it's currently impossible to move the mouse all to the right of the screen, which is currently
+  a problem in maxtool (try to use the scrollbar in the bottom-right corner of the screen...)
+- Fixed a memory leak in the options dialog. 
+
+Todo: Translate some hard-coded messages from german to english and/or use resources for them.
+
+Patrick
+
+
+------------------------------------------------------------------------
+r51 | pgrawehr | 2004-01-13 11:28:28 +0100 (Tue, 13 Jan 2004) | 12 lines
+Changed paths:
+   M \worksrc\editor__lisp_interaction.cpp
+   M \worksrc\gui\scroll_bar.h
+   M \worksrc\gui\text_scroll.h
+   M \worksrc\gui\vssver.scc
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\maxtool__maxtool.cpp
+
+Added a scrollbar to the terminal windows. This is most useful for the lisp terminal window.
+Fixed a small bug in the scrollbar code itself. It was possible that the drag button was reduced
+to size 0.
+
+Just discovered that we still have HUGE problems with the mouse cursor and flickering. 
+The limitation I once implemented to prevent problems with clipping is also a very bad one.
+Who fixes this once and for all? Remember that there must be a solution that works for all video drivers (DX,
+OpenGL...)
+
+- Patrick
+
+
+------------------------------------------------------------------------
+r50 | pgrawehr | 2004-01-12 13:28:24 +0100 (Mon, 12 Jan 2004) | 5 lines
+Changed paths:
+   M \worksrc\checksum__checksum.cpp
+   M \worksrc\lisp__lisp.cpp
+
+- Fixed a bug in the checksum function (function was unused so far)
+- Rewrote the lisp symbol tree. It now uses a hashtable of trees. Uses a bit more memory than before (64k) but is a 
+  lot faster.
+
+
+------------------------------------------------------------------------
+r48 | pgrawehr | 2004-01-09 13:38:50 +0100 (Fri, 09 Jan 2004) | 8 lines
+Changed paths:
+   M \worksrc\Golgotha.dsp
+   M \worksrc\Tests\vssver.scc
+   M \worksrc\app\vssver.scc
+   M \worksrc\cd_maker\vssver.scc
+   M \worksrc\device__device.cpp
+   M \worksrc\editor\dialogs\vssver.scc
+   M \worksrc\editor__editor.cpp
+   M \worksrc\error\vssver.scc
+   M \worksrc\golg__g1_render.cpp
+   M \worksrc\golg__main.cpp
+   M \worksrc\golg__team_api.cpp
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\loaders\jpg\vssver.scc
+   M \worksrc\loaders\vssver.scc
+   M \worksrc\maxtool\m1_info.h
+   M \worksrc\maxtool\vssver.scc
+   M \worksrc\maxtool__m1_commands.cpp
+   M \worksrc\maxtool__render.cpp
+   M \worksrc\objects\supertanktop.gmod
+   M \worksrc\objects\supertanktop_full.gmod
+   M \worksrc\objects\vssver.scc
+   M \worksrc\objs__stank.cpp
+   M \worksrc\render\opengl\vssver.scc
+   M \worksrc\render\r1_api.h
+   M \worksrc\render\tmanage.h
+   M \worksrc\render\vssver.scc
+   M \worksrc\render__dx9__render.cpp
+   M \worksrc\render__tmanage.cpp
+   M \worksrc\resource\vssver.scc
+   M \worksrc\scheme\menu_maxtool.scm
+   M \worksrc\scheme\vssver.scc
+   M \worksrc\video\opengl\vssver.scc
+   M \worksrc\video\x11\vssver.scc
+
+- Fixed the very annoying "Lines are drawn with random color" bug. At least for dx9, this works now properly.
+  Needed a big hack to do it, so I'm not sure wheter the problem (D3DPT_LINESTRIP ignores vertex colors) was a problem
+  of my graphics card or a generic D3D problem.
+- Fixed the supertank top. It shows now at the proper location.
+- Fixed a few other small bugs.
+- Added tree new commands to maxtool to move and size objects relative to the origin.
+
+
+------------------------------------------------------------------------
+r47 | pgrawehr | 2004-01-04 21:42:35 +0100 (Sun, 04 Jan 2004) | 1 line
+Changed paths:
+   M \worksrc\Golgotha.dsp
+
+Forgot to save this file before commiting. :-(
+------------------------------------------------------------------------
+r46 | pgrawehr | 2004-01-04 21:30:50 +0100 (Sun, 04 Jan 2004) | 8 lines
+Changed paths:
+   D \worksrc\Makefile
+   M \worksrc\Optionmfcinit.h
+   M \worksrc\StdAfx.h
+   M \worksrc\app\app.h
+   M \worksrc\app\vssver.scc
+   M \worksrc\error\vssver.scc
+   M \worksrc\error__error.cpp
+   M \worksrc\file__file.cpp
+   M \worksrc\golg__camera.cpp
+   M \worksrc\golg__g1_object.cpp
+   M \worksrc\jj_error.cpp
+   M \worksrc\loaders\jpg\vssver.scc
+   M \worksrc\loaders\jpg_load.h
+   M \worksrc\main__win_main.cpp
+   M \worksrc\maxtool__maxtool.cpp
+   M \worksrc\network__tcpip.cpp
+   M \worksrc\pch.h
+   M \worksrc\sound__dsound__direct_sound.cpp
+   M \worksrc\window__window.cpp
+
+The huge changes that were necessary to support the GNU build tools (autoconf, configure)
+broke the windows build, because some #include directives were moved around.
+This update fixes this.
+Since now all .cpp files properly include pch.h as their first file, we can now use precompiled
+headers again. (That's basically where pch.h has it's name from...) This improves build speed
+on windows significantly.
+
+
+------------------------------------------------------------------------
+r45 | qbic | 2004-01-04 20:25:02 +0100 (Sun, 04 Jan 2004) | 4 lines
+Changed paths:
+   M \worksrc\Makefile
+   M \worksrc\Makefile.in
+   M \worksrc\config.h.in
+   M \worksrc\configure
+   M \worksrc\configure.ac
+
+Did some further modifications to the make-process.
+
+Added some aditional tests to configure.ac  
+
+------------------------------------------------------------------------
+r44 | qbic | 2004-01-04 11:19:37 +0100 (Sun, 04 Jan 2004) | 1 line
+Changed paths:
+   A \worksrc\Doxyfile
+   A \worksrc\configure
+
+Added the Doxyfile and the configure script. The later one is actually a generated file, but will be needed in the distro.
+------------------------------------------------------------------------
+r43 | qbic | 2004-01-02 23:55:21 +0100 (Fri, 02 Jan 2004) | 15 lines
+Changed paths:
+   M \worksrc\Makefile
+   M \worksrc\Makefile.in
+   M \worksrc\OptionGetDXVer.cpp
+   M \worksrc\OptionProcessor.cpp
+   M \worksrc\arch.h
+   M \worksrc\area__rectlist.cpp
+   M \worksrc\checksum__checksum.cpp
+   A \worksrc\config.guess
+   A \worksrc\config.h.in
+   A \worksrc\config.sub
+   M \worksrc\configure.ac
+   M \worksrc\dll__dll_man.cpp
+   M \worksrc\dll__linux_dll.cpp
+   M \worksrc\editor__critical_map.cpp
+   M \worksrc\editor__e_ai.cpp
+   M \worksrc\editor__solvegraph_breadth.cpp
+   M \worksrc\editor__solvemap_breadth.cpp
+   M \worksrc\error\error.h
+   M \worksrc\file__file.cpp
+   M \worksrc\font__font.cpp
+   M \worksrc\golg__border_frame.cpp
+   M \worksrc\golg__cheat.cpp
+   M \worksrc\golg__controller.cpp
+   M \worksrc\golg__demo.cpp
+   M \worksrc\golg__draw_context.cpp
+   M \worksrc\golg__f_tables.cpp
+   M \worksrc\golg__fli_load.cpp
+   M \worksrc\golg__g1_object.cpp
+   M \worksrc\golg__g1_rand.cpp
+   M \worksrc\golg__g1_render.cpp
+   M \worksrc\golg__g1_texture_id.cpp
+   M \worksrc\golg__g1_tint.cpp
+   M \worksrc\golg__global_id.cpp
+   M \worksrc\golg__human.cpp
+   M \worksrc\golg__input.cpp
+   M \worksrc\golg__li_interface.cpp
+   M \worksrc\golg__li_objref.cpp
+   M \worksrc\golg__light.cpp
+   M \worksrc\golg__m_flow.cpp
+   M \worksrc\golg__make_tlist.cpp
+   M \worksrc\golg__map_cell.cpp
+   M \worksrc\golg__map_collision.cpp
+   M \worksrc\golg__map_data.cpp
+   M \worksrc\golg__map_fast.cpp
+   M \worksrc\golg__map_light.cpp
+   M \worksrc\golg__map_man.cpp
+   M \worksrc\golg__map_movi.cpp
+   M \worksrc\golg__map_save.cpp
+   M \worksrc\golg__map_vars.cpp
+   M \worksrc\golg__map_vert.cpp
+   M \worksrc\golg__map_view.cpp
+   M \worksrc\golg__map_vis.cpp
+   M \worksrc\golg__mfcwindows.cpp
+   M \worksrc\golg__options.cpp
+   M \worksrc\golg__overhead.cpp
+   M \worksrc\golg__path.cpp
+   M \worksrc\golg__player.cpp
+   M \worksrc\golg__reference.cpp
+   M \worksrc\golg__remove_man.cpp
+   M \worksrc\golg__resources.cpp
+   M \worksrc\golg__screen_shot.cpp
+   M \worksrc\golg__selection.cpp
+   M \worksrc\golg__team_api.cpp
+   M \worksrc\golg__tick_count.cpp
+   M \worksrc\golg__tile.cpp
+   M \worksrc\golg__vert_table.cpp
+   M \worksrc\golg__visible.cpp
+   M \worksrc\gui__browse_tree.cpp
+   M \worksrc\gui__butbox.cpp
+   M \worksrc\gui__list_pick.cpp
+   M \worksrc\image__image.cpp
+   M \worksrc\inc__search.cpp
+   A \worksrc\install-sh
+   M \worksrc\jj_error.cpp
+   M \worksrc\lisp__math.cpp
+   M \worksrc\loaders\jpg\jconfig.h
+   M \worksrc\loaders__bmp_load.cpp
+   M \worksrc\loaders__bmp_write.cpp
+   M \worksrc\loaders__dir_load.cpp
+   M \worksrc\loaders__dir_save.cpp
+   M \worksrc\loaders__jpg__jcapistd.cpp
+   M \worksrc\loaders__jpg__jdapistd.cpp
+   M \worksrc\loaders__jpg__jdatasrc.cpp
+   M \worksrc\loaders__jpg__jerror.cpp
+   M \worksrc\loaders__jpg__jfdctflt.cpp
+   M \worksrc\loaders__jpg__jfdctfst.cpp
+   M \worksrc\loaders__jpg__jfdctint.cpp
+   M \worksrc\loaders__jpg__jidctflt.cpp
+   M \worksrc\loaders__jpg__jidctfst.cpp
+   M \worksrc\loaders__jpg__jidctint.cpp
+   M \worksrc\loaders__jpg__jidctred.cpp
+   M \worksrc\loaders__jpg__jmemmgr.cpp
+   M \worksrc\loaders__jpg__jmemnobs.cpp
+   M \worksrc\loaders__jpg__jquant1.cpp
+   M \worksrc\loaders__jpg__jquant2.cpp
+   M \worksrc\loaders__jpg__jutils.cpp
+   M \worksrc\loaders__jpg__wrtarga.cpp
+   M \worksrc\loaders__jpg_load.cpp
+   M \worksrc\loaders__jpg_write.cpp
+   M \worksrc\loaders__load.cpp
+   M \worksrc\loaders__mp3__common.cpp
+   M \worksrc\loaders__mp3__control.cpp
+   M \worksrc\loaders__mp3__dct64.cpp
+   M \worksrc\loaders__mp3__dct64_i386.cpp
+   M \worksrc\loaders__mp3__decode.cpp
+   M \worksrc\loaders__mp3__decode_2to1.cpp
+   M \worksrc\loaders__mp3__decode_4to1.cpp
+   M \worksrc\loaders__mp3__decode_i386.cpp
+   M \worksrc\loaders__mp3__enc_mirror.cpp
+   M \worksrc\loaders__mp3__equalizer.cpp
+   M \worksrc\loaders__mp3__getlopt.cpp
+   M \worksrc\loaders__mp3__layer1.cpp
+   M \worksrc\loaders__mp3__layer2.cpp
+   M \worksrc\loaders__mp3__layer3.cpp
+   M \worksrc\loaders__mp3__mp3_decoder.cpp
+   M \worksrc\loaders__mp3__mpg123.cpp
+   M \worksrc\loaders__mp3__tabinit.cpp
+   M \worksrc\loaders__mp3__xfermem.cpp
+   M \worksrc\loaders__mp3_load.cpp
+   M \worksrc\loaders__pcx_load.cpp
+   M \worksrc\loaders__tga_load.cpp
+   M \worksrc\loaders__tga_write.cpp
+   M \worksrc\loaders__wav_load.cpp
+   M \worksrc\main__win32_self_modify.cpp
+   M \worksrc\math__random.cpp
+   M \worksrc\math__spline.cpp
+   M \worksrc\math__transform.cpp
+   M \worksrc\maxtool\m1_info.h
+   M \worksrc\maxtool__anim_dialog.cpp
+   M \worksrc\maxtool__animate.cpp
+   M \worksrc\maxtool__drag_select.cpp
+   M \worksrc\maxtool__draw_modes.cpp
+   M \worksrc\maxtool__m1_info.cpp
+   M \worksrc\maxtool__m1_test.cpp
+   M \worksrc\maxtool__m1_update.cpp
+   M \worksrc\maxtool__max_load.cpp
+   M \worksrc\maxtool__mount_win.cpp
+   M \worksrc\maxtool__navigate.cpp
+   M \worksrc\maxtool__pan.cpp
+   M \worksrc\maxtool__saveas.cpp
+   M \worksrc\maxtool__st_edit.cpp
+   M \worksrc\maxtool__translate.cpp
+   M \worksrc\maxtool__tupdate.cpp
+   M \worksrc\maxtool__visible.cpp
+   M \worksrc\music__stream.cpp
+   M \worksrc\net__startup.cpp
+   M \worksrc\network__tcpip.cpp
+   M \worksrc\objs__ai_builder.cpp
+   M \worksrc\objs__ai_jim.cpp
+   M \worksrc\objs__armor.cpp
+   M \worksrc\objs__bank.cpp
+   M \worksrc\objs__base_launcher.cpp
+   M \worksrc\objs__bases.cpp
+   M \worksrc\objs__beam_weapon.cpp
+   M \worksrc\objs__bird.cpp
+   M \worksrc\objs__bolt.cpp
+   M \worksrc\objs__bomb_truck.cpp
+   M \worksrc\objs__bomber.cpp
+   M \worksrc\objs__bridger.cpp
+   M \worksrc\objs__bullet.cpp
+   M \worksrc\objs__buster_rocket.cpp
+   M \worksrc\objs__car.cpp
+   M \worksrc\objs__chunk_explosion.cpp
+   M \worksrc\objs__cloud.cpp
+   M \worksrc\objs__cobra_tank.cpp
+   M \worksrc\objs__controllers.cpp
+   M \worksrc\objs__convoy.cpp
+   M \worksrc\objs__crate.cpp
+   M \worksrc\objs__damager.cpp
+   M \worksrc\objs__debris.cpp
+   M \worksrc\objs__defaults.cpp
+   M \worksrc\objs__dropped_bomb.cpp
+   M \worksrc\objs__eleccar.cpp
+   M \worksrc\objs__engineer.cpp
+   M \worksrc\objs__explode_model.cpp
+   M \worksrc\objs__explosion1.cpp
+   M \worksrc\objs__field_camera.cpp
+   M \worksrc\objs__fire.cpp
+   M \worksrc\objs__fire_angle.cpp
+   M \worksrc\objs__flak.cpp
+   M \worksrc\objs__goal.cpp
+   M \worksrc\objs__guided_missile.cpp
+   M \worksrc\objs__gun_port.cpp
+   M \worksrc\objs__helicopter.cpp
+   M \worksrc\objs__jet.cpp
+   M \worksrc\objs__lawfirm.cpp
+   M \worksrc\objs__light_o.cpp
+   M \worksrc\objs__map_piece.cpp
+   M \worksrc\objs__miracle.cpp
+   M \worksrc\objs__miscobjs.cpp
+   M \worksrc\objs__model_collide.cpp
+   M \worksrc\objs__model_draw.cpp
+   M \worksrc\objs__model_id.cpp
+   M \worksrc\objs__moneycrate.cpp
+   M \worksrc\objs__moneyplane.cpp
+   M \worksrc\objs__old_ids.cpp
+   M \worksrc\objs__particle_emitter.cpp
+   M \worksrc\objs__peontank.cpp
+   M \worksrc\objs__popup_turret.cpp
+   M \worksrc\objs__repairer.cpp
+   M \worksrc\objs__rocket.cpp
+   M \worksrc\objs__rocktank.cpp
+   M \worksrc\objs__sfx_obj.cpp
+   M \worksrc\objs__shockwave.cpp
+   M \worksrc\objs__shrapnel.cpp
+   M \worksrc\objs__smoke_trail.cpp
+   M \worksrc\objs__sprite.cpp
+   M \worksrc\objs__sprite_object.cpp
+   M \worksrc\objs__stank.cpp
+   M \worksrc\objs__stank_factory.cpp
+   M \worksrc\objs__structure_death.cpp
+   M \worksrc\objs__super_mortar.cpp
+   M \worksrc\objs__supergun.cpp
+   M \worksrc\objs__takeover_pad.cpp
+   M \worksrc\objs__tank_buster.cpp
+   M \worksrc\objs__target.cpp
+   M \worksrc\objs__tower_electric.cpp
+   M \worksrc\objs__tower_missile.cpp
+   M \worksrc\objs__trike.cpp
+   M \worksrc\objs__turret.cpp
+   M \worksrc\objs__vehic_sounds.cpp
+   M \worksrc\objs__verybiggun.cpp
+   M \worksrc\palette_pal.cpp
+   M \worksrc\pch.h
+   M \worksrc\quantize__dither_quantize.cpp
+   M \worksrc\quantize__histogram.cpp
+   M \worksrc\quantize__median.cpp
+   M \worksrc\render__glide__gr_render.cpp
+   M \worksrc\render__glide__gr_vram.cpp
+   M \worksrc\render__gtext_load.cpp
+   M \worksrc\render__mip.cpp
+   M \worksrc\render__mip_average.cpp
+   M \worksrc\render__r1_clip.cpp
+   M \worksrc\render__r1_win.cpp
+   M \worksrc\render__software__amd3d__rasterize_affine_amd3d.cpp
+   M \worksrc\render__software__amd3d__rasterize_perspective_amd3d.cpp
+   M \worksrc\render__software__amd3d__span_buffer_amd3d.cpp
+   M \worksrc\render__software__linux_specific.cpp
+   M \worksrc\render__software__r1_software_globals.cpp
+   M \worksrc\render__software__rasterize_perspective.cpp
+   M \worksrc\render__software__span_buffer.cpp
+   M \worksrc\render__software__tri_setup.cpp
+   M \worksrc\render__software__win32_specific.cpp
+   M \worksrc\sound__dsound__direct_sound.cpp
+   M \worksrc\sound__linux_sound.cpp
+   M \worksrc\sound__sfx_id.cpp
+   M \worksrc\sound__sound.cpp
+   M \worksrc\sound__unix_sound.cpp
+   M \worksrc\string__string.cpp
+   M \worksrc\threads__pthreads.cpp
+   M \worksrc\threads__unixthreads.cpp
+   M \worksrc\threads__win32_threads.cpp
+   M \worksrc\time__timedev.cpp
+   M \worksrc\time__unixtime.cpp
+   M \worksrc\video__display.cpp
+   M \worksrc\video__opengl__openglfunc.cpp
+   M \worksrc\video__opengl__x11_opengl.cpp
+   M \worksrc\video__x11__mitshm.cpp
+   M \worksrc\video__x11__x11_display.cpp
+   M \worksrc\video__x11__x11_input.cpp
+
+- Adapted pch.h to do what config.h (the output of configure) suggests.
+- Wrote some more tests for configure in configure.ac
+- As a result of this update, each cpp file is now REQUIRED to include
+  pch.h as first file. That's why so many files have been modified.
+- There's no guarantee yet that the tests really do whatever is needed
+  to get it running on anything else than what was tested so far (bsd)
+- Need to check that there are no obsolete #ifdef __linux or something
+  lying around.
+
+Patrick
+
+PS: I'm commiting as qbic, to avoid trouble with permissions in the
+working directory. 
+
+
+------------------------------------------------------------------------
+r42 | pgrawehr | 2004-01-02 15:23:42 +0100 (Fri, 02 Jan 2004) | 4 lines
+Changed paths:
+   M \worksrc\menu__menu.cpp
+   M \worksrc\pch.h
+   M \worksrc\window__window.cpp
+
+- More preparations for unix configure.
+- Fixed the pop-up-windows-don't-go-away bug.
+
+
+------------------------------------------------------------------------
+r41 | pgrawehr | 2004-01-02 10:14:57 +0100 (Fri, 02 Jan 2004) | 8 lines
+Changed paths:
+   M \worksrc\Golgotha.dsp
+   M \worksrc\border_frame.h
+   M \worksrc\critical_graph.h
+   M \worksrc\editor\dialogs\path_win.h
+   M \worksrc\editor\dialogs\vssver.scc
+   M \worksrc\editor__critical_graph.cpp
+   M \worksrc\editor__editor.cpp
+   M \worksrc\editor__path_api.cpp
+   M \worksrc\editor__solvemap_breadth.cpp
+   M \worksrc\golg__g1_object.cpp
+   M \worksrc\golg__g1_render.cpp
+   M \worksrc\golg__solvemap_astar.cpp
+   M \worksrc\maxtool\vssver.scc
+   A \worksrc\memory\bitarray.h
+   A \worksrc\memory\bitarray2d.h
+   M \worksrc\memory\vssver.scc
+   M \worksrc\objects\vssver.scc
+   M \worksrc\objs\vssver.scc
+   M \worksrc\path_api.h
+   M \worksrc\render\software\vssver.scc
+   M \worksrc\string\vssver.scc
+
+Improved path-finding 
+- Slight performance improvement on the A* algorithm
+- Fixed a visibility problem in the AI window
+- Improved graph-based path finding, fixed a few bugs
+- Fixed a bug that caused some build buttons in strategy view to behave unpredictably.
+- Added bitarray implementation files.
+
+
+------------------------------------------------------------------------
+r40 | qbic | 2004-01-01 13:36:48 +0100 (Thu, 01 Jan 2004) | 1 line
+Changed paths:
+   A \worksrc\Makefile.in
+   A \worksrc\configure.ac
+
+Prepared a configure script. Now someone needs to write code to examine all those #define.
+------------------------------------------------------------------------
+r39 | pgrawehr | 2003-12-30 19:01:35 +0100 (Tue, 30 Dec 2003) | 7 lines
+Changed paths:
+   M \worksrc\golg__g1_render.cpp
+   M \worksrc\golg__obj3d.cpp
+   M \worksrc\golg__octree.cpp
+   M \worksrc\maxtool\max_object.h
+   M \worksrc\maxtool__max_object.cpp
+   M \worksrc\obj3d.h
+   M \worksrc\objects\castle.gmod
+   M \worksrc\objs\model_id.h
+   M \worksrc\objs\vssver.scc
+   M \worksrc\objs__explode_model.cpp
+   M \worksrc\objs__explosion1.cpp
+   M \worksrc\objs__model_id.cpp
+   M \worksrc\octree.h
+
+- Added save/load capability for entire octrees.
+- Fixed a bug that caused a very bad crash when big objects were destroyed. (in objs__explosion1 and objs__explode_model)
+- Fixed a memory leak for the models. So far, this leak was invisible, because i4_arrays don't report leaked memory.
+- Improved rendering for whole objects with octrees.
+
+
+
+------------------------------------------------------------------------
+r38 | qbic | 2003-12-29 11:04:05 +0100 (Mon, 29 Dec 2003) | 4 lines
+Changed paths:
+   D \worksrc\win32_install.cpp
+   D \worksrc\win32_timedev.cpp
+   D \worksrc\win_file.cpp
+
+test for file delete
+.
+
+
+------------------------------------------------------------------------
+r35 | pgrawehr | 2003-12-28 20:56:18 +0100 (Sun, 28 Dec 2003) | 77 lines
+Changed paths:
+   M \worksrc\critical_graph.h
+   M \worksrc\device__device.cpp
+   M \worksrc\g1_render.h
+   M \worksrc\golg__controller.cpp
+   M \worksrc\golg__g1_render.cpp
+   M \worksrc\golg__map_collision.cpp
+   D \worksrc\golg__map_path.cpp
+   M \worksrc\golg__octree.cpp
+   M \worksrc\loaders\vssver.scc
+   D \worksrc\max_plugin.dsp
+   D \worksrc\maxtool__get_dir.cpp
+   D \worksrc\maxtool__get_tmap.cpp
+   M \worksrc\maxtool__maxtool.cpp
+   M \worksrc\maxtool__render.cpp
+   D \worksrc\maxtool__saver.cpp
+   M \worksrc\objs\map_piece.h
+   M \worksrc\octree.h
+   M \worksrc\pch.h
+   D \worksrc\render\software\affine_map_lit_asm.cpp
+   D \worksrc\render\software\affine_map_lit_c.cpp
+   D \worksrc\render\software\affine_map_unlit_alpha_asm.cpp
+   D \worksrc\render\software\affine_map_unlit_alpha_c.cpp
+   D \worksrc\render\software\affine_map_unlit_alpha_sprite_asm.cpp
+   D \worksrc\render\software\affine_map_unlit_asm.cpp
+   D \worksrc\render\software\affine_map_unlit_c.cpp
+   D \worksrc\render\software\affine_map_unlit_holy_asm.cpp
+   D \worksrc\render\software\affine_map_unlit_holy_blend_asm.cpp
+   D \worksrc\render\software\affine_map_unlit_holy_blend_c.cpp
+   D \worksrc\render\software\affine_map_unlit_holy_c.cpp
+   D \worksrc\render\software\affine_map_unlit_true_alpha_c.cpp
+   D \worksrc\render\software\amd3d\affine_map_lit_asm_amd3d.cpp
+   D \worksrc\render\software\amd3d\perspective_map_lit_asm_amd3d.cpp
+   D \worksrc\render\software\amd3d\perspective_map_unlit_alpha_asm_amd3d.cpp
+   D \worksrc\render\software\amd3d\perspective_map_unlit_asm_amd3d.cpp
+   D \worksrc\render\software\amd3d\perspective_map_unlit_holy_asm_amd3d.cpp
+   D \worksrc\render\software\amd3d\rasterize_affine_amd3d.cpp
+   D \worksrc\render\software\amd3d\rasterize_perspective_amd3d.cpp
+   D \worksrc\render\software\amd3d\span_buffer_amd3d.cpp
+   D \worksrc\render\software\draw_line.cpp
+   D \worksrc\render\software\mappers.cpp
+   D \worksrc\render\software\perspective_map_lit_asm.cpp
+   D \worksrc\render\software\perspective_map_lit_c.cpp
+   D \worksrc\render\software\perspective_map_unlit_alpha_asm.cpp
+   D \worksrc\render\software\perspective_map_unlit_alpha_c.cpp
+   D \worksrc\render\software\perspective_map_unlit_asm.cpp
+   D \worksrc\render\software\perspective_map_unlit_c.cpp
+   D \worksrc\render\software\perspective_map_unlit_holy_asm.cpp
+   D \worksrc\render\software\perspective_map_unlit_holy_c.cpp
+   D \worksrc\render\software\perspective_map_unlit_true_alpha_c.cpp
+   D \worksrc\render\software\r1_software.cpp
+   D \worksrc\render\software\r1_software_globals.cpp
+   D \worksrc\render\software\r1_software_texture.cpp
+   M \worksrc\render\software\r1_software_texture.h
+   D \worksrc\render\software\rasterize_affine.cpp
+   D \worksrc\render\software\rasterize_perspective.cpp
+   D \worksrc\render\software\solid_blend_half_asm.cpp
+   D \worksrc\render\software\solid_blend_half_c.cpp
+   D \worksrc\render\software\solid_fill_asm.cpp
+   D \worksrc\render\software\solid_fill_c.cpp
+   D \worksrc\render\software\span_buffer.cpp
+   D \worksrc\render\software\tint_manage.cpp
+   D \worksrc\render\software\tri_setup.cpp
+   M \worksrc\render\software\vssver.scc
+   D \worksrc\render\software\win32_specific.cpp
+   M \worksrc\render__software__r1_software_texture.cpp
+   M \worksrc\string\string.h
+
+- Fixed some small typos that caused doxygen to issue warnings. 
+- Fixed a memory leak.
+- Removed some files not actually used.
+- Small optimization in the octree rendering code. If the entire object is visible, no tree iteration is needed to draw it.
+
+
+M    device__device.cpp
+M    maxtool__maxtool.cpp
+M    octree.h
+M    golg__controller.cpp
+M    objs/map_piece.h
+D    maxtool__get_tmap.cpp
+M    g1_render.h
+M    golg__octree.cpp
+M    golg__g1_render.cpp
+D    maxtool.cpp
+D    maxtool__get_dir.cpp
+D    maxtool__saver.cpp
+D    maxtool.dsp
+M    pch.h
+M    golg__map_collision.cpp
+D    maxtool.rc
+M    loaders/vssver.scc
+D    max_plugin.dsp
+D    golg__map_path.cpp
+D    render/software/affine_map_unlit_holy_blend_asm.cpp
+D    render/software/affine_map_unlit_asm.cpp
+D    render/software/perspective_map_unlit_asm.cpp
+D    render/software/affine_map_unlit_holy_blend_c.cpp
+D    render/software/affine_map_unlit_c.cpp
+D    render/software/perspective_map_unlit_c.cpp
+D    render/software/draw_line.cpp
+D    render/software/affine_map_unlit_alpha_asm.cpp
+D    render/software/perspective_map_unlit_alpha_asm.cpp
+D    render/software/perspective_map_unlit_true_alpha_c.cpp
+D    render/software/mappers.cpp
+D    render/software/amd3d/perspective_map_unlit_alpha_asm_amd3d.cpp
+D    render/software/amd3d/span_buffer_amd3d.cpp
+D    render/software/amd3d/perspective_map_unlit_holy_asm_amd3d.cpp
+D    render/software/amd3d/affine_map_lit_asm_amd3d.cpp
+D    render/software/amd3d/perspective_map_lit_asm_amd3d.cpp
+D    render/software/amd3d/rasterize_affine_amd3d.cpp
+D    render/software/amd3d/perspective_map_unlit_asm_amd3d.cpp
+D    render/software/amd3d/rasterize_perspective_amd3d.cpp
+D    render/software/affine_map_unlit_alpha_c.cpp
+D    render/software/perspective_map_unlit_alpha_c.cpp
+D    render/software/solid_blend_half_asm.cpp
+D    render/software/solid_blend_half_c.cpp
+D    render/software/solid_fill_asm.cpp
+M    render/software/r1_software_texture.h
+D    render/software/solid_fill_c.cpp
+D    render/software/tint_manage.cpp
+D    render/software/span_buffer.cpp
+D    render/software/affine_map_unlit_alpha_sprite_asm.cpp
+D    render/software/perspective_map_unlit_holy_asm.cpp
+D    render/software/affine_map_lit_asm.cpp
+D    render/software/perspective_map_unlit_holy_c.cpp
+D    render/software/perspective_map_lit_asm.cpp
+D    render/software/r1_software_globals.cpp
+D    render/software/affine_map_lit_c.cpp
+D    render/software/perspective_map_lit_c.cpp
+D    render/software/affine_map_unlit_true_alpha_c.cpp
+D    render/software/win32_specific.cpp
+D    render/software/r1_software_texture.cpp
+D    render/software/tri_setup.cpp
+M    render/software/vssver.scc
+D    render/software/rasterize_affine.cpp
+D    render/software/rasterize_perspective.cpp
+D    render/software/affine_map_unlit_holy_asm.cpp
+D    render/software/r1_software.cpp
+D    render/software/affine_map_unlit_holy_c.cpp
+D    max_object.cpp
+M    critical_graph.h
+M    maxtool__render.cpp
+M    string/string.h
+M    render__software__r1_software_texture.cpp
+
+------------------------------------------------------------------------
+r34 | pgrawehr | 2003-12-27 20:43:26 +0100 (Sat, 27 Dec 2003) | 1 line
+Changed paths:
+   D \worksrc\buf_file.cpp
+   M \worksrc\map_man.h
+   M \worksrc\octree.h
+   M \worksrc\string\string.h
+   M \worksrc\string\vssver.scc
+
+Fixed a few typos in doxygen comments.
+------------------------------------------------------------------------
+r33 | pgrawehr | 2003-12-27 17:18:05 +0100 (Sat, 27 Dec 2003) | 1 line
+Changed paths:
+   M \worksrc\golg__octree.cpp
+   M \worksrc\octree.h
+
+Prepared for a bether check wheter the octree will reduce rendering time or not.
+------------------------------------------------------------------------
+r32 | pgrawehr | 2003-12-27 17:15:08 +0100 (Sat, 27 Dec 2003) | 1 line
+Changed paths:
+   D \worksrc\max_object.cpp
+   D \worksrc\maxtool.cpp
+   D \worksrc\maxtool.dsp
+   D \worksrc\maxtool.rc
+
+Removed some files not actually required any more
+------------------------------------------------------------------------
+r31 | pgrawehr | 2003-12-27 16:26:23 +0100 (Sat, 27 Dec 2003) | 1 line
+Changed paths:
+   M \worksrc\Makefile
+   A \worksrc\Makefile.bsd
+
+Updated bsd makefile
+------------------------------------------------------------------------
+r30 | pgrawehr | 2003-12-26 13:45:13 +0100 (Fri, 26 Dec 2003) | 1 line
+Changed paths:
+   A \worksrc\objects
+   A \worksrc\objects\aagun_barrels.gmod
+   A \worksrc\objects\aagun_barrels.gmod.sav
+   A \worksrc\objects\aagun_barrels_backup.gmod
+   A \worksrc\objects\aagun_base.gmod
+   A \worksrc\objects\aagun_turret.gmod
+   A \worksrc\objects\acid.gmod
+   A \worksrc\objects\airbase.gmod
+   A \worksrc\objects\airbase_old.gmod
+   A \worksrc\objects\aircraftcarrier.gmod
+   A \worksrc\objects\albasbigpipes.gmod
+   A \worksrc\objects\albasky1.gmod
+   A \worksrc\objects\albasmlpipes.gmod
+   A \worksrc\objects\albasplane1.gmod
+   A \worksrc\objects\albasqcrates.gmod
+   A \worksrc\objects\albasroundcrates.gmod
+   A \worksrc\objects\albastanker1.gmod
+   A \worksrc\objects\armor_building.gmod
+   A \worksrc\objects\armycratebig.gmod
+   A \worksrc\objects\armycratesml.gmod
+   A \worksrc\objects\arrow_red.gmod
+   A \worksrc\objects\b120mm.gmod
+   A \worksrc\objects\b90mm.gmod
+   A \worksrc\objects\bank.gmod
+   A \worksrc\objects\bankbuilding3x3.gmod
+   A \worksrc\objects\bankdrivethruold.gmod
+   A \worksrc\objects\barnfrance1.gmod
+   A \worksrc\objects\barrerblock.gmod
+   A \worksrc\objects\barrertall.gmod
+   A \worksrc\objects\battleship.gmod
+   A \worksrc\objects\bigtunnel1.gmod
+   A \worksrc\objects\bigtunnel2.gmod
+   A \worksrc\objects\bigtunnel3.gmod
+   A \worksrc\objects\bigtunnel4.gmod
+   A \worksrc\objects\bigtunnel5.gmod
+   A \worksrc\objects\bigtunnelrock.gmod
+   A \worksrc\objects\bigtunnelrock2.gmod
+   A \worksrc\objects\bigwhitetent.gmod
+   A \worksrc\objects\billboard_activision.gmod
+   A \worksrc\objects\billboard_c&c.gmod
+   A \worksrc\objects\billboard_evil.gmod
+   A \worksrc\objects\billboard_golg.gmod
+   A \worksrc\objects\billboard_group.gmod
+   A \worksrc\objects\billboard_nice.gmod
+   A \worksrc\objects\billboard_sierra.gmod
+   A \worksrc\objects\billboard_wood.gmod
+   A \worksrc\objects\bird.gmod
+   A \worksrc\objects\bird_body-original.gmod
+   A \worksrc\objects\bird_body.gmod
+   A \worksrc\objects\bird_shadow.gmod
+   A \worksrc\objects\bird_wingl-original.gmod
+   A \worksrc\objects\bird_wingl.gmod
+   A \worksrc\objects\bird_wingr-original.gmod
+   A \worksrc\objects\bird_wingr.gmod
+   A \worksrc\objects\blackhole.gmod
+   A \worksrc\objects\blackhole1.gmod
+   A \worksrc\objects\blackred.gmod
+   A \worksrc\objects\blank.gmod
+   A \worksrc\objects\boldernuk1.gmod
+   A \worksrc\objects\bomb_truck.gmod
+   A \worksrc\objects\bomb_truck_lod.gmod
+   A \worksrc\objects\bomber.gmod
+   A \worksrc\objects\bomber_lod.gmod
+   A \worksrc\objects\bomber_shadow.gmod
+   A \worksrc\objects\bouldernuk2.gmod
+   A \worksrc\objects\bouldernuk3.gmod
+   A \worksrc\objects\bouldernuk4.gmod
+   A \worksrc\objects\boxbridgearch_lod.gmod
+   A \worksrc\objects\boxbridgemetal_lod.gmod
+   A \worksrc\objects\brickwall block.gmod
+   A \worksrc\objects\brickwall.gmod
+   A \worksrc\objects\brickwallconcave block.gmod
+   A \worksrc\objects\brickwallconcave.gmod
+   A \worksrc\objects\brickwallcorner block.gmod
+   A \worksrc\objects\brickwallcorner.gmod
+   A \worksrc\objects\bridge1corner2.gmod
+   A \worksrc\objects\bridge1corner2a.gmod
+   A \worksrc\objects\bridge1middle2.000
+   A \worksrc\objects\bridge1middle2.gmod
+   A \worksrc\objects\bridge1road2.gmod
+   A \worksrc\objects\bridge_end.gmod
+   A \worksrc\objects\bridge_marker.gmod
+   A \worksrc\objects\bridgearch4.gmod
+   A \worksrc\objects\bridgearchroad.gmod
+   A \worksrc\objects\bridgebeam.gmod
+   A \worksrc\objects\bridgebroken.gmod
+   A \worksrc\objects\bridgebuilding.gmod
+   A \worksrc\objects\bridger_road.gmod
+   A \worksrc\objects\bridger_wheels.gmod
+   A \worksrc\objects\building10yelo.gmod
+   A \worksrc\objects\building10yelo_lod.gmod
+   A \worksrc\objects\building1sq.gmod
+   A \worksrc\objects\building1sq_lod.gmod
+   A \worksrc\objects\building1sqshort.gmod
+   A \worksrc\objects\building2squnderconst block.gm
+   A \worksrc\objects\building2squnderconst.gmod
+   A \worksrc\objects\building3sqandhalfhigh.gmod
+   A \worksrc\objects\building3sqandhalfhigh_lod.gmo
+   A \worksrc\objects\building4highrise.gmod
+   A \worksrc\objects\building4highrise_lod.gmod
+   A \worksrc\objects\building5lowrise block.gmod
+   A \worksrc\objects\building5lowrise.gmod
+   A \worksrc\objects\building6loadingdock.gmod
+   A \worksrc\objects\building7mexico.gmod
+   A \worksrc\objects\building8blueroof.gmod
+   A \worksrc\objects\building9letterh.gmod
+   A \worksrc\objects\buildingarchswhite block.gmod
+   A \worksrc\objects\buildingarchswhite.gmod
+   A \worksrc\objects\buildingarchswhite_lod.gmod
+   A \worksrc\objects\buildorange2backdoors.gmod
+   A \worksrc\objects\buildsmlbluewindows.gmod
+   A \worksrc\objects\buildstonetemplebrwn.gmod
+   A \worksrc\objects\builduglystuccolittlewin.gmod
+   A \worksrc\objects\buildwarehouse1doortallcement.gmod
+   A \worksrc\objects\buildwarehouse1doortallcement_
+   A \worksrc\objects\buildwarehouse2garagedrslev.000
+   A \worksrc\objects\buildwarehouse2garagedrslevels.gmod
+   A \worksrc\objects\buildwarehouseloadingdock.gmod
+   A \worksrc\objects\buildwarehousestuccobottom.gmod
+   A \worksrc\objects\buildwarehousestuccobottom_lod.gmod
+   A \worksrc\objects\buld3sml2.gmod
+   A \worksrc\objects\bunker.gmod
+   A \worksrc\objects\buster_body.gmod
+   A \worksrc\objects\buster_body_lod.gmod
+   A \worksrc\objects\buster_body_shadow.gmod
+   A \worksrc\objects\buster_rocket.gmod
+   A \worksrc\objects\buster_rocket_lod.gmod
+   A \worksrc\objects\buster_rocket_shadow.gmod
+   A \worksrc\objects\cabin_big.gmod
+   A \worksrc\objects\cabin_garage.gmod
+   A \worksrc\objects\cabin_small.gmod
+   A \worksrc\objects\camel_light.gmod
+   A \worksrc\objects\camera.gmod
+   A \worksrc\objects\castle.gmod
+   A \worksrc\objects\chain_gun.gmod
+   A \worksrc\objects\chunk_chopper_blade.gmod
+   A \worksrc\objects\chunk_chopper_body.gmod
+   A \worksrc\objects\chunk_chopper_tail.gmod
+   A \worksrc\objects\chunk_engineer_front.gmod
+   A \worksrc\objects\chunk_engineer_rear.gmod
+   A \worksrc\objects\chunk_engineer_tire.gmod
+   A \worksrc\objects\chunk_missiletruck_body.gmod
+   A \worksrc\objects\chunk_missiletruck_launcher.gmod
+   A \worksrc\objects\chunk_missiletruck_tread.gmod
+   A \worksrc\objects\chunk_peon_barrel.gmod
+   A \worksrc\objects\chunk_peon_body.gmod
+   A \worksrc\objects\chunk_peon_turret.gmod
+   A \worksrc\objects\chunk_supertankbase.gmod
+   A \worksrc\objects\chunk_supertanktop.gmod
+   A \worksrc\objects\chunk_trike_body.gmod
+   A \worksrc\objects\chunk_trike_tread.gmod
+   A \worksrc\objects\chunk_trike_wheels.gmod
+   A \worksrc\objects\churchbeams.gmod
+   A \worksrc\objects\cloud.gmod
+   A \worksrc\objects\cloud2.gmod
+   A \worksrc\objects\cloud_layer1.gmod
+   A \worksrc\objects\cobra.gmod
+   A \worksrc\objects\cobra_body.gmod
+   A \worksrc\objects\cobra_main_barrel.gmod
+   A \worksrc\objects\cobra_main_turret.gmod
+   A \worksrc\objects\cobra_mini_turret.gmod
+   A \worksrc\objects\collector.gmod
+   A \worksrc\objects\command-self_destruct.gmod
+   A \worksrc\objects\command-stop.gmod
+   A \worksrc\objects\copy (2) of supertanktop.gmod
+   A \worksrc\objects\copy of cylinder.gmod
+   A \worksrc\objects\copy of supertanktop.gmod
+   A \worksrc\objects\cranebig.gmod
+   A \worksrc\objects\cranebig_lod.gmod
+   A \worksrc\objects\crate_bullets.gmod
+   A \worksrc\objects\crate_health.gmod
+   A \worksrc\objects\crate_minigun.gmod
+   A \worksrc\objects\crate_missiles.gmod
+   A \worksrc\objects\crate_money.gmod
+   A \worksrc\objects\crushedbuilding1.gmod
+   A \worksrc\objects\crushedbuilding2.gmod
+   A \worksrc\objects\crushedbuilding3.gmod
+   A \worksrc\objects\cylinder.gmod
+   A \worksrc\objects\debug.txt
+   A \worksrc\objects\deco_aagun.gmod
+   A \worksrc\objects\deco_armycratebig.gmod
+   A \worksrc\objects\deco_armycratesml.gmod
+   A \worksrc\objects\deco_barrerblock.gmod
+   A \worksrc\objects\deco_bridgebeam.gmod
+   A \worksrc\objects\deco_bridgebroken.gmod
+   A \worksrc\objects\deco_factory.gmod
+   A \worksrc\objects\deco_firewood.gmod
+   A \worksrc\objects\deco_metalbridgepole.gmod
+   A \worksrc\objects\deco_oiltanksandwell.gmod
+   A \worksrc\objects\deco_oilwell.gmod
+   A \worksrc\objects\deco_onelargecrate.gmod
+   A \worksrc\objects\deco_palmtree1.gmod
+   A \worksrc\objects\deco_palmtree2.gmod
+   A \worksrc\objects\deco_palmtree3.gmod
+   A \worksrc\objects\deco_sign-camelcrossing.gmod
+   A \worksrc\objects\deco_snowy_fir1.gmod
+   A \worksrc\objects\deco_snowy_woods1.gmod
+   A \worksrc\objects\deco_snowytree1.gmod
+   A \worksrc\objects\deco_snowytree1b.gmod
+   A \worksrc\objects\deco_snowytree2.gmod
+   A \worksrc\objects\deco_threelargecrates.gmod
+   A \worksrc\objects\deco_toilet.gmod
+   A \worksrc\objects\decursio.gmod
+   A \worksrc\objects\digsite.gmod
+   A \worksrc\objects\dispatcher.gmod
+   A \worksrc\objects\dockslant.gmod
+   A \worksrc\objects\drawbridge4.gmod
+   A \worksrc\objects\drawbridgebuilding.gmod
+   A \worksrc\objects\dumpster.gmod
+   A \worksrc\objects\egyptdoublebus.gmod
+   A \worksrc\objects\egyptflag.gmod
+   A \worksrc\objects\egyptsky1.gmod
+   A \worksrc\objects\elec_body.gmod
+   A \worksrc\objects\elec_body_lod.gmod
+   A \worksrc\objects\elec_gun.gmod
+   A \worksrc\objects\elec_shadow.gmod
+   A \worksrc\objects\elec_wheel.gmod
+   A \worksrc\objects\embassy_big.gmod
+   A \worksrc\objects\embassy_medium.gmod
+   A \worksrc\objects\embassy_small.gmod
+   A \worksrc\objects\enemy_engineer_body.gmod
+   A \worksrc\objects\engbuld12.gmod
+   A \worksrc\objects\engineer_back_wheels.gmod
+   A \worksrc\objects\engineer_body.gmod
+   A \worksrc\objects\engineer_front_wheels.gmod
+   A \worksrc\objects\engineer_lod.gmod
+   A \worksrc\objects\engineer_shadow.gmod
+   A \worksrc\objects\engineer_test_wheels.gmod
+   A \worksrc\objects\exp_test.gmod
+   A \worksrc\objects\explosion_plume.gmod
+   A \worksrc\objects\explosion_radial1.gmod
+   A \worksrc\objects\explosions1.gmod
+   A \worksrc\objects\explosions2.gmod
+   A \worksrc\objects\explosions3.gmod
+   A \worksrc\objects\explosions4.gmod
+   A \worksrc\objects\factory.gmod
+   A \worksrc\objects\factory3.gmod
+   A \worksrc\objects\finlandflag.gmod
+   A \worksrc\objects\fire_chunk.gmod
+   A \worksrc\objects\fireball1.gmod
+   A \worksrc\objects\flag_golg.gmod
+   A \worksrc\objects\flag_greece.gmod
+   A \worksrc\objects\flaretest.gmod
+   A \worksrc\objects\flash.gmod
+   A \worksrc\objects\floorpad.gmod
+   A \worksrc\objects\francecastle.gmod
+   A \worksrc\objects\franceflag.gmod
+   A \worksrc\objects\francehouseblue.gmod
+   A \worksrc\objects\francehouseplain.gmod
+   A \worksrc\objects\francehousered.gmod
+   A \worksrc\objects\francesilo.gmod
+   A \worksrc\objects\francewarehouse.gmod
+   A \worksrc\objects\g.gmod
+   A \worksrc\objects\garage.gmod
+   A \worksrc\objects\garage2.gmod
+   A \worksrc\objects\garage_charred.gmod
+   A \worksrc\objects\garage_lod.gmod
+   A \worksrc\objects\germanyflag.gmod
+   A \worksrc\objects\golgflag.gmod
+   A \worksrc\objects\greclighthouse.gmod
+   A \worksrc\objects\greclighthouse_lod.gmod
+   A \worksrc\objects\greecebridgeside.gmod
+   A \worksrc\objects\greecebridgetop.gmod
+   A \worksrc\objects\greecedockfull.gmod
+   A \worksrc\objects\greeceflag.gmod
+   A \worksrc\objects\greecehouses1.gmod
+   A \worksrc\objects\greecehouses2.gmod
+   A \worksrc\objects\greecehouses3.gmod
+   A \worksrc\objects\greeceship1.gmod
+   A \worksrc\objects\greecesky1.gmod
+   A \worksrc\objects\greeceskys.gmod
+   A \worksrc\objects\greecetug.gmod
+   A \worksrc\objects\guided_missile.gmod
+   A \worksrc\objects\gunport_barrel.gmod
+   A \worksrc\objects\gunport_base.gmod
+   A \worksrc\objects\gunshell.gmod
+   A \worksrc\objects\gunshell_shadow.gmod
+   A \worksrc\objects\heavy_rocket.gmod
+   A \worksrc\objects\heli_blades-alpha.gmod
+   A \worksrc\objects\heli_blades.gmod
+   A \worksrc\objects\heli_blades_shadow.gmod
+   A \worksrc\objects\heli_blades_shadow2.gmod
+   A \worksrc\objects\heli_body.gmod
+   A \worksrc\objects\heli_body_lod.gmod
+   A \worksrc\objects\heli_body_shadow.gmod
+   A \worksrc\objects\heli_body_shadow2.gmod
+   A \worksrc\objects\holy_cross.gmod
+   A \worksrc\objects\holy_cross_ring.gmod
+   A \worksrc\objects\iraq1.gmod
+   A \worksrc\objects\iraq1_lod.gmod
+   A \worksrc\objects\iraq2.gmod
+   A \worksrc\objects\iraqbentroofwhole.gmod
+   A \worksrc\objects\iraqbuld3smlwhole.gmod
+   A \worksrc\objects\iraqflag.gmod
+   A \worksrc\objects\iraqfrntbluewhole.gmod
+   A \worksrc\objects\iraqfrntredwhole.gmod
+   A \worksrc\objects\iraqpurpstarwhole.gmod
+   A \worksrc\objects\iraqtallspacewhole.gmod
+   A \worksrc\objects\iraqtempl1whole block.gmod
+   A \worksrc\objects\iraqtempl1whole.gmod
+   A \worksrc\objects\israelflag.gmod
+   A \worksrc\objects\italyflag.gmod
+   A \worksrc\objects\jerusbridgeside.gmod
+   A \worksrc\objects\jerusdig4.gmod
+   A \worksrc\objects\jerustemple1.gmod
+   A \worksrc\objects\jeruswallfull1.gmod
+   A \worksrc\objects\jeruswallfull2.gmod
+   A \worksrc\objects\jeruswallfull3.gmod
+   A \worksrc\objects\jeruswallfull4.gmod
+   A \worksrc\objects\jet_body-old.gmod
+   A \worksrc\objects\jet_body.gmod
+   A \worksrc\objects\jet_body_backup.gmod
+   A \worksrc\objects\jet_body_big_wings.gmod
+   A \worksrc\objects\jet_body_lod.gmod
+   A \worksrc\objects\jet_body_shadow.gmod
+   A \worksrc\objects\jet_engines-old.gmod
+   A \worksrc\objects\jet_engines.gmod
+   A \worksrc\objects\jet_shadow.gmod
+   A \worksrc\objects\jetbomb.gmod
+   A \worksrc\objects\laser_bolt.gmod
+   A \worksrc\objects\lawyerbuilding2x3.gmod
+   A \worksrc\objects\lightbulb.gmod
+   A \worksrc\objects\lock_on.gmod
+   A \worksrc\objects\lock_on_guns.gmod
+   A \worksrc\objects\lock_own.gmod
+   A \worksrc\objects\lod_test1.gmod
+   A \worksrc\objects\luxembourgflag.gmod
+   A \worksrc\objects\mainbase.gmod
+   A \worksrc\objects\mainbasefull010698.gmod
+   A \worksrc\objects\mainbasefull010698_lod.gmod
+   A \worksrc\objects\mainbasepad.gmod
+   A \worksrc\objects\mainfueltanktower4.gmod
+   A \worksrc\objects\mainfueltanktowerfull9.gmod
+   A \worksrc\objects\metal_chunk.gmod
+   A \worksrc\objects\metalbridge.gmod
+   A \worksrc\objects\metalbridgepole.gmod
+   A \worksrc\objects\metalbridgewedge.gmod
+   A \worksrc\objects\mexistyle1.gmod
+   A \worksrc\objects\mexistyle2.gmod
+   A \worksrc\objects\mexistyle3.gmod
+   A \worksrc\objects\mexistylelong1x3.gmod
+   A \worksrc\objects\mexistylelong1x3_lod.gmod
+   A \worksrc\objects\moneycrate-old.gmod
+   A \worksrc\objects\moneycrate.gmod
+   A \worksrc\objects\moneyplane-old.gmod
+   A \worksrc\objects\moneyplane.gmod
+   A \worksrc\objects\moneyplane_lod-old.gmod
+   A \worksrc\objects\moneyplane_lod.gmod
+   A \worksrc\objects\napalm.gmod
+   A \worksrc\objects\nephflag.gmod
+   A \worksrc\objects\nephlim_arch.gmod
+   A \worksrc\objects\newbird.gmod
+   A \worksrc\objects\norwayflag.gmod
+   A \worksrc\objects\nothing.gmod
+   A \worksrc\objects\nuke_ball.gmod
+   A \worksrc\objects\nuke_missile.gmod
+   A \worksrc\objects\nuksky1.gmod
+   A \worksrc\objects\oiltanksandwell.gmod
+   A \worksrc\objects\oilwell.gmod
+   A \worksrc\objects\old_engineer_body.gmod
+   A \worksrc\objects\old_garage.gmod
+   A \worksrc\objects\onelargecrate.gmod
+   A \worksrc\objects\pad_cursor.gmod
+   A \worksrc\objects\pad_type_bank.gmod
+   A \worksrc\objects\pad_type_lawfirm.gmod
+   A \worksrc\objects\palmtree1.gmod
+   A \worksrc\objects\palmtree2.gmod
+   A \worksrc\objects\palmtree3.gmod
+   A \worksrc\objects\peon_body.gmod
+   A \worksrc\objects\peon_body_lod.gmod
+   A \worksrc\objects\peon_body_shadow.gmod
+   A \worksrc\objects\peon_turret.gmod
+   A \worksrc\objects\peon_turret_lod.gmod
+   A \worksrc\objects\peon_turret_shadow.gmod
+   A \worksrc\objects\plasma_bolt.gmod
+   A \worksrc\objects\popup_barrel.gmod
+   A \worksrc\objects\popup_housing.gmod
+   A \worksrc\objects\popup_mount.gmod
+   A \worksrc\objects\popup_test.gmod
+   A \worksrc\objects\powerup_bank.gmod
+   A \worksrc\objects\powerup_engine.gmod
+   A \worksrc\objects\powerup_flare.000
+   A \worksrc\objects\powerup_flare.gmod
+   A \worksrc\objects\powerup_flare_blue.gmod
+   A \worksrc\objects\powerup_flare_green.gmod
+   A \worksrc\objects\powerup_flare_green_old.gmod
+   A \worksrc\objects\powerup_flare_red.gmod
+   A \worksrc\objects\powerup_flare_white.gmod
+   A \worksrc\objects\powerup_flare_yellow.gmod
+   A \worksrc\objects\powerup_lawyer.gmod
+   A \worksrc\objects\powerup_repair.gmod
+   A \worksrc\objects\powerup_ring1.gmod
+   A \worksrc\objects\powerup_shields.gmod
+   A \worksrc\objects\powerup_weapons.gmod
+   A \worksrc\objects\punch_through_building.gmod
+   A \worksrc\objects\pyramidbigfull.gmod
+   A \worksrc\objects\pyramidlarge1.gmod
+   A \worksrc\objects\pyramidlarge10.gmod
+   A \worksrc\objects\pyramidlarge11.gmod
+   A \worksrc\objects\pyramidlarge2.gmod
+   A \worksrc\objects\pyramidlarge3.gmod
+   A \worksrc\objects\pyramidlarge4.gmod
+   A \worksrc\objects\pyramidlarge5.gmod
+   A \worksrc\objects\pyramidlarge6.gmod
+   A \worksrc\objects\pyramidlarge7.gmod
+   A \worksrc\objects\pyramidlarge8.gmod
+   A \worksrc\objects\pyramidlarge9.gmod
+   A \worksrc\objects\pyramidshortfull.gmod
+   A \worksrc\objects\ramp.gmod
+   A \worksrc\objects\red_flare.gmod
+   A \worksrc\objects\repair_base.gmod
+   A \worksrc\objects\repair_boom.gmod
+   A \worksrc\objects\repair_extender.gmod
+   A \worksrc\objects\repair_tip.gmod
+   A \worksrc\objects\repair_turret.gmod
+   A \worksrc\objects\rocket_truck.gmod
+   A \worksrc\objects\rocket_truck_lod.gmod
+   A \worksrc\objects\rocket_truck_shadow.gmod
+   A \worksrc\objects\rocket_truck_top.gmod
+   A \worksrc\objects\rocket_truck_top_lod.gmod
+   A \worksrc\objects\rockwallcorner.gmod
+   A \worksrc\objects\rockwallend.gmod
+   A \worksrc\objects\rockwallmid.gmod
+   A \worksrc\objects\roman_column1.gmod
+   A \worksrc\objects\ruinscorner.gmod
+   A \worksrc\objects\ruinsoneonly.gmod
+   A \worksrc\objects\ruinsonepillar.gmod
+   A \worksrc\objects\ruinspad.gmod
+   A \worksrc\objects\ruinsruin.gmod
+   A \worksrc\objects\ruinsruin2.gmod
+   A \worksrc\objects\ruinstwoonly.gmod
+   A \worksrc\objects\ruinstwopillar.gmod
+   A \worksrc\objects\ruinstwopillar2.gmod
+   A \worksrc\objects\ruinswall1.gmod
+   A \worksrc\objects\ruinswall2.gmod
+   A \worksrc\objects\ruinswall3.gmod
+   A \worksrc\objects\ruinswall4.gmod
+   A \worksrc\objects\sacred_ring.gmod
+   A \worksrc\objects\santa.gmod
+   A \worksrc\objects\santa1.gmod
+   A \worksrc\objects\scotlandflag.gmod
+   A \worksrc\objects\secret_room_small.gmod
+   A \worksrc\objects\selection_arrow.gmod
+   A \worksrc\objects\sheer_test.gmod
+   A \worksrc\objects\shield_building.gmod
+   A \worksrc\objects\shield_building_flare.gmod
+   A \worksrc\objects\shield_building_shield.gmod
+   A \worksrc\objects\shipyard.gmod
+   A \worksrc\objects\shockwave.gmod
+   A \worksrc\objects\shockwave2.gmod
+   A \worksrc\objects\shortcut to iraqtallspacewhole
+   A \worksrc\objects\shovel2.gmod
+   A \worksrc\objects\shovel3.gmod
+   A \worksrc\objects\sign-camelcrossing.gmod
+   A \worksrc\objects\sign-roadblock.gmod
+   A \worksrc\objects\silobigfull2x2.gmod
+   A \worksrc\objects\silobigfull2x2_lod.gmod
+   A \worksrc\objects\silonosides.gmod
+   A \worksrc\objects\silowhole.gmod
+   A \worksrc\objects\skier.gmod
+   A \worksrc\objects\skier1.gmod
+   A \worksrc\objects\skier2.gmod
+   A \worksrc\objects\sky.gmod
+   A \worksrc\objects\sky1.gmod
+   A \worksrc\objects\sky3.gmod
+   A \worksrc\objects\sky4.gmod
+   A \worksrc\objects\sky5.gmod
+   A \worksrc\objects\sky5backup.gmod
+   A \worksrc\objects\sky6.gmod
+   A \worksrc\objects\sky6back.gmod
+   A \worksrc\objects\sky7.gmod
+   A \worksrc\objects\skygrec.gmod
+   A \worksrc\objects\smallcrossroad.gmod
+   A \worksrc\objects\smallpyramid1.gmod
+   A \worksrc\objects\smallpyramid2.gmod
+   A \worksrc\objects\smallpyramid3.gmod
+   A \worksrc\objects\smallpyramid4.gmod
+   A \worksrc\objects\smallpyramid5.gmod
+   A \worksrc\objects\smoke1.gmod
+   A \worksrc\objects\smoke_puff1.gmod
+   A \worksrc\objects\smoke_puff2.gmod
+   A \worksrc\objects\smoke_puff3.gmod
+   A \worksrc\objects\smoke_puff4.gmod
+   A \worksrc\objects\smoke_puff5.gmod
+   A \worksrc\objects\snowy_woods1.gmod
+   A \worksrc\objects\spawn.gmod
+   A \worksrc\objects\speaker.gmod
+   A \worksrc\objects\sphere.gmod
+   A \worksrc\objects\sphinxfull4x10.gmod
+   A \worksrc\objects\sun_and_moon.gmod
+   A \worksrc\objects\super_cobra_body.gmod
+   A \worksrc\objects\super_cobra_turret.gmod
+   A \worksrc\objects\supergun_barrel.gmod
+   A \worksrc\objects\supergun_base.gmod
+   A \worksrc\objects\supertank_base.gmod
+   A \worksrc\objects\supertank_body_shadow.gmod
+   A \worksrc\objects\supertank_turret_shadow.gmod
+   A \worksrc\objects\supertankbase.gmod
+   A \worksrc\objects\supertankbase_old.gmod
+   A \worksrc\objects\supertanktop.gmod
+   A \worksrc\objects\supertanktop_full.gmod
+   A \worksrc\objects\supertanktop_old.gmod
+   A \worksrc\objects\swedenflag.gmod
+   A \worksrc\objects\switzbridgehalf.000
+   A \worksrc\objects\switzbridgehalf.gmod
+   A \worksrc\objects\switzbridgezend2.000
+   A \worksrc\objects\switzbridgezend2.gmod
+   A \worksrc\objects\switzbridgezmid2.000
+   A \worksrc\objects\switzbridgezmid2.gmod
+   A \worksrc\objects\switztunneleightlong.gmod
+   A \worksrc\objects\t.gmod
+   A \worksrc\objects\tac-nuke.gmod
+   A \worksrc\objects\tac_nuke.gmod
+   A \worksrc\objects\takeover_pad-old.gmod
+   A \worksrc\objects\takeover_pad.gmod
+   A \worksrc\objects\takeover_tunnel.gmod
+   A \worksrc\objects\tankball-cannon.gmod
+   A \worksrc\objects\tankball-electric.gmod
+   A \worksrc\objects\tankball-missiles.gmod
+   A \worksrc\objects\target.gmod
+   A \worksrc\objects\team_flag.gmod
+   A \worksrc\objects\templebigfull3x4.gmod
+   A \worksrc\objects\test.gmod
+   A \worksrc\objects\test_static.gmod
+   A \worksrc\objects\test_text.gmod
+   A \worksrc\objects\test_triangle.gmod
+   A \worksrc\objects\testsphere.gmod
+   A \worksrc\objects\testtunnel.gmod
+   A \worksrc\objects\threelargecrates.gmod
+   A \worksrc\objects\toilet.gmod
+   A \worksrc\objects\tower_electric_base.gmod
+   A \worksrc\objects\tower_electric_bottom.gmod
+   A \worksrc\objects\tower_electric_fingers.gmod
+   A \worksrc\objects\tower_electric_pod.gmod
+   A \worksrc\objects\tower_gun_barrel.gmod
+   A \worksrc\objects\tower_gun_base.gmod
+   A \worksrc\objects\tower_gun_bottom.gmod
+   A \worksrc\objects\tower_missile_base.gmod
+   A \worksrc\objects\tower_missile_bottom.gmod
+   A \worksrc\objects\tower_missile_launcher.gmod
+   A \worksrc\objects\traincaboose.gmod
+   A \worksrc\objects\traincarguns.gmod
+   A \worksrc\objects\traincarmissles.gmod
+   A \worksrc\objects\trainengine.gmod
+   A \worksrc\objects\trainengineguns.gmod
+   A \worksrc\objects\trainstation.gmod
+   A \worksrc\objects\trainstation_backup.gmod
+   A \worksrc\objects\trigger.gmod
+   A \worksrc\objects\trike_body.gmod
+   A \worksrc\objects\trike_body_lod.gmod
+   A \worksrc\objects\trike_lod.gmod
+   A \worksrc\objects\trike_shadow.gmod
+   A \worksrc\objects\trike_wheels.gmod
+   A \worksrc\objects\ttest.gmod
+   A \worksrc\objects\tube.gmod
+   A \worksrc\objects\tunnel.gmod
+   A \worksrc\objects\tunnel_entrance.gmod
+   A \worksrc\objects\turret.gmod
+   A \worksrc\objects\turret_muzzle.gmod
+   A \worksrc\objects\uss_la.gmod
+   A \worksrc\objects\vortex_missile.gmod
+   A \worksrc\objects\vssver.scc
+   A \worksrc\objects\waterpumpbuild.gmod
+   A \worksrc\objects\waterpumpbuild_lod.gmod
+   A \worksrc\objects\weaponpad.gmod
+   A \worksrc\objects\wheelbarrow2.gmod
+   A \worksrc\objects\wheelbarrow3.gmod
+   A \worksrc\objects\wheelbarrow4.gmod
+   A \worksrc\objects\wood_burning.gmod
+
+Added all the objects (.gmod files). They're not that big that they need a special directory.
+------------------------------------------------------------------------
+r29 | pgrawehr | 2003-12-26 13:26:48 +0100 (Fri, 26 Dec 2003) | 1 line
+Changed paths:
+   A \worksrc\ivcon
+   A \worksrc\ivcon\ivcon.cpp
+   A \worksrc\ivcon\ivcon.dsp
+   A \worksrc\ivcon\ivcon.dsw
+   A \worksrc\ivcon\ivcon.ico
+   A \worksrc\ivcon\ivcon.opt
+   A \worksrc\ivcon\ivcon.rc
+   A \worksrc\ivcon\ivcon.vcproj
+   A \worksrc\ivcon\ivcon.vcproj.vspscc
+   A \worksrc\ivcon\ivcon.zip
+   A \worksrc\ivcon\resource.h
+
+Added the ivcon source.
+------------------------------------------------------------------------
+r28 | pgrawehr | 2003-12-26 13:14:47 +0100 (Fri, 26 Dec 2003) | 1 line
+Changed paths:
+   D \worksrc\maxtool\sdk_inc
+
+This directory was there for historical reasons only
+------------------------------------------------------------------------
+r27 | pgrawehr | 2003-12-26 13:12:12 +0100 (Fri, 26 Dec 2003) | 1 line
+Changed paths:
+   A \worksrc\transport
+   A \worksrc\transport\axhausen.acts
+   A \worksrc\transport\axhausen.links
+   A \worksrc\transport\axhausen.nodes
+   A \worksrc\transport\axhausen.plans
+   A \worksrc\transport\randomize.h
+   A \worksrc\transport\transport.h
+
+All but objects done now?
+------------------------------------------------------------------------
+r26 | pgrawehr | 2003-12-26 13:03:28 +0100 (Fri, 26 Dec 2003) | 1 line
+Changed paths:
+   D \worksrc\axhausen01.level
+   D \worksrc\axhausen01.scm
+   D \worksrc\axhausen02.level
+   D \worksrc\axhausen02.scm
+   D \worksrc\axhausen03.level
+   D \worksrc\axhausen03.scm
+   D \worksrc\axhausen03_day2.scm
+   D \worksrc\axhausen04.level
+   D \worksrc\axhausen04.scm
+   D \worksrc\axhausen04_endofday1.level
+   D \worksrc\axhausen04_endofday1.scm
+   D \worksrc\axhausen05.level
+   D \worksrc\axhausen05.scm
+   D \worksrc\axhausen06.level
+   D \worksrc\axhausen06.scm
+   D \worksrc\axhausen07_day5.level
+   D \worksrc\axhausen07_day5.scm
+   D \worksrc\axhausen08_day6.level
+   D \worksrc\axhausen08_day6.scm
+   D \worksrc\axhausen08_endofday7.level
+   D \worksrc\axhausen08_endofday7.scm
+   D \worksrc\axhausen09.level
+   D \worksrc\axhausen09.scm
+   D \worksrc\axhausen10.level
+   D \worksrc\axhausen10.scm
+   D \worksrc\axhausen11.level
+   D \worksrc\axhausen11.scm
+   D \worksrc\axtemp.level
+   D \worksrc\axtemp.scm
+   D \worksrc\ch01.level
+   D \worksrc\ch01.scm
+   D \worksrc\ch02.level
+   D \worksrc\ch02.scm
+   D \worksrc\ch03.level
+   D \worksrc\ch03.scm
+
+removed huge and large and obsolete transport savegames
+------------------------------------------------------------------------
+r25 | pgrawehr | 2003-12-26 12:13:47 +0100 (Fri, 26 Dec 2003) | 1 line
+Changed paths:
+   A \worksrc\Tests
+   A \worksrc\Tests\ReadMe.txt
+   A \worksrc\Tests\Release
+   A \worksrc\Tests\Release\StdAfx.obj
+   A \worksrc\Tests\Release\Tests.exe
+   A \worksrc\Tests\Release\Tests.map
+   A \worksrc\Tests\Release\Tests.obj
+   A \worksrc\Tests\Release\vc60.idb
+   A \worksrc\Tests\StdAfx.cpp
+   A \worksrc\Tests\StdAfx.h
+   A \worksrc\Tests\StdAfx.obj
+   A \worksrc\Tests\StdAfx.sbr
+   A \worksrc\Tests\Tests.Tags.WW
+   A \worksrc\Tests\Tests.cpp
+   A \worksrc\Tests\Tests.dep
+   A \worksrc\Tests\Tests.dsp
+   A \worksrc\Tests\Tests.exe
+   A \worksrc\Tests\Tests.ilk
+   A \worksrc\Tests\Tests.mak
+   A \worksrc\Tests\Tests.obj
+   A \worksrc\Tests\Tests.plg
+   A \worksrc\Tests\Tests.sbr
+   A \worksrc\Tests\Tests.vcproj
+   A \worksrc\Tests\Tests.vcproj.vspscc
+   A \worksrc\Tests\mssccprj.scc
+   A \worksrc\Tests\pthread_test.c
+   A \worksrc\Tests\vc60.idb
+   A \worksrc\Tests\vc60.pdb
+   A \worksrc\Tests\vssver.scc
+   A \worksrc\compress
+   A \worksrc\compress\rle.h
+   A \worksrc\compress\vssver.scc
+   A \worksrc\demos
+   A \worksrc\demos\demo00.level
+   A \worksrc\demos\tmp_inputs.gdm
+   A \worksrc\demos\tmp_level.level
+   A \worksrc\demos\tmp_resources.scm
+   A \worksrc\demos\tmp_script.scm
+   A \worksrc\demos\vssver.scc
+   A \worksrc\device
+   A \worksrc\device\device.h
+   A \worksrc\device\event.h
+   A \worksrc\device\kernel.h
+   A \worksrc\device\key_man.h
+   A \worksrc\device\keys.h
+   A \worksrc\device\processor.h
+   A \worksrc\device\vssver.scc
+   A \worksrc\dll
+   A \worksrc\dll\dll.h
+   A \worksrc\dll\dll_man.h
+   A \worksrc\dll\vssver.scc
+   A \worksrc\editor
+   A \worksrc\editor\commands
+   A \worksrc\editor\commands\fill.h
+   A \worksrc\editor\commands\vssver.scc
+   A \worksrc\editor\contedit.h
+   A \worksrc\editor\dialogs
+   A \worksrc\editor\dialogs\d_light.h
+   A \worksrc\editor\dialogs\d_time.h
+   A \worksrc\editor\dialogs\debug_win.h
+   A \worksrc\editor\dialogs\e_time.h
+   A \worksrc\editor\dialogs\obj_win.h
+   A \worksrc\editor\dialogs\object_picker.h
+   A \worksrc\editor\dialogs\path_win.h
+   A \worksrc\editor\dialogs\pick_win.h
+   A \worksrc\editor\dialogs\scene.h
+   A \worksrc\editor\dialogs\scroll_picker.h
+   A \worksrc\editor\dialogs\tile_picker.h
+   A \worksrc\editor\dialogs\tile_win.h
+   A \worksrc\editor\dialogs\vssver.scc
+   A \worksrc\editor\e_res.h
+   A \worksrc\editor\e_state.h
+   A \worksrc\editor\edit_id.h
+   A \worksrc\editor\editor.h
+   A \worksrc\editor\lisp_interaction.h
+   A \worksrc\editor\mode
+   A \worksrc\editor\mode\e_ai.h
+   A \worksrc\editor\mode\e_camera.h
+   A \worksrc\editor\mode\e_game.h
+   A \worksrc\editor\mode\e_light.h
+   A \worksrc\editor\mode\e_mode.h
+   A \worksrc\editor\mode\e_object.h
+   A \worksrc\editor\mode\e_tile.h
+   A \worksrc\editor\mode\vssver.scc
+   A \worksrc\editor\pmenu.h
+   A \worksrc\editor\vssver.scc
+   A \worksrc\error
+   A \worksrc\error\alert.h
+   A \worksrc\error\error.h
+   A \worksrc\error\vssver.scc
+   A \worksrc\file
+   A \worksrc\file\async.h
+   A \worksrc\file\buf_file.h
+   A \worksrc\file\file.h
+   A \worksrc\file\file_man.h
+   A \worksrc\file\file_open.h
+   A \worksrc\file\get_filename.h
+   A \worksrc\file\ram_file.h
+   A \worksrc\file\ram_file_man.h
+   A \worksrc\file\static_file.h
+   A \worksrc\file\sub_section.h
+   A \worksrc\file\vssver.scc
+   A \worksrc\font
+   A \worksrc\font\anti_prop.h
+   A \worksrc\font\font.h
+   A \worksrc\font\plain.h
+   A \worksrc\font\vssver.scc
+   A \worksrc\gui
+   A \worksrc\gui\browse_tree.h
+   A \worksrc\gui\butbox.h
+   A \worksrc\gui\button.h
+   A \worksrc\gui\create_dialog.h
+   A \worksrc\gui\deco_win.h
+   A \worksrc\gui\divider.h
+   A \worksrc\gui\gradiant.h
+   A \worksrc\gui\image_win.h
+   A \worksrc\gui\li_pull_menu.h
+   A \worksrc\gui\list_box.h
+   A \worksrc\gui\list_pick.h
+   A \worksrc\gui\scroll_bar.h
+   A \worksrc\gui\seperate.h
+   A \worksrc\gui\slider.h
+   A \worksrc\gui\smp_dial.h
+   A \worksrc\gui\tab_bar.h
+   A \worksrc\gui\text.h
+   A \worksrc\gui\text_input.h
+   A \worksrc\gui\text_scroll.h
+   A \worksrc\gui\vssver.scc
+   A \worksrc\image
+   A \worksrc\image\color.h
+   A \worksrc\image\context.h
+   A \worksrc\image\image.h
+   A \worksrc\image\image16.h
+   A \worksrc\image\image24.h
+   A \worksrc\image\image32.h
+   A \worksrc\image\image8.h
+   A \worksrc\image\vssver.scc
+   A \worksrc\init
+   A \worksrc\init\init.h
+   A \worksrc\init\vssver.scc
+   A \worksrc\lisp
+   A \worksrc\lisp\abuse.h
+   A \worksrc\lisp\li_all.h
+   A \worksrc\lisp\li_alloc.h
+   A \worksrc\lisp\li_class.h
+   A \worksrc\lisp\li_dialog.h
+   A \worksrc\lisp\li_error.h
+   A \worksrc\lisp\li_file.h
+   A \worksrc\lisp\li_init.h
+   A \worksrc\lisp\li_load.h
+   A \worksrc\lisp\li_optr.h
+   A \worksrc\lisp\li_types.h
+   A \worksrc\lisp\li_vect.h
+   A \worksrc\lisp\lisp.h
+   A \worksrc\lisp\vssver.scc
+   A \worksrc\loaders
+   A \worksrc\loaders\3ds
+   A \worksrc\loaders\3ds\3ds.cpp
+   A \worksrc\loaders\3ds\3ds.dsp
+   A \worksrc\loaders\3ds\3ds.dsw
+   A \worksrc\loaders\3ds\3ds.h
+   A \worksrc\loaders\3ds\3ds.ncb
+   A \worksrc\loaders\3ds\3ds.opt
+   A \worksrc\loaders\3ds\3ds.plg
+   A \worksrc\loaders\3ds\Debug
+   A \worksrc\loaders\3ds\main.cpp
+   A \worksrc\loaders\3ds\mssccprj.scc
+   A \worksrc\loaders\3ds\teapot.3DS
+   A \worksrc\loaders\3ds\vssver.scc
+   A \worksrc\loaders\bmp_write.h
+   A \worksrc\loaders\dir_load.h
+   A \worksrc\loaders\dir_save.h
+   A \worksrc\loaders\jpg
+   A \worksrc\loaders\jpg\cderror.h
+   A \worksrc\loaders\jpg\cdjpeg.h
+   A \worksrc\loaders\jpg\jchuff.h
+   A \worksrc\loaders\jpg\jconfig.h
+   A \worksrc\loaders\jpg\jdct.h
+   A \worksrc\loaders\jpg\jdhuff.h
+   A \worksrc\loaders\jpg\jerror.h
+   A \worksrc\loaders\jpg\jinclude.h
+   A \worksrc\loaders\jpg\jmemsys.h
+   A \worksrc\loaders\jpg\jmorecfg.h
+   A \worksrc\loaders\jpg\jpegint.h
+   A \worksrc\loaders\jpg\jpeglib.h
+   A \worksrc\loaders\jpg\jversion.h
+   A \worksrc\loaders\jpg\vssver.scc
+   A \worksrc\loaders\jpg_load.h
+   A \worksrc\loaders\jpg_write.h
+   A \worksrc\loaders\load.h
+   A \worksrc\loaders\mp3
+   A \worksrc\loaders\mp3\audio.h
+   A \worksrc\loaders\mp3\get1bit.h
+   A \worksrc\loaders\mp3\getlopt.h
+   A \worksrc\loaders\mp3\huffman.h
+   A \worksrc\loaders\mp3\mpg123.h
+   A \worksrc\loaders\mp3\tables.h
+   A \worksrc\loaders\mp3\version.h
+   A \worksrc\loaders\mp3\vssver.scc
+   A \worksrc\loaders\mp3\xfermem.h
+   A \worksrc\loaders\mp3_load.h
+   A \worksrc\loaders\tga_write.h
+   A \worksrc\loaders\vssver.scc
+   A \worksrc\loaders\wav_load.h
+   A \worksrc\main
+   A \worksrc\main\main.h
+   A \worksrc\main\vssver.scc
+   A \worksrc\main\win_main.h
+   A \worksrc\make
+   A \worksrc\make\array_tree.h
+   A \worksrc\make\build_i4_make
+   A \worksrc\make\build_i4_make.bat
+   A \worksrc\make\deps.cpp
+   A \worksrc\make\deps.h
+   A \worksrc\make\error.cpp
+   A \worksrc\make\error.h
+   A \worksrc\make\i4_make.cpp
+   A \worksrc\make\i4_make.exe
+   A \worksrc\make\i4_make.h
+   A \worksrc\make\string.cpp
+   A \worksrc\make\string.h
+   A \worksrc\make\table.h
+   A \worksrc\make\vssver.scc
+   A \worksrc\map2def
+   A \worksrc\map2def\Debug
+   A \worksrc\map2def\Debug\BuildLog.htm
+   A \worksrc\map2def\Debug\StdAfx.obj
+   A \worksrc\map2def\Debug\map2def.obj
+   A \worksrc\map2def\Debug\map2def.pch
+   A \worksrc\map2def\Debug\map2def.res
+   A \worksrc\map2def\Debug\vc70.idb
+   A \worksrc\map2def\Debug\vc70.pdb
+   A \worksrc\map2def\ReadMe.txt
+   A \worksrc\map2def\StdAfx.cpp
+   A \worksrc\map2def\StdAfx.h
+   A \worksrc\map2def\icon1.ico
+   A \worksrc\map2def\map2def.Tags.WW
+   A \worksrc\map2def\map2def.aps
+   A \worksrc\map2def\map2def.cpp
+   A \worksrc\map2def\map2def.dep
+   A \worksrc\map2def\map2def.dsp
+   A \worksrc\map2def\map2def.mak
+   A \worksrc\map2def\map2def.plg
+   A \worksrc\map2def\map2def.rc
+   A \worksrc\map2def\map2def.vcproj
+   A \worksrc\map2def\map2def.vcproj.old
+   A \worksrc\map2def\map2def.vcproj.vspscc
+   A \worksrc\map2def\mssccprj.scc
+   A \worksrc\map2def\resource.h
+   A \worksrc\map2def\vssver.scc
+   A \worksrc\mapdebug
+   A \worksrc\mapdebug\0.tga
+   A \worksrc\mapdebug\1.tga
+   A \worksrc\mapdebug\2.tga
+   A \worksrc\mapdebug\3.tga
+   A \worksrc\mapdebug\vssver.scc
+   A \worksrc\math
+   A \worksrc\math\angle.h
+   A \worksrc\math\d_point.h
+   A \worksrc\math\d_transform.h
+   A \worksrc\math\d_vector.h
+   A \worksrc\math\fixed_point.h
+   A \worksrc\math\matrix.h
+   A \worksrc\math\num_type.h
+   A \worksrc\math\pi.h
+   A \worksrc\math\point.h
+   A \worksrc\math\random.h
+   A \worksrc\math\spline.h
+   A \worksrc\math\transform.h
+   A \worksrc\math\trig.h
+   A \worksrc\math\vector.h
+   A \worksrc\math\vssver.scc
+   A \worksrc\maxtool
+   A \worksrc\maxtool\drop_id.h
+   A \worksrc\maxtool\fly_util.res
+   A \worksrc\maxtool\id.h
+   A \worksrc\maxtool\keys.res
+   A \worksrc\maxtool\m1_info.h
+   A \worksrc\maxtool\max_load.h
+   A \worksrc\maxtool\max_object.h
+   A \worksrc\maxtool\maxcomm.h
+   A \worksrc\maxtool\maxtool_font.tga
+   A \worksrc\maxtool\menu.h
+   A \worksrc\maxtool\menu_scm.old
+   A \worksrc\maxtool\project.i4
+   A \worksrc\maxtool\render2.h
+   A \worksrc\maxtool\sdk_inc
+   A \worksrc\maxtool\sdk_inc\acolor.h
+   A \worksrc\maxtool\sdk_inc\animtbl.h
+   A \worksrc\maxtool\sdk_inc\assert1.h
+   A \worksrc\maxtool\sdk_inc\bezfont.h
+   A \worksrc\maxtool\sdk_inc\bitarray.h
+   A \worksrc\maxtool\sdk_inc\bitmap.h
+   A \worksrc\maxtool\sdk_inc\bmmlib.h
+   A \worksrc\maxtool\sdk_inc\box2.h
+   A \worksrc\maxtool\sdk_inc\box3.h
+   A \worksrc\maxtool\sdk_inc\captypes.h
+   A \worksrc\maxtool\sdk_inc\channels.h
+   A \worksrc\maxtool\sdk_inc\client.h
+   A \worksrc\maxtool\sdk_inc\cmdmode.h
+   A \worksrc\maxtool\sdk_inc\color.h
+   A \worksrc\maxtool\sdk_inc\control.h
+   A \worksrc\maxtool\sdk_inc\coreexp.h
+   A \worksrc\maxtool\sdk_inc\coregen.h
+   A \worksrc\maxtool\sdk_inc\custcont.h
+   A \worksrc\maxtool\sdk_inc\dbgprint.h
+   A \worksrc\maxtool\sdk_inc\decomp.h
+   A \worksrc\maxtool\sdk_inc\dpoint3.h
+   A \worksrc\maxtool\sdk_inc\driver.h
+   A \worksrc\maxtool\sdk_inc\dummy.h
+   A \worksrc\maxtool\sdk_inc\evrouter.h
+   A \worksrc\maxtool\sdk_inc\evuser.h
+   A \worksrc\maxtool\sdk_inc\export.h
+   A \worksrc\maxtool\sdk_inc\expr.h
+   A \worksrc\maxtool\sdk_inc\exprlib.h
+   A \worksrc\maxtool\sdk_inc\fbwin.h
+   A \worksrc\maxtool\sdk_inc\filters.h
+   A \worksrc\maxtool\sdk_inc\fltapi.h
+   A \worksrc\maxtool\sdk_inc\fltlib.h
+   A \worksrc\maxtool\sdk_inc\gamma.h
+   A \worksrc\maxtool\sdk_inc\gcomm.h
+   A \worksrc\maxtool\sdk_inc\gcommlib.h
+   A \worksrc\maxtool\sdk_inc\gencam.h
+   A \worksrc\maxtool\sdk_inc\genhier.h
+   A \worksrc\maxtool\sdk_inc\genlight.h
+   A \worksrc\maxtool\sdk_inc\genshape.h
+   A \worksrc\maxtool\sdk_inc\geom.h
+   A \worksrc\maxtool\sdk_inc\geomlib.h
+   A \worksrc\maxtool\sdk_inc\gfx.h
+   A \worksrc\maxtool\sdk_inc\gfxlib.h
+   A \worksrc\maxtool\sdk_inc\gport.h
+   A \worksrc\maxtool\sdk_inc\hitdata.h
+   A \worksrc\maxtool\sdk_inc\hold.h
+   A \worksrc\maxtool\sdk_inc\hotcheck.h
+   A \worksrc\maxtool\sdk_inc\hsv.h
+   A \worksrc\maxtool\sdk_inc\impapi.h
+   A \worksrc\maxtool\sdk_inc\impexp.h
+   A \worksrc\maxtool\sdk_inc\imtl.h
+   A \worksrc\maxtool\sdk_inc\inode.h
+   A \worksrc\maxtool\sdk_inc\interpik.h
+   A \worksrc\maxtool\sdk_inc\interval.h
+   A \worksrc\maxtool\sdk_inc\ioapi.h
+   A \worksrc\maxtool\sdk_inc\iparamb.h
+   A \worksrc\maxtool\sdk_inc\iparamm.h
+   A \worksrc\maxtool\sdk_inc\ipoint2.h
+   A \worksrc\maxtool\sdk_inc\ipoint3.h
+   A \worksrc\maxtool\sdk_inc\istdplug.h
+   A \worksrc\maxtool\sdk_inc\keyreduc.h
+   A \worksrc\maxtool\sdk_inc\linklist.h
+   A \worksrc\maxtool\sdk_inc\linshape.h
+   A \worksrc\maxtool\sdk_inc\lockid.h
+   A \worksrc\maxtool\sdk_inc\matrix2.h
+   A \worksrc\maxtool\sdk_inc\matrix3.h
+   A \worksrc\maxtool\sdk_inc\matrix33.h
+   A \worksrc\maxtool\sdk_inc\max.h
+   A \worksrc\maxtool\sdk_inc\maxapi.h
+   A \worksrc\maxtool\sdk_inc\maxcom.h
+   A \worksrc\maxtool\sdk_inc\maxtypes.h
+   A \worksrc\maxtool\sdk_inc\mesh.h
+   A \worksrc\maxtool\sdk_inc\meshadj.h
+   A \worksrc\maxtool\sdk_inc\meshlib.h
+   A \worksrc\maxtool\sdk_inc\modstack.h
+   A \worksrc\maxtool\sdk_inc\mouseman.h
+   A \worksrc\maxtool\sdk_inc\mtl.h
+   A \worksrc\maxtool\sdk_inc\nametab.h
+   A \worksrc\maxtool\sdk_inc\notetrck.h
+   A \worksrc\maxtool\sdk_inc\notify.h
+   A \worksrc\maxtool\sdk_inc\nurbs.h
+   A \worksrc\maxtool\sdk_inc\nurbslib.h
+   A \worksrc\maxtool\sdk_inc\nurbsobj.h
+   A \worksrc\maxtool\sdk_inc\object.h
+   A \worksrc\maxtool\sdk_inc\objmode.h
+   A \worksrc\maxtool\sdk_inc\partclib.h
+   A \worksrc\maxtool\sdk_inc\particle.h
+   A \worksrc\maxtool\sdk_inc\patch.h
+   A \worksrc\maxtool\sdk_inc\patchcap.h
+   A \worksrc\maxtool\sdk_inc\patchlib.h
+   A \worksrc\maxtool\sdk_inc\patchobj.h
+   A \worksrc\maxtool\sdk_inc\pixelbuf.h
+   A \worksrc\maxtool\sdk_inc\plugapi.h
+   A \worksrc\maxtool\sdk_inc\plugin.h
+   A \worksrc\maxtool\sdk_inc\point2.h
+   A \worksrc\maxtool\sdk_inc\point3.h
+   A \worksrc\maxtool\sdk_inc\polyshp.h
+   A \worksrc\maxtool\sdk_inc\props.h
+   A \worksrc\maxtool\sdk_inc\ptrvec.h
+   A \worksrc\maxtool\sdk_inc\quat.h
+   A \worksrc\maxtool\sdk_inc\ref.h
+   A \worksrc\maxtool\sdk_inc\render.h
+   A \worksrc\maxtool\sdk_inc\reslib.h
+   A \worksrc\maxtool\sdk_inc\rtclick.h
+   A \worksrc\maxtool\sdk_inc\sceneapi.h
+   A \worksrc\maxtool\sdk_inc\shape.h
+   A \worksrc\maxtool\sdk_inc\shphier.h
+   A \worksrc\maxtool\sdk_inc\shpsels.h
+   A \worksrc\maxtool\sdk_inc\simpmod.h
+   A \worksrc\maxtool\sdk_inc\simpobj.h
+   A \worksrc\maxtool\sdk_inc\snap.h
+   A \worksrc\maxtool\sdk_inc\soundobj.h
+   A \worksrc\maxtool\sdk_inc\spline3d.h
+   A \worksrc\maxtool\sdk_inc\splshape.h
+   A \worksrc\maxtool\sdk_inc\stack.h
+   A \worksrc\maxtool\sdk_inc\stack3.h
+   A \worksrc\maxtool\sdk_inc\stdmat.h
+   A \worksrc\maxtool\sdk_inc\strbasic.h
+   A \worksrc\maxtool\sdk_inc\strclass.h
+   A \worksrc\maxtool\sdk_inc\tab.h
+   A \worksrc\maxtool\sdk_inc\tcbgraph.h
+   A \worksrc\maxtool\sdk_inc\tcp.h
+   A \worksrc\maxtool\sdk_inc\templt.h
+   A \worksrc\maxtool\sdk_inc\texutil.h
+   A \worksrc\maxtool\sdk_inc\trig.h
+   A \worksrc\maxtool\sdk_inc\triobj.h
+   A \worksrc\maxtool\sdk_inc\units.h
+   A \worksrc\maxtool\sdk_inc\utilapi.h
+   A \worksrc\maxtool\sdk_inc\utilexp.h
+   A \worksrc\maxtool\sdk_inc\utillib.h
+   A \worksrc\maxtool\sdk_inc\vedge.h
+   A \worksrc\maxtool\sdk_inc\viewfile.h
+   A \worksrc\maxtool\sdk_inc\vssver.scc
+   A \worksrc\maxtool\sdk_inc\winutil.h
+   A \worksrc\maxtool\st_edit.h
+   A \worksrc\maxtool\tupdate.h
+   A \worksrc\maxtool\user_event.h
+   A \worksrc\maxtool\vssver.scc
+   A \worksrc\memory
+   A \worksrc\memory\array.h
+   A \worksrc\memory\binary_tree.h
+   A \worksrc\memory\bmanage.h
+   A \worksrc\memory\dynque.h
+   A \worksrc\memory\fixed_array.h
+   A \worksrc\memory\growarry.h
+   A \worksrc\memory\growheap.h
+   A \worksrc\memory\hash_map.h
+   A \worksrc\memory\hashtable.h
+   A \worksrc\memory\lalloc.h
+   A \worksrc\memory\malloc.h
+   A \worksrc\memory\new.h
+   A \worksrc\memory\que.h
+   A \worksrc\memory\stack.h
+   A \worksrc\memory\stl_hash_fun.h
+   A \worksrc\memory\stl_hashtable.h
+   A \worksrc\memory\stlinc.h
+   A \worksrc\memory\vssver.scc
+   A \worksrc\menu
+   A \worksrc\menu\boxmenu.h
+   A \worksrc\menu\image_item.h
+   A \worksrc\menu\key_item.h
+   A \worksrc\menu\menu.h
+   A \worksrc\menu\menuitem.h
+   A \worksrc\menu\pull.h
+   A \worksrc\menu\textitem.h
+   A \worksrc\menu\vssver.scc
+   A \worksrc\music
+   A \worksrc\music\stream.h
+   A \worksrc\music\vssver.scc
+   A \worksrc\net
+   A \worksrc\net\client.h
+   A \worksrc\net\server.h
+   A \worksrc\net\startup.h
+   A \worksrc\net\vssver.scc
+   A \worksrc\network
+   A \worksrc\network\login.h
+   A \worksrc\network\net_addr.h
+   A \worksrc\network\net_find.h
+   A \worksrc\network\net_prot.h
+   A \worksrc\network\net_sock.h
+   A \worksrc\network\vssver.scc
+   A \worksrc\objs
+   A \worksrc\objs\bank.h
+   A \worksrc\objs\base_launcher.h
+   A \worksrc\objs\bases.h
+   A \worksrc\objs\beam_weapon.h
+   A \worksrc\objs\bolt.h
+   A \worksrc\objs\bomber.h
+   A \worksrc\objs\bullet.h
+   A \worksrc\objs\buster_rocket.h
+   A \worksrc\objs\car.h
+   A \worksrc\objs\carcass.h
+   A \worksrc\objs\chunk_explosion.h
+   A \worksrc\objs\circle_distrib.pl
+   A \worksrc\objs\convoy.h
+   A \worksrc\objs\crate.h
+   A \worksrc\objs\damager.h
+   A \worksrc\objs\day_night.h
+   A \worksrc\objs\debris.h
+   A \worksrc\objs\def_buildable.h
+   A \worksrc\objs\def_object.h
+   A \worksrc\objs\defaults.h
+   A \worksrc\objs\dropped_bomb.h
+   A \worksrc\objs\eleccar.h
+   A \worksrc\objs\engineer.h
+   A \worksrc\objs\explode_model.h
+   A \worksrc\objs\explosion1.h
+   A \worksrc\objs\field_camera.h
+   A \worksrc\objs\fire.h
+   A \worksrc\objs\fire_angle.h
+   A \worksrc\objs\flak.h
+   A \worksrc\objs\g1_rand.h
+   A \worksrc\objs\goal.h
+   A \worksrc\objs\guided_missile.h
+   A \worksrc\objs\height_info.h
+   A \worksrc\objs\helicopter.h
+   A \worksrc\objs\jet.h
+   A \worksrc\objs\light_o.h
+   A \worksrc\objs\map_piece.h
+   A \worksrc\objs\miracle.h
+   A \worksrc\objs\miscobjs.h
+   A \worksrc\objs\model_collide.h
+   A \worksrc\objs\model_draw.h
+   A \worksrc\objs\model_id.h
+   A \worksrc\objs\moneycrate.h
+   A \worksrc\objs\moneyplane.h
+   A \worksrc\objs\object_type.h
+   A \worksrc\objs\old_ids.h
+   A \worksrc\objs\particle_emitter.h
+   A \worksrc\objs\path_object.h
+   A \worksrc\objs\peontank.h
+   A \worksrc\objs\popup_turret.h
+   A \worksrc\objs\repairer.h
+   A \worksrc\objs\road_object.h
+   A \worksrc\objs\rocket.h
+   A \worksrc\objs\rocktank.h
+   A \worksrc\objs\scream.h
+   A \worksrc\objs\sfx_obj.h
+   A \worksrc\objs\shockwave.h
+   A \worksrc\objs\shrapnel.h
+   A \worksrc\objs\smoke_trail.h
+   A \worksrc\objs\sprite.h
+   A \worksrc\objs\sprite_id.h
+   A \worksrc\objs\sprite_object.h
+   A \worksrc\objs\stank.h
+   A \worksrc\objs\structure_death.h
+   A \worksrc\objs\super_mortar.h
+   A \worksrc\objs\supergun.h
+   A \worksrc\objs\tank_buster.h
+   A \worksrc\objs\target.h
+   A \worksrc\objs\trike.h
+   A \worksrc\objs\turret.h
+   A \worksrc\objs\vehic_lib.h
+   A \worksrc\objs\vehic_sounds.h
+   A \worksrc\objs\verybiggun.h
+   A \worksrc\objs\vssver.scc
+   A \worksrc\palette
+   A \worksrc\palette\pal.h
+   A \worksrc\palette\vssver.scc
+   A \worksrc\plugins
+   A \worksrc\poly
+   A \worksrc\poly\poly.h
+   A \worksrc\poly\polyclip.h
+   A \worksrc\poly\polydraw.h
+   A \worksrc\poly\vssver.scc
+   A \worksrc\quantize
+   A \worksrc\quantize\dither_quantize.h
+   A \worksrc\quantize\histogram.h
+   A \worksrc\quantize\median.h
+   A \worksrc\quantize\vssver.scc
+   A \worksrc\render
+   A \worksrc\render\dx5
+   A \worksrc\render\dx5\r1_dx5.h
+   A \worksrc\render\dx5\r1_dx5.hh
+   A \worksrc\render\dx5\r1_dx5_texture.h
+   A \worksrc\render\dx5\r1_dx5_texture.hh
+   A \worksrc\render\dx5\vssver.scc
+   A \worksrc\render\dx9
+   A \worksrc\render\dx9\render.h
+   A \worksrc\render\dx9\texture.h
+   A \worksrc\render\dx9\vssver.scc
+   A \worksrc\render\glide
+   A \worksrc\render\glide\amd3d.h
+   A \worksrc\render\glide\gr_vram.h
+   A \worksrc\render\glide\vssver.scc
+   A \worksrc\render\gtext_load.h
+   A \worksrc\render\mip.h
+   A \worksrc\render\mip_average.h
+   A \worksrc\render\opengl
+   A \worksrc\render\opengl\opengl_tman.h
+   A \worksrc\render\opengl\vssver.scc
+   A \worksrc\render\project.i4
+   A \worksrc\render\r1_api.h
+   A \worksrc\render\r1_clip.h
+   A \worksrc\render\r1_font.h
+   A \worksrc\render\r1_res.h
+   A \worksrc\render\r1_vert.h
+   A \worksrc\render\r1_win.h
+   A \worksrc\render\render.res.sav
+   A \worksrc\render\software
+   A \worksrc\render\software\affine_map_lit_asm.cpp
+   A \worksrc\render\software\affine_map_lit_c.cpp
+   A \worksrc\render\software\affine_map_unlit_alpha_asm.cpp
+   A \worksrc\render\software\affine_map_unlit_alpha_c.cpp
+   A \worksrc\render\software\affine_map_unlit_alpha_sprite_asm.cpp
+   A \worksrc\render\software\affine_map_unlit_asm.cpp
+   A \worksrc\render\software\affine_map_unlit_c.cpp
+   A \worksrc\render\software\affine_map_unlit_holy_asm.cpp
+   A \worksrc\render\software\affine_map_unlit_holy_blend_asm.cpp
+   A \worksrc\render\software\affine_map_unlit_holy_blend_c.cpp
+   A \worksrc\render\software\affine_map_unlit_holy_c.cpp
+   A \worksrc\render\software\affine_map_unlit_true_alpha_c.cpp
+   A \worksrc\render\software\amd3d
+   A \worksrc\render\software\amd3d\affine_map_lit_asm_amd3d.cpp
+   A \worksrc\render\software\amd3d\amd3d.h
+   A \worksrc\render\software\amd3d\perspective_map_lit_asm_amd3d.cpp
+   A \worksrc\render\software\amd3d\perspective_map_unlit_alpha_asm_amd3d.cpp
+   A \worksrc\render\software\amd3d\perspective_map_unlit_asm_amd3d.cpp
+   A \worksrc\render\software\amd3d\perspective_map_unlit_holy_asm_amd3d.cpp
+   A \worksrc\render\software\amd3d\rasterize_affine_amd3d.cpp
+   A \worksrc\render\software\amd3d\rasterize_perspective_amd3d.cpp
+   A \worksrc\render\software\amd3d\span_buffer_amd3d.cpp
+   A \worksrc\render\software\amd3d\vssver.scc
+   A \worksrc\render\software\draw_line.cpp
+   A \worksrc\render\software\inline_fpu.h
+   A \worksrc\render\software\linux_specific.h
+   A \worksrc\render\software\mappers.cpp
+   A \worksrc\render\software\mappers.h
+   A \worksrc\render\software\perspective_map_lit_asm.cpp
+   A \worksrc\render\software\perspective_map_lit_c.cpp
+   A \worksrc\render\software\perspective_map_unlit_alpha_asm.cpp
+   A \worksrc\render\software\perspective_map_unlit_alpha_c.cpp
+   A \worksrc\render\software\perspective_map_unlit_asm.cpp
+   A \worksrc\render\software\perspective_map_unlit_c.cpp
+   A \worksrc\render\software\perspective_map_unlit_holy_asm.cpp
+   A \worksrc\render\software\perspective_map_unlit_holy_c.cpp
+   A \worksrc\render\software\perspective_map_unlit_true_alpha_c.cpp
+   A \worksrc\render\software\r1_software.cpp
+   A \worksrc\render\software\r1_software.h
+   A \worksrc\render\software\r1_software_globals.cpp
+   A \worksrc\render\software\r1_software_globals.h
+   A \worksrc\render\software\r1_software_texture.cpp
+   A \worksrc\render\software\r1_software_texture.h
+   A \worksrc\render\software\r1_software_types.h
+   A \worksrc\render\software\rasterize_affine.cpp
+   A \worksrc\render\software\rasterize_perspective.cpp
+   A \worksrc\render\software\readme.txt
+   A \worksrc\render\software\solid_blend_half_asm.cpp
+   A \worksrc\render\software\solid_blend_half_c.cpp
+   A \worksrc\render\software\solid_fill_asm.cpp
+   A \worksrc\render\software\solid_fill_c.cpp
+   A \worksrc\render\software\span_buffer.cpp
+   A \worksrc\render\software\span_buffer.h
+   A \worksrc\render\software\tint_manage.cpp
+   A \worksrc\render\software\tri_setup.cpp
+   A \worksrc\render\software\vssver.scc
+   A \worksrc\render\software\win32_specific.cpp
+   A \worksrc\render\software\win32_specific.h
+   A \worksrc\render\tex_cache.h
+   A \worksrc\render\tex_cache_readme.txt
+   A \worksrc\render\tex_heap.h
+   A \worksrc\render\tex_id.h
+   A \worksrc\render\tex_no_heap.h
+   A \worksrc\render\tmanage.h
+   A \worksrc\render\tnode.h
+   A \worksrc\render\vssver.scc
+   A \worksrc\resource
+   A \worksrc\resource\.xvpics
+   A \worksrc\resource\.xvpics\backward.bmp
+   A \worksrc\resource\.xvpics\bground.tga
+   A \worksrc\resource\.xvpics\cancel.tga
+   A \worksrc\resource\.xvpics\closicon.pcx
+   A \worksrc\resource\.xvpics\fforward.bmp
+   A \worksrc\resource\.xvpics\normcurs.pcx
+   A \worksrc\resource\.xvpics\ok.tga
+   A \worksrc\resource\3dcheck.bmp
+   A \worksrc\resource\95check.bmp
+   A \worksrc\resource\backward.bmp
+   A \worksrc\resource\bground.tga
+   A \worksrc\resource\cancel.tga
+   A \worksrc\resource\closicon.pcx
+   A \worksrc\resource\closicon.tga
+   A \worksrc\resource\constants.res
+   A \worksrc\resource\crosshair.pcx
+   A \worksrc\resource\cur00001.cur
+   A \worksrc\resource\cur00002.cur
+   A \worksrc\resource\delete.bmp
+   A \worksrc\resource\downicon.pcx
+   A \worksrc\resource\editor.res
+   A \worksrc\resource\editor_en.res
+   A \worksrc\resource\error.ico
+   A \worksrc\resource\favicon.ico
+   A \worksrc\resource\fforward.bmp
+   A \worksrc\resource\fly_util.res
+   A \worksrc\resource\forward.bmp
+   A \worksrc\resource\g1.res
+   A \worksrc\resource\g1_en.res
+   A \worksrc\resource\help.cur
+   A \worksrc\resource\helvetica_8.tga
+   A \worksrc\resource\i4.res
+   A \worksrc\resource\ico00001.ico
+   A \worksrc\resource\ico102.ico
+   A \worksrc\resource\keymap.res
+   A \worksrc\resource\keys.res
+   A \worksrc\resource\keys_maxtool.res
+   A \worksrc\resource\lefticon.pcx
+   A \worksrc\resource\maxtool.ico
+   A \worksrc\resource\mfctest.rc2
+   A \worksrc\resource\minifwnd.bmp
+   A \worksrc\resource\minus.pcx
+   A \worksrc\resource\move4way.cur
+   A \worksrc\resource\movecurs.pcx
+   A \worksrc\resource\nodrop.cur
+   A \worksrc\resource\normcurs.pcx
+   A \worksrc\resource\normfont.pcx
+   A \worksrc\resource\ntcheck.bmp
+   A \worksrc\resource\ok.tga
+   A \worksrc\resource\pal.pcx
+   A \worksrc\resource\play.bmp
+   A \worksrc\resource\plus.pcx
+   A \worksrc\resource\pointer.cur
+   A \worksrc\resource\randnum.txt
+   A \worksrc\resource\readme.txt
+   A \worksrc\resource\rewind.bmp
+   A \worksrc\resource\rigticon.pcx
+   A \worksrc\resource\sarrows.cur
+   A \worksrc\resource\splith.cur
+   A \worksrc\resource\splitv.cur
+   A \worksrc\resource\sqr2curs.pcx
+   A \worksrc\resource\sqr_curs.pcx
+   A \worksrc\resource\textcurs.pcx
+   A \worksrc\resource\trck4way.cur
+   A \worksrc\resource\trcknesw.cur
+   A \worksrc\resource\trckns.cur
+   A \worksrc\resource\trcknwse.cur
+   A \worksrc\resource\trckwe.cur
+   A \worksrc\resource\upicon.pcx
+   A \worksrc\resource\verboten.bmp
+   A \worksrc\resource\vssver.scc
+   A \worksrc\sound
+   A \worksrc\sound\dsound
+   A \worksrc\sound\dsound\direct_sound.h
+   A \worksrc\sound\dsound\ds_error.h
+   A \worksrc\sound\dsound\ia3d.h
+   A \worksrc\sound\dsound\vssver.scc
+   A \worksrc\sound\linux
+   A \worksrc\sound\linux\linux_sound.h
+   A \worksrc\sound\sfx_id.h
+   A \worksrc\sound\sound.h
+   A \worksrc\sound\sound_types.h
+   A \worksrc\sound\vssver.scc
+   A \worksrc\status
+   A \worksrc\status\gui_stat.h
+   A \worksrc\status\status.h
+   A \worksrc\status\vssver.scc
+   A \worksrc\string
+   A \worksrc\string\str_checksum.h
+   A \worksrc\string\string.h
+   A \worksrc\string\vssver.scc
+   A \worksrc\test
+   A \worksrc\test\cloud_test
+   A \worksrc\test\cloud_test\cloud.tga
+   A \worksrc\test\cloud_test\cloud_test.cpp
+   A \worksrc\test\cloud_test\project.i4
+   A \worksrc\test\cloud_test\vssver.scc
+   A \worksrc\test\font_test
+   A \worksrc\test\font_test\font_test.cpp
+   A \worksrc\test\font_test\golg_font_17.tga
+   A \worksrc\test\font_test\golg_font_18.tga
+   A \worksrc\test\font_test\project.i4
+   A \worksrc\test\font_test\vssver.scc
+   A \worksrc\test\g_install
+   A \worksrc\test\g_install\Copy of setup.jpg
+   A \worksrc\test\g_install\Copy of thanks.jpg
+   A \worksrc\test\g_install\font_test.cpp
+   A \worksrc\test\g_install\inst_linux.cpp
+   A \worksrc\test\g_install\inst_win32.cpp
+   A \worksrc\test\g_install\install.h
+   A \worksrc\test\g_install\project.i4
+   A \worksrc\test\g_install\resource.res
+   A \worksrc\test\g_install\setup.cpp
+   A \worksrc\test\g_install\setup.jpg
+   A \worksrc\test\g_install\setup2.jpg
+   A \worksrc\test\g_install\setup_font.tga
+   A \worksrc\test\g_install\thanks.jpg
+   A \worksrc\test\g_install\thanks_old.jpg
+   A \worksrc\test\g_install\vssver.scc
+   A \worksrc\test\g_install\win32_install.cpp
+   A \worksrc\test\gtext_viewer
+   A \worksrc\test\gtext_viewer\gtext_viewer.cpp
+   A \worksrc\test\gtext_viewer\project.i4
+   A \worksrc\test\gtext_viewer\vssver.scc
+   A \worksrc\test\lfname
+   A \worksrc\test\lisp
+   A \worksrc\test\lisp\class.cpp
+   A \worksrc\test\lisp\class.scm
+   A \worksrc\test\lisp\dialog.cpp
+   A \worksrc\test\lisp\dialog.scm
+   A \worksrc\test\lisp\functions.cpp
+   A \worksrc\test\lisp\functions.scm
+   A \worksrc\test\lisp\li_error.txt
+   A \worksrc\test\lisp\load_save.cpp
+   A \worksrc\test\lisp\load_save.data
+   A \worksrc\test\lisp\minimal.cpp
+   A \worksrc\test\lisp\minimal.scm
+   A \worksrc\test\lisp\new_type.cpp
+   A \worksrc\test\lisp\new_type.scm
+   A \worksrc\test\lisp\object.scm
+   A \worksrc\test\lisp\project.i4
+   A \worksrc\test\lisp\vssver.scc
+   A \worksrc\test\ray_tracer
+   A \worksrc\test\ray_tracer\blueswirl.jpg
+   A \worksrc\test\ray_tracer\green moon.jpg
+   A \worksrc\test\ray_tracer\menu.scm
+   A \worksrc\test\ray_tracer\no_mem
+   A \worksrc\test\ray_tracer\old_code
+   A \worksrc\test\ray_tracer\project.i4
+   A \worksrc\test\ray_tracer\r1_softz.cpp
+   A \worksrc\test\ray_tracer\ray_tracer.cpp
+   A \worksrc\test\ray_tracer\rusty metal.jpg
+   A \worksrc\test\ray_tracer\rusty metal2.jpg
+   A \worksrc\test\ray_tracer\vssver.scc
+   A \worksrc\test\spin_cube
+   A \worksrc\test\spin_cube\gload.h
+   A \worksrc\test\spin_cube\gview.cpp
+   A \worksrc\test\spin_cube\h.tga
+   A \worksrc\test\spin_cube\project.i4
+   A \worksrc\test\spin_cube\spin_cube.cpp
+   A \worksrc\test\spin_cube\texture.tga
+   A \worksrc\test\spin_cube\vssver.scc
+   A \worksrc\test\thread
+   A \worksrc\test\thread\project.i4
+   A \worksrc\test\thread\thread.cpp
+   A \worksrc\test\thread\vssver.scc
+   A \worksrc\test\web_crawl
+   A \worksrc\test\web_crawl\background.tga
+   A \worksrc\test\web_crawl\crawl.cpp
+   A \worksrc\test\web_crawl\crawl_font.tga
+   A \worksrc\test\web_crawl\database.cpp
+   A \worksrc\test\web_crawl\database.h
+   A \worksrc\test\web_crawl\default.scm
+   A \worksrc\test\web_crawl\fb_thread.cpp
+   A \worksrc\test\web_crawl\fb_thread.h
+   A \worksrc\test\web_crawl\filebot.scm
+   A \worksrc\test\web_crawl\logo.jpg
+   A \worksrc\test\web_crawl\menu.scm
+   A \worksrc\test\web_crawl\project.i4
+   A \worksrc\test\web_crawl\url.cpp
+   A \worksrc\test\web_crawl\url.h
+   A \worksrc\test\web_crawl\visited_urls.scm
+   A \worksrc\test\web_crawl\vssver.scc
+   A \worksrc\test\web_crawl\win.cpp
+   A \worksrc\test\web_crawl\win.h
+   A \worksrc\threads
+   A \worksrc\threads\threads.h
+   A \worksrc\threads\vssver.scc
+   A \worksrc\time
+   A \worksrc\time\gui_prof.h
+   A \worksrc\time\profile.h
+   A \worksrc\time\profile_stack.h
+   A \worksrc\time\time.h
+   A \worksrc\time\timedev.h
+   A \worksrc\time\vssver.scc
+   A \worksrc\video
+   A \worksrc\video\display.h
+   A \worksrc\video\glide
+   A \worksrc\video\glide\glide.h
+   A \worksrc\video\glide\glide_display.h
+   A \worksrc\video\glide\vssver.scc
+   A \worksrc\video\movie_engine.h
+   A \worksrc\video\opengl
+   A \worksrc\video\opengl\opengl_display.h
+   A \worksrc\video\opengl\vssver.scc
+   A \worksrc\video\vssver.scc
+   A \worksrc\video\win32
+   A \worksrc\video\win32\d3denumeration.h
+   A \worksrc\video\win32\dd_cursor.h
+   A \worksrc\video\win32\dx5.h
+   A \worksrc\video\win32\dx5_error.h
+   A \worksrc\video\win32\dx5_mouse.h
+   A \worksrc\video\win32\dx5_util.h
+   A \worksrc\video\win32\dx9.h
+   A \worksrc\video\win32\dx9_error.h
+   A \worksrc\video\win32\dx9_mouse.h
+   A \worksrc\video\win32\dx9_util.h
+   A \worksrc\video\win32\dx_cursor.h
+   A \worksrc\video\win32\vssver.scc
+   A \worksrc\video\win32\win32_input.h
+   A \worksrc\video\x11
+   A \worksrc\video\x11\mitshm.h
+   A \worksrc\video\x11\vssver.scc
+   A \worksrc\video\x11\x11_display.h
+   A \worksrc\video\x11\x11_input.h
+   A \worksrc\win95
+   A \worksrc\win95\self_modify.h
+   A \worksrc\win95\texture_asm.h
+   A \worksrc\win95\vssver.scc
+   A \worksrc\window
+   A \worksrc\window\colorwin.h
+   A \worksrc\window\cursor.h
+   A \worksrc\window\dragwin.h
+   A \worksrc\window\style.h
+   A \worksrc\window\vssver.scc
+   A \worksrc\window\win_evt.h
+   A \worksrc\window\window.h
+   A \worksrc\window\wmanager.h
+
+First commit of all subdirectories containing .h-files
+------------------------------------------------------------------------
+r24 | pgrawehr | 2003-12-25 16:06:20 +0100 (Thu, 25 Dec 2003) | 1 line
+Changed paths:
+   A \worksrc\app
+   A \worksrc\app\app.h
+   A \worksrc\app\cdatafile.h
+   A \worksrc\app\registry.h
+   A \worksrc\app\vssver.scc
+   A \worksrc\area
+   A \worksrc\area\rectlist.h
+   A \worksrc\area\vssver.scc
+   A \worksrc\bitmaps
+   A \worksrc\bitmaps\background
+   A \worksrc\bitmaps\build
+   A \worksrc\bitmaps\build\build_bomb_truck.tga
+   A \worksrc\bitmaps\build\build_bomber.tga
+   A \worksrc\bitmaps\build\build_bridger.tga
+   A \worksrc\bitmaps\build\build_button.tga
+   A \worksrc\bitmaps\build\build_button_highlight.tga
+   A \worksrc\bitmaps\build\build_button_select.tga
+   A \worksrc\bitmaps\build\build_electric_car.tga
+   A \worksrc\bitmaps\build\build_engineer.tga
+   A \worksrc\bitmaps\build\build_helicopter.tga
+   A \worksrc\bitmaps\build\build_jet.tga
+   A \worksrc\bitmaps\build\build_moneyplane.tga
+   A \worksrc\bitmaps\build\build_no_vehicle.tga
+   A \worksrc\bitmaps\build\build_peon_tank.tga
+   A \worksrc\bitmaps\build\build_rocket_tank.tga
+   A \worksrc\bitmaps\build\build_stank.tga
+   A \worksrc\bitmaps\build\build_tank_buster.tga
+   A \worksrc\bitmaps\build\build_trike.tga
+   A \worksrc\bitmaps\build\vssver.scc
+   A \worksrc\bitmaps\cheats
+   A \worksrc\bitmaps\cheats\group_invulnerable.jpg
+   A \worksrc\bitmaps\cheats\invulnerable.jpg
+   A \worksrc\bitmaps\cheats\mo_money.jpg
+   A \worksrc\bitmaps\cheats\nuke.jpg
+   A \worksrc\bitmaps\cheats\vssver.scc
+   A \worksrc\bitmaps\cloud.tga
+   A \worksrc\bitmaps\comic1.jpg
+   A \worksrc\bitmaps\commands
+   A \worksrc\bitmaps\commands\self_destruct.tga
+   A \worksrc\bitmaps\commands\stop.tga
+   A \worksrc\bitmaps\cursors
+   A \worksrc\bitmaps\cursors\attack_big16.tga
+   A \worksrc\bitmaps\cursors\attack_big2.tga
+   A \worksrc\bitmaps\cursors\attack_small2.tga
+   A \worksrc\bitmaps\cursors\default_big16.tga
+   A \worksrc\bitmaps\cursors\default_small16.tga
+   A \worksrc\bitmaps\cursors\default_small2.tga
+   A \worksrc\bitmaps\cursors\follow_big16.tga
+   A \worksrc\bitmaps\cursors\follow_big2.tga
+   A \worksrc\bitmaps\cursors\follow_small2.tga
+   A \worksrc\bitmaps\cursors\move_big16.tga
+   A \worksrc\bitmaps\cursors\move_big2.tga
+   A \worksrc\bitmaps\cursors\move_small2.tga
+   A \worksrc\bitmaps\cursors\select_big16.tga
+   A \worksrc\bitmaps\cursors\select_big2.tga
+   A \worksrc\bitmaps\cursors\select_small2.tga
+   A \worksrc\bitmaps\cursors\takeover_big16.tga
+   A \worksrc\bitmaps\cursors\takeover_big2.tga
+   A \worksrc\bitmaps\cursors\takeover_small2.tga
+   A \worksrc\bitmaps\cursors\vssver.scc
+   A \worksrc\bitmaps\cursors\x_big16.tga
+   A \worksrc\bitmaps\cursors\x_small2.tga
+   A \worksrc\bitmaps\default.tga
+   A \worksrc\bitmaps\editor
+   A \worksrc\bitmaps\editor\ai.bmp
+   A \worksrc\bitmaps\editor\ai_recalc.bmp
+   A \worksrc\bitmaps\editor\ambient-higher_button.bmp
+   A \worksrc\bitmaps\editor\ambient-lower_button.bmp
+   A \worksrc\bitmaps\editor\begin.tga
+   A \worksrc\bitmaps\editor\camera.bmp
+   A \worksrc\bitmaps\editor\camera_add.bmp
+   A \worksrc\bitmaps\editor\checkbox.bmp
+   A \worksrc\bitmaps\editor\critical.tga
+   A \worksrc\bitmaps\editor\dest.tga
+   A \worksrc\bitmaps\editor\directional-higher_button.bmp
+   A \worksrc\bitmaps\editor\directional-lower_button.bmp
+   A \worksrc\bitmaps\editor\end.jpg
+   A \worksrc\bitmaps\editor\fill.bmp
+   A \worksrc\bitmaps\editor\frame.bmp
+   A \worksrc\bitmaps\editor\frame_pcx.bmp
+   A \worksrc\bitmaps\editor\grade1.jpg
+   A \worksrc\bitmaps\editor\grade2.jpg
+   A \worksrc\bitmaps\editor\grade3.jpg
+   A \worksrc\bitmaps\editor\grade4.jpg
+   A \worksrc\bitmaps\editor\grow.bmp
+   A \worksrc\bitmaps\editor\height.bmp
+   A \worksrc\bitmaps\editor\info.bmp
+   A \worksrc\bitmaps\editor\lambient.bmp
+   A \worksrc\bitmaps\editor\lcreate.bmp
+   A \worksrc\bitmaps\editor\light.bmp
+   A \worksrc\bitmaps\editor\mirror.bmp
+   A \worksrc\bitmaps\editor\mountadd.bmp
+   A \worksrc\bitmaps\editor\mountdel.bmp
+   A \worksrc\bitmaps\editor\mountedt.bmp
+   A \worksrc\bitmaps\editor\move.bmp
+   A \worksrc\bitmaps\editor\nomap.jpg
+   A \worksrc\bitmaps\editor\nomap.ppf
+   A \worksrc\bitmaps\editor\obj_add.bmp
+   A \worksrc\bitmaps\editor\object.bmp
+   A \worksrc\bitmaps\editor\play.bmp
+   A \worksrc\bitmaps\editor\radiobox.bmp
+   A \worksrc\bitmaps\editor\rotate.bmp
+   A \worksrc\bitmaps\editor\select.bmp
+   A \worksrc\bitmaps\editor\shrink.bmp
+   A \worksrc\bitmaps\editor\size1.jpg
+   A \worksrc\bitmaps\editor\size3.jpg
+   A \worksrc\bitmaps\editor\spin.bmp
+   A \worksrc\bitmaps\editor\start.jpg
+   A \worksrc\bitmaps\editor\stop.jpg
+   A \worksrc\bitmaps\editor\target.bmp
+   A \worksrc\bitmaps\editor\tile.bmp
+   A \worksrc\bitmaps\editor\title.bmp
+   A \worksrc\bitmaps\editor\vssver.scc
+   A \worksrc\bitmaps\editor\waypoint_add.bmp
+   A \worksrc\bitmaps\editor\waypointblock.jpg
+   A \worksrc\bitmaps\editor\waypointcalc.jpg
+   A \worksrc\bitmaps\editor\waypointedit.jpg
+   A \worksrc\bitmaps\editor\waypointload.jpg
+   A \worksrc\bitmaps\editor\zoom.bmp
+   A \worksrc\bitmaps\golg_font_18.bmp
+   A \worksrc\bitmaps\golg_font_18.tga
+   A \worksrc\bitmaps\golg_logo_big.bmp
+   A \worksrc\bitmaps\golgotha_font.tga
+   A \worksrc\bitmaps\help.jpg
+   A \worksrc\bitmaps\jc1.gif
+   A \worksrc\bitmaps\letter-0.bmp
+   A \worksrc\bitmaps\letter-1.bmp
+   A \worksrc\bitmaps\letter-2.bmp
+   A \worksrc\bitmaps\letter-3.bmp
+   A \worksrc\bitmaps\letter-4.bmp
+   A \worksrc\bitmaps\letter-5.bmp
+   A \worksrc\bitmaps\letter-6.bmp
+   A \worksrc\bitmaps\letter-7.bmp
+   A \worksrc\bitmaps\letter-8.bmp
+   A \worksrc\bitmaps\letter-9.bmp
+   A \worksrc\bitmaps\letter-comma.bmp
+   A \worksrc\bitmaps\letter-dollar.bmp
+   A \worksrc\bitmaps\loading.bmp
+   A \worksrc\bitmaps\loading_screen.jpg
+   A \worksrc\bitmaps\logos
+   A \worksrc\bitmaps\logos\bomb_truck_logo.jpg
+   A \worksrc\bitmaps\logos\bomber_logo.jpg
+   A \worksrc\bitmaps\logos\bridger_logo.jpg
+   A \worksrc\bitmaps\logos\electric_car_logo.jpg
+   A \worksrc\bitmaps\logos\engineer_logo.jpg
+   A \worksrc\bitmaps\logos\helicopter_logo.jpg
+   A \worksrc\bitmaps\logos\jet_logo.jpg
+   A \worksrc\bitmaps\logos\moneyplane_logo.jpg
+   A \worksrc\bitmaps\logos\peon_tank_logo.jpg
+   A \worksrc\bitmaps\logos\rocket_tank_logo.jpg
+   A \worksrc\bitmaps\logos\stank_logo.jpg
+   A \worksrc\bitmaps\logos\tank_buster_logo.jpg
+   A \worksrc\bitmaps\logos\trike_logo.jpg
+   A \worksrc\bitmaps\logos\vssver.scc
+   A \worksrc\bitmaps\menu
+   A \worksrc\bitmaps\menu\lit_load.jpg
+   A \worksrc\bitmaps\menu\lit_network.jpg
+   A \worksrc\bitmaps\menu\lit_newgame.jpg
+   A \worksrc\bitmaps\menu\lit_options.jpg
+   A \worksrc\bitmaps\menu\lit_quit.jpg
+   A \worksrc\bitmaps\menu\lit_return.jpg
+   A \worksrc\bitmaps\menu\lit_save.jpg
+   A \worksrc\bitmaps\menu\vssver.scc
+   A \worksrc\bitmaps\network
+   A \worksrc\bitmaps\network\net1.jpg
+   A \worksrc\bitmaps\network\net2.jpg
+   A \worksrc\bitmaps\network\net3.jpg
+   A \worksrc\bitmaps\network\vssver.scc
+   A \worksrc\bitmaps\old
+   A \worksrc\bitmaps\old\ai.bmp
+   A \worksrc\bitmaps\old\ai_recalc.bmp
+   A \worksrc\bitmaps\old\ambient-higher_button.bmp
+   A \worksrc\bitmaps\old\ambient-lower_button.bmp
+   A \worksrc\bitmaps\old\begin.tga
+   A \worksrc\bitmaps\old\build_0.jpg
+   A \worksrc\bitmaps\old\build_1.jpg
+   A \worksrc\bitmaps\old\build_10.jpg
+   A \worksrc\bitmaps\old\build_11.jpg
+   A \worksrc\bitmaps\old\build_2.jpg
+   A \worksrc\bitmaps\old\build_3.jpg
+   A \worksrc\bitmaps\old\build_4.jpg
+   A \worksrc\bitmaps\old\build_5.jpg
+   A \worksrc\bitmaps\old\build_6.jpg
+   A \worksrc\bitmaps\old\build_7.jpg
+   A \worksrc\bitmaps\old\build_8.jpg
+   A \worksrc\bitmaps\old\build_9.jpg
+   A \worksrc\bitmaps\old\buildh_0.jpg
+   A \worksrc\bitmaps\old\buildh_1.jpg
+   A \worksrc\bitmaps\old\buildh_10.jpg
+   A \worksrc\bitmaps\old\buildh_11.jpg
+   A \worksrc\bitmaps\old\buildh_2.jpg
+   A \worksrc\bitmaps\old\buildh_3.jpg
+   A \worksrc\bitmaps\old\buildh_4.jpg
+   A \worksrc\bitmaps\old\buildh_5.jpg
+   A \worksrc\bitmaps\old\buildh_6.jpg
+   A \worksrc\bitmaps\old\buildh_7.jpg
+   A \worksrc\bitmaps\old\buildh_8.jpg
+   A \worksrc\bitmaps\old\buildh_9.jpg
+   A \worksrc\bitmaps\old\builds_0.jpg
+   A \worksrc\bitmaps\old\builds_1.jpg
+   A \worksrc\bitmaps\old\builds_10.jpg
+   A \worksrc\bitmaps\old\builds_11.jpg
+   A \worksrc\bitmaps\old\builds_2.jpg
+   A \worksrc\bitmaps\old\builds_3.jpg
+   A \worksrc\bitmaps\old\builds_4.jpg
+   A \worksrc\bitmaps\old\builds_5.jpg
+   A \worksrc\bitmaps\old\builds_6.jpg
+   A \worksrc\bitmaps\old\builds_7.jpg
+   A \worksrc\bitmaps\old\builds_8.jpg
+   A \worksrc\bitmaps\old\builds_9.jpg
+   A \worksrc\bitmaps\old\button_background.tga
+   A \worksrc\bitmaps\old\camera.bmp
+   A \worksrc\bitmaps\old\camera_add.bmp
+   A \worksrc\bitmaps\old\critical.tga
+   A \worksrc\bitmaps\old\cursor_attack_big16.tga
+   A \worksrc\bitmaps\old\cursor_attack_big2.tga
+   A \worksrc\bitmaps\old\cursor_attack_small2.tga
+   A \worksrc\bitmaps\old\cursor_default_big16.tga
+   A \worksrc\bitmaps\old\cursor_default_small16.tga
+   A \worksrc\bitmaps\old\cursor_default_small2.tga
+   A \worksrc\bitmaps\old\cursor_follow_big16.tga
+   A \worksrc\bitmaps\old\cursor_follow_big2.tga
+   A \worksrc\bitmaps\old\cursor_follow_small2.tga
+   A \worksrc\bitmaps\old\cursor_move_big16.tga
+   A \worksrc\bitmaps\old\cursor_move_big2.tga
+   A \worksrc\bitmaps\old\cursor_move_small2.tga
+   A \worksrc\bitmaps\old\cursor_select_big16.tga
+   A \worksrc\bitmaps\old\cursor_select_big2.tga
+   A \worksrc\bitmaps\old\cursor_select_small2.tga
+   A \worksrc\bitmaps\old\cursor_takeover_big16.tga
+   A \worksrc\bitmaps\old\cursor_takeover_big2.tga
+   A \worksrc\bitmaps\old\cursor_takeover_small2.tga
+   A \worksrc\bitmaps\old\cursor_x_big16.bmp
+   A \worksrc\bitmaps\old\cursor_x_big16.tga
+   A \worksrc\bitmaps\old\cursor_x_small2.bmp
+   A \worksrc\bitmaps\old\cursor_x_small2.tga
+   A \worksrc\bitmaps\old\def_frame.jpg
+   A \worksrc\bitmaps\old\dest.tga
+   A \worksrc\bitmaps\old\directional-higher_button.bmp
+   A \worksrc\bitmaps\old\directional-lower_button.bmp
+   A \worksrc\bitmaps\old\electric_car_logo.jpg
+   A \worksrc\bitmaps\old\end.jpg
+   A \worksrc\bitmaps\old\engineer_logo.jpg
+   A \worksrc\bitmaps\old\fill.bmp
+   A \worksrc\bitmaps\old\frame.jpg
+   A \worksrc\bitmaps\old\frame_level_0.jpg
+   A \worksrc\bitmaps\old\frame_level_1.jpg
+   A \worksrc\bitmaps\old\frame_missile1.jpg
+   A \worksrc\bitmaps\old\frame_missile2.jpg
+   A \worksrc\bitmaps\old\frame_shell1.jpg
+   A \worksrc\bitmaps\old\frame_shell2.jpg
+   A \worksrc\bitmaps\old\grade1.jpg
+   A \worksrc\bitmaps\old\grade2.jpg
+   A \worksrc\bitmaps\old\grade3.jpg
+   A \worksrc\bitmaps\old\grade4.jpg
+   A \worksrc\bitmaps\old\grow.bmp
+   A \worksrc\bitmaps\old\height.bmp
+   A \worksrc\bitmaps\old\helicopter_logo.jpg
+   A \worksrc\bitmaps\old\help.jpg
+   A \worksrc\bitmaps\old\jet_logo.jpg
+   A \worksrc\bitmaps\old\lambient.bmp
+   A \worksrc\bitmaps\old\lcreate.bmp
+   A \worksrc\bitmaps\old\letter-0.bmp
+   A \worksrc\bitmaps\old\letter-1.bmp
+   A \worksrc\bitmaps\old\letter-2.bmp
+   A \worksrc\bitmaps\old\letter-3.bmp
+   A \worksrc\bitmaps\old\letter-4.bmp
+   A \worksrc\bitmaps\old\letter-5.bmp
+   A \worksrc\bitmaps\old\letter-6.bmp
+   A \worksrc\bitmaps\old\letter-7.bmp
+   A \worksrc\bitmaps\old\letter-8.bmp
+   A \worksrc\bitmaps\old\letter-9.bmp
+   A \worksrc\bitmaps\old\letter-comma.bmp
+   A \worksrc\bitmaps\old\letter-dollar.bmp
+   A \worksrc\bitmaps\old\light.bmp
+   A \worksrc\bitmaps\old\lit_load.jpg
+   A \worksrc\bitmaps\old\lit_network.jpg
+   A \worksrc\bitmaps\old\lit_newgame.jpg
+   A \worksrc\bitmaps\old\lit_options.jpg
+   A \worksrc\bitmaps\old\lit_quit.jpg
+   A \worksrc\bitmaps\old\lit_save.jpg
+   A \worksrc\bitmaps\old\mirror.bmp
+   A \worksrc\bitmaps\old\missile.jpg
+   A \worksrc\bitmaps\old\move.bmp
+   A \worksrc\bitmaps\old\net1.jpg
+   A \worksrc\bitmaps\old\net2.jpg
+   A \worksrc\bitmaps\old\net3.jpg
+   A \worksrc\bitmaps\old\obj_add.bmp
+   A \worksrc\bitmaps\old\object.bmp
+   A \worksrc\bitmaps\old\option_double_pixel.jpg
+   A \worksrc\bitmaps\old\option_see_far.jpg
+   A \worksrc\bitmaps\old\option_shadows.jpg
+   A \worksrc\bitmaps\old\option_single_pixel.jpg
+   A \worksrc\bitmaps\old\option_tv_mode.jpg
+   A \worksrc\bitmaps\old\options_doublepixel_on.bmp
+   A \worksrc\bitmaps\old\options_interlace_on.bmp
+   A \worksrc\bitmaps\old\options_normal_pixel.bmp
+   A \worksrc\bitmaps\old\options_open.bmp
+   A \worksrc\bitmaps\old\options_shadows_off.bmp
+   A \worksrc\bitmaps\old\options_shadows_on.bmp
+   A \worksrc\bitmaps\old\options_sound_3d.bmp
+   A \worksrc\bitmaps\old\options_sound_normal.bmp
+   A \worksrc\bitmaps\old\options_topbar.jpg
+   A \worksrc\bitmaps\old\options_visibility_close.bmp
+   A \worksrc\bitmaps\old\options_visibility_far.bmp
+   A \worksrc\bitmaps\old\options_visibility_medium.bmp
+   A \worksrc\bitmaps\old\options_window.jpg
+   A \worksrc\bitmaps\old\peon_tank_logo.jpg
+   A \worksrc\bitmaps\old\pick1.jpg
+   A \worksrc\bitmaps\old\pick2.jpg
+   A \worksrc\bitmaps\old\play.bmp
+   A \worksrc\bitmaps\old\plot.jpg
+   A \worksrc\bitmaps\old\rocket_tank_logo.jpg
+   A \worksrc\bitmaps\old\rotate.bmp
+   A \worksrc\bitmaps\old\select.bmp
+   A \worksrc\bitmaps\old\shrink.bmp
+   A \worksrc\bitmaps\old\size1.jpg
+   A \worksrc\bitmaps\old\size3.jpg
+   A \worksrc\bitmaps\old\sky5.jpg
+   A \worksrc\bitmaps\old\sky5_small.jpg
+   A \worksrc\bitmaps\old\spin.bmp
+   A \worksrc\bitmaps\old\stank_logo.jpg
+   A \worksrc\bitmaps\old\start.jpg
+   A \worksrc\bitmaps\old\startup.jpg
+   A \worksrc\bitmaps\old\stop.jpg
+   A \worksrc\bitmaps\old\target.bmp
+   A \worksrc\bitmaps\old\tile.bmp
+   A \worksrc\bitmaps\old\title_screen.jpg
+   A \worksrc\bitmaps\old\trike_logo.jpg
+   A \worksrc\bitmaps\old\vssver.scc
+   A \worksrc\bitmaps\old\waypoint_add.bmp
+   A \worksrc\bitmaps\old\youlose.jpg
+   A \worksrc\bitmaps\old\youwin.jpg
+   A \worksrc\bitmaps\old\zoom.bmp
+   A \worksrc\bitmaps\options
+   A \worksrc\bitmaps\options\Kopie von strategy_layout.jpg
+   A \worksrc\bitmaps\options\button.tga
+   A \worksrc\bitmaps\options\doublepixel_off.tga
+   A \worksrc\bitmaps\options\doublepixel_on.bmp
+   A \worksrc\bitmaps\options\doublepixel_on.tga
+   A \worksrc\bitmaps\options\gamespeed.jpg
+   A \worksrc\bitmaps\options\gamespeed.tga
+   A \worksrc\bitmaps\options\interlace_on.bmp
+   A \worksrc\bitmaps\options\interlace_on.tga
+   A \worksrc\bitmaps\options\lit_options.jpg
+   A \worksrc\bitmaps\options\music_down.tga
+   A \worksrc\bitmaps\options\music_up.tga
+   A \worksrc\bitmaps\options\normal_pixel.bmp
+   A \worksrc\bitmaps\options\open.bmp
+   A \worksrc\bitmaps\options\open.tga
+   A \worksrc\bitmaps\options\shadows_off.bmp
+   A \worksrc\bitmaps\options\shadows_off.tga
+   A \worksrc\bitmaps\options\shadows_on.bmp
+   A \worksrc\bitmaps\options\shadows_on.tga
+   A \worksrc\bitmaps\options\sound_3d.bmp
+   A \worksrc\bitmaps\options\sound_down.tga
+   A \worksrc\bitmaps\options\sound_normal.bmp
+   A \worksrc\bitmaps\options\sound_up.tga
+   A \worksrc\bitmaps\options\strategy_layout.jpg
+   A \worksrc\bitmaps\options\topbar.jpg
+   A \worksrc\bitmaps\options\topbar.tga
+   A \worksrc\bitmaps\options\visibility_close.bmp
+   A \worksrc\bitmaps\options\visibility_close.tga
+   A \worksrc\bitmaps\options\visibility_far.bmp
+   A \worksrc\bitmaps\options\visibility_far.tga
+   A \worksrc\bitmaps\options\visibility_medium.bmp
+   A \worksrc\bitmaps\options\visibility_medium.tga
+   A \worksrc\bitmaps\options\vssver.scc
+   A \worksrc\bitmaps\options\window.jpg
+   A \worksrc\bitmaps\pick1.tga
+   A \worksrc\bitmaps\pick2.tga
+   A \worksrc\bitmaps\plot.jpg
+   A \worksrc\bitmaps\radar
+   A \worksrc\bitmaps\radar\airbase.tga
+   A \worksrc\bitmaps\radar\bank.tga
+   A \worksrc\bitmaps\radar\base_golg.tga
+   A \worksrc\bitmaps\radar\bomb_truck.tga
+   A \worksrc\bitmaps\radar\bridger.tga
+   A \worksrc\bitmaps\radar\car.tga
+   A \worksrc\bitmaps\radar\engineer.tga
+   A \worksrc\bitmaps\radar\garage.tga
+   A \worksrc\bitmaps\radar\helicopter.tga
+   A \worksrc\bitmaps\radar\lawfirm.tga
+   A \worksrc\bitmaps\radar\missile.tga
+   A \worksrc\bitmaps\radar\moneyplane.tga
+   A \worksrc\bitmaps\radar\peon_tank.tga
+   A \worksrc\bitmaps\radar\plane.tga
+   A \worksrc\bitmaps\radar\rocket_tank.tga
+   A \worksrc\bitmaps\radar\supergun.tga
+   A \worksrc\bitmaps\radar\supertank.tga
+   A \worksrc\bitmaps\radar\supertank_0.tga
+   A \worksrc\bitmaps\radar\supertank_10.tga
+   A \worksrc\bitmaps\radar\supertank_12.tga
+   A \worksrc\bitmaps\radar\supertank_14.tga
+   A \worksrc\bitmaps\radar\supertank_2.tga
+   A \worksrc\bitmaps\radar\supertank_4.tga
+   A \worksrc\bitmaps\radar\supertank_6.tga
+   A \worksrc\bitmaps\radar\supertank_8.tga
+   A \worksrc\bitmaps\radar\tank_buster.tga
+   A \worksrc\bitmaps\radar\tower_electric.tga
+   A \worksrc\bitmaps\radar\tower_missile.tga
+   A \worksrc\bitmaps\radar\vssver.scc
+   A \worksrc\bitmaps\stank
+   A \worksrc\bitmaps\stank\dark_120mm.tga
+   A \worksrc\bitmaps\stank\dark_acid.tga
+   A \worksrc\bitmaps\stank\dark_beam.tga
+   A \worksrc\bitmaps\stank\dark_guided.tga
+   A \worksrc\bitmaps\stank\dark_kevlar.tga
+   A \worksrc\bitmaps\stank\dark_minigun.tga
+   A \worksrc\bitmaps\stank\dark_napalm.tga
+   A \worksrc\bitmaps\stank\dark_nuke.tga
+   A \worksrc\bitmaps\stank\dark_plasma.tga
+   A \worksrc\bitmaps\stank\dark_reactive.tga
+   A \worksrc\bitmaps\stank\dark_strategy_lives.tga
+   A \worksrc\bitmaps\stank\dark_titanium.tga
+   A \worksrc\bitmaps\stank\dark_vortex.tga
+   A \worksrc\bitmaps\stank\def_frame.jpg
+   A \worksrc\bitmaps\stank\def_frame.tga
+   A \worksrc\bitmaps\stank\frame_120mm.tga
+   A \worksrc\bitmaps\stank\frame_acid.tga
+   A \worksrc\bitmaps\stank\frame_beam.tga
+   A \worksrc\bitmaps\stank\frame_guided.tga
+   A \worksrc\bitmaps\stank\frame_kevlar.tga
+   A \worksrc\bitmaps\stank\frame_level_0.jpg
+   A \worksrc\bitmaps\stank\frame_level_0.tga
+   A \worksrc\bitmaps\stank\frame_level_1.jpg
+   A \worksrc\bitmaps\stank\frame_level_1.tga
+   A \worksrc\bitmaps\stank\frame_level_2.jpg
+   A \worksrc\bitmaps\stank\frame_level_2.tga
+   A \worksrc\bitmaps\stank\frame_minigun.tga
+   A \worksrc\bitmaps\stank\frame_napalm.tga
+   A \worksrc\bitmaps\stank\frame_nuke.tga
+   A \worksrc\bitmaps\stank\frame_plasma.tga
+   A \worksrc\bitmaps\stank\frame_reactive.tga
+   A \worksrc\bitmaps\stank\frame_strategy_lives.tga
+   A \worksrc\bitmaps\stank\frame_titanium.tga
+   A \worksrc\bitmaps\stank\frame_vortex.tga
+   A \worksrc\bitmaps\stank\status_bar.jpg
+   A \worksrc\bitmaps\stank\vssver.scc
+   A \worksrc\bitmaps\startup.jpg
+   A \worksrc\bitmaps\thanks.jpg
+   A \worksrc\bitmaps\title_screen.jpg
+   A \worksrc\bitmaps\user
+   A \worksrc\bitmaps\user\Karte Test - Level.tif
+   A \worksrc\bitmaps\user\vssver.scc
+   A \worksrc\bitmaps\vssver.scc
+   A \worksrc\bitmaps\youlose.jpg
+   A \worksrc\bitmaps\youwin.jpg
+   A \worksrc\cd_maker
+   A \worksrc\cd_maker\Debug
+   A \worksrc\cd_maker\cd_maker.Tags.WW
+   A \worksrc\cd_maker\cd_maker.cc
+   A \worksrc\cd_maker\cd_maker.cpp
+   A \worksrc\cd_maker\cd_maker.dep
+   A \worksrc\cd_maker\cd_maker.dsp
+   A \worksrc\cd_maker\cd_maker.mak
+   A \worksrc\cd_maker\cd_maker.plg
+   A \worksrc\cd_maker\cd_maker.vcproj
+   A \worksrc\cd_maker\cd_maker.vcproj.vspscc
+   A \worksrc\cd_maker\crack_cd.res
+   A \worksrc\cd_maker\error.out
+   A \worksrc\cd_maker\local_cd.res
+   A \worksrc\cd_maker\makefile.cpp
+   A \worksrc\cd_maker\models.cd
+   A \worksrc\cd_maker\models_cd.res
+   A \worksrc\cd_maker\mssccprj.scc
+   A \worksrc\cd_maker\project.i4
+   A \worksrc\cd_maker\resource.res
+   A \worksrc\cd_maker\ship_cd.res
+   A \worksrc\cd_maker\vssver.scc
+   A \worksrc\checksum
+   A \worksrc\checksum\checksum.h
+   A \worksrc\checksum\vssver.scc
+
+Adding a few folders. 
+------------------------------------------------------------------------
+r23 | pgrawehr | 2003-12-25 15:27:20 +0100 (Thu, 25 Dec 2003) | 1 line
+Changed paths:
+   A \worksrc\Golgotha.dsp
+   A \worksrc\Golgotha.dsw
+   A \worksrc\Golgotha.rc
+   A \worksrc\Golgotha.sln
+   A \worksrc\Golgotha.vcproj
+   A \worksrc\Golgotha.vcproj.old
+   A \worksrc\Golgotha.vcproj.vspscc
+   A \worksrc\Golgotha_VC6.sln
+   A \worksrc\Makefile
+   A \worksrc\Makefile.gcc.bsd
+   A \worksrc\Makefile.linux.gcc
+   A \worksrc\Makefile.linux.gcc.296
+   A \worksrc\Makefile.linux.gcc.opt
+   A \worksrc\Makefile.linux.icc
+   A \worksrc\Makefile.sgi
+   A \worksrc\Makefile.sgi.CC
+   A \worksrc\Makefile.sgi.gcc
+   A \worksrc\Makefile.sun
+   A \worksrc\OptionExtras.cpp
+   A \worksrc\OptionExtras.h
+   A \worksrc\OptionGetDXVer.cpp
+   A \worksrc\OptionInfo.cpp
+   A \worksrc\OptionInfo.h
+   A \worksrc\OptionMFCInit.cpp
+   A \worksrc\OptionProcessor.cpp
+   A \worksrc\OptionSound.cpp
+   A \worksrc\OptionSound.h
+   A \worksrc\Optionmfcinit.h
+   A \worksrc\Optionsdialog.cpp
+   A \worksrc\Optionsdialog.h
+   A \worksrc\Optionsheet.cpp
+   A \worksrc\Optionsheet.h
+   A \worksrc\Processor.h
+   A \worksrc\Readme.txt
+   A \worksrc\StdAfx.h
+   A \worksrc\app__app.cpp
+   A \worksrc\app__cdatafile.cpp
+   A \worksrc\arch.h
+   A \worksrc\area__rectlist.cpp
+   A \worksrc\border_frame.h
+   A \worksrc\buf_file.cpp
+   A \worksrc\camera.h
+   A \worksrc\cd_maker.cpp
+   A \worksrc\checksum__checksum.cpp
+   A \worksrc\clip.h
+   A \worksrc\controller.h
+   A \worksrc\coredll.cpp
+   A \worksrc\coredll.dsp
+   A \worksrc\coredll.vcproj.vspscc
+   A \worksrc\critical_graph.h
+   A \worksrc\critical_map.h
+   A \worksrc\crkutil.cpp
+   A \worksrc\crkutil.h
+   A \worksrc\crkutilr.h
+   A \worksrc\cticks.h
+   A \worksrc\cwin_man.h
+   A \worksrc\d3d9.h
+   A \worksrc\d3d9caps.h
+   A \worksrc\d3d9types.h
+   A \worksrc\debug.cpp
+   A \worksrc\debug.h
+   A \worksrc\def_buildable.h
+   A \worksrc\demo.h
+   A \worksrc\device__device.cpp
+   A \worksrc\dll__dll_man.cpp
+   A \worksrc\dll__linux_dll.cpp
+   A \worksrc\dll_export.h
+   A \worksrc\draw_context.h
+   A \worksrc\drive_map.h
+   A \worksrc\dxerr9.h
+   A \worksrc\dxfile.h
+   A \worksrc\editor__critical_graph.cpp
+   A \worksrc\editor__critical_map.cpp
+   A \worksrc\editor__e_ai.cpp
+   A \worksrc\editor__editor.cpp
+   A \worksrc\editor__lisp_interaction.cpp
+   A \worksrc\editor__path_api.cpp
+   A \worksrc\editor__solvegraph_breadth.cpp
+   A \worksrc\editor__solvemap_astar2.cpp
+   A \worksrc\editor__solvemap_breadth.cpp
+   A \worksrc\error__error.cpp
+   A \worksrc\f_tables.h
+   A \worksrc\file__file.cpp
+   A \worksrc\flare.h
+   A \worksrc\font__font.cpp
+   A \worksrc\font_test.cpp
+   A \worksrc\frustrum_clip.h
+   A \worksrc\g1_file.h
+   A \worksrc\g1_limits.h
+   A \worksrc\g1_make.dsp
+   A \worksrc\g1_object.h
+   A \worksrc\g1_rand.h
+   A \worksrc\g1_render.h
+   A \worksrc\g1_speed.h
+   A \worksrc\g1_texture_id.h
+   A \worksrc\g1_tint.h
+   A \worksrc\g1_vert.h
+   A \worksrc\geom.dsp
+   A \worksrc\geom.vcproj.vspscc
+   A \worksrc\geomdll.cpp
+   A \worksrc\get_tmap.h
+   A \worksrc\global_id.h
+   A \worksrc\golg__border_frame.cpp
+   A \worksrc\golg__camera.cpp
+   A \worksrc\golg__cheat.cpp
+   A \worksrc\golg__controller.cpp
+   A \worksrc\golg__cwin_man.cpp
+   A \worksrc\golg__demo.cpp
+   A \worksrc\golg__draw_context.cpp
+   A \worksrc\golg__f_tables.cpp
+   A \worksrc\golg__fli_load.cpp
+   A \worksrc\golg__g1_file.cpp
+   A \worksrc\golg__g1_object.cpp
+   A \worksrc\golg__g1_rand.cpp
+   A \worksrc\golg__g1_render.cpp
+   A \worksrc\golg__g1_texture_id.cpp
+   A \worksrc\golg__g1_tint.cpp
+   A \worksrc\golg__global_id.cpp
+   A \worksrc\golg__human.cpp
+   A \worksrc\golg__image_man.cpp
+   A \worksrc\golg__input.cpp
+   A \worksrc\golg__level_load.cpp
+   A \worksrc\golg__li_interface.cpp
+   A \worksrc\golg__li_objref.cpp
+   A \worksrc\golg__light.cpp
+   A \worksrc\golg__load3d.cpp
+   A \worksrc\golg__m_flow.cpp
+   A \worksrc\golg__main.cpp
+   A \worksrc\golg__make_tlist.cpp
+   A \worksrc\golg__map.cpp
+   A \worksrc\golg__map_cell.cpp
+   A \worksrc\golg__map_collision.cpp
+   A \worksrc\golg__map_data.cpp
+   A \worksrc\golg__map_fast.cpp
+   A \worksrc\golg__map_light.cpp
+   A \worksrc\golg__map_lod.cpp
+   A \worksrc\golg__map_man.cpp
+   A \worksrc\golg__map_movi.cpp
+   A \worksrc\golg__map_path.cpp
+   A \worksrc\golg__map_save.cpp
+   A \worksrc\golg__map_vars.cpp
+   A \worksrc\golg__map_vert.cpp
+   A \worksrc\golg__map_view.cpp
+   A \worksrc\golg__map_vis.cpp
+   A \worksrc\golg__menu.cpp
+   A \worksrc\golg__mfcwindows.cpp
+   A \worksrc\golg__obj3d.cpp
+   A \worksrc\golg__octree.cpp
+   A \worksrc\golg__options.cpp
+   A \worksrc\golg__overhead.cpp
+   A \worksrc\golg__path.cpp
+   A \worksrc\golg__player.cpp
+   A \worksrc\golg__reference.cpp
+   A \worksrc\golg__remove_man.cpp
+   A \worksrc\golg__resources.cpp
+   A \worksrc\golg__saver.cpp
+   A \worksrc\golg__screen_shot.cpp
+   A \worksrc\golg__selection.cpp
+   A \worksrc\golg__sky.cpp
+   A \worksrc\golg__solvemap_astar.cpp
+   A \worksrc\golg__sound_man.cpp
+   A \worksrc\golg__statistics.cpp
+   A \worksrc\golg__team_api.cpp
+   A \worksrc\golg__tick_count.cpp
+   A \worksrc\golg__tile.cpp
+   A \worksrc\golg__vert_table.cpp
+   A \worksrc\golg__visible.cpp
+   A \worksrc\gui__browse_tree.cpp
+   A \worksrc\gui__butbox.cpp
+   A \worksrc\gui__list_pick.cpp
+   A \worksrc\height_info.h
+   A \worksrc\human.h
+   A \worksrc\i4_core.dsp
+   A \worksrc\i4_core.vcproj
+   A \worksrc\i4_core__i4_core.cpp
+   A \worksrc\image__image.cpp
+   A \worksrc\image_man.h
+   A \worksrc\import.cpp
+   A \worksrc\inc__search.cpp
+   A \worksrc\init__init.cpp
+   A \worksrc\input.h
+   A \worksrc\inst_linux.cpp
+   A \worksrc\inst_win32.cpp
+   A \worksrc\install.dsp
+   A \worksrc\install.h
+   A \worksrc\install.vcproj
+   A \worksrc\interval.h
+   A \worksrc\isllist.h
+   A \worksrc\jj_error.cpp
+   A \worksrc\jj_error.h
+   A \worksrc\level_load.h
+   A \worksrc\li_objref.h
+   A \worksrc\light.h
+   A \worksrc\lisp__file.cpp
+   A \worksrc\lisp__functions.cpp
+   A \worksrc\lisp__lisp.cpp
+   A \worksrc\lisp__math.cpp
+   A \worksrc\lisp__setup.cpp
+   A \worksrc\load3d.h
+   A \worksrc\loaders__bmp_load.cpp
+   A \worksrc\loaders__bmp_write.cpp
+   A \worksrc\loaders__dir_load.cpp
+   A \worksrc\loaders__dir_save.cpp
+   A \worksrc\loaders__gif.cpp
+   A \worksrc\loaders__jpg__jcapistd.cpp
+   A \worksrc\loaders__jpg__jdapistd.cpp
+   A \worksrc\loaders__jpg__jdatasrc.cpp
+   A \worksrc\loaders__jpg__jerror.cpp
+   A \worksrc\loaders__jpg__jfdctflt.cpp
+   A \worksrc\loaders__jpg__jfdctfst.cpp
+   A \worksrc\loaders__jpg__jfdctint.cpp
+   A \worksrc\loaders__jpg__jidctflt.cpp
+   A \worksrc\loaders__jpg__jidctfst.cpp
+   A \worksrc\loaders__jpg__jidctint.cpp
+   A \worksrc\loaders__jpg__jidctred.cpp
+   A \worksrc\loaders__jpg__jmemmgr.cpp
+   A \worksrc\loaders__jpg__jmemnobs.cpp
+   A \worksrc\loaders__jpg__jquant1.cpp
+   A \worksrc\loaders__jpg__jquant2.cpp
+   A \worksrc\loaders__jpg__jutils.cpp
+   A \worksrc\loaders__jpg__wrtarga.cpp
+   A \worksrc\loaders__jpg_load.cpp
+   A \worksrc\loaders__jpg_write.cpp
+   A \worksrc\loaders__load.cpp
+   A \worksrc\loaders__mp3__common.cpp
+   A \worksrc\loaders__mp3__control.cpp
+   A \worksrc\loaders__mp3__dct64.cpp
+   A \worksrc\loaders__mp3__dct64_i386.cpp
+   A \worksrc\loaders__mp3__decode.cpp
+   A \worksrc\loaders__mp3__decode_2to1.cpp
+   A \worksrc\loaders__mp3__decode_4to1.cpp
+   A \worksrc\loaders__mp3__decode_i386.cpp
+   A \worksrc\loaders__mp3__enc_mirror.cpp
+   A \worksrc\loaders__mp3__equalizer.cpp
+   A \worksrc\loaders__mp3__getlopt.cpp
+   A \worksrc\loaders__mp3__layer1.cpp
+   A \worksrc\loaders__mp3__layer2.cpp
+   A \worksrc\loaders__mp3__layer3.cpp
+   A \worksrc\loaders__mp3__mp3_decoder.cpp
+   A \worksrc\loaders__mp3__mpg123.cpp
+   A \worksrc\loaders__mp3__tabinit.cpp
+   A \worksrc\loaders__mp3__xfermem.cpp
+   A \worksrc\loaders__mp3_load.cpp
+   A \worksrc\loaders__pcx_load.cpp
+   A \worksrc\loaders__tga_load.cpp
+   A \worksrc\loaders__tga_write.cpp
+   A \worksrc\loaders__wav_load.cpp
+   A \worksrc\m_flow.h
+   A \worksrc\main__win32_self_modify.cpp
+   A \worksrc\main__win_main.cpp
+   A \worksrc\make_tlist.h
+   A \worksrc\map.h
+   A \worksrc\map_cell.h
+   A \worksrc\map_collision.h
+   A \worksrc\map_data.h
+   A \worksrc\map_image.h
+   A \worksrc\map_light.h
+   A \worksrc\map_man.h
+   A \worksrc\map_singleton.h
+   A \worksrc\map_vars.h
+   A \worksrc\map_vert.h
+   A \worksrc\map_view.h
+   A \worksrc\map_vis.h
+   A \worksrc\math__random.cpp
+   A \worksrc\math__spline.cpp
+   A \worksrc\math__transform.cpp
+   A \worksrc\max_object.cpp
+   A \worksrc\max_plugin.dsp
+   A \worksrc\maxcomm.h
+   A \worksrc\maxtool.cpp
+   A \worksrc\maxtool.dsp
+   A \worksrc\maxtool.rc
+   A \worksrc\maxtool__anim_dialog.cpp
+   A \worksrc\maxtool__animate.cpp
+   A \worksrc\maxtool__drag_select.cpp
+   A \worksrc\maxtool__draw_modes.cpp
+   A \worksrc\maxtool__get_dir.cpp
+   A \worksrc\maxtool__get_tmap.cpp
+   A \worksrc\maxtool__m1_commands.cpp
+   A \worksrc\maxtool__m1_info.cpp
+   A \worksrc\maxtool__m1_test.cpp
+   A \worksrc\maxtool__m1_update.cpp
+   A \worksrc\maxtool__max_load.cpp
+   A \worksrc\maxtool__max_object.cpp
+   A \worksrc\maxtool__maxcomm.cpp
+   A \worksrc\maxtool__maxtool.cpp
+   A \worksrc\maxtool__mount_win.cpp
+   A \worksrc\maxtool__navigate.cpp
+   A \worksrc\maxtool__pan.cpp
+   A \worksrc\maxtool__render.cpp
+   A \worksrc\maxtool__saveas.cpp
+   A \worksrc\maxtool__saver.cpp
+   A \worksrc\maxtool__st_edit.cpp
+   A \worksrc\maxtool__translate.cpp
+   A \worksrc\maxtool__tupdate.cpp
+   A \worksrc\maxtool__visible.cpp
+   A \worksrc\memory__malloc.cpp
+   A \worksrc\menu.h
+   A \worksrc\menu__menu.cpp
+   A \worksrc\mesh.dsp
+   A \worksrc\meshdll.cpp
+   A \worksrc\mess_id.h
+   A \worksrc\music.h
+   A \worksrc\music__stream.cpp
+   A \worksrc\net__startup.cpp
+   A \worksrc\network__tcpip.cpp
+   A \worksrc\obj3d.h
+   A \worksrc\obj_conscell.h
+   A \worksrc\obj_dll.h
+   A \worksrc\object_definer.h
+   A \worksrc\objs__ai_builder.cpp
+   A \worksrc\objs__ai_jim.cpp
+   A \worksrc\objs__ai_joe.cpp
+   A \worksrc\objs__armor.cpp
+   A \worksrc\objs__bank.cpp
+   A \worksrc\objs__base_launcher.cpp
+   A \worksrc\objs__bases.cpp
+   A \worksrc\objs__beam_weapon.cpp
+   A \worksrc\objs__bird.cpp
+   A \worksrc\objs__bolt.cpp
+   A \worksrc\objs__bomb_truck.cpp
+   A \worksrc\objs__bomber.cpp
+   A \worksrc\objs__bridger.cpp
+   A \worksrc\objs__bullet.cpp
+   A \worksrc\objs__buster_rocket.cpp
+   A \worksrc\objs__car.cpp
+   A \worksrc\objs__carcass.cpp
+   A \worksrc\objs__chunk_explosion.cpp
+   A \worksrc\objs__cloud.cpp
+   A \worksrc\objs__cobra_tank.cpp
+   A \worksrc\objs__controllers.cpp
+   A \worksrc\objs__convoy.cpp
+   A \worksrc\objs__crate.cpp
+   A \worksrc\objs__damager.cpp
+   A \worksrc\objs__day_night.cpp
+   A \worksrc\objs__debris.cpp
+   A \worksrc\objs__def_object.cpp
+   A \worksrc\objs__defaults.cpp
+   A \worksrc\objs__dropped_bomb.cpp
+   A \worksrc\objs__eleccar.cpp
+   A \worksrc\objs__engineer.cpp
+   A \worksrc\objs__explode_model.cpp
+   A \worksrc\objs__explosion1.cpp
+   A \worksrc\objs__field_camera.cpp
+   A \worksrc\objs__fire.cpp
+   A \worksrc\objs__fire_angle.cpp
+   A \worksrc\objs__flak.cpp
+   A \worksrc\objs__goal.cpp
+   A \worksrc\objs__guided_missile.cpp
+   A \worksrc\objs__gun_port.cpp
+   A \worksrc\objs__helicopter.cpp
+   A \worksrc\objs__jet.cpp
+   A \worksrc\objs__lawfirm.cpp
+   A \worksrc\objs__light_o.cpp
+   A \worksrc\objs__map_piece.cpp
+   A \worksrc\objs__miracle.cpp
+   A \worksrc\objs__miscobjs.cpp
+   A \worksrc\objs__model_collide.cpp
+   A \worksrc\objs__model_draw.cpp
+   A \worksrc\objs__model_id.cpp
+   A \worksrc\objs__moneycrate.cpp
+   A \worksrc\objs__moneyplane.cpp
+   A \worksrc\objs__old_ids.cpp
+   A \worksrc\objs__particle_emitter.cpp
+   A \worksrc\objs__path_object.cpp
+   A \worksrc\objs__peontank.cpp
+   A \worksrc\objs__popup_turret.cpp
+   A \worksrc\objs__repairer.cpp
+   A \worksrc\objs__rocket.cpp
+   A \worksrc\objs__rocktank.cpp
+   A \worksrc\objs__sfx_obj.cpp
+   A \worksrc\objs__shockwave.cpp
+   A \worksrc\objs__shrapnel.cpp
+   A \worksrc\objs__smoke_trail.cpp
+   A \worksrc\objs__sprite.cpp
+   A \worksrc\objs__sprite_object.cpp
+   A \worksrc\objs__stank.cpp
+   A \worksrc\objs__stank_factory.cpp
+   A \worksrc\objs__structure_death.cpp
+   A \worksrc\objs__super_mortar.cpp
+   A \worksrc\objs__supergun.cpp
+   A \worksrc\objs__takeover_pad.cpp
+   A \worksrc\objs__tank_buster.cpp
+   A \worksrc\objs__target.cpp
+   A \worksrc\objs__tower_electric.cpp
+   A \worksrc\objs__tower_missile.cpp
+   A \worksrc\objs__trike.cpp
+   A \worksrc\objs__turret.cpp
+   A \worksrc\objs__vehic_sounds.cpp
+   A \worksrc\objs__verybiggun.cpp
+   A \worksrc\octree.h
+   A \worksrc\opener.h
+   A \worksrc\options.h
+   A \worksrc\palette_pal.cpp
+   A \worksrc\path.h
+   A \worksrc\path_api.h
+   A \worksrc\pch.h
+   A \worksrc\playback.h
+   A \worksrc\player.h
+   A \worksrc\player_type.h
+   A \worksrc\plugin.rc
+   A \worksrc\pragma.h
+   A \worksrc\quantize__dither_quantize.cpp
+   A \worksrc\quantize__histogram.cpp
+   A \worksrc\quantize__median.cpp
+   A \worksrc\range.h
+   A \worksrc\reference.h
+   A \worksrc\remove_man.h
+   A \worksrc\render__dx5__r1_dx5.cpp
+   A \worksrc\render__dx5__r1_dx5_texture.cpp
+   A \worksrc\render__dx9__render.cpp
+   A \worksrc\render__dx9__texture.cpp
+   A \worksrc\render__glide__gr_render.cpp
+   A \worksrc\render__glide__gr_vram.cpp
+   A \worksrc\render__gtext_load.cpp
+   A \worksrc\render__mip.cpp
+   A \worksrc\render__mip_average.cpp
+   A \worksrc\render__opengl_render.cpp
+   A \worksrc\render__opengl_tman.cpp
+   A \worksrc\render__r1_api.cpp
+   A \worksrc\render__r1_clip.cpp
+   A \worksrc\render__r1_font.cpp
+   A \worksrc\render__r1_res.cpp
+   A \worksrc\render__r1_win.cpp
+   A \worksrc\render__software__amd3d__rasterize_affine_amd3d.cpp
+   A \worksrc\render__software__amd3d__rasterize_perspective_amd3d.cpp
+   A \worksrc\render__software__amd3d__span_buffer_amd3d.cpp
+   A \worksrc\render__software__draw_line.cpp
+   A \worksrc\render__software__linux_specific.cpp
+   A \worksrc\render__software__mappers.cpp
+   A \worksrc\render__software__r1_software.cpp
+   A \worksrc\render__software__r1_software_globals.cpp
+   A \worksrc\render__software__r1_software_texture.cpp
+   A \worksrc\render__software__rasterize_affine.cpp
+   A \worksrc\render__software__rasterize_perspective.cpp
+   A \worksrc\render__software__span_buffer.cpp
+   A \worksrc\render__software__tint_manage.cpp
+   A \worksrc\render__software__tri_setup.cpp
+   A \worksrc\render__software__win32_specific.cpp
+   A \worksrc\render__tex_id.cpp
+   A \worksrc\render__tmanage.cpp
+   A \worksrc\resource.h
+   A \worksrc\resource.res
+   A \worksrc\resources.h
+   A \worksrc\rotation.h
+   A \worksrc\saver.h
+   A \worksrc\saver_id.h
+   A \worksrc\search.h
+   A \worksrc\selection.h
+   A \worksrc\setup.cpp
+   A \worksrc\sky.h
+   A \worksrc\solvegraph.h
+   A \worksrc\solvegraph_breadth.h
+   A \worksrc\solvemap.h
+   A \worksrc\solvemap_astar.h
+   A \worksrc\solvemap_astar2.h
+   A \worksrc\solvemap_breadth.h
+   A \worksrc\sound__dsound__direct_sound.cpp
+   A \worksrc\sound__linux_sound.cpp
+   A \worksrc\sound__sfx_id.cpp
+   A \worksrc\sound__sound.cpp
+   A \worksrc\sound__unix_sound.cpp
+   A \worksrc\sound_id.h
+   A \worksrc\sound_man.cpp
+   A \worksrc\sound_man.h
+   A \worksrc\statistics.h
+   A \worksrc\status__status.cpp
+   A \worksrc\string__string.cpp
+   A \worksrc\tconvert.cpp
+   A \worksrc\tconvert.h
+   A \worksrc\team_api.cpp
+   A \worksrc\team_api.h
+   A \worksrc\threads__pthreads.cpp
+   A \worksrc\threads__unixthreads.cpp
+   A \worksrc\threads__win32_threads.cpp
+   A \worksrc\tick_count.cpp
+   A \worksrc\tick_count.h
+   A \worksrc\tile.h
+   A \worksrc\time__timedev.cpp
+   A \worksrc\time__unixtime.cpp
+   A \worksrc\transport.dsp
+   A \worksrc\transport__loader.cpp
+   A \worksrc\transport__randomize.cpp
+   A \worksrc\transport__test.cpp
+   A \worksrc\transport__transport.cpp
+   A \worksrc\util.cpp
+   A \worksrc\util.dsp
+   A \worksrc\util.vcproj.vspscc
+   A \worksrc\utildll.cpp
+   A \worksrc\vert_table.cpp
+   A \worksrc\video__display.cpp
+   A \worksrc\video__movie_engine.cpp
+   A \worksrc\video__opengl__opengl_display.cpp
+   A \worksrc\video__opengl__openglfunc.cpp
+   A \worksrc\video__opengl__win32_opengl.cpp
+   A \worksrc\video__opengl__x11_opengl.cpp
+   A \worksrc\video__win32__dd_cursor.cpp
+   A \worksrc\video__win32__dx5.cpp
+   A \worksrc\video__win32__dx5_error.cpp
+   A \worksrc\video__win32__dx5_mouse.cpp
+   A \worksrc\video__win32__dx5_util.cpp
+   A \worksrc\video__win32__dx9.cpp
+   A \worksrc\video__win32__dx9_mouse.cpp
+   A \worksrc\video__win32__dx9_util.cpp
+   A \worksrc\video__win32__dx_cursor.cpp
+   A \worksrc\video__win32__win32.cpp
+   A \worksrc\video__win32__win32_input.cpp
+   A \worksrc\video__x11__mitshm.cpp
+   A \worksrc\video__x11__x11_display.cpp
+   A \worksrc\video__x11__x11_input.cpp
+   A \worksrc\visible.h
+   A \worksrc\win32_install.cpp
+   A \worksrc\win32_timedev.cpp
+   A \worksrc\win_file.cpp
+   A \worksrc\window__window.cpp
+
+Commiting the main golg dir
+------------------------------------------------------------------------
+r22 | pgrawehr | 2003-12-25 14:59:56 +0100 (Thu, 25 Dec 2003) | 1 line
+Changed paths:
+   A \worksrc\Kopie von test.level
+   A \worksrc\axhausen01.level
+   A \worksrc\axhausen02.level
+   A \worksrc\axhausen03.level
+   A \worksrc\axhausen04.level
+   A \worksrc\axhausen04_endofday1.level
+   A \worksrc\axhausen05.level
+   A \worksrc\axhausen06.level
+   A \worksrc\axhausen07_day5.level
+   A \worksrc\axhausen08_day6.level
+   A \worksrc\axhausen08_endofday7.level
+   A \worksrc\axhausen09.level
+   A \worksrc\axhausen10.level
+   A \worksrc\axhausen11.level
+   A \worksrc\axtemp.level
+   A \worksrc\ch01.level
+   A \worksrc\ch02.level
+   A \worksrc\ch03.level
+   A \worksrc\demo.level
+   A \worksrc\egypt.level
+   A \worksrc\egypt2.level
+   A \worksrc\empty.level
+   A \worksrc\large.level
+   A \worksrc\matter.level
+   A \worksrc\movie.level
+   A \worksrc\new.level
+   A \worksrc\snow.level
+   A \worksrc\snow2.level
+   A \worksrc\snow3.level
+   A \worksrc\some.level
+   A \worksrc\te01.level
+   A \worksrc\te02.level
+   A \worksrc\te03.level
+   A \worksrc\test.level
+   A \worksrc\tmp_level.level
+
+partial commit 2
+------------------------------------------------------------------------
+r21 | pgrawehr | 2003-12-25 14:30:35 +0100 (Thu, 25 Dec 2003) | 1 line
+Changed paths:
+   A \worksrc\Kopie von egypt.scm
+   A \worksrc\axhausen01.scm
+   A \worksrc\axhausen02.scm
+   A \worksrc\axhausen03.scm
+   A \worksrc\axhausen03_day2.scm
+   A \worksrc\axhausen04.scm
+   A \worksrc\axhausen04_endofday1.scm
+   A \worksrc\axhausen05.scm
+   A \worksrc\axhausen06.scm
+   A \worksrc\axhausen07_day5.scm
+   A \worksrc\axhausen08_day6.scm
+   A \worksrc\axhausen08_endofday7.scm
+   A \worksrc\axhausen09.scm
+   A \worksrc\axhausen10.scm
+   A \worksrc\axhausen11.scm
+   A \worksrc\axtemp.scm
+   A \worksrc\ch01.scm
+   A \worksrc\ch02.scm
+   A \worksrc\ch03.scm
+   A \worksrc\demo.scm
+   A \worksrc\dump.scm
+   A \worksrc\egypt.scm
+   A \worksrc\egypt2.scm
+   A \worksrc\empty.scm
+   A \worksrc\large.scm
+   A \worksrc\matter.scm
+   A \worksrc\movie.scm
+   A \worksrc\new.scm
+   A \worksrc\playdemo.scm
+   A \worksrc\scheme
+   A \worksrc\scheme\Test.scm
+   A \worksrc\scheme\anims.scm
+   A \worksrc\scheme\balance.scm
+   A \worksrc\scheme\classes.scm
+   A \worksrc\scheme\demo_view.scm
+   A \worksrc\scheme\doctor.scm
+   A \worksrc\scheme\dunnet.scm
+   A \worksrc\scheme\flame.scm
+   A \worksrc\scheme\map_init.scm
+   A \worksrc\scheme\menu.scm
+   A \worksrc\scheme\menu_en.scm
+   A \worksrc\scheme\menu_maxtool.scm
+   A \worksrc\scheme\models.scm
+   A \worksrc\scheme\objects.scm
+   A \worksrc\scheme\preferences.scm
+   A \worksrc\scheme\start.scm
+   A \worksrc\scheme\vssver.scc
+   A \worksrc\snow.scm
+   A \worksrc\snow2.scm
+   A \worksrc\snow3.scm
+   A \worksrc\te01.scm
+   A \worksrc\te02.scm
+   A \worksrc\te03.scm
+   A \worksrc\test.scm
+   A \worksrc\tmp_level.scm
+
+partial commit 1
+------------------------------------------------------------------------
+r4 | pgrawehr | 2003-12-24 11:02:24 +0100 (Wed, 24 Dec 2003) | 2 lines
+Changed paths:
+   D \work
+   A \worksrc (from \work:3)
+
+Renamed dir.
+
+------------------------------------------------------------------------
+r1 | pgrawehr | 2003-12-23 17:16:32 +0100 (Tue, 23 Dec 2003) | 4 lines
+Changed paths:
+   A \work
+
+this directory will contain the current working version.
+
+
+
+------------------------------------------------------------------------

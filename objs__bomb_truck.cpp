@@ -93,6 +93,11 @@ public:
     if (health<=0)
     {
       g1_shockwave_class *shock = NULL;
+      if (controled())
+          {
+          g1_current_controller->view.suggest_camera_mode(
+               G1_CIRCLE_WAIT,global_id);
+          }
       shock = (g1_shockwave_class *)g1_create_object(g1_get_object_type(shockwave.get()));
       if (shock)
         shock->setup(i4_3d_vector(x,y,h), 0.5);

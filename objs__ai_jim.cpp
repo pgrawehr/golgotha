@@ -244,7 +244,7 @@ void g1_team_api_class::guide_hero()
     if (!commander() || commander()->health<=0)
     {
       build_unit(unit_type[0]);
-	  g1_player_man.get(team())->continue_wait=i4_F;
+	  //g1_player_man.get(team())->continue_wait=i4_F;
       return;
     }
 
@@ -485,7 +485,7 @@ public:
     if (!commander() || commander()->health<=0)
     {
       build_unit(unit_type[0]);
-	  g1_player_man.get(team())->continue_wait=i4_F;
+	  //g1_player_man.get(team())->continue_wait=i4_F;
       return;
     }
 

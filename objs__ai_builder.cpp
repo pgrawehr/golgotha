@@ -37,7 +37,7 @@ class ai_remote_player: public g1_team_api_class
 		ai_remote_player(g1_loader_class *f=0){};
 		virtual void think()
 			{
-			g1_player_man.get(team())->continue_wait=i4_F;
+			//g1_player_man.get(team())->continue_wait=i4_F;
 			};
 	};
 g1_team_api_definer<ai_neutral> ai_neutral_def("ai_neutral");

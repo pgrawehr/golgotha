@@ -868,12 +868,7 @@ void g1_player_piece_class::think()
 
   w32 pathinfo = follow_path();
   
-
-  if (!g1_current_controller.get() ||
-       (g1_current_controller->view.get_view_mode()!=G1_ACTION_MODE) &&
-       g1_current_controller->view.get_view_mode()!=G1_FOLLOW_MODE &&
-       g1_current_controller->view.get_view_mode()!=G1_WATCH_MODE
-       )
+  if (!controled())
       process_input = i4_F;
 
   if (g1_human->team()!=player_num)
@@ -1110,7 +1105,7 @@ void g1_player_piece_class::think()
     set_stank_flag(ST_INFLIGHT,0);
   }
 
-  if (hurt>0.0)
+  if ((hurt>0.0)&&process_input)
   {
     g1_hurt_tint = i4_f_to_i((G1_NUM_HURT_TINTS-1)*hurt)+1;
     hurt-=0.05f;
@@ -1787,7 +1782,7 @@ static int first_hurt=1;
 
 void g1_player_piece_class::damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir)
 {
-  int dowait=0;
+  //int dowait=0;
   if (player_num == g1_player_man.local_player)
   {
     if (hp>10)
@@ -1817,14 +1812,11 @@ void g1_player_piece_class::damage(g1_object_class *obj, int hp, i4_3d_vector _d
       {
 	    //only switch to circle_wait if action or camera mode
 	    //otherwise, this is usually of no use.
-	    if (((g1_current_controller->view.follow_object_id==0)  ||
-            (g1_current_controller->view.follow_object_id==global_id ) ) &&
-            ((g1_current_controller->view.get_view_mode()==G1_ACTION_MODE) ||
-			(g1_current_controller->view.get_view_mode()==G1_CAMERA_MODE)))
+	    if (controled())
 			{
 			g1_current_controller->view.suggest_camera_mode(G1_CIRCLE_WAIT,
                                                          global_id);
-			dowait=1;
+			//dowait=1;
 			}
         g1_current_controller->scroll_message("Death cometh. Returning to base...");        
       }
@@ -1833,8 +1825,8 @@ void g1_player_piece_class::damage(g1_object_class *obj, int hp, i4_3d_vector _d
 
   if (health!=0 && health-hp<=0)
   {
-    if (dowait)
-		g1_player_man.get(player_num)->continue_wait=1;
+    //if (dowait)
+	//	g1_player_man.get(player_num)->continue_wait=1;
     theta = base_angle;
     g1_create_carcass(this, stank_carcass.get(), "chunk_supertankbase");
   }

@@ -768,7 +768,7 @@ public:
       case RESURRECT:
         //guide_hero() assures that there exist always a commander
         build_unit(unit_type_joe[0]);
-		g1_player_man.get(team())->continue_wait=i4_F;
+		//g1_player_man.get(team())->continue_wait=i4_F;
         build_wait=20;
         build_mode=INITWAIT;
         break;

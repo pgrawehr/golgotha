@@ -539,7 +539,7 @@ void process_data_packet(i4_file_class &r,i4_bool server)
 						g1_player_man.get(obj->player_num)->num_stank_lives()--;
 						g1_player_man.get(obj->player_num)->calc_upgrade_level();
 						g1_player_man.get(obj->player_num)->set_commander(g1_player_piece_class::cast(obj));
-						g1_player_man.get(obj->player_num)->continue_wait=i4_F;
+						//g1_player_man.get(obj->player_num)->continue_wait=i4_F;
 						}
 					g1_network_time_man.updatecomplete(obj->global_id,ticksent);
 					}

@@ -508,9 +508,7 @@ void g1_map_piece_class::damage(g1_object_class *obj, int hp, i4_3d_vector _dama
 //       scream1.play();
 //     else
 //       scream2.play();
-       if (g1_current_controller.get() &&
-           g1_current_controller->view.view_mode==G1_ACTION_MODE &&
-           g1_current_controller->view.follow_object_id==global_id)
+       if (controled())
            {
            g1_current_controller->view.suggest_camera_mode(
                G1_CIRCLE_WAIT,global_id);
@@ -1150,11 +1148,17 @@ i4_bool g1_map_piece_class::grab_user_controls(i4_float &accel,
 
 i4_bool g1_map_piece_class::controled()
     {
-    if (g1_current_controller.get()&&
-        ((g1_current_controller->view.follow_object_id==global_id )) 
+    if (!g1_current_controller.get())
+        return i4_F;
+    if ((g1_current_controller->view.follow_object_id==global_id )
         &&
         ((g1_current_controller->view.view_mode==G1_ACTION_MODE)||
-        (g1_current_controller->view.view_mode==G1_FOLLOW_MODE)))
+        (g1_current_controller->view.view_mode==G1_FOLLOW_MODE) ) )
+        return i4_T;
+    if ((g1_current_controller->view.follow_object_id==0 )
+        && this==g1_player_man.get_local()->get_commander() &&
+        ((g1_current_controller->view.view_mode==G1_ACTION_MODE)||
+        (g1_current_controller->view.view_mode==G1_FOLLOW_MODE) ) )
         return i4_T;
     return i4_F;
     }
@@ -1218,7 +1222,7 @@ i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
 			if (!reversible) go_reverse=i4_F;//if vehicle cannot move backwards
 			
 			//dont worry about turn radii unless he's actually ready for forward movement
-			if (go_reverse)
+			if (go_reverse||c_accel!=0)
 				dtheta = diffangle;
 			else
 				{

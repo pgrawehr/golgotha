@@ -347,6 +347,15 @@ the original Crack dot com team. If anyone knows, please add them above.
 
 Release History:
 ----------------
+
+V1.0.9.2
+	(common)
+	Subversion on qbic is operating fully now. See the changelogs
+	there for details.
+	It's now possible to control every single unit by hand. 
+	Improved the border frame window.
+	Fixed some old and anoying bugs. 
+
 V1.0.8.4
 	(common)
 	Lots of cleanups. 

@@ -301,17 +301,17 @@ i4_bool g1_team_api_class::fire0(g1_map_piece_class *forwho)
 
 i4_bool g1_team_api_class::continue_game()
 {
-  if (g1_player_man.get(team())->continue_wait)
-  {
+  //if (g1_player_man.get(team())->continue_wait)
+  //{
     if (record)
     {
       write_playback_checker(record);
       record->write_8(G1_COMMAND_CONTINUE);
     }
  
-    g1_player_man.get(team())->continue_wait=i4_F;
+    //g1_player_man.get(team())->continue_wait=i4_F;
 
-  }
+  //}
 
   return i4_T;
 }

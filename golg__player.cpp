@@ -273,7 +273,7 @@ i4_bool g1_player_info_class::load(g1_loader_class *fp)
   w16 ver=0,data_size=0;
   i4_bool ret=i4_F;
   vars=0;
-  continue_wait=i4_F;
+  //continue_wait=i4_F;
 
   if (fp)
     fp->get_version(ver, data_size);

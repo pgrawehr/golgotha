@@ -76,8 +76,9 @@ public:
 	
     request_think();
 	g1_player_info_class *pl=g1_player_man.get(player_num);
-    if (!pl->get_commander() &&
-        !pl->continue_wait)
+    if (!pl->get_commander() 
+        /*&&
+        !pl->continue_wait*/)
     {//strncmp returns 0 if the two match, but we want to continue if they don't match.
       if (pl->num_stank_lives() 
 		  && pl->get_ai()->ai_name()->strncmp("ai_remote",9))
@@ -102,7 +103,7 @@ public:
           pl->set_commander(stank);
 
 
-
+          /*
           if (player_num==g1_player_man.get_local()->get_player_num() && 
               g1_current_controller.get())
           {
@@ -117,7 +118,7 @@ public:
                   stank->global_id);
             }
           }
-
+          */
 
           stank->request_think();    
         }

@@ -44,7 +44,7 @@ private:
   int &num_stank_deaths();
   g1_typed_reference_class<g1_player_piece_class> commander;
 public:
-  i4_bool continue_wait;
+  //i4_bool continue_wait;
   int &num_stank_lives();
   li_object_pointer vars;
   float kill_ratio();
