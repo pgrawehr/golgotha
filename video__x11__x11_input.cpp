@@ -42,11 +42,6 @@
 #include "version.h"
 
 
-int i4_system_choose_option(char **choices)
-{
-  return 0;
-}
-
 x11_input_class *x11_input_class_ptr=0;//used to reference the
 //handler when displaying the error window
 
@@ -189,15 +184,15 @@ static Cursor x11_CreateNullCursor(Display *display, Window root)
   return cursor;
 }
 
-void x11_input_class::draw_error(Display *disp, const char *error_msg,int width, int height)
+void x11_input_class::draw_error(Display *disp, const char *error_msg,int width, int height, int screen_e_num)
 {
 	//draw the error message to the window errorwin.
 	XGCValues values;
 	GC mgc=XCreateGC(disp,errorwin,0,&values);
-	XSetBackground(display,mgc,WhitePixel(display,screen_num));
-	XSetForeground(display,mgc,BlackPixel(display,screen_num));
+	XSetBackground(display,mgc,WhitePixel(display,screen_e_num));
+	XSetForeground(display,mgc,BlackPixel(display,screen_e_num));
 	//XDrawRectangle(display,errorwin,mgc,0,0,width,height);
-	XSetWindowBackground(display,errorwin,WhitePixel(display,screen_num));
+	XSetWindowBackground(display,errorwin,WhitePixel(display,screen_e_num));
 	XClearWindow(display,errorwin);
 	int ypos=20;
 	int endpos=0;
@@ -241,7 +236,7 @@ int x11_input_class::create_error_window(const char *error_msg){
 	int novis=0;
 	XVisualInfo *visual=XGetVisualInfo(display, 0, &vinfo, &novis);
 
-	screen_num  = DefaultScreen(display);
+	int screen_e_num  = DefaultScreen(display);
 
 
   Colormap tmpcmap;
@@ -254,6 +249,7 @@ int x11_input_class::create_error_window(const char *error_msg){
 
   int attribmask = CWColormap | CWBorderPixel;
   XSetWindowAttributes attribs;
+  ZeroMemory(&attribs,sizeof(XSetWindowAttributes));
   attribs.border_pixel = 0;
   attribs.colormap = tmpcmap;
   int numlines=1;
@@ -301,7 +297,7 @@ int x11_input_class::create_error_window(const char *error_msg){
   //XFree(iconName.value);
   GC mgc;
   mgc=XCreateGC(display,errorwin,0,&values);
-  XSetBackground(display,mgc,WhitePixel(display,screen_num));
+  XSetBackground(display,mgc,WhitePixel(display,screen_e_num));
 
   XMapWindow(display,errorwin);
   do
@@ -312,16 +308,16 @@ int x11_input_class::create_error_window(const char *error_msg){
   //i4_kernel.add_device(this);
 
   //XDefineCursor(display, mainwin, x11_CreateNullCursor(display, mainwin));
-  wm_delete_window = XInternAtom (display, "WM_DELETE_WINDOW", True);
-  wm_protocols = XInternAtom (display, "WM_PROTOCOLS", True);
+  Atom wm_e_delete_window = XInternAtom (display, "WM_DELETE_WINDOW", True);
+  Atom wm_e_protocols = XInternAtom (display, "WM_PROTOCOLS", True);
 
   Atom prot[2];
-  prot[0]=wm_delete_window;
-  prot[1]=wm_protocols;
+  prot[0]=wm_e_delete_window;
+  prot[1]=wm_e_protocols;
   
   XSetWMProtocols(display, errorwin, prot, 2);
   XFreeGC(display,mgc);
-  draw_error(display,error_msg,w,h);
+  draw_error(display,error_msg,w,h, screen_e_num);
   i4_bool closed=i4_F;
   XEvent xev;
   do {
@@ -330,7 +326,7 @@ int x11_input_class::create_error_window(const char *error_msg){
      { 
 	case Expose :
 	{ 
-	  draw_error(display,error_msg,w,h);//I think expose is the same as WM_PAINT
+	  draw_error(display,error_msg,w,h,screen_e_num);//I think expose is the same as WM_PAINT
 	} break;
 
 
@@ -341,7 +337,7 @@ int x11_input_class::create_error_window(const char *error_msg){
 	   *  see if this is really the window manager talking
 	   *  to us.
 	   */
-	  if (xev.xclient.message_type == wm_protocols)
+	  if (xev.xclient.message_type == wm_e_protocols)
 	  {
 	  	/*
 	    if ((Atom) xev.xclient.data.l[0] == wm_delete_window)
@@ -419,7 +415,9 @@ int x11_input_class::create_error_window(const char *error_msg){
 	  break;
      }
   } while(!closed);
-  XDestroyWindow(display,errorwin);  
+  XDestroyWindow(display,errorwin); 
+  XNextEvent(display, &report);
+  errorwin=0; 
   //this seems to be quite dangerous in debug mode
   //if (getenv("X_GRAB_OFF") == NULL)
   //  XGrabPointer( display, mainwin, False, 

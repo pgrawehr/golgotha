@@ -80,7 +80,7 @@ public:
                         i4_bool takeup_fullscreen,
                         XVisualInfo *visual);
   int create_error_window(const char *error_msg);
-  void draw_error(Display *disp, const char *error_msg, int width, int height);
+  void draw_error(Display *disp, const char *error_msg, int width, int height, int screen_e_num);
   void destroy_window();
 
   virtual i4_bool process_events();

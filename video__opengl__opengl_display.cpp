@@ -357,7 +357,11 @@ void i4_opengl_display_class::init()
 
 i4_bool i4_opengl_display_class::initialize_mode()
 	{
-	return initialize_mode(&modes[mode_pointer]);
+		//memcpy(&cur_mode, &amode, sizeof(cur_mode));
+	    i4_warning("Opening X window for OpenGL");
+        // this should open an X window
+        //return create_window(cur_mode.xres, cur_mode.yres);
+	    return initialize_mode(&modes[mode_pointer]);
 	}
 
 i4_bool i4_opengl_display_class::initialize_mode(mode *m)

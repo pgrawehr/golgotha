@@ -117,9 +117,28 @@ public:
 i4_bool i4_x11_opengl_display_class::initialize_mode(mode *m) {
 
   // this sets up the window for us
+  if (!input.open_display())
+	  return i4_F;
+  
+
+  
   if (!i4_opengl_display_class::initialize_mode(m))
 	return i4_F;
 
+  if (visual())
+  {
+  	glx_cx = glXCreateContext(input.display, visual(), NULL, True);
+  	if (!glx_cx) {
+		i4_error("WARNING: Could not create glX rendering context");
+		//return;
+  	}
+  }
+  else
+  {
+  	i4_warning("WARNING: OpenGl renderer is possibly not functional.");
+	i4_warning("WARNING: Golgotha will most probably revert to software rendering.");
+  }
+  
   glXMakeCurrent(input.display,input.mainwin,glx_cx);
 
   return i4_T;
@@ -143,24 +162,13 @@ void i4_x11_opengl_display_class::init() {
 	i4_warning("WARNING: glX extension unavailable on the current display.");
 	//return;
   }
-
-  if (visual())
-  {
-  	glx_cx = glXCreateContext(input.display, visual(), NULL, True);
-  	if (!glx_cx) {
-		i4_error("WARNING: Could not create glX rendering context");
-		//return;
-  	}
-  }
-  else
-  {
-  	i4_warning("WARNING: OpenGl renderer is possibly not functional.");
-	i4_warning("WARNING: Golgotha will most probably revert to software rendering.");
-  }
+  
 
   setup_modes();
   
   i4_opengl_display_class::init();
+  the_visual=0;
+  input.close_display();
 }
 
 void i4_x11_opengl_display_class::setup_modes()
@@ -211,6 +219,8 @@ void i4_x11_opengl_display_class::setup_modes()
 // For now we'll look for visual on DefaultScreen(), this should be changed later.
 XVisualInfo *i4_x11_opengl_display_class::find_visual() {
 
+	if (!input.display && !input.open_display())
+		return NULL;
   XVisualInfo *v;
   v = glXChooseVisual(input.display, DefaultScreen(input.display), glx_attribs);
   if (!v) {
