@@ -15,6 +15,91 @@
 #include "math/pi.h"
 #include "math/angle.h"
 
+i4_bool g1_model_collide_polygonal_ex(g1_object_class *_this,
+									  g1_object_class *source,
+									  g1_model_draw_parameters &params,
+									  const i4_3d_vector &notused_start,
+									  i4_3d_vector &ray,
+									  i4_3d_vector &hit_normal,
+									  i4_float *minimum_t)
+{
+	if (!_this->get_flag(g1_object_class::BLOCKING))
+		return i4_F;
+	const int nc=8;
+	const i4_float rad = 0.25;
+	g1_object_class *hit_obj=0;
+	i4_3d_vector oray=ray;
+	i4_bool ret=i4_F;
+	i4_3d_vector start;
+	for (int i=0; i<nc; i++)
+	{
+		start.set(source->x+rad*(float)cos(2.0*i4_pi()*(0.5+i)/nc),source->y+rad*(float)sin(2.0*i4_pi()*(0.5+i)/nc),source->h+0.07f);
+
+		/*
+		if (ray.x<0) 
+		{ 
+			x2 = i4_f_to_i(start.x); 
+			x1 = i4_f_to_i(start.x+ray.x); 
+		}
+		else         
+		{ 
+			x1 = i4_f_to_i(start.x); 
+			x2 = i4_f_to_i(start.x+ray.x); 
+		}
+		if (ray.y<0) 
+		{ 
+			y2 = i4_f_to_i(start.y); 
+			y1 = i4_f_to_i(start.y+ray.y); 
+		}
+		else         
+		{ 
+			y1 = i4_f_to_i(start.y); 
+			y2 = i4_f_to_i(start.y+ray.y); 
+		}
+		*/
+		//          i4_float dist, dx,dy;
+
+		
+		oray = ray;
+		if (g1_model_collide_polygonal(_this, _this->draw_params, start, ray, hit_normal,minimum_t))
+		{
+			if (hit_normal.z>0.8)
+			{
+				// incline more than 45 degrees.  let it go
+				ray = oray;
+			}
+			else
+			{
+				// slide perp. to the normal
+				// NOTE: we really should resubmit the new movement vector to objects
+				//       in the list we already tried to collide against for more robust
+				//       sliding.  just hope we catch most of the errors on the next frame
+				// we've hit the object 'obj'
+
+				i4_3d_vector diff(ray);
+				diff -= oray;
+				hit_normal.z = 0;
+				hit_normal.normalize();
+				hit_normal *= diff.dot(hit_normal) + 0.05f;
+				ray = oray;
+				ray += hit_normal;
+				if (ray.length()<0.001)
+				{
+					ray.x=0;
+					ray.y=0;
+					ray.z=0;
+				}
+				// should really continue in the loop, in case we collide
+				// with more than one wall at the same time. (i.e we've run into
+				// an edge)
+				return i4_T;
+			}
+		}
+
+	}
+	return ret;
+}
+
 i4_bool g1_model_collide_polygonal(g1_object_class *_this,
                                    g1_model_draw_parameters &params,
                                    const i4_3d_vector &start,
@@ -84,11 +169,11 @@ i4_bool g1_model_collide_radial(g1_object_class *_this,
 {
       
   // intersection of a ray with a sphere from graphics gems 1  p. 388
-  i4_3d_vector EO, V, O;
-  float r, disc, EO_length, d, v;
+  i4_3d_vector EO, D, P,DIFF;
+  float r, disc, d, v,difflen,raylen;
   
-  V=ray;
-  V.normalize();
+  D=ray;
+  D.normalize();
 
   r=_this->occupancy_radius();  
   float z_dist=_this->h - start.z;
@@ -96,19 +181,36 @@ i4_bool g1_model_collide_radial(g1_object_class *_this,
 //     z_dist=0;
 
   EO=i4_3d_vector(_this->x - start.x, _this->y - start.y, z_dist);
-  v=EO.dot(V);
+  v=EO.dot(D);
 
-  EO_length=EO.length();
+  //EO_length=EO.length();
 
-  disc=r*r - (EO_length*EO_length - v*v);
+  disc=r*r - (EO.dot(EO) - v*v);
   
     if( disc < 0 )
         return i4_F;
     else
     {
         d=(float)sqrt(disc);
-        V*=(v-d);
-        ray=V;
+		P=start+D*(v-d);
+		DIFF=P-start;
+		//diff is colinear with ray (should be...)
+		difflen=DIFF.dot(DIFF);
+		raylen=ray.dot(ray);
+		if (raylen<difflen)
+			return i4_F;
+		if (raylen>0.2)
+		{
+			ray*=0.25;
+			g1_model_collide_radial(_this,params,start,ray);
+			return i4_T;
+		}
+
+        //D*=(v-d);
+        //ray=D;
+		ray.x=0;
+		ray.y=0;
+		ray.z=0;
         return i4_T;
     }
 

@@ -1187,14 +1187,15 @@ void g1_object_controller_class::setup_clip()
   for (i=0; i<4; i++)
   {
     a = camera_point[j];
-    a -= camera_point[0];
+    a -= camera_point[i];
       
     j = i+1;
     b = camera_point[j];
-    b -= camera_point[0];
+    b -= camera_point[i];
       
     plane[i].normal.cross(a,b);
-    plane[i].D = -plane[i].normal.dot(camera_point[0]);
+	//? perhaps use the 5th point here? 
+    plane[i].D = -plane[i].normal.dot(camera_point[4]);
     plane[i].calc_np();
   }
 }

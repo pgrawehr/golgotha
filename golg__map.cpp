@@ -90,11 +90,6 @@ w32 g1_map_class::get_tick()
 //g1_map_cell_class *g1_map_class::cell(w32 offset) const  { return cells + offset; }
 //g1_map_vertex_class *g1_map_class::vertex(w16 x, w16 y) const { return verts + y*(w+1) + x; }
 
-void g1_map_class::cell_inv(w16 &x, w16 &y, w32 offset) const
-	{
-	x=offset % w;
-	y=offset / w;
-	}
 
 void g1_map_class::add_object(g1_object_chain_class &c, w32 x, w32 y)
 {

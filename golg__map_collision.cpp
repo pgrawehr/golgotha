@@ -444,7 +444,10 @@ i4_bool g1_map_class::check_collision(g1_object_class *obj,
     //therefore also cannot collide. 
     g1_map_piece_class *mp=g1_map_piece_class::cast(obj);
     if (!mp)
+	{
+		g1_map_pf_check_collision.stop();
         return i4_F;
+	}
     i4_bool this_is_on_path=mp->get_next_object()?i4_T:i4_F;
     g1_object_class *other=0;
     g1_map_piece_class *other_mp=0;
@@ -452,7 +455,7 @@ i4_bool g1_map_class::check_collision(g1_object_class *obj,
     i4_float occupancy_radius=mp->occupancy_radius();
     g1_object_class *objs_arr[20];
     sw32 num_objs=get_objects_in_range(mp->x,mp->y,
-        occupancy_radius+0.001,objs_arr,20);
+        occupancy_radius*2+1,objs_arr,20);
     i4_3d_vector start(mp->x,mp->y,mp->h);
     i4_3d_vector ray(dx,dy,dz);
     i4_bool ret=i4_F;
@@ -462,12 +465,13 @@ i4_bool g1_map_class::check_collision(g1_object_class *obj,
         //don't check collision against myself. 
         if (other==obj)
             continue;
-        if (other->check_collision(start,ray))
+        if (other->check_collision(obj,start,ray))
             {
-            //dx=0;
-            //dy=0;
-            //hit=objs_arr[i];
-            //ret=i4_T;
+            dx=ray.x;
+            dy=ray.y;
+			dz=ray.z;
+            hit=objs_arr[i];
+            ret=i4_T;
             break;
             }
         }
@@ -476,7 +480,8 @@ i4_bool g1_map_class::check_collision(g1_object_class *obj,
     }
 
 
-int g1_map_class::check_non_player_collision(g1_player_type player_num,
+int g1_map_class::check_non_player_collision(g1_object_class *source,
+											 g1_player_type player_num,
                                              const i4_3d_vector &point,
                                              i4_3d_vector &ray,
                                              g1_object_class*& hit) const
@@ -544,7 +549,7 @@ int g1_map_class::check_non_player_collision(g1_player_type player_num,
 	    // intersects a poly of "p->object" (if handled as poly collision handler)
         if ((p->object->player_num!=player_num ||
              !p->object->get_flag(g1_object_class::DANGEROUS)) &&
-            p->object->check_collision(point, ray))
+            p->object->check_collision(source,point, ray))
             {
             hit = p->object;
             return 1;

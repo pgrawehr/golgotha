@@ -1804,6 +1804,11 @@ i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz)
 	  //if the new dx/dy pair points far from the original
 	  //direction, return false
       //return false;
+	  if (dx==0 && dy==0 && dz==0)
+	  {
+		  pf_check_move.stop();
+		  return i4_F;
+	  }
 	  }
   //g2_link *own, *other;
   if (next_object.valid())

@@ -75,8 +75,10 @@ public:
 
   g1_deco_object_class(g1_object_type id, g1_loader_class *fp);
 
-  virtual i4_bool check_collision(const i4_3d_vector &start, 
-                          i4_3d_vector &ray);
+  i4_bool check_collision(
+	  g1_object_class* source,
+	  const i4_3d_vector &start, 
+      i4_3d_vector &ray);
 
   
   void save(g1_saver_class *fp);

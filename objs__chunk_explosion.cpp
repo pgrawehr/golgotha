@@ -90,7 +90,7 @@ void g1_chunk_explosion_class::think()
     i4_3d_vector ray=dir;
 
     g1_object_class *hit;
-    if (g1_get_map()->check_non_player_collision(0xff, i4_3d_vector(x,y,h), ray, hit))
+    if (g1_get_map()->check_non_player_collision(this,0xff, i4_3d_vector(x,y,h), ray, hit))
       dir.z=-dir.z*0.75f;
 
     unoccupy_location();

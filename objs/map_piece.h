@@ -138,7 +138,9 @@ public:
   i4_bool check_move(i4_float &dx,i4_float &dy, i4_float &dz);
 
   virtual void change_player_num(int new_player_num);
-  virtual i4_bool check_collision(const i4_3d_vector &start, i4_3d_vector &ray)
+  virtual i4_bool check_collision(
+	  g1_object_class *source,
+	  const i4_3d_vector &start, i4_3d_vector &ray)
   { return g1_model_collide_radial(this, draw_params, start, ray); }
 
   virtual void calc_world_transform(i4_float ratio, i4_transform_class *transform=0);

@@ -268,7 +268,7 @@ public:
 	BLOCKS_MAP    =1<<24,  ///< if this object is on the blockage maps.
 
 	//the following flags are particularly important in networking mode
-	NEEDS_SYNC    =1<<25,  ///< Nonzero if the object has thought something that cannot be quessed 
+	NEEDS_SYNC    =1<<25,  ///< Nonzero if the object has thought something that cannot be guessed 
 						   ///< on the remote machine
 	LAST_SYNC     =1<<26,  ///< Has synced last frame (perhaps requires resending)
 	LOST_SYNC     =1<<27,  ///< Is known to have lost sync. 
@@ -398,11 +398,21 @@ public:
                       int how_much_hurt, i4_3d_vector damage_dir);
 
   //! Check for collisions.
+  //! The method checks wheter moving from \a start by a distance of \a ray
+  //! would collide with us. The implementation of this method usually calls
+  //! either g1_model_collide_radial(), g1_model_collide_polygonal() or 
+  //! g1_model_collide_polygonal_ex() in objs__model_collide.cpp, depending
+  //! on the shape and size of the current object.
+  //! The \a source parameter is required for the
+  //! g1_model_collide_polygonal_ex() implementation, which can only be accurate
+  //! if the size of the source is known also. 
+  //! @param source The object for which collision is checked.
   //! @param start (x,y,h) pos of position vector
-  //! @param ray Direction vector.
+  //! @param ray Direction vector. Might have been slightly modified when returning.
   //! @return i4_T if the ray starting from start intersects us.
-  virtual i4_bool check_collision(const i4_3d_vector &start, 
-                                  i4_3d_vector &ray);
+  i4_bool check_collision(g1_object_class *source,
+	  const i4_3d_vector &start, 
+      i4_3d_vector &ray);
 
   enum {NOTIFY_DAMAGE_KILLED=1};
 

@@ -124,11 +124,11 @@ void g1_map_class::save(g1_saver_class *out, w32 sections)
 
     g1_save_map_cells(cells, width() * height(), out);
   }
-  //stat->update(0.4f);
+  
   if (sections & G1_MAP_VERTS)
     g1_save_map_verts(verts, (w+1)*(h+1), out, i4_T);
-  //stat->update(0.5f);
-  if (sections & G1_MAP_SELECTED_VERTS)
+  //don't save the selected verts if we save all of them. 
+  else if (sections & G1_MAP_SELECTED_VERTS)
   {
     out->mark_section("golgotha selected verts");
     

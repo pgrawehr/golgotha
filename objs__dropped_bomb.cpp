@@ -166,7 +166,7 @@ i4_bool g1_dropped_bomb_class::move(const i4_3d_vector &vel)
       
   i4_3d_vector pos(x,y,h),ray(vel);
   g1_object_class *tmphit;
-  int hit = g1_get_map()->check_non_player_collision(player_num,pos,ray,tmphit);
+  int hit = g1_get_map()->check_non_player_collision(this,player_num,pos,ray,tmphit);
   pos += ray;
   if (hit)
   {

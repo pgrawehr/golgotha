@@ -46,7 +46,8 @@ void g1_turret_init()
 }
 
 g1_object_definer<g1_turret_class>
-g1_turret_def("turret", g1_object_definition_class::EDITOR_SELECTABLE, g1_turret_init);
+g1_turret_def("turret", g1_object_definition_class::EDITOR_SELECTABLE|
+			  g1_object_definition_class::TO_MAP_PIECE, g1_turret_init);
 
 void g1_turret_class::setup(i4_float _x, i4_float _y, g1_object_class *creator)
 {

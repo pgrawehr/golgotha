@@ -2274,7 +2274,7 @@ void g1_controller_edit_class::tile_cell_draw(sw32 x, sw32 y)
   g1_map_class *map=get_map();
 
   g1_map_vertex_class *v[4];
-  v[0]=map->vertex((w16)x,(w16)y);
+  v[0]=map->vertex(x,y);
   v[1]=v[0]+1;
   v[2]=v[0]+map->width()+1;
   v[3]=v[0]+map->width()+1+1;
@@ -5019,7 +5019,7 @@ i4_bool g1_tile_mode::select_object(sw32 mx, sw32 my,
   if (v)
   {
     ox=(float)x; oy=(float)y;
-    oz=c->get_map()->vertex((short)x,(short)y)->get_height();
+    oz=c->get_map()->vertex(x,y)->get_height();
 
     if (!v->is_selected() && mod==CLEAR_OLD_IF_NO_SELECTION)
     {
@@ -5036,7 +5036,7 @@ i4_bool g1_tile_mode::select_object(sw32 mx, sw32 my,
       c->refresh();
 
       move_pivot=v;
-      vert_exact_z=c->get_map()->vertex((short)x,(short)y)->get_height();
+      vert_exact_z=c->get_map()->vertex(x,y)->get_height();
     }     
 
 
@@ -8824,7 +8824,7 @@ g1_map_class *g1_editor_class::create_default_map(int w, int h,
 
   for (x=0; x<mw+1; x++)
     for (y=0; y<mh+1; y++)
-      map->vertex((w16)x,(w16)y)->init();
+      map->vertex(x,y)->init();
 
   map->current_movie=new g1_movie_flow_class;
   map->current_movie->set_scene(0);

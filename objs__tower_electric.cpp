@@ -319,12 +319,12 @@ public:
   }
   //}}}
 
-  virtual i4_bool check_collision(const i4_3d_vector &start, i4_3d_vector &ray)
-  //{{{
+  i4_bool check_collision(
+	  g1_object_class *source,
+	  const i4_3d_vector &start, i4_3d_vector &ray)
   {
     return g1_model_collide_radial(this, draw_params, start, ray);
   }
-  //}}}
 };
 
 g1_object_definer<g1_tower_electric_class>

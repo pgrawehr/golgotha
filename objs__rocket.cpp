@@ -212,7 +212,7 @@ i4_bool g1_rocket_class::move(i4_float x_amount,
   
   i4_3d_vector ray(x_amount, y_amount, z_amount);
 
-  if (!g1_get_map()->check_non_player_collision(player_num,
+  if (!g1_get_map()->check_non_player_collision(this,player_num,
                                                 i4_3d_vector(x,y,h),
                                                 ray,
                                                 hit))

@@ -232,7 +232,9 @@ public:
   }
   //}}}
 
-  virtual i4_bool check_collision(const i4_3d_vector &start, i4_3d_vector &ray)
+  i4_bool check_collision(
+	  g1_object_class *source,
+	  const i4_3d_vector &start, i4_3d_vector &ray)
   //{{{
   {
     i4_3d_vector normal;

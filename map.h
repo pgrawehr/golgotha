@@ -329,10 +329,20 @@ public:
   template <typename T>
   g1_map_cell_class *cell(T x, T y) const { return cells + ((w32)y)*w + ((w32)x); }
   g1_map_cell_class *cell(w32 offset) const { return cells + offset; };
-  g1_map_vertex_class *vertex(w16 x, w16 y) const { return verts + y*(w+1) + x; };
+  template <typename T>
+  g1_map_vertex_class *vertex(T x, T y) const 
+  { 
+	  return 
+	  verts + (w32)y*(w+1) + (w32)x; 
+  };
 
   //! Call this to receive the coordinates from an offset
-  void cell_inv(w16 &x, w16 &y, w32 offset) const;
+  template <typename T>
+  void cell_inv(T &x, T &y, w32 offset) const
+  {
+	  x=(T)(offset % w);
+	  y=(T)(offset / w);
+  }
 
   /*void request_think(g1_object_class *obj)
   {
@@ -347,7 +357,7 @@ public:
   }*/
 
   //! Requests that an object is added to the think list.
-  //! Usually, you will have to call the same method for the object,
+  //! Usually, you will have to call the same method on the object,
   //! not for the map.
   //! @see g1_object_class::request_think()
   void request_think(g1_object_class *obj)
@@ -399,7 +409,8 @@ public:
    against solids on the same team.
    returns 1 if hit object, -1 if hit building, and 0 if nothing
   */
-  int check_non_player_collision(g1_player_type player_num,
+  int check_non_player_collision(g1_object_class *self,
+								 g1_player_type player_num,
                                  const i4_3d_vector &point,
                                  i4_3d_vector &ray,
                                  g1_object_class*& hit) const;

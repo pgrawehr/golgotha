@@ -127,11 +127,12 @@ public:
   //this needs to be overwritten, since a bridger is not round enough
   //for the easy case to work (you won't be able to fire on the bridge 
   //if you use radial tests only!)
-  i4_bool check_collision(const i4_3d_vector &start, 
-                                         i4_3d_vector &ray)
-	  {
+  i4_bool check_collision(g1_object_class *source,
+						  const i4_3d_vector &start, 
+                          i4_3d_vector &ray)
+	  {	
 	  i4_3d_vector normal;
-      return g1_model_collide_polygonal(this, draw_params, start, ray, normal);
+      return g1_model_collide_polygonal_ex(this, source, draw_params, start, ray, normal);
 	  }
 
   void request_remove()

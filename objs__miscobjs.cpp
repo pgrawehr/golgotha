@@ -89,12 +89,12 @@ void g1_deco_object_class::save(g1_saver_class *fp)
   fp->end_version();
 }
 
-i4_bool g1_deco_object_class::check_collision(const i4_3d_vector &start, i4_3d_vector &ray)
+i4_bool g1_deco_object_class::check_collision(g1_object_class *source,const i4_3d_vector &start, i4_3d_vector &ray)
 {
   i4_3d_vector normal;
   if (decoflags&DECO_USEPOLYCOLDET)
 	  {
-	  return g1_model_collide_polygonal(this, draw_params, start, ray, normal);
+	  return g1_model_collide_polygonal_ex(this, source, draw_params, start, ray, normal);
 	  }
   else if (decoflags&DECO_GHOST)
 	  {

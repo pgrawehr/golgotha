@@ -153,11 +153,11 @@ i4_bool g1_light_object_class::occupy_location()
     sw32 ix=i4_f_to_i(x), iy=i4_f_to_i(y);
     w32 *a=add_intensities;
 
-    for (int ty=-change_radius+iy; ty<=change_radius+iy; ty++)
+    for (sw32 ty=-change_radius+iy; ty<=change_radius+iy; ty++)
     {
       sw32 start_x=ix-change_radius;
       if (start_x<0) start_x=0;
-      g1_map_vertex_class *v=g1_get_map()->vertex((w16)start_x,ty);
+      g1_map_vertex_class *v=g1_get_map()->vertex(start_x,ty);
 
       for (int tx=-change_radius+ix; tx<=change_radius+ix; tx++, a++)
       {
@@ -233,11 +233,11 @@ void g1_light_object_class::unoccupy_location()
   sw32 ix=i4_f_to_i(x), iy=i4_f_to_i(y);
   w32 *a=add_intensities;
 
-  for (int ty=-change_radius+iy; ty<=change_radius+iy; ty++)
+  for (sw32 ty=-change_radius+iy; ty<=change_radius+iy; ty++)
   {
     sw32 start_x=ix-change_radius;
     if (start_x<0) start_x=0;
-    g1_map_vertex_class *v=g1_get_map()->vertex((w16)start_x,ty);
+    g1_map_vertex_class *v=g1_get_map()->vertex(start_x,ty);
     for (int tx=-change_radius+ix; tx<=change_radius+ix; tx++, a++)
     {
       if (tx>=0 && ty>=0 && tx<=g1_get_map()->width() && ty<=g1_get_map()->height())      

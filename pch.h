@@ -185,7 +185,7 @@ extern "C" int pthread_mutexattr_settype(void *attr, int __kind);
 #include "resources.h"
 #include "time/time.h"
 #include "time/timedev.h"
-
+#include "memory/new.h"
 
 
 #endif

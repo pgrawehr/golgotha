@@ -312,7 +312,7 @@ i4_bool g1_bullet_class::move()
   g1_object_class *hit = 0;
 
   i4_3d_vector pos(x,y,h);
-  if (!g1_get_map()->check_non_player_collision(player_num,pos,vel,hit))
+  if (!g1_get_map()->check_non_player_collision(this,player_num,pos,vel,hit))
   {  
     unoccupy_location();
 

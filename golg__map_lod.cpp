@@ -126,7 +126,7 @@ public:
   g1_object_controller_class *cont;
   i4_3d_vector pos;
 
-  g1_lod_context_class() : root(0) {}
+  g1_lod_context_class() : root(0),max_fly_height(3.0f),show_all(false) {}
   ~g1_lod_context_class(void)
 	  {
 	  if (root)
@@ -182,12 +182,14 @@ public:
 
   void use_controller(g1_object_controller_class *_cont) { cont = _cont; }
 
+  i4_float max_fly_height;
+  i4_bool show_all;
   int test_clip(lod_node *p)
   // test bounding region of lod_node against the view frustrum
   {
-    const i4_float MAX_FLY_HEIGHT=3.0;
+    //const i4_float MAX_FLY_HEIGHT=3.0;
     int clip = cont->test_clip(i4_3d_vector(p->x1,p->y1,p->z1), 
-                               i4_3d_vector(p->x2,p->y2,p->z2+MAX_FLY_HEIGHT));
+                               i4_3d_vector(p->x2,p->y2,p->z2+max_fly_height));
 
     w8 flags = 
       (clip<0)? lod_node::CLIPPED : 
@@ -300,6 +302,14 @@ public:
     front = num_queued = 0;
     queue[num_queued++] = p;
     root->flags = 0;
+	max_fly_height=3.0f;
+	i4_float terrain_height=g1_get_map()->vertex(pos.x,pos.y)->get_height();
+	i4_float diff=i4_fabs(pos.z-terrain_height);
+	if (diff>max_fly_height)
+		max_fly_height=diff;
+	show_all=false;
+	if (pos.z<terrain_height-3.0f)
+		show_all=true;
 
     while (front<num_queued)
     {

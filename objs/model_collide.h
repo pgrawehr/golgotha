@@ -12,6 +12,14 @@
 #include "objs/model_draw.h"
 #include "math/point.h"
 
+i4_bool g1_model_collide_polygonal_ex(g1_object_class *_this,
+									  g1_object_class *source,
+									  g1_model_draw_parameters &params,
+									  const i4_3d_vector &start,
+									  i4_3d_vector &ray,
+									  i4_3d_vector &hit_normal,
+									  i4_float *minimum_t=0);
+
 i4_bool g1_model_collide_polygonal(g1_object_class *_this,
                                    g1_model_draw_parameters &params,
                                    const i4_3d_vector &start,

@@ -80,7 +80,7 @@ void g1_beam_weapon_class::setup(const i4_3d_vector &pos,
   
   g1_object_class *hit=0;
   
-  if (g1_get_map()->check_non_player_collision(player_num,pos,dir,hit))
+  if (g1_get_map()->check_non_player_collision(this,player_num,pos,dir,hit))
   {
     if (hit)
       g1_apply_damage(this, this_guy_fired_me, hit, dir);

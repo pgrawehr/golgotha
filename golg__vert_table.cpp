@@ -35,6 +35,8 @@ i4_float g1_vert_height_table[256] =
 11.85f, 11.9f, 11.95f, 12.0f, 12.05f, 12.1f, 12.15f, 12.2f, 12.25f, 12.3f, 12.35f,
 12.4f, 12.45f, 12.5f, 12.55f, 12.6f, 12.65f, 12.7f, 12.75 };
 
+static i4_bool g_bIsAequidistant=i4_T; 
+
 LI_HEADER(restore_default_heights)
 	{
 	i4_float val=0.0;
@@ -43,6 +45,7 @@ LI_HEADER(restore_default_heights)
 		g1_vert_height_table[i]=val;
 		val+=0.05f;
 		}
+	g_bIsAequidistant=i4_T;
 	return li_true_sym;
 	}
 
@@ -59,6 +62,7 @@ LI_HEADER(set_height_entry)
 	if (in<0||in>255) li_error(env,"USER: The height table has only 256 entries (0-255).");
 	i4_float val=(i4_float)li_get_float(li_eval(li_second(o,env),env),env);
 	g1_vert_height_table[in]=val;
+	g_bIsAequidistant=i4_F;
 	return li_true_sym;
 	}
 
@@ -81,10 +85,21 @@ LI_HEADER(set_height_aequidistance)
 		g1_vert_height_table[i]=val;
 		val+=diff;
 	}
+	g_bIsAequidistant=i4_T;
 	return li_true_sym;
 }
 
+LI_HEADER(get_height_aequidistance)
+{
+	i4_float diff=g1_vert_height_table[1]-g1_vert_height_table[0];
+	if (g_bIsAequidistant)
+		return new li_float(diff);
+	else
+		return li_nil;
+}
+
 li_automatic_add_function(li_set_height_aequidistance,"set_height_aequidistance");
+li_automatic_add_function(li_get_height_aequidistance,"get_height_aequidistance");
 li_automatic_add_function(li_scale_heights_by,"scale_heights_by");
 li_automatic_add_function(li_restore_default_heights,"map_height_restore");
 li_automatic_add_function(li_get_height_entry,"get_height_entry");

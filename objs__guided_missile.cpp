@@ -324,7 +324,7 @@ i4_bool g1_guided_missile_class::move(i4_float x_amount,
   g1_object_class *hit = NULL;
 
   i4_3d_vector pos(x,y,h),ray(x_amount, y_amount, z_amount);
-  res = g1_get_map()->check_non_player_collision(player_num,pos, ray, hit);
+  res = g1_get_map()->check_non_player_collision(this,player_num,pos, ray, hit);
   
   if (res)
   {

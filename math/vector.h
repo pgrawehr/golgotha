@@ -93,7 +93,7 @@ public:
     return tmp;
   }
 
-  i4_vector3_template operator+(i4_vector3_template v)
+  /*i4_vector3_template operator+(i4_vector3_template v)
   {
     i4_vector3_template tmp;
     tmp.x = x + v.x;
@@ -111,6 +111,24 @@ public:
     tmp.z = z * v.z;
 
     return tmp;
+  }*/
+
+  friend i4_vector3_template operator+(i4_vector3_template a, i4_vector3_template b)
+  {
+	  i4_vector3_template tmp;
+	  tmp.x=a.x+b.x;
+	  tmp.y=a.y+b.y;
+	  tmp.z=a.z+b.z;
+	  return tmp;
+  }
+
+  friend i4_vector3_template operator-(i4_vector3_template a, i4_vector3_template b)
+  {
+	  i4_vector3_template tmp;
+	  tmp.x=a.x-b.x;
+	  tmp.y=a.y-b.y;
+	  tmp.z=a.z-b.z;
+	  return tmp;
   }
 
   i4_vector3_template& operator/=(Coord b)

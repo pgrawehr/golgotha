@@ -197,7 +197,7 @@ i4_bool g1_super_mortar_class::move(i4_3d_vector &vel)
   g1_object_class *tmp_hit;
   int hit;
   
-  hit = g1_get_map()->check_non_player_collision(player_num, pos, vel, tmp_hit);
+  hit = g1_get_map()->check_non_player_collision(this,player_num, pos, vel, tmp_hit);
   pos += vel;
 
   theta = i4_atan2(vel.y, vel.x);   

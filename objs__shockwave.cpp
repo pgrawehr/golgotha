@@ -154,7 +154,7 @@ i4_bool g1_shockwave_class::occupy_location()
 
     for (iy=y_top; iy<=y_bottom; iy++)
     {
-      g1_map_vertex_class *v = g1_get_map()->vertex((w16)x_left, (w16)iy);
+      g1_map_vertex_class *v = g1_get_map()->vertex(x_left, iy);
 
       for (ix=x_left; ix<=x_right; ix++, vo++, v++)
       {
@@ -233,7 +233,7 @@ void g1_shockwave_class::unoccupy_location()
 
     for (iy=y_top; iy<=y_bottom; iy++)
     {
-      g1_map_vertex_class *v=g1_get_map()->vertex((w16)x_left, (w16)iy);
+      g1_map_vertex_class *v=g1_get_map()->vertex(x_left, iy);
 
       for (ix=x_left; ix<=x_right; ix++, vo++, v++)
       {
@@ -441,7 +441,7 @@ i4_bool g2_water_wave_class::occupy_location()
 
     for (iy=y_top; iy<=y_bottom; iy++)
     {
-      g1_map_vertex_class *v = g1_get_map()->vertex((w16)x_left, (w16)iy);
+      g1_map_vertex_class *v = g1_get_map()->vertex(x_left, iy);
 
       for (ix=x_left; ix<=x_right; ix++, vo++, v++)
       {
@@ -532,7 +532,7 @@ void g2_water_wave_class::unoccupy_location()
 
     for (iy=y_top; iy<=y_bottom; iy++)
     {
-      g1_map_vertex_class *v=g1_get_map()->vertex((w16)x_left, (w16)iy);
+      g1_map_vertex_class *v=g1_get_map()->vertex(x_left, iy);
 
       for (ix=x_left; ix<=x_right; ix++, vo++, v++)
       {
