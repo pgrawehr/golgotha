@@ -270,6 +270,15 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 	i4_bool extend_chroma=i4_F;//used if chroma needs to be converted to alpha (32 bit only)
 
 	i4_pixel_format *convfor=&regular_format;
+	
+	const i4_pixel_depth format=image->get_pal()->source.pixel_depth;
+	int convert_depth;
+		
+	if (!((((format==I4_16BIT) && (target_depth==2)) || ((format==I4_24BIT) && (target_depth==3))) || ((format==I4_32BIT) && (target_depth==4))))
+	{
+	   convert_depth=1; //different texture depth -> we need to convert it
+	
+	
 	if (target_depth==2)
 		{
 		if (chroma)
@@ -298,6 +307,8 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 			}
 		extend_chroma=chroma;
 		}
+	
+	}
 	if ((width!=image->width()) || (height!=image->height()))
 		{
 		//need to scale the image
@@ -314,28 +325,33 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 		
 		w8 *dst=(w8 *)dest;
 		
-		
 		for (j=0; j<height; j++)
 			{
 			for (i=0; i<width; i++)
 				{    
 				w32 c = image->get_pixel((i4_coord) i4_f_to_i((float) i * (float) width_ratio),
 					(i4_coord) i4_f_to_i((float) j * (float) height_ratio));
-											
-				
-				w32 c2=image->pal->convert(c,convfor);
-				if (target_depth==4)
+				w32 c2;							
+				if (convert_depth==1)
+				{
+ 	 				c2=image->pal->convert(c,convfor);
+					if (target_depth==4)
 					{
-					if (extend_chroma && (c2!=G1_CHROMA_COLOR))
+						if (extend_chroma && (c2!=G1_CHROMA_COLOR))
 						{
-						c2|=0xff000000;
+							c2|=0xff000000;
 						}
 					}
-				else if (target_depth==2)
+					else if (target_depth==2)		
 					{
-					if (extend_chroma && (c2!=G1_16BIT_CHROMA))
-						c2|=0x8000;
+						if (extend_chroma && (c2!=G1_16BIT_CHROMA))
+							c2|=0x8000;
 					}
+				}
+				else
+				{
+					c2=c;
+				}
 				write_to_image(dst,c2,target_depth);
 				//*dst=c2;
 				dst+=target_depth;
@@ -344,7 +360,7 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 				
 		
 		}
-	else
+	else if (convert_depth==1)
 		{
 		
 		w8 *textu=(w8 *)dest;

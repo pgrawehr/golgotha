@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = Golgotha
-PROJECT_NUMBER         = V1.0.8.3
+PROJECT_NUMBER         = V1.0.9.0
 OUTPUT_DIRECTORY       = doxygen_docs
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
