@@ -716,7 +716,7 @@ void g1_object_controller_class::receive_event(i4_event *ev)
 		  
 		  if (obj)
 			  {
-			  if (obj->player_num==g1_human->team())
+			  //if (obj->player_num==g1_human->team())
 				g1_human->player_clicked(obj,obj->x,obj->y,g1_human_class::SELECT);
 			  //else
 			  //  g1_human->player_clicked(obj,obj->x,obj->y,g1_human_class::ATTACK);

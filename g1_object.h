@@ -274,6 +274,12 @@ public:
 	NEWER_SYNC    =1<<28   ///< This object cannot get syncronized as the remote has different id.
   };
 
+  enum selection_type
+      {
+      SEL_DEFAULT=0,
+      SEL_ENEMYCANSENDCMD=1
+      };
+
   //! This Flag is used internally upon load.
   enum { SAVE_FLAGS= SELECTED | THINKING };//This mask is applied on object creation from a file only
 
@@ -285,7 +291,11 @@ public:
   i4_bool selected() const { return (w8)flags & SELECTED; }
   i4_bool out_of_bounds(i4_float x, i4_float y) const;
   i4_bool moved() const { return (lx!=x || ly!=y); }
-  i4_bool valid() const { return get_flag(MAP_OCCUPIED)!=0; }
+  i4_bool valid() const { return get_flag(MAP_OCCUPIED)!=0; };
+
+  //! This function can return some special information about how
+  //! it takes commands. See the selection_type enum. 
+  virtual w32 get_selection_flags(){return SEL_DEFAULT;};
 
   //! The type class of the object. 
   g1_object_definition_class *get_type();     // inlined below

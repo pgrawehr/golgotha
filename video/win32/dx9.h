@@ -51,6 +51,11 @@ protected:
 public:
 
   void FlipToGDISurface(void);
+  void DisableDialogBoxMode();
+  void EnableDialogBoxMode()
+      {
+      FlipToGDISurface();
+      }
   int using_accelerated_driver() { return (i4_bool)((cur_mode.adaptor_id & 0x8000)!=0); }
 
   i4_dx9_display_class();

@@ -370,13 +370,14 @@ i4_bool i4_dx9_display_class::initialize_mode()
 	  dx9_common.present.BackBufferFormat=format;
 	  dx9_common.present.BackBufferCount=1;
 	  dx9_common.present.MultiSampleType=D3DMULTISAMPLE_NONE;
-	  dx9_common.present.SwapEffect=D3DSWAPEFFECT_DISCARD;
+	  dx9_common.present.SwapEffect=D3DSWAPEFFECT_FLIP;
 	  dx9_common.present.hDeviceWindow=input.get_window_handle();
 	  dx9_common.present.Windowed=FALSE;
 	  dx9_common.present.AutoDepthStencilFormat=D3DFMT_D16;
 	  dx9_common.present.EnableAutoDepthStencil=TRUE;
 	  dx9_common.present.FullScreen_RefreshRateInHz=mode->RefreshRate;
 	  dx9_common.present.Flags=D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
+      dx9_common.present.PresentationInterval=D3DPRESENT_INTERVAL_IMMEDIATE;
 
 	  if (!i4_dx9_check(dx9_common.pD3D9->CreateDevice(D3DADAPTER_DEFAULT,
 		  type,
@@ -396,7 +397,7 @@ i4_bool i4_dx9_display_class::initialize_mode()
 	  dx9_common.present.BackBufferFormat=D3DFMT_UNKNOWN;
 	  dx9_common.present.BackBufferCount=1;
 	  dx9_common.present.MultiSampleType=D3DMULTISAMPLE_NONE;
-	  dx9_common.present.SwapEffect= D3DSWAPEFFECT_DISCARD;//D3DSWAPEFFECT_COPY;
+	  dx9_common.present.SwapEffect= D3DSWAPEFFECT_FLIP;//D3DSWAPEFFECT_COPY;
 	  dx9_common.present.hDeviceWindow=input.get_window_handle();
 	  dx9_common.present.Windowed=TRUE;
 	  dx9_common.present.AutoDepthStencilFormat=D3DFMT_D16;
@@ -404,7 +405,8 @@ i4_bool i4_dx9_display_class::initialize_mode()
 	  dx9_common.present.Flags=D3DPRESENTFLAG_LOCKABLE_BACKBUFFER|D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
 	  dx9_common.present.FullScreen_RefreshRateInHz=D3DPRESENT_RATE_DEFAULT;
       
-	  dx9_common.present.PresentationInterval=D3DPRESENT_INTERVAL_DEFAULT;
+	  dx9_common.present.PresentationInterval=D3DPRESENT_INTERVAL_IMMEDIATE;
+          //D3DPRESENT_INTERVAL_DEFAULT;
 	  if (!i4_dx9_check(dx9_common.pD3D9->CreateDevice(D3DADAPTER_DEFAULT,
 		  type,
 		  input.get_window_handle(),
@@ -675,8 +677,10 @@ i4_bool i4_dx9_display_class::set_mouse_shape(i4_cursor_class *cursor)
 
   return i4_F;
 }
+
 extern HWND current_window_handle;
 extern w32 g1_disable_all_drawing;
+
 void i4_dx9_display_class::flush()
 	{    
 	RECT src;
@@ -821,7 +825,6 @@ void i4_dx9_display_class::flush()
 		{
 			i4_error("INTERNAL: Strange error on Present()");
 		}
-	//the easiest way to resolve flickering
 	pf_dx9_flip.stop();
 	//end of flip stuff
 	if (g1_current_controller.get())
@@ -863,4 +866,18 @@ void i4_dx9_display_class::FlipToGDISurface()
 	return;
 	}
 
-//li_automatic_add_function(show_gdi_surface9,"show_gdi_surface9");
+void i4_dx9_display_class::DisableDialogBoxMode()
+    {
+    if (use_page_flip)
+        {
+        i4_dx9_check(dx9_common.device->SetDialogBoxMode(FALSE));
+        }
+    }
+
+li_object *dx9_disabledialogboxes(li_object *o, li_environment *env)
+    {
+    i4_dx9_display_class_instance.DisableDialogBoxMode();
+    return 0;
+    };
+
+li_automatic_add_function(dx9_disabledialogboxes,"dx9_disabledialogbox");

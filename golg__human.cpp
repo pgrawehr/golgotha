@@ -99,7 +99,7 @@ w8 g1_human_class::determine_cursor(g1_object_class *object_mouse_is_on)
 			{
 			return G1_TAKEOVER_CURSOR;
 			}
-		if (selected_object.valid()&&
+		if (selected_object.valid()&&selected_object->player_num==team() &&
 			(selected_object->can_attack(object_mouse_is_on)||
 			single_sel_id(selected_object.get())==g1_get_object_type(supergun.get())))
 			{
@@ -107,7 +107,7 @@ w8 g1_human_class::determine_cursor(g1_object_class *object_mouse_is_on)
 			}
 		return G1_DEFAULT_CURSOR;//nothing selected that can shoot
 		}
-	if (selected_object.valid())
+	if (selected_object.valid()&&selected_object->player_num==team())
 		{
 		if (selected_object->id==g1_get_object_type(supergun.get()))
 			{
@@ -282,7 +282,12 @@ w32 g1_human_class::show_selection(g1_object_controller_class *for_who,
 		if (!thisbb)
 			continue;
 		g1_render.draw_outline(thisbb,o);
-		lians=new li_list(o->message(commands_ask.get(),0,0),lians);
+        w32 commands_flags=o->get_selection_flags();
+        if ((o->player_num==team()) || 
+            (commands_flags&g1_object_class::SEL_ENEMYCANSENDCMD))
+            {
+		    lians=new li_list(o->message(commands_ask.get(),0,0),lians);
+            }
 		//special_commands.add(lians);
 		}
 	//The list has the following format (I suppose?!?)
@@ -409,40 +414,35 @@ void g1_human_class::player_clicked(g1_object_class *obj, float gx, float gy,w32
 		  }break;
 	  case ATTACK:
 		  {
-		  //if (selected_object.valid())
-		  attack_unit(obj,gx,gy);//remember: this only works if 
+		  if (selected_object.valid()&&selected_object->player_num==team())
+		    attack_unit(obj,gx,gy);//remember: this only works if 
 		  //target is in range
 		  break;
 		  }
 	  case GOTO:
-		  if (selected_object.valid())
+		  if (selected_object.valid()&&selected_object->player_num==team())
 			  send_selected_units(gx,gy);
 		  break;
 	  case SELECT:
 		  {
-		  if (!obj||obj->player_num!=team()
-			  ||!obj->get_flag(g1_object_class::SELECTABLE)) break;
-		  //if (selected_object.valid())
-			//  selected_object->mark_as_unselected();
-		  //selected_object=obj;
-		  //if (selected_object.valid())
-		//	  selected_object->mark_as_selected();
-		  //break;
+          //single objects can be selected, even if they don't
+          //belong to the local user
+		  if (!obj /*||obj->player_num!=team()
+			  ||!obj->get_flag(g1_object_class::SELECTABLE) */) 
+              break;
 		  
 		  clear_selected();
 			  
-			  
-		  //if (obj == commander())
-			//  selected_object = 0;
-		  //else
-			//  {
-			  
-			  g1_convoy_class *c=(g1_convoy_class *)g1_create_object(convoy_type);
-			  c->player_num=team();
-			  c->setup(obj);
-			  selected_object=c;
-			  selected_object->mark_as_selected();
-			  //}
+		  g1_convoy_class *c=(g1_convoy_class *)g1_create_object(convoy_type);
+		  c->player_num=obj->player_num;
+          if (!obj->get_flag(g1_object_class::SELECTABLE))
+              c->player_num=0; //a slight hack to prevent the user
+                               //from actually sending commands
+                               //to this unit.
+		  c->setup(obj);
+		  selected_object=c;
+		  selected_object->mark_as_selected();
+			 
 		  break;
 		  }
 

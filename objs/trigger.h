@@ -27,6 +27,8 @@ public:
   // send our trigger message to all the object our list 
   void send_to_trigger_objects(li_symbol *sym,g1_object_class *who);
 
+  
+
 protected:
    virtual void note_enter_range(g1_object_class *who);
 
@@ -34,6 +36,12 @@ protected:
    
 public:
   void think() ;
+  static g1_trigger_class* cast(g1_object_class *obj)
+        {
+        if (!obj || !(obj->get_type()->get_flag(g1_object_definition_class::TO_TRIGGER)))
+		  return 0;
+          return (g1_trigger_class*)obj;
+        }
 
 };
 
@@ -48,6 +56,11 @@ class g1_switch_class: public g1_trigger_class
         void skipload(g1_loader_class *fp);
         void note_enter_range(g1_object_class *who);
         void note_leave_range(g1_object_class *who);
+        w32 get_selection_flags()
+            {
+            return SEL_ENEMYCANSENDCMD;
+            }
+    
     };
 
 //A trigger that has two states and is activated manually.

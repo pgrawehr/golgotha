@@ -634,8 +634,11 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
     for (i=0; i<t_old_objects; i++)
     {
       request_remove(olist[i]);
-      g1_remove_man.process_requests();        
+           
     }
+    //This can now be safely placed after the loop. 
+    //Might even prevent some bugs when dependent objects get deleted.
+    g1_remove_man.process_requests();   
     t_old_objects=0;
 
 
@@ -728,8 +731,8 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
       for (i=0; i<t_old_objects; i++)
       {
         request_remove(olist[i]);
-        g1_remove_man.process_requests();        
       }
+      g1_remove_man.process_requests();    
     }
     else  // otherwise add them back into the map
     {

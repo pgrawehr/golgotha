@@ -381,6 +381,7 @@ g1_switch_class::g1_switch_class(g1_object_type id, g1_loader_class *fp)
         };
     if (fp)
         fp->end_version(I4_LF);
+    set_flag(SELECTABLE,1);
     };
 
 void g1_switch_class::save(g1_saver_class *fp)
