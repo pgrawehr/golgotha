@@ -32,6 +32,7 @@ w16 i4_check_sum16(const void *buf, w32 buf_len)
     c1+=*((w8 *)buf);
     buf=(void *)(((w8 *)buf)+1);
     c2+=c1;
+    buf_len--;
   }
   return (c1|(c2<<8));
 }

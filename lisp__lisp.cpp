@@ -41,6 +41,7 @@
 #include "gui/smp_dial.h"
 #include "menu/textitem.h"
 #include "window/wmanager.h"
+#include "memory/hashtable.h"
 
 
 
@@ -602,27 +603,11 @@ li_object *li_print(li_object *o, li_environment *env)
 	{
 	li_object *ret=0;
 	try{//this may fail if something failed before (like invalid objects in the list)
-	/*if (o&&o->type()==LI_LIST)
-		{
-		li_get_type(o->type())->print(o,stream);
-		while (o)
-			{
-			ret=li_car(o,env);
-			lip(ret);
-			o=li_cdr(o,env);
-			}
-		}
-	else
-		{
-		lip(o);//don't do any evaluation on something that is not a list.
-		ret=o;
-		}
-		*/
 		lip(o);
 		ret=o;
 		}
 	catch(...){
-		li_error(env,"INTERNAL: Exception during li_print. This is usually due to some former error.");
+		li_error(env,"ERROR: Exception during li_print. This is usually due to some former error.");
 		}
 	return ret;
 	}
@@ -652,18 +637,6 @@ li_list *li_make_list(li_object *first, ...)
   }
 }
 
-/*void li_set_value(li_symbol *sym, li_object *value, li_environment *env)
-{ 
-  if (sym->flags()&LSF_VALUECONSTANT) 
-	  {
-	  li_error(env,"USER: set_value: %O is defined constant. Use defconstant to alter its value.",sym);
-	  return;
-	  }
-  if (env)
-    env->set_value(sym, value);
-  else sym->set_value(value);  
-}*/
-
 void li_define_value(li_symbol *sym, li_object *value, li_environment *env)
 	{
 	if (sym->flags()&LSF_VALUECONSTANT) 
@@ -676,22 +649,6 @@ void li_define_value(li_symbol *sym, li_object *value, li_environment *env)
     else sym->set_value(value); 
 	}
 
-/*li_object *li_get_fun(li_symbol *sym, li_environment *env) 
-{ 
-  li_object *fun=0;
-  if (env)
-	  {
-	  fun=env->fun(sym);
-	  if (!fun) fun=sym->fun();//if we cannot find the fun in the local space, look up globally
-	  return fun;
-	  }
-  else return sym->fun();
-}
-
-li_object *li_get_fun(char *sym, li_environment *env)
-{
-  return li_get_fun(li_get_symbol(sym),env);
-}*/
 
 
 static i4_profile_class lisp_evaluation("lisp_evaluation");
@@ -706,6 +663,9 @@ static i4_profile_class lisp_evaluation("lisp_evaluation");
   If the expression begins with another expression, that one is 
   evaluated as lambda expression.
   This function may cause errors or warn the user of bad argument values.
+  Implementation note: On windows, the lisp evaluator also survives 
+  really hard errors like SIGSEGV or SIGILL, on unix systems there seems
+  to be no easy way of catching these. 
   @param expression The expression that should be evaluated.
   @param env Default lisp environment in which the evaluation should take place.
   @return The result of the evaluation, or :novalue if an error occured.
@@ -1127,8 +1087,6 @@ long li_detect_keyword(li_object *o, long oldkeyword)
 		}
 	return ret;
 	}
-
-
 
 i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment *env,w32 flags)
 	{
@@ -2631,10 +2589,227 @@ li_gc_object_marker_class::~li_gc_object_marker_class()
 void li_mark_symbols(int set);
 
 
-li_symbol *li_root=0;
+//li_symbol *li_root=0;
 
+class li_sym_hashtable
+    {
+    public:
+        enum {TABLE_SIZE=16384};
+    protected:
+        li_symbol *table[TABLE_SIZE];
+        i4_bool active;
+        li_symbol *li_find_symbol(li_symbol *&li_root, const char *name)    
+            {
+            //Locking is not really necessary, as the only point
+            //where a race condition might occur is when one thread is just
+            //adding a node and another thread is passing into this node.
+            //Since we can assume that a 32-bit write is integral, this can't
+            //give a trouble either. 
+            //syms_lock.lock();
+            if (li_root)
+                {
+                li_symbol *p=li_root;
+                for(;;)
+                    {
+                    int cmp=strcmp(name,p->name()->value());
+                    if (cmp<0)
+                        {
+                        if (p->left())
+                            p=p->left();
+                        else
+                            {
+                            //syms_lock.unlock();
+                            return 0;
+                            }
+                        } else if (cmp>0)
+                        {
+                        if (p->right())
+                            p=p->right();
+                        else
+                            {
+                            //syms_lock.unlock();
+                            return 0;
+                            }
+                            } else 
+                            {
+                            //syms_lock.unlock();
+                            return p;
+                                }
+                    }
+                }
+            
+            //syms_lock.unlock();
+            return 0;
+            }
+        
+        li_symbol *li_get_symbol(li_symbol *&li_root, const char *name)     // if symbol doesn't exsist, it is created
+            {
+            //syms_lock.lock();
+            
+            if (!li_root)
+                {
+                li_root=new li_symbol(new li_string(name));
+                //syms_lock.unlock();
+                return li_root;
+                }
+            else
+                {
+                li_symbol *p=li_root;
+                for(;;)
+                    {
+                    
+                    int cmp=strcmp(name,p->name()->value());
+                    if (cmp<0)
+                        {
+                        if (p->left())
+                            p=p->left();
+                        else
+                            {
+                            li_symbol *atleft=new li_symbol(new li_string(name));
+                            p->set_left(atleft);
+                            //syms_lock.unlock();
+                            return p->left();
+                            }
+                        } else if (cmp>0)
+                        {
+                        if (p->right())
+                            p=p->right();
+                        else
+                            {
+                            li_symbol *atright=new li_symbol(new li_string(name));
+                            p->set_right(atright);
+                            //syms_lock.unlock();
+                            return p->right();
+                            }
+                            } else
+                            {
+                            //syms_lock.unlock();
+                            return p;
+                                }
+                    }
+                }
+            
+            //syms_lock.unlock();
+            return 0;
+            }
+        void li_recursive_mark(li_symbol *p, int set)
+        {
+            if (p)
+            {
+              li_get_type(LI_SYMBOL)->mark(p, set);
+              li_recursive_mark(p->left(), set);
+              li_recursive_mark(p->right(), set);
+            }
+        }
+        static w16 li_check_sum16(const char *buf)
+            {
+            w8 c1=0,c2=0;
+            
+            while (*buf)
+                {
+                c1+=*buf;
+                buf++;
+                c2^=c1;
+                }
+            return (c1|(c2<<7));//we will only be using 14 bits
+            }
+    public:
+        li_sym_hashtable()
+            {
+            memset(table,0,sizeof(table));
+            active=i4_T;
+            }
+        // Creates a new entry if it doesn't exist.
+        li_symbol *get_symbol(w32 key, const char *name)
+            {
+            syms_lock.lock();
+            li_symbol *&local_root=table[key%TABLE_SIZE];
+            li_symbol *ret=li_get_symbol(local_root,name);
+            syms_lock.unlock();
+            return ret;
+            }
+        //does never alter the table
+        li_symbol *lookup_symbol(w32 key, const char *name)
+            {
+            syms_lock.lock();
+            li_symbol *&local_root=table[key%TABLE_SIZE];
+            li_symbol *ret=li_find_symbol(local_root,name);
+            syms_lock.unlock();
+            return ret;
+            }
+        void mark(int set)
+            {
+            for (int k=0;k<TABLE_SIZE;k++)
+                {
+                li_recursive_mark(table[k],set);
+                }
+            }
+        static w32 fast_hash(const char *name)
+            {
+            return li_check_sum16(name);
+            }
 
-li_symbol *li_find_symbol(const char *name)     // if symbol doesn't exsist, it is created
+        i4_bool is_active() const
+            {
+            return active;
+            }
+        void uninit()
+            {
+            active=i4_F;
+            //Just dump all the references.
+            memset(table,0,sizeof(table));
+            }
+        void symbol_info(long &nosymb, long &maxdepth, long &empty)
+            {
+            nosymb=0;
+            maxdepth=0;
+            empty=0;
+            for (int i=0;i<TABLE_SIZE;i++)
+                {
+                if (table[i])
+                    {
+                    private_li_symbol_info(table[i],0,nosymb,maxdepth);
+                    }
+                else
+                    empty++;
+                }
+            }
+    private:
+        void private_li_symbol_info(li_symbol *p,long depth, 
+            long &nosymbols, long &maxdepth)
+            {
+            if (p)
+                {
+                if (depth>maxdepth) maxdepth=depth;
+                nosymbols++;
+                if (p->type()!=LI_SYMBOL) li_error(0,"CRITICAL: li_symbol_info: Invalid type occured in symbol table.");
+                private_li_symbol_info(p->left(),depth+1,nosymbols,maxdepth);
+                char *c=p->name()->value();
+                i4_warning(c);
+                //Sleep(1);//required, because if OutputDebugString is called to fast, MSVC skips output.
+                i4_thread_sleep(1);
+                private_li_symbol_info(p->right(),depth+1,nosymbols,maxdepth);
+                }
+            }
+    };
+
+li_sym_hashtable li_hash;
+
+/// Search recursive symbol tree.
+/// That's all what's there about the symbol tree. This method
+/// will be recoded to use another data structure, but the interface
+/// will stay the same.
+/// If the symbol doesn't exist, NULL is returned.
+/// \param name The name of the symbol to check for
+/// \return The symbol pointer or NULL.
+li_symbol *li_find_symbol(const char *name)
+    {
+    w32 key=li_sym_hashtable::fast_hash(name);
+    return li_hash.lookup_symbol(key,name);
+    }
+
+/*
+li_symbol *li_find_symbol(const char *name)    
 {
   syms_lock.lock();
   if (li_root)
@@ -2672,7 +2847,9 @@ li_symbol *li_find_symbol(const char *name)     // if symbol doesn't exsist, it 
   syms_lock.unlock();
   return 0;
 }
+*/
 
+/*
 i4_bool check_symtable_consistency(li_symbol *sym)
 	{
 	if (!sym) return i4_T;
@@ -2685,8 +2862,21 @@ i4_bool check_symtable_consistency(li_symbol *sym)
 	if (!check_symtable_consistency(sym->right())) return i4_F;
 	return i4_T;
 	}
+*/
 
+/// Search the symbol tree for a symbol.
+/// If the symbol doesn't exist, it is created.
+/// \param name The symbol to be searched for.
+/// \return A symbol pointer. Never NULL.
+li_symbol *li_get_symbol(const char *name)
+    {
+    // Return a hash value of the name. 
+    // Probably we'll do something faster than i4_w32_checksum, also because we only need 16 bit.
+    w32 key=li_sym_hashtable::fast_hash(name);
+    return li_hash.get_symbol(key,name);
+    }
 
+/*
 li_symbol *li_get_symbol(const char *name)     // if symbol doesn't exsist, it is created
 {
   syms_lock.lock();
@@ -2709,9 +2899,9 @@ li_symbol *li_get_symbol(const char *name)     // if symbol doesn't exsist, it i
     li_symbol *p=li_root;
     for(;;)
     {
-#ifdef _DEBUG
-	  if (p->type()!=LI_SYMBOL)li_error(0,"CRITICAL: Symbol table: Invalid entry found");
-#endif
+//#ifdef _DEBUG
+//	  if (p->type()!=LI_SYMBOL)li_error(0,"CRITICAL: Symbol table: Invalid entry found");
+//#endif
       int cmp=strcmp(name,p->name()->value());
       if (cmp<0)
       {
@@ -2763,6 +2953,7 @@ li_symbol *li_get_symbol(const char *name)     // if symbol doesn't exsist, it i
   syms_lock.unlock();
   return 0;
 }
+*/
 
 li_symbol *li_get_symbol(char *name, li_symbol *&cache_to)
 {
@@ -2771,43 +2962,22 @@ li_symbol *li_get_symbol(char *name, li_symbol *&cache_to)
   return cache_to;
 }
 
-void li_recursive_mark(li_symbol *p, int set)
-{
-  if (p)
-  {
-    li_get_type(LI_SYMBOL)->mark(p, set);
-    li_recursive_mark(p->left(), set);
-    li_recursive_mark(p->right(), set);
-  }
-}
+
 
 void li_mark_symbols(int set)
 {
-  li_recursive_mark(li_root, set);    
+  li_hash.mark(set);    
 }
 
-void private_li_symbol_info(li_symbol *p,long depth, long &nosymbols, long &maxdepth)
-	{
-	if (p)
-		{
-		if (depth>maxdepth) maxdepth=depth;
-		nosymbols++;
-		if (p->type()!=LI_SYMBOL) li_error(0,"CRITICAL: li_symbol_info: Invalid type occured in symbol table.");
-		private_li_symbol_info(p->left(),depth+1,nosymbols,maxdepth);
-		char *c=p->name()->value();
-		i4_warning(c);
-		//Sleep(1);//required, because if OutputDebugString is called to fast, MSVC skips output.
-		i4_thread_sleep(1);
-		private_li_symbol_info(p->right(),depth+1,nosymbols,maxdepth);
-		}
-	}
+
 
 LI_HEADER(symbol_info)
 	{
 	syms_lock.lock();
 	long nosymbols=0,maxdepth=0;
-	private_li_symbol_info(li_root,0,nosymbols,maxdepth);
-	i4_warning("Currently are %i symbols present. The maximum symbol tree depth is %i.",nosymbols,maxdepth);
+    long emptyfields=0;
+	li_hash.symbol_info(nosymbols,maxdepth,emptyfields);
+	i4_warning("Currently are %i symbols present. The maximum symbol tree depth is %i, (%i empty fields)",nosymbols,maxdepth,emptyfields);
 	syms_lock.unlock();
 	return new li_list(new li_int(nosymbols),new li_int(maxdepth));
 	}
@@ -3742,7 +3912,7 @@ int li_memory_manager_class::gc()
 
       li_mark_symbols(1);
 
-      if (li_root)     // if the system has shut down, don't mark type's objects
+      if (li_hash.is_active())     // if the system has shut down, don't mark type's objects
       {
         for (i=1; i<li_max_types(); i++)
         {
@@ -3828,7 +3998,7 @@ int li_memory_manager_class::gc()
       // unmark symbols
       li_mark_symbols(0);
 
-      if (li_root)
+      if (li_hash.is_active())
       {
         for (i=1; i<li_max_types(); i++)
         {
@@ -3958,7 +4128,8 @@ li_object *li_memory_manager_class::alloc_cell(size_t size)
 
 void li_memory_manager_class::uninit()
 	{
-    li_root=0;//We force dangling references. This is fun :-P
+    //li_root=0;//We force dangling references. This is fun :-P
+    li_hash.uninit();
 
     // clear all pointer references
     for (li_object_pointer *pl=li_object_pointer_list; pl; pl=pl->next)
