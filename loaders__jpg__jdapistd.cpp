@@ -769,9 +769,9 @@ typedef struct {
   int * coef_bits_latch;
 #define SAVED_COEFS  6		/* we save coef_bits[0..5] */
 #endif
-} my_coef_controller;
+} my_coef_d_controller;
 
-typedef my_coef_controller * my_coef_ptr;
+typedef my_coef_d_controller * my_coef_ptr;
 
 /* Forward declarations */
 METHODDEF(int) decompress_onepass
@@ -1390,7 +1390,7 @@ jinit_d_coef_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
 
   coef = (my_coef_ptr)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-				SIZEOF(my_coef_controller));
+				SIZEOF(my_coef_d_controller));
   cinfo->coef = (struct jpeg_d_coef_controller *) coef;
   coef->pub.start_input_pass = start_input_pass;
   coef->pub.start_output_pass = start_output_pass;
@@ -2568,9 +2568,9 @@ typedef struct {
   int context_state;		/* process_data state machine status */
   JDIMENSION rowgroups_avail;	/* row groups available to postprocessor */
   JDIMENSION iMCU_row_ctr;	/* counts iMCU rows to detect image top/bot */
-} my_main_controller;
+} my_main_d_controller;
 
-typedef my_main_controller * my_main_ptr;
+typedef my_main_d_controller * my_main_ptr;
 
 /* context_state values: */
 #define CTX_PREPARE_FOR_IMCU	0	/* need to prepare for MCU row */
@@ -2920,7 +2920,7 @@ jinit_d_main_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
 
   main = (my_main_ptr)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-				SIZEOF(my_main_controller));
+				SIZEOF(my_main_d_controller));
   cinfo->main = (struct jpeg_d_main_controller *) main;
   main->pub.start_pass = start_pass_main;
 

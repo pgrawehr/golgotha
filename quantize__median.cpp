@@ -70,7 +70,7 @@ static int blue_compare(const void *a, const void *b)
 }
 
 
-struct box
+struct quantize_box
 {
   w32 index;
   w32 colors;
@@ -79,7 +79,7 @@ struct box
 
 static int box_compare(const void *a, const void *b)
 {
-  return ((box *)b)->sum-((box *)a)->sum;
+  return ((quantize_box *)b)->sum-((quantize_box *)a)->sum;
 }
 
 inline void _16_to_rgb(w32 rgb, w8 &r, w8 &g, w8 &b)
@@ -104,7 +104,8 @@ void i4_median_cut(i4_histogram_class *hist,
   
   counts=hist->counts; 
 
-  box *box_list=(box *)I4_MALLOC(sizeof(box) * MAX_COLORS, "boxes");
+  quantize_box *box_list=(quantize_box *)I4_MALLOC(sizeof(quantize_box) 
+	  * MAX_COLORS, "boxes");
 
   // setup the initial box
   w32 total_boxes    = 1;
@@ -189,7 +190,7 @@ void i4_median_cut(i4_histogram_class *hist,
     box_list[box_index].sum   = low_count;
 
     // sort to bring the biggest boxes to the top
-    qsort(box_list, total_boxes, sizeof(box), box_compare );    
+    qsort(box_list, total_boxes, sizeof(quantize_box), box_compare );    
 
     /*    for (int z=0;z<total_boxes;z++)
     {

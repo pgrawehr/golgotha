@@ -214,9 +214,9 @@ typedef struct {
   FSERRPTR fserrors;		/* accumulated errors */
   boolean on_odd_row;		/* flag to remember which row we are on */
   int * error_limiter;		/* table for clamping the applied error */
-} my_cquantizer;
+} my_cdquantizer;
 
-typedef my_cquantizer * my_cquantize_ptr;
+typedef my_cdquantizer * my_cquantize_ptr;
 
 
 /*
@@ -1256,7 +1256,7 @@ jinit_2pass_quantizer (j_decompress_ptr cinfo)
 
   cquantize = (my_cquantize_ptr)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-				SIZEOF(my_cquantizer));
+				SIZEOF(my_cdquantizer));
   cinfo->cquantize = (struct jpeg_color_quantizer *) cquantize;
   cquantize->pub.start_pass = start_pass_2_quant;
   cquantize->pub.new_color_map = new_color_map_2_quant;

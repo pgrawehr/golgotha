@@ -554,6 +554,9 @@ int i4_cmp_char_str(i4_const_str::iterator i, const i4_const_str &s, char *c)
 
 }
 
+#ifdef _MANAGED
+#pragma unmanaged
+#endif
 
 int i4_read_dlg_token(i4_const_str::iterator &i,
                       const i4_const_str &fmt,
@@ -624,6 +627,9 @@ int i4_read_dlg_token(i4_const_str::iterator &i,
   return TK_NONE;
 }
 
+#ifdef _MANAGED
+#pragma managed
+#endif
 
 int i4_next_token_is_rbrace(i4_const_str::iterator i,
                             const i4_const_str &fmt)

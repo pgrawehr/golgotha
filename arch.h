@@ -147,7 +147,11 @@ typedef w32  i4_color;  // reserved as 32bits in case we expand to 32 bit color
 #define i4_null 0
 
 #ifdef _WINDOWS
+#ifndef _MANAGED
 #define I4_FAST_CALL __fastcall
+#else
+#define I4_FAST_CALL 
+#endif
 #else
 #define I4_FAST_CALL
 #endif

@@ -118,7 +118,9 @@ i4_const_str::iterator i4_const_str::strstr(const i4_const_str &needle_to_find) 
   }
   return end();      
 }
-
+#ifdef _MANAGED
+#pragma unmanaged
+#endif
 i4_str *i4_const_str::vsprintf(w32 max_length, va_list &ap) const
 {
   i4_str *ns=new i4_str(*this,(w16)max_length);
@@ -207,6 +209,10 @@ i4_str *i4_const_str::vsprintf(w32 max_length, va_list &ap) const
   ns->len=strlen(ns->ptr);
   return ns;
 }
+
+#ifdef _MANAGED
+#pragma managed
+#endif
 
 i4_str *i4_const_str::sprintf(w32 max_length, ...) const
 {
