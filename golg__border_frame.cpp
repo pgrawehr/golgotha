@@ -144,14 +144,29 @@ public:
     }
   }
 
-  void change_icon(i4_image_class *new_im,i4_image_class *new_dark)
-	  {
-	  if (im&&own_im) delete im;
-	  im=new_im;
-	  if (dark_im&&own_dark) delete dark_im;
-	  dark_im=new_dark;
-	  own_im=own_dark=i4_F;
-	  }
+void change_icon(i4_image_class *new_im,i4_image_class *new_dark)
+{
+	  //if (im&&own_im) delete im;
+	  //im=new_im;
+	  //if (dark_im&&own_dark) delete dark_im;
+	  //dark_im=new_dark;
+	  //own_im=own_dark=i4_F;
+	if (own_im)
+		delete im;
+	if (own_dark)
+		delete dark_im;
+	if (im!=new_im) //comparing pointers should be sufficient
+	{
+		im=new_im;
+		request_redraw();
+	}
+	if (dark_im!=new_dark)
+	{
+		dark_im=new_dark;
+		request_redraw();
+	}
+	own_dark=own_im=i4_F;
+}
 
   ~g1_amount_display_class()
   {

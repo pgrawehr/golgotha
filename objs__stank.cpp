@@ -1282,15 +1282,17 @@ i4_bool g1_player_piece_class::fire_weapon(int slot_number)
 #endif
 
       // adjust fire direction to point directly at the object
-      if (fire_at)
-      {
-        i4_3d_vector lead;
+	  // This doesn't make much sense for the stank, since we know
+	  // exactly in which direction we're firing. 
+      //if (fire_at)
+      //{
+      //  i4_3d_vector lead;
 
-        attack_target = a->current_target.get();
-        lead_target(bdir, slot_number);
-        bdir -= bpos;
-        bdir.z += fire_at->occupancy_radius()/3;
-      }
+      //  attack_target = a->current_target.get();
+      //  lead_target(bdir, slot_number);
+      //  bdir -= bpos;
+      //  bdir.z += fire_at->occupancy_radius()/3;
+      //}
   
       g1_object_class *weapon = g1_fire(a->ammo_type->weapon_type, this, 
                                         fire_at, 
@@ -1498,7 +1500,8 @@ void g1_player_piece_class::draw(g1_draw_context_class *context)
     
 
   if (g1_current_controller.get() &&
-      this==local_stank && g1_current_controller->view.get_view_mode()==G1_ACTION_MODE)
+      this==local_stank && g1_current_controller->view.get_view_mode()==G1_ACTION_MODE &&
+	  g1_current_controller->view.follow_object_id==global_id)
     draw_target_cursors(context);
 
   
