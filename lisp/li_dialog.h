@@ -51,7 +51,7 @@ class li_dialog_item : public i4_color_window_class
 protected:
   li_object_pointer o;
   li_object *prop_list;
-
+  i4_bool has_extra_label; //The element has an extra label, since it's an included class
 public:
   i4_window_class **windows;
   int t_windows;
@@ -64,6 +64,10 @@ public:
 
   virtual i4_bool can_apply(li_environment *env);
   virtual li_object *apply(li_environment *env);
+  virtual i4_bool is_fake()
+  {
+	  return i4_F;
+  }
   virtual ~li_dialog_item();
   char *name() { return "li_dialog_item"; }
 };

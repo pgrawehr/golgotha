@@ -224,7 +224,8 @@ void g1_bomber_class::think()
 
   
   h += vspeed;
-  
+  if (speed<0.01)
+	  speed+=0.01;
   
   switch (mode)
   {
@@ -328,6 +329,10 @@ void g1_bomber_class::think()
 			h += d.z + 0.02f*(float)sin(i4_pi()*sway/15.0f);
 			if (dist<speed)
 				advance_path();
+		}
+		else
+		{
+			move(cos(theta)*speed,sin(theta)*speed);
 		}
 
       

@@ -10570,8 +10570,8 @@ void g1_path_window_class::receive_event(i4_event *ev)
           else
             map->get_block_map((w8)grade)->unblock(cell_x, cell_y, flags);
               
-          maker->make_criticals(map, critical_graph);
-		  solvegraph->set_graph(critical_graph);
+          //maker->make_criticals(map, critical_graph);
+		  //solvegraph->set_graph(critical_graph);
           solve();
           changed();
         } break;

@@ -5273,6 +5273,10 @@ public:
 
 class li_class_dialog_item : public li_dialog_item
 {
+protected:
+	li_class_dialog_item():items(5,5)
+	{
+	};
 public:
   char *name() { return "li_class_item"; }
 
@@ -5352,6 +5356,50 @@ public:
    }
  };
 
+class li_dummy_class_dialog_item:public li_class_dialog_item
+{
+protected:
+	i4_window_class *rw;
+public:
+
+	li_dummy_class_dialog_item(i4_window_class *realwindow)
+		:li_class_dialog_item()
+	{
+		rw=realwindow;
+		add_child(0,0,rw);
+		resize_to_fit_children();
+	}
+
+	virtual void resize(w16 new_width, w16 new_height)
+	{
+		rw->resize(new_width,new_height);
+		li_class_dialog_item::resize(new_width,new_height);
+		//must not call this from resize(), results in infinite recursion.
+		//resize_to_fit_children();
+	}
+
+	i4_window_class *window(){return rw;};
+
+	char *name()
+	{
+		return "dummy_class_dialog_item";
+	}
+	i4_bool can_apply(li_environment *env)
+	{
+		return i4_T;
+	}
+
+	li_object *apply(li_environment *env)
+	{
+		return 0;
+	}
+
+	virtual i4_bool is_fake()
+	{
+		return i4_T;
+	}
+};
+
  class li_class_edit_class : public li_type_edit_class
  {
  public:
@@ -5374,7 +5422,11 @@ public:
                                    i4_window_class **windows,
                                    li_environment *env)
    {
-     return ((li_class_dialog_item *)windows[0])->can_apply(env);
+	   li_class_dialog_item *w=(li_class_dialog_item*)windows[0];
+	   if (w->is_fake())
+		   return i4_T;
+	   else
+           return ((li_class_dialog_item *)windows[0])->can_apply(env);
    }
 
    li_object *apply_edit_controls(li_object *o, 
@@ -5382,7 +5434,11 @@ public:
                                   i4_window_class **windows,
                                   li_environment *env)
    {
-     return ((li_class_dialog_item *)windows[0])->apply(env);   
+	   li_class_dialog_item *w=(li_class_dialog_item*)windows[0];
+	   if (w->is_fake())
+		   return 0;
+	   else
+           return ((li_class_dialog_item *)windows[0])->apply(env);   
    }
 
  } li_class_edit_instance;
@@ -5413,6 +5469,7 @@ public:
    t_windows=0; 
    o=0;
    prop_list=0;
+   has_extra_label=i4_F;
  }
 
 
@@ -5428,7 +5485,7 @@ public:
    o=_o;
    windows=0;
    t_windows=0;
-
+   has_extra_label=i4_F;
    i4_window_class *w[10];
 
    if (li_get_type(o->type())->editor)
@@ -5441,8 +5498,9 @@ public:
 		 {
 		 //it's a class contained in another one. Add an extra text item
 		 //with the name of the superclass.
-		 w[0]=new i4_text_window_class(name, i4_current_app->get_style());
+		 w[0]=new li_dummy_class_dialog_item(new i4_text_window_class(name, i4_current_app->get_style()));
 		 t_windows+=1;
+		 has_extra_label=i4_T;
 		 }
 	   
        t_windows+=li_get_type(o->type())->editor->create_edit_controls(name,
@@ -5451,7 +5509,8 @@ public:
                                                                       &w[t_windows], 10-t_windows, env);
        if (t_windows)
        {       
-         windows=(i4_window_class **)I4_MALLOC(sizeof(i4_window_class *) * t_windows,"");
+         windows=(i4_window_class **)I4_MALLOC(sizeof(i4_window_class *) * t_windows,
+			 "lisp dialog sub windows");
          int x=0, i, maxh=0;
          for (i=0; i<t_windows; i++)
            if (w[i] && w[i]->height()>maxh)
@@ -5477,21 +5536,26 @@ public:
  {
    if (!li_get_type(o->type())->editor)  return i4_T;
 
-   return li_get_type(o->type())->editor->can_apply_edit_controls(o.get(), prop_list, windows,env);
+   //if we have an extra label, don't try to apply anything on it, would
+   //break the class chain structure of o.
+   return li_get_type(o->type())->editor->can_apply_edit_controls(
+	   o.get(), prop_list, has_extra_label?windows+1:windows,env);
  }
 
 
  li_object *li_dialog_item::apply(li_environment *env)
  {
    if (li_get_type(o->type())->editor)
-     return li_get_type(o->type())->editor->apply_edit_controls(o.get(), prop_list, windows, env);
+     return li_get_type(o->type())->editor->apply_edit_controls(
+		o.get(), prop_list, has_extra_label?windows+1:windows, env);
    return o.get();
  }  
 
  li_dialog_item::~li_dialog_item()
  {
-   if (windows)
-     i4_free(windows);
+	 //delete the array, but NOT it's contents.
+     if (windows)
+         i4_free(windows);
  }
 
 
