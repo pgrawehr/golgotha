@@ -346,6 +346,10 @@ depend:
 
 prereq: 
 	- mkdir $(INTDIR)
+	- mkdir g_decompressed
+	chmod 777 g_decompressed
+	- mkdir savegame
+	chmod 777 savegame
 
 ######################
 

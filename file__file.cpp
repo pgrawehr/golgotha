@@ -39,7 +39,7 @@
 #include "file/get_filename.h"
 
 #include "lisp/lisp.h"
-
+#include "status/status.h"
 
 
 #ifdef _WINDOWS
