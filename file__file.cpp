@@ -706,12 +706,37 @@ int i4_async_priority_sorter(const i4_async_reader::read_request *a,
 	}
 
 volatile w32 i4_async_reader::num_pending=0;
+i4_array<i4_async_reader*> i4_async_reader::readers(0,10); 
 
 i4_async_reader::i4_async_reader(char *name) : sig(name), 
 request_que(i4_async_priority_sorter)  
 { 
   emulation=i4_F; 
   stop=i4_F;
+}
+
+i4_bool i4_async_reader::request_for_callback(void *buffer, w32 size, i4_file_class::async_callback call, void *context, w32 priority/* =255 */)
+{
+	if (readers.size()==0)
+	{
+		(*call)(size,context);
+		return i4_T;
+	}
+	else if (readers.size()==1)
+	{
+		return readers[0]->start_read(0,buffer,size,call,context,priority);
+	}
+	else
+	{
+		int i=0;
+		//assure there's always at least one left
+		while ((readers[i]->max_priority()<priority)&&i<readers.size()-1)
+		{
+			i++;
+		}
+		return readers[i]->start_read(0,buffer,size,call,context,priority);
+
+	}
 }
 
 void i4_async_reader_thread_start(void *arg)
@@ -725,6 +750,7 @@ void i4_async_reader::init()
   {
     stop=i4_T;
     i4_add_thread(i4_async_reader_thread_start, STACK_SIZE, this);
+	readers.add(this);
   }
 }
 
@@ -753,6 +779,8 @@ void i4_async_reader::uninit()
 #endif
 		}
 	request_que.reset();//must be uninited before the memman goes down.
+	readers.uninit(); //just drop all of these at once, won't be used
+	//later. 
   }
 }
 

@@ -53,6 +53,7 @@ class i4_async_reader : public i4_init_class
   i4_dynamic_que<read_request, 0, MAX_REQUEST> request_que;
   static volatile w32 num_pending;
   void emulate_speeds(read_request &r);
+  static i4_array<i4_async_reader*> readers; 
 
 protected:
 
@@ -78,6 +79,9 @@ public:
   i4_bool start_read(int fd, void *buffer, w32 size, 
                      i4_file_class::async_callback call,
                      void *context, w32 priority=255);
+
+  static i4_bool request_for_callback(void *buffer, w32 size,
+	  i4_file_class::async_callback call, void *context, w32 priority=255);
 
   void PRIVATE_thread();  // don't call this!
 };

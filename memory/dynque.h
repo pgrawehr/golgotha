@@ -1,10 +1,4 @@
-/********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+
 //this file belongs to the revival project only
 
 #ifndef I4_DYNQUE_HH
@@ -13,12 +7,11 @@
 #include "arch.h"
 #include "memory/array.h"
 
-//this should be implemented as a binominal heap
-//let's see wheter I'll get the theory into practice sometime
-
-//for now, we do it the easy way.
-
-/* 
+/** Implements a dynamic queue.
+This template implements a dynamic queue that can be used as a stack, queue or 
+a priority queue. 
+This should be implemented as a binominal heap, for maximum performance.
+let's see wheter I'll get the theory into practice sometime.
 to use as a first-in-first-out queue:
    que() to add an element
    deque() to remove an element

@@ -82,13 +82,21 @@ struct r1_image_list_struct{
 	w32 average_color;
 		};
 	i4_image_class *image;
+	i4_bool locked;
+	r1_image_list_struct()
+	{
+		id=0;
+		usage=30;
+		image=0;
+		locked=i4_F;
+	};
 	};
 //#define RENDER_VERYMUCHSLOWER
 
 /*!
   The base class of all texture managers.
   Currently, we have two working implementations: DirectX (Windows) and
-  OpenGL (Linux).
+  OpenGL (Linux/Unix).
 */
 
 class r1_texture_manager_class
