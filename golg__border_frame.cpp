@@ -996,7 +996,7 @@ li_object *g1_strategy_on_bottom(li_object *o, li_environment *env)
   g1_current_controller->view.suggest_camera_mode(G1_ACTION_MODE);
   i4_key_man.set_context("action");
 
-  g1_border->relocate(g1_border.get(), "action_mode_locations", 
+  g1_border->relocate(g1_border.get(), g1_border->frame_name.c_str(), 
                       g1_border->border_x(),
                       g1_border->border_y());
 
