@@ -85,7 +85,31 @@ void g1_map_class::save_objects(g1_saver_class *out)
 
 void g1_map_class::save(g1_saver_class *out, w32 sections)
 {
-  w32 i,/*j,k,*/ tobjs=0;
+  w32 i,tobjs=0;
+
+  if (sections & G1_MAP_TEXTURE_NAMES)
+  {
+	  out->mark_section(G1_SECTION_TEXTURE_NAMES_V1);
+	  out->write_32(g1_tile_man.total());
+	  for (i=0;i<g1_tile_man.total();i++)
+	  {
+		  i4_const_str *name=g1_tile_man.get_name_from_tile(i);
+		  if (name)
+			out->write_counted_str(*name);
+		  delete name;
+	  }
+  }
+  if (sections & G1_MAP_MODEL_NAMES)
+  {
+	  out->mark_section(G1_SECTION_MODEL_NAMES_V1);
+	  out->write_32(g1_model_list_man.total());
+	  for (i=0;i<g1_model_list_man.total();i++)
+	  {
+		  i4_const_str name2(g1_model_list_man.get_model_name(i));
+		  if (!name2.null())
+			out->write_counted_str(name2);
+	  }
+  }
 
   //The status probably gives problems because things might
   //happen between the two calls of this function

@@ -45,14 +45,20 @@ class g1_model_list_class : public i4_init_class
 public:
   void reset(i4_array<i4_str *> &model_names, r1_texture_manager_class *tmap);
 
-  i4_float get_scaling() {return model_scaling;};
+  i4_float get_scaling() const 
+  {
+	  return model_scaling;
+  };
   void scale_models(i4_float to);//scales all models to this factor 
   //(relative to 1, not the current size)
 
   g1_quad_object_class *get_model(w16 handle) const
   { 
     if (handle>=total_models)
-      i4_error("get_model : bad handle");
+	{
+		i4_error("SEVERE: g1_model_list_class::get_model(): bad handle");
+		handle=0;//ensure we use a valid handle if we continue. 
+	}
 
     return array[handle].model; 
   }
@@ -64,6 +70,11 @@ public:
   {
     return array[handle].name_start;
   }
+  w16 total() const
+  {
+	  return total_models;
+  }
+
 };
 
 extern g1_model_list_class g1_model_list_man;

@@ -68,6 +68,9 @@ enum {   //do NEWER EVER change the order of entries in this list
   
   G1_SECTION_PLAYER_INFO_V2,
 
+  G1_SECTION_MODEL_NAMES_V1,
+  G1_SECTION_TEXTURE_NAMES_V1,
+
   G1_SECTION_OBJECT_LIST = 0x8000
 
 } ;

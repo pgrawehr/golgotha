@@ -18,6 +18,7 @@
 #include "render/r1_api.h"
 #include "status/status.h"
 #include "time/profile.h"
+#include "lisp/lisp.h"
 
 i4_profile_class pf_load_models("load_models");
 g1_model_list_class g1_model_list_man;
@@ -134,7 +135,7 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 
   int actual_total=0;
   g1_quad_object_loader_class loader(g1_object_heap);
-
+  char nbuf[MAX_PATH];
   for (int i=0; i<model_names.size(); i++)
   {
     if (stat) 
@@ -142,7 +143,10 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 
 	model_scaling=0.1f;
     pf_model_load_open.start();
-    i4_file_class *in_file=i4_open(*model_names[i]);
+	li_object *fmt=li_get_value("object_format", 0);
+	char *n=li_string::get(fmt,0)->value();
+	_snprintf(nbuf,MAX_PATH,n,model_names[i]->c_str());
+    i4_file_class *in_file=i4_open(nbuf);
     if (in_file)
     {
       g1_loader_class *fp=g1_open_save_file(in_file);        

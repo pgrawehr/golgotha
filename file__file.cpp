@@ -184,21 +184,34 @@ i4_bool i4_file_class::async_read (void *buffer, w32 size,
 }
 
 
-class file_string : public i4_str
-{
-public:
-  file_string(w16 size) : i4_str(size) {}
-
-  char *buffer() { return (char *)ptr; }
-  void set_len(w16 _len) { len = _len; }
-};
+//class file_string : public i4_str
+//{
+//public:
+//  file_string(w16 size) : i4_str(size) {}
+//
+//  char *buffer() { return (char *)ptr; }
+//  void set_len(w16 _len) { len = _len; }
+//};
 
 
 i4_str* i4_file_class::read_str(w32 len)
 {
-  file_string *str = new file_string((w16)len);   
-  len = read(str->buffer(),len);
-  str->set_len((w16)len);
+	i4_str *str=0;
+  if (len<256)
+  {
+    char buf[256];
+	read(buf,len);
+	buf[len]=0;
+	str=new i4_str(buf);  
+  }
+  else
+  {
+	  char *buf2=(char*)malloc(len+1);
+	  read(buf2,len);
+	  buf2[len]=0;
+	  str=new i4_str(buf2);
+	  free(buf2);
+  }
 
   return str;
 }

@@ -12,9 +12,10 @@
 #include "memory/malloc.h"
 #include "string/string.h"
 class li_object;
+class g1_loader_class;
 
-
-void g1_get_load_info(i4_file_class **fp, int t_files,
+li_object* g1_get_load_info(g1_loader_class* map_file,
+					  i4_file_class **fp, int t_files,
                       i4_array<i4_str *> &texture_name_array,
                       i4_array<i4_str *> &model_name_array,
                       int &total_tiles,

@@ -180,12 +180,18 @@ i4_const_str *g1_tile_man_class::get_name_from_tile(w32 tileno)
 	w32 checksum=array[tileno].filename_checksum;
 	i4_const_str *nm=r1_get_texture_name(checksum);
 	if (!nm)//not found?
-		{
+	{
 		//then try using the hash-table to find overwritten
 		//names
 		checksum=get_original_checksum(checksum);
 		nm=r1_get_texture_name(checksum);
-		}
+		//if (!nm) // still no luck?
+		//{
+		//	char numname[12];
+		//	sprintf(numname,"ID%d",checksum);
+		//	nm=new i4_str(numname);
+		//}
+	}
 	return nm;
 	}
 

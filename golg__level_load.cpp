@@ -6,7 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 #include "pch.h"
-#include "lisp/lisp.h"
+#include "lisp/li_all.h"
 #include "file/file.h"
 #include "memory/array.h"
 #include "tile.h"
@@ -23,16 +23,32 @@
 #include "file/sub_section.h"
 #include <stdlib.h>
 
-li_object *g1_add_textures(li_object *o, li_environment *env)
-{
-  for (o=li_cdr(o,0); o; o=li_cdr(o,0))
-    g1_tile_man.add(li_car(o,0), env);
+//li_object *g1_add_textures(li_object *o, li_environment *env)
+//{
+//  for (o=li_cdr(o,0); o; o=li_cdr(o,0))
+//    g1_tile_man.add(li_car(o,0), env);
+//
+//  return 0;
+//}
 
-  return 0;
+
+//static li_object *g1_ignore(li_object *o, li_environment *env) {  return 0;}
+
+li_object *li_get_all_tile_names(li_object *o, li_environment *env)
+{
+	for (w32 i=0;i<g1_tile_man.total();i++)
+	{
+		i4_const_str *name=g1_tile_man.get_name_from_tile(i);
+		if (name)
+			i4_warning(name->c_str());
+		else
+			i4_warning("Unresolved name found!");
+		delete name;
+	}
+	return li_nil;
 }
 
-
-static li_object *g1_ignore(li_object *o, li_environment *env) {  return 0;}
+li_automatic_add_function(li_get_all_tile_names,"get_all_tile_names");
 
 i4_str *g1_get_res_filnename(const i4_const_str &map_filename)
 {
@@ -54,9 +70,18 @@ i4_str *g1_get_res_filnename(const i4_const_str &map_filename)
   return new i4_str(res_name);
 }
 
-w32 g1_load_res_info(i4_file_class *fp, w32 exclude_flags)
+//! Loads and processes information about the models and textures to be loaded
+//! for the level.
+//! This function investigates the map file and the scm file for model and 
+//! texture names that should be used in the current level. 
+//! The obtained data is directly processed.
+//! \param map_file The map file to be loaded (a .level file)
+//! \param fp The .scm file belonging to the map
+//! \param exclude_flags A flag word indicating which elements should not be reloaded. Use with care.
+//! \return 0 (Side Effect: Models and textures have been loaded)
+w32 g1_load_res_info(g1_loader_class *map_file, i4_file_class *fp, w32 exclude_flags)
 {
-  li_environment *local_env=new li_environment(0,i4_T);
+  //li_environment *local_env=new li_environment(0,i4_T);
   //li_environment *local_env=0;//I don't think loading these not globaly is a good idea 
   //is ok, applies only to functions
   w32 include_flags=~exclude_flags;
@@ -73,11 +98,12 @@ w32 g1_load_res_info(i4_file_class *fp, w32 exclude_flags)
 
   i4_file_class *fp_list[1];
   fp_list[0]=fp;
+  li_object *post_load=0;
 
   // get a list of models and textures we need to load for this level
   // with the last parameter set to 0, won't actually touch any files.
   // Will postphone that for later.
-  g1_get_load_info(fp_list,1,  tlist,  mlist, t_tiles, 0);
+  post_load=g1_get_load_info(map_file, fp_list,1, tlist, mlist, t_tiles, 0);
 
   if (g1_strategy_screen.get())
     g1_strategy_screen->create_build_buttons();
@@ -85,10 +111,6 @@ w32 g1_load_res_info(i4_file_class *fp, w32 exclude_flags)
   if (include_flags & G1_MAP_TEXTURES)
 	  {
 	  g1_tile_man.reset(t_tiles);
-	  //for (int k=0;k<t_tiles;k++)
-	//	  {
-	//	  g1_tile_man.add(new li_string(*tlist[k]),0);
-	//	  }
 	  }
 
   if (include_flags & G1_MAP_MODELS)
@@ -96,20 +118,59 @@ w32 g1_load_res_info(i4_file_class *fp, w32 exclude_flags)
 	  g1_model_list_man.reset( mlist, tman);
 	  }
 
+  li_object *f=li_car(post_load,0),*g;
+  
+  while (f && f!=li_nil)
+  {
+	  g=li_car(f,0);
+	  if (g && g!=li_nil)
+		li_call("def_object",g,0);
+	  f=li_cdr(f,0);
+  }
+
+  f=li_car(li_cdr(post_load,0),0);
+  
+  while (f && f!=li_nil)
+  {
+	  g=li_car(f,0);
+	  if (g && g!=li_nil)
+		li_call("def_movable_object",g,0);
+	  f=li_cdr(f,0);
+  }
+
+   f=li_car(li_cdr(li_cdr(post_load,0),0),0);
+  
+  while (f && f!=li_nil)
+  {
+	  g=li_car(f,0);
+  	  if (g && g!=li_nil)
+		li_call("def_buildings",g,0);
+	  f=li_cdr(f,0);
+  }
+  li_object* li_tex_list=li_car(li_cdr(li_cdr(li_cdr(post_load,0),0),0),0);
+
+  //li_add_function("models", g1_ignore, local_env);
+  //li_add_function("textures", g1_add_textures, local_env);
+
+  //li_load("scheme/models.scm", local_env);
+  //fp->seek(0);
+  //li_load(fp, local_env);
+  if (include_flags & G1_MAP_TEXTURES)
+	  {
+	  for (int k=0;k<t_tiles;k++)
+		  {
+		  li_object* obj=li_car(li_tex_list,0);
+		  li_tex_list=li_cdr(li_tex_list,0);
+		  I4_ASSERT(obj&&obj!=li_nil,"INTERNAL: Number of textures to load does not match elements in list");
+		  g1_tile_man.add(obj,0);
+		  }
+	  }
   int i;
   for (i=0; i<tlist.size(); i++)
-    delete   tlist[i];
+    delete tlist[i];
 
   for (i=0; i<mlist.size(); i++)
     delete mlist[i];
-
-  li_add_function("models", g1_ignore, local_env);
-  li_add_function("textures", g1_add_textures, local_env);
-
-  li_load("scheme/models.scm", local_env);
-  fp->seek(0);
-  li_load(fp, local_env);
-
 
   if (include_flags & G1_MAP_TEXTURES)
 	  {
@@ -168,7 +229,7 @@ i4_bool g1_load_level(const i4_const_str &filename, int reload_textures_and_mode
 	  //li_set_value("world_scaling",new li_float(1.0f),0);
 	  li_load("scheme/map_init.scm");
       //of the map to the default
-      g1_load_res_info(res_file, exclude_flags);
+      g1_load_res_info(load, res_file, exclude_flags);
       delete res_file;
     }
 	else

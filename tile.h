@@ -52,7 +52,7 @@ public:
 
 class g1_tile_man_class : public i4_init_class
 {
-protected:
+private:
   g1_tile_class *array;
   int t_tiles, max_tiles;
   int sorted_by_checksum;

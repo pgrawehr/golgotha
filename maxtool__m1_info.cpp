@@ -60,7 +60,7 @@ void m1_info_struct::get_texture_list(i4_array<i4_str *> &array, i4_bool for_all
 
       int tmp_int;
       i4_array<i4_str *> tmp_array(0,32);
-      g1_get_load_info(fp, res_files.size(), array, tmp_array, tmp_int, i4_T);
+      g1_get_load_info(NULL,fp, res_files.size(), array, tmp_array, tmp_int, i4_T);
       
       for (i=0; i<tmp_array.size(); i++)
         delete tmp_array[i];

@@ -84,6 +84,8 @@ enum {
   G1_MAP_TEXTURES=(1<<14),///<loads the textures
   G1_MAP_MODELS=(1<<15),///<loads the models from the gmod-files
   G1_MAP_TRANSPORT=(1<<16),///<Transport info
+  G1_MAP_TEXTURE_NAMES=(1<<17), ///<The list of terrain textures in use
+  G1_MAP_MODEL_NAMES=(1<<18), ///<The list of models used in the level
   G1_LAST_THING, 
   G1_MAP_ALL=(G1_LAST_THING-1)*2-1,///<Everything
 

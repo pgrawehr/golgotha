@@ -22,4 +22,10 @@
 (setf world_scaling 1.0)
 (setf deterministic nil)
 
+(setf texture_format "textures/%s.tga")
+(setf building_format "objects/%s.gmod")
+(setf object_format "objects/%s.gmod")
+
+
+
 ;;(setf day_and_night (new day_night_change nil))

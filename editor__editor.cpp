@@ -8951,7 +8951,7 @@ void g1_editor_class::new_level_from_dialog()
     
     if (fp)
     {
-      g1_load_res_info(fp,0);
+      g1_load_res_info(0,fp,0);
       delete fp;
     }
 	else //just create one by copying over the default file.
@@ -8960,7 +8960,7 @@ void g1_editor_class::new_level_from_dialog()
 		fp=i4_open(*res_name);
 		if (fp)
 			{
-			g1_load_res_info(fp,0);
+			g1_load_res_info(0,fp,0);
 			delete fp;
 			}
 		else
