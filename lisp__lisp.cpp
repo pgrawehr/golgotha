@@ -13,6 +13,7 @@
 #include "file/file.h"
 #include "file/ram_file.h"
 #include "app/app.h"
+#include "app/registry.h" //for language support
 #include "memory/array.h"
 
 #include "status/status.h"
@@ -809,8 +810,16 @@ li_object *li_load(li_object *name, li_environment *env, i4_status_class *status
   {
     char *s=li_string::get(li_eval(li_car(name,env),env),env)->value();
     strcpy(li_last_file, s);
-
-    i4_file_class *fp=i4_open(i4_const_str(s));
+    //we first try wheter there's a language dependent file 
+    //(that is one that has a language suffix).
+    i4_str langstr(s);
+    i4_str::iterator it(langstr.c_str()+langstr.find_last_of("."));
+    i4_language_extend(langstr,it);
+    i4_file_class *fp=i4_open(langstr);
+    if (!fp)
+        {
+        fp=i4_open(s);
+        }
     if (fp)
     {
       ret=li_load(fp, env, status);

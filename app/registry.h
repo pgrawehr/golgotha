@@ -17,6 +17,7 @@ enum i4_registry_type
   I4_REGISTRY_USER      // associated with user
 };
 
+void i4_language_extend(i4_str& str, i4_str::iterator where);
 int i4_get_int(char *key_name,int* retval);
 void i4_set_int(char *key_name,int i);
 

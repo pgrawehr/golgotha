@@ -394,6 +394,31 @@ void i4_application_class::display_uninit()
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+void i4_language_extend(i4_str &string, i4_str::iterator where)
+    {
+    int lang=0;
+    //if it fails, we will just use the default, which is english
+    char buf[10];
+    buf[0]='_';
+    buf[1]=0;
+#ifdef _WINDOWS
+    
+    LoadString(i4_win32_instance,IDS_LANGUAGE,buf+1,9);
+    
+#endif
+    char buf2[255];
+    if (i4_get_registry(I4_REGISTRY_USER,0,"language",buf2,255)&&buf2[0])
+        {
+        strncpy(buf+1,buf2,9);
+        };
+    if (buf[1]==0)
+        strcpy(buf+1,"en");
+    //string.insert(where,'_');
+    //we must not use two inserts with the same iterator, since
+    //it can become invalid after an insert (when the buffer is resized)
+    string.insert(where,buf);
+    }
+
 #ifdef _WINDOWS
 
 i4_bool i4_get_registry(i4_registry_type type, 
@@ -414,11 +439,11 @@ i4_bool i4_get_registry(i4_registry_type type,
     for (int i=0;; i++)
     {
       char name[256];
-      DWORD name_size=256, type;
+      DWORD name_size=256, ktype=0;
       DWORD data_size=buf_length;
      
       if (RegEnumValue(key, i, name, &name_size, 0, 
-                     &type, 
+                     &ktype, 
                      (LPBYTE)buffer, 
                      &data_size)==ERROR_SUCCESS)
       {
@@ -487,6 +512,8 @@ int i4_get_int(char *key_name, int* retval)
 		}
 	return 1011;
 	}
+
+
 	
 #else 
 

@@ -22,6 +22,7 @@
 
 #include "string/string.h"
 #include "string/str_checksum.h"
+#include "app/registry.h"
 
 i4_string_manager_class i4_string_man;
 
@@ -1165,13 +1166,31 @@ i4_bool i4_string_manager_class::load_buffer(void *internal_buffer, char *error_
       t1=token1;  
       get_token(s,t1,line_on,error_prefix);  
       *t1=0;
+      i4_bool expandlang=i4_F;
       if (strcmp(token1,"include"))
-        i4_error("%s:%d: expected include", error_prefix, line_on);
+          {
+          if (strcmp(token1,"includelang")!=0)
+              {
+              i4_error("%s: line %d: expected #include or #includelang", error_prefix, line_on);
+              }
+          else
+              {
+              expandlang=i4_T;
+              }
+          }
 
       t1=token1;  
       get_token(s,t1,line_on,error_prefix);  
       *t1=0;  
-      load(token1);
+      if (expandlang)
+          {
+          i4_str langstr(token1);
+          i4_language_extend(langstr,langstr.end());
+          langstr.insert(langstr.end(),".res");
+          load(langstr);
+          }
+      else
+          load(token1);
     }
     else
     {

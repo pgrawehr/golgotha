@@ -240,19 +240,19 @@ merge_ter_mask_name "Golgotha Level"
 merge_ter_start_dir "."
 merge_ter_file_mask "*.level"     // don't translate
 
-saveas_title "Save Level as..."
+saveas_title "Level speichern als..."
 open_title "Load Level"                  
 open_mask_name "Golgotha Level"          
 open_start_dir "."
 open_file_mask "*.level"        // don't translate
 
 open_anim_title      "Load SCM"
-open_anim_mask_name  "Lisp-File"
+open_anim_mask_name  "Lisp-Datei"
 open_anim_start_dir "scheme"
 open_anim_file_mask  "*.scm"
 
-savegame_save_title "Save game as..."
-savegame_load_title "Load game from..."
+savegame_save_title "Spiel speichern unter..."
+savegame_load_title "Spiel laden aus..."
 savegame_start_dir "savegame"
 savegame_mask_name "Golgotha Level"
 savegame_file_mask "*.level"
@@ -267,7 +267,7 @@ undo_dir  "undo"                // don't translate
 redo_file "undo/redo_%d.dat"    // don't translate
 
 
-get_song_title "Change WAV for Level"     
+get_song_title "Change WAV for ambient sound"     
 get_song_start_dir "sfx"      // don't translate
 get_song_file_mask "*.wav"      // don't translate
 get_song_mask_name "WAV file"             
@@ -337,7 +337,7 @@ bad_map_w_h_dialog =
  button(text(' Ok ') user_ev(%p %d))
 ]"
 
-bad_w_h_title = "Invalid W / H"
+bad_w_h_title = "Invalid Width / Height"
 bad_w_h_warning= "Very large map size entered"
 bad_w_h_text = "This map will use %d bytes. You should have at least %d MB physical RAM installed to continue. OK?"
 bad_w_h_title_too_small = "This is definitelly too small."

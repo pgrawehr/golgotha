@@ -534,7 +534,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_SETQUESTION         "Should this mode be enabled right now? Mode change is mainly unimplemented yet, so clicking yes might result in an error. "
-    IDS_LANGUAGE            "EN"
+    IDS_LANGUAGE            "en"
     IDS_RESOLUTIONDESC      "%dx%d using %d bit"
     IDS_MONITORDESC         "%s on Monitor ID %i"
     IDS_RESOLUTIONSTRING    "Resolution on next restart:\n%dx%d using %d bit. %s\n"
@@ -1092,7 +1092,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_SETQUESTION         "Soll dieser Videomodus sofort aktiviert werden? Dieses Feature ist nicht implementiert, weshalb dieser Versuch vermutlich zu einer Fehlermeldung führen wird."
-    IDS_LANGUAGE            "DE"
+    IDS_LANGUAGE            "de"
     IDS_RESOLUTIONDESC      "%dx%d Farbtiefe %d Bit"
     IDS_MONITORDESC         "%s auf Monitor ID %i"
     IDS_RESOLUTIONSTRING    "Auflösung beim nächsten Programmstart:\n%dx%d mit Farbtiefe %d Bit. %s\n"

@@ -79,7 +79,7 @@ public:
 
   void render_poly(int t_verts, r1_vert *verts);
   void render_sprite(r1_vert *verts);
-  void render_pixel(int tpoints,r1_vert *pixel);
+  void render_pixel(int t_points,r1_vert *pixel);
   void render_lines(int t_lines, r1_vert *verts);
   //void clear_area(int x1, int y1, int x2, int y2, w32 color, float w);
   

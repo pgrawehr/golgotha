@@ -27,11 +27,16 @@ tdir_file "c:/tmp/ctext/tdir.dat"
 pcx_sequence    = "%S%S%03d.pcx"
 screen_shot_str = "shot%03d.tga"
 
+s_dir	textures
+encoding_jpg           "JPG-File %s is being compressed"
 copying_textures       "Copying textures"
-loading_textures       "loading textures"
-building_texture_cache "building texture cache"
-updating_texture_cache "updating texture cache"
-saving_level           "Saving level"
+loading_textures       "Loading textures"
+building_texture_cache "Creating texture cache"
+updating_texture_cache "Updating texture cache"
+saving_level           "Saving map"
+checking_times         "Checking file times..."
+max_texture_size 256
+
 
 
 movie_option "-movie"

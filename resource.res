@@ -1,6 +1,6 @@
 
 #include "resource/i4.res"
-#include "resource/g1.res"
+#includelang "resource/g1"
 #include "resource/keymap.res"
 
 default_xres 640

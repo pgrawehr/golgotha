@@ -25,6 +25,7 @@
 (add_sub_menu "Edit"
               ("Undo"                   "Edit/Undo")
               ("Redo"                   "Edit/Redo")
+              ("Enable/Disable Undo"    "set_undo")
               -
 ;              ("Cut"                    "Edit/Cut")
 ;              ("Copy"                   "Edit/Copy")
@@ -92,6 +93,8 @@
               ("Join Selected"          "join_path_ends")
               ("UnJoin Selected"        "unjoin_path_ends")
               ("Insert Path Node"       "insert_path_object") 
+              ("Alle Wege loeschen"     "remove_all_paths")
+              ("Knoten und Wege laden"  "load_from_transims")
               -
               ("Toggle Path Display"    "toggle_show_list")
               ("Place Camera"           "place_camera")

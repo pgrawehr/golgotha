@@ -145,16 +145,21 @@ protected:
   //currently the only flag is R1_SOFTWARE
   w32                           render_device_flags;
 
-  // returns false if display is not compatible with render_api, i.e. if you pass
-  // the directx display to the glide render api it return false
-  // init will create the texture manager, which can be used after this call
-  // text_mem_size if size of buffer to hold compressed textures (in system memory)
+  /// Attempt to initialize the rendering device. 
+  /// Returns false if display is not compatible with render_api, i.e. if you pass
+  /// the directx display to the glide render api.
+  /// Init will create the texture manager, which can be used after this call.
+  /// \param display The reference to the display driver in use.
+  /// \return True if successfull, false if not. Reasons of failure are:
+  /// Wrong display driver for this renderer, insufficient memory, 
+  /// missing hardware support. 
   virtual i4_bool init(i4_display_class *display);
 
-  // this will delete the texture manager (and free textures associated with) created by init
+  /// Deinitialize the renderer. 
+  /// this will delete the texture manager (and free textures associated with) created by init
   virtual void uninit();
 
-
+  /// Copy an image to the screen. 
   virtual void copy_part(i4_image_class *im,                                          
                          int x, int y,             // position on screen
                          int x1, int y1,           // area of image to copy 
@@ -247,15 +252,14 @@ public:
   /** Set the Range of the Z-Buffer.
   * The api will scale all z's (or w's) to reflect this range with best percision
   * near_z must be greater than 0.
-  * Hint: For golg, a z great z value (default 1000.0) is far away, 
+  * Hint: For golg, a great z value (default 1000.0) is far away, 
   * for directx, this is mapped to 0.0, the near value, since the
   * z-buffer is used the wrong way round. (With comparison for greater
   * instead of less)
+  * Any implementation of this function must set r1_near_clip_z and
+  * r1_far_clip_z.
   */
   virtual void set_z_range(float near_z, float far_z)                                 = 0;
-  // make sure this updates the following variables:
-  // r1_near_clip_z
-  // r1_far_clip_z
   public:
   virtual void render_poly(int t_verts, r1_vert *verts)                               = 0;
   virtual void render_poly(int t_verts, r1_vert *verts, int *vertex_index);
@@ -284,29 +288,59 @@ public:
   /// The array must be one larger than t_lines. 
   virtual void render_lines(int t_lines, r1_vert *verts )                             = 0;
 
-  // color is standard argb, (z should be within range specifed by set_z_range)
+  /// Writtes a rectangle of the given color to the screen. 
+  /// Color is standard argb, (z should be within range specifed by set_z_range)
+  /// The function takes care of the render settings, so if z-buffer
+  /// write is disabled, it will NOT be cleared. 
+  /// The function might decide to just render polygons. 
   virtual void clear_area(int x1, int y1, int x2, int y2, w32 color, float z);
   
-  // creates an image of the same bit depth and palette of screen (for use with put_image)
+  /// Get an image compatible to the screen. 
+  /// Creates an image of the same bit depth and palette of screen (for use with put_image)
   virtual i4_image_class *create_compatible_image(w16 w, w16 h)                       = 0;
 
   // these should be called for an image before drawing to them
   virtual void lock_image(i4_image_class *im) { ; } 
   virtual void unlock_image(i4_image_class *im) { ; }
 
-  // this function does clipping (based on context) and calls copy_part
+  /// Put an image to the screen. 
+  /// this function does clipping (based on context) and calls copy_part
   virtual void put_image(i4_image_class *im,                                          
                          int x, int y,             // position on screen
                          int x1, int y1,           // area of image to copy 
                          int x2, int y2);
 
-  virtual r1_vert *clip_poly(sw32 *num_clip_verts, //how many verts in this polygon
-                             r1_vert *t_vertices,  //pointer to the vertices
-                             w16 *indices,         //pointer to the indices
-                             r1_vert *clip_buf_1,  //pointer to clip buffer 1
-                             r1_vert *clip_buf_2,  //pointer to clip buffer 2
-                             w8 flags);            //flags to be considered when clipping
-    
+  /// Clip polygons to make them suitable for rendering. 
+  /// Takes a polygon and clips it. 
+  /// \param num_clip_verts How many verts in the clipped polygon. 
+  /// \param t_vertices Pointer to the vertices array
+  /// \param indices Pointer to the indices array (which point themselves
+  /// to the vertices)
+  /// \param clip_buf_1 Pointer to clip buffer 1 (used internally)
+  /// \param clip_buf_2 Pointer to clip buffer 2
+  /// \param flags flags to be considered when clipping. 
+  /// R1_CLIP_NO_CALC_OUTCODE is currently the only supported flag. It
+  /// is used when the outcode has already been calculated on the vertices. 
+  /// \return Either clip_buf_1 or clip_buf_2, depending on the result. 
+  virtual r1_vert *clip_poly(sw32 *num_clip_verts, 
+                             r1_vert *t_vertices,  
+                             w16 *indices,         
+                             r1_vert *clip_buf_1, 
+                             r1_vert *clip_buf_2,  
+                             w8 flags);            
+  
+  /// Clip polygons to make them suitable for rendering. 
+  /// Takes a polygon and clips it. 
+  /// \param num_clip_verts How many verts in the clipped polygon. 
+  /// \param t_vertices Pointer to the vertices array
+  /// \param indices Pointer to the indices array (which point themselves
+  /// to the vertices)
+  /// \param clip_buf_1 Pointer to clip buffer 1 (used internally)
+  /// \param clip_buf_2 Pointer to clip buffer 2
+  /// \param flags flags to be considered when clipping. 
+  /// R1_CLIP_NO_CALC_OUTCODE is currently the only supported flag. It
+  /// is used when the outcode has already been calculated on the vertices. 
+  /// \return Either clip_buf_1 or clip_buf_2, depending on the result. 
   virtual r1_vert *clip_poly(sw32 *num_clip_verts, //how many verts in this polygon
                              r1_vert *t_vertices,  //pointer to the vertices
                              w32 *indices,         //pointer to the indices
@@ -314,10 +348,10 @@ public:
                              r1_vert *clip_buf_2,  //pointer to clip buffer 2
                              w8 flags);            //flags to be considered when clipping
 
-  // creates a window that rendering can occur in
-  // visable_w and & h is the area the window takes up on the actual screen
-  // expand type will determine the size you can actually render to  
-
+  /// Create a render window. 
+  /// Creates a window in which rendering can occur. 
+  /// visable_w and & h is the area the window takes up on the actual screen
+  /// expand type will determine the size you can actually render to.  
   virtual r1_render_window_class *create_render_window(int visable_w, int visable_h,
                                                        r1_expand_type type=R1_COPY_1x1) = 0;
 
@@ -349,10 +383,14 @@ public:
 
 extern r1_render_api_class *r1_render_api_class_instance;
 
+/// Creates the rendering api by iterating over all registered apis.
 r1_render_api_class *r1_create_api(i4_display_class *for_display, char *api_name=0);
 
+/// Destroys the api.
 void r1_destroy_api(r1_render_api_class *render_api);
 
+/// Inverts the z value. 
+/// Used for projection. 
 inline i4_float r1_ooz(i4_float z) { return 0.9999f/z; }
 
 #endif
