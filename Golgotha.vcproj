@@ -4,10 +4,10 @@
 	Version="7.10"
 	Name="Golgotha"
 	RootNamespace="Golgotha"
-	SccProjectName="SAK"
-	SccAuxPath="SAK"
-	SccLocalPath="SAK"
-	SccProvider="SAK"
+	SccProjectName=""
+	SccAuxPath=""
+	SccLocalPath=""
+	SccProvider=""
 	Keyword="MFCProj">
 	<Platforms>
 		<Platform
@@ -1711,19 +1711,19 @@
 				RelativePath=".\maxtool\max_object.h">
 			</File>
 			<File
-				RelativePath=".\maxtool\maxcomm.h">
+				RelativePath=".\maxcomm.h">
 			</File>
 			<File
-				RelativePath=".\maxcomm.h">
+				RelativePath=".\maxtool\maxcomm.h">
 			</File>
 			<File
 				RelativePath=".\quantize\median.h">
 			</File>
 			<File
-				RelativePath=".\menu.h">
+				RelativePath=".\menu\menu.h">
 			</File>
 			<File
-				RelativePath=".\menu\menu.h">
+				RelativePath=".\menu.h">
 			</File>
 			<File
 				RelativePath=".\menu\menuitem.h">
@@ -1888,10 +1888,10 @@
 				RelativePath=".\pragma.h">
 			</File>
 			<File
-				RelativePath=".\Processor.h">
+				RelativePath=".\device\processor.h">
 			</File>
 			<File
-				RelativePath=".\device\processor.h">
+				RelativePath=".\Processor.h">
 			</File>
 			<File
 				RelativePath=".\time\profile.h">
