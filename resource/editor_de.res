@@ -463,9 +463,9 @@ tile_edit_dialog =
 y+(8)
  [right text('Damage                                  ') %p=text_input(50 '%d')]
 y+(8)
- [right text('Block                                   ') %p=bool_input('%d')]
+ [right text('Block                                   ') %p=checkbox('%d')]
 y+(8)
- [right text('Wave                                    ') %p=bool_input('%d')]
+ [right text('Wave                                    ') %p=checkbox('%d')]
 
  y+(20)
  [right
