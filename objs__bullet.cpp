@@ -248,9 +248,9 @@ void g1_bullet_class::draw(g1_draw_context_class *context)
     g1_get_ambient_function_type old_ambient=g1_render.get_ambient;
     g1_render.get_ambient=g1_bright_ambient;
 
-    g1_render.r_api->set_filter_mode(R1_BILINEAR_FILTERING);
+    //g1_render.r_api->set_filter_mode(R1_BILINEAR_FILTERING);
     g1_model_draw(this, draw_params, context);
-    g1_render.r_api->set_filter_mode(R1_NO_FILTERING);
+    //g1_render.r_api->set_filter_mode(R1_NO_FILTERING);
 
     g1_render.get_ambient=old_ambient;
   }

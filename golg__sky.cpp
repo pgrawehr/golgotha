@@ -918,7 +918,9 @@ void g1_draw_sky(i4_window_class *window,
 
       draw_clouds(current_camera, transform, context);
       
-      api->set_filter_mode(R1_NO_FILTERING);
+	  //default state is filter enabled
+//      api->set_filter_mode(R1_NO_FILTERING);
+	  
     }
   }
   //else  //that only gives trouble since the buffer is inited already

@@ -149,7 +149,7 @@ void g1_particle_emitter_class::draw(g1_draw_context_class *context)
   
   if (!params.texture) return;
 
-  g1_render.r_api->set_filter_mode(R1_BILINEAR_FILTERING);
+  //g1_render.r_api->set_filter_mode(R1_BILINEAR_FILTERING);
 
   float fr=g1_render.frame_ratio; 
 
@@ -185,7 +185,7 @@ void g1_particle_emitter_class::draw(g1_draw_context_class *context)
     }
   }
 
-  g1_render.r_api->set_filter_mode(R1_NO_FILTERING);
+  //g1_render.r_api->set_filter_mode(R1_NO_FILTERING);
 }
   
 void g1_particle_emitter_class::think()

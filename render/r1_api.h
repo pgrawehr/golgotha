@@ -407,7 +407,7 @@ public:
     set_shading_mode(R1_COLORED_SHADING);
     set_write_mode(R1_WRITE_COLOR | R1_WRITE_W | R1_COMPARE_W);
     set_alpha_mode(R1_ALPHA_DISABLED);    
-    set_filter_mode(R1_NO_FILTERING);
+    set_filter_mode(R1_BILINEAR_FILTERING);
     set_color_tint(0);
 
     modify_features(R1_ALL_FEATURES, 0);         // turn off these other features

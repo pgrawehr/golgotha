@@ -240,6 +240,7 @@ i4_bool r1_dx9_class::reinit()
 	              D3DTSS_TCI_CAMERASPACEPOSITION );
     dx9_common.device->SetRenderState(D3DRS_LIGHTING,FALSE);
     dx9_common.device->SetRenderState(D3DRS_SPECULARENABLE,FALSE);
+	default_state();
     return i4_T;		
 }
 i4_bool r1_dx9_class::init(i4_display_class *display)
@@ -312,7 +313,7 @@ i4_bool r1_dx9_class::init(i4_display_class *display)
 
   set_alpha_mode(R1_ALPHA_DISABLED);  
       
-  set_filter_mode(R1_NO_FILTERING);
+  set_filter_mode(R1_BILINEAR_FILTERING);
 
   set_z_range(0.01f,1.0f);
 
@@ -339,7 +340,7 @@ i4_bool r1_dx9_class::init(i4_display_class *display)
   tmanager = new r1_dx9_texture_class(display->get_palette());
   tmanagers.reallocate(10,10);
   r1_name_cache_file("dx9");
-
+  default_state();
   return i4_T;
 }
 
@@ -646,12 +647,14 @@ void r1_dx9_class::set_filter_mode(r1_filter_type type)
 {
   if (type==R1_NO_FILTERING)
   {
-    d3d_device->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_POINT);//NEAREST);//D3DFILTER_LINEAR);    
-    d3d_device->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_POINT);//NEAREST);//D3DFILTER_LINEAR);
+	  // The Point filter is a NEAREST filter
+    d3d_device->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_POINT);
+    d3d_device->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_POINT);
   }
   else
   if (type==R1_BILINEAR_FILTERING)
   {
+	  //This is a bilinear filter
     d3d_device->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_LINEAR);    
     d3d_device->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_LINEAR);
   }
@@ -769,7 +772,7 @@ void r1_dx9_class::use_texture(w32 index,r1_texture_handle material_ref,sw32 des
 	  //d3d_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
       //d3d_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
       //d3d_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
-	  //d3d_device->SetRenderState(D3DRS_DITHERENABLE,TRUE);
+	  //d3d_device->SetRenderState(D3DRS_DITHERENABLE,FALSE);
       
     }
   }
@@ -825,7 +828,7 @@ void r1_dx9_class::use_texture(r1_texture_handle material_ref, sw32 desired_widt
       ((r1_dx9_texture_class *)tmanager)->select_texture(mip->vram_handle, blahfloat_a, blahfloat_b);            
       //d3d_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_DISABLE );
       //i4_dx9_check(d3d_device->SetTextureStageState(0,D3DTSS_COLOROP,D3DTOP_MODULATE));
-	  //i4_dx9_check(d3d_device->SetRenderState(D3DRS_DITHERENABLE,TRUE));
+	  //i4_dx9_check(d3d_device->SetRenderState(D3DRS_DITHERENABLE,FALSE));
     }
   }
   pf_dx9_use_texture.stop();
