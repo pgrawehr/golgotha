@@ -43,6 +43,9 @@
 /* Define to 1 if you have the `cipher' library (-lcipher). */
 #undef HAVE_LIBCIPHER
 
+/* Define to 1 if you have the `c_r' library (-lc_r). */
+#undef HAVE_LIBC_R
+
 /* Define to 1 if you have the `stdc++' library (-lstdc++). */
 #undef HAVE_LIBSTDC__
 

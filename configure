@@ -4142,7 +4142,71 @@ _ACEOF
 fi
 
 # FIXME: Replace `main' with a function in `-lc_r':
-#AC_CHECK_LIB([c_r], [main])
+#if present, we use libc_r (the reentrant c runtime) before libc
+
+echo "$as_me:$LINENO: checking for open in -lc_r" >&5
+echo $ECHO_N "checking for open in -lc_r... $ECHO_C" >&6
+if test "${ac_cv_lib_c_r_open+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lc_r  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char open ();
+int
+main ()
+{
+open ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_c_r_open=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_c_r_open=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_c_r_open" >&5
+echo "${ECHO_T}$ac_cv_lib_c_r_open" >&6
+if test $ac_cv_lib_c_r_open = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBC_R 1
+_ACEOF
+
+  LIBS="-lc_r $LIBS"
+
+fi
+
 # FIXME: Replace `main' with a function in `-lgcc':
 #AC_CHECK_LIB([gcc], [main])
 # FIXME: Replace `main' with a function in `-lm':
@@ -4211,6 +4275,21 @@ _ACEOF
 
 fi
 
+
+if test "$with_x" = no; then
+{ { echo "$as_me:$LINENO: error: Golgotha requires the X window system to compile and run.
+Please do not use cthe configure option '--without-x'." >&5
+echo "$as_me: error: Golgotha requires the X window system to compile and run.
+Please do not use cthe configure option '--without-x'." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+#We leave this out. Some os's (i.e BSD) fail the test for -lX11 because
+#the library doesn't need to be linked explicitly.
+#if test "$X11_LIBS" = ""; then
+#dnl Not having X is fatal. We abort here.
+#AC_MSG_ERROR([The X11 library -lX11 could not be found. Please specify
+#the correct path to the library using --x-includes=DIR and --x-libraries=DIR.])
+#fi
 
 # Checks for header files.
 
@@ -5802,7 +5881,7 @@ _ACEOF
 
 fi
 
-
+#ICE_CXX_LONG_LONG
 
 # Checks for library functions.
 echo "$as_me:$LINENO: checking for error_at_line" >&5

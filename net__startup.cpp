@@ -519,7 +519,7 @@ void process_data_packet(i4_file_class &r,i4_bool server)
 				{
 				//Object seems to be new
 				//obj=g1_create_object(typefor);
-				if (typefor>=0 && typefor<=g1_last_object_type)
+				if (typefor<=g1_last_object_type)
 					{
 					obj=g1_object_type_array[typefor]->create_object(typefor,rtloader);
 					//the object will be in sync with the load

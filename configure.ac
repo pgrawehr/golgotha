@@ -34,12 +34,25 @@ AC_PATH_XTRA
 # FIXME: Replace `main' with a function in `-lX11':
 AC_CHECK_LIB([X11], [XOpenDisplay])
 # FIXME: Replace `main' with a function in `-lc_r':
-#AC_CHECK_LIB([c_r], [main])
+#if present, we use libc_r (the reentrant c runtime) before libc
+AC_CHECK_LIB([c_r], [open])
 # FIXME: Replace `main' with a function in `-lgcc':
 #AC_CHECK_LIB([gcc], [main])
 # FIXME: Replace `main' with a function in `-lm':
 #AC_CHECK_LIB([m], [sqrt])
 AC_CHECK_LIB([cipher],[encrypt])
+
+if test "$with_x" = no; then
+AC_MSG_ERROR([Golgotha requires the X window system to compile and run.
+Please do not use cthe configure option '--without-x'.])
+fi
+#We leave this out. Some os's (i.e BSD) fail the test for -lX11 because
+#the library doesn't need to be linked explicitly.
+#if test "$X11_LIBS" = ""; then
+#dnl Not having X is fatal. We abort here.
+#AC_MSG_ERROR([The X11 library -lX11 could not be found. Please specify
+#the correct path to the library using --x-includes=DIR and --x-libraries=DIR.])
+#fi
 
 # Checks for header files.
 AC_HEADER_DIRENT
@@ -61,7 +74,7 @@ AC_HEADER_TIME
 AC_STRUCT_TM
 AC_CHECK_TYPES([ptrdiff_t])
 AC_SYS_LONG_FILE_NAMES
-
+#ICE_CXX_LONG_LONG
 
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
