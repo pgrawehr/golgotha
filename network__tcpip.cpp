@@ -6,11 +6,11 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
-
+#include "pch.h"
 #define PTHREAD_KERNEL  /* Needed for OK and NOTOK defines */
+#ifdef NETWORK_INCLUDED
 
-
-
+/*
 #ifndef _WINDOWS
 #define SIZE_TYPE unsigned int
 #include <unistd.h>
@@ -42,6 +42,16 @@
 #define OPTION_TYPE BOOL
 #define SIZE_TYPE int
 
+#endif
+*/
+
+#ifdef _WINDOWS
+#define OPTION_TYPE BOOL
+#define SIZE_TYPE int
+#else
+#define closesocket ::close
+#define OPTION_TYPE int
+#define SIZE_TYPE unsigned int
 #endif
 
 #include "time/time.h"
@@ -821,5 +831,5 @@ i4_str *i4_get_user_name()
   return i4_from_ascii(buf);
 }
 
-
-
+//The entire file is skipped if the network support is disabled
+#endif

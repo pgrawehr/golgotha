@@ -28,7 +28,7 @@
 ***********************************************************************/
  
 
-
+#include "pch.h"
 #include "gui/browse_tree.h"
 #include "window/style.h"
 #include "window/colorwin.h"

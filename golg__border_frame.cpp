@@ -5,7 +5,7 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "border_frame.h"
 #include "loaders/load.h"
 #include "image/image.h"

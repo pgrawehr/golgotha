@@ -28,7 +28,7 @@
 ***********************************************************************/
  
 
-
+#include "pch.h"
 #include "gui/list_pick.h"
 #include "menu/menuitem.h"
 #include "image/image.h"

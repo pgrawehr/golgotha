@@ -7,7 +7,7 @@
 ***********************************************************************/
 
 
-
+#include "pch.h"
 #include "visible.h"
 #include "map.h"
 #include "map_cell.h"

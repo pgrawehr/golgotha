@@ -6,6 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+#include "pch.h"
 #include "video/display.h"
 #include "device/kernel.h"
 #include "error/error.h"

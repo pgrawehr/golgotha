@@ -19,7 +19,8 @@
     For the full license, see COPYING.
 ***********************************************************************/
  
-#include <stdio.h>
+#include "pch.h"
+//#include <stdio.h>
 //#ifdef __linux
 //includes pthread_mutexattr_settype()
 //Dumb: In my linux distro, declaring this would require symbols which
@@ -33,7 +34,6 @@
 #include "main/main.h"
 #include <sched.h>
 #include <semaphore.h>
-#include <unistd.h>
 static volatile w32 i4_thread_count=0;
 static i4_critical_section_class i4_thread_start_lock;
 static i4_critical_section_class i4_thread_lock;
@@ -270,6 +270,7 @@ void i4_set_thread_priority(int thread_id, i4_thread_priority_type priority)
 //static volatile int recursive_lock=0;
 //static volatile int thread_lock_id=0;
 
+/*
 //pthread_mutexattr_settype() has some real portability problems
 //it exists under all known unixes, but has different names and
 //parameters. 
@@ -292,6 +293,12 @@ extern "C" int pthread_mutexattr_settype(pthread_mutexattr_t *m,int kind);
 #undef I4_MUTEX_RECURSIVE
 #define I4_MUTEX_RECURSIVE PTHREAD_MUTEX_RECURSIVE
 #endif
+*/
+
+#ifndef __USE_UNIX98
+extern "C" int pthread_mutexattr_settype(pthread_mutexattr_t *m,int kind);
+#endif
+
 
 i4_critical_section_class::i4_critical_section_class(void)
 {

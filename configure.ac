@@ -2,7 +2,7 @@
 AC_INIT(Golgotha, V1.0.8.3 , golgotha@qbic.vipnet.ro)
 AC_CONFIG_SRCDIR([golg__main.cpp])
 #AC_PREREQ(2.57)
-#AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.
 AC_PROG_CXX([icc gcc34 gcc33 gcc32 gcc31 gcc30 gcc])
@@ -42,7 +42,10 @@ AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h memory.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h unistd.h])
+#AC_CHECK_HEADERS([netinet/ip.h])
 
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_C_INLINE
@@ -68,6 +71,67 @@ AC_TYPE_SIGNAL
 AC_FUNC_STAT
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([floor getcwd gethostbyname gethostname gettimeofday memmove memset mkdir munmap pow realpath select socket sqrt strcasecmp strchr strcspn strdup strndup strrchr strstr])
+#AC_CHECK_FUNCS([pthread_mutexattr_settype pthread_mutexattr_setkind_np])
+AC_MSG_CHECKING([how to initialize recursive mutexes])
+#AC_DEFINE([HAVE_PTHREAD_MUTEX_RECURSIVE],0)
+ac_cv_mutex_recursive1=unknown
+AC_COMPILE_IFELSE(
+[
+#include <pthread.h>
+int main(void)
+{
+  int k=PTHREAD_MUTEX_RECURSIVE;
+  return 0;
+}
+
+],
+[
+AC_DEFINE([HAVE_PTHREAD_MUTEX_RECURSIVE],1,"How to set recursive mutexes?")
+ac_cv_mutex_recursive1=PTHREAD_MUTEX_RECURSIVE
+])
+if test $ac_cv_mutex_recursive1 = default; then
+AC_COMPILE_IFELSE(
+[
+#include <pthread.h>
+int main(void)
+{
+  int k=PTHREAD_MUTEX_RECURSIVE_NP;
+  return 0;
+}
+],
+[
+AC_DEFINE([HAVE_PTHREAD_MUTEX_RECURSIVE_NP],1,"Recursive_NP present")
+ac_cv_mutex_recursive1=PTHREAD_MUTEX_RECURSIVE_NP
+])
+fi
+AC_MSG_RESULT([$ac_cv_mutex_recursive1])
+AC_MSG_CHECKING([how to set mutexes recursive])
+ac_cv_mutex_recursive2="unknown"
+AC_COMPILE_IFELSE(
+[#include <pthread.h>
+int main(void)
+{
+  pthread_mutexattr_t attr;
+  pthread_mutexattr_init(&attr);
+  pthread_mutexattr_setkind_np(&attr,$ac_cv_mutex_recursive1);
+}
+],
+[AC_DEFINE([HAVE_PTHREAD_MUTEXATTR_SETKIND_NP],1,"setkind") 
+ac_cv_mutex_recursive2="setkind_np"
+])
+AC_COMPILE_IFELSE(
+[#include <pthread.h>
+int main(void)
+{
+pthread_mutexattr_t attr;
+pthread_mutexattr_init(&attr);
+pthread_mutexattr_settype(&attr,$ac_cv_mutex_recursive1);
+}],
+[
+AC_DEFINE([HAVE_PTHREAD_MUTEXATTR_SETTYPE],1,"settype")
+ac_cv_mutex_recursive2="settype"
+])
+AC_MSG_RESULT([$ac_cv_mutex_recursive2])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

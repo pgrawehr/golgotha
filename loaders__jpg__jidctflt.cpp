@@ -44,6 +44,7 @@
  * we use floating point arithmetic.
  */
 
+#include "pch.h"
 #define JPEG_INTERNALS
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"

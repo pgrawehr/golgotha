@@ -8,7 +8,7 @@ DEPCOMP=@CXX@
 MYINCDIR=.
 
 #INTDIR=.
-INTDIR=linux_debug
+INTDIR=@target_os@_debug
 
 INCDIRS=-I${MYINCDIR} @X_CFLAGS@ 
 LIBS= -lm -lGL @LIBS@ @X_LIBS@ @X_PRE_LIBS@ @X_EXTRA_LIBS@
@@ -20,9 +20,9 @@ LIBDIRS=-L/usr/X11R6/lib
 #	-ffor-scope -Wstrict-prototypes  
 	
 
-CFLAGS= $(INCDIRS) -x c++ @DEFS@ -D __linux -D __bsd -W -Wcast-qual @CPPFLAGS@
+CFLAGS= $(INCDIRS) @DEFS@ -D I4_FILE_PREFIX="\"@target_os@\"" -D GOLGOTHA_WINDOW_TITLE="\"Golgotha @target@ build\"" -W @CPPFLAGS@ 
 
-DBG=@CXXFLAGS@
+DBG=@CXXFLAGS@ -D _DEBUG
 
 # -Wconversion 
 

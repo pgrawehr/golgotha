@@ -5,7 +5,7 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "music/stream.h"
 #include "loaders/wav_load.h"
 #include "file/file.h"
@@ -16,7 +16,7 @@
 #include "lisp/lisp.h"
 #include "lisp/li_init.h"
 
-#include <memory.h>
+//#include <memory.h>
 
 void i4_wav_callback(w32 count, void *context)
 {

@@ -31,6 +31,7 @@
 #ifndef GOLG_X11_OPENGL
 #define GOLG_X11_OPENGL
 
+#include "pch.h"
 #include "video/opengl/opengl_display.h"
 #include <GL/glx.h>
 #include "video/x11/x11_input.h"

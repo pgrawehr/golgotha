@@ -24,7 +24,7 @@
  * way to compute intercolor distances; it's unclear that ordered dither's
  * fundamental assumptions even hold with an irregularly spaced color map.
  */
-
+#include "pch.h"
 #define JPEG_INTERNALS
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"

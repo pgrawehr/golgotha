@@ -5,12 +5,12 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "dll/dll_man.h"
 #include "file/file.h"
 #include "memory/malloc.h"
 #include "error/alert.h"
-#include <stdio.h>
+//#include <stdio.h>
 
 
 i4_dll_manager_class i4_dll_man;

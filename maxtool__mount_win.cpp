@@ -6,6 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+#include "pch.h"
 #include "window/window.h"
 #include "window/colorwin.h"
 #include "window/style.h"

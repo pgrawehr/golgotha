@@ -5,13 +5,13 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "path.h"
 #include "memory/malloc.h"
 #include "g1_limits.h"
 #include "saver_id.h"
 #include "global_id.h"
-#include <string.h>
+//#include <string.h>
 
 g1_path_manager_class g1_path_manager;
 

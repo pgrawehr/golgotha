@@ -5,6 +5,7 @@ information about compiling & licensing issues visit this URL</a>
 <PRE> If that doesn't help, contact Jonathan Clark at 
 golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
+#include "pch.h"
 #include "memory/array.h"
 #include "error/error.h"
 #include "remove_man.h"

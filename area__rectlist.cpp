@@ -5,14 +5,14 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "area/rectlist.h"
 #include "error/error.h"
 #include "memory/malloc.h"
 #include "error/error.h"
 #include "init/init.h"
 
-#include <stdlib.h>
+//#include <stdlib.h>
 
 #ifndef max
 #define max(x,y) (((x)>(y)) ? (x) : (y))

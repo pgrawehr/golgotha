@@ -5,14 +5,14 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "loaders/load.h"
 #include "memory/malloc.h"
 #include "file/file.h"
 #include "image/image.h"
 #include "error/alert.h"
 
-#include <stdlib.h>
+//#include <stdlib.h>
 
 static i4_image_loader_class *loader_list=NULL;
 static w16 max_header_need=0;

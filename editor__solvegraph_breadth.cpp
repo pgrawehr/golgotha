@@ -6,6 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+#include "pch.h"
 #include "solvegraph_breadth.h"
 #include "search.h"
 #include "editor/dialogs/path_win.h"

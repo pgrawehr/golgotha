@@ -23,6 +23,7 @@
  */
 
 /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
+#include "pch.h"
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"
 #include "loaders/jpg/jerror.h"

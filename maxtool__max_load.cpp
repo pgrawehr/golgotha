@@ -6,6 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+#include "pch.h"
 //#include "maxtool/sdk_inc/max.h"
 #include "maxtool/max_load.h"
 #include "load3d.h"

@@ -21,7 +21,7 @@
  *
  * Based on code contributed by Lee Daniel Crocker.
  */
-
+#include "pch.h"
 #include "loaders/jpg/cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
 #ifdef TARGA_SUPPORTED

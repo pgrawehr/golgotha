@@ -7,7 +7,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
-#include "arch.h"
+#include "pch.h"
 #include "isllist.h"
 
 #include "init/init.h"
@@ -44,8 +44,6 @@
 #include <winbase.h>
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
 
 i4_time_device_class i4_time_dev;
 extern int i4_show_events;

@@ -22,7 +22,7 @@
  * to process big images.
  * Note that the max_memory_to_use option is ignored by this implementation.
  */
-
+#include "pch.h"
 #define JPEG_INTERNALS
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"

@@ -6,6 +6,8 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 //#include "max.h"
+
+#include "pch.h"
 #include "maxtool/st_edit.h"
 #include "maxtool/m1_info.h"
 #include "window/window.h"

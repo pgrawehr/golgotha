@@ -5,8 +5,8 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
-#include <stdio.h>
+#include "pch.h"
+//#include <stdio.h>
 #include "saver_id.h"
 #include "status/status.h"
 

@@ -6,7 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
-
+#include "pch.h"
 #include "file/file.h"
 #include "loaders/wav_load.h"
 #include "error/error.h"

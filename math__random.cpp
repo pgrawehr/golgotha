@@ -6,7 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
-#include "arch.h"
+#include "pch.h"
 //very fast, but very bad random number generator.
 //I think this is done so badly, because we want to get shure that the "random" sequence
 //is reproduceable. But we should better save the seed in the save-file, so we can use a

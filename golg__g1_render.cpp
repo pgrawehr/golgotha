@@ -533,7 +533,7 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 			//We'll need to further investigate here, since it's no more 
 			//acceptable to iterate over all vertices if there is an octree
 			//(num_vertices might be several hundred thousand)
-			for (i=0; i<num_vertices; i++, src_vert, v++)
+			for (i=0; i<num_vertices; i++, v++)
 				{
 				//      i4_float reflected_intensity = 1.0;
 				

@@ -6,6 +6,8 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+#include "pch.h"
+#ifdef NETWORK_INCLUDED
 #include "net/startup.h"
 #include "net/client.h"
 #include "net/server.h"
@@ -47,11 +49,11 @@
 #include <windows.h>
 #include <winsock.h>
 #endif
-#ifdef __linux
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#endif
+//#ifdef __linux
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+//#include <arpa/inet.h>
+//#endif
 
 i4_temp_file_class *network_file=0;
 
@@ -1382,3 +1384,7 @@ int i4_network_send(w8 *buf, i4_file_class *fp,int send_to)
 		}
 	return 0;
 	}
+
+//This entire file won't be compiled if the network support is unavailable
+
+#endif

@@ -5,7 +5,7 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "solvemap_breadth.h"
 #include "path_api.h"
 #include "memory/malloc.h"

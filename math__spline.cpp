@@ -6,6 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+#include "pch.h"
 #include "math/spline.h"
 #include "memory/lalloc.h"
 #include "math/matrix.h"

@@ -27,7 +27,7 @@
  *
  * See jidctint.c for additional comments.
  */
-
+#include "pch.h"
 #define JPEG_INTERNALS
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"

@@ -27,12 +27,12 @@
 
 ***********************************************************************/
  
-
+#include "pch.h"
 #include "time/time.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <unistd.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <sys/time.h>
+//#include <unistd.h>
 
 void i4_time_class::get()
 {

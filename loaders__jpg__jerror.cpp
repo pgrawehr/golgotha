@@ -22,9 +22,9 @@
  */
 
 /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
-#ifdef _WINDOWS
+//#ifdef _WINDOWS
 #include "pch.h"
-#endif
+//#endif
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"
 #include "loaders/jpg/jversion.h"

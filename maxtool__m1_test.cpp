@@ -5,7 +5,7 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "maxtool/m1_info.h"
 #include "maxtool/st_edit.h"
 #include "maxtool/render2.h"
@@ -14,10 +14,7 @@
 #include "maxtool/max_object.h"
 #include "gui/smp_dial.h"
 
-#ifdef __linux
-
-#include <stdio.h>
-
+#if 0
 li_object *m1_do(li_object *o, li_environment *env)
 {
   char buff[1024], *p=buff;

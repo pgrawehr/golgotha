@@ -27,7 +27,7 @@
 
 ***********************************************************************/
  
-
+#include "pch.h"
 #include "video/x11/mitshm.h"
 #include "video/x11/x11_display.h"
 #include "error/error.h"

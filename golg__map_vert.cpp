@@ -5,7 +5,7 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "map.h"
 #include "map_vert.h"
 #include "math/trig.h"

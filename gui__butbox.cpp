@@ -7,7 +7,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
-
+#include "pch.h"
 #include "gui/butbox.h"
 #include "error/error.h"
 #include "device/kernel.h"

@@ -28,7 +28,7 @@
 ***********************************************************************/
  
 
-
+#include "pch.h"
 #include "editor/mode/e_ai.h"
 #include "editor/e_state.h"
 #include "critical_graph.h"

@@ -71,8 +71,7 @@ typedef __int64            sw64;
 #endif
 #endif //Windows
 
-#if (__linux || __sgi || SUN4)         // gcc has long long
-#define I4_UNIX
+#ifdef I4_UNIX
 typedef unsigned long   w32;
 typedef unsigned short  w16;
 typedef unsigned char   w8;
@@ -102,9 +101,9 @@ typedef struct _GUID {
 typedef long int INT32;//for jpg loader
 
 
-#if (SUN4 || __sgi)
-#define I4_WORDALIGN
-#endif
+// #if (SUN4 || __sgi)
+// #define I4_WORDALIGN
+// #endif
 
 #define ZeroMemory(a,b) memset(a,0,b)
 #endif
@@ -121,7 +120,7 @@ typedef long int INT32;//for jpg loader
 //All little endian systems go here
 //of course, if you wan't to compile for linux, say on a sparc, 
 //you don't wanna go here. Preferably use some other switch, then.
-#if (_WINDOWS||__linux)
+#ifndef WORDS_BIGENDIAN
 
 enum { i4_bigend=0, i4_litend=1 };
 
@@ -175,8 +174,6 @@ inline void *ALIGN_BACKWARD(void *addr)
 #ifdef _WINDOWS
 //Apply some modifications to the warning levels of the compiler
 #include "pragma.h"
-//under windows, the network support can be compiled
-#define NETWORK_INCLUDED
 #endif
 
 //There follow some macro definitions that are mainly for convenience.
@@ -192,17 +189,18 @@ inline void *ALIGN_BACKWARD(void *addr)
 #ifdef _WINDOWS
 #define I4_FILE_PREFIX "win32"
 #define GOLGOTHA_WINDOW_TITLE "Golgotha Milestone 5"
+#endif
+
+/*
 #else
 #ifdef __bsd
 //This must come before linux, since __bsd implies __linux
 #define I4_FILE_PREFIX "bsd"
 #define GOLGOTHA_WINDOW_TITLE "Golgotha Milestone 5 FreeBSD native build"
-#define NETWORK_INCLUDED
 #else
 #ifdef __linux
 #define I4_FILE_PREFIX "linux"
 #define GOLGOTHA_WINDOW_TITLE "Golgotha Milestone 5 linux native build"
-#define NETWORK_INCLUDED
 #else
 #ifdef SUN4
 #define I4_FILE_PREFIX "sun4"
@@ -219,4 +217,7 @@ inline void *ALIGN_BACKWARD(void *addr)
 #endif //linux
 #endif //bsd
 #endif //windows
-#endif //the file arch.h
+*/
+#endif 
+//the file arch.h
+

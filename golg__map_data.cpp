@@ -5,9 +5,9 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "map_data.h"
-#include <string.h>
+//#include <string.h>
 
 g1_map_data_class *g1_map_data_class::first=0;
 

@@ -5,15 +5,15 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "loaders/dir_load.h"
 #include "checksum/checksum.h"
 #include "memory/malloc.h"
 #include "file/buf_file.h"
 #include "file/sub_section.h"
-#include <stdlib.h>
+//#include <stdlib.h>
 
-#include <string.h>
+//#include <string.h>
 
 
 i4_bool i4_insert_sections(i4_file_class *in, i4_file_class *out,

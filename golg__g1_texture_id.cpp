@@ -5,10 +5,10 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "tile.h"
 #include "checksum/checksum.h"
-#include <string.h>
+//#include <string.h>
 
 r1_texture_handle g1_get_texture(char *texture_name)
 {

@@ -18,7 +18,7 @@
  * Note we prefix all global names with "j" to minimize conflicts with
  * a surrounding application.
  */
-
+#include "pch.h"
 #define JPEG_INTERNALS
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"

@@ -6,7 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
-#include "arch.h"
+#include "pch.h"
 
 w32 i4_check_sum32(const void *buf, w32 buf_len)
 {

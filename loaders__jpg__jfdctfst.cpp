@@ -37,7 +37,7 @@
  * precise the scaled value, so this implementation does worse with high-
  * quality-setting files than with low-quality ones.
  */
-
+#include "pch.h"
 #define JPEG_INTERNALS
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"

@@ -6,6 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 //#include "max.h"
+#include "pch.h"
 #include "lisp/li_init.h"
 #include "app/app.h"
 #include "file/get_filename.h"

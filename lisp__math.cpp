@@ -6,15 +6,15 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 //This file belongs to the revival project only
-
+#include "pch.h"
 #include "lisp/lisp.h"
 #include "lisp/li_types.h"
 #include "lisp/li_init.h"
 #include "init/init.h"
 #include "render/r1_api.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
+//#include <stdlib.h>
+//#include <stdio.h>
+//#include <time.h>
 #include <math.h>
 
 li_bignum *li_bigzero;

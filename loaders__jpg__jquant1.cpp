@@ -17,7 +17,7 @@
  * These routines provide mapping to a fixed color map using equally spaced
  * color values.  Optional Floyd-Steinberg or ordered dithering is available.
  */
-
+#include "pch.h"
 #define JPEG_INTERNALS
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"

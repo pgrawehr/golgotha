@@ -6,6 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+#include "pch.h"
 #include "math/transform.h"
 
 i4_transform_class& i4_transform_class::multiply(const i4_transform_class &a, const i4_transform_class &b)

@@ -1,3 +1,5 @@
+#include "pch.h"
+
 /********************************************************************** 
 
     Golgotha Forever - A portable, free 3D strategy and FPS game.

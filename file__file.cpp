@@ -44,6 +44,9 @@
 
 #include "lisp/lisp.h"
 
+
+
+#ifdef _WINDOWS
 #include <stdio.h>
 #include <memory.h>
 #include <stdlib.h>
@@ -51,36 +54,12 @@
 #include <stdarg.h>
 #include <errno.h>
 #include <fcntl.h>
-
-#ifdef _WINDOWS
 #include <io.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <direct.h>
-#else
-#ifdef __bsd
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <dirent.h>
-#else
-#ifdef __linux
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/io.h>
-#include <dirent.h>
-#else
-//For instance SUN4 goes here
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <dirent.h>
 #endif
-#endif
-
-#endif
-
+#include <errno.h>
 //#define file_load_debug /*Activate to see "open failed..." and "opened file ..." messages*/
 
 

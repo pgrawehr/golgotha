@@ -27,15 +27,14 @@
 
 ***********************************************************************/
  
-
+#include "pch.h"
 #include "image/color.h"
 #include "image/image8.h"
 #include "file/file.h"
-#include "arch.h"
 #include "error/error.h"
 #include "image/context.h"
 #include "palette/pal.h"
-#include <memory.h>
+//#include <memory.h>
 
 
 i4_bool fli_read_rle(w8 *im, w32 w, w32 h, i4_file_class *fp)

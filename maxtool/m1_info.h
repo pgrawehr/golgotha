@@ -81,7 +81,7 @@ struct m1_info_struct
     update_mode=0;
     r_font=0;
 	selected_index=0;
-	tman_index=-1;
+	tman_index=0xFFFFFFFF;
 	num_invalid_vertices=0;
   }
 

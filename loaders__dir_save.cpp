@@ -5,11 +5,11 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "loaders/dir_save.h"
 #include "checksum/checksum.h"
 #include "memory/malloc.h"
-#include <string.h>
+//#include <string.h>
 
 w32 i4_saver_class::tell () 
 { 

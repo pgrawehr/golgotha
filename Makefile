@@ -2,28 +2,27 @@
 
 # Golgotha Makefile for FREBSD native build using gcc 3.3
 
-CPP=gcc32
-LD=gcc32 
-DEPCOMP=gcc32 
+CPP=gcc33
+LD=gcc33 
+DEPCOMP=gcc33 
 MYINCDIR=.
 
 #INTDIR=.
-INTDIR=linux_debug
+INTDIR=freebsd4.9_debug
 
-INCDIRS=-I${MYINCDIR} -I/usr/X11/include -I/usr/openwin/include -I/usr/X11R6/include
-LIBS= -lm -lX11 -lGL -lGLU -lc_r -lgcc -pthread -lstdc++
+INCDIRS=-I${MYINCDIR}  -I/usr/X11R6/include 
+LIBS= -lm -lGL -pthread -lstdc++   -L/usr/X11R6/lib  -lSM -lICE 
 LIBDIRS=-L/usr/X11R6/lib
 
 #the following flags work under cygwin (without opengl render) - this is not sensefull anyway.
-#CFLAGS= $(INCDIRS) -D __linux -W -Wcast-qual \
+#CFLAGS= $(INCDIRS)  -D __linux -W -Wcast-qual \
 #	-Wmissing-declarations -static -fno-strict-prototypes \
 #	-ffor-scope -Wstrict-prototypes  
 	
 
-CFLAGS= $(INCDIRS) -x c++ -D __linux -D __bsd -W -Wcast-qual \
-	-ffor-scope -Wno-non-template-friend 
+CFLAGS= $(INCDIRS) -DHAVE_CONFIG_H -D I4_FILE_PREFIX="\"freebsd4.9\"" -D GOLGOTHA_WINDOW_TITLE="\"Golgotha i386-unknown-freebsd4.9 build\"" -W  
 
-DBG=-g -D _DEBUG
+DBG=-g -O2 -D _DEBUG
 
 # -Wconversion 
 
@@ -178,7 +177,6 @@ OBJS = \
 	$(INTDIR)/maxtool__animate.o \
 	$(INTDIR)/maxtool__drag_select.o \
 	$(INTDIR)/maxtool__draw_modes.o \
-	$(INTDIR)/maxtool__get_dir.o \
 	$(INTDIR)/maxtool__m1_commands.o \
 	$(INTDIR)/maxtool__m1_info.o \
 	$(INTDIR)/maxtool__m1_test.o \

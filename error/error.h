@@ -77,9 +77,9 @@ extern int i4_error_line_on;
 
 #else
 
-#define I4_ASSERT(x,y) (0)
-#define I4_TEST(x,y)   (0)
-#define H()            (0)
+#define I4_ASSERT(x,y) 
+#define I4_TEST(x,y)   
+#define H()            
 
 #endif
 

@@ -21,7 +21,7 @@
  * We thus must separate this file from jcapimin.c to avoid linking the
  * whole compression library into a transcoder.
  */
-
+#include "pch.h"
 #define JPEG_INTERNALS
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"

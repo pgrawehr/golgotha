@@ -5,9 +5,9 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
-
+#include "pch.h"
 #include "map_cell.h"
-#include <stdlib.h>
+//#include <stdlib.h>
 #include "poly/polyclip.h"
 #include "poly/polydraw.h"
 #include "map.h"
