@@ -630,7 +630,33 @@ i4_str *i4_relative_path(const i4_const_str &path)
   delete full_path;
   delete full_current;
 
-
+  //replace \ by / in any case right now.
+  int p=0;
+  while (full[p])
+      {
+      if (full[p]=='\\')
+          full[p]='/';
+#ifdef _WINDOWS
+      //the windows file-system is case-insensitive, so convert 
+      //everything to lower-case
+      i4_char c(full[p]);
+      full[p]=c.to_lower().ascii_value();
+#endif
+      p++;
+      }
+  p=0;
+  while (current[p])
+      {
+      if (current[p]=='\\')
+          current[p]='/';
+#ifdef _WINDOWS
+      //the windows file-system is case-insensitive, so convert 
+      //everything to lower-case
+      i4_char d(current[p]);
+      current[p]=d.to_lower().ascii_value();
+#endif
+      p++;
+      }
   // files are on different drives  
   if (full[1]==':' && current[1]==':' && full[0]!=current[0])
     return new i4_str(full);

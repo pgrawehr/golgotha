@@ -309,7 +309,10 @@ public:
 			  case M1_BUTTON_BROWSE_OK:
 				  {
 				  CAST_PTR(file,i4_file_open_message_class,ev);
-				  tname_edit->change_text(*file->filename,i4_T);
+                  i4_str *shortrelname=i4_relative_path(*file->filename);
+                  
+				  tname_edit->change_text(*shortrelname,i4_T);
+                  delete shortrelname;
 				  }
 				  break;
 
