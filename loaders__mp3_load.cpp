@@ -36,7 +36,7 @@ i4_file_class *mp3_out=0;
 
 #include "loaders/mp3/mpg123.h"
 #include "loaders/mp3/getlopt.h"
-#include "loaders/mp3/version.h"
+#include "loaders/mp3/mpversion.h"
 
 static long rates[3][3] = { 
   { 32000,44100,48000 } ,

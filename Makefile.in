@@ -27,7 +27,7 @@ LIBDIRS=-L/usr/X11R6/lib
 #	-Wmissing-declarations -static -fno-strict-prototypes \
 #	-ffor-scope -Wstrict-prototypes  
 	
-CFLAGS= $(INCDIRS) @DEFS@ -D I4_FILE_PREFIX="\"@target_os@\"" -D GOLGOTHA_WINDOW_TITLE="\"Golgotha @target@ build\"" -W @CPPFLAGS@ 
+CFLAGS= $(INCDIRS) @DEFS@ -D I4_FILE_PREFIX="\"@target_os@\"" -D GOLGOTHA_WINDOW_TITLE="\"Golgotha @target@ build \"" -W @CPPFLAGS@ 
 
 DBG=@CXXFLAGS@
 

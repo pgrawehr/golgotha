@@ -1,6 +1,7 @@
 //Microsoft Developer Studio generated resource script.
 //
 #include "resource.h"
+#include "version.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -898,8 +899,8 @@ AFX_IDB_CHECKLISTBOX_95 BITMAP  DISCARDABLE     "resource\\95check.bmp"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,8,2
- PRODUCTVERSION 1,0,8,2
+ FILEVERSION GOLGOTHA_VERSION_ROOT
+ PRODUCTVERSION GOLGOTHA_VERSION_ROOT
  FILEFLAGSMASK 0x2fL
 #ifdef _DEBUG
  FILEFLAGS 0x9L
@@ -917,14 +918,14 @@ BEGIN
             VALUE "Comments", "This is a debug Build of the Golgotha - Revival Group \0"
             VALUE "CompanyName", "Public Domain\0"
             VALUE "FileDescription", "Golgotha Real Time Engine Master Executable\0"
-            VALUE "FileVersion", "1, 0, 8, 2\0"
+            VALUE "FileVersion", GOLGOTHA_VERSION
             VALUE "InternalName", "Golgotha\0"
-            VALUE "LegalCopyright", "Copyright © 1996 - 2003 Crack dot Com et al.\0"
+            VALUE "LegalCopyright", "Copyright © 1996 - 2004 Crack dot Com and the Golgotha Revival Group.\0"
             VALUE "LegalTrademarks", "Golgotha is a Trademark of Crack dot Com and others\0"
             VALUE "OriginalFilename", "Golgotha.exe\0"
             VALUE "PrivateBuild", "TRUE\0"
             VALUE "ProductName", "Golgotha\0"
-            VALUE "ProductVersion", "1, 0, 8, 2\0"
+            VALUE "ProductVersion", GOLGOTHA_VERSION
             VALUE "SpecialBuild", "\0"
         END
         BLOCK "080704b0"
@@ -932,14 +933,14 @@ BEGIN
             VALUE "Comments", "This is a debug Build of the Golgotha - Revival Group\0"
             VALUE "CompanyName", "Public Domain\0"
             VALUE "FileDescription", "Golgotha Main Executable debug build\0"
-            VALUE "FileVersion", "1, 0, 8, 2\0"
+            VALUE "FileVersion", GOLGOTHA_VERSION
             VALUE "InternalName", "Golgotha\0"
-            VALUE "LegalCopyright", "Copyright © 1996-2003 Crack.com et. al.\0"
+            VALUE "LegalCopyright", "Copyright © 1996-2004 Crack.com and the Golgotha Revival Group.\0"
             VALUE "LegalTrademarks", "Golgotha is Trademark of Crack.com, others names may be registered by their respective owners. \0"
             VALUE "OriginalFilename", "Golgotha.exe\0"
             VALUE "PrivateBuild", "Built by Patrick Grawehr\0"
             VALUE "ProductName", "Golgotha\0"
-            VALUE "ProductVersion", "1, 0, 8, 2\0"
+            VALUE "ProductVersion", GOLGOTHA_VERSION
             VALUE "SpecialBuild", "\0"
         END
     END

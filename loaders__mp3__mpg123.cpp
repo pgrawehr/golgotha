@@ -27,7 +27,7 @@
 #include "loaders/mp3/mpg123.h"
 #include "loaders/mp3/getlopt.h"
 
-#include "loaders/mp3/version.h"
+#include "loaders/mp3/mpversion.h"
 
 extern int mp3_endfile;
 

@@ -39,6 +39,7 @@
 #include "image/context.h"
 #include "app/app.h"
 #include "window/window.h"
+#include "version.h"
 
 
 int i4_system_choose_option(char **choices)
@@ -447,7 +448,10 @@ i4_bool x11_input_class::create_window(sw32 x, sw32 y, w32 w, w32 h,
 
   if (!open_display()) 
     return i4_F;
-  listn[0]=GOLGOTHA_WINDOW_TITLE;//defined in arch.h, part of system portability vars
+  //The first constant is defined
+  //by the makefile in a -D flag to the compiler.
+  //The second comes from version.h
+  listn[0]=GOLGOTHA_WINDOW_TITLE GOLGOTHA_VERSION_STR;
   listn[1]=0;
   listicon[0]="Golgotha";
   listicon[1]=0;

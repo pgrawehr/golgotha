@@ -16,6 +16,7 @@
 #include "editor/dialogs/debug_win.h"
 #include "resource.h"
 #include "lisp/lisp.h"
+#include "version.h"
 #ifndef _WINDOWS
 
 #include "app/cdatafile.h"
@@ -738,6 +739,7 @@ int main(int argc, char **argv)
   i4_global_argv=tmp;
   debug_init();
   inifile=0;
+  printf("Golgotha version %s loading.",GOLGOTHA_VERSION_STR);
   inifile=new CDataFile("golgotha.ini");
   i4_win32_startup_options.check_option(argc,tmp);
   i4_main(argc,tmp);
@@ -861,7 +863,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   char memfailbuf[200];
   try
 	  {
-	i4_main(count, tmp); 
+	  i4_main(count, tmp); 
 	  }
   catch( CMemoryException* e )
 	  {
