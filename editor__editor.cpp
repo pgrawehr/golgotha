@@ -608,6 +608,7 @@ void g1_editor_class::do_command(w16 command_id)
          img[2] = g1_edit_state.get_icon(i1.read_number());
 
          path_window = new g1_path_window_class(get_map(), img);
+		 
 
          // Create MPWindow
          i4_parent_window_class *mpw;
@@ -616,11 +617,11 @@ void g1_editor_class::do_command(w16 command_id)
          mpw=style->
            create_mp_window(-1,-1,
                             path_window->width()+40,
-                            path_window->height(),
+							path_window->height(),
                             e_strs.get("ai_window_title"),
                             new i4_event_reaction_class(this, close));
          mpw->add_child(40,0, path_window);
-       
+		 
          // Create Toolbar
          i4_const_str *nums;
          i4_const_str *help_names[MAX_NUM];
@@ -628,7 +629,7 @@ void g1_editor_class::do_command(w16 command_id)
          if (nums)
          {
            int n=0;
-           for (i4_const_str* p=nums;  !p->null();  n++)
+           for (i4_const_str* p=nums;  (!p->null() && n<MAX_NUM);  n++)
            {
              i4_const_str::iterator i1=p->begin();
              img[n] = g1_edit_state.get_icon(i1.read_number());
@@ -10093,7 +10094,7 @@ enum {
   P1_RELOAD_MAP,//10
 
   P1_SET_BLOCK,//11
-  //P1_LAY_OBJECT,//12  //Currently, I can't immagine, what these were
+  //P1_LAY_OBJECT,//12  //Currently, I can't imagine, what these were
   //intended for.
 
 //  P1_STOP,
@@ -10147,12 +10148,25 @@ g1_path_tool_window_class::g1_path_tool_window_class(i4_graphical_style_class *s
 }
 //}}}
 
-
-g1_path_window_class::g1_path_window_class(g1_map_class *map, 
+w16 g1_path_window_class::map_size_x(g1_map_class *map)
+{
+	w16 ret=map->width()*CELL_SIZE+RADAR_SIZEX+2;
+	if (ret>MAX_MAP_SIZE)
+		return MAX_MAP_SIZE;
+	return ret;
+}
+w16 g1_path_window_class::map_size_y(g1_map_class *map)
+{
+	w16 ret=map->height()*CELL_SIZE>RADAR_SIZEY?map->height()*CELL_SIZE:RADAR_SIZEY;
+	if (ret>MAX_MAP_SIZE)
+		return MAX_MAP_SIZE;
+	return ret;
+}
+g1_path_window_class::g1_path_window_class(g1_map_class *_map, 
                                            i4_image_class **icons)
-  : map(map), 
-    critical_graph(map->get_critical_graph()),
-    i4_parent_window_class(map->width()*CELL_SIZE,map->height()*CELL_SIZE)
+  : map(_map), 
+    critical_graph(_map->get_critical_graph()),
+    i4_parent_window_class(map_size_x(_map),map_size_y(_map))
 //{{{
 {
   start_icon = icons[0];
@@ -10166,6 +10180,8 @@ g1_path_window_class::g1_path_window_class(g1_map_class *map,
   size = 2;
   tofrom = 0;
   points = 0;
+  top_point=0;
+  left_point=0;
   maker = map->get_map_maker();
   //maker->make_criticals(map, critical_graph);//should already be ok
   solvemap = new g1_breadth_first_map_solver_class(map->get_block_map(0));
@@ -10177,8 +10193,57 @@ g1_path_window_class::g1_path_window_class(g1_map_class *map,
   solvegraph->set_graph(critical_graph);
   solve_mode=SOLVEMODE_MAP;
   solve();
+  i4_parent_window_class* radar_overview=
+	  g1_create_radar_view(RADAR_SIZEX,RADAR_SIZEY,
+	  G1_RADAR_NO_MAP_EVENTS|
+	  G1_RADAR_SUPRESS_STATUS|
+	  G1_RADAR_CLICK_HOLDS_VIEW);
+  radar_x_pos=width()-RADAR_SIZEX+1;
+  add_child(radar_x_pos,0,radar_overview);
 }
 //}}}
+
+i4_bool g1_path_window_class::within_map(w16 x, w16 y)
+{
+	if (x>radar_x_pos-1)
+		return i4_F;
+	if (x<0)
+		return i4_F;
+	if (y>height())
+	{
+		return i4_F;
+	}
+	if (y<0)
+		return i4_F;
+	if (bitmap&&x>(bitmap->width()-left_point))
+		return i4_F;
+	if (bitmap&&y>(bitmap->height()-top_point))
+		return i4_F;
+	return i4_T;
+}
+
+i4_bool g1_path_window_class::within_radar(w16 x, w16 y)
+{
+	if (x>width())
+		return i4_F;
+	if (x<radar_x_pos)
+		return i4_F;
+	if (y>RADAR_SIZEY)
+		return i4_F;
+	if (y<0)
+		return i4_F;
+	return i4_T;
+}
+
+void g1_path_window_class::map_position(w16& x_pos, w16& y_pos)
+{
+	float map_scalex=((float)map->width()/(float)RADAR_SIZEX)*CELL_SIZE;
+	float map_scaley=((float)map->height()/(float)RADAR_SIZEY)*CELL_SIZE;
+	float map_scale=map_scaley<map_scalex?map_scaley:map_scalex;
+	x_pos-=radar_x_pos;
+	x_pos*=map_scale;
+	y_pos*=map_scale;
+}
 
 g1_path_window_class::~g1_path_window_class()
 //{{{
@@ -10397,7 +10462,7 @@ void g1_path_window_class::draw_to_bitmap()
 /*
 //#if 0
   //{{{ Draw Section Boundaries
-  //Seems to be VERY obsolte code
+  //Seems to be VERY obsolete code
   test_block_map::CBounds::CBlockPoint *p,*q;
   w16 pi=map->bounds.begin(); 
   while (map->bounds.next_point(pi)) 
@@ -10492,18 +10557,18 @@ void g1_path_window_class::parent_draw(i4_draw_context_class &context)
 	  draw_to_bitmap();
 	  }
   local_image->clear(0x0,context);  
-  bitmap->put_image(local_image, 0,0, context);
+  bitmap->put_image(local_image, -left_point, -top_point, context);
 
   int x,y;
   x = start.x * CELL_SIZE + CELL_SIZE/2+1 - start_icon->width()/2;
   y = (mh-1-start.y) * CELL_SIZE + CELL_SIZE/2+1 - start_icon->height()/2;
 
-  start_icon->put_image_trans(local_image, x, y, 0, context);
+  start_icon->put_image_trans(local_image, x-left_point, y-top_point, 0, context);
 
   x = dest.x * CELL_SIZE + CELL_SIZE/2+1 - dest_icon->width()/2;
   y = (mh-1-dest.y) * CELL_SIZE + CELL_SIZE/2+1 - dest_icon->height()/2;
 
-  dest_icon->put_image_trans(local_image, x, y, 0, context);
+  dest_icon->put_image_trans(local_image, x-left_point, y-top_point, 0, context);
 
   for (int i=0; i<critical_graph->criticals; i++)
   {
@@ -10512,7 +10577,7 @@ void g1_path_window_class::parent_draw(i4_draw_context_class &context)
     y = (mh-1-sw32(critical_graph->critical[i].y))*CELL_SIZE
       + CELL_SIZE/2+1 - crit_icon->height()/2;
       
-    crit_icon->put_image_trans(local_image, x, y, 0, context);
+    crit_icon->put_image_trans(local_image, x-top_point, y-left_point, 0, context);
   }
 }
 //}}}
@@ -10534,82 +10599,97 @@ void g1_path_window_class::receive_event(i4_event *ev)
       //{{{
     {
       CAST_PTR(mbev, i4_mouse_button_up_event_class, ev);
+	  if (within_map(last_x,last_y))
+	  {
         
-      int cell_x=last_x/CELL_SIZE,
-        cell_y=map->height()-1-(last_y/CELL_SIZE);
-        
-      // determine type
-        
-      switch (mode)
-      {
-        case P1_SET_START :
-          //{{{
-        {
-          if (mbev->left())
-          {
-            start.x=cell_x;
-            start.y=cell_y;
-          }
-          else
-          {
-            dest.x=cell_x;
-            dest.y=cell_y;
-          }
-          solve();
-          changed();
-        } break;
-        //}}}
-        case P1_SET_DESTINATION :
-          //{{{
-        {
-          dest.x=cell_x;
-          dest.y=cell_y;
-          solve();
-          changed();
-        } break;
-        //}}}
-        case P1_SET_BLOCK:
-          //{{{
-        {
-          int flags=G1_NORTH | G1_EAST | G1_WEST | G1_SOUTH;
-              
-          if (mbev->left())
-            map->get_block_map((w8)grade)->block(cell_x, cell_y, flags);
-          else
-            map->get_block_map((w8)grade)->unblock(cell_x, cell_y, flags);
-              
-          //maker->make_criticals(map, critical_graph);
-		  //solvegraph->set_graph(critical_graph);
-          solve();
-          changed();
-        } break;
-        //}}}
-        case P1_SET_CRITICAL:
-          //{{{
-        {
-          g1_editor_instance.add_undo(G1_MAP_CRITICAL_POINTS);
-          if (map) map->mark_for_recalc(G1_RECALC_CRITICAL_DATA);
+		int cell_x=(last_x+left_point)/CELL_SIZE,
+			cell_y=map->height()-1-((last_y+top_point)/CELL_SIZE);
+	        
+		// determine type
+	        
+		switch (mode)
+		{
+			case P1_SET_START :
+			//{{{
+			{
+			if (mbev->left())
+			{
+				start.x=cell_x;
+				start.y=cell_y;
+			}
+			else
+			{
+				dest.x=cell_x;
+				dest.y=cell_y;
+			}
+			solve();
+			changed();
+			} break;
+			//}}}
+			case P1_SET_DESTINATION :
+			//{{{
+			{
+			dest.x=cell_x;
+			dest.y=cell_y;
+			solve();
+			changed();
+			} break;
+			//}}}
+			case P1_SET_BLOCK:
+			//{{{
+			{
+			int flags=G1_NORTH | G1_EAST | G1_WEST | G1_SOUTH;
+	              
+			if (mbev->left())
+				map->get_block_map((w8)grade)->block(cell_x, cell_y, flags);
+			else
+				map->get_block_map((w8)grade)->unblock(cell_x, cell_y, flags);
+	              
+			//maker->make_criticals(map, critical_graph);
+			//solvegraph->set_graph(critical_graph);
+			solve();
+			changed();
+			} break;
+			//}}}
+			case P1_SET_CRITICAL:
+			//{{{
+			{
+			g1_editor_instance.add_undo(G1_MAP_CRITICAL_POINTS);
+			if (map) map->mark_for_recalc(G1_RECALC_CRITICAL_DATA);
 
-          if (mbev->left() && mbev->right())
-            critical_graph->criticals=0;
-          else if (mbev->left()) 
-            critical_graph->add_critical_point((float)cell_x, (float)cell_y);
-          else if (mbev->right())
-          {
-            critical_graph->remove_critical_point((float)cell_x, (float)cell_y);
-              
-          }
-            
-          request_redraw();
-        } break;
+			if (mbev->left() && mbev->right())
+				critical_graph->criticals=0;
+			else if (mbev->left()) 
+				critical_graph->add_critical_point((float)cell_x, (float)cell_y);
+			else if (mbev->right())
+			{
+				critical_graph->remove_critical_point((float)cell_x, (float)cell_y);
+	              
+			}
+	            
+			request_redraw();
+			} break;
+			
 		
-        //}}}
-      }
-        
-    } break;
-    //}}}
+		}
+	  }
+	  else if (within_radar(last_x,last_y))
+	  {	
+		  w16 relocate_to_x=last_x,relocate_to_y=last_y;
+		  map_position(relocate_to_x,relocate_to_y);
+		  top_point=relocate_to_y-height()/2;
+		  left_point=relocate_to_x-(radar_x_pos-1)/2;
+		  if (top_point<0)
+			  top_point=0;
+		  if (left_point<0)
+			  left_point=0;
+		  request_redraw();
+	  }
+
+	        
+	} break;
+
     case i4_event::USER_MESSAGE:
-      //{{{
     {
       CAST_PTR(uev, i4_user_message_event_class, ev);
       switch (uev->sub_type) 

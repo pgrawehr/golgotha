@@ -604,10 +604,10 @@ public:
     int x,y,w,h;
   };
 
-  g1_radar_view_class(w16 w, w16 h, int flags)
+  g1_radar_view_class(w16 w, w16 h, int _flags)
 
     : i4_parent_window_class(w,h), 
-      flags(flags)
+      flags(_flags)
   {
     restore_strategy_on_top=i4_F;
     next=list;
@@ -646,6 +646,11 @@ public:
 
   void receive_event(i4_event *ev)
   {
+	  if (flags & G1_RADAR_NO_MAP_EVENTS)
+	  {
+		  i4_parent_window_class::receive_event(ev);
+		  return;
+	  }
     switch (ev->type())
     {
       case i4_event::MOUSE_BUTTON_DOWN:
@@ -1101,9 +1106,9 @@ void g1_radar_looking_at(float x1, float y1, float x2, float y2)
 }
 
 
-i4_parent_window_class *g1_create_radar_view(int max_w, int max_h, int flags)
+i4_parent_window_class *g1_create_radar_view(int max_w, int max_h, int _flags)
 {
-  g1_radar_view_class *rv=new g1_radar_view_class(max_w, max_h, flags);
+  g1_radar_view_class *rv=new g1_radar_view_class(max_w, max_h, _flags);
   return rv;
 }
 

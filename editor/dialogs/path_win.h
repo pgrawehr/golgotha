@@ -52,13 +52,18 @@ protected:
   int last_x, last_y;
   int map_changed;
 
-  i4_float point[MAX_SOLVEPOINTS*2];//must make shure no one uses more space
+  i4_float point[MAX_SOLVEPOINTS*2];//must make sure no one uses more space
   w16 points;
   i4_float astar_point[MAX_SOLVEPOINTS*2];
   w16 astar_points;
+  sw32 top_point;
+  sw32 left_point;
   
 public:
-  enum { CELL_SIZE=3 };
+  enum { CELL_SIZE=3,
+	RADAR_SIZEX=150,  //Should be square right now
+    RADAR_SIZEY=150,
+    MAX_MAP_SIZE=150*3};
 
   class coord 
   { 
@@ -98,6 +103,13 @@ public:
 
   
   char *name() { return "path_win"; }
+private:
+	w16 map_size_x(g1_map_class *map);
+	w16 map_size_y(g1_map_class *map);
+	i4_bool within_map(w16 x, w16 y);
+	i4_bool within_radar(w16 x, w16 y);
+	w16 radar_x_pos;
+	void map_position(w16& x_pos, w16& y_pos);
 };
 
 #endif

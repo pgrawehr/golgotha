@@ -239,7 +239,7 @@ i4_bool g1_load_level(const i4_const_str &filename, int reload_textures_and_mode
         //Load a default scm file (it's actually the same as for test.level)
         i4_str *rn=new i4_str("scheme/empty.scm");
         res_file=i4_open(*rn);
-        g1_load_res_info(res_file,exclude_flags);
+        g1_load_res_info(load,res_file,exclude_flags);
         delete res_file;
         delete rn;
 		}

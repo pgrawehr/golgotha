@@ -23,7 +23,8 @@ enum
   G1_RADAR_CLICK_SELECTS_PATH    =16,
   G1_RADAR_INTERLACED            =32,
   G1_RADAR_USE_ICONS             =64,
-  G1_RADAR_SUPRESS_STATUS		 =128
+  G1_RADAR_SUPRESS_STATUS		 =128,
+  G1_RADAR_NO_MAP_EVENTS         =256, //< Don't modify any map parameters
 };
 
 i4_parent_window_class *g1_create_radar_view(int max_w, int max_h, int flags);
