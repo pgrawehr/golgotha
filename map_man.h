@@ -31,7 +31,6 @@ void g1_set_map(g1_map_class *map);
 
 /*! Returns true if a map is loaded
 	Many commands will fail if this returns i4_F, so be sure to always check this first.
-	\param none
 	\return i4_T if map loaded, i4_F otherwise
 */
 inline i4_bool g1_map_is_loaded()
@@ -41,7 +40,6 @@ inline i4_bool g1_map_is_loaded()
   else return i4_F;
 }
 /*! This function returns the current map 
-	\param none
 	\return g1_current_map_PRIVATE (the current map)
 */
 inline g1_map_class *g1_get_map()

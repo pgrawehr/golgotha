@@ -1,5 +1,6 @@
 //  A file of the revival project. 
-/*! \file The definition file for the octree classes.
+/*! \file octree.h
+The definition file for the octree classes.
 */
 
 #ifndef _OCTREE_H
@@ -188,7 +189,7 @@ class g1_octree
 	/// \param vCenter Center of the new node.
 	/// \param xwidth Width of the new Node.
 	/// \param ywidth Height of the new Node. 
-	/// \param zwidht Depth of the new Node.
+	/// \param zwidth Depth of the new Node.
 	/// \param nodeID ID indicated which center is requested.
 	/// \return A vector that point to the center of the new node. 
 	i4_3d_vector GetNewNodeCenter(i4_3d_vector vCenter, 

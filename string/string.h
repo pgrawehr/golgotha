@@ -6,45 +6,50 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
-// String Classes
-//
-//   Strings are hidden behind the two classes :
-//
-//       i4_const_str   (constant strings.. cannot be changed)
-//   and i4_str         (modifiable strings)
-//
-//
-//   i4_strs can only be created from i4_const_strs or other i4_strs and i4_const_strs can
-//   only be created through the i4_string_manager.  All strings gotten from i4_string_manager
-//   are loaded from an external file.  This ensures that all strings are stored external and
-//   UNICODE or wide-chars can be added in without any code changes outside this module.
-//   Because for most applications only one string manager is needed I have created a global
-//   one called i4_string_man.  
-//
-//   To see if a string is available from the string manager the call
-//
-//   const i4_const_str *s=&i4_string_man.get(str);
-//
-//   is made.  If s->null()==i4_T then the string was not loaded.
-//   Since this is a common operation the short-named function i4gets is provided 
-//   (see end of this file).
-//
-//
-//   example :
-//
-//   resource.res
-//   ---------------
-//   hello "Hello World"
-//
-//   ---------------
-//
-//
-//   i4gets("hello") ->  i4_const_str("Hello World")
-//
-//
-//   So, you might ask, how do I create a string quick and dirty for debugging purposes?
-//
-//   You have to do it the hard way for now.......
+/// \file string.h
+/// String Classes
+///
+///   Strings are hidden behind the two classes :
+///   \par
+///       i4_const_str   (constant strings.. cannot be changed)
+///   \par
+///   and i4_str         (modifiable strings)
+///
+///   \par
+///   i4_strs can only be created from i4_const_strs or other i4_strs and i4_const_strs can
+///   only be created through the i4_string_manager.  All strings gotten from i4_string_manager
+///   are loaded from an external file.  This ensures that all strings are stored external and
+///   UNICODE or wide-chars can be added in without any code changes outside this module.
+///   Because for most applications only one string manager is needed I have created a global
+///   one called i4_string_man.  
+///
+///   \par
+///   To see if a string is available from the string manager the call
+///
+///   \code const i4_const_str *s=&i4_string_man.get(str); \endcode
+///
+///   is made.  If s->null()==i4_T then the string was not loaded.
+///   Since this is a common operation the short-named function i4gets is provided 
+///   (see end of this file).
+///
+///
+///   example :
+///   \code
+///   resource.res
+///   ---------------
+///   hello "Hello World"
+///
+///   ---------------
+///
+///
+///   i4gets("hello") ->  i4_const_str("Hello World")
+///
+///   \endcode
+///   \par
+///   So, you might ask, how do I create a string quick and dirty for debugging purposes?
+///
+///   You have to do it the hard way for now.......
+
 #ifndef __STRING_HPP_
 #define __STRING_HPP_
 
@@ -78,7 +83,7 @@ public:
   /// to be expanded to double-byte charater sets sometime.
   w16 value() const { return ch; }
   /// Returns true if we are talking about a space character.
-  /// A space character is ' ', '\r', '\t' or '\n'.
+  /// A space character is ' ', '\\r', '\\t' or '\\n'.
   i4_bool is_space() const { return (i4_bool)(ch==' ' || ch=='\r' || ch=='\n' || ch=='\t'); }
   i4_bool is_slash() const { return (i4_bool)(ch=='/'); }
   i4_bool is_backslash() const { return (i4_bool)(ch=='\\'); }
