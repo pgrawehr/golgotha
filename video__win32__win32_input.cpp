@@ -487,6 +487,12 @@ void win32_input_class::update_mouse_movement(sw32 new_x, sw32 new_y)
   if (!active)
     return;
 
+  //For some reason, I keep getting mouse movement messages under WinXP
+  //even if the mouse does NOT move. This prevents the idle handler to
+  //do it's work (effectively causing tool-tips not to show)
+  if (mouse_x==new_x && mouse_y==new_y)
+	  return; 
+
   i4_mouse_move_event_class ev((short)mouse_x, (short)mouse_y, (short)new_x, (short)new_y);
     
   int mx,my;
