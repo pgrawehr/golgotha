@@ -1953,15 +1953,19 @@ public:
 #ifdef file_load_debug
       i4_warning("i4_unix_file_class::open() failed for %s.",i4_os_string(name,buf,256));
 #endif
+	if (f&O_CREAT)
+	{
 	  if (!(flags&I4_NO_ERROR))
 	  {
-      i4_str msg("Unable to write to file %s. Check that you have appropriate permissions.");
-        i4_str *rmsg=msg.sprintf(200,name.c_str());
-        i4_message_box("File system permission problem",
+          i4_str msg("Unable to write to file %s. Check that you have appropriate permissions.");
+          i4_str *rmsg=msg.sprintf(200,name.c_str());
+          i4_message_box("File system permission problem",
             *rmsg);
-        delete rmsg;
+          delete rmsg;
 	  }
-		return NULL;
+	}
+	return NULL;
+	
       }
 
     if (!no_buffer)
@@ -2052,7 +2056,7 @@ public:
       if (de && de->d_name[0])
       {
         t++;
-        tlist=(i4_str **)i4_realloc(tlist,sizeof(i4_str *)*t,"tmp file list");
+        tlist=(i4_str **)I4_REALLOC(tlist,sizeof(i4_str *)*t,"tmp file list");
         tlist[t-1]=new i4_str(de->d_name);
       }
     } while (de);
@@ -2077,14 +2081,14 @@ public:
       if (S_ISDIR(s.st_mode))
       {
         dir_struct.tdirs++;
-        dir_struct.dirs=(i4_str **)i4_realloc(dir_struct.dirs,
+        dir_struct.dirs=(i4_str **)I4_REALLOC(dir_struct.dirs,
                                               sizeof(i4_str *)*dir_struct.tdirs,"dir list");
         dir_struct.dirs[dir_struct.tdirs-1]=tlist[i];
       } else
       {
         int on=dir_struct.tfiles++;
         
-        dir_struct.files=(i4_str **)i4_realloc(dir_struct.files,
+        dir_struct.files=(i4_str **)I4_REALLOC(dir_struct.files,
                                                sizeof(i4_str *)*dir_struct.tfiles,"dir list");
         dir_struct.files[on]=tlist[i];
 
