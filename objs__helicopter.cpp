@@ -359,6 +359,11 @@ void g1_helicopter_class::think()
         i4_rotate_to(roll,roll_to,defaults->turn_speed/4);  
       else
         i4_rotate_to(roll,0,defaults->turn_speed/2);
+	  //make the heli pitch forward if it moves. The amount is just pure guess, since speed is
+	  //in units per tick and picht is an angle. But it seems to work
+	  i4_float pitch_to=speed*1.5f; 
+	  if (i4_fabs(pitch-pitch_to)>0.05f) //this avoids swining. 
+		i4_rotate_to(pitch,pitch_to,0.05f);
       
       if (attack_target.valid() && !fire_delay)
         fire();
