@@ -142,9 +142,13 @@ Gefixt, Problem mit unerwartetem Verhalten von Windows (sendet WM_MOUSEMOVE
 auch wenn nicht nötig)
 
 "Press spacebar to return to base" - Meldung, wenn der stank zerstört wird: Meldung ändern und
-irgendwas sonst machen, da die Leertaste genau garnichts bewirkt. 
+irgendwas sonst machen, da die Leertaste genau garnichts bewirkt. - Gefixt. 
 
 If an object does not have a lod texture, it is not displayed at all if it passes beyond some
 distance. This distance is usually too close (at least on fast computers and large displays)
+
+Peon-tank doesn't fire upwards if he targets a plane. 
+
+Should finally implement adding of textures in the editor. It's everything prepared.
 
 

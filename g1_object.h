@@ -436,6 +436,11 @@ public:
   //! The number of mini_objects.
   w16 num_mini_objects;
 
+  //! Allocate memory of the given number of mini-objects.
+  //! Mini objects are sub-objects to the given object. I.e. the moving turret of a tank or
+  //! the blade of a chopper.
+  //! @param num Number of mini-objects to allocate
+  //! @param reason String used to identify allocation reason on debugging heap. 
   void allocate_mini_objects(int num,char *reason)
   {
     mini_objects = (g1_mini_object *)I4_MALLOC(sizeof(g1_mini_object)*num,reason);
@@ -443,14 +448,21 @@ public:
     num_mini_objects = num;
   }
 
-  virtual void grab_old();     // grab info about the current tick for interpolation
+  //! Grab info about the previous tick for interpolation.
+  //! This sets the lx, ly and lh (and possibly the angles) to the current values, such that
+  //! the next target position can be calculated.
+  virtual void grab_old();     
 
-  //  to be consistant, every g1_object should have an init
+  //! To be consistent, every g1_object should have an init.
+  //! This function is seldomly implemented. Use the constructor instead (or a specific setup method).
   virtual void init()  {}
 
-  //! use this instead of defaults->max_health.
+  //! Use this instead of defaults->max_health.
+  //! May do some internal adjustments for special units.
   virtual short get_max_health();
-  //! returns usually 0, but not always.
+  //! Returns usually 0, but not always.
+  //! Specific units may override this value to something larger than 0, such that they actually
+  //! die before the health reaches zero. They can then show some cool animation while dying.
   virtual short get_min_health() {return 0;}
   //! show in editor if mouse cursor stays still on object
   virtual i4_str *get_context_string();  
@@ -467,7 +479,7 @@ public:
   //! Otherwise it's usually better just not to call request_think() any more.
   virtual void stop_thinking();
 
-  //! Get some info about pos.
+  //! Update information about position.
   float height_above_ground();      // calls map->terrain_height
 
   //! The name of the object type. 

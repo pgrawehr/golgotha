@@ -201,6 +201,7 @@ void g1_peon_tank_class::think()
 
   //turret_kick thing
   lturret_kick = turret_kick;
+  request_think();
 
   if (turret_kick < 0.f)
   {
@@ -209,15 +210,13 @@ void g1_peon_tank_class::think()
     if (turret_kick >= 0)
       turret_kick = 0;
     
-    request_think();
   }
   
   //aim the turret
   if (attack_target.valid())
   {
-    request_think();
             
-    i4_float dx,dy,dangle;
+    i4_float dx,dy,dangle,dz;
 
     i4_3d_point_class pos;
 
@@ -226,8 +225,17 @@ void g1_peon_tank_class::think()
     //this will obviously only be true if attack_target.ref != NULL    
     dx = ((x+turret->x) - pos.x);
     dy = ((y+turret->y) - pos.y);
+	dz = ((h+turret->h) - pos.z);
 
     //aim the turret
+
+	i4_float dist=i4_fsqrt(dx*dx+dy*dy);
+	i4_float height_angle=i4_atan2(dz,dist);
+	if (height_angle>i4_pi_4())
+		height_angle=i4_pi_4();
+	if (height_angle<-i4_pi_4())
+		height_angle=-i4_pi_4();
+	i4_rotate_to(turret->rotation.y,height_angle,defaults->turn_speed);
     
     guard_angle = i4_atan2(dy,dx) + i4_pi() - theta;
     i4_normalize_angle(guard_angle);
@@ -240,7 +248,6 @@ void g1_peon_tank_class::think()
   }
   else
   {
-    request_think();            // move this to draw function
 
     if (moved())
     {

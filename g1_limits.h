@@ -17,15 +17,13 @@ enum { G1_MAX_OBJECT_TYPES=400 };
 enum { G1_MAX_TILES=500 };   // maximum building & ground "types" defined for game
 enum { G1_MAX_SPRITES=300 } ;
 enum { G1_MAX_PLAYERS=5 };      // maximum number of players, including the no_player team
-// teams a player can be on, for single player game, the player is always on the ALLY team
+// teams a player can be on. For single player game, the player is always on the ALLY team
 enum g1_team_type { G1_ALLY, G1_ENEMY, G1_MAX_TEAMS }; 
 enum { G1_MAX_SOUNDS=20 };
 enum { G1_MAX_WAYPOINTS=200 };  // maximum number of way points in a path
 enum { G1_MAX_CELL_FUNCTIONS=30 }; // maximum number of functions that can be assigned to cells
 enum { G1_MAX_UNIT_PADS_PER_PLAYER=8 };
 enum { G1_MAX_POLY_LIST_POLYS=256}; //max number of polygons in the poly list
-enum { G1_MAX_TEXTURES=1500 };      // total game textures total
-enum { G1_MAX_ANIMATIONS=50 };     // total animating textures total
 enum { G1_CHROMA_COLOR=(254<<16)|(2<<8)|166 } ; //don't change these two
 enum { G1_16BIT_CHROMA=(0x7C14)}; //unless you want to change all textures
 enum { G1_16BIT_CHROMA_565=(0xf814)}; //for software renderer
@@ -37,6 +35,6 @@ enum { G1_BUILD_PAD_W=6,           // size of construction pad
        G1_BUILD_PAD_H=6 };
 
 enum { G1_MIN_MAP_DIMENSION=10,
-       G1_MAX_MAP_DIMENSION=150 };
+       G1_MAX_MAP_DIMENSION=150 }; //Can actually be larger, but will significantly increase memory requirement
 
 #endif
