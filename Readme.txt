@@ -29,7 +29,7 @@ For unix type systems, the registry is replaced by a file called "golgotha.ini".
 -eout filename	Write (append) the debug log to the given file.
 -max_memory n	Maximum amount of Memory to be used for i4_mem_manager
 -edit		Start in edit-Mode
--eval		?
+-eval		Command line lisp-evaluation, don't use for now.
 -frame_lock     Force one frame per think() loop.
 -movie		What format?, where?, when? Unimplemented
 -sfxdbg		Display some debug information about sounds. (i.e. Position, Loops)
@@ -39,6 +39,11 @@ For unix type systems, the registry is replaced by a file called "golgotha.ini".
 			(See Search-Path below)
 -demo		(ignored)
 -3dsound	Use DirectSound3D, defaults to true now.
+-display <location> Specify the connection to the X-Server (i.e localhost:2) 
+                (Only for unix versions)
+-ron		Enable alternative handling or keyboard reapeat events.
+		Usually not required (X server drivers only)
+
 
 File Search-Path
 ----------------

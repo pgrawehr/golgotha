@@ -131,8 +131,8 @@ void i4_x11_opengl_display_class::init() {
   // get the input handler to open X connection
   if (!input.display) {
 	if (!input.open_display()) {
-	  i4_error("FATAL: X11 OpenGL renderer: could not convince input handler to open display. \n"
-	  	"Check the preceeding lines for X warnings.");
+	  i4_warning("WARNING: X11 OpenGL renderer: could not convince input handler to open display. \n"
+	  	"Check the preceeding lines for X warnings.\n");
 	  return;
 	}
   }
@@ -140,7 +140,7 @@ void i4_x11_opengl_display_class::init() {
   i4_warning("Connection to XServer established successfully");
 
   if (!glXQueryExtension(input.display,&errbase,&eventbase)) {
-	i4_error("WARNING: glX extension unavailable");
+	i4_warning("WARNING: glX extension unavailable on the current display.");
 	//return;
   }
 
@@ -153,7 +153,10 @@ void i4_x11_opengl_display_class::init() {
   	}
   }
   else
-  	i4_error("WARNING: OpenGl renderer is possibly not functional.");
+  {
+  	i4_warning("WARNING: OpenGl renderer is possibly not functional.");
+	i4_warning("WARNING: Golgotha will most probably revert to software rendering.");
+  }
 
   setup_modes();
   

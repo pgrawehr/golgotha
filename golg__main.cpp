@@ -171,8 +171,11 @@ public:
              "Or that you have the current version of OpenGl installed",
 			 "No usable display device found",MB_OK+MB_ICONSTOP);
 #else
-    i4_error("Golgotha would be happy to have a OpenGl capable card available.\n");
+    printf("Golgotha would be happy to have a OpenGl capable card available\n");
+    printf("or at least find an X-Server running somewhere. \n");
+    printf("Specify -display <location> to indicate where your X-Server runs.\n");
 #endif
+    exit(55);
   }
   
   void pre_play_save();

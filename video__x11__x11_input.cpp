@@ -56,6 +56,7 @@ i4_bool x11_input_class::open_display()
 
   // get the default display name from the environment variable DISPLAY
   char ds_name[512];
+  memset(ds_name,0,512);
 
   char *ds_env = getenv("DISPLAY");
 
@@ -76,14 +77,16 @@ i4_bool x11_input_class::open_display()
     else if (i4_global_argv[i] == "-display")
     {
       i++;
-      i4_os_string(i4_global_argv[i], ds_name, sizeof(ds_name));
+      i4_os_string(i4_global_argv[i], ds_name, 512);
     }
   }
   display=XOpenDisplay(ds_name);  
   if (!display) {
-	//i4_warning("SEVERE: Cannot open display: %s",ds_name);
-	i4_error("SEVERE: Check the DISPLAY environment variable and verify an X-Server is running. "
-	"Could not open the connection to the X-Server at \"%s\"",ds_name);
+	//We must not use i4_error() here, since that would cause
+	//recursive non-reporting of the same error (if we can't open the
+	//display, we cannot open the same display to show an error...)
+	printf("SEVERE: Check the DISPLAY environment variable and verify an X-Server is running. \n");
+	printf("Could not open the connection to the X-Server at: %s",ds_name);
     return i4_F;
   }
 
@@ -216,14 +219,20 @@ void x11_input_class::draw_error(Display *disp, const char *error_msg,int width,
 
 int x11_input_class::create_error_window(const char *error_msg){
 	XVisualInfo vinfo;
+	bool is_fatal=false;
+	if (error_msg[0]=='F' && error_msg[1]=='A' && error_msg[2]=='T')
+	{
+		is_fatal=true;
+	}
 	ZeroMemory(&vinfo,sizeof(vinfo));
 	if (!open_display())
 	{
 		//Ack, no display at all. Cannot display message in an X window.
 	    printf("The following error occured: \n%s",error_msg);
 	    printf("Additionally, I was unable to properly show an error dialog: "
-	    "The connection to the X server could not be openend.");
-	    
+	    "The connection to the X server could not be openend.\n");
+	    if (is_fatal)
+	       exit(99);
 	    return 0;
 	}
 		//PG: Need to look up required parameters, probably, (display,0,0,0)
@@ -259,7 +268,10 @@ int x11_input_class::create_error_window(const char *error_msg){
 	    maxlinelen=curlinelen;
 	  curlinelen=0;
 	  }
-	}
+    }
+    //it's not neccessary that the message ends with a line feed
+  if (curlinelen>maxlinelen)
+    maxlinelen=curlinelen;
   int w=(maxlinelen*8)+30;
   int h=numlines*30+20;
   int x=-1;
@@ -414,6 +426,8 @@ int x11_input_class::create_error_window(const char *error_msg){
   //                ButtonReleaseMask | ButtonMotionMask | PointerMotionMask,
   //                GrabModeAsync, GrabModeAsync, None, None, CurrentTime );
   was_exposed=i4_T; //always redraw everything after an error.
+  if (is_fatal)
+    exit(101);
   return 0;	
 	
 	}
@@ -908,7 +922,11 @@ i4_bool x11_input_class::process_events()
 int showerror(const char *msg)
 	{
 		if (x11_input_class_ptr)
-			return x11_input_class_ptr->create_error_window(msg);
+		{
+			int ret=0;
+			ret=x11_input_class_ptr->create_error_window(msg);
+			return ret;
+		}
 		else
 		{
 			printf("%s",msg);

@@ -249,9 +249,11 @@ void i4_application_class::display_init()
         found=d;
   }
   
-  if (!found)
+  //Find a display driver. Don't enter the loop if there's no driver 
+  //left to try.
+  if (!found&&(i4_display_list!=0))
 	  {
-      found=i4_display_list;
+      	  found=i4_display_list;
 	  best=found;
 	  if (strcmp(found->name,"Windowed GDI")==0 && found->next) 
 		best=found->next;//ANYthing is better than GDI.
