@@ -167,6 +167,8 @@ void i4_x11_opengl_display_class::init() {
   setup_modes();
   
   i4_opengl_display_class::init();
+  if (the_visual!=0)
+	  XFree(the_visual);
   the_visual=0;
   input.close_display();
 }
@@ -230,8 +232,9 @@ XVisualInfo *i4_x11_opengl_display_class::find_visual() {
   }
   vis_info.depth=v->depth;
   vis_info.c_class=v->c_class;
+  //Don't know what it actually does, but without the following line, 
+  //the window will not get a border from the window manager (it is not managed)
   XMatchVisualInfo(input.display, input.screen_num, vis_info.depth, vis_info.c_class, v);
-  //v->visual = vis_info.visual;
   
   return v;
 }
@@ -250,6 +253,9 @@ void i4_x11_opengl_display_class::swap_buffers() {
 i4_bool i4_x11_opengl_display_class::close() {
   if (glx_cx && input.display)
 	glXDestroyContext(input.display,glx_cx);
+  if (the_visual)
+	 XFree(the_visual);
+  the_visual=0;
   input.close_display();
   return i4_opengl_display_class::close();
 }

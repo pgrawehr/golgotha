@@ -307,12 +307,6 @@ i4_bool i4_opengl_display_class::close()
   if (back_screen) {
 	delete back_screen;
 	back_screen = 0;
-
-	//must not delete any paletes, this is done by the pal manager
-	//if (back_pal) {
-	//  delete back_pal;
-	//  back_pal = 0;
-	//}
 	
   }
 
