@@ -58,6 +58,7 @@ public:
   void expand_critical_graph();
 
   i4_bool add_critical_point(i4_float x, i4_float y);
+  void remove_critical_point(i4_float atx, i4_float aty);
 
   void save_points(g1_saver_class *f);
   void save_graph(g1_saver_class *f);

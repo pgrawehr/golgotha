@@ -1350,6 +1350,14 @@ SOURCE=.\memory\binary_tree.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\memory\bitarray.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\memory\bitarray2d.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\memory\bmanage.h
 # End Source File
 # Begin Source File

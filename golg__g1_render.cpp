@@ -1513,7 +1513,7 @@ i4_bool g1_render_class::project_point(const i4_3d_point_class &p,
 w8 g1_render_class::point_classify(const i4_3d_point_class &p,
 										   i4_transform_class *transform)
 	{
-	//This method seems to deliver wrong results. Need to fix it.	
+		
 	i4_3d_vector temp;
 	transform->transform(p,temp);
 	temp.x *= scale_x;

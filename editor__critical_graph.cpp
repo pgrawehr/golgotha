@@ -5,12 +5,14 @@
   <PRE> If that doesn't help, contact Jonathan Clark at 
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
+#include "pch.h"
 #include "memory/new.h"
 #include "critical_graph.h"
 #include "path_api.h"
 #include "map.h"
 #include "map_cell.h"
 #include "map_man.h"
+#include "gui/smp_dial.h"
 #include <math.h>
 
 
@@ -107,7 +109,9 @@ void g1_critical_graph_class::expand_critical_graph()
 i4_bool g1_critical_graph_class::add_critical_point(i4_float x, i4_float y)
 //{{{
 {
-  if (criticals<MAX_CRITICALS)
+  //must not use the last entry, because 256 does not fit in 8 bit for
+  //g1_graph_node.
+  if (criticals<(MAX_CRITICALS-1))
   {
     critical[criticals].x=x;    // oliy change this to float - jc
     critical[criticals].y=y;
@@ -119,9 +123,37 @@ i4_bool g1_critical_graph_class::add_critical_point(i4_float x, i4_float y)
     return i4_T;
   }
   else
-    return i4_F;
+      {
+      i4_message_box("Graph full","You cannot define more than 256 points.",0);
+      return i4_F;
+      }
 }
 //}}}
+
+void g1_critical_graph_class::remove_critical_point(i4_float atx, i4_float aty)
+    {
+    if (criticals==0)
+        return;
+    w16 nearest_critical=0;
+    i4_float sqrdist=1E+30f;//a very large number
+    i4_float curdist=0;
+    for (int j=0;j<criticals;j++)
+        {
+        curdist=(atx-critical[j].x)*(atx-critical[j].x);
+        curdist+=(aty-critical[j].y)*(aty-critical[j].y);
+        if (curdist<sqrdist)
+            {
+            sqrdist=curdist;
+            nearest_critical=j;
+            }
+        }
+    
+    for (int k=nearest_critical;k<criticals-1;k++)
+        {
+        critical[k]=critical[k+1];
+        }
+    criticals--;
+    }
 
 void g1_critical_graph_class::save_points(g1_saver_class *f)
 //{{{

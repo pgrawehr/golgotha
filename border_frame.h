@@ -32,8 +32,8 @@ private:
   enum
   { 
     OPTIONS,
-    BUILD_FIRST, BUILD_LAST=BUILD_FIRST+0x1000,
-    ACTIVE_FIRST, ACTIVE_LAST=ACTIVE_FIRST+0x1000
+    BUILD_FIRST, BUILD_LAST=BUILD_FIRST+0x10000,
+    ACTIVE_FIRST, ACTIVE_LAST=ACTIVE_FIRST+0x10000
   };
 
   // left justify draw number with commas if needed
@@ -91,7 +91,7 @@ public:
 
 class g1_strategy_screen_class : public i4_color_window_class
 {
-  enum { OPTIONS, BUILD=1, ACTIVE=100 };
+  enum { OPTIONS, BUILD=1, ACTIVE=10000 };
   i4_array<i4_button_class *> build_buttons;
 
 public:

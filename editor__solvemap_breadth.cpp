@@ -268,7 +268,11 @@ w32 g1_map_solver_class::unblocked(g1_block_map_class *block,i4_float startx, i4
 		//	}
 		return BLOCK_EASY_WAY;
 		}
-	
+    //if the target is completelly unreachable, don't try anything.
+	if (block->is_full_blocked(destx,desty))
+        {
+        return BLOCK_NO_WAY;
+        }
 	xi=x2; xc=x1;
 	
 	// assume y1<=y2 from above swap operation

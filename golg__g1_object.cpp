@@ -1099,7 +1099,8 @@ static void change_obj(int i, int j)
 {
 	g1_object_definition_class *ic=g1_object_type_array[i];
 	g1_object_definition_class *jc=g1_object_type_array[j];
-	ic->type=j;
+	if (ic) //may be NULL (see bellow) 
+        ic->type=j;
 	jc->type=i;
 	g1_object_type_array[i]=jc;
 	g1_object_type_array[j]=ic;

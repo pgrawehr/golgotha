@@ -10204,8 +10204,8 @@ void g1_path_window_class::solve()
   i4_time_class start_time;
   i4_time_class end_time;
   
-  w16 throwawaypoints=0;
-  float throwawaypoint[MAX_SOLVEPOINTS*2];
+  //w16 throwawaypoints=0;
+  //float throwawaypoint[MAX_SOLVEPOINTS*2];
   if (solve_mode&SOLVEMODE_MAP)
 	  {
 	  start_time.get();
@@ -10214,9 +10214,9 @@ void g1_path_window_class::solve()
 	  i4_warning("Used %d ms to solve breadth first. Got %d points.",end_time.milli_diff(start_time),(w32)points);
 	  end_time.get();
 	  solvemap_astar->path_solve(start.x,start.y,dest.x,dest.y,size,size,(w8) grade, 
-		  throwawaypoint, throwawaypoints);//indicated in the map, so throw actual result away.
+		  astar_point, astar_points);//indicated in the map, so throw actual result away.
 	  start_time.get();
-	  i4_warning("Used %d ms to solve A*. Got %d points.",start_time.milli_diff(end_time),(w32)throwawaypoints);
+	  i4_warning("Used %d ms to solve A*. Got %d points.",start_time.milli_diff(end_time),(w32)astar_points);
 	  }
   else
 	  {
@@ -10420,9 +10420,11 @@ void g1_path_window_class::draw_to_bitmap()
         x3 = (x4-x1)*0.7f + x1;
         y3 = (y4-y1)*0.7f + y1;
         
-        bitmap->line((w16)x1,(w16)y1,(w16)x2,(w16)y2, 
-                     0x000800*(crit->connection[i].size[grade]), tmp_context);
-        bitmap->line((w16)x2,(w16)y2,(w16)x3,(w16)y3, 0x404020, tmp_context);
+        //bitmap->line((w16)x1,(w16)y1,(w16)x2,(w16)y2, 
+        //             0x000800*(crit->connection[i].size[grade]), tmp_context);
+        //bitmap->line((w16)x2,(w16)y2,(w16)x3,(w16)y3, 0x404020, tmp_context);
+        bitmap->line(x1,y1,x2,y2,0xff836353,tmp_context);
+        bitmap->line(x2,y2,x3,y3,0xfffbab5b,tmp_context);
       }
     }
   }
@@ -10440,6 +10442,20 @@ void g1_path_window_class::draw_to_bitmap()
       y2 = (mh*CELL_SIZE-1) - w32(point[j*2+1])*CELL_SIZE - CELL_SIZE/2;
 
     bitmap->line((short)x1,(short)y1,(short)x2,(short)y2,0xffff0000, tmp_context);
+  }
+
+  astar_point[astar_points*2]=start.x;
+  astar_point[astar_points*2+1]=start.y;
+
+  for (j=astar_points; j>0; j--)    // points solved in backwards order
+  {
+    w32
+      x1 = w32(astar_point[j*2-2])*CELL_SIZE + CELL_SIZE/2,
+      y1 = (mh*CELL_SIZE-1) - w32(astar_point[j*2-1])*CELL_SIZE - CELL_SIZE/2,
+      x2 = w32(astar_point[j*2+0])*CELL_SIZE + CELL_SIZE/2,
+      y2 = (mh*CELL_SIZE-1) - w32(astar_point[j*2+1])*CELL_SIZE - CELL_SIZE/2;
+
+    bitmap->line((short)x1,(short)y1,(short)x2,(short)y2,0xff00ffcc, tmp_context);
   }
 
 }
@@ -10564,8 +10580,8 @@ void g1_path_window_class::receive_event(i4_event *ev)
             critical_graph->add_critical_point((float)cell_x, (float)cell_y);
           else if (mbev->right())
           {
-            if (critical_graph->criticals>0)
-              --critical_graph->criticals;
+            critical_graph->remove_critical_point((float)cell_x, (float)cell_y);
+              
           }
             
           request_redraw();
@@ -10653,9 +10669,10 @@ void g1_path_window_class::receive_event(i4_event *ev)
                       found = 1;
                   if (!found)
                   {
-                    critical_graph->critical[critical_graph->criticals].x = (float)i;
-                    critical_graph->critical[critical_graph->criticals].y = (float)j;
-                    critical_graph->criticals++;
+                    critical_graph->add_critical_point((i4_float)i,(i4_float)j);
+                    //critical_graph->critical[critical_graph->criticals].x = (float)i;
+                    //critical_graph->critical[critical_graph->criticals].y = (float)j;
+                    //critical_graph->criticals++;
                   }
                 }
               }

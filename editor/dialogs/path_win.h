@@ -54,6 +54,8 @@ protected:
 
   i4_float point[MAX_SOLVEPOINTS*2];//must make shure no one uses more space
   w16 points;
+  i4_float astar_point[MAX_SOLVEPOINTS*2];
+  w16 astar_points;
   
 public:
   enum { CELL_SIZE=3 };

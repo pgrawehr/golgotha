@@ -94,13 +94,22 @@ public:
     return (block_map[y*bwx+x] & dir)!=0;
   }
 
+  i4_bool is_full_blocked(w16 x, w16 y) const
+      {
+      w8 dir=0xf;
+      if (x&1)
+          dir<<=4;
+      x/=2;
+      return (block_map[y*bwx+x] & dir)==dir;
+      }
+
   i4_bool ready()
 	  {
 	  return (block_map!=0);
 	  }
 
   i4_float line_of_sight(i4_float x1, i4_float y1, i4_float x2, i4_float y2,
-                         i4_float rad_x=5.0, i4_float rad_y=5.0) const;
+                         i4_float rad_x=10.0f, i4_float rad_y=10.0f) const;
 };
 
 #endif

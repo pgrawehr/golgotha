@@ -6,6 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+#include "pch.h"
 #include <math.h>
 
 #include "memory/malloc.h"
@@ -17,17 +18,20 @@
 #include "math/trig.h"
 #include "math/pi.h"
 #include "math/angle.h"
+#include "memory/bitarray2d.h"
 
 i4_profile_class pf_solve_astar("solve_astar");
 
 const i4_float sqrt2 = (float)sqrt(2.0);
 static g1_map_class *map_ref;//for faster reference
+static BitArray2D *visited_array=0;
 
 //enum { VISITED = g1_map_cell_class::VISITED, OK = g1_map_cell_class::ROUTEOK };
 
 inline void visit(w16 x, w16 y) 
 {
-	map_ref->cell(x,y)->flags |= g1_map_cell_class::VISITED;
+	//map_ref->cell(x,y)->flags |= g1_map_cell_class::VISITED;
+    visited_array->SetBit(x,y);
 }
 
 inline void ok(w16 x, w16 y) 
@@ -37,7 +41,8 @@ inline void ok(w16 x, w16 y)
 
 inline i4_bool is_visited(w16 x, w16 y) 
 {
-	return (map_ref->cell(x,y)->flags & g1_map_cell_class::VISITED)!=0; 
+	//return (map_ref->cell(x,y)->flags & g1_map_cell_class::VISITED)!=0; 
+    return visited_array->IsBitSet(x,y);
 }
 
 inline i4_bool is_ok(w16 x, w16 y)
@@ -249,6 +254,8 @@ i4_bool g1_astar_map_solver_class::path_solve(i4_float startx, i4_float starty,
 	  }
   pf_solve_astar.start();
   map_ref=g1_get_map();
+  visited_array=new BitArray2D(map_ref->width(),map_ref->height());
+  visited_array->Clear();
   w16 x = (w16)startx,y = (w16)starty;
   i4_float l;
 
@@ -263,7 +270,7 @@ i4_bool g1_astar_map_solver_class::path_solve(i4_float startx, i4_float starty,
   costindex=(w8)((th/i4_2pi())*8);
 
   clear_heap();
-  clear_solve();
+  //clear_solve();
 
   add_link(x, y, x, y, 0);
 
@@ -295,6 +302,8 @@ i4_bool g1_astar_map_solver_class::path_solve(i4_float startx, i4_float starty,
   if (!found)
   {
     pf_solve_astar.stop();
+    delete visited_array;
+    visited_array=0;
     return i4_F;
   }
 
@@ -314,7 +323,7 @@ i4_bool g1_astar_map_solver_class::path_solve(i4_float startx, i4_float starty,
   w16 lastupdate=0,len=0;
   while (x!=nx || y!=ny)
   {
-    ok(nx,ny);
+    //ok(nx,ny);
     /*if (nx-x==dx && ny-y==dy)
       points--;
     dx = nx-x;
@@ -339,6 +348,8 @@ i4_bool g1_astar_map_solver_class::path_solve(i4_float startx, i4_float starty,
 	//len++;
     solve_link(x,y, nx,ny,waylen);
   }
+  delete visited_array;
+  visited_array=0;
   pf_solve_astar.stop();
   if (points>0) 
 	  points--;
