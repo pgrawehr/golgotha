@@ -1254,10 +1254,10 @@ i4_bool g1_object_class::check_collision(const i4_3d_vector &start,
                                          i4_3d_vector &ray)
 {
   i4_3d_vector normal;
-  if (occupancy_radius()<0.5)
-    return g1_model_collide_radial(this, draw_params, start, ray);
+  if (occupancy_radius()>=0.5f||this->draw_params.model->octree)
+      return g1_model_collide_polygonal(this, draw_params, start, ray, normal);
   else
-    return g1_model_collide_polygonal(this, draw_params, start, ray, normal);
+      return g1_model_collide_radial(this, draw_params, start, ray);
 }
 
 

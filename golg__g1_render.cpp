@@ -457,12 +457,12 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 	
 	//if we have an octree, we need to iterate over a 
 	//limited set of polys and vertices only. 
-	i4_array<g1_quad_class*> qif(0,200);
+    quad_object_list.clear();
 	i4_bool use_ot=i4_F;
 	if (obj->octree)
 		{
 		//hiddenly modificates the t_vertices array
-		use_ot=prepare_octree_rendering(qif,obj,src_vert,
+		use_ot=prepare_octree_rendering(quad_object_list,obj,src_vert,
 			&view_transform,
 			object_to_world,
 			ANDCODE,ORCODE);
@@ -580,15 +580,15 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 	int allquads=obj->num_quad;
 	if (use_ot)
 		{
-		allquads=qif.size();
-		q_ptr=qif[0];
+		allquads=quad_object_list.size();
+		q_ptr=quad_object_list[0];
 		}
 	for (i=0; i<allquads; i++, q_ptr++)
 		{
 		if (use_ot)
 			{
-			q_ptr=qif[i];
-			if (i>0 && q_ptr==qif[i-1]) //we've already drawn this quad.
+			q_ptr=quad_object_list[i];
+			if (i>0 && q_ptr==quad_object_list[i-1]) //we've already drawn this quad.
 				continue;
 			}
 		sw32 num_poly_verts = q_ptr->num_verts();

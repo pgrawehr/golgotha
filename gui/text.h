@@ -58,6 +58,8 @@ public:
 
 	void wrap()
 	{
+        if (wrap_width==0)
+            return;
 		numlines=1;
 		w32 index=0;
 		int xpos=0;

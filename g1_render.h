@@ -16,6 +16,7 @@
 #include "render/tex_id.h"
 #include "init/init.h"
 #include "memory/array.h"
+#include "octree.h"
 
 class g1_screen_box
 {
@@ -213,7 +214,9 @@ public:
   r1_vert *t_vertices;
   int max_t_vertices;
 
-  g1_render_class()
+  g1_quadlist quad_object_list;
+
+  g1_render_class():quad_object_list(0,200)
   {
     rendered_font=0;
     draw_mode=TEXTURED;
@@ -227,6 +230,7 @@ public:
 	  {
 	  free(t_vertices);
 	  max_t_vertices=0;
+      quad_object_list.uninit();
 	  }
 
   i4_bool project_point(const i4_3d_point_class &p, r1_vert &v, i4_transform_class *transform);

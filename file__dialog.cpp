@@ -224,7 +224,10 @@ public:
       style,i4_current_app->get_window_manager(),
       new i4_event_reaction_class(this,LISTBOX));
     i4_str filter;
-    filter=mask_name+i4_str(" (")+file_mask+i4_str(")");
+    filter=mask_name;
+    filter+=i4_str(" (");
+    filter+=file_mask;
+    filter+=i4_str(")");
     listbox->add_item(new i4_text_item_class(filter,style));
     listbox->set_current_item(0);
     filter=i4_str("All files (*.*)");

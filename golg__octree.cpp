@@ -1,16 +1,64 @@
-//***********************************************************************//
-//	\file   															 //
-//		- "Talk to me like I'm a 3 year old!" Programming Lessons -		 //
-//                                                                       //
-//		$Author:		DigiBen		digiben@gametutorials.com			 //
-//																		 //
-//		$Program:		Octree3	 										 //
-//																		 //
-//		$Description:	A working octree with a .3ds file format scene   //
-//																		 //
-//		$Date:			2/16/02											 //
-//																		 //
-//***********************************************************************//
+/// \file   
+/// Octree rendering code for large objects. 															
+///		- "Talk to me like I'm a 3 year old!" Programming Lessons -	
+///                                                                 
+///		$Author:		DigiBen		digiben@gametutorials.com		
+///																	
+///		$Program:		Octree3	 										
+///																		
+///		$Description:	A working octree with a .3ds file format scene  
+///																		
+///		$Date:			2/16/02			
+///
+/// \par Summary								
+/// This is the final version of our octree code.  It will allow you to take  
+/// a 3D model, regardless of the file format (as long as it conforms to the t3DModel struct).
+/// The difference from the last 2 tutorials is that we store face indices, rather
+/// than vertices.  Check out the top of Main.cpp for a explanation of why we chose this way.
+/// 
+/// Here is a list of the important new functions added to our g1_octree class:
+/// \code
+///	//This returns the number of polygons in our entire scene
+///	int GetSceneTriangleCount(t3DModel *pWorld);
+///
+///  // This adds the current object index to our object list
+///	void AddObjectIndexToList(int index);
+///
+///	// This recursively creates a display list ID for every end node in the octree
+///	void CreateDisplayList(g1_octree *pNode, t3DModel *pRootWorld, int displayListOffset);
+/// \endcode
+/// Since we need to know the total triangle count for each node that we will
+/// be potentially splitting, GetSceneTriangleCount() was created to go through
+/// all of the objects in the model and add up their triangles to a total number.
+/// This number is then returned and used for the root node to pass in.
+///
+/// Instead of going through every object in the model's object list when drawing
+/// each end node, we store a list of indices into the object list that are in the end node.  
+/// This way we don't do unnecessary looping if the triangles in that end node aren't in 
+/// those objects.  The AddObjectIndexToList() function adds the passed in index to our 
+/// index list, if it's not already there.
+///
+/// To get a greater efficiency out of the drawing of our octree, display lists are used.
+/// CreateDisplayList() recursively goes through each node and creates a display list ID for each.
+/// This is only done once, then we can use the display ID to render that end node liquid fast.
+///
+/// Keep in mind, that we do NOT split the triangles over the node's planes.  Instead, we
+/// are just storing the face indices for each object. You might wonder how this works, since 
+/// our t3DModel structure has multiple objects, with multiple face index arrays.  Simple,
+/// we just create a pointer to a t3DModel structure for every end node (m_pWorld).  Then,
+/// we only store the objects that are in that end node.  Of course, there is no need to
+/// store anything but the face indices, number of faces and objects.  We will then use
+/// the face indices stored in our m_pWorld pointer to pass into the original world model's
+/// structure to draw it.  Remember, we don't store all the objects from the original
+/// model's structure, just the ones that are in our node's dimensions.
+///
+/// There is so much that is going on in this tutorial, that I suggest having a second
+/// window open to look at the Octree2 project, so you can contrast between what is changed
+/// and what isn't.  This was necessary even for me when creating this tutorial.  Also,
+/// I think this helps you to understand the new code if you understand what the simplified
+/// octree code was doing.  Follow along each function with the old code and the new code.
+/// The same concepts are being coded, but with full world data, not just vertices.
+
 
 // Include our associated .h file
 #include "pch.h"
@@ -20,55 +68,7 @@
 #include "load3d.h"
 #include "global_id.h"
 
-// This is the final version of our octree code.  It will allow you to take  
-// a 3D model, regardless of the file format (as long as it conforms to the t3DModel struct).
-// The difference from the last 2 tutorials is that we store face indices, rather
-// than vertices.  Check out the top of Main.cpp for a explanation of why we chose this way.
-// 
-// Here is a list of the important new functions added to our g1_octree class:
-//
-//	//This returns the number of polygons in our entire scene
-//	int GetSceneTriangleCount(t3DModel *pWorld);
-//
-//  // This adds the current object index to our object list
-//	void AddObjectIndexToList(int index);
-//
-//	// This recursively creates a display list ID for every end node in the octree
-//	void CreateDisplayList(g1_octree *pNode, t3DModel *pRootWorld, int displayListOffset);
-//
-// Since we need to know the total triangle count for each node that we will
-// be potentially splitting, GetSceneTriangleCount() was created to go through
-// all of the objects in the model and add up their triangles to a total number.
-// This number is then returned and used for the root node to pass in.
-//
-// Instead of going through every object in the model's object list when drawing
-// each end node, we store a list of indices into the object list that are in the end node.  
-// This way we don't do unnecessary looping if the triangles in that end node aren't in 
-// those objects.  The AddObjectIndexToList() function adds the passed in index to our 
-// index list, if it's not already there.
-//
-// To get a greater efficiency out of the drawing of our octree, display lists are used.
-// CreateDisplayList() recursively goes through each node and creates a display list ID for each.
-// This is only done once, then we can use the display ID to render that end node liquid fast.
-//
-// Keep in mind, that we do NOT split the triangles over the node's planes.  Instead, we
-// are just storing the face indices for each object. You might wonder how this works, since 
-// our t3DModel structure has multiple objects, with multiple face index arrays.  Simple,
-// we just create a pointer to a t3DModel structure for every end node (m_pWorld).  Then,
-// we only store the objects that are in that end node.  Of course, there is no need to
-// store anything but the face indices, number of faces and objects.  We will then use
-// the face indices stored in our m_pWorld pointer to pass into the original world model's
-// structure to draw it.  Remember, we don't store all the objects from the original
-// model's structure, just the ones that are in our node's dimensions.
-//
-// There is so much that is going on in this tutorial, that I suggest having a second
-// window open to look at the Octree2 project, so you can contrast between what is changed
-// and what isn't.  This was necessary even for me when creating this tutorial.  Also,
-// I think this helps you to understand the new code if you understand what the simplified
-// octree code was doing.  Follow along each function with the old code and the new code.
-// The same concepts are being coded, but with full world data, not just vertices.
-//
-//
+
 
 
 // This holds the current amount of subdivisions we are currently at.
@@ -100,21 +100,11 @@ g1_octree_debug::~g1_octree_debug()
 	{
 	m_vLines.uninit();
 	}
-///////////////////////////////// RENDER DEBUG LINES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////	This goes through all of the lines that we stored in our list and draws them
-/////
-///////////////////////////////// RENDER DEBUG LINES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-// This renders all of the lines
 void g1_octree_debug::RenderDebugLines(i4_transform_class *transform)				
 {
     
-	//glDisable(GL_LIGHTING);					// Turn OFF lighting so the debug lines are bright yellow
-
-	//glBegin(GL_LINES);						// Start rendering lines
-
-	//	glColor3ub(255, 255, 0.0f);			// Turn the lines yellow
+	
 	r1_render_api_class *api=g1_render.r_api;
 	r1_shading_type shade=api->get_shade_mode();
 	api->set_shading_mode(R1_SHADE_DISABLED);
@@ -128,22 +118,12 @@ void g1_octree_debug::RenderDebugLines(i4_transform_class *transform)
 			
 			g1_render.render_3d_line(v1,v2,0xffff00,0xffff00,
 				transform,i4_T);
-			//glVertex3f(m_vLines[i].x, m_vLines[i].y, m_vLines[i].z);
 		}	
 
-	//glEnd();								// Stop rendering lines
-
-	// If we have lighting turned on, turn the lights back on
-	//if(g_bLighting) 
-	//	glEnable(GL_LIGHTING);
+	
 	api->set_shading_mode(shade);
 }
 
-///////////////////////////////// ADD DEBUG LINE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////	This adds a debug LINE to the stack of lines
-/////
-///////////////////////////////// ADD DEBUG LINE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
 void g1_octree_debug::AddDebugLine(i4_3d_vector vPoint1, i4_3d_vector vPoint2)
 {
@@ -152,12 +132,6 @@ void g1_octree_debug::AddDebugLine(i4_3d_vector vPoint1, i4_3d_vector vPoint2)
 	m_vLines.push_back(vPoint2);
 }
 
-
-///////////////////////////////// ADD DEBUG RECTANGLE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////	This adds a debug RECTANGLE to the stack of lines
-/////
-///////////////////////////////// ADD DEBUG RECTANGLE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
 void g1_octree_debug::AddDebugRectangle(i4_3d_vector vCenter, float width, float height, float depth)
 {
@@ -200,12 +174,6 @@ void g1_octree_debug::AddDebugRectangle(i4_3d_vector vCenter, float width, float
 }
 
 
-///////////////////////////////// CLEAR \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////	This clears all of the debug lines
-/////
-///////////////////////////////// CLEAR \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-
 void g1_octree_debug::Clear()						
 {
 	// Destroy the list using the standard vector clear() function
@@ -218,15 +186,6 @@ void g1_octree_debug::uninit()
 	}
 
 
-//-------------------------------------------------------------------------\\ 
-
-
-
-///////////////////////////////// OCTREE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////	The g1_octree contstructor which calls our init function
-/////
-///////////////////////////////// OCTREE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
 g1_octree::g1_octree():m_pQuadList(0,200)
 {
@@ -259,6 +218,7 @@ g1_octree::g1_octree():m_pQuadList(0,200)
 	// Set the sub nodes to NULL
 	memset(m_pOctreeNodes, 0, sizeof(m_pOctreeNodes));		
 }
+
 
 g1_octree::g1_octree(g1_quad_object_class *pWorld, i4_loader_class *fp)
 :m_pQuadList(0,200)
@@ -406,7 +366,6 @@ g1_octree *g1_octree::Build(g1_quad_object_class *pWorld)
 		delete newtree;
 		return 0;
 		}
-	
 	return newtree;
 	}
 
@@ -483,9 +442,6 @@ void g1_octree::GetSceneDimensions(g1_quad_object_class *pWorld)
 
 	// Divide the total by the number of vertices to get the center point.
 	// We could have overloaded the / symbol but I chose not to because we rarely use it.
-	//m_vCenter.x /= numberOfVerts;
-	//m_vCenter.y /= numberOfVerts;	
-	//m_vCenter.z /= numberOfVerts;
 	m_vCenter/=(float)numberOfVerts;
 
 	// Now that we have the center point, we want to find the farthest distance from
@@ -532,17 +488,6 @@ void g1_octree::GetSceneDimensions(g1_quad_object_class *pWorld)
 
 	maxWidth *= 2;		maxHeight *= 2;		maxDepth *= 2;
 
-	// Check if the width is the highest value and assign that for the cube dimension
-	//if(maxWidth > maxHeight && maxWidth > maxDepth)
-	//	m_Width = maxWidth;
-
-	// Check if the height is the heighest value and assign that for the cube dimension
-	//else if(maxHeight > maxWidth && maxHeight > maxDepth)
-	//	m_Width = maxHeight;
-
-	// Else it must be the depth or it's the same value as some of the other ones
-	//else
-	//	m_Width = maxDepth;
 	m_xWidth=maxWidth;
 	m_yWidth=maxHeight;
 	m_zWidth=maxDepth;
@@ -1244,14 +1189,6 @@ i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads,
 	//PG: Why don't we just use the this pointer for pNode?
 	//And pRootWorld doesn't need to be passed either, so we
 	//safe the time to copy unecessary parameters to the stack.
-		//DrawOctree(pNode->m_pOctreeNodes[TOP_LEFT_FRONT],		pRootWorld);
-		//DrawOctree(pNode->m_pOctreeNodes[TOP_LEFT_BACK],		pRootWorld);
-		//DrawOctree(pNode->m_pOctreeNodes[TOP_RIGHT_BACK],		pRootWorld);
-		//DrawOctree(pNode->m_pOctreeNodes[TOP_RIGHT_FRONT],		pRootWorld);
-		//DrawOctree(pNode->m_pOctreeNodes[BOTTOM_LEFT_FRONT],	pRootWorld);
-		//DrawOctree(pNode->m_pOctreeNodes[BOTTOM_LEFT_BACK],		pRootWorld);
-		//DrawOctree(pNode->m_pOctreeNodes[BOTTOM_RIGHT_BACK],	pRootWorld);
-		//DrawOctree(pNode->m_pOctreeNodes[BOTTOM_RIGHT_FRONT],	pRootWorld);
 		m_pOctreeNodes[TOP_LEFT_FRONT]->DrawOctree(transform,quads, depth+1);
 		m_pOctreeNodes[TOP_LEFT_BACK]->DrawOctree(transform,quads, depth+1);
 		m_pOctreeNodes[TOP_RIGHT_BACK]->DrawOctree(transform,quads, depth+1);
@@ -1293,6 +1230,42 @@ i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads,
 		}
 	return i4_T;
 }
+
+i4_bool g1_octree::PointInCube(i4_3d_vector p) const
+    {
+    
+    i4_float xw=m_xWidth/2;
+    if ((p.x<m_vCenter.x-xw)||(p.x>m_vCenter.x+xw))
+        return false;
+    i4_float yw=m_yWidth/2;
+    if ((p.y<m_vCenter.y-yw)||(p.y>m_vCenter.y+yw))
+        return false;
+    i4_float zw=m_zWidth/2;
+    if ((p.z<m_vCenter.z-zw)||(p.z>m_vCenter.z+zw))
+        return false;
+    return true;
+    }
+
+g1_octree *g1_octree::GetLeafAt(i4_3d_vector where)
+    {
+    if (!this)
+        return 0;
+    g1_octree *node=NULL;
+    i4_bool inside=i4_F;
+    inside=PointInCube(where);
+    if (!inside)
+        return NULL;
+    if (isLeaf())
+        {
+        return this;
+        }
+    int i;
+    for (i=0;(i<8)&&(node==NULL);++i)
+        {
+        node=m_pOctreeNodes[i]->GetLeafAt(where);
+        }
+    return node;
+    }
 
 
 void g1_octree::scale(i4_float value)

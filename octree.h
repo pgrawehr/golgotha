@@ -90,22 +90,26 @@ class g1_octree_debug : public i4_init_class
 
 public:
 
-	/// The default constructor. Initializes the member fields. 
+	/// The default constructor. 
+    /// Initializes the member fields. 
 	g1_octree_debug();
 
-	/// This adds a line to our list of debug lines
+	/// This adds a line to our list of debug lines.
+    /// Add a line to the line list. 
 	/// \param vPoint1 Starting point
 	/// \param vPoint2 End point
 	void AddDebugLine(i4_3d_vector vPoint1, i4_3d_vector vPoint2);
 
-	/// This adds a rectangle with a given center, width, height and depth to our list
+	/// This adds a rectangle with a given center, width, height and depth to our list.
+    /// Add a rectangle of lines. 
 	/// \param vCenter The center of the rectangle.
 	/// \param width   Size of the rectangle in X-Dimension
 	/// \param height  Size of the rectangle in Y-Dimension
 	/// \param depth   Size of the rectangle in Z-Dimension
 	void AddDebugRectangle(i4_3d_vector vCenter, float width, float height, float depth);
 
-	/// This renders all of the lines
+	/// This renders all of the lines.
+    /// This is for debugging purposes only!
 	/// \param transform The world-to-camera transform
 	void RenderDebugLines(i4_transform_class *transform);		
 
@@ -161,16 +165,16 @@ class g1_octree
 	void save(i4_saver_class *fp);
 
 	/// This returns the center of this node.
-	i4_3d_vector GetCenter() {	 return m_vCenter;	}
+	i4_3d_vector GetCenter() const {	 return m_vCenter;	}
 
 	/// This returns the triangle count stored in this node.
-	int GetTriangleCount()  {   return m_TriangleCount;	}
+	int GetTriangleCount() const  {   return m_TriangleCount;	}
 
 	// This returns the widht of this node (since it's a cube the height and depth are the same)
 	//float GetWidth() {	 return m_Width;	}
 
 	/// This returns if this node is subdivided or not.
-	i4_bool IsSubDivided()  {   return m_bSubDivided;	}
+	i4_bool IsSubDivided() const {   return m_bSubDivided;	}
 
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
@@ -211,7 +215,7 @@ class g1_octree
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 
-	/// This subdivides a node depending on the triangle count and node width
+	/// This subdivides a node depending on the triangle count and node width.
 	i4_bool CreateNode(g1_quad_object_class *pWorld, tFaceList *pList, int numberOfTriangles, i4_3d_vector vCenter, 
 		float xwidth,float ywidth, float zwidth);
 
@@ -252,9 +256,45 @@ class g1_octree
 	//most probably will be dropped
 	//void CreateDisplayList(g1_octree *pNode, g1_quad_object_class *pRootWorld, int displayListOffset);
 
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
+    int GetNumQuads() const
+        {
+        return m_TriangleCount;
+        };
 
+    float xWidth() const 
+        {
+        return m_xWidth;
+        }
+    float yWidth() const
+        {
+        return m_yWidth;
+        }
 
+    float zWidth() const 
+        {
+        return m_zWidth;
+        }
+
+    i4_bool isLeaf() const
+        {
+        return !IsSubDivided();
+        }
+
+    /// Returns the i'th quad of this object.
+    /// Make sure the index is in range.
+    g1_quad_class *GetQuad(int i) const
+        {
+        //unfortunatelly, we need a double indirection here.
+        return &m_pWorld->quad[m_pQuadList[i]];
+        }
+
+    /// Returns the Leaf node the point is in.
+    /// The vector must already have been transformed to local coordinates.
+    /// May return 0 if point is outside object. 
+    g1_octree *GetLeafAt(i4_3d_vector where);
+
+protected:
+    i4_bool PointInCube(i4_3d_vector p) const;
 private:
 
 	/// This tells us if we have divided this node into more sub nodes
@@ -266,12 +306,11 @@ private:
 	/// we can safely assume that we're not generating two octrees
 	/// simultaneously.
 	static int m_CurrentSubdivision;
-
+protected:
 	// These are the size of the cube for this current node
-public:
-	float m_xWidth; /// < Width of this node
-	float m_yWidth; /// < Height of this node
-	float m_zWidth; /// < Depth of this node
+	float m_xWidth; ///< Width of this node
+	float m_yWidth; ///< Height of this node
+	float m_zWidth; ///< Depth of this node
 
 	/// This holds the amount of triangles stored in this node
 	int m_TriangleCount;
@@ -279,9 +318,7 @@ public:
 	/// This is the center (X, Y, Z) point in this node
 	i4_3d_vector m_vCenter;
 
-
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-private:
 	/// This holds all the scene information (verts, normals, texture info, etc..) for this node
 	g1_quad_object_class *m_pWorld;
 

@@ -146,109 +146,259 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
                                         i4_float *intersect_t,
                                         int *hit_poly,
                                         i4_3d_vector *normal)
-{
-  g1_vert_class *verts = get_verts(anim, frame);
-  g1_quad_class *q = quad;
-  i4_bool hit = i4_F;
-  i4_float new_t = 1.0;
-
-  for (int i=0; i<num_quad; i++, q++)
-  {
-    if (q->normal.dot(ray)>=0)
-      // wrong direction, next quad
-      continue;
-
-    // find intersection point in polygon's plane
-    i4_float d = q->normal.dot(verts[q->vertex_ref[0]].v);
-    i4_float num = d - q->normal.dot(point);
-    i4_float den = q->normal.dot(ray);
-    i4_float t = num/den;
+    {
+    g1_vert_class *verts;
+    verts = get_verts(anim, frame);
     
-    if (t<0)
-      // behind the observer, next
-      continue;
-
-    if (t>=new_t)
-      // check if new intersection is closer than previous ones
-      continue;
-
-    // project point into plane
-    int j, u,v;
-    i4_3d_vector new_ray(ray);
-    new_ray *= t;
-    i4_3d_vector new_point(point);
-    new_point += new_ray;
-
-    // determine orthogonal plane for 2D point in polygon test
-    i4_3d_vector abs_normal;
-
-    abs_normal.set((float)fabs(q->normal.x), (float)fabs(q->normal.y), (float)fabs(q->normal.z));
-
-    if (abs_normal.x>abs_normal.y && abs_normal.x>abs_normal.z)
-    {
-      // test in yz plane
-      u = 1; v = 2;
-    }
-    else if (abs_normal.y>abs_normal.x && abs_normal.y>abs_normal.z)
-    {
-      // test in zx plane
-      u = 2; v = 0;
-    }
-    else
-    {
-      // test in xy plane
-      u = 0; v = 1;
-    }
-
-    // count first axis crossings of polygon to determine whether point in polygon
+    g1_quad_class *q = quad;
+    i4_bool hit = i4_F;
+    i4_float new_t = 1.0;
+    i4_float d,num,den,t;
     i4_float 
-      dx1, dy1,
-      dx2 = verts[q->vertex_ref[0]].v[u] - new_point[u],
-      dy2 = verts[q->vertex_ref[0]].v[v] - new_point[v];
-
+            dx1, dy1, dx2,dy2;
     int 
-      x_sign1, y_sign1, 
-      x_sign2 = dx2>0,
-      y_sign2 = dy2>0;
-
-    int inside=0;
-
-    for (j=q->num_verts()-1; j>=0; j--)
-    {
-      dx1 = verts[q->vertex_ref[j]].v[u] - new_point[u];
-      dy1 = verts[q->vertex_ref[j]].v[v] - new_point[v];
-      x_sign1 = dx1>0;
-      y_sign1 = dy1>0;
-      if (y_sign1 != y_sign2)
-      {
-        // crosses x-axis
-        if (x_sign1 != x_sign2)
+            x_sign1, y_sign1, x_sign2, y_sign2;
+    int inside;
+    i4_3d_vector new_ray,new_point,abs_normal;
+    int j, u,v,i;
+    g1_octree *curnode;
+    g1_octree *nodes[3];
+    if (octree)
         {
-          // check if crossing point is positive ((slope2>slope1) ^ (y2>y1))
-          if ((dx2*dy1 > dx1*dy2) ^ (dy2>dy1))
-            inside = !inside;
+        new_point=point;
+        new_point+=ray;
+        //although not perfectly true, we assume that
+        //the ray doesn't pass any other nodes than the source
+        //and the target.
+        nodes[2]=0;
+        nodes[0]=octree->GetLeafAt(point);
+        nodes[1]=octree->GetLeafAt(new_point);
+        if (nodes[0]==nodes[1])
+            nodes[1]=NULL;
+        int the_cur_node=0;
+        curnode=nodes[the_cur_node];
+        i=0;
+        while (curnode)
+            {
+            q=curnode->GetQuad(i);
+            den = q->normal.dot(ray);
+            if (den>=0)
+                // wrong direction, next quad
+                goto next_loop;
+        
+            // find intersection point in polygon's plane
+            d = q->normal.dot(verts[q->vertex_ref[0]].v);
+            num = d - q->normal.dot(point);
+        
+            //originally, the line t=num/den was before the following
+            //line and we tested for t<0, but since we now here that
+            //den<0, t can only become negative if num is positive. 
+            if (num>0) 
+                // behind the observer, next
+                goto next_loop;
+        
+            t = num/den;
+            if (t>=new_t)
+                // check if new intersection is closer than previous ones
+                goto next_loop;
+        
+            // project point into plane
+        
+            new_ray=ray;
+            new_ray *= t;
+            new_point=point;
+            new_point += new_ray;
+        
+            // determine orthogonal plane for 2D point in polygon test
+        
+            abs_normal.set((float)fabs(q->normal.x), (float)fabs(q->normal.y), (float)fabs(q->normal.z));
+        
+            if (abs_normal.x>abs_normal.y && abs_normal.x>abs_normal.z)
+                {
+                // test in yz plane
+                u = 1; v = 2;
+                }
+            else if (abs_normal.y>abs_normal.x && abs_normal.y>abs_normal.z)
+                {
+                // test in zx plane
+                u = 2; v = 0;
+                }
+            else
+                {
+                // test in xy plane
+                u = 0; v = 1;
+                }
+        
+            // count first axis crossings of polygon to determine whether point in polygon
+        
+            dx2 = verts[q->vertex_ref[0]].v[u] - new_point[u],
+            dy2 = verts[q->vertex_ref[0]].v[v] - new_point[v];
+        
+        
+            x_sign2 = dx2>0,
+            y_sign2 = dy2>0;
+        
+            inside=0;
+        
+            for (j=q->num_verts()-1; j>=0; j--)
+                {
+                dx1 = verts[q->vertex_ref[j]].v[u] - new_point[u];
+                dy1 = verts[q->vertex_ref[j]].v[v] - new_point[v];
+                x_sign1 = dx1>0;
+                y_sign1 = dy1>0;
+                if (y_sign1 != y_sign2)
+                    {
+                    // crosses x-axis
+                    if (x_sign1 != x_sign2)
+                        {
+                        // check if crossing point is positive ((slope2>slope1) ^ (y2>y1))
+                        if ((dx2*dy1 > dx1*dy2) ^ (dy2>dy1))
+                            inside = !inside;
+                        }
+                    else if (x_sign1)
+                        // crosses +x-axis
+                        inside = !inside;
+                    y_sign2 = y_sign1;
+                    }
+                x_sign2 = x_sign1;
+                dx2 = dx1;
+                dy2 = dy1;
+                }
+        
+            if (inside)
+                {
+                // update current intersection
+                new_t = t;
+                if (hit_poly) 
+                    *hit_poly=i;
+                if (normal) 
+                    *normal=q->normal;
+                hit = i4_T;
+                }
+next_loop:
+            ++i;
+            if (i>=curnode->GetNumQuads())
+                {
+                i=0;
+                //restart with the quads from the other node.
+                ++the_cur_node;
+                curnode=nodes[the_cur_node];
+                }
+            }
+        if (intersect_t) 
+            *intersect_t=new_t;
+        return hit;
         }
-        else if (x_sign1)
-          // crosses +x-axis
-          inside = !inside;
-        y_sign2 = y_sign1;
-      }
-      x_sign2 = x_sign1;
-      dx2 = dx1;
-      dy2 = dy1;
-    }
 
-    if (inside)
-    {
-      // update current intersection
-      new_t = t;
-      if (hit_poly) *hit_poly=i;
-      if (normal) *normal=q->normal;
-      hit = i4_T;
-    }
-  }
-  if (intersect_t) *intersect_t=new_t;
-  return hit;
+    else //not octree bellow
+        {
+        for (i=0; i<num_quad; i++, q++)
+            {
+            den = q->normal.dot(ray);
+            if (den>=0)
+                // wrong direction, next quad
+                continue;
+        
+            // find intersection point in polygon's plane
+            d = q->normal.dot(verts[q->vertex_ref[0]].v);
+            num = d - q->normal.dot(point);
+        
+            //originally, the line t=num/den was before the following
+            //line and we tested for t<0, but since we now here that
+            //den>=0, t can only become negative if num is positive. 
+            //PG: Yuk, that gave me quite a shock... Thought I had
+            //introduced a very hard to find collision bug when I
+            //noted that I had just used the wrong comparison here.
+            //Change this to (num<0) and see how far tanks can fly ;) 
+            if (num>0) 
+                // behind the observer, next
+                continue;
+        
+            t = num/den;
+            if (t>=new_t)
+                // check if new intersection is closer than previous ones
+                continue;
+        
+            // project point into plane
+        
+            new_ray=ray;
+            new_ray *= t;
+            new_point=point;
+            new_point += new_ray;
+        
+            // determine orthogonal plane for 2D point in polygon test
+        
+            abs_normal.set((float)fabs(q->normal.x), (float)fabs(q->normal.y), (float)fabs(q->normal.z));
+        
+            if (abs_normal.x>abs_normal.y && abs_normal.x>abs_normal.z)
+                {
+                // test in yz plane
+                u = 1; v = 2;
+                }
+            else if (abs_normal.y>abs_normal.x && abs_normal.y>abs_normal.z)
+                {
+                // test in zx plane
+                u = 2; v = 0;
+                }
+            else
+                {
+                // test in xy plane
+                u = 0; v = 1;
+                }
+        
+            // count first axis crossings of polygon to determine whether point in polygon
+        
+            dx2 = verts[q->vertex_ref[0]].v[u] - new_point[u],
+            dy2 = verts[q->vertex_ref[0]].v[v] - new_point[v];
+        
+        
+            x_sign2 = dx2>0,
+            y_sign2 = dy2>0;
+        
+            inside=0;
+        
+            for (j=q->num_verts()-1; j>=0; j--)
+                {
+                dx1 = verts[q->vertex_ref[j]].v[u] - new_point[u];
+                dy1 = verts[q->vertex_ref[j]].v[v] - new_point[v];
+                x_sign1 = dx1>0;
+                y_sign1 = dy1>0;
+                if (y_sign1 != y_sign2)
+                    {
+                    // crosses x-axis
+                    if (x_sign1 != x_sign2)
+                        {
+                        // check if crossing point is positive ((slope2>slope1) ^ (y2>y1))
+                        if ((dx2*dy1 > dx1*dy2) ^ (dy2>dy1))
+                            inside = !inside;
+                        }
+                    else if (x_sign1)
+                        // crosses +x-axis
+                        inside = !inside;
+                    y_sign2 = y_sign1;
+                    }
+                x_sign2 = x_sign1;
+                dx2 = dx1;
+                dy2 = dy1;
+                }
+        
+            if (inside)
+                {
+                // update current intersection
+                new_t = t;
+                if (hit_poly) 
+                    *hit_poly=i;
+                if (normal) 
+                    *normal=q->normal;
+                hit = i4_T;
+                }
+            }
+        if (intersect_t) 
+            *intersect_t=new_t;
+        return hit;
+
+        } //end of else not octree
+
 }
 
 i4_bool g1_quad_object_class::get_mount_point(char *name, i4_3d_vector& vect) const
