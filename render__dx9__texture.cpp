@@ -907,7 +907,7 @@ void r1_dx9_texture_class::async_load_finished(used_node *u)
 	w32 tex_by;
 	r1_image_list_struct *ils=0;
     I4_ASSERT(u->mip->entry!=0,"SEVERE: Texture manager internal inconsistency");
-  if (u->mip->flags & R1_MIPLEVEL_LOAD_JPG)
+    if (u->mip->flags & R1_MIPLEVEL_LOAD_JPG)
 	  {
 	  i4_ram_file_class *rp=new i4_ram_file_class(u->data,u->async_fp->size());
 	  //i4_thread_sleep(10);
@@ -926,14 +926,38 @@ void r1_dx9_texture_class::async_load_finished(used_node *u)
       size_image_to_texture(u->data,im,u->mip->width,u->mip->height,
 		  tex_by,u->mip->entry->is_transparent(),
 		  u->mip->entry->is_alphatexture());
-      u->mip->flags &=~R1_MIPLEVEL_LOAD_JPG;
-
-      array_lock.lock();
       
-	  ils=image_list.add();
-      ils->init();
-      ils->id=u->mip->entry->id;
-	  ils->image=im;
+      array_lock.lock();
+	  u->mip->flags &=~R1_MIPLEVEL_LOAD_JPG;
+      
+	  //Due to delays, it might happen that we come here twice for the same texture.
+	  //This is not good from a performance point of view, but can hardly be avoided.
+	  //We must ensure that the image-list contains each element only once. 
+	  bool found=false;
+	  for (x=0;x<image_list.size();x++)
+	  {
+		  //The image list entry has been prepared (but with a null reference). Otherwise,
+		  //the main process would not know that he already sent a load request for this image. 
+		  if (image_list[x].id==u->mip->entry->id)
+		  {
+		      found=true;
+			  if (image_list[x].image)
+				delete im;
+			  else
+			  {
+				  image_list[x].image=im;
+			  }
+			  break;
+		  }
+	  }
+	  //Should actually not happen
+	  if (!found)
+	  {
+		ils=image_list.add();
+		ils->init();
+		ils->id=u->mip->entry->id;
+		ils->image=im;
+	  }
 	  
 	  }
   else if (u->mip->flags&R1_MIPLEVEL_JPG_ALREADY_LOADED)
@@ -966,10 +990,18 @@ void r1_dx9_texture_class::async_load_finished(used_node *u)
 		  u->mip->width,u->mip->height,tex_by,
 		  u->mip->entry->is_transparent(),
 		  u->mip->entry->is_alphatexture());
-	  u->mip->flags &=~R1_MIPLEVEL_JPG_ALREADY_LOADED;
+	  
 	  array_lock.lock();
+	  u->mip->flags &=~R1_MIPLEVEL_JPG_ALREADY_LOADED;
 	  //We MUST search the entry again, since it might have been moved
 	  //due to removals (but the index can only be smaller than before)
+	  //The problem is that we would actually have to do everything in this method 
+	  //with the array locked, but this would make the asynchronous load a fake, since
+	  //all the expensive calculations involved were synchronous with the main thread. 
+	  if (x>=image_list.size())
+	  {
+		  x=image_list.size()-1;
+	  }
 	  for(int x2=x;x2>=0;x2--)
 	  {
 		  if (image_list[x2].id==u->mip->entry->id)
@@ -1085,7 +1117,7 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
     async_worked = load_info->src_file->async_read(new_used->data,
                                                    mip->width*mip->height*tex_by,
                                                    dx9_async_callback,
-                                                   new_used);
+                                                   new_used,255,92);
   }
   else
   {
@@ -1124,7 +1156,7 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
 		async_worked = fp->async_read(new_used->data,
                                   mip->width*mip->height*2,
                                   dx9_async_callback,
-                                  new_used,110);
+                                  new_used,110,93);
 		}
 	else
 		{
@@ -1143,7 +1175,7 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
 				//dx9_async_callback(0,new_used);
 				
 				async_worked=i4_async_reader::request_for_callback(0,
-					0,dx9_async_callback,new_used);
+					0,dx9_async_callback,new_used,255,91);
 				
 				bytes_loaded += mip->width*mip->height*2;
 				no_of_textures_loaded++;
@@ -1185,7 +1217,7 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
 					}
 				}
 			}
-		array_lock.unlock();
+		
 		i4_const_str *n=NULL;
 		n=r1_get_texture_name(mip->entry->id);
 		char buf[100],buf2[150];
@@ -1203,13 +1235,19 @@ i4_bool r1_dx9_texture_class::async_mip_load(r1_mip_load_info *load_info)
 			int datasize=new_used->async_fp->size();
 			new_used->data=new w8[datasize];
 			mip->flags|=R1_MIPLEVEL_LOAD_JPG;
+			r1_image_list_struct *ils_1=image_list.add();
+			ils_1->init();
+			ils_1->id=mip->entry->id;
+			ils_1->usage=30;
+			array_lock.unlock();
 			async_worked=new_used->async_fp->async_read(new_used->data,
 				datasize,
-				dx9_async_callback,new_used);
+				dx9_async_callback,new_used,255,94);
 			}
 		else
 			{
 			mip->flags&= (~R1_MIPLEVEL_IS_LOADING);
+			array_lock.unlock();
 			free_mip(new_used);    
     
 			load_info->error = R1_MIP_LOAD_MISSING;    
@@ -1530,9 +1568,9 @@ void r1_dx9_texture_class::next_frame()
 			ils->usage=30;
 			ils->image=im;
 			ils->id=u->mip->entry->id;;
-		size_image_to_texture(texture_ptr,im,u->mip->width,u->mip->height,tex_by,
-			u->mip->entry->is_transparent(),u->mip->entry->is_alphatexture());
-		u->mip->flags &=~R1_MIPLEVEL_LOAD_JPG;
+		    size_image_to_texture(texture_ptr,im,u->mip->width,u->mip->height,tex_by,
+			    u->mip->entry->is_transparent(),u->mip->entry->is_alphatexture());
+		    u->mip->flags &=~R1_MIPLEVEL_LOAD_JPG;
 		}
 	else
 		if (u->mip->flags & R1_MIPLEVEL_JPG_ALREADY_LOADED)
