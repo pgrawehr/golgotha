@@ -2877,8 +2877,6 @@ li_object *li_sys_function_evaluator(li_object *o,li_environment *env)
 				}
 		}
 	
-	
-    
 	ret=(li_object *)eval_sys_function( &fun,o,env);    
     
 	return ret;

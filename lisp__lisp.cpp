@@ -2297,8 +2297,21 @@ LI_HEADER(user_function_evaluator)//called for any user function
 
 LI_HEADER(user_macro_evaluator)
 	{
-	li_object *o1=new li_list(li_get_symbol("&noevalonbind"),o);
-	li_object *macroeval=li_user_function_evaluator(o1,env);
+    //we don't only need to use noevalonbind here but need to quote
+    //every argument before the call, because they will be double-evaled
+    //anyway. (at least I think this will help)
+    li_object *o1=li_get_type(o)->copy(o);
+    //li_list *ob=li_list::get(o1,env);
+    
+    //while (ob)
+    //    {
+        //ob is the list of parameters
+    //    ob->set_data(li_make_list(li_quote,ob->data(),0));
+    //    ob=li_list::get(li_cdr(ob,env),env);
+    //    }
+
+	li_object *o2=new li_list(li_get_symbol("&noevalonbind"),o1);
+	li_object *macroeval=li_user_function_evaluator(o2,env);
 	return li_eval(macroeval,env);//evaluate result of macro expansion.
 	}
 
@@ -2403,38 +2416,13 @@ LI_HEADER(defmacro_operator)
 		//has a documentation-string
 		body=li_cdr(body,env);
 		}
-	//This is special about macros: We evaluate all forms right now
-	//for the first time.
-	/*
-	li_object *expr=body;
-	li_list *expanded_body=0;
-	li_list *expanded_body_head=0;
-	li_object *newform=0;
-	while (expr)
-		{
-		newform=li_eval(li_car(expr,env),env);
-		expr=li_cdr(expr,env);
-		if (expanded_body==0)
-			{
-			expanded_body=new li_list(newform,0);
-			expanded_body_head=expanded_body;
-			}
-		else
-			{
-			expanded_body->set_next(new li_list(newform,0));
-			expanded_body=(li_list*)expanded_body->next();//now points to the newly added element
-			}
-		}
-	*/
+	
 	li_user_function *fn=new li_user_function(li_user_macro_evaluator,
 		hd,env,0,body,n->name());
 	fn->data()->_reserved=docu;
 	
-	li_symbol *sym=li_symbol::get(n,0);//defun has always global effect.
-	//if (env)
-	//	env->set_fun(sym, fn);
-	//else
-		sym->set_fun(fn);
+	li_symbol *sym=li_symbol::get(n,0);//defmacro has always global effect.
+	sym->set_fun(fn);
 	return n;
 	}
 
@@ -3292,6 +3280,13 @@ LI_HEADER(defconstant)
 	return s;
 	}
 
+li_object *li_set(li_object *o, li_environment *env)
+    {
+    li_symbol *sym=li_symbol::get(li_eval(li_first(o,env),env),env);
+    li_object *value=li_eval(li_second(o,env),env);
+    li_set_value(sym,value,env);
+    return value;
+    }
 
 li_object *li_setf(li_object *o, li_environment *env)
 	{
@@ -3321,8 +3316,12 @@ li_object *li_setf(li_object *o, li_environment *env)
 				}
 			else
                 {
-			    //li_set_value(s, value, env); 
-                s->set_value(value);
+                if (value==0)
+                    value=li_nil; //never set a variable to null 
+                                  //would be the same as make-unbound
+                                  //which is obviously not intended.
+			    li_set_value(s, value, env); 
+                //s->set_value(value);
                 }
 			
 			}
@@ -3352,10 +3351,18 @@ li_object *li_setf(li_object *o, li_environment *env)
 	
 	}
 
+//This function is used for the internal quote function 
+//that is the '(a b c) form. It CANNOT be used for explicit quotation using (quote a b c)
 li_object *li_quote_fun(li_object *o, li_environment *env)
 {
   return li_car(o,env);
 }
+
+//This is the explicit (quote ... ) form
+li_object *li_explicit_quote_fun(li_object *o, li_environment *env)
+    {
+    return li_car(o,env);
+    }
 
 li_object *li_new(li_object *o, li_environment *env)
 {
@@ -3861,6 +3868,7 @@ void li_memory_manager_class::init()
 	li_get_symbol("setf")->set_flags(LSF_SPECIALFORM);
 	li_add_function("setq", li_setf); //Abuse lisps use this one
 	li_get_symbol("setq")->set_flags(LSF_SPECIALFORM);
+    li_add_function("set",li_set);
 	li_add_function("cdr",li_cdr_operator);
 	li_add_function("car",li_car_operator);
 	li_add_function("cons",li_cons_operator);
@@ -3882,7 +3890,8 @@ void li_memory_manager_class::init()
 	li_add_function("symbol-function",li_function);
 	li_add_function("symbol-value",li_symbol_value);
 	li_get_symbol("function")->set_flags(LSF_SPECIALFORM&LSF_FUNCTIONCONSTANT);
-	li_add_function("quote",li_quote_fun);
+    //due to an implementation speciality of golg, this is different from the ' function.
+	li_add_function("quote",li_explicit_quote_fun);
 	li_get_symbol("quote")->set_flags(LSF_SPECIALFORM&LSF_FUNCTIONCONSTANT);
     li_add_function("new", li_new);
     li_add_function("read-eval", li_read_eval);

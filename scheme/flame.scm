@@ -39,6 +39,9 @@
 ;;; Ian G. Batten, Batten@uk.ac.bham.multics
 ;;;
 
+;;; Adapted to run on the golgotha lisp engine core in 2002 by 
+;;; Patrick Grawehr pgrawehr@student.ethz.ch
+
 ;;; Code:
 ;;(random t) ;;what the hell does this mean? it is undocumented to have t as arg to random
 
