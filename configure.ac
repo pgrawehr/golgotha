@@ -1,8 +1,12 @@
 # Process this file with autoconf to produce a configure script.
 AC_INIT(Golgotha, V1.0.8.3 , golgotha@qbic.vipnet.ro)
+
+
+
 AC_CONFIG_SRCDIR([golg__main.cpp])
 #AC_PREREQ(2.57)
 AC_CONFIG_HEADER([config.h])
+
 
 # Checks for programs.
 AC_PROG_CXX([icc gcc34 gcc33 gcc32 gcc31 gcc30 gcc])
@@ -21,7 +25,7 @@ LINKER_NEEDS_PTHREAD=No])
 AC_MSG_RESULT([$LINKER_NEEDS_PTHREAD])
 AC_PATH_X
 AC_PATH_XTRA
-#LIBS="-I$x_includes -L$x_libraries $LIBS" 
+ 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lGL':
 #AC_CHECK_LIB([GL], [glEnable])
@@ -35,7 +39,7 @@ AC_CHECK_LIB([X11], [XOpenDisplay])
 #AC_CHECK_LIB([gcc], [main])
 # FIXME: Replace `main' with a function in `-lm':
 #AC_CHECK_LIB([m], [sqrt])
-#AC_CHECK_LIB([stdc++], [__cxa_pure_virtual])
+AC_CHECK_LIB([cipher],[encrypt])
 
 # Checks for header files.
 AC_HEADER_DIRENT
@@ -132,6 +136,21 @@ AC_DEFINE([HAVE_PTHREAD_MUTEXATTR_SETTYPE],1,"settype")
 ac_cv_mutex_recursive2="settype"
 ])
 AC_MSG_RESULT([$ac_cv_mutex_recursive2])
+AC_SUBST(debug_or_release)
+debug_or_release="release"
+AC_MSG_CHECKING([for --with-debug flag])
+AC_ARG_WITH([debug],
+AC_HELP_STRING([--with-debug],
+[Enable debugging support. Defaults to no])
+,
+[if test withval=yes; then
+#Passing something like -O2 -O0 results in the last one being effective
+  CXXFLAGS="$CXXFLAGS -O0 -D _DEBUG"
+  debug_or_release="debug"
+fi
+AC_MSG_RESULT([$debug_or_release])
+],
+[AC_MSG_RESULT([$debug_or_release])])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

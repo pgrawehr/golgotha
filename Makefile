@@ -1,17 +1,25 @@
 #! /usr/local/bin/gmake
 
-# Golgotha Makefile for FREBSD native build using gcc 3.3
+# Golgotha Makefile for i386-unknown-freebsd4.9 native build using gcc33
 
+#The compiler to use. Usually gcc or some specific version of it
 CPP=gcc33
+#The linker to use. When using gcc, you can specify that one, because
+#it will automatically launch ld when apropriate.
 LD=gcc33 
+#The compiler used to generate the dependency info files.
+#This should stay gcc even if you use some other compiler (like icc)
+#because this feature uses a few very-gcc specific features. This setting
+#has absolutelly no influence on the code generated.
 DEPCOMP=gcc33 
-MYINCDIR=.
 
-#INTDIR=.
+#Aditional include directories. This should always contain the dot (.)
+MYINCDIR=.
+#The directory where the intermediate files go.
 INTDIR=freebsd4.9_debug
 
 INCDIRS=-I${MYINCDIR}  -I/usr/X11R6/include 
-LIBS= -lm -lGL -pthread -lstdc++   -L/usr/X11R6/lib  -lSM -lICE 
+LIBS= -lm -lGL -lcipher -pthread -lstdc++   -L/usr/X11R6/lib  -lSM -lICE 
 LIBDIRS=-L/usr/X11R6/lib
 
 #the following flags work under cygwin (without opengl render) - this is not sensefull anyway.
@@ -19,10 +27,9 @@ LIBDIRS=-L/usr/X11R6/lib
 #	-Wmissing-declarations -static -fno-strict-prototypes \
 #	-ffor-scope -Wstrict-prototypes  
 	
-
 CFLAGS= $(INCDIRS) -DHAVE_CONFIG_H -D I4_FILE_PREFIX="\"freebsd4.9\"" -D GOLGOTHA_WINDOW_TITLE="\"Golgotha i386-unknown-freebsd4.9 build\"" -W  
 
-DBG=-g -O2 -D _DEBUG
+DBG=-g -O2 -O0 -D _DEBUG
 
 # -Wconversion 
 
@@ -314,9 +321,14 @@ all:	depend prereq golgotha.elf
 
 ######################
 
+#Code for gmake
 ifeq (depend,$(wildcard depend))
 include depend
 endif
+#Code for default make
+#.if exists (depend)
+#.include "depend"
+#.endif
 
 ######################
 depend: 
@@ -325,7 +337,8 @@ depend:
 	- $(DEPCOMP) -MM -MG $(CFLAGS) *.cpp >> depend1
 	sed -e 's/\(^[^: ]\)/$(INTDIR)\/&/g' < depend1 >> depend
 	@echo "Dependency info generated. Ignore all warnings and errors "
-	@echo "and restart the make process."
+	@echo "and restart the make process. (if the compilation stops"
+	@echo "unexspectedly beyond this point)"
 
 # (generates dependencies for *.C -> *.o, but still need to do
 #  *.o -> *.exe by hand)
@@ -355,7 +368,7 @@ golgotha.elf:	depend $(OBJS)
 ######################
 
 clean:
-	- rm *.elf $(INTDIR)/*.o *~ depend depend1 
+	- rm $(INTDIR)/*.o *~ depend depend1 
 
 untouch:
 	- rm golgotha.elf all
@@ -363,6 +376,14 @@ untouch:
 touch:
 	- touch -c $(OBJS)
 	
+veryclean:	clean
+	- rm golgotha.elf
+
+install:	all
+
+uninstall:
+	@echo "To uninstall golgotha, you can just remove its entire "
+	@echo "distribution directory. No files have been put anywhere else."
 
 
 

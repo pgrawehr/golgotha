@@ -1,14 +1,22 @@
 #! /usr/local/bin/gmake
 
-# Golgotha Makefile for FREBSD native build using gcc 3.3
+# Golgotha Makefile for @target@ native build using @CXX@
 
+#The compiler to use. Usually gcc or some specific version of it
 CPP=@CXX@
+#The linker to use. When using gcc, you can specify that one, because
+#it will automatically launch ld when apropriate.
 LD=@CXX@ 
+#The compiler used to generate the dependency info files.
+#This should stay gcc even if you use some other compiler (like icc)
+#because this feature uses a few very-gcc specific features. This setting
+#has absolutelly no influence on the code generated.
 DEPCOMP=@CXX@ 
-MYINCDIR=.
 
-#INTDIR=.
-INTDIR=@target_os@_debug
+#Aditional include directories. This should always contain the dot (.)
+MYINCDIR=.
+#The directory where the intermediate files go.
+INTDIR=@target_os@_@debug_or_release@
 
 INCDIRS=-I${MYINCDIR} @X_CFLAGS@ 
 LIBS= -lm -lGL @LIBS@ @X_LIBS@ @X_PRE_LIBS@ @X_EXTRA_LIBS@
@@ -19,10 +27,9 @@ LIBDIRS=-L/usr/X11R6/lib
 #	-Wmissing-declarations -static -fno-strict-prototypes \
 #	-ffor-scope -Wstrict-prototypes  
 	
-
 CFLAGS= $(INCDIRS) @DEFS@ -D I4_FILE_PREFIX="\"@target_os@\"" -D GOLGOTHA_WINDOW_TITLE="\"Golgotha @target@ build\"" -W @CPPFLAGS@ 
 
-DBG=@CXXFLAGS@ -D _DEBUG
+DBG=@CXXFLAGS@
 
 # -Wconversion 
 
@@ -314,9 +321,14 @@ all:	depend prereq golgotha.elf
 
 ######################
 
+#Code for gmake
 ifeq (depend,$(wildcard depend))
 include depend
 endif
+#Code for default make
+#.if exists (depend)
+#.include "depend"
+#.endif
 
 ######################
 depend: 
@@ -325,7 +337,8 @@ depend:
 	- $(DEPCOMP) -MM -MG $(CFLAGS) *.cpp >> depend1
 	sed -e 's/\(^[^: ]\)/$(INTDIR)\/&/g' < depend1 >> depend
 	@echo "Dependency info generated. Ignore all warnings and errors "
-	@echo "and restart the make process."
+	@echo "and restart the make process. (if the compilation stops"
+	@echo "unexspectedly beyond this point)"
 
 # (generates dependencies for *.C -> *.o, but still need to do
 #  *.o -> *.exe by hand)
@@ -355,7 +368,7 @@ golgotha.elf:	depend $(OBJS)
 ######################
 
 clean:
-	- rm *.elf $(INTDIR)/*.o *~ depend depend1 
+	- rm $(INTDIR)/*.o *~ depend depend1 
 
 untouch:
 	- rm golgotha.elf all
@@ -363,6 +376,14 @@ untouch:
 touch:
 	- touch -c $(OBJS)
 	
+veryclean:	clean
+	- rm golgotha.elf
+
+install:	all
+
+uninstall:
+	@echo "To uninstall golgotha, you can just remove its entire "
+	@echo "distribution directory. No files have been put anywhere else."
 
 
 
