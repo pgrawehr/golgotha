@@ -25,6 +25,7 @@ enum
   G1_RADAR_USE_ICONS             =64,
   G1_RADAR_SUPRESS_STATUS		 =128,
   G1_RADAR_NO_MAP_EVENTS         =256, //< Don't modify any map parameters
+  G1_RADAR_EDIT_MODE             =1024, //< Causes the map to be drawn fully regardless of FOW settings
 };
 
 i4_parent_window_class *g1_create_radar_view(int max_w, int max_h, int flags);

@@ -124,9 +124,9 @@ struct g1_radar_params_struct
 static float radar_darkness_multiply;
 
 
-inline int get_mat_color(g1_map_cell_class *c)
+static inline int get_mat_color(g1_map_cell_class *c, i4_bool no_fog)
 {
-  if (c->flags & g1_map_cell_class::FOGGED)
+  if (!no_fog && (c->flags & g1_map_cell_class::FOGGED))
     return 0;
 
   r1_texture_handle mat=g1_tile_man.get_texture(c->type);
@@ -243,7 +243,8 @@ void g1_render_map_area(i4_image_class *im,
                         g1_radar_params_struct *p,
                         int gx1, int gy1, int gx2, int gy2,
                         i4_status_class *status,
-                        i4_bool interlaced)
+                        i4_bool interlaced,
+						i4_bool edit_mode)
 {
   g1_map_class *map=g1_get_map();
 
@@ -319,10 +320,10 @@ void g1_render_map_area(i4_image_class *im,
         int lv2=v[1].light_sum;
 
 
-        int c1=get_mat_color(cell1);
-        int c2=get_mat_color(cell1+1);
+        int c1=get_mat_color(cell1,edit_mode);
+        int c2=get_mat_color(cell1+1,edit_mode);
 
-        // seperate color components
+        // separate color components
         
         c1>>=3;
         int b1=c1&31;  c1>>=8; 
@@ -376,9 +377,9 @@ void g1_render_map_area(i4_image_class *im,
         int lv1g=lv1&31;  lv1>>=8;
         int lv1b=lv1&31;
 
-        int c1=get_mat_color(cell1);
+        int c1=get_mat_color(cell1,edit_mode);
 
-        // seperate color components        
+        // separate color components        
         c1>>=3;
         int b1=c1&31;  c1>>=8; 
         int g1=c1&31;  c1>>=8; 
@@ -426,8 +427,8 @@ void g1_render_map_area(i4_image_class *im,
         int lv2=v[1].light_sum;
 
 
-        int c1=get_mat_color(cell1);
-        int c2=get_mat_color(cell1+1);
+        int c1=get_mat_color(cell1,edit_mode);
+        int c2=get_mat_color(cell1+1,edit_mode);
 
         // seperate color components
         
@@ -483,7 +484,7 @@ void g1_render_map_area(i4_image_class *im,
         int lv1g=lv1&255;  lv1>>=8;
         int lv1b=lv1&255;
 
-        int c1=get_mat_color(cell1);
+        int c1=get_mat_color(cell1,edit_mode);
 
         // seperate color components        
         //c1>>=3;
@@ -525,7 +526,8 @@ void g1_render_map_area(i4_image_class *im,
 }
 
 i4_image_class *g1_create_map_image(int max_width, int max_height,
-                                    i4_bool interlace, i4_bool supress_status=i4_F)
+                                    i4_bool interlace, i4_bool supress_status,
+									i4_bool edit_mode)
 {        
   i4_status_class *status=0;
   if (!supress_status) //don't show status if in resize or reparenting of window
@@ -547,7 +549,7 @@ i4_image_class *g1_create_map_image(int max_width, int max_height,
   p.init(max_width, max_height);
 
   g1_render_map_area(im, &p, 0,0, g1_get_map()->width()-1, 
-                     g1_get_map()->height()-1, status, interlace);
+                     g1_get_map()->height()-1, status, interlace, edit_mode);
     
 //   g1_draw_takeover_spots(im);
 //   g1_draw_paths(im, 0);
@@ -630,7 +632,10 @@ public:
 
     if (g1_map_is_loaded())
     {
-      background=g1_create_map_image(width(), height(), flags & G1_RADAR_INTERLACED, flags & G1_RADAR_SUPRESS_STATUS);
+		background=g1_create_map_image(width(), height(), 
+			flags & G1_RADAR_INTERLACED?i4_T:i4_F, 
+		    flags & G1_RADAR_SUPRESS_STATUS?i4_T:i4_F, 
+			flags & G1_RADAR_EDIT_MODE?i4_T:i4_F);
       setup.init(background->width(), background->height());
     }
   }
@@ -1061,7 +1066,8 @@ public:
   {
     g1_render_map_area(background,
                        &setup, gx1,gy1,gx2,gy2,
-                       0, (flags & G1_RADAR_INTERLACED) ? i4_T : i4_F);
+                       0, (flags & G1_RADAR_INTERLACED) ? i4_T : i4_F,
+					   i4_F);
 
                     
 

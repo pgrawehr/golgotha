@@ -182,7 +182,7 @@ void g1_astar_map_solver_class::clear_solve()
 {
   int x=0,y=0;
   g1_map_cell_class *c;
-  
+  map_ref=g1_get_map();
   for (y=0; y<map_ref->height(); y++)
   {
     c = map_ref->cell(0,y);

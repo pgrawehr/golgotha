@@ -10197,7 +10197,8 @@ g1_path_window_class::g1_path_window_class(g1_map_class *_map,
 	  g1_create_radar_view(RADAR_SIZEX,RADAR_SIZEY,
 	  G1_RADAR_NO_MAP_EVENTS|
 	  G1_RADAR_SUPRESS_STATUS|
-	  G1_RADAR_CLICK_HOLDS_VIEW);
+	  G1_RADAR_CLICK_HOLDS_VIEW|
+	  G1_RADAR_EDIT_MODE);
   radar_x_pos=width()-RADAR_SIZEX+1;
   add_child(radar_x_pos,0,radar_overview);
 }
@@ -10558,7 +10559,7 @@ void g1_path_window_class::parent_draw(i4_draw_context_class &context)
 	  }
   local_image->clear(0x0,context);  
   bitmap->put_image(local_image, -left_point, -top_point, context);
-  local_image->bar(radar_x_pos,RADAR_SIZEY,width(),height(),0x0,context);
+  
 
   int x,y;
   x = start.x * CELL_SIZE + CELL_SIZE/2+1 - start_icon->width()/2;
@@ -10578,8 +10579,9 @@ void g1_path_window_class::parent_draw(i4_draw_context_class &context)
     y = (mh-1-sw32(critical_graph->critical[i].y))*CELL_SIZE
       + CELL_SIZE/2+1 - crit_icon->height()/2;
       
-    crit_icon->put_image_trans(local_image, x-top_point, y-left_point, 0, context);
+    crit_icon->put_image_trans(local_image, x-left_point, y-top_point, 0, context);
   }
+  local_image->bar(radar_x_pos,RADAR_SIZEY,width(),height(),0x0,context);
 }
 //}}}
   
