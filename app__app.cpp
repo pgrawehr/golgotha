@@ -316,12 +316,15 @@ void i4_application_class::display_init()
       i4_warning("WARNING: Invalid bit depth or resolution chosen or DirectX/OpenGL renderer is not ready.");
 //#endif
   }
-  i4_warning("INFO: About to initialize display to (%ix%ix%i) (Internal name %s) using driver %s.",
-    use->xres,
-    use->yres,use->bits_per_pixel,use->name,found->name);
-  sprintf(display_mode_name,"Resolution %ix%ix%i (Internal name: %s) using driver %s.",
+  if (use)
+  {
+  	i4_warning("INFO: About to initialize display to (%ix%ix%i) (Internal name %s) using driver %s.",
+    	use->xres,
+    	use->yres,use->bits_per_pixel,use->name,found->name);
+  	sprintf(display_mode_name,"Resolution %ix%ix%i (Internal name: %s) using driver %s.",
 	  use->xres,use->yres,use->bits_per_pixel,use->name,found->name);
-  if (!display->initialize_mode())//Open the Window / switch to FS
+  }
+  if (!use||!display->initialize_mode())//Open the Window / switch to FS
   {
 	  display->close();
 	  i4_display_list_struct::remove_from_list(found->name);
@@ -335,7 +338,7 @@ void i4_application_class::display_init()
 	  display_init();//try another display type.
 	  return;
   }
-
+  i4_warning("Initialisation successfull.");
   wm=new i4_window_manager_class();
   wm->prepare_for_mode(display, use);
 
@@ -555,6 +558,8 @@ int i4_get_int(char *key_name, int *i)
 	if (!inifile)
 		return 1;
 	*i=inifile->GetInt(key_name, t_Str("Main"));
+	if (*i==0x7FFFFFFE)
+	  return 1;
 	return 0;
 }
 #endif
