@@ -201,7 +201,12 @@ public:
   //this is the current "lock" target (the one most near the center of view)
   g1_typed_reference_class<g1_object_class> lock_target;
 
-  g1_typed_reference_class<g1_object_class> laser_target; 
+  g1_typed_reference_class<g1_object_class> laser_target;
+  
+  virtual i4_str frame_image_name(int &num_entries);
+
+  virtual void frame_amount(int entry_number, int &current_amount,
+      int &max_amount, g1_amount_display_class *window);
 };
 
 void draw_spining_tris(float px, float py, float z,

@@ -45,7 +45,17 @@
         0xff0000))    ; red  - level 2  (fire)
 
 ; locations relative to status bar top left graphic
-(setf action_mode_locations
+;action_mode_locations
+;although this might look strange, the filename is here used as an identifier
+(setf bitmaps/stank/status_stank_level_0.jpg
+      '((276   10)  ; lives
+        (-10   500) ; money
+        (92    34)  ; main
+        (341   37)  ; missiles
+        (369   6)   ; chain
+        (92    6))) ; health
+        
+(setf bitmaps/stank/status_stank_level_1.jpg
       '((276   10)  ; lives
         (-10   500) ; money
         (92    34)  ; main
@@ -53,14 +63,27 @@
         (369   6)   ; chain
         (92    6))) ; health
 
+(setf bitmaps/stank/status_stank_level_2.jpg
+      '((276   10)  ; lives
+        (-10   500) ; money
+        (92    34)  ; main
+        (341   37)  ; missiles
+        (369   6)   ; chain
+        (92    6))) ; health
+        
+(setf bitmaps/stank/status_default.jpg
+      '((276   10)  ; lives
+        (276   30))) ; money
+
 ; locations relative to strategy-bar top left graphic
+; only lives and money are really visible in strategy mode. 
 (setf strategy_mode_locations
       '((7 172)     ; lives
         (99 126)    ; money
         (37 270)    ; main
         (100 299)   ; missiles
         (101 218)   ; chain
-        (37  218))) ; health
+        (102 218))) ; health -was (37 218)
 
 
 ; *************************** Preferences ******************************

@@ -100,7 +100,8 @@ remap_pal "tint"
 
 
 bomb_coming "WARNING!  Bomb Truck Approaching"
-switch_to_action  "Press TAB or BACKSPACE for Action Mode"
+switch_to_action  "Press TAB or BACKSPACE to switch back to Action Mode"
+switch_to_strategy "Press TAB or BACKSPACE for Strategy Mode"
 
 /////////////// Debug / temp strings
 cs_pos "%d %d %d %d"

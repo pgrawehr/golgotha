@@ -18,6 +18,7 @@
 class i4_button_class;
 class i4_image_class;
 class i4_graphical_style_class;
+class g1_amount_display_class;
 
 // this window is responsible for drawing the border area around the game window's
 // it also loads the board frame from disk when need.  My hope is that during the normal
@@ -43,13 +44,23 @@ private:
          REFRESH_ALL=REFRESH_FRAME*2-1
   };
 
+  /*
   struct last_struct
   {
-    int money, ammo[4], cost, frame_upgrade_level;
+    int money, ammo[4], frame_upgrade_level;
     int lives;
-    last_struct() { memset(this, 0, sizeof(*this)); }
+    last_struct() 
+        {
+        money=0;
+        ammo[0]=0;
+        ammo[1]=0;
+        ammo[2]=0;
+        ammo[3]=0;
+        frame_upgrade_level=0;
+        lives=0;
+        }
   } last;
-
+*/
   
   int refresh;
   void reparent(i4_image_class *draw_area, i4_parent_window_class *parent);
@@ -63,6 +74,7 @@ public:
   void resize_controller(int shrink_add);
 
   int shrink;              // how many pixels the 3d view is shrinked in for speed-up
+  i4_str frame_name;
   i4_image_class *frame;
 
   i4_bool mouse_grabbed;
@@ -70,6 +82,17 @@ public:
   i4_window_class *strategy_window;
   i4_window_class *controller_window;
   i4_window_class *radar_window;
+  enum 
+      {
+      LIVES,
+      MONEY,
+      MAINGUN,
+      MISSILES,
+      CHAIN,
+      HEALTH,
+      MAX_AMOUNT_WINDOWS
+      };
+  g1_amount_display_class *amount_windows[MAX_AMOUNT_WINDOWS];
 
   void set_strategy_on_top(i4_bool v);
   i4_bool strategy_on_top;
@@ -108,6 +131,49 @@ public:
   virtual ~g1_strategy_screen_class();
   void receive_event(i4_event *ev);
   void resize(w16 new_width, w16 new_height);
+};
+
+class g1_amount_display_class : public i4_window_class
+{
+public:
+  int last_amount, last_max;
+  i4_image_class *im, *dark_im;
+  i4_bool own_im,own_dark;
+  i4_bool refresh_as_text;
+
+  g1_amount_display_class(int w, int h)
+    : i4_window_class(w,h)
+  {
+    refresh_as_text=i4_T;
+    im=dark_im=0;
+	own_im=own_dark=i4_F;
+    last_amount=0;
+    last_max=1;
+  }
+
+  g1_amount_display_class(char *image_name=0);
+
+  void update(int new_amount, int max_amount)
+  {
+    if (new_amount!=last_amount || last_max!=max_amount)
+    {
+      last_amount=new_amount;
+      last_max=max_amount;
+      request_redraw(i4_F);
+    }
+  }
+
+  void draw(i4_draw_context_class &context);
+
+void change_icon(i4_image_class *new_im,i4_image_class *new_dark);
+
+  ~g1_amount_display_class()
+  {
+    if (im&&own_im) delete im;
+    if (dark_im&&own_dark) delete dark_im;
+  }
+
+  char *name() { return "amount_display"; }
 };
 
 

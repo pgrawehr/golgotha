@@ -1,5 +1,3 @@
-#include "pch.h"
-
 /********************************************************************** <BR>
   This file is part of Crack dot Com's free source code release of
   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
@@ -8,6 +6,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
+#include "pch.h"
 #include "sound_man.h"
 #include "input.h"
 #include "math/pi.h"
@@ -31,6 +30,7 @@
 #include "g1_render.h"
 #include "statistics.h"
 #include "human.h"
+#include "border_frame.h"
 
 #include "objs/model_id.h"
 #include "objs/stank.h"
@@ -60,7 +60,8 @@
 #ifdef NETWORK_INCLUDED
 #include "net/server.h"
 #endif
-static i4_float droll = 0.0, ddroll = 0.0, hurt=0.0;
+//static i4_float droll = 0.0, ddroll = 0.0, 
+static i4_float hurt=0.0f;
 
 static g1_model_ref model_ref("supertankbase"),
   turret_ref("supertanktop"),
@@ -225,6 +226,75 @@ void g1_stank_ammo_info_struct::setup(li_symbol *sym)
   need_refresh=i4_T;    
   last_fired_object=0;  
 }
+
+i4_str g1_player_piece_class::frame_image_name(int &num_entries)
+    {
+    num_entries=6;
+    g1_player_info_class *p=g1_player_man.get(player_num);
+    int level=p->supertank_upgrade_level;
+    i4_str name="bitmaps/stank/status_stank_level_";
+    i4_char c(level+'0');
+    name.insert(name.end(),c);
+    name.insert(name.end(),".jpg");
+    return name;
+    }
+
+void g1_player_piece_class::frame_amount(int entry_number,
+                                         int &current_amount,
+                                         int &max_amount,
+                                         g1_amount_display_class *window)
+    {
+    
+    g1_player_info_class *p=g1_player_man.get(player_num);
+    int level=p->supertank_upgrade_level;
+    li_object *o,*a;
+	li_symbol *s;
+	g1_stank_ammo_type_struct *am;
+	for (o=li_get_value("upgrade_levels");o&&level;level--) 
+		o=li_cdr(o,0);
+	o=li_car(o,0);
+    max_amount=ammo[entry_number-2].ammo_type->max_amount;
+    current_amount=ammo[entry_number-2].amount;
+	if (o)
+		{
+        switch (entry_number)
+            {
+            case 2:
+                //main
+		        a=li_second(o,0);
+		        s=li_symbol::get(a,0);
+		        am=g1_find_stank_ammo_type(s);
+		        window->change_icon(am->icon,am->dark_icon);
+                break;
+            case 3:
+                //missiles
+		        a=li_third(o,0);
+		        s=li_symbol::get(a,0);
+		        am=g1_find_stank_ammo_type(s);
+		        window->change_icon(am->icon,am->dark_icon);
+                break;
+            case 4:
+                //chaingun
+		        a=li_fourth(o,0);
+		        s=li_symbol::get(a,0);
+		        am=g1_find_stank_ammo_type(s);
+		        window->change_icon(am->icon,am->dark_icon);
+                break;
+            case 5:
+                //health
+		        a=li_fifth(o,0);
+		        s=li_symbol::get(a,0);
+		        am=g1_find_stank_ammo_type(s);
+		        window->change_icon(am->icon,am->dark_icon);
+                current_amount=health;
+                break;
+            default:
+                current_amount=0;
+                max_amount=-1;
+            };
+		}
+
+    };
 
 void g1_player_piece_class::find_weapons()
 {
@@ -1111,7 +1181,7 @@ void g1_player_piece_class::think()
       dx = (mp->x - (x+turret->x));
       dy = (mp->y - (y+turret->y));
 	  dh = ((mp->h+0.7f) - (h + turret->h)); 
-	  dist= sqrt(dx*dx+dy*dy);
+	  dist= i4_fsqrt(dx*dx+dy*dy);
       //aim the turret
   
       angle = i4_atan2(dy,dx);    
@@ -1498,10 +1568,17 @@ void g1_player_piece_class::draw(g1_draw_context_class *context)
 {
   g1_player_piece_class *local_stank=g1_player_man.get_local()->get_commander();
     
+  i4_bool in_local_stank=i4_F;
 
   if (g1_current_controller.get() &&
       this==local_stank && g1_current_controller->view.get_view_mode()==G1_ACTION_MODE &&
-	  g1_current_controller->view.follow_object_id==global_id)
+	  ((g1_current_controller->view.follow_object_id==global_id) ||
+      (g1_current_controller->view.follow_object_id==0)))
+      {
+      in_local_stank=i4_T;
+      }
+
+  if (in_local_stank)
     draw_target_cursors(context);
 
   
@@ -1548,9 +1625,7 @@ void g1_player_piece_class::draw(g1_draw_context_class *context)
 
   out.multiply(*old, *world_transform);
 
-  if (this!=local_stank || 
-      !g1_current_controller.get() ||
-      g1_current_controller->view.get_view_mode()!=G1_ACTION_MODE)
+  if (!in_local_stank)
   {
     g1_render.render_object(model,
                             &out,
@@ -1566,9 +1641,7 @@ void g1_player_piece_class::draw(g1_draw_context_class *context)
 
 
   // draw barrel with alpha if in action mode and on the local supertank
-  if (this==local_stank && 
-      g1_current_controller.get() &&
-      g1_current_controller->view.get_view_mode()==G1_ACTION_MODE)
+  if (in_local_stank)
   {
     
     //g1_render.r_api->set_alpha_mode(R1_ALPHA_CONSTANT);

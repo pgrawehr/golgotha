@@ -59,61 +59,11 @@ S1_SFX(press_tab_to_switch_to_action_mode, "computer_voice/press_tab_to_switch_t
 class i4_profile_class pf_border_draw("border frame draw");
 
 
-class g1_amount_display_class : public i4_window_class
-{
-public:
-  int last_amount, last_max;
-  i4_image_class *im, *dark_im;
-  i4_bool own_im,own_dark;
-  i4_bool refresh_as_text;
-
-  g1_amount_display_class(int w, int h)
-    : i4_window_class(w,h)
+void g1_amount_display_class::draw(i4_draw_context_class &context)
   {
-    refresh_as_text=i4_T;
-    im=dark_im=0;
-	own_im=own_dark=i4_F;
-    last_amount=0;
-    last_max=1;
-  }
+    if (last_amount==-1)
+        return;
 
-  g1_amount_display_class(char *image_name=0)
-    : i4_window_class(0,0)
-  {
-    if (image_name)
-    {
-      char fn[100];
-      sprintf(fn, "bitmaps/stank/frame_%s.tga", image_name);
-      im=i4_load_image(fn);
-	  own_im=i4_T;
-      sprintf(fn, "bitmaps/stank/dark_%s.tga", image_name);
-      dark_im=i4_load_image(fn);
-	  own_dark=i4_T;
-    }
-    else im=dark_im=0;
-
-    last_amount=1;
-    last_max=1;
-    refresh_as_text=i4_F;
-
-    if (im)
-      resize(im->width(), im->height());
-    else
-      resize(10,5);
-  }
-
-  void update(int new_amount, int max_amount=1)
-  {
-    if (new_amount!=last_amount || last_max!=max_amount)
-    {
-      last_amount=new_amount;
-      last_max=max_amount;
-      request_redraw(i4_F);
-    }
-  }
-
-  void draw(i4_draw_context_class &context)
-  {
     if (refresh_as_text)
     {
       local_image->clear(0, context);
@@ -143,14 +93,10 @@ public:
         local_image->bar(midx, 0, width()-1, height()-1, 0, context);
     }
   }
-
-void change_icon(i4_image_class *new_im,i4_image_class *new_dark)
+void g1_amount_display_class::change_icon(i4_image_class *new_im,
+                                        i4_image_class *new_dark)
 {
-	  //if (im&&own_im) delete im;
-	  //im=new_im;
-	  //if (dark_im&&own_dark) delete dark_im;
-	  //dark_im=new_dark;
-	  //own_im=own_dark=i4_F;
+
 	if (own_im)
 		delete im;
 	if (own_dark)
@@ -168,20 +114,11 @@ void change_icon(i4_image_class *new_im,i4_image_class *new_dark)
 	own_dark=own_im=i4_F;
 }
 
-  ~g1_amount_display_class()
-  {
-    if (im&&own_im) delete im;
-    if (dark_im&&own_dark) delete dark_im;
-  }
-
-  char *name() { return "amount_display"; }
-};
-
 i4_event_handler_reference_class<g1_border_frame_class> g1_border;
 i4_event_handler_reference_class<g1_strategy_screen_class> g1_strategy_screen;
 
-static i4_event_handler_reference_class<g1_amount_display_class>  g1_lives, 
-     g1_chain, g1_missiles, g1_main, g1_health, g1_money;
+//static i4_event_handler_reference_class<g1_amount_display_class>  g1_lives, 
+//     g1_chain, g1_missiles, g1_main, g1_health, g1_money;
 
 
 class g1_object_stats_window_class : public i4_window_class
@@ -399,21 +336,22 @@ public:
 void g1_border_frame_class::relocate(i4_parent_window_class *w, char *loc,
                                      int dx, int dy)
 {
-  i4_window_class *wins[6]={g1_lives.get(), g1_money.get(), g1_main.get(),
-                            g1_missiles.get(), g1_chain.get(), g1_health.get() };
 
   int i=0;
   for (li_object *o=li_get_value(loc); o; o=li_cdr(o,0), i++)
   {
+    if (o==NULL)
+        return;//no more entries in list. 
     li_object *v=li_car(o,0);
+    
     int x=li_get_int(li_first(v,0),0), y=li_get_int(li_second(v,0),0);
 
-    if (wins[i])
+    if (amount_windows[i])
     {
-      if (wins[i]->get_parent())
-        wins[i]->get_parent()->remove_child(wins[i]);
+      if (amount_windows[i]->get_parent())
+        amount_windows[i]->get_parent()->remove_child(amount_windows[i]);
     
-      w->add_child(x+dx,y+dy, wins[i]);
+      w->add_child(x+dx,y+dy, amount_windows[i]);
     }   
   }
 
@@ -437,23 +375,28 @@ g1_border_frame_class::g1_border_frame_class()
                           i4_current_app->get_window_manager()->height(), 0,
                           i4_current_app->get_style())
 {
-  frame=i4_load_image("bitmaps/stank/status_bar.jpg");
+  frame_name="bitmaps/stank/status_stank_level_0.jpg";
+  frame=i4_load_image(frame_name);
   refresh=REFRESH_ALL;
 
   mouse_grabbed=i4_F;
   strategy_window=0;
   shrink=0;
+  
+  for (int i=0;i<MAX_AMOUNT_WINDOWS;i++)
+      {
+      amount_windows[i]=NULL;
+      }
+
+  amount_windows[MONEY]=new g1_amount_display_class(63,13);
+  amount_windows[HEALTH]=new g1_amount_display_class("reactive");
+  amount_windows[LIVES]=new g1_amount_display_class("strategy_lives");
+  amount_windows[CHAIN]=new g1_amount_display_class("minigun");
+  amount_windows[MISSILES]=new g1_amount_display_class("guided");
+  amount_windows[MAINGUN]=new g1_amount_display_class("120mm");
 
 
-  g1_money=new g1_amount_display_class(63,13);
-  g1_health=new g1_amount_display_class("reactive");
-  g1_lives=new g1_amount_display_class("strategy_lives");
-  g1_chain=new g1_amount_display_class("minigun");
-  g1_missiles=new g1_amount_display_class("guided");
-  g1_main=new g1_amount_display_class("120mm");
-
-
-  set_cursor(0);
+  //set_cursor(0);
 
 
   // create the main 3d view window
@@ -477,7 +420,7 @@ g1_border_frame_class::g1_border_frame_class()
   i4_key_man.set_context("action");
 
  
-  relocate(this, "action_mode_locations", border_x(), border_y());
+  relocate(this, frame_name.c_str(), border_x(), border_y());
 }
 
 void g1_border_frame_class::resize(w16 w, w16 h)
@@ -497,7 +440,7 @@ void g1_border_frame_class::resize(w16 w, w16 h)
 		}
 	else
 		{
-		relocate(this, "action_mode_locations", 
+		relocate(this, frame_name.c_str(), 
                       border_x(),
                       border_y());
 		}
@@ -525,6 +468,19 @@ void g1_border_frame_class::set_strategy_on_top(i4_bool v)
     //    i4_current_app->get_display()->set_mouse_raw_mode(i4_T);
     mouse_grabbed=i4_T;
   }
+
+  if (strategy_on_top)
+		{
+        relocate(g1_strategy_screen.get(), "strategy_mode_locations", 
+                      g1_strategy_screen->border_x(),
+                      g1_strategy_screen->border_y());
+		}
+	else
+		{
+		relocate(this, frame_name.c_str(), 
+                      border_x(),
+                      border_y());
+		}
 
   if (parent)
   {
@@ -614,7 +570,7 @@ void g1_border_frame_class::receive_event(i4_event *ev)
 void g1_border_frame_class::draw(i4_draw_context_class &context)
 {
   if (g1_render.main_draw)
-    i4_parent_window_class::draw(context);
+    i4_color_window_class::draw(context);
 }
 
 
@@ -641,7 +597,7 @@ void g1_border_frame_class::parent_draw(i4_draw_context_class &context)
   }  
 
    
-  i4_window_class::draw(context);
+  //i4_window_class::draw(context);
   refresh=0;
 
   pf_border_draw.stop();
@@ -651,6 +607,31 @@ void g1_border_frame_class::parent_draw(i4_draw_context_class &context)
 static int first_start=1;
 static int first_strategy=1;
 
+g1_amount_display_class::g1_amount_display_class(char *image_name)
+    : i4_window_class(0,0)
+  {
+    if (image_name)
+    {
+      char fn[100];
+      sprintf(fn, "bitmaps/stank/frame_%s.tga", image_name);
+      im=i4_load_image(fn);
+	  own_im=i4_T;
+      sprintf(fn, "bitmaps/stank/dark_%s.tga", image_name);
+      dark_im=i4_load_image(fn);
+	  own_dark=i4_T;
+    }
+    else im=dark_im=0;
+
+    last_amount=1;
+    last_max=1;
+    refresh_as_text=i4_F;
+
+    if (im)
+      resize(im->width(), im->height());
+    else
+      resize(10,5);
+  }
+
 
 void g1_border_frame_class::update()   // check for changes in the game
 {
@@ -658,6 +639,7 @@ void g1_border_frame_class::update()   // check for changes in the game
   {
     first_start=0;
     press_tab_to_switch_to_strategy_mode.play();
+    g1_current_controller->scroll_message(i4gets("switch_to_strategy"));
   }
 
 
@@ -667,11 +649,56 @@ void g1_border_frame_class::update()   // check for changes in the game
   g1_player_info_class *p=g1_player_man.get_local();
 
   
-  g1_money->update(p->money());
-  g1_lives->update(p->num_stank_lives(), 5);
+  
+  amount_windows[MONEY]->update(p->money(),999999);
+  amount_windows[LIVES]->update(p->num_stank_lives(), 5);
 
+  i4_str new_frame_name;
+  g1_object_class *frame_for_obj=0;
+  w32 fid=g1_current_controller->view.follow_object_id;
+  if (fid)
+      {
+      frame_for_obj=g1_global_id.checked_get(fid);
+      }
+  if (!fid || !frame_for_obj)
+      {
+      frame_for_obj=p->get_commander();
+      }
+  if (!frame_for_obj)
+      return;
 
-  g1_player_piece_class *stank=p->get_commander();
+  int num_entries=2;
+//  if ((g1_current_controller->view.view_mode==G1_ACTION_MODE)||
+//      (g1_current_controller->view.view_mode==G1_FOLLOW_MODE))
+//      {
+      new_frame_name=frame_for_obj->frame_image_name(num_entries);
+      if (new_frame_name!=frame_name)
+          {
+          delete frame;
+          frame=i4_load_image(new_frame_name,0);
+          frame_name=new_frame_name;
+          refresh=REFRESH_ALL;
+          relocate(this,frame_name.c_str(),border_x(), border_y());
+          
+          }
+//      }
+  request_redraw();
+  //start enumerating from entry 2
+  int current_amount=0;
+  int max_amount=0;
+  int entry;
+  for (entry=2;entry<num_entries;++entry)
+      {
+      frame_for_obj->frame_amount(entry,current_amount,max_amount,
+          amount_windows[entry]);
+      amount_windows[entry]->update(current_amount,max_amount);
+      }
+  for (entry=num_entries;entry<MAX_AMOUNT_WINDOWS;++entry)
+      {
+      if (amount_windows[entry])
+        amount_windows[entry]->update(0,-1);
+      }
+  /*g1_player_piece_class *stank=p->get_commander();
   if (stank)
   { 
     li_object *o,*a;
@@ -709,14 +736,14 @@ void g1_border_frame_class::update()   // check for changes in the game
 	g1_health->update(stank->health, stank->ammo[3].ammo_type->max_amount);
 		
   }
-
+*/
   
-  if (g1_current_controller.get() && strategy_on_top)
-  {
+  //if (g1_current_controller.get() && strategy_on_top)
+  //{
     // so that sound will work...
-    i4_transform_class transform;
-    g1_current_controller->view.calc_transform(transform);
-  }
+  //  i4_transform_class transform;
+  //  g1_current_controller->view.calc_transform(transform);
+  //}
 
 }
 

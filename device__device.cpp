@@ -31,6 +31,10 @@
 #include <stdlib.h>
 #include "memory/new.h"
 
+//The following macro can be defined when you need to debug handler
+//allocation/deallocation bugs. 
+//#define HANDLER_DEBUG
+
 //#ifdef _DEBUG
 //#undef new
 //#define new DEBUG_NEW
@@ -433,7 +437,9 @@ i4_bool i4_kernel_device_class::flush_events()
         eh_delete_list.erase();
 
       list_lock.unlock();     // unlock because deleted object might send events
-
+#ifdef DEBUG_HANDLER
+      i4_warning("Executing postphoned deletion of handler 0x%x",q->who);
+#endif
       delete q->who;
       delete &*q;
 
@@ -595,7 +601,22 @@ void i4_kernel_device_class::broadcast_event_type(i4_event *ev, w32 event_type)
 void i4_kernel_device_class::delete_handler(i4_event_handler_class *handler)
 {
   if (handler->thinking())
-    eh_delete_list.insert(*(new event_handler_delete_node(handler)));
+      {
+#ifdef HANDLER_DEBUG
+      i4_warning("Marking handler 0x%x for deletion. ",handler);
+#endif
+      i4_isl_list<event_handler_delete_node>::iterator i=eh_delete_list.begin();
+    // This is cheap, since the delete list is usually quite small. 
+    // (around 3-4 items max)
+    while (i!=eh_delete_list.end())
+        {
+        if (i->who==handler)
+            {
+            return;//already there, don't do anything. 
+            }
+        }
+      eh_delete_list.insert(*(new event_handler_delete_node(handler)));
+      }
   else
   {
     //i4_warning("need to fix this handler deletion thing, trey");
@@ -614,8 +635,23 @@ void i4_kernel_device_class::delete_handler(i4_event_handler_class *handler)
 	  handler=NULL;
 		}
 		*/
+    
+    i4_isl_list<event_handler_delete_node>::iterator i=eh_delete_list.begin();
+
+    while (i!=eh_delete_list.end())
+        {
+        if (i->who==handler)
+            {
+#ifdef HANDLER_DEBUG
+            i4_warning("Attempting to bypass deletion handler for already queued item 0x%x, ignoring.",handler);
+#endif
+            return;
+            }
+        }
+#ifdef HANDLER_DEBUG
+    i4_warning("Immediate delete of handler 0x%x.",handler);
+#endif
     delete handler;
-	handler=NULL;
   }
 }
 // processor.CPP

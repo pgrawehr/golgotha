@@ -640,19 +640,41 @@ class i4_win32_debug_stream_class : public i4_file_class
 {
 public:
   virtual w32 read (void *buffer, w32 size) { return 0; }
-  char *b;//because of possible stack problems, be shure this exists when called
+//  char *b;//because of possible stack problems, be shure this exists when called
+//  enum {CONST_BUF_SIZE=1024};
+//  char c[CONST_BUF_SIZE];
+  w32 i;
+  char *b;
   virtual w32 write(const void *buffer, w32 size) 
   {
-    b=(char*)malloc(size+1);//buffer might not be 0-terminated
-	ZeroMemory(b,size+1);
-	memcpy(b,buffer,size);
+//    if (size>=CONST_BUF_SIZE)
+//        {
+//        b=(char*)malloc(size+1);//buffer might not be 0-terminated
+//#ifdef _WINDOWS
+//        if (!b)
+//            {
+//            MessageBox(0,"FATAL: Error handler internal error: "
+//                "Out of Memory to allocate space for error message.",
+//                "Golgotha",MB_OK|MB_SYSTEMMODAL);
+//            exit(199);
+//            }
+//#endif
+//        ZeroMemory(b,size+1);
+//        }
+//    else
+//        {
+//        b=c;
+//        ZeroMemory(b,CONST_BUF_SIZE);
+//        }
+	
+//	memcpy(b,buffer,size);
     if (debug_file&&i4_is_initialized()&&size>2)//avoid writing a single "\n"
     {
       //fwrite(buffer, 1, size, debug_file);
       //fflush(debug_file);
 	  //_write(debug_file,buffer,size);
 	    i4_file_class *fp=i4_open(i4_global_argv[debug_file],I4_APPEND|I4_NO_BUFFER);
-		fp->write(b,size);
+		fp->write(buffer,size);
 		fp->write_str("\r\n");
 		delete fp;
 	  //_commit(debug_file);
@@ -675,9 +697,23 @@ public:
       //OutputDebugString(b);
     }
     */
+    i=0;
+    b=(char*)buffer;
+    while (i<size)
+        {
+        if (b[i]==0)
+            break;
+        ++i;
+        }
+    //if we coudn't find a zero within size and b[i] is not just that
+    //zero, we ignore the call. 
+    if ((i==size)&&(b[i]!=0))
+        return size;
+    //don't call g1_debug_printf on non-zero terminated strings.
     g1_debug_printf(b);
-	free(b);
-	b=0;
+//    if (size>=CONST_BUF_SIZE)
+//    	free(b);
+//	b=0;
     return size;
   }
 

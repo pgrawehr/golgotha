@@ -51,6 +51,7 @@ struct g1_object_defaults_struct;     // objs/defaults.hh
 class g1_damage_map_struct;            // objs/defaults.hh
 class g1_team_icon_ref;
 class g1_player_piece_class;
+class g1_amount_display_class;         // border_frame.h
 
 //g1_mini_object stuff
 class g1_mini_object
@@ -509,6 +510,27 @@ public:
   //! Returns the color of the path used for objects of this building if selected.
   virtual w32 get_selected_path_color()
 	  {return 0xffff0000;}
+
+  //! Returns the frame image to be used in action mode.
+  virtual i4_str frame_image_name(int &num_entries)
+      {
+      num_entries=2;//number of stank lives and money.
+      return i4_str("bitmaps/stank/status_default.jpg");
+      }
+
+  //! Should return the amount to be displayed in the specified bar number.
+  //! Number is always >=2, since entries 0 and 1 are reserved for lives 
+  //! and money. 
+  //! If you return -1 in max_amount, the corresponding bar is not drawn
+  //! at all. 
+  virtual void frame_amount(int entry_number, 
+      int &current_amount, 
+      int &max_amount,
+      g1_amount_display_class *window)
+      {
+      current_amount=0;
+      max_amount=-1;
+      };
 };
 
 
