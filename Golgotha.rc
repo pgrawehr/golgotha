@@ -848,6 +848,7 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 102                     ICON    DISCARDABLE     "resource\\ico00001.ico"
+IDI_MODELFILE           ICON    DISCARDABLE     "resource\\modelfil.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -880,6 +881,23 @@ BEGIN
 END
 
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_EXTRAS DLGINIT
+BEGIN
+    IDC_LANGSELECT, 0x403, 14, 0
+0x7453, 0x6e61, 0x6164, 0x6472, 0x5b20, 0x6e65, 0x005d, 
+    IDC_LANGSELECT, 0x403, 14, 0
+0x6e45, 0x6c67, 0x7369, 0x6863, 0x5b20, 0x6e65, 0x005d, 
+    IDC_LANGSELECT, 0x403, 13, 0
+0x6544, 0x7475, 0x6373, 0x2068, 0x645b, 0x5d65, "\000" 
+    0
+END
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -951,23 +969,6 @@ BEGIN
 END
 
 #endif    // !_MAC
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog Info
-//
-
-IDD_EXTRAS DLGINIT
-BEGIN
-    IDC_LANGSELECT, 0x403, 14, 0
-0x7453, 0x6e61, 0x6164, 0x6472, 0x5b20, 0x6e65, 0x005d, 
-    IDC_LANGSELECT, 0x403, 14, 0
-0x6e45, 0x6c67, 0x7369, 0x6863, 0x5b20, 0x6e65, 0x005d, 
-    IDC_LANGSELECT, 0x403, 13, 0
-0x6544, 0x7475, 0x6373, 0x2068, 0x645b, 0x5d65, "\000" 
-    0
-END
 
 
 /////////////////////////////////////////////////////////////////////////////

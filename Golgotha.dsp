@@ -2970,6 +2970,10 @@ SOURCE=.\resource\minifwnd.bmp
 # End Source File
 # Begin Source File
 
+SOURCE=.\resource\modelfil.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\resource\move4way.cur
 # End Source File
 # Begin Source File

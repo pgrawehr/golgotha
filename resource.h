@@ -10,6 +10,7 @@
 #define IDD_SOUNDINFO                   110
 #define IDD_ERRORDIALOG                 111
 #define IDI_SKULL                       112
+#define IDI_MODELFILE                   116
 #define IDC_UEBERNEHMEN                 1001
 #define IDC_DEVICES                     1006
 #define IDC_CREATE                      1007
@@ -73,7 +74,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        116
+#define _APS_NEXT_RESOURCE_VALUE        117
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1047
 #define _APS_NEXT_SYMED_VALUE           2001
