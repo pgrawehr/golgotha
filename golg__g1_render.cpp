@@ -898,12 +898,12 @@ void g1_render_class::render_3d_line(const i4_3d_point_class &p1,
   if (draw_in_front_of_everything)
   {
     v[0].v.z=r1_near_clip_z;//g1_near_z_range();
-    v[1].v.z=r1_far_clip_z;//g1_near_z_range();
+    v[1].v.z=r1_near_clip_z;//g1_near_z_range();
     
     float ooz = r1_ooz(r1_near_clip_z);//r1_ooz(g1_near_z_range());
     
-    v[0].w = ooz;
-    v[1].w = ooz;
+    v[0].w = r1_near_clip_z;
+    v[1].w = r1_near_clip_z;
   }
   
   v[0].r=g1_table_0_255_to_0_1[(color1&0xff0000)>>16];
@@ -993,40 +993,55 @@ void g1_render_class::draw_outline(g1_screen_box *box, g1_object_class *for_who)
   r_api->disable_texture();
 
   i4_float depth   = box->z1-0.1f;
-  i4_float oodepth = box->w;
+  i4_float oodepth = box->z1-0.1f;//box->w;
 
   line_points[0].v.z = depth;
   line_points[0].w   = oodepth;
+  line_points[0].s=0;
+  line_points[0].t=0;
   line_points[1].v.z = depth;
   line_points[1].w   = oodepth;
+  line_points[1].s=0;
+  line_points[1].t=0;
   line_points[2].v.z = depth;
   line_points[2].w   = oodepth;
+  line_points[2].s=0;
+  line_points[2].t=0;
+  r_api->set_alpha_mode(R1_ALPHA_DISABLED);
   
-  if (for_who->player_num==g1_player_man.local_player)
+  
+  if (for_who->player_num==0)
 	  {
-	  line_points[0].r   = 1.0f;//0.25f;
-      line_points[0].g   = 1.0f;//0.25f;
-      line_points[0].b   = 1.0f;//0.f;
-      line_points[1].r   = 1.0f;
-      line_points[1].g   = 1.0f;
-      line_points[1].b   = 1.0f;//0.f;
-      line_points[2].r   = 1.0f;//0.25f;
-      line_points[2].g   = 1.0f;//0.25f;
-      line_points[2].b   = 1.0f;//0.f;
-	  r_api->set_constant_color(0xffffff);
+	  line_points[0].r   = 0.5f;//0.25f;
+      line_points[0].g   = 0.5f;//0.25f;
+      line_points[0].b   = 0.5f;//0.f;
+      line_points[0].a   = 0.5f;
+      line_points[1].r   = 0.5f;
+      line_points[1].g   = 0.5f;
+      line_points[1].b   = 0.5f;//0.f;
+      line_points[1].a   = 0.5f;
+      line_points[2].r   = 0.5f;//0.25f;
+      line_points[2].g   = 0.5f;//0.25f;
+      line_points[2].b   = 0.5f;//0.f;
+      line_points[2].a   = 0.5f;
+	  r_api->set_constant_color(0xffffffff);
 	  }
   else
 	  {
-	  line_points[0].r   = 1.0f;
-      line_points[0].g   = 0.f;
-      line_points[0].b   = 0.f;
-      line_points[1].r   = 1.0f;
-      line_points[1].g   = 0.f;
-      line_points[1].b   = 0.f;
-      line_points[2].r   = 1.0f;
-      line_points[2].g   = 0.f;
-      line_points[2].b   = 0.f;
-	  r_api->set_constant_color(0xff0000);
+      g1_player_info_class *p=g1_player_man.get(for_who->player_num);
+      float r = ((p->map_player_color >> 16) & 0xff) / 255.f;
+	  float g = ((p->map_player_color >> 8) & 0xff) / 255.f;
+	  float b = (p->map_player_color & 0xff) / 255.0f;
+	  line_points[0].r   = r;
+      line_points[0].g   = g;
+      line_points[0].b   = b;
+      line_points[1].r   = r;
+      line_points[1].g   = g;
+      line_points[1].b   = b;
+      line_points[2].r   = r;
+      line_points[2].g   = g;
+      line_points[2].b   = b;
+	  r_api->set_constant_color(0xffff0000);
 	  }
 
   //dunno whats up w/these.. looks like the box is ending up outside the viewport somehow
@@ -1038,12 +1053,8 @@ void g1_render_class::draw_outline(g1_screen_box *box, g1_object_class *for_who)
   float width_adjust  = (float)((box_x2 - box_x1)/6);
   float height_adjust = (float)((box_y2 - box_y1)/6);
 
-
-
   line_points[0].px = (float)box_x1;
   line_points[0].py = box_y1 + height_adjust;  
-
-
 
   line_points[1].px = (float)box_x1;
   line_points[1].py = (float)box_y1;
@@ -1051,8 +1062,8 @@ void g1_render_class::draw_outline(g1_screen_box *box, g1_object_class *for_who)
   line_points[2].px = box_x1 + width_adjust;
   line_points[2].py = (float)box_y1;
   
-  r_api->render_lines(2,line_points);
-
+  
+  r_api->disable_texture();
   //The box must be at least 10 pixels wide for drawing the health.
   if (for_who && (box_x1+10<=box_x2) && box_y1>=5)
   {
@@ -1080,7 +1091,9 @@ void g1_render_class::draw_outline(g1_screen_box *box, g1_object_class *for_who)
       r_api->clear_area(box_x1+1, box_y1-4, box_x1+1+(int)(box_w*percent), box_y1-3, c, box->z1-0.01f);
     }
   }
-
+  //r_api->use_default_texture();
+  r_api->set_shading_mode(R1_COLORED_SHADING);
+  r_api->render_lines(2,line_points);
 
   line_points[0].px = box_x2 - width_adjust;
   line_points[0].py = (float)box_y1; 

@@ -137,7 +137,7 @@ void r1_dx9_class::set_write_mode(r1_write_mask_type mask)
 
   if (mask & R1_COMPARE_W)
   {
-	  UINT cmpfn=D3DCMP_GREATER;//for dx5, it was cmp_greater ?!
+	  UINT cmpfn=D3DCMP_GREATER;
     d3d_device->SetRenderState(D3DRS_ZFUNC,cmpfn);
   }
   else
@@ -934,6 +934,8 @@ inline void make_d3d_verts(CUSTOMVERTEX *dxverts,r1_vert *r1verts,r1_dx9_class *
     //add color information
     dx_v->diffuse=0xff000000;
     
+    dx_v->tu=0;
+    dx_v->tv=0;
     dx_v++;
     r1_v++;
   }
@@ -1194,34 +1196,96 @@ void r1_dx9_class::render_pixel(int t_points, r1_vert *pixel)
 }
 
 void r1_dx9_class::render_lines(int t_lines, r1_vert *verts)
-{
-  if (t_lines+1>256) return;
-  CUSTOMVERTEX dx_verts[256];
-  //DWORD oldstat;
-  //d3d_device->GetTextureStageState(0,D3DTSS_COLOROP,&oldstat);
-  d3d_device->SetTextureStageState(0,D3DTSS_COLOROP,D3DTOP_DISABLE);
-  //sw32 i;
-
-  //for (i=0;i<t_lines+1;i++)
-  //{
-    make_d3d_verts(dx_verts,verts,this,t_lines+1);
-	//either code the loop or use t_lines verts, but not both
-  //}
-
-  //for (i=0;i<t_lines;i++)
-  //{
-	  /*
-    d3d_device->DrawPrimitive(D3DPT_LINELIST,
-                              D3DVT_TLVERTEX,
-                              (void *)&dx_verts[i],
-                              2,
-                              D3DDP_DONOTCLIP);  
-							  */
-	  i4_dx9_check(d3d_device->DrawPrimitiveUP(D3DPT_LINELIST,t_lines,
-		dx_verts,sizeof(CUSTOMVERTEX)));
-  //d3d_device->SetTextureStageState(0,D3DTSS_COLOROP,oldstat);
-  //}
-}
+    {
+    if (t_lines+1>256) return;
+    
+    for (int line=0;line<t_lines;line++)
+        {
+        CUSTOMVERTEX dx_v[4];
+        memset(dx_v,0,4*sizeof(CUSTOMVERTEX));
+        float ooz=r1_ooz(verts[line].w);
+        float oozw=ooz*dx9_w_scale;
+        float x1=verts[line].px;
+        float y1=verts[line].py;
+        float x2=verts[line+1].px+1;
+        float y2=verts[line+1].py+1;
+        
+        w32 color=make_d3d_color(verts[line].r,verts[line].g,verts[line].b);
+        w32 color2=make_d3d_color(verts[line+1].r,
+            verts[line+1].g,
+            verts[line+1].b);
+        if (i4_fabs(x1-x2)>=i4_fabs(y1-y2))
+            {
+            //dx_v[0].sx=  x2+x_off;
+            //dx_v[0].sy=  y1+y_off;
+            dx_v[0].sx=  x2+x_off;
+            dx_v[0].sy=  y2+y_off-1;
+            dx_v[0].sz=  oozw;
+            dx_v[0].rhw= ooz;
+            dx_v[0].diffuse=color2;
+            
+            //dx_v[1].sx=  x1+x_off;
+            //dx_v[1].sy=  y1+y_off;
+            dx_v[1].sx=  x1+x_off;
+            dx_v[1].sy=  y1+y_off;
+            dx_v[1].sz=  oozw;
+            dx_v[1].rhw=ooz;
+            dx_v[1].diffuse=color;
+            
+            //dx_v[2].sx=  x1+x_off;
+            //dx_v[2].sy=  y2+y_off;
+            dx_v[2].sx=  x1+x_off;
+            dx_v[2].sy=  y1+y_off+1;
+            dx_v[2].sz=  oozw;
+            dx_v[2].rhw=ooz;
+            dx_v[2].diffuse=color;
+            
+            //dx_v[3].sx=  x2+x_off;
+            //dx_v[3].sy=  y2+y_off;
+            dx_v[3].sx=  x2+x_off;
+            dx_v[3].sy=  y2+y_off;
+            dx_v[3].sz=  oozw;
+            dx_v[3].rhw=ooz;
+            dx_v[3].diffuse=color2;
+            d3d_device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN,
+                2,
+                dx_v,
+                sizeof(CUSTOMVERTEX));
+            
+            }
+        else
+            {
+            dx_v[0].sx=  x2+x_off;
+            dx_v[0].sy=  y2+y_off;
+            dx_v[0].sz=  oozw;
+            dx_v[0].rhw= ooz;
+            dx_v[0].diffuse=color2;
+            
+            dx_v[1].sx=  x1+x_off;
+            dx_v[1].sy=  y1+y_off;
+            dx_v[1].sz=  oozw;
+            dx_v[1].rhw=ooz;
+            dx_v[1].diffuse=color;
+            
+            dx_v[2].sx=  x1+x_off-1;
+            dx_v[2].sy=  y1+y_off;
+            dx_v[2].sz=  oozw;
+            dx_v[2].rhw=ooz;
+            dx_v[2].diffuse=color;
+            
+            dx_v[3].sx=  x2+x_off-1;
+            dx_v[3].sy=  y2+y_off;
+            dx_v[3].sz=  oozw;
+            dx_v[3].rhw=ooz;
+            dx_v[3].diffuse=color2;
+            d3d_device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN,
+                2,
+                dx_v,
+                sizeof(CUSTOMVERTEX));
+            }
+        }
+    
+    }
 
 void r1_dx9_class::clear_area(int x1, int y1, int x2, int y2, w32 color, float z)
 	{

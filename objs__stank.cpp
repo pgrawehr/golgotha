@@ -984,9 +984,8 @@ void g1_player_piece_class::think()
 
     move(dx,dy);
     
-    if (turret->h != cur_top_attach)
-      turret->h = cur_top_attach;
-
+    //if (turret->h != cur_top_attach)
+    //  turret->h = cur_top_attach;
   }
 
   switch ((int)(base_angle*8/(2*i4_pi())))
@@ -1426,7 +1425,7 @@ void g1_player_piece_class::draw_target_cursors(g1_draw_context_class *context)
 	  33*w_mult, 33*w_mult);
   g1_render.render_3d_line(i4_3d_vector(compass_pos,-compass_pos,compass_z),
 	  i4_3d_vector((compass_pos+(0.0005f*cos(-theta))),-(compass_pos+(0.0005f*sin(theta))),compass_z),
-	  0x00ffffff,0,&tr,i4_F);
+	  0x00ffffff,0,&tr,i4_T);
   r1_vert v;
 
   float ctheta=(g1_tick_counter + g1_render.frame_ratio)/4.0f;

@@ -31,6 +31,12 @@
 #include <stdlib.h>
 #include "memory/new.h"
 
+#ifdef _DEBUG
+#undef new
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
 
 i4_device_class::i4_device_class()
 {
@@ -1195,7 +1201,7 @@ i4_bool i4_key_man_class::load(const i4_const_str &filename)
         for (key_item *i=keys[key]; i; i=i->next)
         {        
           if (i->modifier_flags==mod && (i->context_mask & context_mask))
-            i4_error("USER: attempting to assign command %s but key %s (%d) already command %s",
+            i4_error("USER: attempting to assign command %s but key %s (%d) is already assigned to command %s",
                      (*command_list)[i->command_id], key_name, key, (*command_list)[id]);
 
         }

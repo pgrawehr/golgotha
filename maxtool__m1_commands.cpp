@@ -191,6 +191,15 @@ li_object *m1_flip_normal_selected(li_object *o, li_environment *env)
   return 0;
 }
 
+li_object *m1_recalc_normals(li_object *o, li_environment *env)
+    {
+    m1_info.obj->calc_extents();
+    m1_info.obj->calc_vert_normals();
+    m1_info.obj->calc_texture_scales();
+    m1_render_window->request_redraw();
+    return 0;
+    }
+
 li_object *m1_default_coordinates(li_object *o, li_environment *env)
 {
   if (m1_info.obj==NULL) return 0;
@@ -293,6 +302,73 @@ li_object *m1_add_mount(li_object *o, li_environment *env)
 	m1_info.obj->add_mount(name);
 	return li_true_sym;
 	}
+
+i4_3d_vector m1_vector_input(const i4_const_str &msg, i4_3d_vector oldvalue)
+    {
+    i4_3d_vector retval;
+    i4_str strvectout("out");
+	i4_const_str afl("( %f , %f , %f )");
+	i4_3d_vector &v=oldvalue;
+	i4_str *strvectin=afl.sprintf(10,v.x,
+		v.y,v.z);
+	
+	if (i4_input_box("Vector",msg,*strvectin,
+		strvectout,MSG_OK+MSG_CANCEL)==MSG_CANCEL)
+		{
+		return oldvalue;
+		}
+	char buf[200];
+	i4_float x=0,y=0,z=0;
+	i4_os_string(strvectout,buf,200);
+	if (sscanf(buf,"( %f , %f , %f )",&x,&y,&z)<3)
+		{
+		i4_message_box("Invalid Input","You entered something that cannot be interpreted as a vector.",MSG_OK);
+		return oldvalue;
+		}
+    retval.x=x;
+    retval.y=y;
+    retval.z=z;
+    return retval;
+    }
+
+li_object *m1_scale_object(li_object *o, li_environment *env)
+    {
+    if (!m1_info.obj) return 0;
+    i4_3d_vector scale=m1_vector_input(
+        "Enter the tripplet to scale the object with",
+        i4_3d_vector(1.0f,1.0f,1.0f));
+    //This one needs to be regenerated afterwards.
+    li_call("remove_octree",0,0);
+    g1_vert_class *v=m1_info.obj->get_verts(m1_info.current_animation,
+        m1_info.current_frame);
+    for (int i=0;i<m1_info.obj->num_vertex;i++,v++)
+        {
+        v->v.x*=scale.x;
+        v->v.y*=scale.y;
+        v->v.z*=scale.z;
+        }
+    return li_true_sym;
+    }
+
+li_object *m1_move_object(li_object *o, li_environment *env)
+    {
+    if (!m1_info.obj) return 0;
+    i4_3d_vector move=m1_vector_input(
+        "Enter the amount you want the object to move",
+        i4_3d_vector(0,0,0));
+    //This one needs to be regenerated afterwards.
+    li_call("remove_octree",0,0);
+    g1_vert_class *v=m1_info.obj->get_verts(m1_info.current_animation,
+        m1_info.current_frame);
+    for (int i=0;i<m1_info.obj->num_vertex;i++,v++)
+        {
+        v->v.x+=move.x;
+        v->v.y+=move.y;
+        v->v.z+=move.z;
+        }
+    return li_true_sym;
+    }
+    
 
 
 li_object *m1_delete_anim(li_object *o, li_environment *env)
@@ -603,6 +679,13 @@ li_object *m1_toggle_numbers(li_object *o, li_environment *env)
   return 0;
 }
 
+li_object *m1_toggle_origin(li_object *o, li_environment *env)
+{
+  m1_info.set_flags(M1_SHOW_ORIGIN, ~m1_info.get_flags(M1_SHOW_ORIGIN));
+  m1_render_window->request_redraw();
+  return 0;
+}
+
 
 li_object *m1_toggle_vnumbers(li_object *o, li_environment *env)
 {
@@ -857,6 +940,7 @@ class li_add_m1_commands_class: public i4_init_class
 		li_add_function("add_quad", m1_add_quad);
 		li_add_function("delete_sel", m1_delete_selected_quad);
 		li_add_function("join_coords", m1_join_coords);
+        li_add_function("m1_recalc", m1_recalc_normals);
 
 		li_add_function("add_vertex", m1_add_vertex);
 		li_add_function("delete_vertex", m1_remove_vertex);
@@ -887,9 +971,13 @@ class li_add_m1_commands_class: public i4_init_class
 		li_add_function("toggle_names", m1_toggle_names);
 		li_add_function("toggle_numbers", m1_toggle_numbers);
 		li_add_function("toggle_vnumbers", m1_toggle_vnumbers);
+        li_add_function("toggle_origin",m1_toggle_origin);
 		li_add_function("toggle_orphans", m1_toggle_orphans);
 		li_add_function("swap_polynums", m1_swap_polynums);
 		li_add_function("toggle_octree", m1_toggle_octree);
+
+        li_add_function("m1_scale_object",m1_scale_object);
+        li_add_function("m1_move_object",m1_move_object);
 		
 		li_add_function("reload_max_textures", m1_reload_textures);
 		li_add_function("reload_main_textures", g1_reload_textures);

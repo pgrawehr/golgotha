@@ -104,6 +104,7 @@ public:
   i4_bool textures_loaded;///<Don't assign any semantics to this flag. It's obsolete.
   i4_bool is_master_tman;///<This is the master texture manager
   i4_bool has_higher_mipmaps_loaded;///<This texture manager has higher mipmaps loaded (not only lowest levels)
+  r1_texture_handle null_texture_handle;///<The handle of the "null" texture.
 
   sw32 bytes_loaded;
   sw32 no_of_textures_loaded;//don't mix with the bool value textures_loaded from superclass!

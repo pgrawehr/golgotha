@@ -17,28 +17,40 @@
 #include "render/tmanage.h"
 
 #include "render/mip.h"
+
+//! Defines the tint value for a quad.
+//! Tints are used to modify the objects colors depending
+//! on their owner.
 typedef struct
 {
   i4_float r,g,b;
 } r1_color_tint;
 
+//! A handle to a tint value.
 typedef w32 r1_color_tint_handle;
 
+//! Used to set the state of the alpha transparency texturing stage.
 enum r1_alpha_type 
 { 
-  R1_ALPHA_DISABLED,
-  R1_ALPHA_CONSTANT,          // use the constant color's alpha
-  R1_ALPHA_LINEAR             // use the alpha specified in the verts
+  R1_ALPHA_DISABLED,          //< Disable all alpha
+  R1_ALPHA_CONSTANT,          //< Use the constant color's alpha 
+  R1_ALPHA_LINEAR             //< Use the alpha specified in the verts
 };
 
+//! Constants used to declare how vertices are lighted. 
+//! Remember that we are using gouraud shading most of the time, so
+//! vertex colors define the tint and the lighting of a polygon. 
 enum r1_shading_type
 {
-  R1_SHADE_DISABLED,          // routines will not light
-  R1_CONSTANT_SHADING,        // routines will use the constant color
-  R1_WHITE_SHADING,           // routines will use only the red component (as white)
-  R1_COLORED_SHADING          // routines will use r,g, and b
+  R1_SHADE_DISABLED,          //< routines will not light
+  R1_CONSTANT_SHADING,        //< routines will use the constant color
+  R1_WHITE_SHADING,           //< routines will use only the red component (as white)
+  R1_COLORED_SHADING          //< routines will use r,g, and b
 };
 
+//! Constants for the write mask.
+//! This mask is used to define what clear_area does. 
+//! The default value for this mask is 7.
 enum
 {
   R1_WRITE_COLOR     = 1,    // write pixels to frame buffer
@@ -47,19 +59,25 @@ enum
 };
 typedef w32 r1_write_mask_type;
 
+//! Constants for the filter values.
+//! The meaning is platform-dependent.
 enum r1_filter_type
 {
   R1_NO_FILTERING,
   R1_BILINEAR_FILTERING
 };
 
+//! Flags used mainly for the software renderer.
+//! These flags can be used to reduce the resolution on very slow 
+//! machines. 
 enum r1_expand_type 
 { 
-  R1_COPY_1x1,               // 1 - 1 pixel copy  (render size = w,h)
-  R1_COPY_2x2,               // 2 - 1 pixel blow up (render size = w/2, h/2)
-  R1_COPY_1x1_SCANLINE_SKIP  // skips a scan line on each row (render size = w, h/2)
+  R1_COPY_1x1,               //< 1 - 1 pixel copy  (render size = w,h)
+  R1_COPY_2x2,               //< 2 - 1 pixel blow up (render size = w/2, h/2)
+  R1_COPY_1x1_SCANLINE_SKIP  //< skips a scan line on each row (render size = w, h/2)
 }; 
 
+//! This flag should be used by software renderers in their type description field.
 enum r1_render_flags
 {
   R1_SOFTWARE=1
@@ -74,7 +92,7 @@ enum r1_feature_flags
                //in front of things drawn before it was turned on
   R1_ALL_FEATURES = R1_SPANS | R1_PERSPECTIVE_CORRECT | R1_LOCK_CHEAT | R1_Z_BIAS
 };
-//#include "render/r1_win.h"
+
 //Don't use empty class declarations - Will only give trouble
 //class r1_last_node;
 //class r1_texture_manager_class;
@@ -85,6 +103,10 @@ enum r1_feature_flags
 //one exception here: otherwise, we have a circular reference problem
 class r1_render_window_class;      // defined in r1_win.hh
 
+/// The abstract hardware-independent rendering interface.
+/// This abstract class defines the methods a rendering device must
+/// support to be usable under golgotha. The most important function
+/// is the rendering of textured and shaded polygons. 
 class r1_render_api_class
 {
 protected:
@@ -187,6 +209,21 @@ public:
 	  sw32 desired_width,//will mainly be ignored
 	  w32 frame)=0;
 
+  void use_default_texture(w32 tman_index=-1)
+      {
+      r1_texture_handle mat=0;
+      if (tman_index==-1)
+          {
+          mat=get_tmanager()->null_texture_handle;
+          use_texture(mat,8,0);
+          }
+      else
+          {
+          mat=get_tmanager(tman_index)->null_texture_handle;
+          use_texture(tman_index,mat,8,0);
+          }
+      }
+
   // drawing will the constant color to render with if textures are disabled
   virtual void disable_texture()                                                      = 0;
 
@@ -223,13 +260,28 @@ public:
   virtual void render_poly(int t_verts, r1_vert *verts)                               = 0;
   virtual void render_poly(int t_verts, r1_vert *verts, int *vertex_index);
   virtual void render_poly(int t_verts, r1_vert *verts, w16 *vertex_index);
-  virtual void flush_vert_buffer()//Only used for subclass r1_dx5
+  virtual void flush_vert_buffer()//Only used for dx right now
 	  {
 	  };
   //this had better be a rectangle
   virtual void render_sprite(r1_vert *verts);
 
+  /// Renders single pixels.
+  /// This method uses the corresponding method of the underlying
+  /// HAL, so it might not work properly (ie dx5 just eats these calls).
+  /// Prefer using a higher-level call of the g1_render interface.
+  /// \param t_points The number of poinst to draw.
+  /// \param pixel The array of vertices. Must be at least as long as t_points.
+  /// Use screen-coordinates.
   virtual void render_pixel(int t_points, r1_vert *pixel)                             = 0;
+  /// Renders lines as line-strips.
+  /// Not properly supported by all HAL layers, but might be emulated 
+  /// using triangle strips (the only primitive known to be fully supported
+  /// by all HAL drivers and gfx cards)
+  /// \param t_lines The number of lines to draw. This method draws line
+  /// strips (polylines). Minimum value=1, Maximum value=255
+  /// \param verts The vertices of the corners of the polylines. 
+  /// The array must be one larger than t_lines. 
   virtual void render_lines(int t_lines, r1_vert *verts )                             = 0;
 
   // color is standard argb, (z should be within range specifed by set_z_range)

@@ -36,12 +36,16 @@
               ("Select Faces"          "navigate")
               ("Select Points"         "translate_point")
               ("Pan Mode"	       "pan")
+              ("Recalculate normals"   "m1_recalc")
 	      -
 	      ("Join Texture Coords"   "join_coords")
 	      ("Add a Side"	       "add_quad")
               ("Add a Vertex"	       "add_vertex")
               ("Delete Vertex"         "delete_vertex")
               ("Edit Mount-Points"     "m1_edit_mount_points")
+              ;;This moves the entire object relative to the origin. 
+              ("Resize object"         "m1_scale_object")
+              ("Move object"           "m1_move_object")
               )
 
 
@@ -101,6 +105,7 @@
               ("Toggle Texture Names" "toggle_names")
               ("Toggle Face Numbers" "toggle_numbers")
               ("Toggle Vertex Numbers" "toggle_vnumbers")	      
+              ("Show Coordinate Origin" "toggle_origin")
               ("Toggle Orphaning Vertices" "toggle_orphans")
               ("Toggle Octree cubes" "toggle_octree")
               -
@@ -114,5 +119,5 @@
               ("White"           "back_white")
               ("Blue"            "back_blue")
               ("Dark Blue"       "back_darkblue")
-              ("Green"           "back_green"))
-
+              ("Green"           "back_green")
+              )

@@ -260,7 +260,10 @@ public:
         md=now.milli_diff(g1_get_map()->tick_time);
         if (fixed || md>0 || frame_locked_mode)
         {
-          if (!g1_resources.paused)
+          //We must skip the think loop if the controller is unavailable
+          //for the moment (this happens in rare cases when the mode
+          //is just being changed)
+          if ((!g1_resources.paused)&&(g1_current_controller.get()))
           {
             pf_calc_model_1.start();
             g1_player_man.think();  // thinks player/team type thoughts
@@ -284,7 +287,8 @@ public:
 #ifdef NETWORK_INCLUDED
 	      i4_network_poll();
 #endif
-              }
+              ticks_simulated++;
+          }
 
           if (g1_current_controller.get())
             g1_current_controller->update_camera();

@@ -476,15 +476,15 @@ void g1_team_api_class::playback_end()
   {
     i4_time_class now;
 
-    char buff[512];
+    //char buff[512];
     sw32
       frames = g1_stat_counter.get_value(g1_statistics_counter_class::FRAMES);
     i4_float
       time = i4_float(now.milli_diff(demo_start))/1000.0f,
       fps = i4_float(frames)/time;
 
-    sprintf(buff, "Demo Frames: %d  Time: %7.3f FPS: %5.2f", frames, time, fps);
-    g1_current_controller->scroll_message(buff, 0xff00ff);
+    //sprintf(buff, "Demo Frames: %d  Time: %7.3f FPS: %5.2f", frames, time, fps);
+    //g1_current_controller->scroll_message(buff, 0xff00ff);
   }
 }
 

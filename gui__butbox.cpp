@@ -1456,11 +1456,20 @@ static li_object *li_add_sub(li_object *o, li_environment *env)
   return 0;
 }
 
+LI_HEADER(clear_subs)
+	{
+	li_pull->remove_all_menus();
+	return 0;
+	}
 
 i4_pull_menu_class *li_create_pull_menu(char *filename)
 {
   if (li_pull.get())
-    i4_error("pull menu already created");
+      {
+      i4_warning("WARN: Pull menu already created");
+      li_clear_subs(0,0);
+      }
+
 
   i4_graphical_style_class *style=i4_current_app->get_style();
   li_pull=new i4_pull_menu_class(style, i4_current_app->get_window_manager());
@@ -1472,11 +1481,7 @@ i4_pull_menu_class *li_create_pull_menu(char *filename)
   return li_pull.get();
 }
 
-LI_HEADER(clear_subs)
-	{
-	li_pull->remove_all_menus();
-	return 0;
-	}
+
 
 //if possible, delete the assigned menu instance complete.
 li_automatic_add_function(li_clear_subs,"remove_sub_menus");//Clears out the menu-bar

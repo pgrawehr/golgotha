@@ -67,6 +67,7 @@ r1_texture_manager_class::r1_texture_manager_class(const i4_pal *pal)
   has_higher_mipmaps_loaded=i4_F;
   is_master_tman=i4_T;//Assume we are master.
   default_texture_flags=R1_MIPFLAGS_USE16;
+  null_texture_handle=0;
   //install_new_tmanager() will reset this.
 }
 
@@ -2378,6 +2379,8 @@ i4_bool r1_texture_manager_class::load_textures()
     return i4_F;
   active=i4_T;
 
+  //Register the NULL texture.
+  null_texture_handle=register_texture("null", "NULL texture");
   //these GLOBAL textures are only registered with the main texture manager
   //Otherwise, every instance of the tman has different handles for these
   //and in global context, the textures get screwed up.

@@ -4803,6 +4803,8 @@ LI_HEADER(set_local_player)
 	}
 li_object *g1_set_player(li_object *o, li_environment *env)
 {
+  if (!o) //the window was closed using cancel. 
+      return 0;
   g1_player_info_class *p=g1_player_man.get(team_editing);
   p->vars=li_car(o, env);
   

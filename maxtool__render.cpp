@@ -1035,6 +1035,11 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
   if (m1_info.preselect_point>=0)
     draw_3d_point(src_vert[m1_info.preselect_point].v, 0xff00ff, context, i4_T);
 
+  if (m1_info.flags & (M1_SHOW_ORIGIN))
+      {
+      draw_3d_point(i4_3d_point_class(0,0,0),0x00FF00,context,i4_T);
+      }
+
   // mount points
 
   for (i=0; i<obj->num_mounts; i++)
