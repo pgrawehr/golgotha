@@ -1647,7 +1647,7 @@ void *concatenate(void *prog_list,li_environment *env)
 					case L_STRING : len+=strlen(lstring_value(str_eval[i])); break;
 					default :
 						lprint(prog_list);
-						lbreak("type not supported\n");
+						lbreak("USER: concatenate: Type not supported\n");
 						
 						break;
 						

@@ -90,8 +90,9 @@ void g1_map_class::save(g1_saver_class *out, w32 sections)
   if (sections & G1_MAP_TEXTURE_NAMES)
   {
 	  out->mark_section(G1_SECTION_TEXTURE_NAMES_V1);
-	  out->write_32(g1_tile_man.total());
-	  for (i=0;i<g1_tile_man.total();i++)
+	  out->write_32(g1_tile_man.total()-1);
+	  //Don't write first entry (is always 0)
+	  for (i=1;i<g1_tile_man.total();i++)
 	  {
 		  g1_tile_class *tile=g1_tile_man.get(i);
 		  i4_const_str *name=g1_tile_man.get_name_from_tile(i);

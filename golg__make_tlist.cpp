@@ -296,14 +296,14 @@ li_object* g1_get_load_info(g1_loader_class* map_file,
 			texture_name_array.add(str);
 			li_set_value("texture_object_list",new li_list(
 				li_make_list(new li_string(*str),
-				    li_make_list(new li_string("friction"), new i4_float(friction),0),
-				    li_make_list(new li_string("flags"),new li_int(flags),0),
-					li_make_list(new li_string("damage"),new li_int(damage),0),
+				    li_make_list(li_get_symbol("friction"), new li_float(friction),0),
+				    li_make_list(li_get_symbol("flags"),new li_int(flags),0),
+					li_make_list(li_get_symbol("damage"),new li_int(damage),0),
 					0),
 				li_get_value("texture_object_list",env)),env);
 			g1_current_t_tiles++;
 		}
-		li_call("reverse",li_get_value("texture_object_list"));
+		//li_set_value("texture_object_list",li_call("reverse",li_get_value("texture_object_list"),env),env);
 	}
 
 	if (map_file->goto_section(G1_SECTION_MODEL_NAMES_V1))

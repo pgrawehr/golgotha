@@ -247,11 +247,25 @@ void g1_tile_man_class::add(li_object *o, li_environment *env)
 
 
   i4_const_str i4_tname=i4_const_str(tname->value());
-  g1_tile_class *newtile=array.add();
-  newtile->init();
-  newtile->texture=tman->register_texture(i4_tname, i4_tname); 
-  newtile->filename_checksum=i4_str_checksum(i4_tname);
-  newtile->get_properties(prop, env);
+  w32 curr_checksum=i4_str_checksum(i4_tname);
+  
+  i4_bool found=false;
+  for (int i=0;i<array.size();i++)
+  {
+	  if (array[i].filename_checksum==curr_checksum)
+	  {
+		  found=true;
+		  break;
+	  }
+  }
+  if (!found)
+  {
+	g1_tile_class *newtile=array.add();
+	newtile->init();
+	newtile->texture=tman->register_texture(i4_tname, i4_tname); 
+	newtile->filename_checksum=curr_checksum;
+	newtile->get_properties(prop, env);
+  }
   sorted_by_checksum=0;
 }
 
