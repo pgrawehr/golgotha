@@ -269,7 +269,7 @@ w32 g1_map_solver_class::unblocked(g1_block_map_class *block,i4_float startx, i4
 		return BLOCK_EASY_WAY;
 		}
     //if the target is completelly unreachable, don't try anything.
-	if (block->is_full_blocked(destx,desty))
+	if (block->is_full_blocked((w32)destx,(w32)desty))
         {
         return BLOCK_NO_WAY;
         }

@@ -103,6 +103,10 @@ g1_object_class *g1_fire(li_symbol *fire_type,
     { r=1; g=0.5; bl=0; }
     else if (fire_type==acid.get())
     { r=0; g=1; bl=0; }
+	else
+	{
+		r=1;g=0;bl=0;
+	}
         
 
 

@@ -72,7 +72,7 @@ g1_jet_class::g1_jet_class(g1_object_type id,
   engines->x = engines->lx = 0.01f;
   engines->y = engines->ly = 0;
   
-  w16 ver,data_size;
+  w16 ver=0,data_size=0;
   if (fp)
     fp->get_version(ver,data_size);
   else

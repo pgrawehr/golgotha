@@ -148,7 +148,10 @@ If an object does not have a lod texture, it is not displayed at all if it passe
 distance. This distance is usually too close (at least on fast computers and large displays)
 
 Peon-tank doesn't fire upwards if he targets a plane. 
+Fixed, but does optically not look very good. Need to split the peon tank's 
+turret from the top.
 
-Should finally implement adding of textures in the editor. It's everything prepared.
+Should finally implement adding of textures in the editor. 
+It's everything prepared.
 
 

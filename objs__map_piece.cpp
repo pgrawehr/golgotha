@@ -286,7 +286,7 @@ g1_map_piece_class::g1_map_piece_class(g1_object_type id,
 
   stagger=0;
 
-  used_path_len=0.7f * li_get_float(li_get_value("world_scaling"),0);
+  used_path_len=0.7f * (i4_float)li_get_float(li_get_value("world_scaling"),0);
 
   switch (ver)
   {
@@ -1528,8 +1528,9 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 			can_get_there = check_turn_radius();
 			dtheta = diffangle;
 			
-			//distance to move squared
-			t = dx*dx + dy*dy+0.00001;//ensure t is newer zero
+			//distance to move (need to do the sqrt because we compare it to 
+			//the speed further down)
+			t = i4_fsqrt(dx*dx + dy*dy+0.00001f);//ensure t is newer zero
 			
 			//how far will the vehicle go if he slows down from his maximum speed?
 			//if (t>speed*speed+0.0025)
@@ -1545,7 +1546,7 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 				if (braking_friction>0.0)
 					stop_dist = (float)fabs(speed)/braking_friction; // geometric series of braking motion
 				
-				if (braking_friction>0.0 && t<=(stop_dist*stop_dist))
+				if (braking_friction>0.0 && t<=stop_dist)
 					{            
 					//just in case our calculations were off, dont let him slow to less than 0.01
 					//hm, on roads, due to scaling, these constants must be much less.
@@ -1588,7 +1589,7 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
                 //Check that we don't get too fast
                 //airbourne units usually don't move backwards. Exception: The helicopter, which
 				//is currently the only user-controllable airbourne unit anyway. 
-				if ((speed)>defaults->speed*1.1f)
+				if (speed>(defaults->speed*1.1f))
 				{
 					speed=defaults->speed*1.1f;
 				}
@@ -1652,7 +1653,7 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 			d.z=0;
 			dist=d.x*d.x+d.y*d.y;
 			dtheta=0;
-			speed*=0.9;
+			speed*=0.9f;
 			if (speed<0.0001f)
 				speed=0;
 		}
@@ -1948,11 +1949,11 @@ i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz)
 				calced=i4_T;
 				if (speed>mp->speed)
 					{//the guy before me is slower
-					speed=speed*0.8;//above statement implies speed>0
-					dx=dx*0.8;//exact??
-					dy=dy*0.8;
+					speed=speed*0.8f;//above statement implies speed>0
+					dx=dx*0.8f;//exact??
+					dy=dy*0.8f;
 					}
-				else if (mp->speed < 8)
+				else if (mp->speed < 8.0f)
 					{
 					ret=i4_F;
 					//speed=speed*0.9;
@@ -1961,9 +1962,9 @@ i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz)
 					}
 				else
 					{
-					speed=speed*0.9;
-					dx=dx*0.9;
-					dy=dy*0.9;
+					speed=speed*0.9f;
+					dx=dx*0.9f;
+					dy=dy*0.9f;
 					}
 
 				}
@@ -2005,11 +2006,11 @@ i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz)
 			//calced=i4_T;
 			if (speed>mp->speed)
 				{//the guy before me is slower
-				speed=speed*0.8;//above statement implies speed>0
+				speed=speed*0.8f;//above statement implies speed>0
 				//dx=dx*0.8;//exact??
 				//dy=dy*0.8;
-				dx=fabs(cos(theta)) * 0.8 * dx;//dx already has a sign
-				dy=fabs(sin(theta)) * 0.8 * dy;
+				dx=fabs(cos(theta)) * 0.8f * dx;//dx already has a sign
+				dy=fabs(sin(theta)) * 0.8f * dy;
 				}
 			else if (mp->speed < 8)//required for delayed start
 				{
@@ -2020,9 +2021,9 @@ i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz)
 				}
 			else
 				{
-				speed=speed*0.9;
-				dx=fabs(cos(theta))*dx*0.9;
-				dy=fabs(sin(theta))*dy*0.9;
+				speed=speed*0.9f;
+				dx=fabs(cos(theta))*dx*0.9f;
+				dy=fabs(sin(theta))*dy*0.9f;
 				
 				}
 			}
@@ -2165,7 +2166,7 @@ void g1_map_piece_class::get_terrain_info()
   damping_fraction = t->friction_fraction;
   g1_block_map_class *bmc=g1_get_map()->get_block_map(GRADE(solveparams));
   if (bmc->ready()&&bmc->is_blocked(ix,iy,G1_ALL_DIRS))
-	  damping_fraction=damping_fraction*1.7;
+	  damping_fraction=damping_fraction*1.7f;
   set_flag(ON_WATER, (t->flags & g1_tile_class::WAVE)!=0 && 
            terrain_height<=g1_get_map()->terrain_height(x,y));
 }

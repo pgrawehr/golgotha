@@ -67,7 +67,8 @@ public:
     memset(block_map, 0, bwx*wy);
   }
 
-  void block(w16 x, w16 y, w8 dir)
+  template<typename T>
+  void block(T x, T y, w8 dir)
   {
 	I4_ASSERT(block_map,"INTERNAL: block() called on empty block map");
     if (x&1)
@@ -75,8 +76,8 @@ public:
     x /= 2;
     block_map[y*bwx+x] |= dir;
   }
-
-  void unblock(w16 x, w16 y, w8 dir)
+  template<typename T>
+  void unblock(T x, T y, w8 dir)
   {
     I4_ASSERT(block_map,"INTERNAL: unblock() called on empty block map");
     if (x&1)
@@ -84,8 +85,8 @@ public:
     x /= 2;
     block_map[y*bwx+x] &= ~(dir);
   }
-
-  i4_bool is_blocked(w16 x, w16 y, w8 dir) const
+  template<typename T>
+  i4_bool is_blocked(T x, T y, w8 dir) const
   {
     I4_ASSERT(block_map,"INTERNAL: Cannot know wheter is_blocked() without block map.");
     if (x&1)
@@ -94,7 +95,8 @@ public:
     return (block_map[y*bwx+x] & dir)!=0;
   }
 
-  i4_bool is_full_blocked(w16 x, w16 y) const
+  template<typename T>
+  i4_bool is_full_blocked(T x, T y) const
       {
       w8 dir=0xf;
       if (x&1)
