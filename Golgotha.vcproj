@@ -1719,9 +1719,6 @@
 				RelativePath=".\maxtool\max_object.h">
 			</File>
 			<File
-				RelativePath=".\maxcomm.h">
-			</File>
-			<File
 				RelativePath=".\maxtool\maxcomm.h">
 			</File>
 			<File
@@ -1893,10 +1890,10 @@
 				RelativePath=".\pragma.h">
 			</File>
 			<File
-				RelativePath=".\device\processor.h">
+				RelativePath=".\Processor.h">
 			</File>
 			<File
-				RelativePath=".\Processor.h">
+				RelativePath=".\device\processor.h">
 			</File>
 			<File
 				RelativePath=".\time\profile.h">

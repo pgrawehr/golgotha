@@ -118,7 +118,9 @@ public:
     : mem(0), next(0),
       name(_name), 
       grow(_grow),
-      size(_size)
+      size(_size),
+	  blocks(0),
+	  items(0)
   //
   //  Create linear allocator
   //

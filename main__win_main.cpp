@@ -236,6 +236,8 @@ void i4_win32_startup_options_struct::check_option(w32 argc,i4_const_str *argv)
 			0,(w8*)&guid_screen,&s);
 		RegQueryValueEx(key,"Sound",0,
 			0,(w8*)&guid_sound,&s);
+		RegCloseKey(key);
+		key=0;
 		}
 #endif
   

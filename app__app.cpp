@@ -510,7 +510,9 @@ int i4_get_int(char *key_name, int* retval)
                    KEY_READ, //is not admin on NT/2000
                    &key)==ERROR_SUCCESS)
 		{
-		return RegQueryValueEx(key,key_name,0,NULL,(unsigned char*)retval,&len);
+		LONG ret=RegQueryValueEx(key,key_name,0,NULL,(unsigned char*)retval,&len);
+		RegCloseKey(key);
+		return ret;
 		}
 	return 1011;
 	}

@@ -139,6 +139,9 @@ class m1_utility_init_class:public i4_init_class
 			}
 		virtual void uninit(void)
 			{
+#ifdef MAXCOMM_HH
+				
+#endif
 			m1_info.uninit();
 			}
 	}m1_utility_init_class_instance;

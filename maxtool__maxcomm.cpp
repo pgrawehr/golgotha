@@ -27,6 +27,13 @@ int m1_mail_slot_class::create(const i4_const_str &name)
 }
 //}}}
 
+int m1_mail_slot_class::close()
+{
+	if (slot!=INVALID_HANDLE_VALUE)
+	{
+		CloseHandle(slot);
+	}
+}
 
 int m1_mail_slot_class::open(const i4_const_str &name)
 //{{{

@@ -28,6 +28,7 @@ public:
   w32 write(char *buff, w32 size);
 
   int read_ready();
+  void close();
 };
 
 #endif
