@@ -1175,7 +1175,7 @@ void g1_player_piece_class::think()
      
       dx = (mp->x - (x+turret->x));
       dy = (mp->y - (y+turret->y));
-	  dh = ((mp->h+0.7f) - (h + turret->h)); 
+	  dh = ((mp->h+0.2f) - (h + turret->h)); 
 	  dist= i4_fsqrt(dx*dx+dy*dy);
       //aim the turret
   
@@ -1185,7 +1185,7 @@ void g1_player_piece_class::think()
 		  hangle=i4_pi_4();
 	  else if (hangle<-i4_pi_4())
 		  hangle=-i4_pi_4();
-	  i4_rotate_to(turret->rotation.x,hangle,0.2f);
+	  i4_rotate_to(turret->rotation.y,-hangle,0.2f);
       //snap it
       i4_normalize_angle(angle);    
       

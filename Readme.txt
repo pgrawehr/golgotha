@@ -44,7 +44,7 @@ For unix type systems, the registry is replaced by a file called "golgotha.ini".
 -ron		Enable alternative handling or keyboard reapeat events.
 		    Usually not required (X server drivers only)
 -no_mitshm  Disable MITSHM extension on X Windows display driver. Try this if you find
-			that golgotha crashes with strange X warnings. 		
+			that golgotha crashes with strange X warnings. (X server drivers only)
 
 
 File Search-Path

@@ -112,7 +112,7 @@ Programmer's resource file
   "powerup_repair"
   "garage" "garage_lod"
   "airbase"
-  "mainbasefull010698" "mainbasefull010698_lod"
+  
   "mainbase"
   "mainbasepad"
   "camera"
@@ -221,6 +221,8 @@ Programmer's resource file
   ("tunnel" deco_invulnerable deco_usepolycoldet)
   "garage_charred"
   ("floorpad" deco_invulnerable deco_usepolycoldet)
+    ("mainbasefull010698" deco_usepolycoldet)
+    "mainbasefull010698_lod"
 )
 
 

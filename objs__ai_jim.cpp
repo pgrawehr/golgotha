@@ -306,11 +306,11 @@ void g1_team_api_class::guide_hero()
         i4_3d_point_class pos;
         commander()->lead_target(pos,0);
 	
-        //this will obviously only be true if me->attack_target.ref != NULL    
+        //this will obviously only work if me->attack_target.ref != NULL    
         dx = (pos.x - (commander()->x+commander()->turret->x));
         dy = (pos.y - (commander()->y+commander()->turret->y));
-		//dh = ((pos.z+0.7) - (commander()->h+commander()->turret->h));
-		dh=(pos.z - commander()->h);
+		dh = ((pos.z+0.2f) - (commander()->h+commander()->turret->h));
+		//dh=(pos.z - commander()->turret->offset.z);
 	    dist2 = dx*dx+dy*dy;
 		dist=sqrt(dist2);
 
@@ -323,7 +323,7 @@ void g1_team_api_class::guide_hero()
 			hangle=i4_pi_4();
 		if (hangle<-i4_pi_4())
 			hangle=-i4_pi_4();
-		i4_rotate_to(commander()->turret->rotation.y , hangle, 0.2);
+		i4_rotate_to(commander()->turret->rotation.y , -hangle, 0.1f);
 		i4_float bangle=(angle - commander()->base_angle);
         i4_float dangle = i4_rotate_to(commander()->turret->rotation.z, 
 			angle, commander()->defaults->turn_speed);

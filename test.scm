@@ -115,7 +115,6 @@
  "templebigfull3x4"
  "mexistylelong1x3"
  "silobigfull2x2"
- "mainbasefull010698"
  "rockwallcorner"
  "rockwallend"
  "rockwallmid"

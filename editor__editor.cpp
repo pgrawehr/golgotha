@@ -9044,6 +9044,7 @@ void g1_editor_class::new_level_from_dialog()
 		fp=i4_open(*res_name);
 		if (fp)
 			{
+			li_load("scheme/map_init.scm");
 			g1_load_res_info(0,fp,0);
 			delete fp;
 			}

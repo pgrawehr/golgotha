@@ -42,14 +42,20 @@ public:
 
   }
   
-  i4_bool occupy_location() 
+  virtual i4_bool occupy_location() 
   { 
-    if (occupy_location_center())
-    {
-      g1_factory_list.insert(*this);
-      return i4_T;
-    }
-    else return i4_F;
+	  if (g1_factory_class::occupy_location())
+		{
+		g1_factory_list.insert(*this);
+		return i4_T;
+		}
+      else return i4_F;
+  }
+
+  virtual void unoccupy_location()
+  {
+	  g1_factory_class::unoccupy_location()
+	  g1_factory_list.find_and_unlink(*this);
   }
 
 
