@@ -861,8 +861,9 @@ void i4_async_reader::PRIVATE_thread()
       {
         que_lock.unlock();
         emulate_speeds(r);
-
-        amount = read(r.fd, r.buffer, r.size);          
+		amount=0;
+		if (r.fd!=0)
+			amount = read(r.fd, r.buffer, r.size);          
         r.callback(amount, r.context);
 		num_pending--;
       }

@@ -162,6 +162,7 @@ Programmer's resource file
   "powerup_flare_yellow"
   "command-stop"
   "command-self_destruct"
+  "command-control"
   )
   
 (load "scheme/objects.scm")

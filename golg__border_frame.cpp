@@ -61,7 +61,7 @@ class i4_profile_class pf_border_draw("border frame draw");
 
 void g1_amount_display_class::draw(i4_draw_context_class &context)
   {
-    if (last_amount==-1)
+    if (last_max==-1)
         return;
 
     if (refresh_as_text)

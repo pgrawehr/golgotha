@@ -1446,9 +1446,9 @@ void r1_dx9_texture_class::next_frame()
   
   sw32 i;
   array_lock.lock();
-  if (finished_array.size()>0)
-	i4_warning("Finished array size %d. Image List size %d", finished_array.size(),
-	image_list.size());
+  //if (finished_array.size()>0)
+//	i4_warning("Finished array size %d. Image List size %d", finished_array.size(),
+//	image_list.size());
   sw32 max_work=finished_array.size()>3?3:finished_array.size();
   
   for (i=0; i<max_work; i++)

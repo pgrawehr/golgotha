@@ -160,6 +160,8 @@ public:
       last_amount=new_amount;
       last_max=max_amount;
       request_redraw(i4_F);
+	  if (parent)
+		  parent->request_redraw();
     }
   }
 
