@@ -182,10 +182,32 @@ i4_time_device_class::request_event(i4_event_handler_class *send_to, // who to s
 ***********************************************************************/
 
 #ifdef _WINDOWS
-sw32 i4_win32_start_clock=GetTickCount();
+sw32 i4_win32_start_clock=0;
+
+//This is useless, since instances of the time class get allocated long before
+//this code would be executed (because there are static instances or fields of static instances
+//with this type). Initialisation sequence of statics cannot be determined and must be assumed
+//as random. 
+//class i4_start_time_init_class:public i4_init_class
+//{
+//public:
+//	virtual void init()
+//	{
+//		i4_win32_start_clock=GetTickCount();
+//	}
+//	virtual int init_type() 
+//	{
+//		//this one is completelly independent from anything else, so this is valid. 
+//		return I4_INIT_TYPE_MEMORY_MANAGER;
+//	}
+//}i4_start_time_init_class_inst;
 
 void i4_time_class::get()
 {
+  if(i4_win32_start_clock==0)
+  {
+	  i4_win32_start_clock=GetTickCount();
+  }
   time.win32_time.clock=GetTickCount()-i4_win32_start_clock;
   time.win32_time.overflow=0;
 }
@@ -217,7 +239,8 @@ sw32 i4_time_class::milli_diff(const i4_time_class &past_time) const
 
 i4_time_class::i4_time_class(sw32 milli_sec)
 {
-  time.win32_time.clock=milli_sec - i4_win32_start_clock;
+  time.win32_time.clock=milli_sec;
+  time.win32_time.overflow=0;
 }
 
 
