@@ -53,7 +53,7 @@ class g1_octree_globals:public i4_init_class
 		g_EndNodeCount=0;
 		g_bLighting=true;
 		g_RenderMode=true;
-		g_MaxSubdivisions=6;
+		g_MaxSubdivisions=16;
 		}
 	};
 
@@ -135,6 +135,20 @@ private:
 
 typedef i4_array<g1_quad_class *> g1_quadlist;
 extern g1_octree_debug g_Debug;
+
+//These values are used to generate the location codes. I suppose they have
+//to be corresponding to the order the sub-nodes are organized.
+const int octreeChildCenterOffsetInt[][3] = {
+	{-1, -1, -1},
+	{ 1, -1, -1},
+	{-1,  1, -1},
+	{ 1,  1, -1},
+	{-1, -1,  1},
+	{ 1, -1,  1},
+	{-1,  1,  1},
+	{ 1,  1,  1}
+};
+
 
 //! This is our octree class.
 //! It contains an octree and is the same as a node of the tree.
@@ -308,6 +322,285 @@ class g1_octree
     /// May return 0 if point is outside object. 
     g1_octree *GetLeafAt(i4_3d_vector where) const;
 
+
+	/**
+	* This method returns a pointer of the left neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the left neighbour or NULL.
+	*/
+	g1_octree *GetNeighbourLeft(g1_octree *root);
+
+	/**
+	* This method returns a pointer to the left neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	*
+	* <b>Note:</b> The neighbour has to be on the same level as the current node.
+	*              Otherwise a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the left neighbour with same level or NULL.
+	*/
+	g1_octree *GetNeighbourLeftSameLevel(g1_octree *root);
+
+	/**
+	* This method returns a pointer of the right neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the right neighbour or NULL.
+	*/
+	g1_octree *GetNeighbourRight(g1_octree *root);
+
+	/**
+	* This method returns a pointer to the right neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	*
+	* <b>Note:</b> The neighbour has to be on the same level as the current node.
+	*              Otherwise a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the right neighbour with same level or NULL.
+	*/
+	g1_octree *GetNeighbourRightSameLevel(g1_octree *root);
+
+	/**
+	* This method returns a pointer of the front neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the front neighbour or NULL.
+	*/
+	g1_octree *GetNeighbourFront(g1_octree *root);
+
+	/**
+	* This method returns a pointer to the front neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	*
+	* <b>Note:</b> The neighbour has to be on the same level as the current node.
+	*              Otherwise a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the front neighbour with same level or NULL.
+	*/
+	g1_octree *GetNeighbourFrontSameLevel(g1_octree *root);
+
+	/**
+	* This method returns a pointer of the rear neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the rear neighbour or NULL.
+	*/	
+	g1_octree *GetNeighbourRear(g1_octree *root);
+
+	/**
+	* This method returns a pointer to the rear neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	*
+	* <b>Note:</b> The neighbour has to be on the same level as the current node.
+	*              Otherwise a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the rear neighbour with same level or NULL.
+	*/
+	g1_octree *GetNeighbourRearSameLevel(g1_octree *root);
+
+	/**
+	* This method returns a pointer of the bottom neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the bottom neighbour or NULL.
+	*/	
+	g1_octree *GetNeighbourBottom(g1_octree *root);
+
+	/**
+	* This method returns a pointer to the bottom neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	*
+	* <b>Note:</b> The neighbour has to be on the same level as the current node.
+	*              Otherwise a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the bottom neighbour with same level or NULL.
+	*/
+	g1_octree *GetNeighbourBottomSameLevel(g1_octree *root);
+
+	/**
+	* This method returns a pointer of the top neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the top neighbour or NULL.
+	*/	
+	g1_octree *GetNeighbourTop(g1_octree *root);
+
+	/**
+	* This method returns a pointer to the top neighbour. If no neighbour is found,
+	* a NULL pointer is returned.
+	*
+	* <b>Note:</b> The neighbour has to be on the same level as the current node.
+	*              Otherwise a NULL pointer is returned.
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to the top neighbour with same level or NULL.
+	*/
+	g1_octree *GetNeighbourTopSameLevel(g1_octree *root);
+
+	/**
+	* This method returns all 26 neighbours of the current OcTree node to.
+	* Nodes are sorted lexicographically from left to right, front to rear
+	* and bottom to top.
+	*
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to an array of neighbours or NULL.
+	*/
+	i4_array<g1_octree*> getNeighbourCells(g1_octree *root);
+
+	/**
+	* This method returns all 26 neighbours of same level the current OcTree node to.
+	* Nodes are sorted lexicographically from left to right, front to rear
+	* and bottom to top.
+	*
+	* <b>Note:</b> If a neighbour does not have the same level as the current
+	*				node, a NULL pointer is stored instead.
+	*
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns a pointer to an array of neighbours or NULL.
+	*/
+	i4_array<g1_octree*> getNeighbourCellsSameLevel(g1_octree *root);
+
+	/**
+	* Testing methods for the neighbour cells methods.
+	* 
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns true if test successful.
+	*/
+	bool GetNeighbourCellsTest(g1_octree *root);
+
+	/**
+	* Testing methods for the neighbour cells methods with same level.
+	* 
+	* @param root
+	*				specifies the <code>OcTree</code> the node belongs to.
+	* @return returns true if test successful.
+	*/
+	bool GetNeighbourCellsSameLevelTest(g1_octree *root);
+
+	class iterator
+	{
+	private:
+		g1_octree *node;
+		friend class g1_octree;
+	public:
+		iterator(g1_octree* startnode)
+			:node(startnode)
+		{
+		}
+		iterator():node(NULL)
+		{
+		}
+		iterator& operator=(iterator &it)
+		{
+			this->node=it.node;
+		}
+		bool operator==(iterator &i)
+		{
+			return node==i.node;
+		}
+		bool operator!=(iterator &i)
+		{
+			return node!=i.node;
+		}
+		g1_octree* operator->() const
+		{
+			return node;
+		}
+		g1_octree& operator*() const
+		{
+			return *node;
+		}
+		g1_octree* get()
+		{
+			return node;
+		}
+		
+		iterator& operator++()
+		{
+			Next();
+			return *this;
+		}
+		iterator& operator++(int)
+		{
+			Next();
+			return *this;
+		}
+	protected:
+		//Traverse the octree pre-order-wise. (Root first, then children)
+		void Next()
+		{
+			g1_octree* oldnode=node;
+			for(int i=0;i<8;i++)
+			{
+				if (node->m_pOctreeNodes[i]!=NULL)
+				{
+					node=node->m_pOctreeNodes[i];
+					return;
+				}
+			}
+			g1_octree *p=node->m_pParent;
+			if (p==NULL)
+			{
+				//No children and no parent -> End
+				node=NULL;
+				return; 
+			}
+			bool bfoundchild=false;
+			while (p!=NULL)
+			{
+				int j;
+				for (j=0;j<8;j++)
+				{
+					if (p->m_pOctreeNodes[j]==oldnode)
+					{
+						bfoundchild=true;
+						// we were the last child of our parent, continue seaching up the tree
+						if (j==7)
+						{
+							break; //out of for
+						}
+						continue;
+					}
+					if (bfoundchild&&p->m_pOctreeNodes[j]!=NULL)
+					{
+						node=p->m_pOctreeNodes[j];
+						return;
+					}
+
+				}
+				oldnode=p;
+				p=p->m_pParent;
+			}
+			node=NULL;
+		}
+
+	};
+
+	iterator begin()
+	{
+		return iterator(this);
+	}
+	iterator end() const
+	{
+		return NULL;
+	}
+
+
 protected:
     i4_bool PointInCube(i4_3d_vector p) const;
 	i4_bool RayShorterThanCubeSize(i4_3d_vector ray) const;
@@ -330,7 +623,37 @@ protected:
 
 	/// This holds the amount of triangles stored in this node
 	int m_TriangleCount;
-
+	// The following values are used for neighbour finding (see code from pointshop3d, 
+	// diffuser_plugin, which is an implementation of samet, 1990a)
+	w32 m_level;    ///< Depth of this node
+	w32 m_xLocCode; ///< location codes for nearest neighbour finding. 
+	w32 m_yLocCode;
+	w32 m_zLocCode;
+public:
+	enum 
+	{
+		NO_FLAGS=0,
+		IS_ROOT=1,
+		BOUNDARY=2,
+		ENUM_FORCE_DWORD=0xFFFFFFFF
+	};
+protected:
+	w32 m_flags;
+	void calculate_location_codes();
+	void internal_calc_loc_codes(int cur_level);
+public:
+	w32 get_flag(w32 x) const 
+	{ 
+		return m_flags & x; 
+	}
+	void set_flag(w32 x, w32 value=ENUM_FORCE_DWORD) 
+	{ 
+		if (value) 
+			m_flags|=x; 
+		else 
+			m_flags&=(~x); 
+	} 
+protected:
 	/// This is the center (X, Y, Z) point in this node
 	i4_3d_vector m_vCenter;
 
@@ -344,6 +667,8 @@ protected:
 
 	/// These are the eight nodes branching down from this current node
 	g1_octree *m_pOctreeNodes[8];	
+	/// The parent element
+	g1_octree *m_pParent;
 };
 
 

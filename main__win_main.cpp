@@ -356,35 +356,35 @@ DWORD FormatErrorMessage(char* input, char* buf, long bufsize)
 		memcpy(severity,buf,30);
 		severity[first-buf]='\0';
 		
-		if (strcmp(severity,"USER")==0)
+		if (strstr(severity,"USER")!=0)
 			{
 			dwResId=IDS_ERROR_USER;
 			}
-		if (strcmp(severity,"ERROR")==0)
+		if (strstr(severity,"ERROR")!=0)
 			{
 			dwResId=IDS_ERROR_ERROR;
 			}
-		if (strcmp(severity,"FATAL")==0)
+		if (strstr(severity,"FATAL")!=0)
 			{
 			dwResId=IDS_ERROR_FATAL;
 			}
-		if (strcmp(severity,"CRITICAL")==0)
+		if (strstr(severity,"CRITICAL")!=0)
 			{
 			dwResId=IDS_ERROR_CRITICAL;
 			}
-		if (strcmp(severity,"INFO")==0)
+		if (strstr(severity,"INFO")!=0)
 			{
 			dwResId=IDS_ERROR_INFO;
 			}
-		if (strcmp(severity,"WARNING")==0)
+		if (strstr(severity,"WARNING")!=0)
 			{
 			dwResId=IDS_ERROR_WARNING;
 			}
-		if (strcmp(severity,"SEVERE")==0)
+		if (strstr(severity,"SEVERE")!=0)
 			{
 			dwResId=IDS_ERROR_SEVERE;
 			}
-		if (strcmp(severity,"INTERNAL")==0)
+		if (strstr(severity,"INTERNAL")!=0)
 			{
 			dwResId=IDS_ERROR_INTERNAL;
 			}
