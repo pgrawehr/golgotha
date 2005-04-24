@@ -326,8 +326,8 @@ void g1_octree::internal_calc_loc_codes(int cur_level)
 		for (int i=0;i<8;i++)
 		{
 			// can it really happen that a node has less than 8 children? (but not 0)
-			if (m_pOctreeNodes[i]==NULL)
-				continue;
+			//if (m_pOctreeNodes[i]==NULL)
+			//	continue;
 			m_pOctreeNodes[i]->m_pParent=this;
 			m_pOctreeNodes[i]->m_level=nextLevel;
 			if (octreeChildCenterOffsetInt[i][0] == 1) {
@@ -446,7 +446,7 @@ g1_octree *g1_octree::GetNeighbourRightSameLevel(g1_octree *root) {
 g1_octree *g1_octree::GetNeighbourFront(g1_octree *root) {
 
 	// No front neighbour if this is the front side of the octree.
-	if (this->m_xLocCode == 0)
+	if (this->m_yLocCode == 0)
 		return NULL;
 	else {
 
@@ -1221,7 +1221,7 @@ g1_octree *g1_octree::Build(g1_quad_object_class *pWorld)
 		return 0;
 		}
 	newtree->calculate_location_codes();
-	for(g1_octree::iterator it=newtree->begin();it!=newtree->end();it++)
+	for(g1_octree::iterator it=newtree->begin();it!=newtree->end();++it)
 	{
 		it->GetNeighbourCellsTest(newtree);
 		it->GetNeighbourCellsSameLevelTest(newtree);
@@ -1432,7 +1432,6 @@ i4_3d_vector g1_octree::GetNewNodeCenter(i4_3d_vector vCenter,
 bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree) 
 {
 
-	int i, j;
 	g1_octree *node1, *node2;
 
 	// 1st test:
@@ -1456,11 +1455,11 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 		node2 = node1->GetNeighbourRight(ocTree);
 		if ((node2 != NULL) && (node2 == this))
 		{
-			i4_warning("Test1: Pass");
+			//i4_warning("Test1: Pass");
 		} // same nodes
 		else if (this->m_level != node1->m_level)
 		{
-			i4_warning("Test1: Pass (passive)");
+			//i4_warning("Test1: Pass (passive)");
 		} // different nodes because not on the same level
 		else {
 			i4_warning("*** Warning! Nodes are not identical.");
@@ -1583,8 +1582,6 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 
 bool g1_octree::GetNeighbourCellsSameLevelTest(g1_octree *ocTree) 
 {
-
-	int i, j;
 	g1_octree *node1, *node2;
 
 	// 1st test:
@@ -1741,7 +1738,8 @@ i4_bool g1_octree::CreateNewNode(g1_quad_object_class *pWorld, tFaceList &pList,
 	// are in our node that is being created.  
 
 	// Check if the first node found some triangles in it, if not we don't continue
-	if(!triangleCount) return i4_F;
+	// PG: This causes that leaf nodes with no triangles aren't even created. 
+	// if(!triangleCount) return i4_F;
 	
 	// Here we create the temporary partitioned data model, which will contain
 	// all the objects and triangles in this end node.
@@ -2106,14 +2104,14 @@ i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
 			// top left front, top right front,
 			// top left back, top right back (if I interpret the comment at GetNeighbourCells() properly)
 
-		CreateNewNode(pWorld, pList1, triCount1, vCenter, xwidth, ywidth, zwidth, BOTTOM_LEFT_FRONT/*TOP_LEFT_FRONT*/);
-		CreateNewNode(pWorld, pList2, triCount2, vCenter, xwidth, ywidth, zwidth, BOTTOM_RIGHT_FRONT/*TOP_LEFT_BACK*/);
-		CreateNewNode(pWorld, pList3, triCount3, vCenter, xwidth, ywidth, zwidth, BOTTOM_LEFT_BACK/*TOP_RIGHT_BACK*/);
-		CreateNewNode(pWorld, pList4, triCount4, vCenter, xwidth, ywidth, zwidth, BOTTOM_RIGHT_BACK/*TOP_RIGHT_FRONT*/);
-		CreateNewNode(pWorld, pList5, triCount5, vCenter, xwidth, ywidth, zwidth, TOP_LEFT_FRONT/*BOTTOM_LEFT_FRONT*/);
-		CreateNewNode(pWorld, pList6, triCount6, vCenter, xwidth, ywidth, zwidth, TOP_RIGHT_FRONT/*BOTTOM_LEFT_BACK*/);
-		CreateNewNode(pWorld, pList7, triCount7, vCenter, xwidth, ywidth, zwidth, TOP_LEFT_BACK/*BOTTOM_RIGHT_BACK*/);
-		CreateNewNode(pWorld, pList8, triCount8, vCenter, xwidth, ywidth, zwidth, TOP_RIGHT_BACK/*BOTTOM_RIGHT_FRONT*/);
+		CreateNewNode(pWorld, pList1, triCount1, vCenter, xwidth, ywidth, zwidth, /*BOTTOM_LEFT_FRONT*/TOP_LEFT_FRONT);
+		CreateNewNode(pWorld, pList2, triCount2, vCenter, xwidth, ywidth, zwidth, /*BOTTOM_RIGHT_FRONT*/TOP_LEFT_BACK);
+		CreateNewNode(pWorld, pList3, triCount3, vCenter, xwidth, ywidth, zwidth, /*BOTTOM_LEFT_BACK*/TOP_RIGHT_BACK);
+		CreateNewNode(pWorld, pList4, triCount4, vCenter, xwidth, ywidth, zwidth, /*BOTTOM_RIGHT_BACK*/TOP_RIGHT_FRONT);
+		CreateNewNode(pWorld, pList5, triCount5, vCenter, xwidth, ywidth, zwidth, /*TOP_LEFT_FRONT*/BOTTOM_LEFT_FRONT);
+		CreateNewNode(pWorld, pList6, triCount6, vCenter, xwidth, ywidth, zwidth, /*TOP_RIGHT_FRONT*/BOTTOM_LEFT_BACK);
+		CreateNewNode(pWorld, pList7, triCount7, vCenter, xwidth, ywidth, zwidth, /*TOP_LEFT_BACK*/BOTTOM_RIGHT_BACK);
+		CreateNewNode(pWorld, pList8, triCount8, vCenter, xwidth, ywidth, zwidth, /*TOP_RIGHT_BACK*/BOTTOM_RIGHT_FRONT);
 		int subtcount=0;
 		for (int subts=0;subts<8;subts++)
 			{

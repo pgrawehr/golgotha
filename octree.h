@@ -28,25 +28,25 @@ http://www.GameTutorials.com \n
 class g1_octree_globals:public i4_init_class
 	{
 	public:
-/// The maximum amount of triangles per node.
+//! The maximum amount of triangles per node.
 	static int g_MaxTriangles;
 
-/// The maximum amount of subdivisions allow (Levels of subdivision).
+//! The maximum amount of subdivisions allow (Levels of subdivision).
 	static int g_MaxSubdivisions;
 
-/// The amount of end nodes created in the octree (That hold vertices).
+//! The amount of end nodes created in the octree (That hold vertices).
 	static int g_EndNodeCount;
 
-/// This stores the amount of nodes that are in the frustum.
+//! This stores the amount of nodes that are in the frustum.
     static int g_TotalNodesDrawn;
 
-/// Turn lighting on initially.
+//! Turn lighting on initially.
     static bool g_bLighting;
 
-/// This stores the render mode (LINES = false or TRIANGLES = true).
+//! This stores the render mode (LINES = false or TRIANGLES = true).
     static bool g_RenderMode;
 
-/// The init function inherited from i4_init_class. 
+//! The init function inherited from i4_init_class. 
 	void init()
 		{
 		g_MaxTriangles=200;
@@ -58,17 +58,19 @@ class g1_octree_globals:public i4_init_class
 	};
 
 
-/// These values (0 - 7) store the index ID's for the octree node array (m_pOctreeNodes).
+//! These values (0 - 7) store the index ID's for the octree node array (m_pOctreeNodes).
+//! The numbering is a bit strange because we merged two projects which had different definitions
+//! for these. 
 enum eOctreeNodes
 {
-	TOP_LEFT_FRONT,			// 0
-	TOP_LEFT_BACK,			// 1
-	TOP_RIGHT_BACK,			// etc...
-	TOP_RIGHT_FRONT,
-	BOTTOM_LEFT_FRONT,
-	BOTTOM_LEFT_BACK,
-	BOTTOM_RIGHT_BACK,
-	BOTTOM_RIGHT_FRONT
+	TOP_LEFT_FRONT      = 4,			
+	TOP_LEFT_BACK       = 6,			
+	TOP_RIGHT_BACK      = 7,			
+	TOP_RIGHT_FRONT     = 5,
+	BOTTOM_LEFT_FRONT   = 0,
+	BOTTOM_LEFT_BACK    = 2,
+	BOTTOM_RIGHT_BACK   = 3,
+	BOTTOM_RIGHT_FRONT  = 1
 };
 
 
@@ -505,15 +507,20 @@ class g1_octree
 		iterator():node(NULL)
 		{
 		}
-		iterator& operator=(iterator &it)
+		iterator(const iterator &it)
+			:node(it.node)
+		{
+		}
+		/*iterator& operator=(const iterator &it)
 		{
 			this->node=it.node;
-		}
-		bool operator==(iterator &i)
+			return *this;
+		}*/
+		bool operator==(iterator i)
 		{
 			return node==i.node;
 		}
-		bool operator!=(iterator &i)
+		bool operator!=(iterator i)
 		{
 			return node!=i.node;
 		}
@@ -535,10 +542,11 @@ class g1_octree
 			Next();
 			return *this;
 		}
-		iterator& operator++(int)
+		iterator operator++(int)
 		{
+			iterator it=*this;
 			Next();
-			return *this;
+			return it;
 		}
 	protected:
 		//Traverse the octree pre-order-wise. (Root first, then children)
@@ -585,6 +593,7 @@ class g1_octree
 				}
 				oldnode=p;
 				p=p->m_pParent;
+				bfoundchild=false;
 			}
 			node=NULL;
 		}

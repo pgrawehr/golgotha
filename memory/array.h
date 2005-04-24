@@ -96,7 +96,7 @@ public:
 	}
 
 	//! Copy constructor.
-	i4_array(i4_array<T> &tocopy)
+	i4_array(const i4_array<T> &tocopy)
 	{
 		entry=0;
 		used=0;
