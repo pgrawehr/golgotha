@@ -1806,6 +1806,9 @@
 				RelativePath=".\editor\dialogs\object_picker.h">
 			</File>
 			<File
+				RelativePath=".\octree.h">
+			</File>
+			<File
 				RelativePath=".\octreetraversal.h">
 			</File>
 			<File

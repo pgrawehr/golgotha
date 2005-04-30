@@ -2442,6 +2442,146 @@ void g1_octree::scale(i4_float value)
 		}
 	}
 
+void g1_octree::GetBorderSide(int side, 
+		i4_3d_vector &v1, 
+		i4_3d_vector &v2,
+		i4_3d_vector &v3,
+		i4_3d_vector &v4,
+		i4_3d_vector &normal)
+{
+	v1=this->m_vCenter;
+	v2=this->m_vCenter;
+	v3=this->m_vCenter;
+	v4=this->m_vCenter;
+	float xs=m_xWidth/2;
+	float ys=m_yWidth/2;
+	float zs=m_zWidth/2;
+	switch(side)
+	{
+	case CS_FRONT:
+		{
+			v1.x-=xs;//links
+			v1.y-=ys;//vorne
+			v1.z-=zs;//unten
+
+			v2.x+=xs;//rechts
+			v2.y-=ys;//vorne
+			v2.z-=zs;//unten
+
+			v3.x+=xs;
+			v3.y-=ys;
+			v3.z+=zs;
+
+			v4.x-=xs;
+			v4.y-=ys;
+			v4.z+=zs;
+			normal.set(0,-1,0);
+		}
+		break;
+	case CS_LEFT:
+		{
+			v1.x-=xs;//links
+			v1.y+=ys;//hinten
+			v1.z-=zs;//unten
+
+			v2.x-=xs;
+			v2.y-=ys;
+			v2.z-=zs;
+
+			v3.x-=xs;
+			v3.y-=ys;
+			v3.z+=zs;
+
+			v4.x-=xs;//links
+			v4.y+=ys;//hinten
+			v4.z+=zs;//oben
+			normal.set(-1,0,0);
+		}
+		break;
+	case CS_TOP:
+		{
+			v1.x-=xs;
+			v1.y-=ys;
+			v1.z+=zs;
+
+			v2.x+=xs;
+			v2.y-=ys;
+			v2.z+=zs;
+
+			v3.x+=xs;
+			v3.y+=ys;
+			v3.z+=zs;
+
+			v4.x-=xs;
+			v4.y+=ys;
+			v4.z+=zs;
+			normal.set(0,0,1);
+		}
+		break;
+	case CS_BOTTOM:
+		{
+			v1.x-=xs;
+			v1.y-=ys;
+			v1.z-=zs;
+
+			v2.x-=xs;
+			v2.y+=ys;
+			v2.z-=zs;
+
+			v3.x+=xs;
+			v3.y+=ys;
+			v3.z-=zs;
+
+			v4.x+=xs;
+			v4.y-=ys;
+			v4.z-=zs;
+			normal.set(0,0,-1);
+		}
+		break;
+	case CS_RIGHT:
+		{
+			v1.x+=xs;
+			v1.y-=ys;
+			v1.z-=zs;
+
+			v2.x+=xs;
+			v2.y+=ys;
+			v2.z-=zs;
+
+			v3.x+=xs;
+			v3.y+=ys;
+			v3.z+=zs;
+
+			v4.x+=xs;
+			v4.y-=ys;
+			v4.z+=zs;
+			normal.set(1,0,0);
+		}
+		break;
+	case CS_BACK:
+		{
+			v1.x+=xs;
+			v1.y+=ys;
+			v1.z-=zs;
+
+			v2.x-=xs;
+			v2.y+=ys;
+			v2.z-=zs;
+
+			v3.x-=xs;
+			v3.y+=ys;
+			v3.z+=zs;
+
+			v4.x+=xs;
+			v4.y+=ys;
+			v4.z+=zs;
+			normal.set(0,1,0);
+		}
+		break;
+	}
+	
+}
+
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 
 //////////////////////////////// CREATE DISPLAY LIST \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*

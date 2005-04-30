@@ -73,6 +73,16 @@ enum eOctreeNodes
 	BOTTOM_RIGHT_FRONT  = 1
 };
 
+enum eCubeSides
+{
+	CS_LEFT,
+	CS_RIGHT,
+	CS_TOP,
+	CS_BOTTOM,
+	CS_FRONT,
+	CS_BACK
+};
+
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 
@@ -318,6 +328,17 @@ class g1_octree
         //unfortunatelly, we need a double indirection here.
         return &m_pWorld->quad[m_pQuadList[i]];
         }
+
+	//! Returns the vertices of the quad specified by the given side of this node.
+	//! The normal vector is always facing outwards. It can be used to 
+	//! check for collisions with this node. 
+	void GetBorderSide(int side, 
+		i4_3d_vector &v1, 
+		i4_3d_vector &v2,
+		i4_3d_vector &v3,
+		i4_3d_vector &v4,
+		i4_3d_vector &normal);
+
 
     /// Returns the Leaf node the point is in.
     /// The vector must already have been transformed to local coordinates.
