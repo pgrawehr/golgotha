@@ -68,7 +68,7 @@
 #include "g1_render.h"
 #include "load3d.h"
 #include "global_id.h"
-
+#include "memory/stack.h"
 
 
 
@@ -245,9 +245,9 @@ g1_octree::g1_octree(g1_quad_object_class *pWorld, i4_loader_class *fp)
 	memset(m_pOctreeNodes, 0, sizeof (m_pOctreeNodes));
 	if (!fp)
 		return;
-	fp->read_format("4ffffff4", &m_bSubDivided,
+	fp->read_format("4ffffff44", &m_bSubDivided,
 		&m_xWidth,&m_yWidth,&m_zWidth,&m_vCenter.x,&m_vCenter.y,
-		&m_vCenter.z,&m_TriangleCount);
+		&m_vCenter.z,&m_TriangleCount,&m_flags);
 	fp->read_32(); //skip a word
 	int numquads=fp->read_32();
 	while (numquads)
@@ -304,6 +304,8 @@ g1_octree::g1_octree(g1_quad_object_class *pWorld, i4_loader_class *fp)
 		m_pOctreeNodes[7]=new g1_octree(pWorld,fp);
 		m_pOctreeNodes[7]->m_pParent=this;
 	}
+	if (get_flag(IS_ROOT))
+		calculate_location_codes();
 	}
 
 void g1_octree::calculate_location_codes()
@@ -486,7 +488,7 @@ g1_octree *g1_octree::GetNeighbourFrontSameLevel(g1_octree *root) {
 }
 
 
-g1_octree *g1_octree::GetNeighbourRear(g1_octree *root) {
+g1_octree *g1_octree::GetNeighbourBack(g1_octree *root) {
 
 	w32 binaryCellSize = 1 << this->m_level;
 	w32 rootCellpos=(1 << root->m_level);
@@ -501,12 +503,12 @@ g1_octree *g1_octree::GetNeighbourRear(g1_octree *root) {
 		unsigned int xLocCode = this->m_xLocCode;
 		unsigned int yLocCode = this->m_yLocCode;
 		unsigned int zLocCode = this->m_zLocCode;
-		unsigned int yRearLocCode = this->m_yLocCode + binaryCellSize;
+		unsigned int yBackLocCode = this->m_yLocCode + binaryCellSize;
 
 		// Determine the smallest common ancestor of the node and the node's
 		// smallest possible rear neighbour.
 		unsigned int nodeLevel, nextLevel;
-		unsigned int diff = yLocCode ^ yRearLocCode;
+		unsigned int diff = yLocCode ^ yBackLocCode;
 		g1_octree *rear = this;
 		nodeLevel = nextLevel = this->m_level;
 		OT_GET_COMMON_ANCESTOR(rear, nextLevel, diff);
@@ -515,15 +517,15 @@ g1_octree *g1_octree::GetNeighbourRear(g1_octree *root) {
 		// patterns of the locational codes downward to the smallest rear
 		// neighbour of size greater than or equal to node.
 		nextLevel--;
-		OT_TRAVERSE_TO_LEVEL(rear,nextLevel,xLocCode,yRearLocCode,zLocCode,nodeLevel);
+		OT_TRAVERSE_TO_LEVEL(rear,nextLevel,xLocCode,yBackLocCode,zLocCode,nodeLevel);
 		return rear;
 	}
 }
 
 
-g1_octree *g1_octree::GetNeighbourRearSameLevel(g1_octree *root) {
+g1_octree *g1_octree::GetNeighbourBackSameLevel(g1_octree *root) {
 
-	g1_octree *node = this->GetNeighbourRear(root);
+	g1_octree *node = this->GetNeighbourBack(root);
 
 	if (node != NULL && (node->m_level != this->m_level))
 		node = NULL;
@@ -621,7 +623,7 @@ g1_octree *g1_octree::GetNeighbourTopSameLevel(g1_octree *root) {
 }
 
 
-i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
+i4_array<g1_octree*> g1_octree::GetNeighbourCells(g1_octree *root) {
 
 	int i;
 
@@ -636,7 +638,7 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 	unsigned int noLeft = (this->m_xLocCode == 0) ? 1 : 0;
 	unsigned int noRight = ((this->m_xLocCode + binCellSize) >= rootCellpos) ? 1 : 0;
 	unsigned int noFront = (this->m_yLocCode == 0) ? 1 : 0;
-	unsigned int noRear = ((this->m_yLocCode + binCellSize) >= rootCellpos) ? 1 : 0;
+	unsigned int noBack = ((this->m_yLocCode + binCellSize) >= rootCellpos) ? 1 : 0;
 	unsigned int noBottom = (this->m_zLocCode == 0) ? 1 : 0;
 	unsigned int noTop = ((this->m_zLocCode + binCellSize) >= rootCellpos) ? 1 : 0;
 
@@ -647,7 +649,7 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 	unsigned int xLeftLocCode = this->m_xLocCode - 0x00000001;
 	unsigned int xRightLocCode = this->m_xLocCode + binCellSize;
 	unsigned int yFrontLocCode = this->m_yLocCode - 0x00000001;
-	unsigned int yRearLocCode =  this->m_yLocCode + binCellSize;
+	unsigned int yBackLocCode =  this->m_yLocCode + binCellSize;
 	unsigned int zBottomLocCode = this->m_zLocCode - 0x00000001;
 	unsigned int zTopLocCode = this->m_zLocCode + binCellSize;
 
@@ -659,7 +661,7 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 	g1_octree* commonLeft=0;
 	g1_octree* commonRight=0;
 	g1_octree* commonFront=0;
-	g1_octree* commonRear=0;
+	g1_octree* commonBack=0;
 	g1_octree* commonBottom=0;
 	g1_octree* commonTop=0;
 
@@ -762,7 +764,7 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 			}
 		}
 	}
-	if (noRear) {
+	if (noBack) {
 		neighbours[6] = this;
 		neighbours[7] = this;
 		neighbours[8] = this;
@@ -777,13 +779,13 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 		// calculate neighbour 15
 		if (neighbours[15] != this) {
 			unsigned int level = this->m_level;
-			diff = yLocCode ^ yRearLocCode;
-			commonRear = this;
-			OT_GET_COMMON_ANCESTOR(commonRear, level, diff);
+			diff = yLocCode ^ yBackLocCode;
+			commonBack = this;
+			OT_GET_COMMON_ANCESTOR(commonBack, level, diff);
 			rearLevel = level;
-			neighbours[15] = commonRear;
+			neighbours[15] = commonBack;
 			level--;
-			OT_TRAVERSE_TO_LEVEL(neighbours[15],level,xLocCode,yRearLocCode,zLocCode,nodeLevel);
+			OT_TRAVERSE_TO_LEVEL(neighbours[15],level,xLocCode,yBackLocCode,zLocCode,nodeLevel);
 
 		}
 		// calculate neighbour 14
@@ -791,12 +793,12 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 			if (leftLevel >= rearLevel) {
 				unsigned int level = leftLevel - 1;
 				neighbours[14] = commonLeft;
-				OT_TRAVERSE_TO_LEVEL(neighbours[14],level,xLeftLocCode,yRearLocCode,zLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[14],level,xLeftLocCode,yBackLocCode,zLocCode,nodeLevel);
 			}
 			else {
 				unsigned int level = rearLevel - 1;
-				neighbours[14] = commonRear;
-				OT_TRAVERSE_TO_LEVEL(neighbours[14],level,xLeftLocCode,yRearLocCode,zLocCode,nodeLevel);
+				neighbours[14] = commonBack;
+				OT_TRAVERSE_TO_LEVEL(neighbours[14],level,xLeftLocCode,yBackLocCode,zLocCode,nodeLevel);
 			}
 		}
 		// calculate neighbour 16
@@ -804,13 +806,13 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 			if (rightLevel >= rearLevel) {
 				unsigned int level = rightLevel - 1;
 				neighbours[16] = commonRight;
-				OT_TRAVERSE_TO_LEVEL(neighbours[16],level,xRightLocCode,yRearLocCode,zLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[16],level,xRightLocCode,yBackLocCode,zLocCode,nodeLevel);
 
 			}
 			else {
 				unsigned int level = rearLevel - 1;
-				neighbours[16] = commonRear;
-				OT_TRAVERSE_TO_LEVEL(neighbours[16],level,xRightLocCode,yRearLocCode,zLocCode,nodeLevel);
+				neighbours[16] = commonBack;
+				OT_TRAVERSE_TO_LEVEL(neighbours[16],level,xRightLocCode,yBackLocCode,zLocCode,nodeLevel);
 			}
 		}
 	}
@@ -873,13 +875,13 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 		if (neighbours[7] != this) {
 			if (rearLevel > bottomLevel) {
 				unsigned int level = rearLevel - 1;
-				neighbours[7] = commonRear;
-				OT_TRAVERSE_TO_LEVEL(neighbours[7],level,xLocCode,yRearLocCode,zBottomLocCode,nodeLevel);
+				neighbours[7] = commonBack;
+				OT_TRAVERSE_TO_LEVEL(neighbours[7],level,xLocCode,yBackLocCode,zBottomLocCode,nodeLevel);
 			}
 			else {
 				unsigned int level = bottomLevel - 1;
 				neighbours[7] = commonBottom;
-				OT_TRAVERSE_TO_LEVEL(neighbours[7],level,xLocCode,yRearLocCode,zBottomLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[7],level,xLocCode,yBackLocCode,zBottomLocCode,nodeLevel);
 			}
 		}
 		// calculate neighbour 0
@@ -923,17 +925,17 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 			if ((leftLevel > bottomLevel) && (leftLevel > rearLevel)) {
 				unsigned int level = leftLevel - 1;
 				neighbours[6] = commonLeft;
-				OT_TRAVERSE_TO_LEVEL(neighbours[6],level,xLeftLocCode,yRearLocCode,zBottomLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[6],level,xLeftLocCode,yBackLocCode,zBottomLocCode,nodeLevel);
 			}
 			else if (bottomLevel > rearLevel) {
 				unsigned int level = bottomLevel - 1;
 				neighbours[6] = commonBottom;
-				OT_TRAVERSE_TO_LEVEL(neighbours[6],level,xLeftLocCode,yRearLocCode,zBottomLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[6],level,xLeftLocCode,yBackLocCode,zBottomLocCode,nodeLevel);
 			}
 			else {
 				unsigned int level = rearLevel - 1;
-				neighbours[6] = commonRear;
-				OT_TRAVERSE_TO_LEVEL(neighbours[6],level,xLeftLocCode,yRearLocCode,zBottomLocCode,nodeLevel);
+				neighbours[6] = commonBack;
+				OT_TRAVERSE_TO_LEVEL(neighbours[6],level,xLeftLocCode,yBackLocCode,zBottomLocCode,nodeLevel);
 			}
 		}
 		// calculate neighbour 8
@@ -941,17 +943,17 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 			if ((rightLevel > bottomLevel) && (rightLevel > rearLevel)) {
 				unsigned int level = rightLevel - 1;
 				neighbours[8] = commonRight;
-				OT_TRAVERSE_TO_LEVEL(neighbours[8],level,xRightLocCode,yRearLocCode,zBottomLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[8],level,xRightLocCode,yBackLocCode,zBottomLocCode,nodeLevel);
 			}
 			else if (bottomLevel > rearLevel) {
 				unsigned int level = bottomLevel - 1;
 				neighbours[8] = commonBottom;
-				OT_TRAVERSE_TO_LEVEL(neighbours[8],level,xRightLocCode,yRearLocCode,zBottomLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[8],level,xRightLocCode,yBackLocCode,zBottomLocCode,nodeLevel);
 			}
 			else {
 				unsigned int level = rearLevel - 1;
-				neighbours[8] = commonRear;
-				OT_TRAVERSE_TO_LEVEL(neighbours[8],level,xRightLocCode,yRearLocCode,zBottomLocCode,nodeLevel);
+				neighbours[8] = commonBack;
+				OT_TRAVERSE_TO_LEVEL(neighbours[8],level,xRightLocCode,yBackLocCode,zBottomLocCode,nodeLevel);
 			}
 		}
 	}
@@ -1014,13 +1016,13 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 		if (neighbours[24] != this) {
 			if (rearLevel > topLevel) {
 				unsigned int level = rearLevel - 1;
-				neighbours[24] = commonRear;
-				OT_TRAVERSE_TO_LEVEL(neighbours[24],level,xLocCode,yRearLocCode,zTopLocCode,nodeLevel);
+				neighbours[24] = commonBack;
+				OT_TRAVERSE_TO_LEVEL(neighbours[24],level,xLocCode,yBackLocCode,zTopLocCode,nodeLevel);
 			}
 			else {
 				unsigned int level = topLevel - 1;
 				neighbours[24] = commonTop;
-				OT_TRAVERSE_TO_LEVEL(neighbours[24],level,xLocCode,yRearLocCode,zTopLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[24],level,xLocCode,yBackLocCode,zTopLocCode,nodeLevel);
 			}
 		}
 		// calculate neighbour 17
@@ -1064,17 +1066,17 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 			if ((leftLevel > topLevel) && (leftLevel > rearLevel)) {
 				unsigned int level = leftLevel - 1;
 				neighbours[23] = commonLeft;
-				OT_TRAVERSE_TO_LEVEL(neighbours[23],level,xLeftLocCode,yRearLocCode,zTopLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[23],level,xLeftLocCode,yBackLocCode,zTopLocCode,nodeLevel);
 			}
 			else if (topLevel > rearLevel) {
 				unsigned int level = topLevel - 1;
 				neighbours[23] = commonTop;
-				OT_TRAVERSE_TO_LEVEL(neighbours[23],level,xLeftLocCode,yRearLocCode,zTopLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[23],level,xLeftLocCode,yBackLocCode,zTopLocCode,nodeLevel);
 			}
 			else {
 				unsigned int level = rearLevel - 1;
-				neighbours[23] = commonRear;
-				OT_TRAVERSE_TO_LEVEL(neighbours[23],level,xLeftLocCode,yRearLocCode,zTopLocCode,nodeLevel);
+				neighbours[23] = commonBack;
+				OT_TRAVERSE_TO_LEVEL(neighbours[23],level,xLeftLocCode,yBackLocCode,zTopLocCode,nodeLevel);
 			}
 		}
 		// calculate neighbour 25
@@ -1082,17 +1084,17 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 			if ((rightLevel > topLevel) && (rightLevel > rearLevel)) {
 				unsigned int level = rightLevel - 1;
 				neighbours[25] = commonRight;
-				OT_TRAVERSE_TO_LEVEL(neighbours[25],level,xRightLocCode,yRearLocCode,zTopLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[25],level,xRightLocCode,yBackLocCode,zTopLocCode,nodeLevel);
 			}
 			else if (topLevel > rearLevel) {
 				unsigned int level = topLevel - 1;
 				neighbours[25] = commonTop;
-				OT_TRAVERSE_TO_LEVEL(neighbours[25],level,xRightLocCode,yRearLocCode,zTopLocCode,nodeLevel);
+				OT_TRAVERSE_TO_LEVEL(neighbours[25],level,xRightLocCode,yBackLocCode,zTopLocCode,nodeLevel);
 			}
 			else {
 				unsigned int level = rearLevel - 1;
-				neighbours[25] = commonRear;
-				OT_TRAVERSE_TO_LEVEL(neighbours[25],level,xRightLocCode,yRearLocCode,zTopLocCode,nodeLevel);
+				neighbours[25] = commonBack;
+				OT_TRAVERSE_TO_LEVEL(neighbours[25],level,xRightLocCode,yBackLocCode,zTopLocCode,nodeLevel);
 			}
 		}
 	}
@@ -1107,10 +1109,10 @@ i4_array<g1_octree*> g1_octree::getNeighbourCells(g1_octree *root) {
 }
 
 
-i4_array<g1_octree*> g1_octree::getNeighbourCellsSameLevel(g1_octree *root) {
+i4_array<g1_octree*> g1_octree::GetNeighbourCellsSameLevel(g1_octree *root) {
 
 	i4_array<g1_octree*> neighbours(100,100);
-	neighbours = this->getNeighbourCells(root);
+	neighbours = this->GetNeighbourCells(root);
 
 	for (int i = 0; i < 26; i++) {
 		if (neighbours[i] != NULL && (this->m_level != neighbours[i]->m_level))
@@ -1124,9 +1126,9 @@ i4_array<g1_octree*> g1_octree::getNeighbourCellsSameLevel(g1_octree *root) {
 
 void g1_octree::save(i4_saver_class *fp)
 	{
-	fp->write_format("4ffffff4",&m_bSubDivided,
+	fp->write_format("4ffffff44",&m_bSubDivided,
 		&m_xWidth,&m_yWidth,&m_zWidth,&m_vCenter.x,&m_vCenter.y,
-		&m_vCenter.z,&m_TriangleCount);
+		&m_vCenter.z,&m_TriangleCount,&m_flags);
 	fp->write_32(0xdeadbeef);//reserved entry
 	fp->write_32(m_pQuadList.size());
 	int i=0;
@@ -1439,7 +1441,7 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 	// Tested routines: getNeighbourLeft(ocTree)
 	//					getNeighbourRight(ocTree)
 	//					getNeighbourFront(ocTree)
-	//					getNeighbourRear(ocTree)
+	//					getNeighbourBack(ocTree)
 	//					getNeighbourBottom(ocTree)
 	//					getNeighbourTop(ocTree)
 	// 
@@ -1456,6 +1458,8 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 		if ((node2 != NULL) && (node2 == this))
 		{
 			//i4_warning("Test1: Pass");
+			if (this->m_vCenter.x<=node1->m_vCenter.x)
+				i4_warning("*** Warning! Geometry inconsistency: Node is left of it's left neighbour");
 		} // same nodes
 		else if (this->m_level != node1->m_level)
 		{
@@ -1474,7 +1478,11 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 	if (node1 != NULL) {
 		node2 = node1->GetNeighbourLeft(ocTree);
 		if ((node2 != NULL) && (node2 == this))
-		{ } // same nodes
+		{
+			if (this->m_vCenter.x>=node1->m_vCenter.x)
+				i4_warning("*** Warning! Geometry inconsistency: Node is right of it's right neighbour");
+
+		} // same nodes
 		else if (this->m_level != node1->m_level)
 		{ } // different nodes because not on the same level
 		else {
@@ -1488,9 +1496,13 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 
 	node1 = this->GetNeighbourFront(ocTree);
 	if (node1 != NULL) {
-		node2 = node1->GetNeighbourRear(ocTree);
+		node2 = node1->GetNeighbourBack(ocTree);
 		if ((node2 != NULL) && (node2 == this))
-		{ } // same nodes
+		{
+			if (this->m_vCenter.y>=node1->m_vCenter.y)
+				i4_warning("*** Warning! Geometry inconsistency: Node is in front of it's front neighbour");
+
+		} // same nodes
 		else if (this->m_level != node1->m_level)
 		{ } // different nodes because not on the same level
 		else {
@@ -1502,11 +1514,15 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 		// No node on the front side.
 	}
 
-	node1 = this->GetNeighbourRear(ocTree);
+	node1 = this->GetNeighbourBack(ocTree);
 	if (node1 != NULL) {
 		node2 = node1->GetNeighbourFront(ocTree);
 		if ((node2 != NULL) && (node2 == this))
-		{ } // same nodes
+		{
+			if (this->m_vCenter.y<=node1->m_vCenter.y)
+				i4_warning("*** Warning! Geometry inconsistency: Node is in back of it's back neighbour");
+
+		} // same nodes
 		else if (this->m_level != node1->m_level)
 		{ } // different nodes because not on the same level
 		else {
@@ -1522,7 +1538,10 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 	if (node1 != NULL) {
 		node2 = node1->GetNeighbourTop(ocTree);
 		if ((node2 != NULL) && (node2 == this))
-		{ } // same nodes
+		{
+			if (this->m_vCenter.z<=node1->m_vCenter.z)
+				i4_warning("*** Warning! Geometry inconsistency: Node is in bellow of it's bottom neighbour");
+} // same nodes
 		else if (this->m_level != node1->m_level)
 		{ } // different nodes because not on the same level
 		else {
@@ -1538,7 +1557,10 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 	if (node1 != NULL) {
 		node2 = node1->GetNeighbourBottom(ocTree);
 		if ((node2 != NULL) && (node2 == this))
-		{ } // same nodes
+		{
+			if (this->m_vCenter.z>=node1->m_vCenter.z)
+				i4_warning("*** Warning! Geometry inconsistency: Node is in above of it's top neighbour");
+} // same nodes
 		else if (this->m_level != node1->m_level)
 		{ } // different nodes because not on the same level
 		else {
@@ -1555,7 +1577,7 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 	// getNeighbourCells is tested for all possible neighbours.
 	// The testing method is the same as above.
 
-	i4_array<g1_octree*> neighbours=this->getNeighbourCells(ocTree);
+	i4_array<g1_octree*> neighbours(this->GetNeighbourCells(ocTree));
 
 	//i = 0;
 	//for (j = 0; j < 26; j++) {
@@ -1589,7 +1611,7 @@ bool g1_octree::GetNeighbourCellsSameLevelTest(g1_octree *ocTree)
 	// Tested routines: getNeighbourLeftSameLevel(ocTree)
 	//					getNeighbourRightSameLevel(ocTree)
 	//					getNeighbourFrontSameLevel(ocTree)
-	//					getNeighbourRearSameLevel(ocTree)
+	//					getNeighbourBackSameLevel(ocTree)
 	//					getNeighbourBottomSameLevel(ocTree)
 	//					getNeighbourTopSameLevel(ocTree)
 	// 
@@ -1630,7 +1652,7 @@ bool g1_octree::GetNeighbourCellsSameLevelTest(g1_octree *ocTree)
 
 	node1 = this->GetNeighbourFrontSameLevel(ocTree);
 	if (node1 != NULL) {
-		node2 = node1->GetNeighbourRearSameLevel(ocTree);
+		node2 = node1->GetNeighbourBackSameLevel(ocTree);
 		if ((node2 != NULL) && (node2 == this))
 		{ } // same nodes
 		else {
@@ -1642,7 +1664,7 @@ bool g1_octree::GetNeighbourCellsSameLevelTest(g1_octree *ocTree)
 		// No node on the front side.
 	}
 
-	node1 = this->GetNeighbourRearSameLevel(ocTree);
+	node1 = this->GetNeighbourBackSameLevel(ocTree);
 	if (node1 != NULL) {
 		node2 = node1->GetNeighbourFrontSameLevel(ocTree);
 		if ((node2 != NULL) && (node2 == this))
@@ -2406,7 +2428,7 @@ i4_bool g1_octree::RayShorterThanCubeSize(i4_3d_vector ray) const
 		return ret;
 	}
 
-g1_octree *g1_octree::GetLeafAt(i4_3d_vector where) const
+g1_octree *g1_octree::GetLeafAt(i4_3d_vector &where) const
     {
     if (!this)
         return 0;
@@ -2580,6 +2602,262 @@ void g1_octree::GetBorderSide(int side,
 		break;
 	}
 	
+}
+
+bool g1_octree::CheckCollision(const i4_3d_vector &start, const i4_3d_vector &ray, int &side_in, int &side_out)
+{
+	//The following code is mainly similar to the ray-to-object intersection test
+	//in g1_quad_object_class::intersect()
+	float num, d, den=0;
+	float t, new_t=1.0f;
+	i4_3d_vector new_ray,new_point;
+	i4_3d_vector abs_normal;
+	i4_float dx1, dy1, dx2,dy2;
+	int x_sign1, y_sign1, x_sign2, y_sign2;
+	int side1=-1;
+	int side2=-1;
+	i4_3d_vector vert[4];
+	i4_3d_vector normal;
+	i4_bool frontside=true;
+	bool inside;
+	bool hit=false;
+	side_in=-1;
+	side_out=-1;
+	int i,u,v,j;
+	for (i=0; i<6; i++)
+	{
+		GetBorderSide(i,vert[0],vert[1],vert[2],vert[3],normal);
+		frontside=true;
+		den = normal.dot(ray);
+		if (den>=0)
+		{
+			// here, we always test both sides, but we will remember wich one we took. 
+			//Just inverse the normal vector and try again
+			normal=-normal;
+			den=normal.dot(ray);
+			frontside=false;
+			//Cannot handle this case (isn't a problem, because ray and norm are paralell
+			//and cannot intersect)
+			if (den==0) 
+				continue;
+		}
+
+		// find intersection point in polygon's plane
+		d = normal.dot(vert[0]);
+		num = d - normal.dot(start);
+
+		//originally, the line t=num/den was before the following
+		//line and we tested for t<0, but since we now here that
+		//den>=0, t can only become negative if num is positive. 
+		if (num>0) 
+			continue;
+
+		t = num/den;
+		if (t>=new_t)
+			// check if new intersection is closer than previous ones
+			continue;
+
+		// project point into plane
+
+		new_ray=ray;
+		new_ray *= t;
+		new_point=start;
+		new_point += new_ray;
+
+		// determine orthogonal plane for 2D point in polygon test
+
+		abs_normal.set((float)fabs(normal.x), (float)fabs(normal.y), (float)fabs(normal.z));
+
+		if (abs_normal.x>abs_normal.y && abs_normal.x>abs_normal.z)
+		{
+			// test in yz plane
+			u = 1; v = 2;
+		}
+		else if (abs_normal.y>abs_normal.x && abs_normal.y>abs_normal.z)
+		{
+			// test in zx plane
+			u = 2; v = 0;
+		}
+		else
+		{
+			// test in xy plane
+			u = 0; v = 1;
+		}
+
+		// count first axis crossings of polygon to determine whether point in polygon
+
+		dx2 = vert[0][u] - new_point[u];
+		dy2 = vert[0][v] - new_point[v];
+
+
+		x_sign2 = dx2>0;
+		y_sign2 = dy2>0;
+
+		inside=0;
+
+		for (j=4-1; j>=0; j--)
+		{
+			dx1 = vert[j][u] - new_point[u];
+			dy1 = vert[j][v] - new_point[v];
+			x_sign1 = dx1>0;
+			y_sign1 = dy1>0;
+			if (y_sign1 != y_sign2)
+			{
+				// crosses x-axis
+				if (x_sign1 != x_sign2)
+				{
+					// check if crossing point is positive ((slope2>slope1) ^ (y2>y1))
+					if ((dx2*dy1 > dx1*dy2) ^ (dy2>dy1))
+						inside = !inside;
+				}
+				else if (x_sign1)
+					// crosses +x-axis
+					inside = !inside;
+				y_sign2 = y_sign1;
+			}
+			x_sign2 = x_sign1;
+			dx2 = dx1;
+			dy2 = dy1;
+		}
+
+		if (inside)
+		{
+			// update current intersection
+			new_t = t;
+			hit = i4_T;
+			if (frontside)
+				side1=i; //this side was crossed from the outside to the inside
+			else
+				side2=i; //this side was crossed from inside out
+		}
+	}
+	side_in=side1;
+	side_out=side2;
+	return hit;
+}
+
+g1_octree* g1_octree::GetIntersectedLeaf(const i4_3d_vector &start, const i4_3d_vector &ray)
+{
+	g1_octree *ret=NULL;
+	int sidein=-1,sideout=-1;
+	if(CheckCollision(start,ray,sidein,sideout))
+	{
+		if (isLeaf())
+			return this;
+		for(int i=0;i<8;i++)
+		{
+			ret=m_pOctreeNodes[i]->GetIntersectedLeaf(start,ray);
+			if (ret)
+				return ret;
+		}
+	}
+	return 0;
+}
+
+i4_bool g1_octree::ListContainsNode(i4_array<g1_octree*> &list, g1_octree* node)
+{
+	// This only looks like an stl-type iterator. It is an ordinary int
+	i4_array<g1_octree*>::iterator it=list.begin();
+	for (;it!=list.end();it++)
+	{
+		if (list[it]==node)
+			return true;
+	}
+	return false;
+}
+
+i4_array<g1_octree*> g1_octree::GetIntersectedNodes(const i4_3d_vector &start, const i4_3d_vector &ray)
+{
+	i4_array<g1_octree*> nodes(30,30);
+	i4_stack<g1_octree*> stack(30);
+	g1_octree *node1=NULL;
+	g1_octree *node1a=NULL, *node2a=NULL;
+	g1_octree *newnode=NULL;
+	int frontside=-1;
+	int backside=-1;
+	node1=GetIntersectedLeaf(start,ray);
+	if (node1==NULL)
+		return nodes;
+	nodes.add(node1);
+	stack.push(node1);
+	while(!stack.empty())
+	{
+		node1=stack.pop();
+		node1->CheckCollision(start,ray,frontside,backside);
+		node1a=node1->GetNeighbour(frontside,this);
+		if (node1a)
+		{
+			if (node1a->isLeaf())
+			{
+				if (!ListContainsNode(nodes,node1a))
+				{
+					//if the list already contains this node, it was once added to the stack
+					//and therefore it was inspected (or is just being inspected)
+					I4_ASSERT(node1a!=NULL,"INTERNAL: Unexspected null node");
+					nodes.add(node1a);
+					stack.push(node1a);
+				}
+			}
+			else
+			{
+				//Is not a leaf, find a leaf and add it to the stack of to-inspect objects
+				newnode=node1a->GetIntersectedLeaf(start,ray);
+				if (!ListContainsNode(nodes,newnode))
+				{
+					I4_ASSERT(newnode!=NULL,"INTERNAL: Unexspected null node");
+
+					stack.push(newnode);
+				}
+			}
+		}
+		node2a=node1->GetNeighbour(backside,this);
+		if (node2a)
+		{
+			if (node2a->isLeaf())
+			{
+				if (!ListContainsNode(nodes,node2a))
+				{
+					I4_ASSERT(node2a!=NULL,"INTERNAL: Unexspected null node");
+					nodes.add(node2a);
+					stack.push(node2a);
+				}
+			}
+			else
+			{
+				newnode=node2a->GetIntersectedLeaf(start,ray);
+				if (!ListContainsNode(nodes,newnode))
+				{
+					I4_ASSERT(newnode!=NULL,"INTERNAL: Unexspected null node");
+					stack.push(newnode);
+				}
+			}
+		}
+	}
+	return nodes;
+}
+
+g1_octree* g1_octree::GetNeighbour(int side, g1_octree* root)
+{
+	switch (side)
+	{
+	case CS_NONE:
+		return NULL;
+	case CS_LEFT:
+		return GetNeighbourLeft(root);
+	case CS_RIGHT:
+		return GetNeighbourRight(root);
+	case CS_TOP:
+		return GetNeighbourTop(root);
+	case CS_FRONT:
+		return GetNeighbourFront(root);
+	case CS_BACK:
+		return GetNeighbourBack(root);
+	case CS_BOTTOM:
+		return GetNeighbourBottom(root);
+	default:
+		return NULL;
+
+	}
 }
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *

@@ -33,7 +33,7 @@ template <class T, int i> void i4_static_stack< T, i >::push( const T item )
     if( cItems > 0 )
      StackBuffer[--cItems] = item;
     else
-     throw "Stack-Überlauf.";
+		i4_error("SEVERE: Stack structure overflow\n");
     return;
 }
 
@@ -43,7 +43,7 @@ template <class T, int i> T i4_static_stack< T, i >::pop( void )
      return StackBuffer[cItems++];
     else
 
-     throw "Stack-Unterlauf.";
+     i4_error("SEVERE: Stack structure underflow\n");
 }
 
 template <typename T>

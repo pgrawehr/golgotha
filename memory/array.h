@@ -108,7 +108,27 @@ public:
 			entry=(T*)I4_MALLOC(sizeof(T)*entries,"copied grow array");
 			memcpy(entry,tocopy.entry,sizeof(T)*used);//copy all the used elements (rest will be left uninitalized)
 			I4_ASSERT(entry, "SEVERE: i4_array::copy.ctor(): Out of memory");
+			used=tocopy.used;
 		}
+	}
+
+	i4_array& operator=(const i4_array& assign)
+	{
+		if (entry)
+			i4_free(entry);
+		entry=0;
+		used=0;
+		entries=0;
+		grow=assign.grow;
+		if (assign.used>0)
+		{
+			entries=assign.entries;
+			entry=(T*)I4_MALLOC(sizeof(T)*entries,"re-assigned grow array");
+			memcpy(entry,assign.entry,sizeof(T)*used);//copy all the used elements (rest will be left uninitalized)
+			I4_ASSERT(entry, "SEVERE: i4_array::operator=(): Out of memory");
+			used=assign.used;
+		}
+		return *this;
 	}
 
 	void uninit()     // frees memory (use clear just to reset)

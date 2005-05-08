@@ -75,12 +75,13 @@ enum eOctreeNodes
 
 enum eCubeSides
 {
-	CS_LEFT,
-	CS_RIGHT,
-	CS_TOP,
-	CS_BOTTOM,
-	CS_FRONT,
-	CS_BACK
+	CS_NONE = -1,
+	CS_LEFT = 0,
+	CS_RIGHT =1,
+	CS_TOP = 2 ,
+	CS_BOTTOM = 3,
+	CS_FRONT =4 ,
+	CS_BACK  =5
 };
 
 
@@ -185,7 +186,7 @@ class g1_octree
 
 	/// The deserialization constructor. 
 	/// This constructor loads the octree from the stream fp.
-	/// The stream position must already be at set properly.
+	/// The stream position must already be set properly.
 	/// \param pWorld The (already loaded) object we are loading the
 	/// octree for.
 	/// \param fp The file stream to be loaded from. 
@@ -339,11 +340,22 @@ class g1_octree
 		i4_3d_vector &v4,
 		i4_3d_vector &normal);
 
+	//! Returns true if the given ray intersects with this node of the tree.
+	//! This function also returns the sides which are intercepted (at most two). 
+	//! Either out-parameter might return -1 if the start or the end of the ray lies inside the cube.
+	bool CheckCollision(const i4_3d_vector &start, const i4_3d_vector &ray, int &side_in, int &side_out);
+
+	//! Returns a leaf node of the tree intersected by start and ray.
+	//! Yup, you've read right: This returns just ANY node that is intersected.
+	g1_octree* GetIntersectedLeaf(const i4_3d_vector &start, const i4_3d_vector &ray);
+
+	i4_array<g1_octree*> GetIntersectedNodes(const i4_3d_vector &start, const i4_3d_vector &ray);
+
 
     /// Returns the Leaf node the point is in.
     /// The vector must already have been transformed to local coordinates.
     /// May return 0 if point is outside object. 
-    g1_octree *GetLeafAt(i4_3d_vector where) const;
+    g1_octree *GetLeafAt(i4_3d_vector &where) const;
 
 
 	/**
@@ -416,7 +428,7 @@ class g1_octree
 	*				specifies the <code>OcTree</code> the node belongs to.
 	* @return returns a pointer to the rear neighbour or NULL.
 	*/	
-	g1_octree *GetNeighbourRear(g1_octree *root);
+	g1_octree *GetNeighbourBack(g1_octree *root);
 
 	/**
 	* This method returns a pointer to the rear neighbour. If no neighbour is found,
@@ -428,7 +440,7 @@ class g1_octree
 	*				specifies the <code>OcTree</code> the node belongs to.
 	* @return returns a pointer to the rear neighbour with same level or NULL.
 	*/
-	g1_octree *GetNeighbourRearSameLevel(g1_octree *root);
+	g1_octree *GetNeighbourBackSameLevel(g1_octree *root);
 
 	/**
 	* This method returns a pointer of the bottom neighbour. If no neighbour is found,
@@ -472,6 +484,7 @@ class g1_octree
 	*/
 	g1_octree *GetNeighbourTopSameLevel(g1_octree *root);
 
+	g1_octree *GetNeighbour(int Side, g1_octree* root);
 	/**
 	* This method returns all 26 neighbours of the current OcTree node to.
 	* Nodes are sorted lexicographically from left to right, front to rear
@@ -481,7 +494,7 @@ class g1_octree
 	*				specifies the <code>OcTree</code> the node belongs to.
 	* @return returns a pointer to an array of neighbours or NULL.
 	*/
-	i4_array<g1_octree*> getNeighbourCells(g1_octree *root);
+	i4_array<g1_octree*> GetNeighbourCells(g1_octree *root);
 
 	/**
 	* This method returns all 26 neighbours of same level the current OcTree node to.
@@ -495,7 +508,7 @@ class g1_octree
 	*				specifies the <code>OcTree</code> the node belongs to.
 	* @return returns a pointer to an array of neighbours or NULL.
 	*/
-	i4_array<g1_octree*> getNeighbourCellsSameLevel(g1_octree *root);
+	i4_array<g1_octree*> GetNeighbourCellsSameLevel(g1_octree *root);
 
 	/**
 	* Testing methods for the neighbour cells methods.
@@ -634,6 +647,7 @@ class g1_octree
 protected:
     i4_bool PointInCube(i4_3d_vector p) const;
 	i4_bool RayShorterThanCubeSize(i4_3d_vector ray) const;
+	static i4_bool ListContainsNode(i4_array<g1_octree*> &list, g1_octree* node);
 private:
 
 	/// This tells us if we have divided this node into more sub nodes

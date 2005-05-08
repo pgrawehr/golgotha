@@ -162,29 +162,34 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
     i4_3d_vector new_ray,new_point,abs_normal;
     int j, u,v,i;
     g1_octree *curnode;
-    g1_octree *nodes[3];
+    i4_array<g1_octree*> nodes(0,30);
     if (octree)
         {
-        new_point=point;
-        new_point+=ray;
+        //new_point=point;
+        //new_point+=ray;
         //although not perfectly true, we assume that
         //the ray doesn't pass any other nodes than the source
         //and the target.
 		//This doesn't work to find hits with the mouse cursor ray, since the ray is very long there. 
 		//We have to find the list of leaf nodes that are intersected by the ray. 
 		//The list should be sorted in Z-Order. 
-        nodes[2]=0;
-        nodes[0]=octree->GetLeafAt(point);
-        nodes[1]=octree->GetLeafAt(new_point);
-        if (nodes[0]==nodes[1])
-            nodes[1]=NULL;
+        //nodes[2]=0;
+        //nodes[0]=octree->GetLeafAt(point);
+        //nodes[1]=octree->GetLeafAt(new_point);
+        //if (nodes[0]==nodes[1])
+        //    nodes[1]=NULL;
+		nodes=octree->GetIntersectedNodes(point,ray);
+		nodes.add(NULL); // The last entry of the array should be NULL. 
         int the_cur_node=0;
         curnode=nodes[the_cur_node];
         i=0;
+		i4_3d_vector qnorm;
         while (curnode)
             {
+			if (i>=curnode->GetNumQuads())
+				goto next_loop;
             q=curnode->GetQuad(i);
-			i4_3d_vector qnorm=q->normal;
+			qnorm=q->normal;
             den = qnorm.dot(ray);
 			if (den>=0)
 			{
@@ -298,7 +303,7 @@ next_loop:
             if (i>=curnode->GetNumQuads())
                 {
                 i=0;
-                //restart with the quads from the other node.
+                //restart with the quads from the next node.
                 ++the_cur_node;
                 curnode=nodes[the_cur_node];
                 }
