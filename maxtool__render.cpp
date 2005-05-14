@@ -122,6 +122,8 @@ void m1_utility_window_class::recenter()
   theta=0;
   phi=0;
   dist=40;
+  pan_x=pan_y=pan_z=0;
+  recalc_view();
   request_redraw(i4_F);
 }
 
@@ -628,7 +630,7 @@ void m1_utility_window_class::draw_3d_point(i4_3d_point_class p, i4_color color,
 }
 //}}}
 
-void m1_utility_window_class::draw_plane(const i4_3d_vector &u, const i4_3d_vector &v, w8 color, i4_draw_context_class &context)
+void m1_utility_window_class::draw_plane(const i4_3d_vector &u, const i4_3d_vector &v, w32 color, i4_draw_context_class &context)
 //{{{
 {
   if (color>0x10)
@@ -726,7 +728,7 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
 
   //if any of these flags is set, we draw it the ordinary way.
   if (!m1_info.get_flags(M1_WIREFRAME|M1_SHOW_ORPHANS|
-	  M1_SHOW_FACE_NAMES|M1_SHOW_FACE_NUMBERS|M1_SHOW_VERT_NUMBERS) &&
+	  M1_SHOW_FACE_NAMES|M1_SHOW_FACE_NUMBERS/*|M1_SHOW_VERT_NUMBERS*/) &&
 	  obj->octree!=0)
 	  {
 	  draw_as_octree=i4_T;
@@ -1106,7 +1108,7 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
       if (used)
       {
         char buf[100];
-        sprintf(buf,"%d", v);
+        sprintf(buf,"%d (%.2f/%.2f/%.2f)", v, src_vert[v].v.x,src_vert[v].v.y,src_vert[v].v.z);
         draw_3d_text(src_vert[v].v, buf, 0x00ffff, context);
       }
 

@@ -581,14 +581,10 @@ i4_bool i4_dx9_display_class::change_mode(w16 newwidth, w16 newheight,
 	//This might happen if another directx app has just popped up. 
 	//this is a rare case, so we don't investigate this further
 	//(Golg just crashed at me once here)
-	if (dx9_common.primary_surface==NULL)
-		return i4_F; 
-	dx9_common.get_surface_description(dx9_common.primary_surface, ddsd); 
+	//if (dx9_common.primary_surface==NULL)
+	//	return i4_F; 
+	dx9_common.get_surface_description(dx9_common.back_surface, ddsd); 
 	fake_screen=new i4_dx9_image_class(newwidth, newheight);
-	//fake_screen->surface->PageLock(0);
-    
-	
-	
 	
 	i4_pixel_format fmt;
 	bitmask_2_format(ddsd.Format,fmt);
@@ -608,7 +604,7 @@ i4_bool i4_dx9_display_class::change_mode(w16 newwidth, w16 newheight,
 	context->both_dirty = new i4_rect_list_class;
 	context->single_dirty=new i4_rect_list_class;
 	
-	cur_mode.xres=newwidth;//must be shure that these settings are correct as code depends on them
+	cur_mode.xres=newwidth;//must be sure that these settings are correct as code depends on them
 	cur_mode.yres=newheight;
 	cur_mode.bits_per_pixel=(w8)newbitdepth;//Actually, this shan't change here.
     screen_is_gdi=i4_T;

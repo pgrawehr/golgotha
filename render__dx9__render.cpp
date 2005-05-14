@@ -737,6 +737,8 @@ void r1_dx9_class::use_texture(w32 index,r1_texture_handle material_ref,sw32 des
 
   if (!texture_mode)
   {
+	  states_have_changed = i4_T;
+	  flush_vert_buffer();
 	  d3d_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
 	  //d3d_device->SetTextureStageState( 0, D3DTSS_COLOROP, D3DTOP_DISABLE);
       d3d_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );

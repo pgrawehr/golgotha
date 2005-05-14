@@ -760,7 +760,7 @@ void CD3DEnumeration::BuildPresentIntervalList( D3DDeviceInfo* pDeviceInfo,
 
 dx9_common_class       dx9_common;
 LPDIRECT3D9            dx9_common_class::pD3D9;
-IDirect3DSurface9     *dx9_common_class::primary_surface, *dx9_common_class::back_surface,
+IDirect3DSurface9     *dx9_common_class::back_surface,
                       *dx9_common_class::front_surface;
 IDirect3DDevice9      *dx9_common_class::device;
 D3DPRESENT_PARAMETERS dx9_common_class::present;
@@ -955,16 +955,15 @@ void dx9_common_class::cleanup()
 
   if (front_surface)
   {
-	if (front_surface==primary_surface) primary_surface=0;
     front_surface->Release();
     front_surface=0;
   }
 
-  if (primary_surface)
+  /*if (primary_surface)
   {
     primary_surface->Release();
     primary_surface=0;
-  }  
+  }  */
 
   //DDSCAPS tcaps;
   //tcaps.dwCaps = DDSCAPS_TEXTURE;  
@@ -997,7 +996,7 @@ dx9_common_class::dx9_common_class()
 {
   device=0;
   pD3D9=0;
-  primary_surface=back_surface=front_surface=0;  
+  back_surface=front_surface=0;  
   //lpddclipper=0;
 
   i4_fmt_565.pixel_depth = I4_16BIT;  

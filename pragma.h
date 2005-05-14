@@ -53,6 +53,9 @@
 #pragma warning(3:4705)     // statement has no effect (example: a+1;)
 #pragma warning(error: 4035)// function does not return a value.
 #pragma warning(3:4127)     // expression is constant
+#pragma warning(error: 4034) // sizeof returns 0
+#pragma warning(3:4130)     // Comparison of string using ==
+#pragma warning(error: 4131) //Old style function declaration
 //#pragma warning(3:4189)     // initialized but not used local var
 //
 //                           (clip here)

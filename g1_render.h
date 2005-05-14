@@ -159,6 +159,10 @@ public:
                       i4_transform_class *t,
                       i4_bool draw_in_front_of_everything=i4_F);
 
+  void render_3d_point(const i4_3d_point_class &v,
+	  i4_color color,
+	  i4_transform_class *t);
+
   void draw_outline(g1_screen_box *outline, g1_object_class *for_who);
 
   void post_draw_quads();

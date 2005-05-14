@@ -892,16 +892,17 @@ void g1_render_class::render_3d_line(const i4_3d_point_class &p1,
   project_point(p1, v[0], t);
   project_point(p2, v[1], t);
 
-  if (draw_in_front_of_everything)
-  {
-    v[0].v.z=r1_near_clip_z;//g1_near_z_range();
-    v[1].v.z=r1_near_clip_z;//g1_near_z_range();
-    
-    float ooz = r1_ooz(r1_near_clip_z);//r1_ooz(g1_near_z_range());
-    
-    v[0].w = r1_near_clip_z;
-    v[1].w = r1_near_clip_z;
-  }
+  // Ignored for now, since it doesn't work (any line using this flag is always clipped away)
+  //if (draw_in_front_of_everything)
+  //{
+  //  v[0].v.z=r1_near_clip_z;//g1_near_z_range();
+  //  v[1].v.z=r1_near_clip_z;//g1_near_z_range();
+  //  
+  //  float ooz = r1_ooz(r1_near_clip_z);//r1_ooz(g1_near_z_range());
+  //  
+  //  v[0].w = r1_near_clip_z;
+  //  v[1].w = r1_near_clip_z;
+  //}
   
   v[0].r=g1_table_0_255_to_0_1[(color1&0xff0000)>>16];
   v[0].g=g1_table_0_255_to_0_1[(color1&0xff00)>>8];
@@ -926,6 +927,33 @@ void g1_render_class::render_3d_line(const i4_3d_point_class &p1,
   r_api->set_alpha_mode(oldalpha);
   //r_api->use_default_texture();
   //r_api->set_constant_color(0xffffff);
+}
+
+void g1_render_class::render_3d_point(const i4_3d_point_class &p1, i4_color color, i4_transform_class *t)
+{
+	r1_vert v;
+
+	project_point(p1, v, t);
+
+	int ix = int(v.px),iy = int(v.py);
+	if (ix>0 && iy>0 && ix<center_x*2-1 && iy<center_y*2-1)
+	{
+
+		r1_shading_type oldshade=r_api->get_shade_mode();
+		r1_alpha_type oldalpha=r_api->get_alpha_mode();
+
+		r_api->set_shading_mode(R1_COLORED_SHADING);
+		r_api->set_alpha_mode(R1_ALPHA_DISABLED);
+		r_api->disable_texture();
+
+		r_api->r1_render_api_class::clear_area(ix-1,iy-1,ix+1,iy+1,color,
+			v.v.z);
+		//restore old modes. Since lines are realy seldom used primitives,
+		//this is no performance problem compared to what might happen if
+		//the caller unexspectedly finds the render device in a new state. 
+		r_api->set_shading_mode(oldshade);
+		r_api->set_alpha_mode(oldalpha);
+	}
 }
 
 void g1_draw_vert_line(float x, float y1, float y2, r1_vert *v)
@@ -1547,8 +1575,8 @@ w8 g1_render_class::point_classify(const i4_3d_point_class &p,
 		}
 	float ooz=r1_ooz(temp.z);
 	float px,py;
-	px = temp.x * ooz * center_x + center_x;
-    py = temp.y * ooz * center_y + center_y;
+	px = temp.x * ooz *center_x+ center_x;
+    py = temp.y * ooz *center_y+ center_y;
 	if (px<0)
 		code|=2;
 	if (px>2*center_x)
@@ -1557,7 +1585,6 @@ w8 g1_render_class::point_classify(const i4_3d_point_class &p,
 		code|=8;
 	if (py>2*center_y)
 		code|=4;
-	//w8 code=r1_calc_outcode(temp);
 	//if code is non-null it is outside of at least one plane of the frustrum
 	return code;
 	}

@@ -208,9 +208,9 @@ void g1_miracle_class::new_arc_points(i4_3d_vector src, i4_3d_vector dest, arc_p
     //ARC #1
     i4_float random_scale = (1 - (i/(NUM_ARC_POINTS-1)))*3;
     
-    rx = (g1_float_rand(6) * 0.4 - 0.2) * random_scale;
-    ry = (g1_float_rand(4) * 0.4 - 0.2) * random_scale;
-    rz = (g1_float_rand(2) * 0.4 - 0.2) * random_scale;
+    rx = (g1_float_rand(6) * 0.4f - 0.2f) * random_scale;
+    ry = (g1_float_rand(4) * 0.4f - 0.2f) * random_scale;
+    rz = (g1_float_rand(2) * 0.4f - 0.2f) * random_scale;
     
     px = src.x + vec1.x*i/(NUM_ARC_POINTS-1) + rx;
     py = src.y + vec1.y*i/(NUM_ARC_POINTS-1) + ry;

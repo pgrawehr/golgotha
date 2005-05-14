@@ -1294,65 +1294,84 @@ void g1_octree::GetSceneDimensions(g1_quad_object_class *pWorld)
 	numberOfVerts=pWorld->num_vertex;
 	//we assume that objects wich have a quadtree don't have animations
 	g1_vert_class *verts=pWorld->get_verts(0,0);
+	i4_float minx,maxx,miny,maxy,minz,maxz;
+	minz=miny=minx=10E30f;
+	maxz=maxy=maxx=-10E30f;
 	for (int i=0; i<pWorld->num_vertex; i++)
-		{
-		m_vCenter=m_vCenter+verts[i].v;
-		}
-
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-
-
-	// Divide the total by the number of vertices to get the center point.
-	// We could have overloaded the / symbol but I chose not to because we rarely use it.
-	m_vCenter/=(float)numberOfVerts;
-
-	// Now that we have the center point, we want to find the farthest distance from
-	// our center point.  That will tell us how big the width of the first node is.
-	// Once we get the farthest height, width and depth, we then check them against each
-	// other.  Which ever one is higher, we then use that value for the cube width.
-
-	float currentWidth = 0, currentHeight = 0, currentDepth = 0;
-
-	// Initialize some temporary variables to hold the max dimensions found
-	float maxWidth = 0, maxHeight = 0, maxDepth = 0;
-	
-
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-
-	// This code still does the same thing as in the previous octree tutorials,
-	// except we need to go through each object in the scene to find the max dimensions.
-
-	
-	// Go through all of the current objects vertices
-	for(int j = 0; j < pWorld->num_vertex; j++)
 	{
-		// Get the distance in width, height and depth this vertex is from the center.
-		currentWidth  = i4_fabs(verts[j].v.x - m_vCenter.x);	
-		currentHeight = i4_fabs(verts[j].v.y - m_vCenter.y);		
-		currentDepth  = i4_fabs(verts[j].v.z - m_vCenter.z);
-
-		// Check if the current width value is greater than the max width stored.
-		if(currentWidth  > maxWidth)	maxWidth  = currentWidth;
-
-		// Check if the current height value is greater than the max height stored.
-		if(currentHeight > maxHeight)	maxHeight = currentHeight;
-
-		// Check if the current depth value is greater than the max depth stored.
-		if(currentDepth > maxDepth)		maxDepth  = currentDepth;
+		//m_vCenter=m_vCenter+verts[i].v;
+		i4_3d_vector &v=verts[i].v;
+		if (v.x<minx)
+			minx=v.x;
+		if (v.y<miny)
+			miny=v.y;
+		if (v.z<minz)
+			minz=v.z;
+		if (v.x>maxx)
+			maxx=v.x;
+		if (v.y>maxy)
+			maxy=v.y;
+		if (v.z>maxz)
+			maxz=v.z;
 	}
 
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
+	// Calculate node with and center of node. (first is the difference between max and min,
+	// second is the average)
+	m_xWidth=maxx-minx;
+	m_yWidth=maxy-miny;
+	m_zWidth=maxz-minz;
+	m_vCenter.x=(maxx+minx)/2;
+	m_vCenter.y=(maxy+miny)/2;
+	m_vCenter.z=(maxz+minz)/2;
 
-	// Set the member variable dimensions to the max ones found.
-	// We multiply the max dimensions by 2 because this will give us the
-	// full width, height and depth.  Otherwise, we just have half the size
-	// because we are calculating from the center of the scene.
 
-	maxWidth *= 2;		maxHeight *= 2;		maxDepth *= 2;
-
-	m_xWidth=maxWidth;
-	m_yWidth=maxHeight;
-	m_zWidth=maxDepth;
+//	// Now that we have the center point, we want to find the farthest distance from
+//	// our center point.  That will tell us how big the width of the first node is.
+//	// Once we get the farthest height, width and depth, we then check them against each
+//	// other.  Which ever one is higher, we then use that value for the cube width.
+//
+//	float currentWidth = 0, currentHeight = 0, currentDepth = 0;
+//
+//	// Initialize some temporary variables to hold the max dimensions found
+//	float maxWidth = 0, maxHeight = 0, maxDepth = 0;
+//	
+//
+///////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
+//
+//	// This code still does the same thing as in the previous octree tutorials,
+//	// except we need to go through each object in the scene to find the max dimensions.
+//
+//	
+//	// Go through all of the current objects vertices
+//	for(int j = 0; j < pWorld->num_vertex; j++)
+//	{
+//		// Get the distance in width, height and depth this vertex is from the center.
+//		currentWidth  = i4_fabs(verts[j].v.x - m_vCenter.x);	
+//		currentHeight = i4_fabs(verts[j].v.y - m_vCenter.y);		
+//		currentDepth  = i4_fabs(verts[j].v.z - m_vCenter.z);
+//
+//		// Check if the current width value is greater than the max width stored.
+//		if(currentWidth  > maxWidth)	maxWidth  = currentWidth;
+//
+//		// Check if the current height value is greater than the max height stored.
+//		if(currentHeight > maxHeight)	maxHeight = currentHeight;
+//
+//		// Check if the current depth value is greater than the max depth stored.
+//		if(currentDepth > maxDepth)		maxDepth  = currentDepth;
+//	}
+//
+///////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
+//
+//	// Set the member variable dimensions to the max ones found.
+//	// We multiply the max dimensions by 2 because this will give us the
+//	// full width, height and depth.  Otherwise, we just have half the size
+//	// because we are calculating from the center of the scene.
+//
+//	maxWidth *= 2;		maxHeight *= 2;		maxDepth *= 2;
+//
+//	m_xWidth=maxWidth;
+//	m_yWidth=maxHeight;
+//	m_zWidth=maxDepth;
 }
 
 
@@ -1384,42 +1403,42 @@ i4_3d_vector g1_octree::GetNewNodeCenter(i4_3d_vector vCenter,
 	{
 		case TOP_LEFT_FRONT:
 			// Calculate the center of this new node
-			vNodeCenter = i4_3d_vector(vCtr.x - xwidth/4, vCtr.y + ywidth/4, vCtr.z + zwidth/4);
+			vNodeCenter = i4_3d_vector(vCtr.x - xwidth/4, vCtr.y - ywidth/4, vCtr.z + zwidth/4);
 			break;
 
 		case TOP_LEFT_BACK:
 			// Calculate the center of this new node
-			vNodeCenter = i4_3d_vector(vCtr.x - xwidth/4, vCtr.y + ywidth/4, vCtr.z - zwidth/4);
+			vNodeCenter = i4_3d_vector(vCtr.x - xwidth/4, vCtr.y + ywidth/4, vCtr.z + zwidth/4);
 			break;
 
 		case TOP_RIGHT_BACK:
 			// Calculate the center of this new node
-			vNodeCenter = i4_3d_vector(vCtr.x + xwidth/4, vCtr.y + ywidth/4, vCtr.z - zwidth/4);
+			vNodeCenter = i4_3d_vector(vCtr.x + xwidth/4, vCtr.y + ywidth/4, vCtr.z + zwidth/4);
 			break;
 
 		case TOP_RIGHT_FRONT:
 			// Calculate the center of this new node
-			vNodeCenter = i4_3d_vector(vCtr.x + xwidth/4, vCtr.y + ywidth/4, vCtr.z + zwidth/4);
+			vNodeCenter = i4_3d_vector(vCtr.x + xwidth/4, vCtr.y - ywidth/4, vCtr.z + zwidth/4);
 			break;
 
 		case BOTTOM_LEFT_FRONT:
 			// Calculate the center of this new node
-			vNodeCenter = i4_3d_vector(vCtr.x - xwidth/4, vCtr.y - ywidth/4, vCtr.z + zwidth/4);
+			vNodeCenter = i4_3d_vector(vCtr.x - xwidth/4, vCtr.y - ywidth/4, vCtr.z - zwidth/4);
 			break;
 
 		case BOTTOM_LEFT_BACK:
 			// Calculate the center of this new node
-			vNodeCenter = i4_3d_vector(vCtr.x - xwidth/4, vCtr.y - ywidth/4, vCtr.z - zwidth/4);
+			vNodeCenter = i4_3d_vector(vCtr.x - xwidth/4, vCtr.y + ywidth/4, vCtr.z - zwidth/4);
 			break;
 
 		case BOTTOM_RIGHT_BACK:
 			// Calculate the center of this new node
-			vNodeCenter = i4_3d_vector(vCtr.x + xwidth/4, vCtr.y - ywidth/4, vCtr.z - zwidth/4);
+			vNodeCenter = i4_3d_vector(vCtr.x + xwidth/4, vCtr.y + ywidth/4, vCtr.z - zwidth/4);
 			break;
 
 		case BOTTOM_RIGHT_FRONT:
 			// Calculate the center of this new node
-			vNodeCenter = i4_3d_vector(vCtr.x + xwidth/4, vCtr.y - ywidth/4, vCtr.z + zwidth/4);
+			vNodeCenter = i4_3d_vector(vCtr.x + xwidth/4, vCtr.y - ywidth/4, vCtr.z - zwidth/4);
 			break;
 	}
 
@@ -1499,7 +1518,7 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 		node2 = node1->GetNeighbourBack(ocTree);
 		if ((node2 != NULL) && (node2 == this))
 		{
-			if (this->m_vCenter.y>=node1->m_vCenter.y)
+			if (this->m_vCenter.y<=node1->m_vCenter.y)
 				i4_warning("*** Warning! Geometry inconsistency: Node is in front of it's front neighbour");
 
 		} // same nodes
@@ -1519,7 +1538,7 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree* ocTree)
 		node2 = node1->GetNeighbourFront(ocTree);
 		if ((node2 != NULL) && (node2 == this))
 		{
-			if (this->m_vCenter.y<=node1->m_vCenter.y)
+			if (this->m_vCenter.y>=node1->m_vCenter.y)
 				i4_warning("*** Warning! Geometry inconsistency: Node is in back of it's back neighbour");
 
 		} // same nodes
@@ -1926,14 +1945,14 @@ i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
 
 		// Create the list of tFaceLists for each child node
 		
-		tFaceList pList1;		// TOP_LEFT_FRONT node list
-		tFaceList pList2;		// TOP_LEFT_BACK node list
-		tFaceList pList3;		// TOP_RIGHT_BACK node list
-		tFaceList pList4;		// TOP_RIGHT_FRONT node list
-		tFaceList pList5;		// BOTTOM_LEFT_FRONT node list
-		tFaceList pList6;		// BOTTOM_LEFT_BACK node list
-		tFaceList pList7;		// BOTTOM_RIGHT_BACK node list
-		tFaceList pList8;		// BOTTOM_RIGHT_FRONT node list
+		tFaceList pList1;		// BOTTOM_LEFT_FRONT node list
+		tFaceList pList2;		// BOTTOM_RIGHT_FRONT node list
+		tFaceList pList3;		// BOTTOM_LEFT_BACK node list
+		tFaceList pList4;		// BOTTOM_RIGHT_BACK node list
+		tFaceList pList5;		// TOP_LEFT_FRONT node list
+		tFaceList pList6;		// TOP_RIGHT_FRONT node list
+		tFaceList pList7;		// TOP_LEFT_BACK node list
+		tFaceList pList8;		// TOP_RIGHT_BACK node list
 	
 		// Create this variable to cut down the thickness of the code below (easier to read)
 		i4_3d_vector vCtr = vCenter;
@@ -1995,39 +2014,39 @@ i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
 					break;
 				vPoint=vert[vertex].v;
 				int isinnodes=0;
-				// Check if the point lies within the TOP LEFT FRONT node
-				if( (vPoint.x <= vCtr.x) && (vPoint.y >= vCtr.y) && (vPoint.z >= vCtr.z) ) 
+				// Check if the point lies within the BOTTOM LEFT FRONT node
+				if( (vPoint.x <= vCtr.x) && (vPoint.y <= vCtr.y) && (vPoint.z <= vCtr.z) ) 
 					{
 					pList1.pFaceList[j] = true;
 					isinnodes++;
 					nodeor|=1;
 					}
 
-				// Check if the point lies within the TOP LEFT BACK node
-				if( (vPoint.x <= vCtr.x) && (vPoint.y >= vCtr.y) && (vPoint.z <= vCtr.z) ) 
+				// Check if the point lies within the BOTTOM RIGHT FRONT node
+				if( (vPoint.x >= vCtr.x) && (vPoint.y <= vCtr.y) && (vPoint.z <= vCtr.z) ) 
 					{
 					pList2.pFaceList[j] = true;
 					isinnodes++;
 					nodeor|=2;
 					}
 
-				// Check if the point lies within the TOP RIGHT BACK node
-				if( (vPoint.x >= vCtr.x) && (vPoint.y >= vCtr.y) && (vPoint.z <= vCtr.z) ) 
+				// Check if the point lies within the BOTTOM LEFT BACK node
+				if( (vPoint.x <= vCtr.x) && (vPoint.y >= vCtr.y) && (vPoint.z <= vCtr.z) ) 
 					{
 					pList3.pFaceList[j] = true;
 					isinnodes++;
 					nodeor|=4;
 					}
 
-				// Check if the point lies within the TOP RIGHT FRONT node
-				if( (vPoint.x >= vCtr.x) && (vPoint.y >= vCtr.y) && (vPoint.z >= vCtr.z) ) 
+				// Check if the point lies within the BOTTOM RIGHT BACK node
+				if( (vPoint.x >= vCtr.x) && (vPoint.y >= vCtr.y) && (vPoint.z <= vCtr.z) ) 
 					{
 					pList4.pFaceList[j] = true;
 					isinnodes++;
 					nodeor|=8;
 					}
 
-				// Check if the point lies within the BOTTOM LEFT FRONT node
+				// Check if the point lies within the TOP LEFT FRONT node
 				if( (vPoint.x <= vCtr.x) && (vPoint.y <= vCtr.y) && (vPoint.z >= vCtr.z) ) 
 					{
 					pList5.pFaceList[j] = true;
@@ -2035,24 +2054,24 @@ i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
 					nodeor|=16;
 					}
 
-				// Check if the point lies within the BOTTOM LEFT BACK node
-				if( (vPoint.x <= vCtr.x) && (vPoint.y <= vCtr.y) && (vPoint.z <= vCtr.z) ) 
+				// Check if the point lies within the TOP RIGHT FRONT node
+				if( (vPoint.x >= vCtr.x) && (vPoint.y <= vCtr.y) && (vPoint.z >= vCtr.z) ) 
 					{
 					pList6.pFaceList[j] = true;
 					isinnodes++;
 					nodeor|=32;
 					}
 
-				// Check if the point lies within the BOTTOM RIGHT BACK node
-				if( (vPoint.x >= vCtr.x) && (vPoint.y <= vCtr.y) && (vPoint.z <= vCtr.z) ) 
+				// Check if the point lies within the TOP LEFT BACK node
+				if( (vPoint.x <= vCtr.x) && (vPoint.y >= vCtr.y) && (vPoint.z >= vCtr.z) ) 
 					{
 					pList7.pFaceList[j] = true;
 					isinnodes++;
 					nodeor|=64;
 					}
 
-				// Check if the point lines within the BOTTOM RIGHT FRONT node
-				if( (vPoint.x >= vCtr.x) && (vPoint.y <= vCtr.y) && (vPoint.z >= vCtr.z) ) 
+				// Check if the point lines within the TOP RIGHT BACK node
+				if( (vPoint.x >= vCtr.x) && (vPoint.y >= vCtr.y) && (vPoint.z >= vCtr.z) ) 
 					{
 					pList8.pFaceList[j] = true;
 					isinnodes++;
@@ -2126,14 +2145,14 @@ i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
 			// top left front, top right front,
 			// top left back, top right back (if I interpret the comment at GetNeighbourCells() properly)
 
-		CreateNewNode(pWorld, pList1, triCount1, vCenter, xwidth, ywidth, zwidth, /*BOTTOM_LEFT_FRONT*/TOP_LEFT_FRONT);
-		CreateNewNode(pWorld, pList2, triCount2, vCenter, xwidth, ywidth, zwidth, /*BOTTOM_RIGHT_FRONT*/TOP_LEFT_BACK);
-		CreateNewNode(pWorld, pList3, triCount3, vCenter, xwidth, ywidth, zwidth, /*BOTTOM_LEFT_BACK*/TOP_RIGHT_BACK);
-		CreateNewNode(pWorld, pList4, triCount4, vCenter, xwidth, ywidth, zwidth, /*BOTTOM_RIGHT_BACK*/TOP_RIGHT_FRONT);
-		CreateNewNode(pWorld, pList5, triCount5, vCenter, xwidth, ywidth, zwidth, /*TOP_LEFT_FRONT*/BOTTOM_LEFT_FRONT);
-		CreateNewNode(pWorld, pList6, triCount6, vCenter, xwidth, ywidth, zwidth, /*TOP_RIGHT_FRONT*/BOTTOM_LEFT_BACK);
-		CreateNewNode(pWorld, pList7, triCount7, vCenter, xwidth, ywidth, zwidth, /*TOP_LEFT_BACK*/BOTTOM_RIGHT_BACK);
-		CreateNewNode(pWorld, pList8, triCount8, vCenter, xwidth, ywidth, zwidth, /*TOP_RIGHT_BACK*/BOTTOM_RIGHT_FRONT);
+		CreateNewNode(pWorld, pList1, triCount1, vCenter, xwidth, ywidth, zwidth, BOTTOM_LEFT_FRONT);
+		CreateNewNode(pWorld, pList2, triCount2, vCenter, xwidth, ywidth, zwidth, BOTTOM_RIGHT_FRONT);
+		CreateNewNode(pWorld, pList3, triCount3, vCenter, xwidth, ywidth, zwidth, BOTTOM_LEFT_BACK);
+		CreateNewNode(pWorld, pList4, triCount4, vCenter, xwidth, ywidth, zwidth, BOTTOM_RIGHT_BACK);
+		CreateNewNode(pWorld, pList5, triCount5, vCenter, xwidth, ywidth, zwidth, TOP_LEFT_FRONT);
+		CreateNewNode(pWorld, pList6, triCount6, vCenter, xwidth, ywidth, zwidth, TOP_RIGHT_FRONT);
+		CreateNewNode(pWorld, pList7, triCount7, vCenter, xwidth, ywidth, zwidth, TOP_LEFT_BACK);
+		CreateNewNode(pWorld, pList8, triCount8, vCenter, xwidth, ywidth, zwidth, TOP_RIGHT_BACK);
 		int subtcount=0;
 		for (int subts=0;subts<8;subts++)
 			{
@@ -2143,6 +2162,8 @@ i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
 		}
 	else
 		{
+		i4_warning("HINT: %d polygons in this cube at level %d were put in a leaf node",numberOfTriangles,m_CurrentSubdivision);
+
 		// If we get here we must either be subdivided past our max level, or our triangle
 		// count went below the minimum amount of triangles so we need to store them.
 		
@@ -2325,45 +2346,49 @@ i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads,
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 
 	// Make sure a valid node was passed in, otherwise go back to the last node
-	if(!this) return i4_F;
-
+	//if(!this) return i4_F;
 	if (depth==0)
-		{
+	{
 		w8 andcode=0,orcode=0;
 		g1_render.cube_in_frustrum(m_vCenter,m_xWidth,m_yWidth,m_zWidth,
 			transform,andcode,orcode);
 		if (orcode==0) //All corners inside?
 			{
-			return i4_F;
-			}
+			return i4_F; 
+			} 
 		if (andcode!=0)
 			return i4_T; //we can draw as octree, but don't need to do anything
-		}
+	}
 	else
-		{
+	{
+		
 
 		// Check if the current node is (at least partially) in our frustum
+
 		if (!g1_render.cube_in_frustrum(m_vCenter,m_xWidth,m_yWidth, m_zWidth, transform))
-			{
-			return i4_T;
-			};
-		}
+		{
+			return i4_T; 
+		};
+	}
 
-
-	//if(!g_Frustum.CubeInFrustum(pNode->m_vCenter.x, pNode->m_vCenter.y, 
-	//							pNode->m_vCenter.z, pNode->m_Width / 2) )
-	//{
-	//	return;
-	//}
+	// PG: This is debugging code
+	i4_3d_vector v1,v2,v3,v4,normal;
+	GetBorderSide(CS_BOTTOM, v1,v2,v3,v4,normal); 
+	g1_render.render_3d_line(v1,v2,0xCF4510,0xCF4510,transform,i4_F);
+	g1_render.render_3d_line(v2,v3,0xCF4510,0xCF4510,transform,i4_F);
+	g1_render.render_3d_line(v3,v4,0xCF4510,0xCF4510,transform,i4_F);
+	g1_render.render_3d_line(v4,v1,0xCF4510,0xCF4510,transform,i4_F);
+	g1_render.render_3d_point(v1,0x00F020,transform); //mark bottom left edge
 
 	// Check if this node is subdivided. If so, then we need to recurse and draw it's nodes
 	if(IsSubDivided())
-		{
+	{
+		
 		// Recurse to the bottom of these nodes and draw the end node's vertices
 		// Like creating the octree, we need to recurse through each of the 8 nodes.
-	//PG: Why don't we just use the this pointer for pNode?
-	//And pRootWorld doesn't need to be passed either, so we
-	//safe the time to copy unecessary parameters to the stack.
+		//PG: Why don't we just use the this pointer for pNode?
+		//And pRootWorld doesn't need to be passed either, so we
+		//safe the time to copy unecessary parameters to the stack.
 		m_pOctreeNodes[TOP_LEFT_FRONT]->DrawOctree(transform,quads, depth+1);
 		m_pOctreeNodes[TOP_LEFT_BACK]->DrawOctree(transform,quads, depth+1);
 		m_pOctreeNodes[TOP_RIGHT_BACK]->DrawOctree(transform,quads, depth+1);
@@ -2372,9 +2397,9 @@ i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads,
 		m_pOctreeNodes[BOTTOM_LEFT_BACK]->DrawOctree(transform,quads, depth+1);
 		m_pOctreeNodes[BOTTOM_RIGHT_BACK]->DrawOctree(transform,quads, depth+1);
 		m_pOctreeNodes[BOTTOM_RIGHT_FRONT]->DrawOctree(transform,quads, depth+1);
-		}
+	}
 	else
-		{
+	{
 		// Increase the amount of nodes in our viewing frustum (camera's view)
 		g1_octree_globals::g_TotalNodesDrawn++;
 
@@ -2402,7 +2427,7 @@ i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads,
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 
-		}
+	}
 	return i4_T;
 }
 

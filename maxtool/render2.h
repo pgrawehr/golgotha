@@ -123,7 +123,7 @@ public:
                     i4_draw_context_class &context);
   void draw_3d_line(i4_3d_point_class p1,i4_3d_point_class p2,i4_color color, i4_draw_context_class &context, i4_bool on_top=i4_F);
   void draw_3d_point(i4_3d_point_class p, i4_color color, i4_draw_context_class &context, i4_bool on_top=i4_F);
-  void draw_plane(const i4_3d_vector &u, const i4_3d_vector &v, w8 color, i4_draw_context_class &context);
+  void draw_plane(const i4_3d_vector &u, const i4_3d_vector &v, w32 color, i4_draw_context_class &context);
   void update_object(i4_float time);
   void render_object(i4_draw_context_class &context);
 

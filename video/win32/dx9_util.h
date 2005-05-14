@@ -84,7 +84,7 @@ public:
   static LPDIRECT3D9            pD3D9;
   static D3DPRESENT_PARAMETERS  present;
   static DDPIXELFORMAT          dd_fmt_565, dd_fmt_1555;
-  static IDirect3DSurface9      *primary_surface, *back_surface, *front_surface;
+  static IDirect3DSurface9      *back_surface, *front_surface;
   static i4_pixel_format        i4_fmt_565, i4_fmt_1555;
   static LPDIRECT3DDEVICE9      device;
   //static LPDIRECTDRAWCLIPPER    lpddclipper;
