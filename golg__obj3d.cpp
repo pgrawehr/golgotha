@@ -163,7 +163,7 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
     int j, u,v,i;
     g1_octree *curnode;
     i4_array<g1_octree*> nodes(0,30);
-    if (octree)
+    if (octree)  
         {
         //new_point=point;
         //new_point+=ray;
@@ -293,7 +293,7 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
                 // update current intersection
                 new_t = t;
                 if (hit_poly) 
-                    *hit_poly=i;
+                    *hit_poly=curnode->GetGlobalQuadNumber(i);
                 if (normal) 
                     *normal=qnorm;
                 hit = i4_T;

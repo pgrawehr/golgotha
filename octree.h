@@ -318,17 +318,26 @@ class g1_octree
 	}
 
     i4_bool isLeaf() const
-        {
+    {
         return !IsSubDivided();
-        }
+    }
 
     /// Returns the i'th quad of this object.
     /// Make sure the index is in range.
     g1_quad_class *GetQuad(int i) const
-        {
+    {
         //unfortunatelly, we need a double indirection here.
         return &m_pWorld->quad[m_pQuadList[i]];
-        }
+    }
+
+	/// Returns the global quad index number for the given local quad. 
+	/// The index must be smaller than the number of quads in this node. 
+	/// @param i Index into the local quad list.
+	/// @return Global quad index.
+	int GetGlobalQuadNumber(int i) const
+	{
+		return m_pQuadList[i];
+	}
 
 	//! Returns the vertices of the quad specified by the given side of this node.
 	//! The normal vector is always facing outwards. It can be used to 

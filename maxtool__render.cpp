@@ -388,227 +388,155 @@ void m1_utility_window_class::draw_3d_line(i4_3d_point_class p1,
 										   i4_bool on_top)
 //{{{
 {
-  r1_vert w[2],v[2];
-  //i4_float t,slope;
-  //i4_bool vertical;
-  //p1.z+=0.01;
-  //p2.z+=0.01;
-  project_point(p1, w[0]);
-  project_point(p2, w[1]);
-  v[0]=w[0];
-  v[1]=w[1];
-  
-  //i4_rect_list_class::area_iter cl;
-  //i4_rect_list_class *clip=&context.clip;
-  i4_float x1,y1,x2,y2;
-  i4_float cx1,cy1,cx2,cy2;
-  i4_bool skip;
+	g1_render.r_api->set_shading_mode(R1_COLORED_SHADING);
+	g1_render.render_3d_line(p1,p2,color,color,&transform,i4_F);
+	// The following code does almost the same as render_3d_line already does. 
+	// Two problems: first, it's uneccessary code duplication,
+	// Second, its buggy. (some lines get lost)
+ // r1_vert w[2],v[2];
+ // //i4_float t,slope;
+ // //i4_bool vertical;
+ // //p1.z+=0.01;
+ // //p2.z+=0.01;
+ // project_point(p1, w[0]);
+ // project_point(p2, w[1]);
+ // v[0]=w[0];
+ // v[1]=w[1];
+ // 
+ // //i4_rect_list_class::area_iter cl;
+ // //i4_rect_list_class *clip=&context.clip;
+ // i4_float x1,y1,x2,y2;
+ // i4_float cx1,cy1,cx2,cy2;
+ // i4_bool skip;
 
-  for (i4_rect_list_class::area_iter c=context.clip.list.begin();c!=context.clip.list.end();++c)
-  { //quite same code as image::line(), except for actual drawing and precision
-    x1=w[0].px;
-    y1=w[0].py;
-    x2=w[1].px;
-    y2=w[1].py;
-    skip=i4_F;
+ // for (i4_rect_list_class::area_iter c=context.clip.list.begin();c!=context.clip.list.end();++c)
+ // { //quite same code as image::line(), except for actual drawing and precision
+ //   x1=w[0].px;
+ //   y1=w[0].py;
+ //   x2=w[1].px;
+ //   y2=w[1].py;
+ //   skip=i4_F;
 
-    //i4_float i,xc,yc,er,n,m,xi,yi,xcxi,ycyi,xcyi;
-    //unsigned dcy,dcx;
-	i4_float i,my,mx,b;
-    // check to make sure that both endpoints are inside the rectangle
+ //   //i4_float i,xc,yc,er,n,m,xi,yi,xcxi,ycyi,xcyi;
+ //   //unsigned dcy,dcx;
+	//i4_float i,my,mx,b;
+ //   // check to make sure that both endpoints are inside the rectangle
 
-    cx1=c->x1;
-    cy1=c->y1;
-    cx2=c->x2;
-    cy2=c->y2;
+ //   cx1=c->x1;
+ //   cy1=c->y1;
+ //   cx2=c->x2;
+ //   cy2=c->y2;
 
-    // check to see if the line is completly clipped off
-    if (!((x1<cx1 && x2<cx1) || (x1>cx2 && x2>cx2) || 
-          (y1<cy1 && y2<cy1) || (y1>cy2 && y2>cy2)))
-    {
- 
-      if (x1>x2)        // make sure that x1 is to the left
-      {    
-        i=x1; x1=x2; x2=i;  // if not swap points
-        i=y1; y1=y2; y2=i;
-      }  
+ //   // check to see if the line is completly clipped off
+ //   if (!((x1<cx1 && x2<cx1) || (x1>cx2 && x2>cx2) || 
+ //         (y1<cy1 && y2<cy1) || (y1>cy2 && y2>cy2)))
+ //   {
+ //
+ //     if (x1>x2)        // make sure that x1 is to the left
+ //     {    
+ //       i=x1; x1=x2; x2=i;  // if not swap points
+ //       i=y1; y1=y2; y2=i;
+ //     }  
 
-      // clip the left side
-      if (x1<cx1)
-      {  
-        my=(y2-y1);       
-        mx=(x2-x1);
-        if (!mx) skip=i4_T;
-        if (my)
-        {
-          b=y1-(y2-y1)*x1/mx;      
-          y1=my*cx1/mx+b;
-          x1=cx1;      
-        }
-        else x1=cx1;
-      }
+ //     // clip the left side
+ //     if (x1<cx1)
+ //     {  
+ //       my=(y2-y1);       
+ //       mx=(x2-x1);
+ //       if (!mx) skip=i4_T;
+ //       if (my)
+ //       {
+ //         b=y1-(y2-y1)*x1/mx;      
+ //         y1=my*cx1/mx+b;
+ //         x1=cx1;      
+ //       }
+ //       else x1=cx1;
+ //     }
 
-      // clip the right side
-      if (x2>cx2)
-      {  
-        my=(y2-y1);       
-        mx=(x2-x1);
-        if (!mx) skip=i4_T;
-        else if (my)
-        {
-          b=y1-(y2-y1)*x1/mx;      
-          y2=my*cx2/mx+b;
-          x2=cx2;      
-        }
-        else x2=cx2;
-      }
+ //     // clip the right side
+ //     if (x2>cx2)
+ //     {  
+ //       my=(y2-y1);       
+ //       mx=(x2-x1);
+ //       if (!mx) skip=i4_T;
+ //       else if (my)
+ //       {
+ //         b=y1-(y2-y1)*x1/mx;      
+ //         y2=my*cx2/mx+b;
+ //         x2=cx2;      
+ //       }
+ //       else x2=cx2;
+ //     }
 
-      if (y1>y2)        // make sure that y1 is on top
-      {    
-        i=x1; x1=x2; x2=i;  // if not swap points
-        i=y1; y1=y2; y2=i;
-      }  
+ //     if (y1>y2)        // make sure that y1 is on top
+ //     {    
+ //       i=x1; x1=x2; x2=i;  // if not swap points
+ //       i=y1; y1=y2; y2=i;
+ //     }  
 
-      // clip the bottom
-      if (y2>cy2)
-      {  
-        mx=(x2-x1);       
-        my=(y2-y1);
-        if (!my)
-          skip=i4_T;
-        else if (mx)
-        {
-          b=y1-(y2-y1)*x1/mx;      
-          x2=(cy2-b)*mx/my;
-          y2=cy2;
-        }
-        else y2=cy2;
-      }
+ //     // clip the bottom
+ //     if (y2>cy2)
+ //     {  
+ //       mx=(x2-x1);       
+ //       my=(y2-y1);
+ //       if (!my)
+ //         skip=i4_T;
+ //       else if (mx)
+ //       {
+ //         b=y1-(y2-y1)*x1/mx;      
+ //         x2=(cy2-b)*mx/my;
+ //         y2=cy2;
+ //       }
+ //       else y2=cy2;
+ //     }
 
-      // clip the top
-      if (y1<cy1)
-      {  
-        mx=(x2-x1);       
-        my=(y2-y1);
-        if (!my) 
-          skip=i4_T;
-        else if (mx)
-        {
-          b=y1-(y2-y1)*x1/mx;      
-          x1=(cy1-b)*mx/my;
-          y1=cy1;
-        }
-        else y1=cy1;
-      }
+ //     // clip the top
+ //     if (y1<cy1)
+ //     {  
+ //       mx=(x2-x1);       
+ //       my=(y2-y1);
+ //       if (!my) 
+ //         skip=i4_T;
+ //       else if (mx)
+ //       {
+ //         b=y1-(y2-y1)*x1/mx;      
+ //         x1=(cy1-b)*mx/my;
+ //         y1=cy1;
+ //       }
+ //       else y1=cy1;
+ //     }
 
 
-      // see if it got clipped out
-      if (x1<cx1 || x2<cx1 || x1>cx2 || x2>cx2 || y1<cy1 || y2 <cy1 || y1>cy2 || y2>cy2)
-        skip=i4_T;     
+ //     // see if it got clipped out
+ //     if (x1<cx1 || x2<cx1 || x1>cx2 || x2>cx2 || y1<cy1 || y2 <cy1 || y1>cy2 || y2>cy2)
+ //       skip=i4_T;     
 
-      //if (x1>x2)
-      //{ xc=x2; xi=x1; }
-      //else { xi=x2; xc=x1; }
+ //     //if (x1>x2)
+ //     //{ xc=x2; xi=x1; }
+ //     //else { xi=x2; xc=x1; }
 
-      if (!skip)
-      {
-        // assume y1<=y2 from above swap operation
-        //yi=y2; yc=y1;
-		v[0].px=x1;
-		v[0].py=y1;
-		v[1].px=x2;
-		v[1].py=y2;
-		v[0].r=(float)((color>>16)&0xff)/255;
-		v[1].r=v[0].r;
-		v[0].g=(float)((color>>8)&0xff)/255;
-		v[1].g=v[0].g;
-		v[0].b=(float)((color)&0xff)/255;
-		v[1].b=v[0].b;
-		v[0].a=(float)((color>>24)&0xff)/255;
-		v[1].a=v[0].a;
-		r1_clip_render_lines(1, v, center_x, center_y, api);
-        
-      }
-    }
-  }
+ //     if (!skip)
+ //     {
+ //       // assume y1<=y2 from above swap operation
+ //       //yi=y2; yc=y1;
+	//	v[0].px=x1;
+	//	v[0].py=y1;
+	//	v[1].px=x2;
+	//	v[1].py=y2;
+	//	v[0].r=(float)((color>>16)&0xff)/255;
+	//	v[1].r=v[0].r;
+	//	v[0].g=(float)((color>>8)&0xff)/255;
+	//	v[1].g=v[0].g;
+	//	v[0].b=(float)((color)&0xff)/255;
+	//	v[1].b=v[0].b;
+	//	v[0].a=(float)((color>>24)&0xff)/255;
+	//	v[1].a=v[0].a;
+	//	r1_clip_render_lines(1, v, center_x, center_y, api);
+ //       
+ //     }
+ //   }
+ // }
     
-
-    //old, wrong code bellow
-
-    //r1_far_clip_z = 1000;
-
-    //api->clear_area(0,0, width()-1, height()-1, m1_info.bg_color, 1000-1);   
-	//unfortunatelly, something seems to be buggy in the projection code such that
-	//lines are not drawn at the adequate z-depth.
-	//don't know what else to do about this.
-  /*if (w[0].px>w[1].px) 
-	  {//swap order if needed (will save a few tests later, but we need to swap 
-	  //the entire info of the point)
-	  tmp=w[0];
-	  w[0]=w[1];
-	  w[1]=tmp;
-	  }
-  if (w[0].py>w[1].py) 
-	  {
-	  tmp=w[0];
-	  w[0]=w[1];
-	  w[1]=tmp;
-	  }
-  t=w[1].px-w[0].px;
-  
-  if (t==0) 
-	  {
-	  vertical=i4_T;
-	  slope=0;
-	  }
-  else
-	  {
-	  slope=(w[1].py-w[0].py)/t;
-	  //if (slope<0) slope=-slope;
-	  vertical=i4_F;
-	  }
-  for (cl = clip->list.begin(); cl != clip->list.end(); ++cl)
-	  {
-	  v[0]=w[0];
-	  v[1]=w[1];
-	  if ((cl->x2<v[0].px)||(cl->x1>v[1].px))
-		  {
-		  continue;
-		  }
-	  if (cl->x1>v[0].px)
-		  {
-		  t=cl->x1 - v[0].px;
-		  v[0].px=cl->x1;
-		  v[0].py += t*1/slope;
-		  }
-	  
-	  if (cl->x2<v[1].px)
-		  {
-		  t=v[1].px - cl->x2;
-		  v[1].px=cl->x2;
-		  v[1].py -=t*1/slope;
-		  }
-
-	  if (cl->y1>v[0].py)
-		  {
-		  t=cl->y1 - v[0].py;
-		  v[0].py=cl->y1;
-		  v[0].px += t*slope;
-		  }
-	  if ((cl->y2<v[0].py)||(cl->y1>v[1].py))
-		  {
-		  continue;
-		  }
-	  if (cl->y2<v[1].py)
-		  {
-		  t=v[1].py - cl->y2;
-		  v[1].py=cl->y2;
-		  v[1].px -=t*slope;
-		  }
-	  r1_clip_render_lines(1, v, center_x, center_y, api);
-	  }*/
-
-  
   api->set_constant_color(0xffffff);
 }
 //}}}

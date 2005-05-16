@@ -1203,7 +1203,13 @@ void r1_dx9_class::render_pixel(int t_points, r1_vert *pixel)
 void r1_dx9_class::render_lines(int t_lines, r1_vert *verts)
     {
     if (t_lines+1>256) return;
-    
+	CUSTOMVERTEX dx_verts[256];
+	make_d3d_verts(dx_verts,verts,this,t_lines+1);
+	i4_dx9_check(d3d_device->DrawPrimitiveUP(D3DPT_LINESTRIP,
+		t_lines,
+		dx_verts,
+		sizeof(CUSTOMVERTEX)));
+    /*
     for (int line=0;line<t_lines;line++)
         {
         CUSTOMVERTEX dx_v[4];
@@ -1289,7 +1295,7 @@ void r1_dx9_class::render_lines(int t_lines, r1_vert *verts)
                 sizeof(CUSTOMVERTEX));
             }
         }
-    
+    */
     }
 
 void r1_dx9_class::clear_area(int x1, int y1, int x2, int y2, w32 color, float z)

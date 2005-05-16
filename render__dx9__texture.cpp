@@ -80,7 +80,7 @@ r1_dx9_texture_class::r1_dx9_texture_class(const i4_pal *pal)
 	//if (max_texture_dimention>256)
 	//  max_texture_dimention=256;     // don't allow d3d to go above 256
 	
-	square_textures = r1_dx9_class_instance.needs_square_textures;
+	square_textures = r1_dx9_class_instance.IsSquareTextureRequired();
 	
 	init();
 }

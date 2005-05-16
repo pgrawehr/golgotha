@@ -2371,14 +2371,14 @@ i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads,
 		};
 	}
 
-	// PG: This is debugging code
-	i4_3d_vector v1,v2,v3,v4,normal;
-	GetBorderSide(CS_BOTTOM, v1,v2,v3,v4,normal); 
-	g1_render.render_3d_line(v1,v2,0xCF4510,0xCF4510,transform,i4_F);
-	g1_render.render_3d_line(v2,v3,0xCF4510,0xCF4510,transform,i4_F);
-	g1_render.render_3d_line(v3,v4,0xCF4510,0xCF4510,transform,i4_F);
-	g1_render.render_3d_line(v4,v1,0xCF4510,0xCF4510,transform,i4_F);
-	g1_render.render_3d_point(v1,0x00F020,transform); //mark bottom left edge
+	// PG: This is debugging code 
+	//i4_3d_vector v1,v2,v3,v4,normal;
+	//GetBorderSide(CS_BOTTOM, v1,v2,v3,v4,normal); 
+	//g1_render.render_3d_line(v1,v2,0xCF4510,0xCF4510,transform,i4_F);
+	//g1_render.render_3d_line(v2,v3,0xCF4510,0xCF4510,transform,i4_F);
+	//g1_render.render_3d_line(v3,v4,0xCF4510,0xCF4510,transform,i4_F);
+	//g1_render.render_3d_line(v4,v1,0xCF4510,0xCF4510,transform,i4_F);
+	//g1_render.render_3d_point(v1,0x00F020,transform); //mark bottom left edge
 
 	// Check if this node is subdivided. If so, then we need to recurse and draw it's nodes
 	if(IsSubDivided())

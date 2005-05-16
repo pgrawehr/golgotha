@@ -107,13 +107,13 @@ public:
                    sw32 desired_width,
                    w32 frame);
 
+protected:
   r1_alpha_type      pre_holy_alpha_mode;
   r1_write_mask_type pre_holy_write_mask;
 
-  //i4_bool states_have_changed; //now defined in parent - Class
   i4_bool holy_mode;
   i4_bool texture_mode;
-
+public:
   void enable_holy();
   void disable_holy();
 
@@ -125,14 +125,20 @@ public:
   r1_render_window_class *create_render_window(int visable_w, int visable_h,
                                                r1_expand_type type);
 
-  i4_float x_off,y_off;
+  i4_bool IsSquareTextureRequired()
+  {
+	  return needs_square_textures;
+  }
 
+
+  i4_float x_off,y_off;
+protected:
   i4_bool hardware_tmapping;
   i4_bool needs_square_textures;
   
   char    dd_driver_name[128];
   char    d3d_driver_name[128];      
-  
+public:
   char *name() { return d3d_driver_name;} 
       
   //IDirectDrawSurface3 *zbuffer_surface;
@@ -140,6 +146,7 @@ public:
   //IDirect3DDevice2    *d3d_device;
   //IDirect3DViewport2  *d3d_viewport;
   //dx5_d3d_info *info;
+
   IDirect3DDevice9 *d3d_device;
 };
 

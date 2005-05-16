@@ -976,7 +976,7 @@ void g1_map_class::make_block_maps()
               h3=v3->height, 
               h4=v4->height;
           
-            i4_float
+            int
               grade_ns = max(h3-h1, h4-h2),
               grade_ew = max(h2-h1, h4-h3),
               grade_sn = max(h1-h3, h2-h4),
@@ -1069,10 +1069,10 @@ void g1_map_class::update_block_maps(w16 x, w16 y, g1_object_class *changingobj,
 						h3=v3->height, 
 						h4=v4->height;
 					
-					i4_float
+					int
 						grade_ns = max(h3-h1, h4-h2),
 						grade_ew = max(h2-h1, h4-h3);
-					i4_float
+					int
 						grade_sn = max(h1-h3, h2-h4),
 						grade_we = max(h1-h2, h3-h4);
 					

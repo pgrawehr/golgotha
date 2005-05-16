@@ -938,21 +938,8 @@ void g1_render_class::render_3d_point(const i4_3d_point_class &p1, i4_color colo
 	int ix = int(v.px),iy = int(v.py);
 	if (ix>0 && iy>0 && ix<center_x*2-1 && iy<center_y*2-1)
 	{
-
-		r1_shading_type oldshade=r_api->get_shade_mode();
-		r1_alpha_type oldalpha=r_api->get_alpha_mode();
-
-		r_api->set_shading_mode(R1_COLORED_SHADING);
-		r_api->set_alpha_mode(R1_ALPHA_DISABLED);
-		r_api->disable_texture();
-
 		r_api->r1_render_api_class::clear_area(ix-1,iy-1,ix+1,iy+1,color,
 			v.v.z);
-		//restore old modes. Since lines are realy seldom used primitives,
-		//this is no performance problem compared to what might happen if
-		//the caller unexspectedly finds the render device in a new state. 
-		r_api->set_shading_mode(oldshade);
-		r_api->set_alpha_mode(oldalpha);
 	}
 }
 

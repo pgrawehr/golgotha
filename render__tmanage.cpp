@@ -1245,7 +1245,7 @@ i4_bool r1_texture_manager_class::update_cache_file(i4_array<w32> &update_ids,
 
   i4_status_class *stat = i4_create_status(i4gets("updating_texture_cache"));
 
-  while (1)
+  for(;;)
   {  
     if (j>=update_ids.size()) j_done = i4_T;
     
