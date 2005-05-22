@@ -378,7 +378,7 @@ void i4_free(void *ptr)
   if (!i4_is_initialized())
 	  {
 	  
-	  //i4_warning("INTERNAL: i4_free called after i4_uninit()");
+	  i4_warning("INTERNAL: i4_free called after i4_uninit()");
 	  free(ptr);//we can only hope that we guess right here.
 	  return;
 	  }

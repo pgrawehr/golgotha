@@ -95,13 +95,14 @@ int g1_octree_globals::g_TotalNodesDrawn=0;
 
 int g1_octree::m_CurrentSubdivision=0;
 
-g1_octree_debug::g1_octree_debug():m_vLines(0,100)
+g1_octree_debug::g1_octree_debug():m_vLines(0,100),m_vSelectedLines(0,100)
 	{
 	}
 
 g1_octree_debug::~g1_octree_debug()
 	{
 	m_vLines.uninit();
+	m_vSelectedLines.uninit();
 	}
 
 void g1_octree_debug::RenderDebugLines(i4_transform_class *transform)				
@@ -112,16 +113,25 @@ void g1_octree_debug::RenderDebugLines(i4_transform_class *transform)
 	r1_shading_type shade=api->get_shade_mode();
 	api->set_shading_mode(R1_SHADE_DISABLED);
 	api->set_constant_color(0xFFFF00);
-		// Go through the whole list of lines stored in the vector m_vLines.
-		for(int i = 0; i < m_vLines.size(); i+=2)
-		{
-			// Pass in the current point to be rendered as part of a line
-			i4_3d_point_class v1(m_vLines[i]);
-			i4_3d_point_class v2(m_vLines[i+1]);
-			
-			g1_render.render_3d_line(v1,v2,0xffff00,0xffff00,
-				transform,i4_T);
-		}	
+	// Go through the whole list of lines stored in the vector m_vLines.
+	for(int i = 0; i < m_vLines.size(); i+=2)
+	{
+		// Pass in the current point to be rendered as part of a line
+		i4_3d_point_class v1(m_vLines[i]);
+		i4_3d_point_class v2(m_vLines[i+1]);
+		
+		g1_render.render_3d_line(v1,v2,0xffff00,0xffff00,
+			transform,i4_T);
+	}
+	for(int i = 0; i < m_vSelectedLines.size(); i+=2)
+	{
+		// Pass in the current point to be rendered as part of a line
+		i4_3d_point_class v3(m_vSelectedLines[i]);
+		i4_3d_point_class v4(m_vSelectedLines[i+1]);
+
+		g1_render.render_3d_line(v3,v4,0xff0000,0xff0000,
+			transform,i4_T);
+	}
 
 	
 	api->set_shading_mode(shade);
@@ -176,16 +186,58 @@ void g1_octree_debug::AddDebugRectangle(i4_3d_vector vCenter, float width, float
 	m_vLines.push_back(vTopRightFront);		m_vLines.push_back(vBottomRightFront);
 }
 
+void g1_octree_debug::AddSelectedRectangle(i4_3d_vector vCenter, float width, float height, float depth)
+{
+	// So we can work with the code better, we divide the dimensions in half.
+	// That way we can create the cube from the center outwards.
+	width /= 2.0f;	height /= 2.0f;	depth /= 2.0f;
+
+	// Below we create all the 8 points so it will be easier to input the lines
+	// of the cube.  With the dimensions we calculate the points.
+	i4_3d_vector vTopLeftFront( vCenter.x - width, vCenter.y + height, vCenter.z + depth);
+	i4_3d_vector vTopLeftBack(  vCenter.x - width, vCenter.y + height, vCenter.z - depth);
+	i4_3d_vector vTopRightBack( vCenter.x + width, vCenter.y + height, vCenter.z - depth);
+	i4_3d_vector vTopRightFront(vCenter.x + width, vCenter.y + height, vCenter.z + depth);
+
+	i4_3d_vector vBottom_LeftFront( vCenter.x - width, vCenter.y - height, vCenter.z + depth);
+	i4_3d_vector vBottom_LeftBack(  vCenter.x - width, vCenter.y - height, vCenter.z - depth);
+	i4_3d_vector vBottomRightBack( vCenter.x + width, vCenter.y - height, vCenter.z - depth);
+	i4_3d_vector vBottomRightFront(vCenter.x + width, vCenter.y - height, vCenter.z + depth);
+
+	////////// TOP LINES ////////// 
+
+	m_vSelectedLines.push_back(vTopLeftFront);		m_vSelectedLines.push_back(vTopRightFront);
+	m_vSelectedLines.push_back(vTopLeftBack);  		m_vSelectedLines.push_back(vTopRightBack);
+	m_vSelectedLines.push_back(vTopLeftFront);		m_vSelectedLines.push_back(vTopLeftBack);
+	m_vSelectedLines.push_back(vTopRightFront);		m_vSelectedLines.push_back(vTopRightBack);
+
+	////////// BOTTOM LINES ////////// 
+
+	m_vSelectedLines.push_back(vBottom_LeftFront);	m_vSelectedLines.push_back(vBottomRightFront);
+	m_vSelectedLines.push_back(vBottom_LeftBack);	m_vSelectedLines.push_back(vBottomRightBack);
+	m_vSelectedLines.push_back(vBottom_LeftFront);	m_vSelectedLines.push_back(vBottom_LeftBack);
+	m_vSelectedLines.push_back(vBottomRightFront);	m_vSelectedLines.push_back(vBottomRightBack);
+
+	////////// SIDE LINES ////////// 
+
+	m_vSelectedLines.push_back(vTopLeftFront);		m_vSelectedLines.push_back(vBottom_LeftFront);
+	m_vSelectedLines.push_back(vTopLeftBack);		m_vSelectedLines.push_back(vBottom_LeftBack);
+	m_vSelectedLines.push_back(vTopRightBack);		m_vSelectedLines.push_back(vBottomRightBack);
+	m_vSelectedLines.push_back(vTopRightFront);		m_vSelectedLines.push_back(vBottomRightFront);
+}
+
 
 void g1_octree_debug::Clear()						
 {
 	// Destroy the list using the standard vector clear() function
 	m_vLines.clear();
+	m_vSelectedLines.clear();
 }
 
 void g1_octree_debug::uninit()
 	{
 	m_vLines.uninit();
+	m_vSelectedLines.uninit();
 	}
 
 
@@ -2453,7 +2505,7 @@ i4_bool g1_octree::RayShorterThanCubeSize(i4_3d_vector ray) const
 		return ret;
 	}
 
-g1_octree *g1_octree::GetLeafAt(i4_3d_vector &where) const
+g1_octree *g1_octree::GetLeafAt(const i4_3d_vector &where) const
     {
     if (!this)
         return 0;
@@ -2678,9 +2730,9 @@ bool g1_octree::CheckCollision(const i4_3d_vector &start, const i4_3d_vector &ra
 			continue;
 
 		t = num/den;
-		if (t>=new_t)
+		//if (t>=new_t)
 			// check if new intersection is closer than previous ones
-			continue;
+		//	continue;
 
 		// project point into plane
 
@@ -2802,9 +2854,18 @@ i4_array<g1_octree*> g1_octree::GetIntersectedNodes(const i4_3d_vector &start, c
 	int backside=-1;
 	node1=GetIntersectedLeaf(start,ray);
 	if (node1==NULL)
+	{
+		g_Debug.ClearSelected();
 		return nodes;
+	}
 	nodes.add(node1);
 	stack.push(node1);
+	node1a=GetLeafAt(start);
+	if (node1a!=node1 && node1a!=NULL)
+	{
+		nodes.add(node1a);
+		stack.push(node1a);
+	}
 	while(!stack.empty())
 	{
 		node1=stack.pop();
@@ -2830,7 +2891,8 @@ i4_array<g1_octree*> g1_octree::GetIntersectedNodes(const i4_3d_vector &start, c
 				if (!ListContainsNode(nodes,newnode))
 				{
 					I4_ASSERT(newnode!=NULL,"INTERNAL: Unexspected null node");
-
+					// since we just found a leaf, we add it to the list
+					nodes.add(newnode);
 					stack.push(newnode);
 				}
 			}
@@ -2853,10 +2915,18 @@ i4_array<g1_octree*> g1_octree::GetIntersectedNodes(const i4_3d_vector &start, c
 				if (!ListContainsNode(nodes,newnode))
 				{
 					I4_ASSERT(newnode!=NULL,"INTERNAL: Unexspected null node");
+					nodes.add(newnode);
 					stack.push(newnode);
 				}
 			}
 		}
+	}
+	g_Debug.ClearSelected();
+	for (int i=0;i<nodes.size();i++)
+	{
+		g1_octree *n=nodes[i];
+		g_Debug.AddSelectedRectangle(n->m_vCenter,n->m_xWidth,
+			n->m_yWidth,n->m_zWidth);
 	}
 	return nodes;
 }

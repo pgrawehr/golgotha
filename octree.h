@@ -128,6 +128,7 @@ public:
 	/// \param height  Size of the rectangle in Y-Dimension
 	/// \param depth   Size of the rectangle in Z-Dimension
 	void AddDebugRectangle(i4_3d_vector vCenter, float width, float height, float depth);
+	void AddSelectedRectangle(i4_3d_vector vCenter, float width, float height, float depth);
 
 	/// This renders all of the lines.
     /// This is for debugging purposes only!
@@ -135,15 +136,20 @@ public:
 	void RenderDebugLines(i4_transform_class *transform);		
 
 	/// This clears all of the debug lines
-	void Clear();				
+	void Clear();		
 
-	/// The destructor; should actually do nothing.
+	void ClearSelected()
+	{
+		m_vSelectedLines.clear();
+	}
+
 	~g1_octree_debug();
 	void uninit();
 
 private:
 	/// This is the vector list of all of our lines
-	i4_array<i4_3d_vector> m_vLines;		
+	i4_array<i4_3d_vector> m_vLines;
+	i4_array<i4_3d_vector> m_vSelectedLines;
 };
 
 typedef i4_array<g1_quad_class *> g1_quadlist;
@@ -364,7 +370,7 @@ class g1_octree
     /// Returns the Leaf node the point is in.
     /// The vector must already have been transformed to local coordinates.
     /// May return 0 if point is outside object. 
-    g1_octree *GetLeafAt(i4_3d_vector &where) const;
+    g1_octree *GetLeafAt(const i4_3d_vector &where) const;
 
 
 	/**

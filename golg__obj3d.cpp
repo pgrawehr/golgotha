@@ -165,8 +165,8 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
     i4_array<g1_octree*> nodes(0,30);
     if (octree)  
         {
-        //new_point=point;
-        //new_point+=ray;
+        new_point=point;
+        new_point+=ray;
         //although not perfectly true, we assume that
         //the ray doesn't pass any other nodes than the source
         //and the target.
@@ -179,6 +179,8 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
         //if (nodes[0]==nodes[1])
         //    nodes[1]=NULL;
 		nodes=octree->GetIntersectedNodes(point,ray);
+		//nodes.add(octree->GetLeafAt(point));
+		//nodes.add(octree->GetLeafAt(new_point));
 		nodes.add(NULL); // The last entry of the array should be NULL. 
         int the_cur_node=0;
         curnode=nodes[the_cur_node];

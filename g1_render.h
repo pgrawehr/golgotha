@@ -163,6 +163,8 @@ public:
 	  i4_color color,
 	  i4_transform_class *t);
 
+  void render_2d_point(int px, int py, i4_color color);
+
   void draw_outline(g1_screen_box *outline, g1_object_class *for_who);
 
   void post_draw_quads();

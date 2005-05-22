@@ -53,7 +53,8 @@ static i4_profile_class pf_render_object_transform("render_object (transform)"),
   pf_render_draw_outline("g1_render::draw_outline"),
   pf_post_draw_quads("g1_render::post_draw_quads"),
   pf_add_translucent_trail("g1_render::add_trans_trail"),
-  pf_draw_building("g1_render::draw_building");
+  pf_draw_building("g1_render::draw_building"),
+  pf_draw_octree("render_octree");
   
 
 
@@ -301,11 +302,13 @@ i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 	{
 	g1_octree *oc=obj->octree;
 	//quads in frustrum
+	pf_draw_octree.start();
 	
 	if (oc->DrawOctree(tf,qif,object_to_world?0:1)==i4_F)
-		{
+	{
+		pf_draw_octree.stop();
 		return i4_F;
-		}
+	}
 	//now: We first sort qif, such that we can later drop duplicate
 	//quads.
 	//Then we iterate trough it and grab all the vertices
@@ -317,7 +320,10 @@ i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 	//(which is very probable)
 	memset(t_vertices,0,(obj->num_vertex+1)*sizeof(r1_vert));
 	if (qif.empty())
+	{
+		pf_draw_octree.stop();
 		return i4_T;//will break completelly out, as andcode is still 0xff
+	}
 	qif.sort(g1_quad_sorter);
 	
 	g1_quad_class *curquad;
@@ -388,6 +394,7 @@ i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class*> &qif,
 			v->flags=1;
 			}
 		}
+	pf_draw_octree.stop();
 	return i4_T;
 	}
 
@@ -401,361 +408,361 @@ void g1_render_class::ensure_capacity(int num_vertices)
 	}
 
 
-void g1_render_class::render_object(g1_quad_object_class *obj,
-                                    i4_transform_class *object_to_view,
-                                    i4_transform_class *object_to_world,
-                                    i4_float texture_scale,                      
-                                    int player_num,
-                                    sw32 current_frame,
-                                    g1_screen_box *bound_box,
-                                    w32 option_flags)
+	void g1_render_class::render_object(g1_quad_object_class *obj,
+		i4_transform_class *object_to_view,
+		i4_transform_class *object_to_world,
+		i4_float texture_scale,                      
+		int player_num,
+		sw32 current_frame,
+		g1_screen_box *bound_box,
+		w32 option_flags)
 	{
-	if (!obj) //its not 100% clear in wich rare cases this happens
-		return;
-	g1_stat_counter.increment(g1_statistics_counter_class::OBJECTS);
-	
-	
-	int i,j,/*k,*/num_vertices;
-	//r1_vert* t_vertices=0;
-	//int src_quad[4];
-	i4_transform_class view_transform;
-	
-	num_vertices            = obj->num_vertex;
-	ensure_capacity(num_vertices+1);
-	
-	
-	
-	r1_vert *v              = t_vertices;
-	g1_vert_class *src_vert = obj->get_verts(0, current_frame);
-	w8 ANDCODE = 0xFF;
-	w8 ORCODE  = 0;
-	
-	g1_vert_class *src_v=src_vert;
-	
-	//pf_render_object_transform.start();
-	
-	//get this vector before we warp the transform
-	i4_3d_vector cam_in_object_space;
-	object_to_view->inverse_transform(i4_3d_vector(0,0,0),cam_in_object_space);
-	
-	
-	view_transform.x.x = object_to_view->x.x * scale_x;
-	view_transform.x.y = object_to_view->x.y * scale_y;
-	view_transform.x.z = object_to_view->x.z;
-	view_transform.y.x = object_to_view->y.x * scale_x;
-	view_transform.y.y = object_to_view->y.y * scale_y;
-	view_transform.y.z = object_to_view->y.z;
-	view_transform.z.x = object_to_view->z.x * scale_x;
-	view_transform.z.y = object_to_view->z.y * scale_y;
-	view_transform.z.z = object_to_view->z.z;
-	view_transform.t.x = object_to_view->t.x * scale_x;
-	view_transform.t.y = object_to_view->t.y * scale_y;
-	view_transform.t.z = object_to_view->t.z;
-	
-	//if we have an octree, we need to iterate over a 
-	//limited set of polys and vertices only. 
-    quad_object_list.clear();
-	i4_bool use_ot=i4_F;
-	if (obj->octree)
-		{
-		//hiddenly modificates the t_vertices array
-		use_ot=prepare_octree_rendering(quad_object_list,obj,src_vert,
-			&view_transform,
-			object_to_world,
-			ANDCODE,ORCODE);
-		if (ANDCODE&&use_ot)
+		if (!obj) //its not 100% clear in wich rare cases this happens
 			return;
-		}
-	if (!obj->octree || (use_ot==i4_F))
+		g1_stat_counter.increment(g1_statistics_counter_class::OBJECTS);
+
+
+		int i,j,/*k,*/num_vertices;
+		//r1_vert* t_vertices=0;
+		//int src_quad[4];
+		i4_transform_class view_transform;
+
+		num_vertices            = obj->num_vertex;
+		ensure_capacity(num_vertices+1);
+
+
+
+		r1_vert *v              = t_vertices;
+		g1_vert_class *src_vert = obj->get_verts(0, current_frame);
+		w8 ANDCODE = 0xFF;
+		w8 ORCODE  = 0;
+
+		g1_vert_class *src_v=src_vert;
+
+		//pf_render_object_transform.start();
+
+		//get this vector before we warp the transform
+		i4_3d_vector cam_in_object_space;
+		object_to_view->inverse_transform(i4_3d_vector(0,0,0),cam_in_object_space);
+
+
+		view_transform.x.x = object_to_view->x.x * scale_x;
+		view_transform.x.y = object_to_view->x.y * scale_y;
+		view_transform.x.z = object_to_view->x.z;
+		view_transform.y.x = object_to_view->y.x * scale_x;
+		view_transform.y.y = object_to_view->y.y * scale_y;
+		view_transform.y.z = object_to_view->y.z;
+		view_transform.z.x = object_to_view->z.x * scale_x;
+		view_transform.z.y = object_to_view->z.y * scale_y;
+		view_transform.z.z = object_to_view->z.z;
+		view_transform.t.x = object_to_view->t.x * scale_x;
+		view_transform.t.y = object_to_view->t.y * scale_y;
+		view_transform.t.z = object_to_view->t.z;
+
+		//if we have an octree, we need to iterate over a 
+		//limited set of polys and vertices only. 
+		quad_object_list.clear();
+		i4_bool use_ot=i4_F;
+		if (obj->octree)
 		{
-		for (i=0; i<num_vertices; i++, src_v++, v++)
+			//hiddenly modificates the t_vertices array
+			use_ot=prepare_octree_rendering(quad_object_list,obj,src_vert,
+				&view_transform,
+				object_to_world,
+				ANDCODE,ORCODE);
+			if (ANDCODE&&use_ot)
+				return;
+		}
+		if (!obj->octree || (use_ot==i4_F))
+		{
+			for (i=0; i<num_vertices; i++, src_v++, v++)
 			{
-			fast_transform(&view_transform,src_v->v,v->v);
-			
-			//v->v.x *= scale_x; //this is accomplished by the above matrix multiplies
-			//v->v.y *= scale_y;
-			
-			w8 code = r1_calc_outcode(v);
-			ANDCODE &= code;
-			ORCODE  |= code;
-			if (!code)
+				fast_transform(&view_transform,src_v->v,v->v);
+
+				//v->v.x *= scale_x; //this is accomplished by the above matrix multiplies
+				//v->v.y *= scale_y;
+
+				w8 code = r1_calc_outcode(v);
+				ANDCODE &= code;
+				ORCODE  |= code;
+				if (!code)
 				{
-				//valid point
-				i4_float ooz = r1_ooz(v->v.z);
-				
-				v->px = v->v.x * ooz * center_x + center_x;
-				v->py = v->v.y * ooz * center_y + center_y;
-				
-				
-				v->w  = ooz;
-				if (option_flags & RENDER_PROJECTTOPLANE)
+					//valid point
+					i4_float ooz = r1_ooz(v->v.z);
+
+					v->px = v->v.x * ooz * center_x + center_x;
+					v->py = v->v.y * ooz * center_y + center_y;
+
+
+					v->w  = ooz;
+					if (option_flags & RENDER_PROJECTTOPLANE)
 					{
-					v->w=r1_ooz(r1_near_clip_z);
-					
+						v->w=r1_ooz(r1_near_clip_z);
+
 					}
 				}
 			}
-	
-	
-		//pf_render_object_transform.stop();
-		
-		if (ANDCODE) 
+
+
+			//pf_render_object_transform.stop();
+
+			if (ANDCODE) 
 			{
-			//free(t_vertices);
-			return;
+				//free(t_vertices);
+				return;
 			}
-		
-		//pf_render_object_light.start();
-		
-		//IMPORTANT
-		//we need this transform to do lighting
-		if (object_to_world)
+
+			//pf_render_object_light.start();
+
+			//IMPORTANT
+			//we need this transform to do lighting
+			if (object_to_world)
 			{
-			//worldspace light vector
-			i4_3d_vector light = g1_lights.direction;
-			i4_3d_vector t_light;
-			
-			// get the ambient contribution from the map at the object's center point
-			i4_float ar,ag,ab;
-			get_ambient(object_to_world, ar,ag,ab);
-			
-			float dir_int=g1_lights.directional_intensity;
-			
-			//transform light into object space for lighting
-			object_to_world->inverse_transform_3x3(light,t_light);
-			
-			src_vert = obj->get_verts(0,current_frame);
-			v        = t_vertices;
-			
-			//We'll need to further investigate here, since it's no more 
-			//acceptable to iterate over all vertices if there is an octree
-			//(num_vertices might be several hundred thousand)
-			for (i=0; i<num_vertices; i++, v++)
+				//worldspace light vector
+				i4_3d_vector light = g1_lights.direction;
+				i4_3d_vector t_light;
+
+				// get the ambient contribution from the map at the object's center point
+				i4_float ar,ag,ab;
+				get_ambient(object_to_world, ar,ag,ab);
+
+				float dir_int=g1_lights.directional_intensity;
+
+				//transform light into object space for lighting
+				object_to_world->inverse_transform_3x3(light,t_light);
+
+				src_vert = obj->get_verts(0,current_frame);
+				v        = t_vertices;
+
+				//We'll need to further investigate here, since it's no more 
+				//acceptable to iterate over all vertices if there is an octree
+				//(num_vertices might be several hundred thousand)
+				for (i=0; i<num_vertices; i++, v++)
 				{
-				//      i4_float reflected_intensity = 1.0;
-				
-				i4_float dot=-src_vert[i].normal.dot(t_light);
-				i4_float reflected_intensity = g1_lights.directional_intensity * dot;
-				
-				
-				if (reflected_intensity<0) 
-					reflected_intensity=0;
-				
-				v->r = reflected_intensity * dir_int + ar;  if (v->r>1.0) v->r=1.0;
-				v->g = reflected_intensity * dir_int + ag;  if (v->g>1.0) v->g=1.0;
-				v->b = reflected_intensity * dir_int + ab;  if (v->b>1.0) v->b=1.0;
-				v->a = 1.0;
+					//      i4_float reflected_intensity = 1.0;
+
+					i4_float dot=-src_vert[i].normal.dot(t_light);
+					i4_float reflected_intensity = g1_lights.directional_intensity * dot;
+
+
+					if (reflected_intensity<0) 
+						reflected_intensity=0;
+
+					v->r = reflected_intensity * dir_int + ar;  if (v->r>1.0) v->r=1.0;
+					v->g = reflected_intensity * dir_int + ag;  if (v->g>1.0) v->g=1.0;
+					v->b = reflected_intensity * dir_int + ab;  if (v->b>1.0) v->b=1.0;
+					v->a = 1.0;
 				}
 			}
-		else
+			else
 			{
-			v = t_vertices;    
-			for (i=0; i<num_vertices; i++, v++)
+				v = t_vertices;    
+				for (i=0; i<num_vertices; i++, v++)
 				{
-				v->r = v->g = v->b = 1.f;//g1_lights.ambient_intensity;
-				v->a = 1.0f;/// we will decrease this... (was 1.0, just to remember)
-				//ok? let's try this? 
+					v->r = v->g = v->b = 1.f;//g1_lights.ambient_intensity;
+					v->a = 1.0f;/// we will decrease this... (was 1.0, just to remember)
+					//ok? let's try this? 
 				}
 			}
-		
-		
-		if (render_damage_level != -1)
+
+
+			if (render_damage_level != -1)
 			{
-			//set their lighting values to 1
-			v = t_vertices;    
-			for (i=0; i<num_vertices; i++, v++)
-				if ((1<<(i&7)) & charred_array[render_damage_level]) 
-					v->r = v->g = v->b = 0;
+				//set their lighting values to 1
+				v = t_vertices;    
+				for (i=0; i<num_vertices; i++, v++)
+					if ((1<<(i&7)) & charred_array[render_damage_level]) 
+						v->r = v->g = v->b = 0;
 			}
 
 		}//else not octree
 
-	//pf_render_object_light.stop();     
-	
-	pf_render_object_pack.start();
-	g1_quad_class *q_ptr = obj->quad, *q; 
-	int allquads=obj->num_quad;
-	if (use_ot)
-		{
-		allquads=quad_object_list.size();
-		q_ptr=quad_object_list[0];
-		}
-	for (i=0; i<allquads; i++, q_ptr++)
-		{
+		//pf_render_object_light.stop();     
+
+		pf_render_object_pack.start();
+		g1_quad_class *q_ptr = obj->quad, *q; 
+		int allquads=obj->num_quad;
 		if (use_ot)
+		{
+			allquads=quad_object_list.size();
+			q_ptr=quad_object_list[0];
+		}
+		for (i=0; i<allquads; i++, q_ptr++)
+		{
+			if (use_ot)
 			{
-			q_ptr=quad_object_list[i];
-			if (i>0 && q_ptr==quad_object_list[i-1]) //we've already drawn this quad.
-				continue;
+				q_ptr=quad_object_list[i];
+				if (i>0 && q_ptr==quad_object_list[i-1]) //we've already drawn this quad.
+					continue;
 			}
-		sw32 num_poly_verts = q_ptr->num_verts();
-		
-		i4_3d_vector cam_to_pt = src_vert[q_ptr->vertex_ref[0]].v;
-		cam_to_pt -= cam_in_object_space;
-		
-		float dot = cam_to_pt.dot(q_ptr->normal);
-		
-		if (dot<0||q_ptr->get_flags(g1_quad_class::BOTHSIDED))
+			sw32 num_poly_verts = q_ptr->num_verts();
+
+			i4_3d_vector cam_to_pt = src_vert[q_ptr->vertex_ref[0]].v;
+			cam_to_pt -= cam_in_object_space;
+
+			float dot = cam_to_pt.dot(q_ptr->normal);
+
+			if (dot<0||q_ptr->get_flags(g1_quad_class::BOTHSIDED))
 			{
-			if (g1_tint!=G1_TINT_OFF && g1_hurt_tint==0)
+				if (g1_tint!=G1_TINT_OFF && g1_hurt_tint==0)
 				{
-				if ((q_ptr->get_flags(g1_quad_class::TINT)||(g1_tint==G1_TINT_ALL)) 
-					&& player_num!=-1)
-					q=tint_modify(q_ptr, player_num);
-				else
+					if ((q_ptr->get_flags(g1_quad_class::TINT)||(g1_tint==G1_TINT_ALL)) 
+						&& player_num!=-1)
+						q=tint_modify(q_ptr, player_num);
+					else
 					{
-					r_api->set_color_tint(0);
-					q=q_ptr;
+						r_api->set_color_tint(0);
+						q=q_ptr;
 					}
 				}
-			else q=q_ptr;
-			
-			// copy in the texture coordinates      
-			for (j=0; j<num_poly_verts; j++)      
+				else q=q_ptr;
+
+				// copy in the texture coordinates      
+				for (j=0; j<num_poly_verts; j++)      
 				{
-				int ref=q->vertex_ref[j];
-				//src_quad[j]=ref;
-				
-				v = &t_vertices[ref];
-				v->s = q->u[j];
-				v->t = q->v[j];
+					int ref=q->vertex_ref[j];
+					//src_quad[j]=ref;
+
+					v = &t_vertices[ref];
+					v->s = q->u[j];
+					v->t = q->v[j];
 				}
-			
-			
-			if (ORCODE==0)
+
+
+				if (ORCODE==0)
 				{
-				float nearest_w = 0;
-				
-				if (bound_box)
+					float nearest_w = 0;
+
+					if (bound_box)
 					{          
-					for (j=0; j<num_poly_verts; j++)
+						for (j=0; j<num_poly_verts; j++)
 						{        
-						r1_vert *temp_vert = &t_vertices[q->vertex_ref[j]];
-						
-						float ooz = temp_vert->w;
-						
-						if (ooz > nearest_w)
-							nearest_w=ooz;
-						
-						if (temp_vert->px < bound_box->x1) bound_box->x1 = temp_vert->px;
-						if (temp_vert->px > bound_box->x2) bound_box->x2 = temp_vert->px;
-						
-						if (temp_vert->py < bound_box->y1) bound_box->y1 = temp_vert->py;
-						if (temp_vert->py > bound_box->y2) bound_box->y2 = temp_vert->py;
-						
-						if (temp_vert->v.z > bound_box->z2) bound_box->z2 = temp_vert->v.z;
-						
-						if (temp_vert->v.z < bound_box->z1)
+							r1_vert *temp_vert = &t_vertices[q->vertex_ref[j]];
+
+							float ooz = temp_vert->w;
+
+							if (ooz > nearest_w)
+								nearest_w=ooz;
+
+							if (temp_vert->px < bound_box->x1) bound_box->x1 = temp_vert->px;
+							if (temp_vert->px > bound_box->x2) bound_box->x2 = temp_vert->px;
+
+							if (temp_vert->py < bound_box->y1) bound_box->y1 = temp_vert->py;
+							if (temp_vert->py > bound_box->y2) bound_box->y2 = temp_vert->py;
+
+							if (temp_vert->v.z > bound_box->z2) bound_box->z2 = temp_vert->v.z;
+
+							if (temp_vert->v.z < bound_box->z1)
 							{
-							bound_box->z1 = temp_vert->v.z;
-							bound_box->w  = ooz;
+								bound_box->z1 = temp_vert->v.z;
+								bound_box->w  = ooz;
 							}                            
 						}
 					}
-				else
+					else
 					{
-					for (j=0; j<num_poly_verts; j++)
+						for (j=0; j<num_poly_verts; j++)
 						{        
-						r1_vert *temp_vert = &t_vertices[q->vertex_ref[j]];
-						
-						float ooz = temp_vert->w;            
-						
-						if (ooz > nearest_w)
-							nearest_w=ooz;                          
+							r1_vert *temp_vert = &t_vertices[q->vertex_ref[j]];
+
+							float ooz = temp_vert->w;            
+
+							if (ooz > nearest_w)
+								nearest_w=ooz;                          
 						}
 					}
-				
-				i4_float twidth = nearest_w * q->texture_scale * texture_scale * center_x * 2;
-				
-				r_api->use_texture(q->material_ref, i4_f_to_i(twidth), current_frame);
-				
-				g1_stat_counter.increment(g1_statistics_counter_class::OBJECT_POLYS);
-				g1_stat_counter.increment(g1_statistics_counter_class::TOTAL_POLYS);
-				r_api->render_poly(num_poly_verts,t_vertices,q->vertex_ref);
+
+					i4_float twidth = nearest_w * q->texture_scale * texture_scale * center_x * 2;
+
+					r_api->use_texture(q->material_ref, i4_f_to_i(twidth), current_frame);
+
+					g1_stat_counter.increment(g1_statistics_counter_class::OBJECT_POLYS);
+					g1_stat_counter.increment(g1_statistics_counter_class::TOTAL_POLYS);
+					r_api->render_poly(num_poly_verts,t_vertices,q->vertex_ref);
 				}
-			else
+				else
 				{
-				r1_vert temp_buf_1[64];
-				r1_vert temp_buf_2[64];
-				r1_vert *clipped_poly;
-				
-				clipped_poly = r_api->clip_poly(&num_poly_verts,
-					t_vertices,
-					q->vertex_ref,
-					temp_buf_1,
-					temp_buf_2,
-					R1_CLIP_NO_CALC_OUTCODE
-					);
-				
-				
-				if (clipped_poly && num_poly_verts>=3)      
+					r1_vert temp_buf_1[64];
+					r1_vert temp_buf_2[64];
+					r1_vert *clipped_poly;
+
+					clipped_poly = r_api->clip_poly(&num_poly_verts,
+						t_vertices,
+						q->vertex_ref,
+						temp_buf_1,
+						temp_buf_2,
+						R1_CLIP_NO_CALC_OUTCODE
+						);
+
+
+					if (clipped_poly && num_poly_verts>=3)      
 					{
-					float nearest_w = 0;
-					
-					if (!bound_box)
+						float nearest_w = 0;
+
+						if (!bound_box)
 						{                  
-						r1_vert *temp_vert = clipped_poly;
-						
-						for (j=0; j<num_poly_verts; j++, temp_vert++)
+							r1_vert *temp_vert = clipped_poly;
+
+							for (j=0; j<num_poly_verts; j++, temp_vert++)
 							{        
-							i4_float ooz = r1_ooz(temp_vert->v.z);
-							
-							temp_vert->w  = ooz;
-							temp_vert->px = temp_vert->v.x * ooz * center_x + center_x;
-							temp_vert->py = temp_vert->v.y * ooz * center_y + center_y;
-							
-							if (ooz > nearest_w)
-								nearest_w=ooz;                            
+								i4_float ooz = r1_ooz(temp_vert->v.z);
+
+								temp_vert->w  = ooz;
+								temp_vert->px = temp_vert->v.x * ooz * center_x + center_x;
+								temp_vert->py = temp_vert->v.y * ooz * center_y + center_y;
+
+								if (ooz > nearest_w)
+									nearest_w=ooz;                            
 							}                  
 						}
-					else
+						else
 						{          
-						r1_vert *temp_vert = clipped_poly;
-						
-						for (j=0; j<num_poly_verts; j++,temp_vert++)
+							r1_vert *temp_vert = clipped_poly;
+
+							for (j=0; j<num_poly_verts; j++,temp_vert++)
 							{            
-							float ooz = r1_ooz(temp_vert->v.z);
-							
-							temp_vert->w  = ooz;
-							temp_vert->px = temp_vert->v.x * ooz * center_x + center_x;
-							temp_vert->py = temp_vert->v.y * ooz * center_y + center_y;
-							
-							if (ooz > nearest_w)
-								nearest_w=ooz;
-							
-							if (temp_vert->px < bound_box->x1) bound_box->x1 = temp_vert->px;
-							if (temp_vert->px > bound_box->x2) bound_box->x2 = temp_vert->px;
-							
-							if (temp_vert->py < bound_box->y1) bound_box->y1 = temp_vert->py;
-							if (temp_vert->py > bound_box->y2) bound_box->y2 = temp_vert->py;
-							
-							if (temp_vert->v.z > bound_box->z2) bound_box->z2 = temp_vert->v.z;
-							
-							if (temp_vert->v.z < bound_box->z1)
+								float ooz = r1_ooz(temp_vert->v.z);
+
+								temp_vert->w  = ooz;
+								temp_vert->px = temp_vert->v.x * ooz * center_x + center_x;
+								temp_vert->py = temp_vert->v.y * ooz * center_y + center_y;
+
+								if (ooz > nearest_w)
+									nearest_w=ooz;
+
+								if (temp_vert->px < bound_box->x1) bound_box->x1 = temp_vert->px;
+								if (temp_vert->px > bound_box->x2) bound_box->x2 = temp_vert->px;
+
+								if (temp_vert->py < bound_box->y1) bound_box->y1 = temp_vert->py;
+								if (temp_vert->py > bound_box->y2) bound_box->y2 = temp_vert->py;
+
+								if (temp_vert->v.z > bound_box->z2) bound_box->z2 = temp_vert->v.z;
+
+								if (temp_vert->v.z < bound_box->z1)
 								{
-								bound_box->z1 = temp_vert->v.z;
-								bound_box->w = ooz;
+									bound_box->z1 = temp_vert->v.z;
+									bound_box->w = ooz;
 								}
 							}                  
 						}
-					
-					i4_float twidth = nearest_w * q->texture_scale * texture_scale * center_x * 2;
-					r_api->use_texture(q->material_ref, i4_f_to_i(twidth), current_frame);
-					r_api->render_poly(num_poly_verts,clipped_poly);
-					
-					g1_stat_counter.increment(g1_statistics_counter_class::OBJECT_POLYS);
-					g1_stat_counter.increment(g1_statistics_counter_class::TOTAL_POLYS);
+
+						i4_float twidth = nearest_w * q->texture_scale * texture_scale * center_x * 2;
+						r_api->use_texture(q->material_ref, i4_f_to_i(twidth), current_frame);
+						r_api->render_poly(num_poly_verts,clipped_poly);
+
+						g1_stat_counter.increment(g1_statistics_counter_class::OBJECT_POLYS);
+						g1_stat_counter.increment(g1_statistics_counter_class::TOTAL_POLYS);
 					}
 				} 
-    }
-  }
-  
-  if (g1_tint!=G1_TINT_OFF && g1_hurt_tint==0)
-	  r_api->set_color_tint(0);
-  
-  //free(t_vertices);
-  pf_render_object_pack.stop();
-}
+			}
+		}
+
+		if (g1_tint!=G1_TINT_OFF && g1_hurt_tint==0)
+			r_api->set_color_tint(0);
+
+		//free(t_vertices);
+		pf_render_object_pack.stop();
+	}
 
 void g1_render_class::render_object_polys(g1_quad_object_class *obj,
                                           i4_transform_class *object_to_view,
@@ -927,6 +934,16 @@ void g1_render_class::render_3d_line(const i4_3d_point_class &p1,
   r_api->set_alpha_mode(oldalpha);
   //r_api->use_default_texture();
   //r_api->set_constant_color(0xffffff);
+}
+
+void g1_render_class::render_2d_point(int px, int py, i4_color color)
+{
+
+	if (px>0 && py>0 && px<center_x*2-1 && py<center_y*2-1)
+	{
+		r_api->r1_render_api_class::clear_area(px-1,py-1,px+1,py+1,color,
+			r1_near_clip_z);
+	}
 }
 
 void g1_render_class::render_3d_point(const i4_3d_point_class &p1, i4_color color, i4_transform_class *t)
@@ -1550,8 +1567,8 @@ w8 g1_render_class::point_classify(const i4_3d_point_class &p,
 		
 	i4_3d_vector temp;
 	transform->transform(p,temp);
-	temp.x *= scale_x;
-    temp.y *= scale_y;
+	//temp.x *= scale_x;  //although project_point above is exactly doing the same,
+    //temp.y *= scale_y;  //this is wrong here (causes point to be off by a factor for the larger of the two)
 	w8 code=0;
 	if (temp.z<r1_near_clip_z)
 		{
@@ -1564,6 +1581,7 @@ w8 g1_render_class::point_classify(const i4_3d_point_class &p,
 	float px,py;
 	px = temp.x * ooz *center_x+ center_x;
     py = temp.y * ooz *center_y+ center_y;
+	//render_2d_point(px,py,0xffffff); // for testing purposes only
 	if (px<0)
 		code|=2;
 	if (px>2*center_x)

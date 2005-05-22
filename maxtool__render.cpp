@@ -374,7 +374,7 @@ void m1_utility_window_class::draw_3d_text(i4_3d_point_class p,
     //m1_info.r_font->set_color(0);
     //m1_info.r_font->put_string(local_image, x+1, v.py+1,  str, context);
 
-    m1_info.r_api->set_constant_color(0xffffff);
+    api->set_constant_color(0xffffff);
     m1_info.r_font->set_color(color);
     m1_info.r_font->put_string(local_image, (short) x, (short) v.py,  str, context);
   }
@@ -388,7 +388,7 @@ void m1_utility_window_class::draw_3d_line(i4_3d_point_class p1,
 										   i4_bool on_top)
 //{{{
 {
-	g1_render.r_api->set_shading_mode(R1_COLORED_SHADING);
+	api->set_shading_mode(R1_COLORED_SHADING);
 	g1_render.render_3d_line(p1,p2,color,color,&transform,i4_F);
 	// The following code does almost the same as render_3d_line already does. 
 	// Two problems: first, it's uneccessary code duplication,
@@ -551,8 +551,9 @@ void m1_utility_window_class::draw_3d_point(i4_3d_point_class p, i4_color color,
   if (ix>0 && iy>0 && ix<center_x*2-1 && iy<center_y*2-1)
   {
     api->set_alpha_mode(R1_ALPHA_DISABLED);
+	api->set_shading_mode(R1_COLORED_SHADING);
     api->disable_texture();
-    api->r1_render_api_class::clear_area(ix-1,iy-1,ix+1,iy+1,color,
+    api->clear_area(ix-1,iy-1,ix+1,iy+1,color,
                                          on_top ? v.v.z : m1_near_clip_z());
   }
 }
@@ -1149,7 +1150,8 @@ void m1_utility_window_class::parent_draw(i4_draw_context_class &context)
 
   //    i4_time_dev.request_event(this,new i4_user_message_event_class(0),100);
 
-  //request_redraw(i4_F);//would be fine to solve the flicker-problem, but 
+  request_redraw(i4_F);
+  //would be fine to solve the flicker-problem, but 
   //we cannot draw if something is on top of us (i.e menu) because
   //the renderer just ignores the contexts (hardware!)
 
