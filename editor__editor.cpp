@@ -6767,7 +6767,8 @@ g1_3d_object_window::g1_3d_object_window(w16 w, w16 h,
   :  g1_3d_pick_window(w,h,
                        active_back, passive_back,
                        camera,
-                       reaction)
+                       reaction),
+     object_type(-1) //set to invalid (will cause set_object_type() bellow to load always)
 {
   object=0;
   set_object_type(obj_type, _array_index);
