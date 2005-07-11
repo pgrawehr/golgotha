@@ -208,6 +208,17 @@ i4_bool g1_factory_class::build(int type)
   }
   return i4_F;
 }
+
+void g1_factory_class::request_remove()
+{
+	while (!deploy_que.empty())
+	{
+		g1_build_item item;
+		deploy_que.deque(item);
+		i4_free(item.path);
+	}
+	g1_building_class::request_remove();
+}
   
 void g1_factory_class::think()
 {  

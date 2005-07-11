@@ -85,7 +85,7 @@ typedef i4_str t_Str;
 // line is a comment or not. Note that the first character in this constant is
 // the one used when writing comments to disk (if the comment does not allready
 // contain an indicator)
-const t_Str CommentIndicators = t_Str(";#");
+//const t_Str CommentIndicators = t_Str(";#");
 
 // EqualIndicators
 // This constant contains the characters that we check against to determine if
@@ -94,12 +94,12 @@ const t_Str CommentIndicators = t_Str(";#");
 // ability of CDataFile to read/write to .ini files.  Also, note that the
 // first character in this constant is the one that is used when writing the
 // values to the file. (EqualIndicators[0])
-const t_Str EqualIndicators   = t_Str("=:"); 
+//const t_Str EqualIndicators   = t_Str("=:"); 
 
 // WhiteSpace
 // This constant contains the characters that the Trim() function removes from
 // the head and tail of strings.
-const t_Str WhiteSpace = t_Str(" \t\n\r");
+//const t_Str WhiteSpace = t_Str(" \t\n\r");
 
 // st_key
 // This structure stores the definition of a key. A key is a named identifier

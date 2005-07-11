@@ -58,6 +58,7 @@ public:
   virtual i4_bool build(int type);
   virtual w32 get_path_color();
   virtual w32 get_selected_path_color();
+  virtual void request_remove();
   static g1_factory_class *cast(g1_object_class *obj)
 			{
 			if (!obj||!(obj->get_type()->get_flag(g1_object_definition_class::TO_FACTORY)))

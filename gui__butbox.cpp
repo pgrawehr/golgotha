@@ -498,14 +498,14 @@ void i4_button_class::set_repeat_down(i4_bool value, i4_event_reaction_class *_r
 
 char *tokens[]={"=", "(", ")",
                 "[", "]", "right", "down", "up_deco", "down_deco", "'", "text_input", "text",
-                "button", "butbox", "obj_ev", "user_ev", "x+", "y+", 0};
+                "button", "butbox", "obj_ev", "user_ev", "x+", "y+", "checkbox", 0};
 
 enum {
   TK_EQUAL, TK_LPAREN, TK_RPAREN,
   TK_LBRACE, TK_RBRACE, TK_RIGHT, TK_DOWN, TK_UP_DECO, TK_DOWN_DECO, TK_TICK, 
   TK_TEXT_INPUT, TK_TEXT,
   TK_BUTTON, TK_BUTBOX, TK_OBJ_EV,  TK_USER_EV,
-  TK_XPLUS, TK_YPLUS, TK_NUMBER, TK_POINTER, TK_NONE };
+  TK_XPLUS, TK_YPLUS, TK_CHECKBOX, TK_NUMBER, TK_POINTER, TK_NONE };
   
 
 
@@ -655,19 +655,17 @@ i4_str *i4_read_str(i4_const_str::iterator &i, const i4_const_str &fmt, va_list 
   if (i4_read_dlg_token(i, fmt, n, p, ap)!=TK_TICK)
     i4_expected("'",i,fmt);
 
-  i4_str *s=new i4_str(i4_string_man.get(0), 200);
-  i4_str::iterator x=s->begin();
+  i4_str *s=new i4_str();
   while (i!=fmt.end() && i.get().value()!='\'')
   {
-    x.set((w8)i.get().value());
+	s->insert(s->end(),i.get());
     ++i;
-    ++x;
-    s->set_length(s->length()+1);
   }
   ++i;
 
+  //i4_warning(s->c_str());
   i4_str *ret=s->vsprintf(200, ap);
-
+  //i4_warning(ret->c_str());
   delete s;
   return ret;
 }

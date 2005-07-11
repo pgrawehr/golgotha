@@ -179,3 +179,8 @@ issue might be needed.
 Trike: Behaves strangely when near target. The problem might be that the speed is not directly 
 limited if the unit moves along the path. 
 
+bomb_truck: May crash if recursion on damage()/g1_apply_damage() gets to deep. Need to move
+the code that applies damage to other units from damage() to think(), and partially reimplement the
+code from g1_object_class::damage() base in bomb truck (including different sound)
+
+

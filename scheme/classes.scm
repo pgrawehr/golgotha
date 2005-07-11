@@ -278,6 +278,14 @@
   ;;changed to a global variable since it is needed before the map vars are loaded
 )
 
+(def_class tile_edit_dialog nil
+    (friction_fraction 1.0)
+    (damage 0)
+    (block nil)
+    (wave nil)
+    (hidden_id 0)
+)
+
 ;;Information: The day has 60*60*24=86400 seconds.
 ;;since a second has 10 ticks, the whole day takes 864000 ticks. 
 ;;if you increase the advance_ticks value, day and night change faster

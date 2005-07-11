@@ -613,6 +613,13 @@ li_object *li_print(li_object *o, li_environment *env)
 	return ret;
 	}
 
+void dmem_report();
+li_object *li_dump_memory(li_object *o, li_environment *env)
+{
+	dmem_report();
+	return 0;
+}
+
 li_list *li_make_list(li_object *first, ...)
 {
   va_list ap;
@@ -3956,6 +3963,7 @@ void li_memory_manager_class::init()
     li_add_function("make-local-variable",li_make_local_variable);
     li_add_function("while",li_while);
     li_add_function("memq",li_memq);
+	li_add_function("memory_report",li_dump_memory);
     active=i4_T;
 	
   }

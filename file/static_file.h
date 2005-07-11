@@ -32,6 +32,12 @@ public:
     else
       return 0;
   }
+  void close()
+  {
+	if (f)
+		fclose(f);
+	f=0;
+  }
 
   virtual w32 read (void *buffer, w32 size) { return 0; }
   virtual w32 write(const void *buffer, w32 size) { return fwrite(buffer, size, 1, f); }

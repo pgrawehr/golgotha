@@ -480,11 +480,13 @@ void i4_mem_report(char *filename)
 
   if (fp)
   {
-    for (int i=0;i<bmanage_total;i++)
-      bmanage[i].report(fp);
+	  fp->printf("Total available=%d, allocated=%d\n", i4_available(), i4_allocated());    
+
+	  for (int i=0;i<bmanage_total;i++)
+		  bmanage[i].report(fp);
   
-    fp->printf("Total available=%d, allocated=%d\n", i4_available(), i4_allocated());    
   }
+  
   
 }
 
@@ -723,6 +725,7 @@ void i4_block_manager_class::inspect()
 void i4_block_manager_class::report(i4_file_class *fp)
 {
   fp->printf("************** Block size = %d ***************\n",block_size);
+  fp->printf("Index  Base (Offset) Size\n");
   int i=0;
   memory_node *f=sfirst;
   swptr f_total=0, a_total=0;
@@ -789,8 +792,12 @@ swptr i4_block_manager_class::largest_free_block()
   swptr l=0;
   memory_node *f;
   for (f=sfirst;f;f=f->next)
-    if (-f->size>l)
-      l=-f->size;
+  {
+      if (-f->size>l)
+	  {
+          l=-f->size;
+	  }
+  }
 
   return l;
 }
@@ -800,7 +807,12 @@ swptr i4_block_manager_class::available()
   swptr size=0;
   memory_node *f;
   for (f=sfirst;f;f=f->next)
-    if (f->size<0) size-=f->size;
+  {
+      if (f->size<0) 
+	  {
+		  size-=f->size;
+	  }
+  }
 
   return size;
 }
@@ -835,6 +847,12 @@ void i4_block_manager_class::init(void *block, long Block_size)
 
 void *i4_block_manager_class::alloc(long size, char *name)
 {
+#ifdef i4_MEM_CHECK
+	int iBytesAlloc=allocated();
+	int iBytesAvail=available();
+	I4_ASSERT(iBytesAlloc<=this->block_size, "Memory manager internal inconsistency");
+	I4_ASSERT(block_size>=iBytesAvail,"Memory manager very strange inconsistency");
+#endif
   if (size<JM_SMALL_SIZE)
   {
     small_block *s=sblocks[size];

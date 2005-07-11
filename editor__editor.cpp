@@ -7874,6 +7874,7 @@ g1_tile_picker_class::g1_tile_picker_class(i4_graphical_style_class *style,
     passive_back(passive_back),
 	edit_blocking(0),
 	edit_fract(0),
+	edit_tile_damage(0),
 	edit_wave(0)
     
 {
@@ -7944,19 +7945,49 @@ i4_bool g1_tile_picker_class::remove(i4_menu_item_class *window)
 	return i4_F;
 }
 
+li_object* tile_edit_callback(li_object* o, li_environment *env)
+{
+	if (o==NULL)
+		return 0;
+	li_class *c=li_class::get(li_car(o, env),env);
+	li_class_context ctx(c);
+	int t=g1_tile_man.get_remap(li_int::get(c->value("hidden_id"),0)->value());
+	g1_tile_class *tile=g1_tile_man.get(t);
+	tile->set_friction(li_float::get(c->value("friction_fraction"),0)->value());
+	tile->damage=li_int::get(c->value("damage"),0)->value();
+	tile->flags|=(c->value("wave")==li_true_sym)?(g1_tile_class::WAVE):0;
+	tile->flags|=(c->value("block")==li_true_sym)?(g1_tile_class::BLOCKING):0;
+	return 0;
+}
 i4_bool g1_tile_picker_class::edit(i4_menu_item_class *window)
 {
 	g1_3d_tile_window *tilewin=(g1_3d_tile_window*)window;
 	int t=g1_tile_man.get_remap(tilewin->tile_num);
 	g1_tile_class *tile=g1_tile_man.get(t);
 	
-	i4_create_dialog(g1_ges("tile_edit_dialog"), this, style,
-		&edit_fract, tile->friction_fraction,
-		&(tile->damage), tile->damage,
-		&edit_wave, tile->flags&g1_tile_class::WAVE?i4_T:i4_F,
-		&edit_blocking, tile->flags&g1_tile_class::BLOCKING?i4_T:i4_F,
-		this, KEY_OK,
-		this, KEY_CANCEL);
+	//i4_create_dialog(g1_ges("tile_edit_dialog"), this, style,
+	//	&edit_fract, /*tile->friction_fraction*/ 0,
+	//	&edit_tile_damage, tile->damage,
+	//	&edit_wave, (tile->flags&g1_tile_class::WAVE)?i4_T:i4_F,
+	//	&edit_blocking, (tile->flags&g1_tile_class::BLOCKING)?i4_T:i4_F,
+	//	this, KEY_OK,
+	//	this, KEY_CANCEL);
+	li_class *dlg=(li_class*)li_new("tile_edit_dialog");
+	li_class_context ctx(dlg);
+	dlg->set("friction_fraction",new li_float(tile->friction_fraction));
+	dlg->set("damage",new li_int(tile->damage));
+	li_object *v=(tile->flags&g1_tile_class::BLOCKING)?li_true_sym:li_nil;
+	dlg->set("block", v);
+	v=(tile->flags&g1_tile_class::WAVE)?li_true_sym:li_nil;
+	dlg->set("wave",v);
+	dlg->set("hidden_id",new li_int(tilewin->tile_num));
+	i4_const_str *s=g1_tile_man.get_name_from_tile(t);
+	if (s==NULL)
+	{
+		return i4_F;
+	}
+	li_create_dialog(*s,dlg,0,&tile_edit_callback,0);
+	delete s;
 	return i4_T;
 }
 

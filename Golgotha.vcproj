@@ -57,8 +57,8 @@
 				MapExports="TRUE"
 				MapLines="TRUE"
 				SubSystem="2"
-				StackReserveSize="2556302"
-				StackCommitSize="1048576"/>
+				StackReserveSize="4194304"
+				StackCommitSize="4194304"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -131,8 +131,8 @@
 				GenerateMapFile="TRUE"
 				MapFileName="Golgotha.map"
 				SubSystem="2"
-				StackReserveSize="2556302"
-				StackCommitSize="1048576"/>
+				StackReserveSize="4194304"
+				StackCommitSize="4194304"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
