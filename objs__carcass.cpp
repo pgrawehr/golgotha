@@ -32,10 +32,8 @@ public:
   g1_carcass_class(g1_object_type id, g1_loader_class *fp)
     : g1_object_class(id, fp)
   {
-    //if (fp)    // remove from game on load
-    //  x=-1;
     model_name=0;//just in case...
-    w16 ver,data;//it is possible that there follows no data for this 
+    w16 ver=0,data=0;//it is possible that there follows no data for this 
     if (fp)//object
 		{
 		fp->get_version(ver,data);
@@ -151,6 +149,7 @@ public:
       {
         unoccupy_location();
         request_remove();
+		return;
       }
     }
 	if (g1_get_map()->terrain_height(x,y)<h)//may happen i.e
@@ -160,6 +159,7 @@ public:
 		pitch+=0.12f;//some random values.
 		roll-=0.024f;
 		theta+=0.002f;
+		occupy_location();
 		}
 	request_think();
   }

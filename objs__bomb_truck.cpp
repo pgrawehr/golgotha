@@ -23,13 +23,15 @@
 #include "sound/sfx_id.h"
 #include "controller.h"
 #include "human.h"
+#include "objs/crate.h"
+#include "g1_rand.h"
 
 static g1_team_icon_ref radar_im("bitmaps/radar/bomb_truck.tga");
 
 S1_SFX(bomb_coming, "computer_voice/bomb_truck_approaching_22khz.wav", S1_STREAMED, 200);
 
 S1_SFX(bleep, "misc/bleep_22khz.wav", 0, 100);
-
+S1_SFX(explosion_bomb_truck, "explosion/shockwave.wav", S1_3D, 201);
 
 static li_symbol_ref reached("reached");
 static li_symbol_ref commands_ask("commands-ask");
@@ -74,6 +76,23 @@ public:
   {
     if (attack_target.get()==this)
 		damage(0,health,i4_3d_vector(0,0,1));
+	if (health<=0)
+	{
+		g1_shockwave_class *shock = NULL;
+		if (controled())
+		{
+			g1_current_controller->view.suggest_camera_mode(
+				G1_CIRCLE_WAIT,global_id);
+		}
+		shock = (g1_shockwave_class *)g1_create_object(g1_get_object_type(shockwave.get()));
+		if (shock)
+			shock->setup(i4_3d_vector(x,y,h), 0.5);
+
+		g1_apply_damage(this, this, 0, i4_3d_vector(0,0,1));
+		unoccupy_location();
+		request_remove();
+		return;
+	}
     g1_map_piece_class::think();
     if (warning_level>9)
       warning_level=9;
@@ -89,21 +108,51 @@ public:
   void damage(g1_object_class *who_is_hurting,
               int how_much_hurt, i4_3d_vector damage_dir)  
   {
-    g1_object_class::damage(who_is_hurting, how_much_hurt, damage_dir);
-    if (health<=0)
-    {
-      g1_shockwave_class *shock = NULL;
-      if (controled())
-          {
-          g1_current_controller->view.suggest_camera_mode(
-               G1_CIRCLE_WAIT,global_id);
-          }
-      shock = (g1_shockwave_class *)g1_create_object(g1_get_object_type(shockwave.get()));
-      if (shock)
-        shock->setup(i4_3d_vector(x,y,h), 0.5);
 
-      g1_apply_damage(this, this, 0, i4_3d_vector(0,0,1));
-    }
+	  if (health-how_much_hurt<=0)
+	  {          
+		  health=0;
+
+		  if (player_num!=g1_player_man.local_player)
+		  {
+
+			  // jc fixme : global_id is not deterministic if global_id's are not
+			  // pg fixed : was not the worst problem; if setup is not called, we mustn't
+			  // create the object either. (just gets leaked)
+
+			  if ((g1_rand((int)x) & 7)==0)
+			  {
+				  g1_crate_class *c=(g1_crate_class *)g1_create_object(g1_get_object_type("crate"));
+
+				  c->setup(i4_3d_vector(x,y,h), 
+					  (g1_crate_class::ctype)(g1_rand((int)y) % g1_crate_class::MAX_TYPES),
+					  g1_crate_class::SMALL,
+					  200);       // 20 seconds to get the crate
+			  }
+		  }
+
+
+
+		  i4_3d_vector spot=i4_3d_vector(x, y, h);
+		  float r=g1_resources.visual_radius();
+
+		  // don't explode or play sound if we are too far away from the camera
+		  if (g1_current_view_state()->dist_sqrd(spot)<r*r)
+		  {
+			  
+			  g1_camera_event cev;
+			  cev.type=G1_WATCH_EXPLOSION;
+			  cev.follow_object=this;
+			  g1_current_controller->view.suggest_camera_event(cev);
+
+			  explosion_bomb_truck.play(x,y,h);
+		  }
+	  }
+	  else
+	  {
+		  health-=how_much_hurt;
+	  }
+    
   }
 
 
