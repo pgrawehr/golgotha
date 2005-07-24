@@ -3809,8 +3809,9 @@ class memory_block_list
 
 void li_memory_manager_class::init()
   {
-  //Warning C4127 "Conditional Expression is constant" is normal
-  //on the following line.
+	//Warning C4127 "Conditional Expression is constant" is normal
+	//on the following line.
+    //You should be alarmed if it does NOT show up... See what the code does in that case ;-) 
     if (sizeof(li_list)!=16 || sizeof(li_free8_list)!=8)
 		{
         li_error(0, "FATAL: Lisp-Engine memory init: Data size mismatch error, cannot continue.");
@@ -5124,6 +5125,19 @@ public:
     buf[rf.tell()]=0;
 
     i4_graphical_style_class *style=i4_current_app->get_style();
+
+	//Do some beautification on the identifier
+	//Replace any underscores by blanks (these are identifiers shown to the user)
+	for (int i=0;i<name.length();i++)
+	{
+		if (name[i]=='_') 
+			name[i]=' ';
+	}
+	//Make the first character uppercase 
+	if (name.length()>1)
+	{
+		name[0]=(i4_char(name[0]).to_upper().ascii_value());
+	}
 
     windows[0]=new i4_text_window_class(name, style);
 	input_type ctype=get_type(o,property_list,env);
