@@ -23,7 +23,7 @@ public:
   // windows is a buffer of window *, maximum windows allowed is passed through max_windows
   // and total # created is returned.
   // o is the object being edited.  Property list is a generic 'looks' control parameter
-  virtual int create_edit_controls(const i4_const_str &name,
+  virtual int create_edit_controls(i4_str name,
                                    li_object *object, 
                                    li_object *property_list,
                                    i4_window_class **windows, 

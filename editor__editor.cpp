@@ -7269,7 +7269,7 @@ class li_object_reference_edit_class : public li_type_edit_class
 {
 public:
 
-  virtual int create_edit_controls(const i4_const_str &name,
+  virtual int create_edit_controls(i4_str name,
                                    li_object *o, 
                                    li_object *property_list,
                                    i4_window_class **windows, 
@@ -7313,7 +7313,7 @@ public:
 class li_object_list_reference_edit_class : public li_type_edit_class
 {
 public:
-  virtual int create_edit_controls(const i4_const_str &name,
+  virtual int create_edit_controls(i4_str name,
                                    li_object *o, 
                                    li_object *property_list,
                                    i4_window_class **windows, 

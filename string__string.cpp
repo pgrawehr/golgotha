@@ -645,7 +645,7 @@ i4_str::~i4_str()
     i4_free((char *)ptr); 
 }
 
-int i4_str::find(const i4_str &needle_to_find) const
+int i4_const_str::find(const i4_const_str &needle_to_find) const
 {
   iterator j=needle_to_find.begin();
   int pos=0;
@@ -669,10 +669,10 @@ void i4_str::erase(int start, int bytes)
 	remove (iterator(ptr+start),iterator(ptr+start+bytes));
 	}
 
-int i4_str::find_first_of(const i4_str &str) const
+int i4_const_str::find_first_of(const i4_const_str &str) const
 {
 	i4_char ch;
-	int j;
+	w32 j;
 	int ip=0;
 	for (iterator i=begin();i!=end();i++,ip++)
 	{	
@@ -688,10 +688,10 @@ int i4_str::find_first_of(const i4_str &str) const
 	return -1;
 }
 
-int i4_str::find_first_not_of(const i4_str &str) const
+int i4_const_str::find_first_not_of(const i4_const_str &str) const
 {
 	i4_char ch;
-	int j;
+	w32 j;
 	int ip=0;
 	i4_bool found=i4_F;
 	for (iterator i=begin();i!=end();i++,ip++)
@@ -711,10 +711,10 @@ int i4_str::find_first_not_of(const i4_str &str) const
 	return -1;
 }
 
-int i4_str::find_last_of(const i4_str &str) const
+int i4_const_str::find_last_of(const i4_const_str &str) const
 {
 	i4_char ch;
-	int j;
+	w32 j;
 	int ip=len-1;
 	iterator i=end();
 	--i;
@@ -732,10 +732,10 @@ int i4_str::find_last_of(const i4_str &str) const
 	return -1;
 }
 
-int i4_str::find_last_not_of(const i4_str &str) const
+int i4_const_str::find_last_not_of(const i4_const_str &str) const
 {
 	i4_char ch;
-	int j;
+	w32 j;
 	int ip=len-1;
 	i4_bool found=i4_F;
 	iterator i=end();

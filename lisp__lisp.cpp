@@ -5110,7 +5110,7 @@ public:
   }
   
 
-  virtual int create_edit_controls(const i4_const_str &name,
+  virtual int create_edit_controls(i4_str name,
                                    li_object *o, 
                                    li_object *property_list,
                                    i4_window_class **windows, 
@@ -5118,6 +5118,11 @@ public:
                                    li_environment *env)
   {
     if (max_windows<2) return 0;
+	//if the name starts with "hidden_", we don't show an edit element for it. 
+	if (name.starts_with("hidden_"))
+	{
+		return 0; //no window created.
+	}
     
     char buf[300];
     i4_ram_file_class rf(buf, 260);
@@ -5204,6 +5209,8 @@ public:
                                           i4_window_class **windows,
 										  li_environment *env)
   {
+    if (windows==0)
+		return i4_T;
     if (get_type(o,property_list, env)==LIST_BOX)
 		return i4_T;
 	if (get_type(o,property_list,env)==CHECK_BOX)
@@ -5269,6 +5276,8 @@ public:
 		}
 	else if (get_type(o,property_list, env)==TEXT_INPUT)
     {
+	  if (windows==NULL) //Happens if the element didn't have a visible control (was hidden)
+		  return o;      //we can return the original object, since it didn't change
       i4_text_input_class *w=((i4_text_input_class *)windows[1]);
       
       i4_const_str::iterator i=w->get_edit_string()->begin();
@@ -5427,7 +5436,7 @@ public:
  class li_class_edit_class : public li_type_edit_class
  {
  public:
-   int create_edit_controls(const i4_const_str &name,
+   virtual int create_edit_controls(i4_str name,
                             li_object *object, 
                             li_object *property_list,
                             i4_window_class **windows, 

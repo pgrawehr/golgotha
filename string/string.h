@@ -273,6 +273,31 @@ public:
   i4_str *sprintf(w32 max_length, ...) const;
   i4_str *vsprintf(w32 max_length, va_list &ap) const;
 
+  //! Finds another string in this string
+  int find(const i4_const_str &str) const;
+  //! Finds the first occurence of any of the elements of str.
+  int find_first_of(const i4_const_str &str) const;
+  //! Finds the last occurence of any of the elements of str. 
+  int find_last_of(const i4_const_str &str) const;
+  int find_first_not_of(const i4_const_str &str) const;
+  int find_last_not_of(const i4_const_str &str) const;
+  bool starts_with(const i4_const_str &str) const
+  {
+	  if (len==0)
+		  return false;
+	  return find(str)==0;
+  }
+
+  bool ends_with(const i4_const_str &str) const
+  {
+	  if (len==0)
+		  return false;
+	  int i=find(str);
+	  if (i==len-str.length())
+		  return true;
+	  return false;
+  }
+
   /** Find some substring */
   iterator strstr(const i4_const_str &needle_to_find) const;
   
@@ -380,19 +405,13 @@ public:
 	(*this).insert(end(),a);
 	return *this;
 	}
-  int find(const i4_str &str) const;
-  //! Finds the first occurence of any of the elements of str.
-  int find_first_of(const i4_str &str) const;
-  //! Finds the last occurence of any of the elements of str. 
-  int find_last_of(const i4_str &str) const;
-  i4_str substr(int start, int &len) const;
-  int find_first_not_of(const i4_str &str) const;
-  int find_last_not_of(const i4_str &str) const;
   //!erases everything from start (included) to end (exclusive)
   void erase(i4_str::iterator start, i4_str::iterator last)
   	{remove (start, last);}
   //!erases bytes from start to end. 
   void erase(int start, int bytes);
+  i4_str substr(int start, int &len) const;
+
   	
   void to_upper();   ///< converts all the chars in this string to upper case
   void to_lower();   ///< converts all the chars in this string to lower case

@@ -351,7 +351,7 @@ public:
 class li_sky_editor:public li_type_edit_class
 	{
 	public:
-	virtual int create_edit_controls(const i4_const_str &name,
+	virtual int create_edit_controls(i4_str name,
                                    li_object *o, 
                                    li_object *property_list,
                                    i4_window_class **windows, 
