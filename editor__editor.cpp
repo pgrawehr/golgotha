@@ -8054,10 +8054,12 @@ void g1_3d_tile_window::do_edit()
 
 i4_bool g1_3d_tile_window::selected()
 {
-  if (g1_tile_man.get_remap(tile_num)==g1_e_tile.get_cell_type())
-    return i4_T;
-  else
-    return i4_F;
+	if (tile_num>=g1_tile_man.remap_size())
+		return i4_F; //can't select an entry beyond the amount of tiles.
+	if (g1_tile_man.get_remap(tile_num)==g1_e_tile.get_cell_type())
+		return i4_T;
+	else
+		return i4_F;
 }
 
 void g1_3d_tile_window::draw_object(g1_draw_context_class *context)
