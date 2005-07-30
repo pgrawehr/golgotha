@@ -76,8 +76,8 @@ public:
 				it+=breakpos;
 				text->insert(it,'\n');
 				xpos=0;
+				index=breakpos+1;
 				breakpos+=10;
-				index=breakpos;
 				numlines++;
 			}
 			else
@@ -92,7 +92,8 @@ public:
 				{
 					numlines++;
 					breakpos=index+10;
-					index=breakpos;
+					//index=breakpos;
+					index++;
 					xpos=0;
 				}
 				else

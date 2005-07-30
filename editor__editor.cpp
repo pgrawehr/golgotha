@@ -1203,6 +1203,7 @@ void g1_editor_class::open_anim()
 	i4_str *start_dir=0;
 	if (!start_dir)
     start_dir=new i4_str(get_editor_string("open_anim_start_dir"));
+	//TODO: start_dir gets leaked (but mustn't delete bellow, since it's copied to an i4_const_str)
 	i4_create_file_open_dialog(style,
 		get_editor_string("open_anim_title"),
 		*start_dir,
@@ -4915,36 +4916,40 @@ void g1_tile_mode::hide_focus()
 }
 void g1_tile_mode::mouse_down()
 {
-  if (g1_e_tile.get_minor_mode()==g1_tile_params::FILL)
-  {
-    g1_get_map()->mark_for_recalc(G1_RECALC_WATER_VERTS);
-    c->fill_map();
-  }
-  else if (g1_e_tile.get_minor_mode()==g1_tile_params::PLACE)
-  {
-    g1_get_map()->mark_for_recalc(G1_RECALC_WATER_VERTS);
-    c->change_map_cell();
-  }
-  else if (g1_e_tile.get_minor_mode()==g1_tile_params::INFO)
-	  {
-	  i4_const_str msg("Position (%i,%i), Texture %S (han=%i), Rotation %i deg %s");
-	  g1_map_cell_class *cell= c->get_map()->cell((w16)c->cell_x,(w16)c->cell_y);
-	  i4_const_str *texname=0;
-	  //It seems we don't need the remap here
-	  //texname=g1_tile_man.get_name_from_tile(g1_tile_man.get_remap(cell->type));
-	  texname=g1_tile_man.get_name_from_tile(cell->type);
-	  i4_str *m=msg.sprintf(500,(w32)c->cell_x,(w32)c->cell_y,texname,
-		  g1_tile_man.get_texture(cell->type),
-		  (w32)cell->get_rotation()*90,cell->mirrored()?"mirrored":"");
-	  //i4_warning(m);
-	  i4_message_box("Tile Info",*m,MSG_OK);
-	  delete texname;
-	  delete m;
-	  return; //don't pass on to parent, since that event is outdated when 
-	  //this method returns.
-	  }
+	if (g1_e_tile.get_minor_mode()==g1_tile_params::FILL)
+	{
+		g1_get_map()->mark_for_recalc(G1_RECALC_WATER_VERTS);
+		c->fill_map();
+	}
+	else if (g1_e_tile.get_minor_mode()==g1_tile_params::PLACE)
+	{
+		g1_get_map()->mark_for_recalc(G1_RECALC_WATER_VERTS);
+		c->change_map_cell();
+	}
+	else if (g1_e_tile.get_minor_mode()==g1_tile_params::INFO)
+	{
+		i4_const_str msg("Position (%i,%i), Texture %S rotated by %i deg%s. Characteristics: "
+			"%s%sfriction %f, damage %i");
+		g1_map_cell_class *cell= c->get_map()->cell((w16)c->cell_x,(w16)c->cell_y);
+		i4_const_str *texname=0;
+		//It seems we don't need the remap here
+		//texname=g1_tile_man.get_name_from_tile(g1_tile_man.get_remap(cell->type));
+		texname=g1_tile_man.get_name_from_tile(cell->type);
+		g1_tile_class* tile=g1_tile_man.get(cell->type);
+		i4_str *m=msg.sprintf(500,(w32)c->cell_x,(w32)c->cell_y,texname,
+			(w32)cell->get_rotation()*90,cell->mirrored()?" and mirrored":"",
+			(tile->flags&g1_tile_class::BLOCKING)?"blocking, ":"",
+			(tile->flags&g1_tile_class::WAVE)?"wave, ":"",
+			tile->friction_fraction,(w32)(tile->damage));
+		//i4_warning(m);
+		i4_message_box("Tile Info",*m,MSG_OK);
+		delete texname;
+		delete m;
+		return; //don't pass on to parent, since that event is outdated when 
+		//this method returns.
+	}
 
-  g1_mode_handler::mouse_down();
+	g1_mode_handler::mouse_down();
 
 }
 
