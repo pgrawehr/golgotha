@@ -28,7 +28,7 @@
 g1_tile_man_class g1_tile_man;
 
 
-static i4_array<w16> select_remap(0,128);
+
 
 
 void g1_tile_class::set_friction(float uB)
@@ -39,14 +39,9 @@ void g1_tile_class::set_friction(float uB)
 }
 
 
-int g1_tile_man_class::get_remap(int tile_num)
-{
-  return select_remap[tile_num];
-}
-
 g1_tile_man_class::g1_tile_man_class()
 :original_checksums(256,i4_hashtable<w32>::WAITFORINIT|i4_hashtable<w32>::KEYSONLY),
-array(0,100)
+array(0,100),select_remap(0,100)
 {
   sorted_by_checksum=0;
 }
@@ -65,8 +60,6 @@ void g1_tile_man_class::init()
 
 void g1_tile_man_class::reset(int _max_tiles) 
 { 
-  
- 
   array.clear();
   array.add();
 
@@ -74,6 +67,7 @@ void g1_tile_man_class::reset(int _max_tiles)
   array[0].texture=0;
   array[0].filename_checksum=0;
   original_checksums.reset(i4_F);
+  select_remap.clear();
   sorted_by_checksum=0;
 }
 
@@ -198,30 +192,46 @@ i4_const_str *g1_tile_man_class::get_name_from_tile(w32 tileno)
 
 int g1_tile_man_class::get_tile_from_checksum(w32 checksum)
 {
-  if (!array.size())
-    return 0;
+	if (!array.size())
+		return 0;
 
- 
-  sw32 lo=0,hi=array.size()-1,mid;
+	if (sorted_by_checksum)
+	{
 
-  mid=(lo+hi+1)/2;
-  for(;;)
-  {
-    if (checksum==array[mid].filename_checksum)
-      return mid;
-    else if (checksum<array[mid].filename_checksum)
-      hi=mid-1;
-    else 
-      lo=mid+1;
-    
-    w32 last_mid=mid;
-    mid=(hi+lo)/2;
 
-    if (last_mid==(w32)mid)
-      return 0;
-  }
+		sw32 lo=0,hi=array.size()-1,mid;
 
-  return 0;
+		mid=(lo+hi+1)/2;
+		for(;;)
+		{
+			if (checksum==array[mid].filename_checksum)
+				return mid;
+			else if (checksum<array[mid].filename_checksum)
+				hi=mid-1;
+			else 
+				lo=mid+1;
+
+			w32 last_mid=mid;
+			mid=(hi+lo)/2;
+
+			if (last_mid==(w32)mid)
+				return 0;
+		}
+	}
+	else
+	{
+		//happens only if tiles were added during runtime (seldom)
+		for (int k=0;k<array.size();k++)
+		{
+			if (array[k].filename_checksum==checksum)
+			{
+				return k;
+			}
+		}
+		return 0;
+	}
+
+	return 0;
 }
 
 
@@ -266,6 +276,52 @@ void g1_tile_man_class::add(li_object *o, li_environment *env)
 	newtile->get_properties(prop, env);
   }
   sorted_by_checksum=0;
+}
+
+void g1_tile_man_class::add_new(li_object *o, li_environment *env)
+{
+	li_object *prop=0;
+
+	li_string *tname=0;  
+	if (o->type()==LI_STRING)
+		tname=li_string::get(o,env);
+	else
+	{
+		prop=li_cdr(o,env);
+		tname=li_string::get(li_car(o,env),env);
+	}
+
+
+	r1_texture_manager_class *tman=g1_render.r_api->get_tmanager();
+
+
+	i4_const_str i4_tname=i4_const_str(tname->value());
+	w32 curr_checksum=i4_str_checksum(i4_tname);
+
+	i4_bool found=false;
+	for (int i=0;i<array.size();i++)
+	{
+		if (array[i].filename_checksum==curr_checksum)
+		{
+			found=true;
+			break;
+		}
+	}
+	if (!found)
+	{
+		g1_tile_class *newtile=array.add();
+		newtile->init();
+		newtile->texture=tman->register_texture(i4_tname, i4_tname); 
+		newtile->filename_checksum=curr_checksum;
+		newtile->get_properties(prop, env);
+		if (newtile->flags & g1_tile_class::SELECTABLE)
+		{
+			newtile->selection_order=select_remap.size()-1;
+			select_remap.add(array.size()-1); //last entry of array is new
+		}
+	}
+	sorted_by_checksum=0;
+
 }
 
 

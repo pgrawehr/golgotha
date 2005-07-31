@@ -54,12 +54,10 @@ class g1_tile_man_class : public i4_init_class
 {
 private:
   i4_array<g1_tile_class> array;
-  //int t_tiles, max_tiles;
   int sorted_by_checksum;
   r1_texture_handle pink, default_tile_type;
-
   i4_hashtable<w32> original_checksums;
-
+  i4_array<w16> select_remap;
 
 public:  
   int get_tile_from_name(i4_const_str &name);
@@ -76,6 +74,7 @@ public:
 
   void reset(int _max_tiles);
   void add(li_object *o, li_environment *env);
+  void add_new(li_object *o, li_environment *env);
   //This function is not used (doesn't even have a body)
   //void get_tile_texture(li_object *o, li_object *&texture_name, li_object *&save_name);
 
@@ -88,7 +87,10 @@ public:
   
   void finished_load();
   int remap_size();
-  int get_remap(int tile_num);
+  int get_remap(int tile_num)
+  {
+	  return select_remap[tile_num];
+  }
   
   w32 total() { return array.size(); }
 };

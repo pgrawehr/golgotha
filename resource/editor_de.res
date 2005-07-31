@@ -261,6 +261,10 @@ open_dll_title       "Load DLL"
 open_dll_mask_name   "Dynamically Loaded Library"          
 open_dll_file_mask   "*.dll"     // don't translate
 
+new_tile_texture_title "Eine neue Bodentextur laden"
+new_tile_texture_mask_name "Texturen"
+new_tile_texture_mask "*.jpg;*.tga"
+
 
 undo_file "undo/undo_%d.dat"    // don't translate
 undo_dir  "undo"                // don't translate

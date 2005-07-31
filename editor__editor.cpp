@@ -7707,22 +7707,37 @@ void g1_scroll_picker_class::receive_event(i4_event *ev)
   if (ev->type()==i4_event::USER_MESSAGE)
   {   
     CAST_PTR(sm, i4_scroll_message, ev);
-    if (sm->sub_type==SCROLL)
-    {
-      int obj_size=info->object_size;
-      int objs_per_line=info->max_object_size/obj_size;
+	switch (sm->sub_type)
+	{
+	case SCROLL:
+		{
+		int obj_size=info->object_size;
+		int objs_per_line=info->max_object_size/obj_size;
 
-      int off=sm->amount * objs_per_line;
+		int off=sm->amount * objs_per_line;
 
-      if (off>=total_objects())
-        off-=objs_per_line;
+		if (off>=total_objects())
+			off-=objs_per_line;
 
-      info->scroll_offset=off;
+		info->scroll_offset=off;
 
-      for (int i=0; i<windows.size(); i++)
-        change_window_object_num(windows[i], off+i);
-                                   
-    }
+		for (int i=0; i<windows.size(); i++)
+			change_window_object_num(windows[i], off+i);
+	                                   
+		}
+		break;
+	case G1_OPEN_DLL_OK:
+		{
+			CAST_PTR(f, i4_file_open_message_class, ev);
+			if (f->filename)
+			{
+				i4_filename_struct fname_struct;
+				i4_split_path(*f->filename,fname_struct);
+				add(fname_struct.filename);
+			}
+			refresh(i4_T);
+		}break;
+	}
   }
   else if (ev->type()==i4_event::OBJECT_MESSAGE)
   {
@@ -7774,10 +7789,16 @@ void g1_scroll_picker_class::receive_event(i4_event *ev)
 			  
 		  }break;
 	  case ADD:
-		  {
-			  add();
-			  refresh(i4_T);
-		  }break;
+		  i4_create_file_open_dialog(style,
+			  g1_editor_instance.get_editor_string("new_tile_texture_title"),
+			  "textures",  //cannot be changed
+			  g1_editor_instance.get_editor_string("new_tile_texture_mask"),
+			  g1_editor_instance.get_editor_string("new_tile_texture_mask_name"),
+			  this,
+			  G1_OPEN_DLL_OK,
+			  G1_FILE_OPEN_CANCEL);
+		  break;
+	  
 	  case REMOVE:
 		  {
 			  for (int win=0;win<windows.size();win++)
@@ -7965,9 +7986,9 @@ li_object* tile_edit_callback(li_object* o, li_environment *env)
 	return 0;
 }
 
-void g1_tile_picker_class::add()
+void g1_tile_picker_class::add(i4_str name)
 {
-	g1_tile_man.add(new li_string("1crombillboard"),0);
+	g1_tile_man.add_new(new li_string(name),0);
 	
 	li_call("reload_main_textures");
 }

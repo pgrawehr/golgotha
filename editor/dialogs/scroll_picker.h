@@ -57,7 +57,7 @@ protected:
   virtual int total_objects() = 0;
   virtual void rotate() { ; }
   virtual void mirror() { ; }
-  virtual void add() 
+  virtual void add(i4_str name) 
   {
   }
   virtual i4_bool remove(i4_menu_item_class *window)

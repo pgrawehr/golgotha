@@ -531,7 +531,7 @@ void i4_str::insert(i4_str::iterator p, const i4_char ch)
 void i4_str::insert(i4_str::iterator p, const i4_const_str &other)
 // insert other before p, adjust size of this
 {
-  w32 l=length()+other.length();
+  w32 l=length()+other.length()+1;
   if (l>0xfff0) l=0xfff0;//Try to avoid vulnerability to buffer-overrun attacks
   if (ptr==0)
   {

@@ -142,7 +142,7 @@ class node_manager
 		void remove_node(node_id nid);
 		void reset();
 		void activate(g1_map_class *map);
-		w32 num_nodes(){return nodes.actual_entries;}
+		w32 num_nodes(){return nodes.entries();}
 		void collect();//collect all nodes on the map
 		node_manager();
 		~node_manager();
