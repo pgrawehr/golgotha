@@ -128,7 +128,7 @@ i4_bool node_manager::load_nodes(i4_file_class *fp)
 			}
 		}
 	i4_warning("Loaded %d nodes. Map extends: (%f,%f) to (%f,%f).",
-		nodes.actual_entries,minx,miny,maxx,maxy);
+		nodes.entries(),minx,miny,maxx,maxy);
 	delete [] buf;
 	delete stat;
 	return i4_T;
@@ -220,7 +220,7 @@ void node_manager::activate(g1_map_class *map)
 	g1_object_type road_type=g1_get_object_type("road_object");
 	
 	node *nod;
-	w32 toprocess=nodes.actual_entries;
+	w32 toprocess=nodes.entries();
 	w32 processed=0;
 	float xp,yp,hp;
 	while(nod=(node*)i.get())
@@ -431,7 +431,7 @@ i4_bool link_manager::load_links(i4_file_class *fp)
 				}
 			}
 		}
-	i4_warning("Loaded %d links.",links.actual_entries);
+	i4_warning("Loaded %d links.",links.entries());
 	delete [] buf;
 	delete stat;
 	return i4_T;
@@ -517,7 +517,7 @@ i4_bool link_manager::save_qualitydata(g1_saver_class *fp)
 	//fp->write(head,strlen(head)+1);//also write the terminal 0
 	fp->mark_section(QUALITY_DATA_STRING);
 	fp->write_32(QUALITY_DATA_VERSION);//Version info
-	fp->write_32(links.actual_entries);
+	fp->write_32(links.entries());
 	int i,s;
 	while (it.get())
 		{
