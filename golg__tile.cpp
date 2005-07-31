@@ -159,7 +159,6 @@ void g1_tile_man_class::finished_load()
         array[i].selection_order=0;
     }
 
-    //qsort(array, t_tiles, sizeof(g1_tile_class), g1_tile_compare);
 	array.sort(&g1_tile_compare);
     sorted_by_checksum=1;
 

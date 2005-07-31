@@ -35,6 +35,7 @@ class g1_tile_picker_class : public g1_scroll_picker_class
   virtual int total_objects();
   virtual i4_bool remove(i4_menu_item_class *window);
   virtual i4_bool edit(i4_menu_item_class *window);
+  virtual void add();
 public:
 
   g1_tile_picker_class(i4_graphical_style_class *style, 

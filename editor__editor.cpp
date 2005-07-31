@@ -7964,6 +7964,13 @@ li_object* tile_edit_callback(li_object* o, li_environment *env)
 	tile->flags|=(c->value("block")==li_true_sym)?(g1_tile_class::BLOCKING):0;
 	return 0;
 }
+
+void g1_tile_picker_class::add()
+{
+	g1_tile_man.add(new li_string("1crombillboard"),0);
+	
+	li_call("reload_main_textures");
+}
 i4_bool g1_tile_picker_class::edit(i4_menu_item_class *window)
 {
 	g1_3d_tile_window *tilewin=(g1_3d_tile_window*)window;
