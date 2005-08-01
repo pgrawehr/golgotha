@@ -75,8 +75,8 @@ public:
   void init();
 
   void reset(int _max_tiles);
-  void add(li_object *o, li_environment *env);
-  void add_new(li_object *o, li_environment *env);
+  bool add(li_object *o, li_environment *env);
+  bool add_new(li_object *o, li_environment *env);
   //This function is not used (doesn't even have a body)
   //void get_tile_texture(li_object *o, li_object *&texture_name, li_object *&save_name);
 

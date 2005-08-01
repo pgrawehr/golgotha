@@ -243,7 +243,7 @@ int g1_tile_man_class::get_tile_from_checksum(w32 checksum)
 }
 
 
-void g1_tile_man_class::add(li_object *o, li_environment *env)
+bool g1_tile_man_class::add(li_object *o, li_environment *env)
 {
   //if (t_tiles==max_tiles)
   //  i4_error("WARNING: Too many tile textures in level.");
@@ -282,11 +282,13 @@ void g1_tile_man_class::add(li_object *o, li_environment *env)
 	newtile->texture=tman->register_texture(i4_tname, i4_tname); 
 	newtile->filename_checksum=curr_checksum;
 	newtile->get_properties(prop, env);
+	sorted_by_checksum=0;
+	return true;
   }
-  sorted_by_checksum=0;
+  return false;
 }
 
-void g1_tile_man_class::add_new(li_object *o, li_environment *env)
+bool g1_tile_man_class::add_new(li_object *o, li_environment *env)
 {
 	li_object *prop=0;
 
@@ -309,7 +311,15 @@ void g1_tile_man_class::add_new(li_object *o, li_environment *env)
 	i4_bool found=false;
 	for (int i=0;i<array.size();i++)
 	{
+		//must not add a tile twice
+		//and also not a tile which has already been added using an alternate checksum.
 		if (array[i].filename_checksum==curr_checksum)
+		{
+			found=true;
+			break;
+		}
+		w32 c=get_original_checksum(array[i].filename_checksum);
+		if (c!=0 && curr_checksum==c)
 		{
 			found=true;
 			break;
@@ -327,8 +337,10 @@ void g1_tile_man_class::add_new(li_object *o, li_environment *env)
 			newtile->selection_order=select_remap.size()-1;
 			select_remap.add(array.size()-1); //last entry of array is new
 		}
+		sorted_by_checksum=0;
+		return true;
 	}
-	sorted_by_checksum=0;
+	return false;
 
 }
 

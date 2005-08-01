@@ -7988,8 +7988,11 @@ li_object* tile_edit_callback(li_object* o, li_environment *env)
 
 void g1_tile_picker_class::add(i4_str name)
 {
-	g1_tile_man.add_new(new li_string(name),0);
-	
+	if (g1_tile_man.add_new(new li_string(name),0)==false)
+	{
+		i4_message_box("Tile editor","The new tile texture could not be added. Verify it doesn't exist already in the list");
+		return;
+	}
 	li_call("reload_main_textures");
 }
 i4_bool g1_tile_picker_class::edit(i4_menu_item_class *window)
