@@ -89,7 +89,7 @@ void g1_map_class::save(g1_saver_class *out, w32 sections)
 
   if (sections & G1_MAP_TEXTURE_NAMES)
   {
-	  out->mark_section(G1_SECTION_TEXTURE_NAMES_V1);
+	  out->mark_section(G1_SECTION_TEXTURE_NAMES_V2);
 	  out->write_32(g1_tile_man.total()-1);
 	  //Don't write first entry (is always 0)
 	  for (i=1;i<g1_tile_man.total();i++)
@@ -100,10 +100,13 @@ void g1_map_class::save(g1_saver_class *out, w32 sections)
 		  {
 		      out->write_counted_str(*name);
 			  out->write_32(tile->flags);
-			  //out->write_float(tile->damping_fraction);
-			  //out->write_float(tile->damping_e);
 			  out->write_float(tile->friction_fraction);
 			  out->write_16(tile->damage);
+			  //We need to save the checksum separatelly, since it may not be the correct checksum
+			  //for name in case the texture had a "save_name" property argument
+			  out->write_32(tile->filename_checksum);
+			  out->write_32(0);//reserved
+			  out->write_counted_str("_reserved_"); //also reserved ;-)
 		  }
 		  delete name;
 	  }
@@ -273,11 +276,31 @@ static w16 *g1_map_get_tile_remap(g1_loader_class *fp)   // returns 0 on failure
 
   w16 *remap=(w16 *)I4_MALLOC(t*sizeof(w16), "tile remap");
   memset(remap, 0, t*sizeof(w16));
+  for (i=0; i< t; i++)
+  {
+	  w32 find_id=tl[i].old_checksum;
+	  /*i4_const_str *n=r1_get_texture_name(find_id);
+	  if (n)
+	  {
+		  char buf[300];
+		  i4_os_string(*n,buf,300);
+		  delete n;
+		  i4_warning("Using Texture %s.",buf);
+	  }
+	  else
+	  {
+		  i4_warning("Unknown texture id: %x ",find_id);
+	  }*/
+	  int new_id=g1_tile_man.get_tile_from_checksum(find_id);
+	  if (new_id==0)
+		  i4_warning("Tile 0x%x not found in tile manager",find_id);
+	  remap[tl[i].old_tile_number]=new_id;
+  }
 
-  for (i=0; i< g1_tile_man.total(); i++)
+  /*for (i=0; i< g1_tile_man.total(); i++)
   {
     w32 find_id=g1_tile_man.get(i)->filename_checksum,cur;
-	/*i4_const_str *n=r1_get_texture_name(find_id);
+	i4_const_str *n=r1_get_texture_name(find_id);
 	if (n)
 		{
 		char buf[300];
@@ -289,7 +312,6 @@ static w16 *g1_map_get_tile_remap(g1_loader_class *fp)   // returns 0 on failure
 		{
 		i4_warning("Unknown texture id: %x ",find_id);
 		}
-*/
     w32 lo=0,hi=t,mid;
     i4_bool done=i4_F;
     mid=(hi+lo+1)/2;
@@ -311,11 +333,14 @@ static w16 *g1_map_get_tile_remap(g1_loader_class *fp)   // returns 0 on failure
         w32 last_mid=mid;
         mid=(hi+lo)/2;
         if (last_mid==mid)
-          done=i4_T;
+		{
+			i4_warning("Warn: Texture not available in tile manager");
+			done=i4_T;
+		}
       }
         
     } while (!done);
-  }
+  }*/
   i4_free(tl);
   return remap;
 }

@@ -190,6 +190,14 @@ i4_const_str *g1_tile_man_class::get_name_from_tile(w32 tileno)
 	return nm;
 	}
 
+	int g1_tile_man_class::get_tile_from_alternate_checksum(w32 checksum)
+	{
+		w32 alt_chk=get_original_checksum(checksum);
+		if (alt_chk!=0)
+			return get_tile_from_checksum(alt_chk);	
+		return 0;
+	}
+
 int g1_tile_man_class::get_tile_from_checksum(w32 checksum)
 {
 	if (!array.size())
@@ -215,7 +223,7 @@ int g1_tile_man_class::get_tile_from_checksum(w32 checksum)
 			mid=(hi+lo)/2;
 
 			if (last_mid==(w32)mid)
-				return 0;
+				return get_tile_from_alternate_checksum(checksum);
 		}
 	}
 	else
@@ -228,7 +236,7 @@ int g1_tile_man_class::get_tile_from_checksum(w32 checksum)
 				return k;
 			}
 		}
-		return 0;
+		return get_tile_from_alternate_checksum(checksum);
 	}
 
 	return 0;
@@ -326,7 +334,7 @@ void g1_tile_man_class::add_new(li_object *o, li_environment *env)
 
 
 static li_symbol *g1_block=0, *g1_wave=0, *g1_selectable=0, *g1_friction=0, *g1_save_name=0,
-  *g1_damage=0;
+  *g1_damage=0,*g1_alternate_checksum=0;
 
 // format of ("texture_name" (property_name prop_value)..)
 void g1_tile_class::get_properties(li_object *properties, li_environment *env)
@@ -363,13 +371,22 @@ void g1_tile_class::get_properties(li_object *properties, li_environment *env)
 		g1_tile_man.store_alternate_checksum(newkey,filename_checksum);
 		filename_checksum=newkey;
 		}
+	else if (sym==li_get_symbol("alternate_checksum", g1_alternate_checksum))
+	{
+		w32 newkey=li_int::get(value,env)->value();
+		if (newkey!=0 && newkey!=filename_checksum)
+		{
+			g1_tile_man.store_alternate_checksum(newkey,filename_checksum);
+			filename_checksum=newkey;
+		}
+	}
 	else if (sym==li_get_symbol("flags"))
 	{
 		//Used internally for flag saving
 		flags=li_int::get(value,env)->value();
 	}
     else
-      i4_error("bad texture flag '%s' should be block, wave, selectable, friction, save_name or flags", 
+      i4_error("bad texture flag '%s' should be block, wave, selectable, friction, save_name, alternate_checksum or flags", 
                sym->name()->value());
 
     properties=li_cdr(properties,env);

@@ -797,7 +797,7 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
       map_cell=cells + x1 + y1*width();
 
       g1_lod.last_context=0;
-      han = g1_tile_man.get_texture(map_cell->type);
+      han = g1_tile_man.get_texture(map_cell->type);//Where is this type field set on load?
       if (han && han!=g1_tile_man.get_pink())
       {
         

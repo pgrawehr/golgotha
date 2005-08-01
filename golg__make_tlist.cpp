@@ -289,6 +289,9 @@ li_object* g1_get_load_info(g1_loader_class* map_file,
 		int num_add_t=map_file->read_32();
 		for(int k=0;k<num_add_t;k++)
 		{
+			//Don't delete str after usage here, it is added to the
+			//texture_name_array bellow and deleted after *that*
+			//has been used. 
 			i4_str* str=map_file->read_counted_str();
 			w32 flags=map_file->read_32();
 			i4_float friction=map_file->read_float();
@@ -303,7 +306,32 @@ li_object* g1_get_load_info(g1_loader_class* map_file,
 				li_get_value("texture_object_list",env)),env);
 			g1_current_t_tiles++;
 		}
-		//li_set_value("texture_object_list",li_call("reverse",li_get_value("texture_object_list"),env),env);
+	}
+	//Can only have either of them
+	else if (map_file->goto_section(G1_SECTION_TEXTURE_NAMES_V2))
+	{
+		int num_add_t=map_file->read_32();
+		for(int k=0;k<num_add_t;k++)
+		{
+			i4_str* str=map_file->read_counted_str();
+			w32 flags=map_file->read_32();
+			i4_float friction=map_file->read_float();
+			w16 damage=map_file->read_16();
+			w32 chksum=map_file->read_32();
+			map_file->read_32(); //reserved
+			i4_str *res_str=map_file->read_counted_str();
+			delete res_str;
+			texture_name_array.add(str);
+			li_set_value("texture_object_list",new li_list(
+				li_make_list(new li_string(*str),
+				li_make_list(li_get_symbol("friction"), new li_float(friction),0),
+				li_make_list(li_get_symbol("flags"),new li_int(flags),0),
+				li_make_list(li_get_symbol("damage"),new li_int(damage),0),
+				li_make_list(li_get_symbol("alternate_checksum"), new li_int(chksum),0),
+				0),
+				li_get_value("texture_object_list",env)),env);
+			g1_current_t_tiles++;
+		}
 	}
 
 	if (map_file->goto_section(G1_SECTION_MODEL_NAMES_V1))

@@ -29,6 +29,7 @@ public:
   w32 filename_checksum;           // used to identify matchup tiles with saved levels
   w8 flags;
   w16 selection_order;
+  //w32 alternate_checksum;
 
   enum { 
     SELECTABLE        =1,     // if user can pick it for tile selection
@@ -65,6 +66,7 @@ public:
   int get_tile_from_checksum(w32 checksum);
   i4_const_str *get_name_from_tile(w32 tilehandle);//you must delete the return string yourself!
   w32 get_original_checksum(w32 newchecksum);//used if save_name used in tile definition
+  int get_tile_from_alternate_checksum(w32 checksum);
   void store_alternate_checksum(w32 nchk,w32 oldchk);
 
   g1_tile_man_class();
