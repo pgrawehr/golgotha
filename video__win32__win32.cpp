@@ -169,7 +169,18 @@ public:
     return &tmp_mode;
   }
 
-  virtual mode *get_next_mode()  {    return 0; }
+  virtual mode *get_next_mode()  
+  {    
+	  if (tmp_mode.bits_per_pixel==16)
+	  {
+		  tmp_mode.bits_per_pixel=32;
+		  /*tmp_mode.red_mask=0xff0000;
+		  tmp_mode.green_mask=0x00ff00;
+		  tmp_mode.blue_mask=0x0000ff;*/
+		  return &tmp_mode;
+	  }
+	  return 0; 
+  }
 
   i4_image_class *lock_frame_buffer(i4_frame_buffer_type type,
                                             i4_frame_access_type access)

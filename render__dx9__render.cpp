@@ -280,10 +280,9 @@ i4_bool r1_dx9_class::init(i4_display_class *display)
   //d3d_device->SetRenderState(D3DRS_TEXTUREMAPBLEND,D3DTBLEND_MODULATE);
   //d3d_device->SetRenderState(D3DRS_TEXTUREHANDLE,0);  
   
-  //This is the default anyway
-  //d3d_device->SetRenderState(D3DRS_TEXTUREADDRESS,D3DTADDRESS_CLAMP);
-  //d3d_device->SetRenderState(D3DRS_WRAPU,0);
-  //d3d_device->SetRenderState(D3DRS_WRAPV,0);
+  i4_dx9_check(d3d_device->SetSamplerState(0, D3DSAMP_ADDRESSU,D3DTADDRESS_CLAMP));
+  i4_dx9_check(d3d_device->SetSamplerState(0, D3DSAMP_ADDRESSV,D3DTADDRESS_CLAMP));
+  i4_dx9_check(d3d_device->SetSamplerState(0, D3DSAMP_ADDRESSW,D3DTADDRESS_CLAMP));
 
   //d3d_device->SetRenderState(D3DRS_TEXTUREPERSPECTIVE,1);
     
@@ -301,13 +300,16 @@ i4_bool r1_dx9_class::init(i4_display_class *display)
   i4_dx9_check(d3d_device->SetTextureStageState(0,D3DTSS_COLOROP,D3DTOP_MODULATE));
   //d3d_device->SetTextureStageState(0,D3DTSS_COLOROP,D3DTOP_DISABLE);
   //i4_dx9_check(d3d_device->SetTextureStageState(0,D3DTSS_TEXCOORDINDEX,0);
-  d3d_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
-  d3d_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
-  d3d_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_DISABLE );
-  d3d_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 
-	              D3DTSS_TCI_CAMERASPACEPOSITION );
-  d3d_device->SetRenderState(D3DRS_LIGHTING,FALSE);
-  d3d_device->SetRenderState(D3DRS_SPECULARENABLE,FALSE);
+  i4_dx9_check(d3d_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE ));
+  i4_dx9_check(d3d_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE ));
+  i4_dx9_check(d3d_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_DISABLE ));
+  i4_dx9_check(d3d_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 
+	              D3DTSS_TCI_CAMERASPACEPOSITION ));
+  i4_dx9_check(d3d_device->SetRenderState(D3DRS_LIGHTING,FALSE));
+  i4_dx9_check(d3d_device->SetRenderState(D3DRS_SPECULARENABLE,FALSE));
+  //d3d_device->SetRenderState(D3DRS_WRAP0,  
+  //	  D3DWRAPCOORD_0 | D3DWRAPCOORD_1);
+
   
   set_shading_mode(R1_COLORED_SHADING);
 
