@@ -181,6 +181,15 @@ limited if the unit moves along the path.
 
 bomb_truck: May crash if recursion on damage()/g1_apply_damage() gets to deep. Need to move
 the code that applies damage to other units from damage() to think(), and partially reimplement the
-code from g1_object_class::damage() base in bomb truck (including different sound)
+code from g1_object_class::damage() base in bomb truck (including different sound) 
+
+Points open from my HD crash:
+Fix editing of terrain height
+Fix look of terrain when scaling is large - Test (found an even better fix than last time)
+Fix coldet using the code from the coldet_11 sample code. - Test
+Add g1_model_collide_polygonal_ex - Test, maybe modify to allow several collisions at once. 
+missile_turret self-declares it's type falsely - Test
+
+
 
 
