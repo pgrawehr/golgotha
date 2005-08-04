@@ -20,7 +20,7 @@
 //! Check for collisions.
 //! This method checks wheter the object pointed to by \a source intersects with 
 //! the object \a _this if it would move by the distance \a ray from it's current location.
-//! The function checks 8 points around \source for collision, which may in some cases not be 
+//! The function checks 8 points around \a source for collision, which may in some cases not be 
 //! very accurate (mainly in cases where the target object has a lot of small surfaces). Maybe
 //! we once need to change this, but this would have a significant impact on the performance. 
 //! Internally, this function uses g1_model_collide_polygonal().

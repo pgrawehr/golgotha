@@ -427,14 +427,15 @@ public:
   */
 
   /** Check wheter an object can move in a certain direction.
-  * Checks wheter an obj \a obj can move by \a dx \a dy on the
+  * Checks wheter an obj \a obj can move by \a dx, \a dy, \a dz on the
   * map without colliding.
   * \param obj The pointer to the object for which coldet should be
   * calculated. 
   * \param dx The amount of requested movement in x-direction. The
   * value of this might be changed after return (i.e to compensate
-  * for wall-sliding.
+  * for wall-sliding or to indicate that moving half the distance might work)
   * \param dy The amount of requested movement in y-direction
+  * \param dz The amount of requested movement in z-direction (up or down)
   * \param hit A reference to a pointer which will get the object
   * we collided with (if any)
   * \return true if we hit an object (doesn't actually mean no movement

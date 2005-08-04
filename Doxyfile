@@ -85,7 +85,8 @@ EXCLUDE                = Tests \
                          coredll.cpp \
                          utildll.cpp \
                          geomdll.cpp \
-                         backup
+                         backup \
+                         max_plugin/
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = .svn
 EXAMPLE_PATH           = 

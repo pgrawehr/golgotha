@@ -466,30 +466,31 @@ i4_bool g1_movable_dynamic_object_class::can_attack(g1_object_class *who)
 	else
 		return g1_map_piece_class::can_attack(who);
 	}
-void g1_dynamic_object_class::change_player_num(int new_player)
+
+void g1_dynamic_object_class::change_player_num(int new_player_num)
 {
   g1_dynamic_object_type_class *t=get_type();
   if (t->funs[G1_F_CHANGE_TEAMS])
   {
     li_class_context context(vars);
     (*t->funs[G1_F_CHANGE_TEAMS])(li_make_list(new li_g1_ref(global_id),
-                                            new li_int(new_player), 0), 0);
+                                            new li_int(new_player_num), 0), 0);
   }
   else
-    g1_object_class::change_player_num(new_player);  
+    g1_object_class::change_player_num(new_player_num);  
 }
 
-void g1_movable_dynamic_object_class::change_player_num(int new_player)
+void g1_movable_dynamic_object_class::change_player_num(int new_player_num)
 {
   g1_dynamic_object_type_class *t=get_type();
   if (t->funs[G1_F_CHANGE_TEAMS])
   {
     li_class_context context(vars);
     (*t->funs[G1_F_CHANGE_TEAMS])(li_make_list(new li_g1_ref(global_id),
-                                            new li_int(new_player), 0), 0);
+                                            new li_int(new_player_num), 0), 0);
   }
   else
-    g1_map_piece_class::change_player_num(new_player);  
+    g1_map_piece_class::change_player_num(new_player_num);  
 }
 
 i4_bool g1_dynamic_object_class::occupy_location()

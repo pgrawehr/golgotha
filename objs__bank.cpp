@@ -100,16 +100,16 @@ void g1_bank_class::unoccupy_location()
   g1_bank_list_count[player_num]--;
 }
   
-void g1_bank_class::change_player_num(int new_team)
+void g1_bank_class::change_player_num(int new_player_num)
 { 
-  if (new_team!=player_num)
+  if (new_player_num!=player_num)
   {
     g1_bank_list[player_num].find_and_unlink(this);
     g1_bank_list_count[player_num]--;
-    g1_bank_list[new_team].insert(*this);
-    g1_bank_list_count[new_team]++;
+    g1_bank_list[new_player_num].insert(*this);
+    g1_bank_list_count[new_player_num]++;
       
-    if (new_team==g1_player_man.local_player)
+    if (new_player_num==g1_player_man.local_player)
     {
       if (g1_current_controller.get())
         g1_current_controller->add_spin_event("powerup_bank", 0);
@@ -123,7 +123,7 @@ void g1_bank_class::change_player_num(int new_team)
       bank_lost.play();
     }
   }
-  g1_factory_class::change_player_num(new_team);
+  g1_factory_class::change_player_num(new_player_num);
 }
 
 void g1_bank_class::think()

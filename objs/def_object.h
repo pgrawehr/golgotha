@@ -97,7 +97,7 @@ public:
   void think();
   li_object *message(li_symbol *name, li_object *params, li_environment *env);
 
-  void change_player_num(int new_player);  // don't change player_num directly
+  void change_player_num(int new_player_num);  // don't change player_num directly
   i4_bool occupy_location();
   void unoccupy_location();
 
@@ -148,7 +148,7 @@ public:
   i4_bool can_attack(g1_object_class *who);
   li_object *message(li_symbol *name, li_object *params, li_environment *env);
 
-  void change_player_num(int new_player);  // don't change player_num directly
+  void change_player_num(int new_player_num);  // don't change player_num directly
   i4_bool occupy_location();
   void unoccupy_location();
 

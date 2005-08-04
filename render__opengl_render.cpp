@@ -461,8 +461,8 @@ public:
 
   void copy_part(i4_image_class *im, int x, int y, int x1, int y1, int x2, int y2);
 
-  void use_texture(r1_texture_handle handle, sw32 desired_width, w32 frame);
-  void use_texture(w32 index, r1_texture_handle handle, sw32 desired_width, w32 frame);
+  void use_texture(r1_texture_handle material_ref, sw32 desired_width, w32 frame);
+  void use_texture(w32 index, r1_texture_handle material_ref, sw32 desired_width, w32 frame);
   
 
 };
@@ -670,115 +670,3 @@ void r1_opengl_render_class::use_texture(r1_texture_handle handle,
   }
 
 }
-/*
-@d133 1
-a133 1
-  float x, y, z, r, g, b, a;
-a161 1
-	  float a = (const_color >> 24) / 255.f;
-d267 1
-a267 1
-  ~r1_opengl_render_class()
-
-
-
-1.3
-log
-@texture, shading fixes
-@
-text
-@d1 28
-@
-
-
-1.2
-log
-@cursor fixes
-@
-text
-@d114 1
-d134 4
-a137 4
-	  float a = ((const_color&0xff000000)>>24) / 255.0;
-	  float const_r = ((const_color&0xff0000)>>16) / 255.0;
-	  float const_g = ((const_color&0xff00)>>8) / 255.0;
-	  float const_b = (const_color&0xff) / 255.0;
-d292 1
-a292 3
-
-	  glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
-
-d305 1
-a305 1
-	  glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
-d322 1
-a322 1
-	r1_render_api_class::set_constant_color(color);
-d324 5
-a328 5
-	float a = ( (const_color & 0xff000000) >> 24 ) / 255.0;
-	float r = ( (const_color & 0xff0000) >> 16) / 255.0;
-	float g = ( (const_color & 0xff00) >> 8 ) / 255.0;
-	float b = (const_color & 0xff) / 255.0;
-	glBlendColorEXT(r,g,b,a);
-d373 1
-d380 1
-d382 1
-a382 1
-	  glBlendFunc(GL_ONE_MINUS_CONSTANT_ALPHA, GL_CONSTANT_ALPHA);
-d387 1
-a387 1
-	  glBlendFunc(GL_ONE_MINUS_SRC_ALPHA,GL_SRC_ALPHA);
-@
-
-
-1.1
-log
-@OpenGL renderer. Does not yet work properly.
-@
-text
-@d169 3
-d303 1
-a308 1
-	holy_mode = i4_F;
-d449 1
-a449 11
-	i4_pixel_format f;
-	f.lookup = 0;
-	f.pixel_depth = I4_16BIT;
-	f.red_mask =   31 << 11;
-	f.green_mask = 63 << 5;
-	f.blue_mask =  31;
-	f.alpha_mask = 0;
-	f.calc_shift();
-
-	i4_pal *pal = i4_pal_man.register_pal(&f);
-	i4_image_class *dst_im = i4_create_image( width, height, pal);
-d453 2
-a454 2
-	  i4_draw_context_class *context = new i4_draw_context_class(0,0,width-1, height-1);
-	  im->put_part(dst_im,0,0,x1,y1,x2,y2,*context);
-d461 1
-a465 8
-	  glMatrixMode(GL_PROJECTION);
-	  glPushMatrix();
-	  glLoadIdentity();
-
-	  glMatrixMode(GL_MODELVIEW);
-	  glPushMatrix();
-	  glLoadIdentity();
-
-a471 6
-	  glMatrixMode(GL_PROJECTION);
-	  glPopMatrix();
-
-	  glMatrixMode(GL_MODELVIEW);
-	  glPopMatrix();
-
-a473 1
-	  delete context;
-a475 2
-
-	delete pal;
-@
-*/
