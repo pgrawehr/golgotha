@@ -1,0 +1,228 @@
+<!-- Copyright (C) 1997 Crack dot Com.  All rights reserved. -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<HTML>
+<HEAD>
+	<TITLE>Golgotha</TITLE>
+</HEAD>
+
+<BODY BACKGROUND="bground.jpg" BGCOLOR="#000000" TEXT="#DFD0DF" LINK="#FF0000" VLINK="#800000" ALINK="#FF0000">
+
+<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH="100%">
+<TR WIDTH="100%">
+	<TD VALIGN="Top" WIDTH="30%" ROWSPAN=3 NOWRAP>
+		<IMG SRC="golgotha.gif" WIDTH=150 HEIGHT=210 BORDER=0 ALT="Golgotha"></TD>
+	<TD ALIGN="Right" VALIGN="Top" WIDTH="70%">
+		<FONT SIZE="-2" FACE="Arial" COLOR="#8080C0"><I>Last updated: October 16th, 1997</I></FONT></TD>
+</TR>
+<TR WIDTH="100%"><TD WIDTH="70%" HEIGHT=10></TD></TR>
+<TR WIDTH="100%">
+	<TD WIDTH="70%">
+<!--
+		<P ALIGN="Center">
+		- <B>Main</B> - <A HREF="script.html">Golgotha Script</A> - <A HREF="music">Music</A> -<BR>
+		- <A HREF="screenshots">Game Shots</A> - <A HREF="modelshots">Model Shots</A> - <A HREF="toolshots">Tool Shots</A> -</P>
+-->
+		<P align="center">
+		<br>
+		<font color="#8080ff" size="+3">
+		GOLGOTHA DEMO 5 README<br>
+		- Troubleshooting, Excuses and Lies -
+		</font>
+		</p>
+
+		<HR WIDTH=250>
+		<P><TABLE CELLSPACING=0 CELLPADDING=2 BORDER=0 ALIGN="LEFT">
+		<TR><TD ALIGN="Center"><FONT COLOR="#8080FF"><B>&nbsp;Troubleshooting, Excuses and Lies &nbsp;</B></FONT>
+		<HR WIDTH=100></TD></TR></TABLE><p>This is a demo, not an alpha, beta, not anything
+		we think resembles the completedness or competetiveness of a finished product.  This
+		section explains some of the problems you may have with this demo and talks a little
+		about where we plan to go next.
+		</p><p>
+		Troubleshooting and Known Bugs (Excuses):
+		<el>
+			<li><b>Windows NT 4.0</b>: This demo requires Direct X 5.0 which NT 4.0 doesn't have.  So software rendering doesn't work in NT, but we have reports that if you are using a 3DFX card, then it does work.</li>
+			<li><b>Compatibility Problems</b>: Requires DirectX 5.0.  You can find the English drivers at
+				the <a href="http://www.microsoft.com/DirectX/Resources/Downloads/dx5eng.exe"">Microsoft DirectX</a> page.</li>
+			<li><b>That Crazy Supertank</b>: You can drive on nearly vertical walls right now.  It also looks "flat"
+				as you drive over steep terrain.</li>
+			<li><b>3DFX broke</b>: You may have a Voodoo Rush card.  Delete glide2x.dll from the
+				installed Golgotha directory.  Should work.</li>
+			<li><b>Explosion Probs</b>: Every little shard of explosion has an accompanying smoke trail of 8
+				to 10 polygons.  A lot of simultaneous explosions can make your system run out of memory
+				and crash.</li>
+			<li><b>Disappeaing Smoke Trails</b>: Smoke trails sometimes won't show up.</li>
+			<li><b>Supertank Not Selected</b>: When you build a supertank, it won't be automatically
+				selected.  Need to do it manually.</li>
+			<li><b>Crash on Production Pad</b>: If you have filled up over 3 production pads with vehicles
+				and order up a jump jet or helicopter, the game will crash as it tries to put it on the
+				"5th" square (which doesn't exist).</li>
+			<li><b>Jets and Trikes Lose Control</b>: After either of these vehicles targets an enemy, these
+				vehicles will not be controllable from then on.</li>
+			<li><b>Helicopters Suck When Right Above</b>: The turning radius on guided missiles is quite
+				large.  Helicopters can not hit vehicles right below them very well.</li>
+			<li><b>Flimsy Buildings</b>: Vehicles will pass through buidlings in the name of path-finding.</li>
+			<li><b>Sounds Cutting Out</b>: Only 8 simultaneous sound effects.  They will sometimes cut out.</li>
+			<li><b>Just Darned Effective Engineering Vehicles</b>: When an engineering vehicle enters the map tile
+				containing a takeover pad, it will take over the pad without having to drive to it.</li>
+			<li><b>Flickering Objects</b>: If there are too many objects on the screen, they will start to flicker
+				because there are too many to draw at once.</li>
+			<li><b>Undrawn Edges in Strategy View</b>: In Strategy View, the edges of the view area will commonly
+				not draw.</li>
+			<li><b>Path-finding</b>: Formations don't go immediately to where you send them.  They may
+				back up some.</li>
+			<li><b>Steep Slopes</b>: Formations can get stuck on steep slopes.
+			<li><b>Install Problems</b>: The game requires almost 40Mb of hard drive space.  Make
+				sure you have it.
+			<li><b>Numlock</b>: If you can't seem to fire your supertank weapons or use other
+				numeric keypad keys, hit the [Num Lock] key.</li>
+			<li><b>Queued-up Formations</b>: It's meant to be a feature, but may appear to be a bug.  But right now
+				you can have no cash, summon up several formations, and tell each one where to go,
+				and as you make the cash, those formations will slowly appear then automatically
+				leave the pad and head where you told them to.  If your units don't seem to be
+				building anymore or leaving the pad, watch your cash for a while.  You may have
+				spazzed out and summoned up one or more formations of vehicles.</li>
+			<li><b>Other Production Problems</b>: Formations will not appear on the production pad
+				if other vehicles are on the pad.  Move them off first.</li>
+			<li><b>Missing Supertank</b>: Supertank blends in pretty badly with the production pads,
+				especially in double-pixel mode.  If it's missing but apparently alive, it might
+				be there.</li>
+			<li><b>Formation Travel Problems</b>: The artificial intelligence and path-solving code
+				for the formations is brand spanking new, relatively untested.  Your formations will
+				behave a little strangely but will usually get to where you want them to go.</li>
+			<li><b>Hybrid Ground-Air Formations</b>: Don't group air vehicles like helicopters and jump
+				jets with ground vehicles.  Silly things happen.
+			<li><b>Egypt</b>: Egypt has trouble with the AI right now, especially in the city.</li>
+			<li><b>Jerky Movie</b>: The movies are jerky.</li>
+			<li><b>Mouse Trails</b>: We've seen the mouse leave trails on some video cards.</li>
+			<li><b>Supertank Undead</b>: When the supertank dies, sometimes his ARMOR doesn't go to zero.
+				He's probably dead if he doesn't come when you call him (hit TAB or BACKSPACE).
+			<li><b>Crappy Sky on 3DFX</b>: The sky on the 3DFX is low-resolution.</li>
+			<li><b>Textures Res In</b>: Textures often start out low-res and "res in" to a higher
+				resolution.</li>
+		</el>
+
+		</p><p>
+		The Future (Lies):
+		</p><p>
+		This section is by Dave Taylor so that he can take full responsibilty for this painful subject instead of
+		the company.
+		"Like it or not, game developers and lies are permanent bedfellows.  We all try to keep from doing it, but this
+		industry was built on the shoulders of high school and college drop-outs, so it's all the fault of truancy
+		officers, steep tuition, and really stunningly bad professors.
+		The above listed bugs are all fixable and not limitations of your hardware.  The cost of fixing each one
+		varies.  We seem to have an endless list of features to add and bugs to squash on Golgotha.  We don't
+		like to commit to any one particular bug fix or feature because we might commit to the wrong ones, find
+		out they're too hard, and end up out of money or behind schedule.  Your only assurance is that we're working
+		as hard as we can, often working weekends and into the wee hours, trying to make a game that we think is
+		as kick-butt as we can make it.  Though by no means wealthy, we're still self-funded, so I think we're in
+		better shape to make killer games properly than the other guys.  We have recently gotten really excited about
+		Golgotha's progress.  We feel Demo 5 is a huge improvement over Demo 4.  We're seeing the kernel of a damn
+		sweet game in this demo.
+		</p><p>
+		With that in mind, listed here are some of the issues we plan to address before we master:
+		<el>
+			<li><b>Color Reproduction</b>: We've noticed the colors look pretty drab, washed-out.
+				We're pretty sure this is due to an ambitious image compression scheme we attempted
+				on textures.  We plan to remove this and store textures in full 565 16-bit color.</li>
+			<li><b>Texture Management</b>: The texture manager is pretty broken.  It needs rewriting.  This
+				is why you see textures "res in" all the time, and why the textures seem fairly low-res
+				even though we actually have extremely high-resolution textures (often 512x512).  We
+				exploited this problem in the demo by shipping no textures larger than 64x64.  Made the
+				demo a lot smaller.  The texture manager will almost certainly be rewritten.</li>
+			<li><b>Install Proggy</b>: We intend to update the install proggy so that you don't need to
+				use a file extractor.  So you run one proggy, it installs everything, runs the game,
+				no worries.  If we write our own, we can use the same one for Linux as for Windows.</li>
+			<li><b>Linux Stuff</b>: Need to write a masm-to-gas translator so that we can get high-speed Linux
+				software rendering.  Also need to add sound & GGI support.</li>
+			<li><b>Big Gameplay Mods</b>: Formation creation will become paramount.  Timed release capsules are a
+				priority, and support for formation macros will keep your mind off micro-managing formations and focused
+				on protecting them in the supertank and wreaking havoc on the bad guy.</li>
+			<li><b>Missing Content</b>: There should be 20 levels (20 to go), 20 level scores (7 to go), 20 vehicles (10
+				to go), 10 special buildings (8 to go), 20 engine movies (20 to go), 20 engine movie scores (20 to go),
+				and 20 comic book frames (20 to go).  The content often waits until the very end when you're trying to do
+				a game that dances on the leading edge.</li>
+			<li><b>Control Optimizations</b>: Of paramount importance, honing the user interface will take time, and
+				of course also needs to support a complete remapping by the user.</li>
+			<li><b>AI and Path-Solving</b>: Both still in their infancy, these should improve quite a bit.</li>
+			<li><b>Multiplayer Support</b>: Also in its infancy, but we have grand designs.</li>
+			<li><b>We Broke A3D Support</b>: Dunno what we did, but it broke.  Sorry.</li>
+			<li><b>Level of Detail</b>: A real bitch, but we would like to get a better view, further towards the
+				horizon, when in the Action View.  This basically begs level of detail optimizations, which are
+				just pretty darned tough and take a lot of time to do right algorithmically.</li>
+			<li><b>Optimizations</b>: We are talking about doing hand-tuned assembly K6 and K6-3D
+				optimized versions.  May do this for various peripherals out there, too.</li>
+			<li><b>Direct3D</b>: Almost had it solid for this demo, but there's clearly something we don't understand
+				about it... like... why it doesn't work.</li>
+			<li><b>Engine Movie</b>: The engine movie editor is shaping up well but needs a lot of mods to support
+				the elaborate plot.</li>
+			<li><b>Status Bars & Radar</b>: These aren't final.  8 vehicles is probably not enough per level in
+				the later levels.  The radar needs a little clarification and brightening.  Also need a tool
+				to help navigate in the Action View.</li>
+		</el>
+
+		Well, that's about the extent of my lies for now.  I would now like to rant a bit.  It is extremely difficult to
+		be an independent game company in today's market without a sugar daddy.  We feel we're a dying
+		breed.  We really like the feel of being on our own.  We enjoy our jobs more, can make executive design decisions
+		right here, and still think that we can write better games than our competition.  But the game publishing system
+		doesn't work on these principles and
+		threatens to squash indies on a daily basis.  Small game developers are either selling out, becoming contractors for
+		a big publisher, or just plain folding at a record rate.
+		</p><p>
+		So actually, I'm not ranting, I'm asking for a favor.
+		It helps a lot if you have some convenient way to show your
+		support, even if it's just an e-mail saying you dig what we're doing or a suggestion or contact to help us out.  For instance,
+		we really appreciate the loads of support from Linux fans on our recent announcement that we're publishing Linux
+		Golgotha through Red Hat.  That was just completely not necessary yet completely cool.  Likewise, if you get this demo
+		and dig it, please recommend it to someone.  It's that sort of simple favor which can translate into the bucks to keep
+		us alive and independent for our next title.  Enough soap-boxing.  Thanks for playing Golgotha Demo 5!"
+		</p>
+
+		<P><TABLE CELLSPACING=0 CELLPADDING=2 BORDER=0 ALIGN="LEFT">
+		<TR><TD ALIGN="Center"><FONT COLOR="#8080FF"><B>&nbsp;Detailed Help Sections&nbsp;</B></FONT><BR>
+		<HR WIDTH=100></TD></TR></TABLE><p>
+		The following sections have more detailed help with labelled screenshots:
+		</p><p>
+		<table width="100%"><tr width="100%"><td width="40%"></td>
+		<td width="60%">
+			<el>
+			<li><a href="../readme.html">Getting Started</a></li>
+			<li><a href="r1.html">Status Bars, Radar, and Vehicles</a></li>
+			<li><a href="r2.html">Action View</a></li>
+			<li><a href="r3.html">Strategy View</a></li>
+			<li><a href="r4.html">Options</a></li>
+			<li><a href="r5.html">Level Editor</a></li>
+			<li><b>Troubleshooting, Excuses, and Lies</b></li>
+			</el>
+		</td>
+		</tr></table>
+		</P>
+
+		<P><TABLE CELLSPACING=0 CELLPADDING=2 BORDER=0 ALIGN="LEFT">
+		<TR><TD ALIGN="Center"><FONT COLOR="#8080FF"><B>&nbsp;Tons of Web Site Stuff&nbsp;</B></FONT>
+		</FONT><BR><HR WIDTH=100></TD></TR></TABLE>
+		There's even more about Golgotha and Crack dot Com.  Click on one of the links below to go to the Crack
+		dot Com web site or check out the <a href="http://www.planetquake.com/golgotha">It's Golgotha Dammit</a>
+		and <a href="http://games.3dreview.com/golgotha">Golgotha Connection</a> web sites.
+		</P>
+
+		<P ALIGN="Center"><FONT SIZE="2" FACE="Arial">- <A HREF="http://crack.com">Main Crack Page</A> - <a href="http://crack.com/games/golgotha">Golgotha</a> - <A HREF="http://crack.com/games/abuse">Abuse</A> -
+		- <A HREF="http://crack.com/innews">Crack News</A> - <A HREF="http://crack.com/press">Press Releases</A> - <A HREF="http://crack.com/about">Corporate Information</A> - <A HREF="http://crack.com/jobs">Crack Employment Opportunities</A> -
+		- <A HREF="http://crack.com/crackcam">CrackCam</A> - <A HREF="http://crack.com/finger/">Employee Fingers</A> - <A HREF="http://crack.com/home_pages.html">Homepages</A> - <A HREF="http://crack.com/contact.html">Contact Crack</A> - <A HREF="http://crack.com/links">Crack Links</A> -</FONT></P>
+
+</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH="100%">
+<TR WIDTH="100%">
+	<TD VALIGN="Top" WIDTH="20%" NOWRAP> &nbsp; </TD>
+	<TD WIDTH="80%">
+		<HR>
+		<FONT SIZE="1" FACE="Arial">Copyright &copy; 1997 Crack dot Com<BR><A HREF="mailto:webmaster@crack.com">webmaster@crack.com</A></FONT></TD>
+</TR>
+</TABLE>
+
+</BODY>
+</HTML>
+
