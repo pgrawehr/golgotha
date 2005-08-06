@@ -1,0 +1,164 @@
+phorum - Golgotha - Terrain Rendering and transparency bitmapGolgotha
+      Forum List  |  New Topic  |  Go to Top  |  Go to Topic  |  Threaded View  
+      |  Search  Previous Topic  |  Next Topic
+       Terrain Rendering and transparency bitmap
+            Author: Sun Wai Fu (152.101.12.---)
+            Date:   09-06-2000 23:23
+
+            Dear all, 
+
+            I don't know if anybody has noticed that the rendering of remote 
+            terrain has some bugs. This causes incorrect texture mapping for 
+            remote scene. You can easily observe that the moutain outside of a 
+            distance will be rendered incorrectly(the shape and the texture 
+            keeps changing when your view point moves) as you walk around the 
+            demo scene. After tracking this problem for a long time by trial and 
+            error, I have the following findings: 
+
+            if the following changes are made to map_lod.cc: 
+
+            // area metric 
+            i4_float dz1,dz2; 
+
+            dz1 = z22 - z21; 
+            dz2 = z11 - z21; 
+            p->metric = (float)sqrt(dz1*dz1 + dz2*dz2 + 1); 
+            dz1 = z22 - z12; 
+            dz2 = z11 - z12; 
+            p->metric += dz1*dz1 + dz2*dz2 + 1; 
+
+            to 
+
+
+            // area metric 
+            i4_float dz1,dz2; 
+
+            dz1 = z22 - z21; 
+            dz2 = z11 - z21; 
+            p->metric = dz1*dz1 + dz2*dz2 + 1; 
+            dz1 = z22 - z12; 
+            dz2 = z11 - z12; 
+            p->metric += dz1*dz1 + dz2*dz2 + 1; 
+
+            AND 
+
+            int mx = (x1+x2)/2, my = (y1+y2)/2; 
+
+            i4_float fx = pos.x - mx, fy = pos.y - my, fz = pos.z - 
+            g1_get_vertex(mx,my)->get_height(); 
+            i4_float d1 = fx*fx+fy*fy+fz*fz; 
+            i4_float d2 = p->metric*20; 
+
+            to 
+
+            int mx = (x1+x2)/2, my = (y1+y2)/2; 
+
+            i4_float fx = pos.x - mx, fy = pos.y - my, fz = pos.z - 
+            g1_get_vertex(mx,my)->get_height(); 
+            i4_float d1 = fx*fx+fy*fy+fz*fz; 
+            i4_float d2 = p->metric*400; 
+
+            (you can find this easily by searching for the word 'metric'), the 
+            problem seems to be completely solved. My question is: 
+
+            Do anybody know what is T intersection fixing appeared in 
+            map_lod.cc: 
+
+            // T intersection fixing 
+
+            // Map of directions 
+            // dzdx2 
+            // z22* ----> * 
+            // ^ ^ 
+            // dzdy1 | | dzdy2 
+            // | | 
+            // z12* ----> * 
+            // z11 dzdx1 z21 
+
+            What is the underlying theory behind the terrain rendering used in 
+            golgotha engine? 
+
+            Besides this, I have tried to delete both g_compressed and 
+            g_decompressed directories and then use 
+
+            maxtool_debug -update demo.scm 
+
+            to regenerate the texture cache. This works but the texture mapping 
+            nows has no transparency effect; (for example, the transparent part 
+            in texture for tree is rendered in 
+            pink); how can I achieve transparency effect? 
+
+
+            Thanks for your attension. 
+
+            Regards, 
+            Wai Fu 
+
+
+      Reply To This Message
+       RE: Terrain Rendering and transparency bitmap
+            Author: nnr (---.jns.fi)
+            Date:   09-08-2000 04:54
+
+            It's good to see someone actually doing something with Golgotha. 
+            I'll see if I can solve your transparency problem this weekend if I 
+            have time. 
+            Jonathan might actually know answer to your questions and if he ever 
+            actually 
+            read this forum he might help (JC, if you do, remove those flash 4.0 
+            crack messages). 
+
+
+
+      Reply To This Message
+       RE: Terrain Rendering and transparency bitmap
+            Author: Jonathan Clark (---.jitit.com)
+            Date:   09-08-2000 05:07
+
+            Oliver Yu wrote all of the terrain LOD code, and you can contact him 
+            at oliy@crack.com. A T-intersection is the case were you subdivision 
+            occurs on one block but not the ajoining block (making a T shape) 
+
+            A-B 
+            -C- 
+
+            A and B are subdivided and C is joined. The edge that they share 
+            need to have the same value both times it is rendered or there will 
+            be cracks in the ground. 
+
+
+      Reply To This Message
+       RE: Terrain Rendering and transparency bitmap
+            Author: nnr (---.kolumbus.net)
+            Date:   09-08-2000 09:20
+
+            Are you are of the fact that if I change 
+            i4_float d2 = p->metric*20; into i4_float d2 = p->metric*400; 
+            it makes everything slower, 
+            at least on my computer the fps dropped from 250 into 35... 
+
+
+
+
+      Reply To This Message
+       RE: Terrain Rendering and transparency bitmap
+            Author: rachid (---.europeonline.net)
+            Date:   12-18-2000 07:42
+
+            need crack for combustion please...can someone help me?
+
+      Reply To This Message
+
+    Forum List  |  New Topic  |  Go to Top  |  Go to Topic  |  
+            Threaded View  |  Search 
+
+       Reply To This Message
+       Your Name:
+       Your Email:
+       Subject:
+
+
+      Email replies to this thread, to the address above.
+        
+
+

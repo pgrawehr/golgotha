@@ -1,0 +1,33 @@
+How to get experience
+*********************
+
+You are alone
+-------------
+
+A list is kept for each enemy you attacked but didn't kill. This list has limited size. 
+If it gets full, the oldest entry is dropped. Each entry contains the damage you've
+done and the reference to the enemy. 
+When the enemy dies, you get the experience points (exp) from him and the entry is dropped.
+If the enemy's health increases again (i.e slowly on his own or he takes a potion), 
+the exp he has to spend increase, too. 
+These extra-exp drop back to normal quite fast.
+When the enemy reaches full health, all list-references to him are dropped. (This is to 
+avoid that you get exp for an enemy completelly killed by someone else later)
+
+You are a party
+---------------
+If the monster dies, the lists of all players involved in the kill are accessed and 
+the sum of the damage they made is calculated. This sum might be larger than the maximum
+health of the enemy. The exp points are distributed related to the ratio of each player
+to this sum. It is much likely that if the sum is larger than the maximum health, the exp
+is also larger than usual, because the enemy has healed itself. 
+
+A monster killed by a party should give more exp for each player than if he's alone, such
+that the party members don't increase their level to slowly. But multiplying the exp points
+by the number of members won't do the trick, because that would make a party too strong as 
+they have at some point the same level as a lonely fighter but are two or three. 
+I'd suggest each successive member in a party increases the exp by 0.75. 
+
+These rules don't even need the players to be an explicitly stated party, they could also 
+just happen to be attacking the same enemy by coincidence. 
+

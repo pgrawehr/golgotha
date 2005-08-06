@@ -1,0 +1,74 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>Frequently Asked Questions (FAQ)</title>
+</head>
+
+<body bgcolor="#000000" text="#C0C0C0">
+
+<p><img src="source_code_title.jpg" width="368" height="169"> </p>
+
+<p>&nbsp; <br>
+&nbsp; </p>
+
+<table border="0" width="550">
+    <tr>
+        <td><table border="0" width="560" bgcolor="#800000">
+            <tr>
+                <td><font size="5">Frequently Asked Question
+                (FAQ)</font></td>
+            </tr>
+        </table>
+        </td>
+    </tr>
+</table>
+
+<table border="0" width="550">
+    <tr>
+        <td>Q: Win95/NT : <strong>Running i4_make reports error
+        saying bad command/file not found, what gives?<br>
+        </strong>A: First if you have a windows directory other
+        than c:\windows, you should reflect this in the
+        i4_make.cc file and rebuild i4_make by running
+        build_i4_make.bat. Second if i4_make tries to execute a
+        command with a space in the filename, it will probably
+        not work. Don't extract the source to a directory such as
+        &quot;Program Files/golgotha&quot;. To see the command
+        i4_make is having a problem with, run &quot;i4_make
+        -v&quot;. &quot;i4_make -?&quot; will report other
+        possibly useful switches.<p>Q: <strong>What does it mean
+        when it says &quot;golgotha.cd&quot; is missing? <br>
+        </strong>A: Golgotha.cd is like a doom WAD file or a
+        ZIP/TAR file. It can store a bunch of files in one file.
+        This reduces the clutter for the end user. However during
+        development it is a pain to have to rebuild this file
+        everytime you run the game. So when golgotha opens a file
+        it looks inside the golgotha.cd file first, if it is not
+        found it will read the file from your hard drive. In this
+        release we do not have a golgotha.cd file, so all files
+        are read from your hard drive. You can use the cd_maker
+        program (included) to build a golgotha.cd file. If you
+        do, you may wish to use the command line option
+        &quot;-netfirst&quot; when running golgotha. This causes
+        golgotha to first read from your hard drive, then from
+        golgotha.cd if the file is missing.</p>
+        <p>Q: <strong>I want to use Golgotha's rendering code in
+        my game, where do I start?<br>
+        </strong>A: Checkout the test/<a
+        href="http://www.crack.com/golgotha_release/test/spin_cube/spin_cube.cc">spin_cube</a>
+        program. It renders a spinning cube with a texture
+        applied and it pretty heavily commented.</p>
+        <p>Q: <strong>What is the structure of 3d model file
+        format (.gmod) for Golgotha?<br>
+        </strong>A: See the <a href="gmod_format.html">golgotha
+        model format description</a>.</p>
+        </td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+</body>
+</html>
