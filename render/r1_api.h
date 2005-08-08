@@ -192,7 +192,7 @@ public:
   r1_texture_manager_class *get_tmanager() { return tmanager; }  // created by init()
 
   r1_texture_manager_class *get_tmanager(w32 index) {
-	  if (index==-1) return NULL;
+	  if (index==0xFFFFFFFF) return NULL;
 	  if (index>=(w32)tmanagers.size()) return NULL;
 	  return tmanagers[index];
 	  }
@@ -226,7 +226,7 @@ public:
   void use_default_texture(w32 tman_index=-1)
       {
       r1_texture_handle mat=0;
-      if (tman_index==-1)
+      if (tman_index==0xFFFFFFFF)
           {
           mat=get_tmanager()->null_texture_handle;
           use_texture(mat,8,0);

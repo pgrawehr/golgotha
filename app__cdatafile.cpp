@@ -69,6 +69,27 @@
   #define vsnprintf _vsnprintf
 #endif
 
+// CommentIndicators
+// This constant contains the characters that we check for to determine if a 
+// line is a comment or not. Note that the first character in this constant is
+// the one used when writing comments to disk (if the comment does not allready
+// contain an indicator)
+const char* CommentIndicators=";#";
+
+// EqualIndicators
+// This constant contains the characters that we check against to determine if
+// a line contains an assignment ( key = value )
+// Note that changing these from their defaults ("=:") WILL affect the
+// ability of CDataFile to read/write to .ini files.  Also, note that the
+// first character in this constant is the one that is used when writing the
+// values to the file. (EqualIndicators[0])
+const char* EqualIndicators="=:"; 
+
+// WhiteSpace
+// This constant contains the characters that the Trim() function removes from
+// the head and tail of strings.
+const char* WhiteSpace =" \t\n\r";
+
 
 // CDataFile
 // Our default constructor.  If it can load the file, it will do so and populate
@@ -181,10 +202,10 @@ bool CDataFile::Load(t_Str szFileName)
 				szComment += szLine;
 			}
 			else
-			if ( szLine.find_first_of('[') == 0 ) // new section
+			if ( szLine.find_first_of("[") == 0 ) // new section
 			{
 				szLine.erase( 0, 1 );
-				szLine.erase( szLine.find_last_of(']'), 1 );
+				szLine.erase( szLine.find_last_of("]"), 1 );
 
 				CreateSection(szLine, szComment);
 				pSection = GetSection(szLine);

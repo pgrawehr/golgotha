@@ -3,7 +3,7 @@
 ///
 ///   Strings are hidden behind the two classes :
 ///   \par
-///       i4_const_str   (constant strings.. cannot be changed)
+///       i4_const_str   (constant strings.. cannot be changed)
 ///   \par
 ///   and i4_str         (modifiable strings)
 ///
@@ -15,7 +15,8 @@
 ///   Because for most applications only one string manager is needed I have created a global
 ///   one called i4_string_man.  
 ///
-///   \par
+///   \par
+
 ///   To see if a string is available from the string manager the call
 ///
 ///   \code const i4_const_str *s=&i4_string_man.get(str); \endcode
@@ -36,11 +37,12 @@
 ///
 ///   i4gets("hello") ->  i4_const_str("Hello World")
 ///
-///   \endcode
+///   \endcode
+
 ///   \par
 ///   So, you might ask, how do I create a string quick and dirty for debugging purposes?
 ///
-///   You have to do it the hard way for now.......
+///   You have to do it the hard way for now.......
 
 #ifndef __STRING_HPP_
 #define __STRING_HPP_
@@ -52,47 +54,58 @@
 
 #include <stdlib.h>
 #include <string.h>
-#undef new
-
-/** This class represents a single character.
-
-  It may seem overkill to have an entire class for a single character,
-  but this class is merely used when really only a single character is
-  interesting and not for collections of characters.
-  Use it together with some of the functions of i4_const_str.
+#undef new
+
+/** This class represents a single character.
+
+  It may seem overkill to have an entire class for a single character,
+  but this class is merely used when really only a single character is
+  interesting and not for collections of characters.
+  Use it together with some of the functions of i4_const_str.
 */
 class i4_char
 {
 protected:
   w8 ch; ///< The only data element of this class.
-public:
+public:
   /// The copy constructor.
-  i4_char(w8 ch) : ch(ch) {}
+  i4_char(w8 ch) : ch(ch) {}
   /// The default constructor.
-  i4_char():ch(0){}
-  /// Returns the value of ch. 
-  /// This return value is w16 because this function is subject
+  i4_char():ch(0){}
+  /// Returns the value of ch. 
+
+  /// This return value is w16 because this function is subject
+
   /// to be expanded to double-byte charater sets sometime.
-  w16 value() const { return ch; }
-  /// Returns true if we are talking about a space character.
+  w16 value() const { return ch; }
+
+  /// Returns true if we are talking about a space character.
+
   /// A space character is ' ', '\\r', '\\t' or '\\n'.
   i4_bool is_space() const { return (i4_bool)(ch==' ' || ch=='\r' || ch=='\n' || ch=='\t'); }
   i4_bool is_slash() const { return (i4_bool)(ch=='/'); }
   i4_bool is_backslash() const { return (i4_bool)(ch=='\\'); }
   i4_bool is_period() const { return (i4_bool)(ch=='.'); }
-#ifndef _WINDOWS
+#ifndef _WINDOWS
+
   
   i4_char to_lower() const 
 	  { return (ch>='A' && ch<='Z') ? i4_char(ch-'A'+'a') : i4_char(ch); }
   i4_char to_upper() const 
   { return (ch>='a' && ch<='z') ? i4_char(ch-'a'+'A') : i4_char(ch); }
-#else
-  /// Converts one character to lowercase.
-  /// For Windows, this uses the system-locale specific conversation function,
-  /// which guarantees that language specific letters (i.e äöñ) are handled
+#else
+
+  /// Converts one character to lowercase.
+
+  /// For Windows, this uses the system-locale specific conversation function,
+
+  /// which guarantees that language specific letters (i.e äöñ) are handled
+
   /// properly. 
-  i4_char to_lower() const;
-  /// Same thing, opposite direction.
+  i4_char to_lower() const;
+
+  /// Same thing, opposite direction.
+
   /// @see to_lower()
   i4_char to_upper() const;
 #endif
@@ -111,12 +124,18 @@ public:
 class i4_str;
 class i4_string_manager_class;
 class i4_file_class;
-
-/** The base class of all string classes.
-  This class can handle constants strings that do not change.
-  Warning: The pointer to the string is \a not copied when the constructor
-  is called, so be sure that the string which is represented by this class
-  is not deleted before the class itself!
+
+
+/** The base class of all string classes.
+
+  This class can handle constants strings that do not change.
+
+  Warning: The pointer to the string is \a not copied when the constructor
+
+  is called, so be sure that the string which is represented by this class
+
+  is not deleted before the class itself!
+
 */
 class i4_const_str
 {
@@ -127,11 +146,16 @@ protected:
 
   friend class i4_string_manager_class;
 
-public:
-  /** The usualy used constructor.
-  This constructor is the one that is usually used to convert default 
-  C-Strings to i4_const_str. It can be called implicitly.
-  @param ptr A string value.
+public:
+
+  /** The usualy used constructor.
+
+  This constructor is the one that is usually used to convert default 
+
+  C-Strings to i4_const_str. It can be called implicitly.
+
+  @param ptr A string value.
+
   */
   i4_const_str(const char *ptr) : ptr(const_cast<char*>(ptr)) 
   { 
@@ -139,17 +163,23 @@ public:
       len=(w16)strlen(ptr); 
     else 
       len=0;
-  }
+  }
+
   /** The default constructor, generates an empty string */
-  i4_const_str():ptr(0),len(0) {};
+  i4_const_str():ptr(0),len(0) {};
+
   /** A special-purpose constructor, use only if you know what you're doing! */
-  i4_const_str(char *ptr, w16 len) : ptr(ptr), len(len) {}
+  i4_const_str(char *ptr, w16 len) : ptr(ptr), len(len) {}
+
   /** The copy constructor */
   i4_const_str(const i4_const_str &str) : ptr(str.ptr), len(str.len) {}
   
-  /** The iterator class for strings.
-  This class is used like a stl-iterator type class.
-  It points to one element of the string. 
+  /** The iterator class for strings.
+
+  This class is used like a stl-iterator type class.
+
+  It points to one element of the string. 
+
   */
   class iterator
   {
@@ -157,19 +187,27 @@ public:
     friend class i4_str;
   protected:
     char_type *node; ///< The "node" (character) this iterator points to. 
-  public:
+  public:
+
 	  /** default constructor, don't use directly */
-    iterator() : node(0) {}
-	/** Copy constructor.
-    Important for iterators.
+    iterator() : node(0) {}
+
+	/** Copy constructor.
+
+    Important for iterators.
+
 	*/
-    iterator(const iterator &p) : node(p.node) {}
+    iterator(const iterator &p) : node(p.node) {}
+
 	/** Creates an iterator that points to the given location of a string */
-    iterator(char_type *p) : node(p) {}
+    iterator(char_type *p) : node(p) {}
+
 	/** A special purpose constructor */
-    explicit iterator(const iterator p, int i): node(p.node+i){}
+    explicit iterator(const iterator p, int i): node(p.node+i){}
+
 	/** The equality operator for iterators */
-    int operator==(const iterator p) const { return (node == p.node); }
+    int operator==(const iterator p) const { return (node == p.node); }
+
 	/** The inequality operator for iterators */
     int operator!=(const iterator p) const { return (node != p.node); }
     
@@ -182,53 +220,75 @@ public:
     iterator operator+=(const sw32 len) {   node+=len;   return *this;}
     iterator operator-(const sw32 other)   { return iterator(node-other);}
     iterator operator-=(const sw32 len) { node-=len; return *this;}
-
+
+
 	/** Gets the character this iterator points to */
     i4_char get() const { return i4_char(*node); }
-
+
+
 	/** Also gets the contents of the iterator */
-    i4_char operator* () const { return get(); }
-
-	/** Converts everything from here to the end of the string to an i4_str.
-	The return value is an i4_str, so it becomes modifiable.
+    i4_char operator* () const { return get(); }
+
+
+
+	/** Converts everything from here to the end of the string to an i4_str.
+
+	The return value is an i4_str, so it becomes modifiable.
+
 	*/
-    i4_str *read_string();
+    i4_str *read_string();
+
 	/** Returns a C-string */ 
-    w32     read_ascii(char *buffer, w32 buffer_size);  // returns bytes read
-	/** Attempts to convert the string to a number.
-	@param throwexception Set to true if you want an error to be reported when the conversion fails.
-	@return a number.
+    w32     read_ascii(char *buffer, w32 buffer_size);  // returns bytes read
+
+	/** Attempts to convert the string to a number.
+
+	@param throwexception Set to true if you want an error to be reported when the conversion fails.
+
+	@return a number.
+
 	*/
-    sw32    read_number(i4_bool throwexception=i4_F);
-	/** Returns a double value. 
-	@see read_number()
+    sw32    read_number(i4_bool throwexception=i4_F);
+
+	/** Returns a double value. 
+
+	@see read_number()
+
 	*/
     double  read_float(i4_bool throwexception=i4_F);
   };
-
+
+
   /** The destructor (only virtual function of the class) */
   virtual ~i4_const_str(){};
-
+
+
   /** Returns an iterator pointing to the one-beyond-the-last element of the string */
   const iterator end()   const { return ptr+len; }
-  iterator end() { return ptr+len;}
+  iterator end() { return ptr+len;}
+
   /** Returns the beginning of the string */
   const iterator begin() const { return ptr; }
   iterator begin() {return ptr;}
 
   //! Number of characters in the String.
-  w32 length() const { return len; }
+  w32 length() const { return len; }
+
   //! For compatibiliy reasons, same as length() 
   w32 size() const {return len;}
-  /** Generic length function.
+  /** Generic length function.
+
    ascii length includes null-terminator and may eventually be longer than length()+1
-   when kanji support is added and escape characters are used 
+   when kanji support is added and escape characters are used 
+
   */
   w32 ascii_length() const { return len+1; } 
-
+
+
   /** Difference between two iterators */
   swptr ptr_diff(const iterator first, const iterator last) const
-  { return last.node-first.node; }
+  { return last.node-first.node; }
+
   /** Compares two strings */
   i4_bool operator== (const i4_const_str &other) const 
   { 
@@ -238,16 +298,19 @@ public:
   }
 
   i4_bool operator!= (const i4_const_str &other) const 
-  { return !(other==*this); }
-
-  i4_bool operator<(const i4_const_str &other) const
-      {
-      return ::strncmp(other.ptr,ptr,len)>0?i4_T:i4_F;
-      }
-
-  i4_bool operator>(const i4_const_str &other) const
-      {
-      return ::strncmp(other.ptr,ptr,len)<0?i4_T:i4_F;
+  { return !(other==*this); }
+
+
+
+  i4_bool operator<(const i4_const_str &other) const
+
+      {
+      return ::strncmp(other.ptr,ptr,len)>0?i4_T:i4_F;
+      }
+
+  i4_bool operator>(const i4_const_str &other) const
+      {
+      return ::strncmp(other.ptr,ptr,len)<0?i4_T:i4_F;
       }
   
   int strncmp(const i4_const_str &other, w32 max_cmp) const
@@ -256,7 +319,7 @@ public:
   }
   /** Returns true if this string is null */
   i4_bool null() const { return (i4_bool)(ptr==0); }
-
+
   /// Pattern expansion.
   /// max_length is the maximum expanded length sprintf will create.
   /// sprintf uses it's own internal string as the format, and returns the
@@ -266,36 +329,38 @@ public:
   i4_str *vsprintf(w32 max_length, va_list &ap) const;
 
   //! Finds another string in this string
-  int find(const i4_const_str &str) const;
+  int find(const i4_const_str &str) const;
   //! Finds the first occurence of any of the elements of str.
-  int find_first_of(const i4_const_str &str) const;
+  int find_first_of(const i4_const_str &str) const;
   //! Finds the last occurence of any of the elements of str. 
   int find_last_of(const i4_const_str &str) const;
   int find_first_not_of(const i4_const_str &str) const;
   int find_last_not_of(const i4_const_str &str) const;
   bool starts_with(const i4_const_str &str) const
-  {
-	  if (len==0)
-		  return false;
-	  return find(str)==0;
+  {
+	  if (len==0)
+		  return false;
+	  return find(str)==0;
   }
 
   bool ends_with(const i4_const_str &str) const
-  {
-	  if (len==0)
-		  return false;
-	  int i=find(str);
-	  if (i==len-str.length())
-		  return true;
-	  return false;
+  {
+	  if (len==0)
+		  return false;
+	  w32 i=find(str);
+	  if (i==len-str.length())
+		  return true;
+	  return false;
   }
-
+
   /** Find some substring */
   iterator strstr(const i4_const_str &needle_to_find) const;
-  
+  
+
   ///Return the C representation of this string. 
   ///This function is implemented for compatibility with stl. 
-  ///Do NOT delete the return value!
+  ///Do NOT delete the return value!
+
   ///The method newer returns 0.
   char_type *c_str() const //c_str() must not return 0
   {
@@ -306,11 +371,16 @@ public:
     
   char_type& operator[](int i) const {return *(ptr+i);}
 };
-
-/** The class for modifiable strings.
-  This class is almost identical to the stl::string class.
-  It supports all kinds of modifications, searches, concatenations and
-  weird stuff. 
+
+
+/** The class for modifiable strings.
+
+  This class is almost identical to the stl::string class.
+
+  It supports all kinds of modifications, searches, concatenations and
+
+  weird stuff. 
+
 */
 
 class i4_str : public i4_const_str
@@ -333,7 +403,8 @@ public:
     iterator(const iterator &p) : i4_const_str::iterator(p) {}
     explicit iterator(const iterator p, int i):i4_const_str::iterator(p,i) {}
     iterator(char_type *p) : i4_const_str::iterator((char_type *)p) {}
-    void set(i4_char ch) { *((char_type *)node)=(char_type)ch.value(); }
+    void set(i4_char ch) { *((char_type *)node)=(char_type)ch.value(); }
+
 	char_type& operator*() {return *((char_type*)node);}
   };
   i4_str():i4_const_str(),buf_len(0){}
@@ -344,29 +415,47 @@ public:
   i4_str(const char c);
   // copies from start to end-1 characters (does not include end)
   i4_str(const i4_const_str::iterator start, const i4_const_str::iterator end, w16 buf_len);
-
+
+
   /** Insertion and deletion operators.
   These methods might change this.ptr! 
   when the functions return, p still points to same character, but node 
-  might have changed anyway, meaning the iterator is no more valid.
-  First kind: Insert other before p.
-  \par Warning
-  Insert invalidates all iterators pointing to the string. 
-  Do not use code like the following.
-  \code
-  i4_str str("my tiny little string");
-  i4_str::iterator it=str.begin();
-  str.insert(it,"is ");
-  str.insert(it,"This "); //bang! it is no more valid.
-  \endcode
+  might have changed anyway, meaning the iterator is no more valid.
+
+  First kind: Insert other before p.
+
+  \par Warning
+
+  Insert invalidates all iterators pointing to the string. 
+
+  Do not use code like the following.
+
+  \code
+
+  i4_str str("my tiny little string");
+
+  i4_str::iterator it=str.begin();
+
+  str.insert(it,"is ");
+
+  str.insert(it,"This "); //bang! it is no more valid.
+
+  \endcode
+
   */
-  void insert(i4_str::iterator p, const i4_const_str &other);   // insert other before p
-  /** More insertion.
-  Second kind: insert ch before p
+  void insert(i4_str::iterator p, const i4_const_str &other);   // insert other before p
+
+  /** More insertion.
+
+  Second kind: insert ch before p
+
   */
-  void insert(i4_str::iterator p, const i4_char ch);            // insert ch before p
-  /** Deletion.
-  Delete all from start to (but not including) last.
+  void insert(i4_str::iterator p, const i4_char ch);            // insert ch before p
+
+  /** Deletion.
+
+  Delete all from start to (but not including) last.
+
   */
   void remove(i4_str::iterator start, i4_str::iterator last);
   i4_str operator+(i4_str& a)
@@ -374,15 +463,15 @@ public:
 	i4_str tmp(*this);
 	tmp.insert(end(),a);
 	return tmp;
-	}
-  /** Concatenates two strings.
-  The first parameter must not be passed by reference!
-  */
-  friend i4_str operator+(i4_str a, i4_str b)
-	  {
-	  a.insert(a.end(),b);
-	  return a;
-	  }
+	}
+  /** Concatenates two strings.
+  The first parameter must not be passed by reference!
+  */
+  friend i4_str operator+(i4_str a, i4_str b)
+	  {
+	  a.insert(a.end(),b);
+	  return a;
+	  }
   /** The assignment operator */
   i4_str& operator=(const i4_str &other)
   	{
@@ -414,7 +503,8 @@ public:
   ///this function must only be used if you know that the string-memory
   ///is large enough, i.e it has been created with the (str,len) constructor.
   void set_length(int l) { len=l; }
-  public:
+  public:
+
 	  /// The virtual destructor 
   virtual ~i4_str();
 

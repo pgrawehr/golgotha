@@ -1045,7 +1045,7 @@ i4_bool act_manager::load(g1_loader_class *fp)
 		oldestwaiting++;
 		difpos--;
 		}
-	I4_ASSERT(difpos>=0,"INTERNAL: Iterators on linked list violate required invariant.");
+	//I4_ASSERT(difpos>=0,"INTERNAL: Iterators on linked list violate required invariant.");
 	scramble.load(fp);
 	//fp->end_version(I4_LF);
 	return i4_T;
