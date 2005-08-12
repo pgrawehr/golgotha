@@ -300,7 +300,8 @@ g1_octree::g1_octree(g1_quad_object_class *pWorld, i4_loader_class *fp)
 	fp->read_format("4ffffff44", &m_bSubDivided,
 		&m_xWidth,&m_yWidth,&m_zWidth,&m_vCenter.x,&m_vCenter.y,
 		&m_vCenter.z,&m_TriangleCount,&m_flags);
-	fp->read_32(); //skip a word
+	int test=fp->read_32(); //skip a word
+	I4_ASSERT(test==0xDEADBEEF,"Octree reading failed: File out of sync");
 	int numquads=fp->read_32();
 	while (numquads)
 		{

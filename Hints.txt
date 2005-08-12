@@ -190,6 +190,14 @@ Fix coldet using the code from the coldet_11 sample code. - Test
 Add g1_model_collide_polygonal_ex - Test, maybe modify to allow several collisions at once. 
 missile_turret self-declares it's type falsely - Test
 
+Linux bombs when loading castle. 
+
+Polygon marker lines in maxtool not visible when using opengl renderer.
+
+Maxtool bombs after trying to add a 3-sided face.
+
+The second attempt to open an object in linux-maxtool has wrong (possibly nonexistent) directory 
+as start. 
 
 
 

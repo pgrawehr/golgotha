@@ -230,9 +230,14 @@ i4_bool r1_dx9_class::reinit()
 	dx9_common.device->SetRenderState(D3DRS_ZENABLE,TRUE);
 	dx9_common.device->SetRenderState(D3DRS_CULLMODE,D3DCULL_NONE);
 
+	i4_dx9_check(d3d_device->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP));
+	i4_dx9_check(d3d_device->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP));
+	i4_dx9_check(d3d_device->SetSamplerState(0, D3DSAMP_ADDRESSW, D3DTADDRESS_CLAMP));
+
+
 	dx9_common.device->SetFVF(FVF_CUSTOMVERTEX);
 	
-    dx9_common.device->SetTextureStageState(0,D3DTSS_COLOROP,D3DTOP_MODULATE);
+    dx9_common.device->SetTextureStageState( 0, D3DTSS_COLOROP, D3DTOP_MODULATE);
     dx9_common.device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
 	dx9_common.device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
 	dx9_common.device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_DISABLE );
