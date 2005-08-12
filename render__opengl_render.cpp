@@ -547,6 +547,8 @@ i4_bool r1_opengl_render_class::init(i4_display_class *_display)
 	  glDepthMask(GL_TRUE);
 	  glEnable(GL_DEPTH_TEST);
 	  glDepthFunc(GL_LEQUAL);
+	  
+	  
 
 	  // set up glBlendColor
 	  set_constant_color(get_constant_color());
@@ -560,6 +562,8 @@ i4_bool r1_opengl_render_class::init(i4_display_class *_display)
 
 	  glMatrixMode(GL_MODELVIEW);
 	  glLoadIdentity();
+	  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S, GL_CLAMP);
+	  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 	}
 	else
