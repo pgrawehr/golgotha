@@ -196,10 +196,13 @@ bomb on windows...
 
 Polygon marker lines in maxtool not visible when using opengl renderer.
 
+Textures are stretched in opengl renderer. 
+
+
 Maxtool bombs after trying to add a 3-sided face.
 
 The second attempt to open an object in linux-maxtool has wrong (possibly nonexistent) directory 
 as start. 
 Fixed. Hope the fix works for windows, too. Followup: Check how it behaves after creating a new object. 
-
+Fixed that, too. 
 

@@ -914,10 +914,16 @@ void g1_render_class::render_3d_line(const i4_3d_point_class &p1,
   v[0].r=g1_table_0_255_to_0_1[(color1&0xff0000)>>16];
   v[0].g=g1_table_0_255_to_0_1[(color1&0xff00)>>8];
   v[0].b=g1_table_0_255_to_0_1[(color1&0xff)>>0];
+  v[0].a=1;
+  v[0].s=0;
+  v[0].t=0;
 
   v[1].r=g1_table_0_255_to_0_1[(color2&0xff0000)>>16];
   v[1].g=g1_table_0_255_to_0_1[(color2&0xff00)>>8];
   v[1].b=g1_table_0_255_to_0_1[(color2&0xff)>>0];
+  v[1].a=1;
+  v[1].s=0;
+  v[1].t=0;
 
   r1_shading_type oldshade=r_api->get_shade_mode();
   r1_alpha_type oldalpha=r_api->get_alpha_mode();
