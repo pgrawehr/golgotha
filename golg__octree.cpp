@@ -1276,10 +1276,17 @@ g1_octree *g1_octree::Build(g1_quad_object_class *pWorld)
 		return 0;
 		}
 	newtree->calculate_location_codes();
-	for(g1_octree::iterator it=newtree->begin();it!=newtree->end();++it)
+	
+	i4_bool success=i4_T;
+	for(g1_octree::iterator it=newtree->begin();it!=newtree->end() && success==i4_T;++it)
 	{
-		it->GetNeighbourCellsTest(newtree);
-		it->GetNeighbourCellsSameLevelTest(newtree);
+		success=it->GetNeighbourCellsTest(newtree);
+		if (success)
+			success=it->GetNeighbourCellsSameLevelTest(newtree);
+	}
+	if (!success)
+	{
+		i4_error("SEVERE: Octree integrity test failure");
 	}
 	return newtree;
 	}

@@ -167,20 +167,7 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
         {
         new_point=point;
         new_point+=ray;
-        //although not perfectly true, we assume that
-        //the ray doesn't pass any other nodes than the source
-        //and the target.
-		//This doesn't work to find hits with the mouse cursor ray, since the ray is very long there. 
-		//We have to find the list of leaf nodes that are intersected by the ray. 
-		//The list should be sorted in Z-Order. 
-        //nodes[2]=0;
-        //nodes[0]=octree->GetLeafAt(point);
-        //nodes[1]=octree->GetLeafAt(new_point);
-        //if (nodes[0]==nodes[1])
-        //    nodes[1]=NULL;
 		nodes=octree->GetIntersectedNodes(point,ray);
-		//nodes.add(octree->GetLeafAt(point));
-		//nodes.add(octree->GetLeafAt(new_point));
 		nodes.add(NULL); // The last entry of the array should be NULL. 
         int the_cur_node=0;
         curnode=nodes[the_cur_node];

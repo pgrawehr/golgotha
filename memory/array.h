@@ -123,10 +123,13 @@ public:
 		if (assign.used>0)
 		{
 			entries=assign.entries;
-			entry=(T*)I4_MALLOC(sizeof(T)*entries,"re-assigned grow array");
-			memcpy(entry,assign.entry,sizeof(T)*used);//copy all the used elements (rest will be left uninitalized)
-			I4_ASSERT(entry, "SEVERE: i4_array::operator=(): Out of memory");
 			used=assign.used;
+			int elemsize=sizeof(T);
+			entry=(T*)I4_MALLOC(elemsize*entries,"re-assigned grow array");
+			//copy all the used elements (rest will be left uninitalized)
+			memcpy(entry,assign.entry,elemsize*used);
+			I4_ASSERT(entry, "SEVERE: i4_array::operator=(): Out of memory");
+			
 		}
 		return *this;
 	}

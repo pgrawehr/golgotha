@@ -222,7 +222,10 @@ void i4_list_pick::receive_event(i4_event *ev)
     if (uev->sub_type==scroll_event_id)
     {
       CAST_PTR(sc_msg, i4_scroll_message, ev);
-      reposition_start(sc_msg->amount*total_items/sc_msg->scroll_total);
+      if (sc_msg->scroll_total > 0)
+		  reposition_start(sc_msg->amount*total_items/sc_msg->scroll_total);
+	  else
+		  reposition_start(0);
     } 
     else 
 		{
