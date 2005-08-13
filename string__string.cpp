@@ -535,8 +535,11 @@ void i4_str::insert(i4_str::iterator p, const i4_const_str &other)
   if (l>0xfff0) l=0xfff0;//Try to avoid vulnerability to buffer-overrun attacks
   if (ptr==0)
   {
-     ptr=(char*)I4_MALLOC(other.length(),"strbuf");
+     ptr=(char*)I4_MALLOC(other.length()+1,"strbuf");
+	 ZeroMemory(ptr,other.length()+1);
      strncpy(ptr,other.c_str(),other.length());
+	 buf_len=other.length()+1;
+	 len=other.length();
      return;
   } //no here. thats enough.
   if (l>buf_len)//increase buffer size

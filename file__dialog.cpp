@@ -111,7 +111,8 @@ public:
   {    
     mp_window=0;
     text_input_win=0;
-    cur_dir.insert(cur_dir.begin(),"./");
+	if (cur_dir.length()==0 || cur_dir[0]!='/') //if it's not already an absolute path...
+	    cur_dir.insert(cur_dir.begin(),"./");
     simplify_dir(cur_dir);
     //i4_create_dialog(i4gets("get_savename_dialog"), 
     //                 this,
