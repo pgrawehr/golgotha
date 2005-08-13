@@ -1,0 +1,24 @@
+
+#Unix configuration file template. (for golgotha.ini)
+#Usually, golgotha.ini is automatically created with default contents
+#if it doesn't exist jet. You can modify it to change screen or
+#renderer settings. There's currently no in-game editor for these settings
+#under unixes.
+
+[Main]
+Fullscreen=1
+xres=640
+yres=480
+use2dsound=1
+use3dsound=1
+bits=16
+max_texture_quality=256
+max_view_distance=200
+texture_bitdepth=0
+stereo_mode=0
+stereo_port=956
+render_type=-1
+#This activates the software renderer, remove or uncomment the
+#following line to get opengl rendering capability.
+display=X Windows
+
