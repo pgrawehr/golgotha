@@ -27,6 +27,7 @@
 #include "objs/shrapnel.h"
 #include "math/random.h"
 #include "object_definer.h"
+#include "objs/path_object.h"
 
 
 static g1_model_ref model_ref("trike_body"),
@@ -167,8 +168,23 @@ void g1_trike_class::think()
         
         dest_x = attack_target->x;
         dest_y = attack_target->y;
-        
-        i4_float dist, dtheta, dx, dy,dz=0;
+		stagger=0; 
+
+		path_cos = dest_x - x;//cheat and calculate path from current position
+		path_sin = dest_y - y;
+		path_tan_phi = attack_target->h - h;
+		stagger = 0;
+
+		path_pos = 0;
+
+		path_len = (float)sqrt(path_cos*path_cos + path_sin*path_sin);
+		i4_float dist_w = 1.0f/path_len;
+		path_cos *= dist_w;
+		path_sin *= dist_w;
+		path_tan_phi *= dist_w;
+
+        i4_float dist=0, dtheta=0, dx=0, dy=0 ,dz=0;
+		i4_float oldspeed=speed;
         suggest_move(dist, dtheta, dx, dy, 0);
 		g1_object_class *blocking=0;
         check_move(dx,dy,dz,blocking);
@@ -201,9 +217,18 @@ void g1_trike_class::think()
             health=0;//be shure that we aren't still alive for the next tick
             return;
             }      
-        
+		return;   
         }
-	else
-		g1_map_piece_class::think();
+	else if (next_path->valid())
+	{
+		//Need a new target because our's just blew away without our help...
+
+		g1_path_object_class *next=(g1_path_object_class *)next_path.get();
+		if (dest_x!=next->x || dest_y != next->y)
+		{
+			return_to_path(); //Maybe called a bit too often, but shoudn't hurt. 
+		}
+	}
+	g1_map_piece_class::think();
     }
 

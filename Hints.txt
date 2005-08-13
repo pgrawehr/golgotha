@@ -167,6 +167,7 @@ visible.
 Fixed. 
 Followup: When in octree-mode, no faces can be selected. (Reason: Ray-to-octree intersection 
 doesn't work for long rays)
+Fixed. Completelly new octree collision code. 
 
 Octree: Collision detection does not use the benefits of the octree, but checks against all polys
 of the objects (asfaik).
@@ -182,6 +183,7 @@ limited if the unit moves along the path.
 bomb_truck: May crash if recursion on damage()/g1_apply_damage() gets to deep. Need to move
 the code that applies damage to other units from damage() to think(), and partially reimplement the
 code from g1_object_class::damage() base in bomb truck (including different sound) 
+Done.
 
 Points open from my HD crash:
 Fix editing of terrain height
@@ -198,11 +200,15 @@ Polygon marker lines in maxtool not visible when using opengl renderer.
 
 Textures are stretched in opengl renderer. 
 
+The distant terrain looks awfull under linux (both opengl and software renderer). Once again...
 
 Maxtool bombs after trying to add a 3-sided face.
+Fixed. 
 
 The second attempt to open an object in linux-maxtool has wrong (possibly nonexistent) directory 
 as start. 
 Fixed. Hope the fix works for windows, too. Followup: Check how it behaves after creating a new object. 
 Fixed that, too. 
 
+Jet and engineer accept "stop" commands even on path defined maps (but otherwise, they're not 
+user controllable). Jet might perhaps become user-controllable, but engineer depends on map. 

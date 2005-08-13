@@ -1340,21 +1340,13 @@ i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
 	  i4_bool on_road=i4_T;
 	  if (next_path->id!=road_type)
 		  {
-		  speed = defaults->speed * (1.0f - damping_fraction);
+		  i4_float maxspeed = defaults->speed * (1.0f - damping_fraction);
+		  if (speed<=maxspeed)
+			  //The 0.01 is there to make sure, there happens something if the old speed is 0. 
+			  speed=(speed+defaults->accel); 
 		  on_road=i4_F;
 		  }
-	  /*
-	  if (next_path->id==road_type)// (*next_path).id
-		  {
-		  //speed = speed + 0.01;// * (1.0f - damping_fraction);
-		  on_road=i4_T;
-		  }
-	  else
-		  {
-		  speed = defaults->speed * (1.0f - damping_fraction);
-		  on_road=i4_F;
-		  }
-	  */
+	  
 	  path_pos += speed;
 	  if (on_road)
 		  {
@@ -1672,7 +1664,7 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 	}
 	//code bellow for following paths only
 
-	i4_float angle, scale=0.0,pl,curlen;
+	i4_float angle, /*scale=0.0,*/ pl,curlen;
 	i4_bool faroff=i4_F;
 	if (speed<defaults->speed)
 		{
@@ -1693,9 +1685,9 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 	path_pos += speed;
 	pl=path_len-path_pos;
 	//d.x = cos(theta)*speed;
-	d.x=(dest_x - path_cos*pl - path_sin*stagger*scale - x);
+	d.x=(dest_x - path_cos*pl /*- path_sin*stagger*scale*/ - x);
 	//d.y = sin(theta)*speed;
-	d.y=(dest_y - path_sin*pl + path_cos*stagger*scale - y);
+	d.y=(dest_y - path_sin*pl /*+ path_cos*stagger*scale*/ - y);
 	d.z = (dest_z - path_tan_phi*pl - h);
 	curlen=d.x*d.x+d.y*d.y;
 	if (curlen>(2*defaults->speed*defaults->speed))
@@ -1937,9 +1929,9 @@ i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz, 
 				calced=i4_T;
 				if (speed>mp->speed)
 					{//the guy before me is slower
-					speed=speed*0.8f;//above statement implies speed>0
-					dx=dx*0.8f;//exact??
-					dy=dy*0.8f;
+					speed=speed*defaults->accel;//above statement implies speed>0
+					dx=dx*defaults->accel;//exact??
+					dy=dy*defaults->accel;
 					}
 				else if (mp->speed < 8.0f)
 					{
@@ -1997,8 +1989,8 @@ i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz, 
 				speed=speed*0.8f;//above statement implies speed>0
 				//dx=dx*0.8;//exact??
 				//dy=dy*0.8;
-				dx=fabs(cos(theta)) * 0.8f * dx;//dx already has a sign
-				dy=fabs(sin(theta)) * 0.8f * dy;
+				dx=fabs(cos(theta)) * defaults->accel * dx;//dx already has a sign
+				dy=fabs(sin(theta)) * defaults->accel* dy;
 				}
 			else if (mp->speed < 8)//required for delayed start
 				{
@@ -2009,9 +2001,9 @@ i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz, 
 				}
 			else
 				{
-				speed=speed*0.9f;
-				dx=fabs(cos(theta))*dx*0.9f;
-				dy=fabs(sin(theta))*dy*0.9f;
+				speed=speed*defaults->accel;
+				dx=fabs(cos(theta))*dx*defaults->accel;
+				dy=fabs(sin(theta))*dy*defaults->accel;
 				
 				}
 			}
