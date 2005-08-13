@@ -477,6 +477,9 @@ void m1_poly_object_class::remove_quad(w32 num)
   }
   
   quad_store.remove(num);
+  i4_str *texture_name=texture_names[num];
+  texture_names[num]=NULL;
+  delete texture_name;
   texture_names.remove(num);
   num_quad = quad_store.size();
 }

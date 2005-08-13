@@ -946,22 +946,7 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
     }
   }
   
-  if (m1_info.selected_index>0)
-	  {
-	  draw_3d_point(src_vert[m1_info.selected_points[0]].v, 0x00ff00, context, i4_T);
-	  if (m1_info.selected_index>1)
-		  {
-		  draw_3d_point(src_vert[m1_info.selected_points[1]].v, 0x00ff00,context, i4_T);
-		  }
-	  if (m1_info.selected_index>2)
-		  {
-		  draw_3d_point(src_vert[m1_info.selected_points[2]].v, 0x00ff00,context, i4_T);
-		  }
-	  if (m1_info.selected_index>3)
-		  {
-		  draw_3d_point(src_vert[m1_info.selected_points[3]].v, 0x00ff00,context, i4_T);
-		  }
-	  }
+  
 
   if (m1_info.preselect_point>=0)
     draw_3d_point(src_vert[m1_info.preselect_point].v, 0xff00ff, context, i4_T);
@@ -1068,6 +1053,23 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
 
     }
 
+  }
+
+  if (m1_info.selected_index>0)
+  {
+	  draw_3d_point(src_vert[m1_info.selected_points[0]].v, 0x00ff00, context, i4_T);
+	  if (m1_info.selected_index>1)
+	  {
+		  draw_3d_point(src_vert[m1_info.selected_points[1]].v, 0x00ff00,context, i4_T);
+	  }
+	  if (m1_info.selected_index>2)
+	  {
+		  draw_3d_point(src_vert[m1_info.selected_points[2]].v, 0x00ff00,context, i4_T);
+	  }
+	  if (m1_info.selected_index>3)
+	  {
+		  draw_3d_point(src_vert[m1_info.selected_points[3]].v, 0x00ff00,context, i4_T);
+	  }
   }
 
   if (m1_info.flags& M1_SHOW_OCTREE_SUBDIVISIONS&&m1_info.obj->octree)

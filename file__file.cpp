@@ -1738,7 +1738,10 @@ public:
 
     long handle=_findfirst(os_str,&fdat),done;
     if (handle==-1)
-      return i4_F;
+	{
+		i4_error("WARNING: Directory %s not accessible.",os_str);
+		return i4_F;
+	}
   
     i4_array<i4_file_status_struct> stats(64,64);
 

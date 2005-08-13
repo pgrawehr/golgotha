@@ -456,6 +456,7 @@ li_object *m1_add_quad(li_object *o, li_environment *env)
 	if (num_points==4)
 		points[3]=m1_info.selected_points[3];
 
+	m1_info.selected_index=0;
 	int myquadindex=obj->add_quad();
 	obj->quad[myquadindex].set(points[0],points[1],points[2],points[3]);
 	obj->quad_store[myquadindex].flags=0;
