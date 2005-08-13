@@ -184,7 +184,7 @@ void g1_trike_class::think()
 		path_tan_phi *= dist_w;
 
         i4_float dist=0, dtheta=0, dx=0, dy=0 ,dz=0;
-		i4_float oldspeed=speed;
+		speed*=1.3f;
         suggest_move(dist, dtheta, dx, dy, 0);
 		g1_object_class *blocking=0;
         check_move(dx,dy,dz,blocking);
@@ -212,9 +212,10 @@ void g1_trike_class::think()
                 rh = (i4_rand()&0xFFFF)/((i4_float)0xFFFF) * 0.2f;
                 shrapnel->setup(x+rx,y+ry,h + rh,6,i4_T);
                 }
-            unoccupy_location();
-            request_remove();
-            health=0;//be shure that we aren't still alive for the next tick
+            //unoccupy_location();
+            //request_remove();
+            //health=0;//be shure that we aren't still alive for the next tick
+			this->damage(this,health,i4_3d_vector(-dx,-dy,0));
             return;
             }      
 		return;   
@@ -222,7 +223,8 @@ void g1_trike_class::think()
 	else if (next_path->valid())
 	{
 		//Need a new target because our's just blew away without our help...
-
+		if (speed>(defaults->speed+defaults->accel))
+			speed-=defaults->accel; //slow down again. 
 		g1_path_object_class *next=(g1_path_object_class *)next_path.get();
 		if (dest_x!=next->x || dest_y != next->y)
 		{
