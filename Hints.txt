@@ -136,7 +136,9 @@ Der Wert von used_path_len für normale Objekte muss vermutlich erhöht werden.
 Texturen sollen über mehrere Kartenzellen verteilbar sein (künstliche Vergrösserung)
 Vielleicht gibt es da auch eine einfache Lösung? Eventueller Nachteil währe ein Qualitätsverlust.
 
-Prüfen dass, falls kein Geld vorhanden, auch keine Bestellungen in die Liste kommen.
+Prüfen dass, falls kein Geld vorhanden, auch keine Bestellungen in die Liste kommen. 
+Old FAQ says this is a feature, not a bug. But we might decide to change the behaviour
+anyway. 
 
 Wo sind die Build-Window-Tooltips?!?
 Gefixt, Problem mit unerwartetem Verhalten von Windows (sendet WM_MOUSEMOVE 
@@ -161,6 +163,8 @@ turret from the top.
 
 Should finally implement adding of textures in the editor. 
 It's everything prepared.
+Done. Followup: Under some rare circumstances, golg crashes when the tile editor is opened 
+when textures are just being loaded. 
 
 Maxtool: If "Show vertex numbers" is active and an object with an octree is open, nothing is 
 visible.
@@ -171,6 +175,7 @@ Fixed. Completelly new octree collision code.
 
 Octree: Collision detection does not use the benefits of the octree, but checks against all polys
 of the objects (asfaik).
+Changed. Reimplemented octree coldet, using a very sophisticated neighbourhood-algorithm. 
 
 Octree: I've seen cases where the octree rendering code spits out 2500 polys to be rendered for
 an object that has only 9(!) faces at all. So each face is classified 250 times. Maybe it's just
@@ -179,6 +184,7 @@ issue might be needed.
 
 Trike: Behaves strangely when near target. The problem might be that the speed is not directly 
 limited if the unit moves along the path. 
+Fixed. Now looks much better. 
 
 bomb_truck: May crash if recursion on damage()/g1_apply_damage() gets to deep. Need to move
 the code that applies damage to other units from damage() to think(), and partially reimplement the
@@ -212,6 +218,10 @@ Fixed that, too.
 
 Jet and engineer accept "stop" commands even on path defined maps (but otherwise, they're not 
 user controllable). Jet might perhaps become user-controllable, but engineer depends on map. 
+Changed. Jet is now fully user-controllable. 
 
 Need to improve efficiency of guided_missile. Maybe add some randomness in the target finding 
 algorithm. 
+
+Some objects (i.e rocket_launcher) require special "Viewpos" mount-point. 
+
