@@ -142,10 +142,12 @@ g1_jet_class::g1_jet_class(g1_object_type id,
 
   radar_image=&radar_im;
   radar_type=G1_RADAR_VEHICLE;  
+  solveparams=SF_GRADE4;
   set_flag(BLOCKING      |
            TARGETABLE    |
            AERIAL        | 
            HIT_AERIAL    |
+		   SELECTABLE    |
            DANGEROUS,   1);
 
 }
@@ -197,11 +199,12 @@ void g1_jet_class::fire()
           this, attack_target.get(), p, dir);          
 }
 
-i4_bool g1_jet_class::move(i4_float x_amount, i4_float y_amount)
+i4_bool g1_jet_class::move(i4_float x_amount, i4_float y_amount, i4_float z_amount)
 {
   unoccupy_location();
   x+=x_amount;
   y+=y_amount;
+  h+=z_amount;
 
   if (occupy_location())
   {
@@ -267,10 +270,76 @@ void g1_jet_class::think()
       }
     } break;
 
-    case FLYING:
+	case 47: //Heli-Flying
+		{
+			find_target();
+
+			if (next_path.valid())
+			{
+				dest_x = next_path->x;
+				dest_y = next_path->y;
+				dest_z = next_path->h;
+			}
+
+			i4_float dist, dtheta;
+			i4_3d_vector d;
+			suggest_air_move(dist, dtheta, d);
+			g1_object_class *blocking=0;
+			i4_float save_z=d.z;
+			if (check_move(d.x,d.y,d.z,blocking))
+			{
+				//if we're colliding with the airbase we just go up vertically.
+				if (blocking && (blocking->id==g1_get_object_type("airbase")))
+				{
+					d.x=0;
+					d.y=0; 
+					d.z=save_z>0.05f?save_z:0.05f;
+				}
+				if (my_solver)
+				{
+					if (h>terrain_height+0.3)//fly vertical upwards if just above the floor
+						move(d.x,d.y,d.z);
+					else 
+						move(0,0,d.z);
+				}
+				else
+				{
+					move(d.x,d.y,d.z);
+				}
+			}
+
+			if (h<terrain_height)
+			{
+				damage(this,health,i4_3d_vector(-d.x,-d.y,-d.z));
+				break;
+			}
+			if (dist<speed)
+				advance_path();
+
+			i4_float roll_to = -i4_pi()/4 * dtheta;
+
+			i4_normalize_angle(roll_to);
+
+			if (roll_to)
+				i4_rotate_to(roll,roll_to,defaults->turn_speed/4);  
+			else
+				i4_rotate_to(roll,0,defaults->turn_speed/2);
+			//make the heli pitch forward if it moves. The amount is just pure guess, since speed is
+			//in units per tick and pitch is an angle. But it seems to work
+			i4_float pitch_to=speed*1.5f; 
+			if (i4_fabs(pitch-pitch_to)>0.05f) //this avoids swinging. 
+				i4_rotate_to(pitch,pitch_to,0.05f);
+
+			if (attack_target.valid() && !fire_delay)
+				fire();
+
+			groundpitch = 0; //no ground when in the air (duh)
+			groundroll  = 0;
+		} break;
+
+	case FLYING:
     {
       i4_3d_vector d;
-      //i4_float angle,t;
 
       // sway over terrain
       sway++;
@@ -289,10 +358,39 @@ void g1_jet_class::think()
       i4_float roll_to  = 0.02f*(float)sin(i4_pi()*sway/17.0f);
       i4_float pitch_to = 0.02f*(float)sin(i4_pi()*sway/13.0f);
       
-      i4_float dist, dtheta;
+      i4_float dist=0, dtheta=0;
       suggest_air_move(dist, dtheta, d);
-      move(d.x,d.y);
-      h += d.z + 0.02f*(float)sin(i4_pi()*sway/15.0f);
+	  g1_object_class *blocking=0;
+	  if (!controled())
+		d.z+=0.02f*(float)sin(i4_pi()*sway/15.0f); //doing this while controled causes "jumpy" movement
+	  i4_float save_z=d.z;
+	  if (check_move(d.x,d.y,d.z,blocking))
+	  {
+		  //if we're colliding with the airbase we just go up vertically.
+		  if (blocking && (blocking->id==g1_get_object_type("airbase")))
+		  {
+			  d.x=0;
+			  d.y=0; 
+			  d.z=save_z>0.05f?save_z:0.05f;
+		  }
+		  if (my_solver)
+		  {
+			  if (h>terrain_height+0.3)//fly vertical upwards if just above the floor
+				  move(d.x,d.y,d.z);
+			  else 
+				  move(0,0,d.z);
+		  }
+		  else
+		  {
+			  move(d.x,d.y,d.z);
+		  }
+	  }
+
+	  if (h<terrain_height)
+	  {
+		  damage(this,health,i4_3d_vector(-d.x,-d.y,-d.z));
+		  break;
+	  }
         
       if (dist<speed)
         advance_path();
@@ -309,7 +407,8 @@ void g1_jet_class::think()
 		  i4_rotate_to(engines->rotation.y,3*i4_pi()/2,0.1f);
 
       i4_rotate_to(roll,roll_to,defaults->turn_speed/4);  
-      i4_rotate_to(pitch,pitch_to,defaults->turn_speed/4);  
+	  if (i4_fabs(pitch-pitch_to)>0.05f) //this avoids swinging. 
+		  i4_rotate_to(pitch,pitch_to,defaults->turn_speed/4);
       
       groundpitch = 0; //no ground in the air (duh)
       groundroll  = 0;
@@ -331,7 +430,7 @@ void g1_jet_class::think()
       i4_float dx,dy;
       dx = speed*(float)cos(theta);
       dy = speed*(float)sin(theta);
-      move(dx,dy);
+      move(dx,dy,0);
 
       if (h<=terrain_height)
         g1_map_piece_class::damage(0,health,i4_3d_vector(0,0,1));               // die somehow!!!

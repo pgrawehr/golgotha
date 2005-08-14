@@ -32,7 +32,7 @@ public:
   virtual void load(g1_loader_class *fp);
   virtual void skipload(g1_loader_class *fp);
 
-  i4_bool move(i4_float x_amount, i4_float y_amount);
+  i4_bool move(i4_float x_amount, i4_float y_amount, i4_float z_amount);
 
   virtual void fire();
   virtual void think();

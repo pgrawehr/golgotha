@@ -33,7 +33,7 @@
   (electric_car    0.08    0.2    0.020   800     50      0      3         electric_beam)
   (peon_tank       0.08    0.20   0.020   300     50     10      4         b90mm)
   (helicopter      0.16    0.8    0.020  1000     70     30      10        guided_missile);;health offset 20
-  (jet             0.17    0.07   0.020  1500     70      0      5         chain_gun)
+  (jet             0.3     0.07   0.020  1500     70      0      5         chain_gun)
   (engineer        0.08    0.2    0.020   300     30      0      1         nil)
   (trike           0.08    0.2    0.020   500     80      0      5         trike)
   (tank_buster     0.08    0.2    0.020   800     30      0      18        buster_rocket)
