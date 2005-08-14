@@ -188,8 +188,7 @@ void g1_engineer_class::skipload(g1_loader_class *fp)
 
 i4_bool g1_engineer_class::can_attack(g1_object_class *who)
 	{
-	if ((who->id==takeover_pad)&&(who->player_num!=player_num)
-		&&in_range(who)) 
+	if ((who->id==takeover_pad)&&in_range(who)) 
 		return i4_T;
 	return i4_F;
 	}
@@ -217,10 +216,14 @@ void g1_engineer_class::think()
 	  //find_target(i4_F);
 	  if (attack_target.valid())
 		  {
-		  if (attack_target.get()->id==takeover_pad)
+		  g1_object_class *o=attack_target.get();
+		  if (o->id==takeover_pad)
 			  {
-			  attack_target.get()->change_player_num(player_num);
-			  attack_target=0;
+				o->change_player_num(player_num);
+				if (o->repair(get_damage_for(attack_target.get())))
+				{
+					attack_target=0;
+				}
 			  }
 		  }
 	  }
@@ -239,8 +242,9 @@ li_object *g1_engineer_class::message(li_symbol *message_name,
     if (who)
     {
       g1_path_object_class *po=g1_path_object_class::cast(who);
-      if (po /*&& po->total_links(get_team())*/)
+      if (po)
         who->change_player_num(player_num);
+	  who->repair(get_damage_for(who));
     }    
   }
   

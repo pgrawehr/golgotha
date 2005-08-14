@@ -134,6 +134,8 @@ public:
   void change_player_num(int new_player_num); 
   
   g1_path_object_class* find_next(g1_team_type type, g1_path_object_class *dest);
+
+  virtual bool repair(int how_much);
 };
 
 

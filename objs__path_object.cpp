@@ -685,6 +685,23 @@ int g1_path_object_class::find_path(g1_team_type team, g1_path_object_class *des
   return depth;
 }
 
+bool g1_path_object_class::repair(int how_much)
+{
+	//Repairing path objects repairs all attached 
+	//objects to full health (ignoring the argument, since capturing them also restores 
+	//them)
+	int t=total_controlled_objects();
+	for (int i=0;i<t;i++)
+	{
+		g1_object_class* o=get_controlled_object(i);
+		if (o && o->player_num==player_num)
+		{
+			o->repair(o->get_max_health());
+		}
+	}
+	return true;
+}
+
 void g1_path_object_class::change_player_num(int new_player)
 {
   g1_object_class::change_player_num(new_player);

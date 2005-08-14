@@ -150,7 +150,12 @@ i4_bool g1_repairer_class::can_attack(g1_object_class *who)
   {
     g1_map_piece_class *mp = g1_map_piece_class::cast(who);
 	//this is odd: compiler complains about mp!=this because of const declarations...
-    return (mp && ((void *)mp)!=((void *)this) && mp->get_flag(GROUND) && mp->health>0 && mp->health<mp->defaults->health && in_range(who));
+    return (mp 
+		&& ((void *)mp)!=((void *)this) 
+		&& mp->get_flag(GROUND) 
+		&& mp->health>0 
+		&& mp->health<mp->get_max_health() 
+		&& in_range(who));
   }
   return i4_F;
 }
@@ -232,13 +237,10 @@ void g1_repairer_class::think()
       if (mp->health<mp->get_max_health() && mp->health>0)
       {
         fire_delay = defaults->fire_delay;
-        mp->health+=get_type()->get_damage_map()->get_damage_for(mp->id);
-        
-        if (mp->health>mp->defaults->health)
-			{
-            mp->health = mp->defaults->health;
-			attack_target=0;
-			}
+        if (mp->repair(get_damage_for(mp)))
+		{
+			attack_target=NULL;
+		}
       }
       else
         attack_target = 0;

@@ -299,7 +299,7 @@ public:
   virtual w32 get_selection_flags(){return SEL_DEFAULT;};
 
   //! The type class of the object. 
-  g1_object_definition_class *get_type();     // inlined below
+  g1_object_definition_class *get_type() const;     // inlined below
 
   void mark_as_selected()
 	  {
@@ -397,6 +397,9 @@ public:
   virtual void damage(g1_object_class *who_is_hurting,//we got some damage
                       int how_much_hurt, i4_3d_vector damage_dir);
 
+  //! This method is a shortcut to get the damage to be done to a specific unit. 
+  int get_damage_for(g1_object_class* target) const;
+
   //! Check for collisions.
   //! The method checks wheter moving from \a start by a distance of \a ray
   //! would collide with us. The implementation of this method usually calls
@@ -464,7 +467,14 @@ public:
   //! Specific units may override this value to something larger than 0, such that they actually
   //! die before the health reaches zero. They can then show some cool animation while dying.
   virtual short get_min_health() {return 0;}
-  //! show in editor if mouse cursor stays still on object
+  //! Increases the health of this object up to it's maximum health. 
+  //! @param how_much Amount of health to be added
+  //! @return True if the object has reached maximum health. 
+  virtual bool repair(int how_much);
+
+  //! Retun tooltip for object in editor.
+  //! Returns the string that the editor should display when the mouse pointer 
+  //! is moved over the object in the editor. Defaults to displaying the unit ID and the type. 
   virtual i4_str *get_context_string();  
 
   //! The virtual destructor. 
@@ -620,6 +630,10 @@ public:
     //! If you have an instance of g1_object_class whose type has 
     //! TO_MAP_PIECE set, you know that it is actually an instance
     //! of g1_map_piece_class or a subclass of that one. 
+	//! If you wonder: Golgotha does not rely on rtti, and
+	//! therefore does not use any dynamic_cast operators at all.
+	//! The main reason for this is that (at least on older compilers),
+	//! dynamic_cast is very slow and also has a big memory overhead. 
   enum 
   {
     EDITOR_SELECTABLE = (1<<0),      //< object shows up in editor
@@ -642,7 +656,10 @@ public:
   li_class                   *vars;       // variables specific to the type
   g1_object_defaults_struct  *defaults;   // loaded from scheme/balance.scm
   
+  //! Gets the damage map for this unit type.
   g1_damage_map_struct        *get_damage_map();
+
+  
   
   w32 flags;
   int get_flag(int x) const { return flags & x; }
@@ -716,7 +733,12 @@ inline g1_object_class *g1_create_object(g1_object_type type)
     return 0;
 }
 
-inline g1_object_definition_class *g1_object_class::get_type() { return g1_object_type_array[id]; }
+inline g1_object_definition_class *g1_object_class::get_type() const
+{ 
+	return g1_object_type_array[id]; 
+}
+
+
 
 void g1_initialize_loaded_objects(); 
 void g1_uninitialize_loaded_objects();

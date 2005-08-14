@@ -115,14 +115,19 @@ g1_damage_map_struct *g1_object_definition_class::get_damage_map()
     damage=g1_find_damage_map(type);
     if (!damage)
     {
-      i4_warning("damage map missing %s, using default", name());
+      i4_warning("Damage map missing for %s, using default.", name());
       damage=g1_find_damage_map(0);
       if (!damage)
-        i4_error("no default");
+		  i4_error("SEVERE: No default damage map. Possible reason: scheme/balance.scm is corrupt.");
     }
   }
   
   return damage;
+}
+
+int g1_object_class::get_damage_for(g1_object_class* target) const
+{
+	return get_type()->get_damage_map()->get_damage_for(target->id);
 }
 
 g1_object_definition_class::g1_object_definition_class(char *_name,
@@ -197,6 +202,17 @@ short g1_object_class::get_max_health()
 	{
 	return get_type()->defaults->health;
 	};
+
+bool g1_object_class::repair(int how_much)
+{
+	health+=how_much;
+	if (health>=get_max_health())
+	{
+		health=get_max_health();
+		return true;
+	}
+	return false;
+}
 
 
 g1_team_type g1_object_class::get_team() const

@@ -86,7 +86,7 @@ li_object *g1_def_weapon_damage(li_object *i, li_environment *env)
       a->hurt_type=g1_damage_map_struct::HURT_SINGLE_GUY;
     else if (htype==li_mult.get())
       a->hurt_type=g1_damage_map_struct::DO_AREA_OF_EFFECT;
-    else li_error(env, "USER: Unknown hurt type %O", o);
+    else li_error(env, "USER: Unknown hurt type %O, should be sing or mult", o);
     o=li_cdr(o,env);
     
     a->default_damage=li_get_int(li_car(o,env),env);      o=li_cdr(o,env);

@@ -43,7 +43,7 @@
   (moneyplane      0.20    0.1    0.010   500     50      0      0         nil);;health offset=20
   (bomber          0.10    0.05   0.020  1500    100      2      6         dropped_bomb)
   (cobra_lisp      0.10    0.20   0.020  2000    500      2     10         heavy_rocket)
-  (cobra_tank      0.10    0.20   0.015  2000    600      3	14         napalm)
+  (cobra_tank      0.10    0.20   0.015  2000    600      3 	14         napalm)
   (bird            0.06    0.10   0.050    10      5      0      0         nil)         
   (car             0.08    0.2    0.020     0    100      4      0         nil)
   (convoy          0.20    0.2    0.1       0     10      0      0         nil);;a dummy entry
@@ -79,8 +79,17 @@
   (trike           mult     1000     2         0.2   5)
   (bomb_truck      mult     50000    3         0.0   0)
   (electric_car    sing     5        2         0.2   1)
-  
+
+; This is the damage the invisible explosion causes. 
+; This is applied to all nearby units if something explodes. 
+; The explosion is "invisible", because the visible parts of it are handled independently. 
   (inv_explosion       mult     100      3         0.0   10)
+
+; These units repair others, so the damage value actually says how much targets
+; are repaired per tick.
+  (repairer        sing     5        0         1.0     3    (stank 50))
+    (engineer      sing     10       0         1.0     1)
+  
   )
 
 

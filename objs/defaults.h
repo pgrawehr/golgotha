@@ -63,15 +63,15 @@ class g1_damage_map_struct
 public:
   li_symbol *object_for;     // which object does this apply to?
   int special_damage;        // radius of effect or ticks to apply damage
-  int default_damage;        // how much damage is done by default (if not in exxception list)
+  int default_damage;        // how much damage is done by default (if not in exception list)
   float speed;               // speed at which weapon travels
   int t_maps;                // how many exceptions are in the array
-  float range;            // how far the shot can travel
+  float range;               // how far the shot can travel
   
   struct map
   {
     li_symbol *object_type;  // who this exception is for
-    int damage;             // how much damage to do to them
+    int damage;              // how much damage to do to them
   } *maps;
 
   int get_damage_for(int object_type);
