@@ -212,3 +212,6 @@ Fixed that, too.
 
 Jet and engineer accept "stop" commands even on path defined maps (but otherwise, they're not 
 user controllable). Jet might perhaps become user-controllable, but engineer depends on map. 
+
+Need to improve efficiency of guided_missile. Maybe add some randomness in the target finding 
+algorithm. 

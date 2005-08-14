@@ -2185,11 +2185,17 @@ void g1_map_piece_class::calc_world_transform(i4_float ratio, i4_transform_class
 static li_symbol_ref commands_ask("commands-ask"),
 	commands_exec("commands-exec"),command_control("command-control"),
 	command_stop("command-stop");
-li_object *g1_map_piece_class::message(li_symbol *message, li_object *message_param, li_environment *env)
+li_object *g1_map_piece_class::message(li_symbol *message_cmd, li_object *message_param, li_environment *env)
 	{
-	if (message==commands_ask.get())
-		return li_make_list(command_stop.get(),command_control.get(),g1_object_class::message(message,message_param,env),0);
-	if (message==commands_exec.get())
+	if (message_cmd==commands_ask.get())
+	{
+		if (get_flag(SELECTABLE))
+			return li_make_list(command_stop.get(),command_control.get(),g1_object_class::message(message_cmd,message_param,env),0);
+		else 
+			//Non-Selectable units can't be commanded. 
+			return g1_object_class::message(message_cmd,message_param,env);
+	}
+	if (message_cmd==commands_exec.get())
 		{
 		if (message_param==command_stop.get())
 			{
@@ -2207,10 +2213,10 @@ li_object *g1_map_piece_class::message(li_symbol *message, li_object *message_pa
             }
         else
 			{
-			return g1_object_class::message(message,message_param,env);
+			return g1_object_class::message(message_cmd,message_param,env);
 			}
 		}
-	return g1_object_class::message(message,message_param,env);
+	return g1_object_class::message(message_cmd,message_param,env);
 	}
  
 
