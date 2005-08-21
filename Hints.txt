@@ -202,7 +202,8 @@ Linux bombs when loading castle.
 Fixed. Was acutally a bug in the assignment operator of i4_array<T>. I have no idea why this didn't
 bomb on windows...
 
-Polygon marker lines in maxtool not visible when using opengl renderer.
+Polygon marker lines in maxtool not visible when using opengl renderer. 
+Maybe no lines visible at all? Further investigation on this issue is required.
 
 Textures are stretched in opengl renderer. 
 
