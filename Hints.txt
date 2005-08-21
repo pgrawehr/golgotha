@@ -225,3 +225,7 @@ algorithm.
 
 Some objects (i.e rocket_launcher) require special "Viewpos" mount-point. 
 
+The light-bulb object should have an edit-dialog. 
+
+3D-Vectors should have a lisp editor associated. 
+

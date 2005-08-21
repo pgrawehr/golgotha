@@ -45,6 +45,7 @@ g1_guided_missile_def("guided_missile");
 static li_symbol_ref li_smoke_trail("smoke_trail");
 static li_symbol_ref li_explosion1("explosion1");
 static li_g1_ref_class_member track_object("track_object");
+static li_vect_class_member precision("precision");
 static li_g1_ref_class_member smoke_trail("smoke_trail");
 static li_g1_ref_class_member who_fired_me("who_fired_me");
 static li_vect_class_member velocity("velocity");
@@ -121,15 +122,6 @@ void g1_guided_missile_class::think()
       if (look_ahead>3) look_ahead=3;
       accel.normalize();
 
-#if 0
-      // attempt to cancel old velocity
-      tvel.normalize();
-      tvel *= 0.4;
-      accel -= tvel;
-      accel.normalize();
-#endif
-
-#if 1
       // attempt to cancel perp component of old velocity
       if (vel.dot(accel)>0)
       {
@@ -152,7 +144,6 @@ void g1_guided_missile_class::think()
           accel += perp;
         }
       }
-#endif
 
       if (accel.z<-0.5)
 		  {

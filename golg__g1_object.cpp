@@ -95,7 +95,7 @@ i4_window_class *g1_object_definition_class::create_edit_dialog()
   {
     g1_object_class *go=g1_global_id.get(selected_objects[0]);
 
-    if (go->vars && li_get_type(go->vars->type())->editor)
+    if (go->vars && li_get_type(go->vars->type())->has_editor())
     {     
       li_function_type fun=li_function::get(li_get_fun(li_get_symbol("object_changed"),0),0)->value();
 

@@ -4418,7 +4418,36 @@ void li_set_class_editor(li_type_edit_class *editor)
 
 ////////////////////////////// li_class_type members ///////////////////////////////////////////////
 
+
+//! This global variable contains the "this" parameter for the current lisp class.
+//! This may seem bad style, but simpliefies some stuff a lot. 
 li_class *li_this;
+
+int li_type_function_table::create_edit_controls(i4_str name, 
+												 li_object *object, 
+												 li_object *property_list, 
+												 i4_window_class **windows, 
+												 int max_windows, 
+												 li_environment *env)
+{
+	return editor->create_edit_controls(name,object,property_list,windows,max_windows,env);
+}
+
+i4_bool li_type_function_table::can_apply_edit_controls(li_object *objectw, 
+												li_object *property_list, 
+												i4_window_class **windows, 
+												li_environment *env)
+{
+	return editor->can_apply_edit_controls(objectw,property_list,windows,env);
+}
+
+li_object* li_type_function_table::apply_edit_controls(li_object *o, 
+													   li_object *property_list, 
+													   i4_window_class **windows, 
+													   li_environment *env)
+{
+	return editor->apply_edit_controls(o,property_list,windows,env);
+}
 
 class li_class_type : public li_type_function_table
 {
@@ -4994,7 +5023,7 @@ li_object *li_def_class(li_object *fields, li_environment *env)
   }
     
   me->vars.sort(li_class_type::var_compare);
-  me->editor=li_class_editor;
+  me->set_editor(li_class_editor);
   ///type must match exactly for parameters passed by reference.
   li_type_function_table *me_p=me;
   int newtype=li_add_type(me_p);
@@ -5484,10 +5513,10 @@ public:
 
    void init()
    {
-     li_get_type(LI_INT)->editor=&li_generic_edit_instance;
-     li_get_type(LI_FLOAT)->editor=&li_generic_edit_instance;
-     li_get_type(LI_SYMBOL)->editor=&li_generic_edit_instance;
-     li_get_type(LI_STRING)->editor=&li_generic_edit_instance;
+     li_get_type(LI_INT)->set_editor(&li_generic_edit_instance);
+     li_get_type(LI_FLOAT)->set_editor(&li_generic_edit_instance);
+     li_get_type(LI_SYMBOL)->set_editor(&li_generic_edit_instance);
+     li_get_type(LI_STRING)->set_editor(&li_generic_edit_instance);
      li_set_class_editor(&li_class_edit_instance);
    }
 
@@ -5521,7 +5550,7 @@ public:
    has_extra_label=i4_F;
    i4_window_class *w[10];
 
-   if (li_get_type(o->type())->editor)
+   if (li_get_type(o->type())->has_editor())
    {
      if (prop_list!=li_get_symbol("no_edit"))
      {
@@ -5536,10 +5565,10 @@ public:
 		 has_extra_label=i4_T;
 		 }
 	   
-       t_windows+=li_get_type(o->type())->editor->create_edit_controls(name,
-                                                                      o.get(),
-                                                                      prop_list,
-                                                                      &w[t_windows], 10-t_windows, env);
+       t_windows+=li_get_type(o->type())->create_edit_controls(name,
+                                                               o.get(),
+                                                               prop_list,
+                                                               &w[t_windows], 10-t_windows, env);
        if (t_windows)
        {       
          windows=(i4_window_class **)I4_MALLOC(sizeof(i4_window_class *) * t_windows,
@@ -5567,26 +5596,28 @@ public:
 
  i4_bool li_dialog_item::can_apply(li_environment *env)
  {
-   if (!li_get_type(o->type())->editor)  return i4_T;
+   if (!li_get_type(o->type())->has_editor())  
+	   return i4_T;
 
    //if we have an extra label, don't try to apply anything on it, would
    //break the class chain structure of o.
-   return li_get_type(o->type())->editor->can_apply_edit_controls(
+   return li_get_type(o->type())->can_apply_edit_controls(
 	   o.get(), prop_list, has_extra_label?windows+1:windows,env);
  }
 
 
  li_object *li_dialog_item::apply(li_environment *env)
  {
-   if (li_get_type(o->type())->editor)
-     return li_get_type(o->type())->editor->apply_edit_controls(
+   if (li_get_type(o->type())->has_editor())
+     return li_get_type(o->type())->apply_edit_controls(
 		o.get(), prop_list, has_extra_label?windows+1:windows, env);
    return o.get();
  }  
 
  li_dialog_item::~li_dialog_item()
  {
-	 //delete the array, but NOT it's contents.
+	 //delete the array, but NOT it's contents, since these are windows, and windows
+	 //are deleted by the parent. 
      if (windows)
          i4_free(windows);
  }
@@ -5624,9 +5655,9 @@ public:
 
 
    mp_handle=0;
-   int t=li_get_type(o->type())->editor->create_edit_controls(name, o.get(), 
-                                                             prop_list.get(), w, 10,
-                                                              env);
+   int t=li_get_type(o->type())->create_edit_controls(name, o.get(), 
+                                                      prop_list.get(), w, 10,
+                                                      env);
   int x=0, maxh=0;
   for (int i=0; i<t; i++)
   {
@@ -5670,10 +5701,10 @@ void li_dialog_window_class::receive_event(i4_event *ev)
   {
     if (((i4_user_message_event_class *)ev)->sub_type==1)
     {
-      if (!li_get_type(o->type())->editor->can_apply_edit_controls(o.get(), prop_list.get(), w, env()))
+      if (!li_get_type(o->type())->can_apply_edit_controls(o.get(), prop_list.get(), w, env()))
         return;
       else
-        new_value=li_get_type(o->type())->editor->apply_edit_controls(o.get(),
+        new_value=li_get_type(o->type())->apply_edit_controls(o.get(),
                                                                       prop_list.get(), w, env());
 
     }
@@ -7225,7 +7256,7 @@ public:
   // free data associated with an instance of this type
   virtual void free(li_object   *o)
   {
-    delete li_vect::get(o,0)->v;
+    //delete li_vect::get(o,0)->v;
   }
 
   virtual int equal(li_object  *o1, li_object *o2) 

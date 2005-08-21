@@ -198,35 +198,45 @@
   (who_fired_me   (new object_ref))
   (track_object   (new object_ref))
   (fuel           0.0)
-  (velocity       (new vector)))
+  (velocity       (new vector))
+  (precision    (new vector))
+)
 
 (def_class buster_rocket_vars nil
   (smoke_trail    (new object_ref))
   (who_fired_me   (new object_ref))
   (track_object   (new object_ref))
   (fuel           0.0)
-  (velocity       (new vector)))
+  (velocity       (new vector))
+  (precision    (new vector))
+  )
 
 (def_class heavy_rocket_vars nil
   (smoke_trail    (new object_ref))
   (who_fired_me   (new object_ref))
   (track_object   (new object_ref))
   (fuel           0.0)
-  (velocity       (new vector)))
+  (velocity       (new vector))
+  (precision    (new vector))
+)
 
 (def_class vortex_missile_vars nil
   (smoke_trail    (new object_ref))
   (who_fired_me   (new object_ref))
   (track_object   (new object_ref))
   (fuel           0.0)
-  (velocity       (new vector)))
+  (velocity       (new vector))
+  (precision    (new vector))
+)
 
 (def_class nuke_missile_vars nil
   (smoke_trail    (new object_ref))
   (who_fired_me   (new object_ref))
   (track_object   (new object_ref))
   (fuel           0.0)
-  (velocity       (new vector)))
+  (velocity       (new vector))
+  (precision    (new vector))
+)
 
 
 (def_class crate_vars nil

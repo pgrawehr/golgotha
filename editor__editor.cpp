@@ -7362,8 +7362,8 @@ class li_objref_edit_initer : public i4_init_class
 public:
   void init() 
   {
-    li_get_type(li_find_type("object_ref"))->editor=&li_object_reference_edit_instance;
-    li_get_type(li_find_type("object_ref_list"))->editor=&li_object_list_reference_edit_instance;
+    li_get_type(li_find_type("object_ref"))->set_editor(&li_object_reference_edit_instance);
+    li_get_type(li_find_type("object_ref_list"))->set_editor(&li_object_list_reference_edit_instance);
   }
 
 } i_objref_edit_instance;

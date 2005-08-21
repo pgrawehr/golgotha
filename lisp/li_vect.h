@@ -18,16 +18,15 @@ extern li_type_number li_vect_type;
 class li_vect : public li_object
 {
   friend class li_vect_type_function_table;
-  i4_3d_vector *v;
+  i4_3d_vector v;
 public:
-  li_vect(i4_3d_vector _v) : v(new i4_3d_vector), li_object(li_vect_type) 
+  li_vect(i4_3d_vector _v) : v(_v), li_object(li_vect_type) 
   { 
-    *v=_v;
   }
 
-  li_vect(i4_3d_vector *v) : v(v), li_object(li_vect_type) {}
+  //li_vect(i4_3d_vector *v) : v(v), li_object(li_vect_type) {}
 
-  i4_3d_vector &value() { return *v; }  
+  i4_3d_vector &value() { return v; }  
   static li_vect *get(li_object *o, li_environment *env)
   { check_type(o, li_vect_type, env); return ((li_vect *)o); }
 } ;

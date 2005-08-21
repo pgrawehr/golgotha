@@ -398,7 +398,7 @@ class li_g1_sky_initer:public i4_init_class
 			{
 			li_type_function_table *ty=new li_g1_sky_function;
 			li_g1_sky_type=li_add_type(ty);
-			li_get_type(li_find_type("sky"))->editor=&li_sky_edit_instance;
+			li_get_type(li_find_type("sky"))->set_editor(&li_sky_edit_instance);
 			};
 	}li_g1_sky_initer_instance;
 

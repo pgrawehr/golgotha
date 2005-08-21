@@ -106,66 +106,98 @@ public:
   void operator delete(void *ptr, char *file, int line);
 #endif
 };
-/*
-class li_virtual_test: public li_object
-	{//virtual functions in a derived class are possible even if base has none.
-	virtual void somevirtualfn();
-	virtual int anothervirtualfn(int x);
-	int amember;
-	li_virtual_test():li_object(0){amember=0;}
-	};
-*/
+
 // the li_ system does not know about gui stuff directly, it goes through this type_edit_class
 // which can be added to each type later
 class i4_window_class;   
 class li_type_edit_class;
 
-// if you want to add a new type into the system, implement one of these
-// and call li_add_type
+//! Base class for all lisp types. 
+//! If you want to add a new type into the system, implement one of these
+//! and call li_add_type.
+//! This class has virtual functions, most of them
+//! are used in conjunction with the garbage collector. 
 class li_type_function_table
 { 
-public:
+private:
+	//! Reference to the type editor. 
+    //! The editor that is used to edit types of this object (in most cases it displays
+	//! a text window to edit the value of the type
   li_type_edit_class *editor;
-  //if non-zero, this is a class type (and it should(?) be safe
-  //to cast it to li_class_type and the corresponding object to li_class
+public:
+  //! Class type number. 
+  //! if non-zero, this is a class type (and it should(?) be safe
+  //! to cast it to li_class_type and the corresponding object to li_class
   int type;
 
-  // mark any data you the type have
+  //! Mark any data you (the type) have.
+  //! This is used to mark object that depend directly on the type. 
   virtual void mark(int set) { ; }
 
-  // mark any data an instance of this type has
+  //! Mark any data an instance of this type has.
   virtual void mark(li_object   *o, int set) { o->mark(set); }
 
-  // free data associated with an instance of this type
+  //! Free data associated with an instance of this type
   virtual void free(li_object   *o) { ; } // during free, you will not be marked
 
+  //! Equality operator for objects. 
+  //! The base class implementation just checks for reference equality. 
   virtual int equal(li_object  *o1, li_object *o2) { return o1==o2; }
+
+  //! Print (display) an element of the associated type.
+  //! This function is pure virtual. 
   virtual void print(li_object  *o, i4_file_class *stream) = 0;
   //! name is used to sync types across a network & saves and for dynamic object
-  //creation using (new ...)
+  //! creation using (new ...)
   virtual char *name() = 0;   
 
   //! This is needed by new. Implement it for all types that can be created
-  // using new. 
+  //! using new. 
   virtual li_object *create(li_object *params, li_environment *env) { return 0; }
 
-  // these load and save type information
+  //! these load and save type information
   virtual void save(i4_saver_class *fp, li_environment *env) { ; }
   virtual void load(i4_loader_class *fp, li_type_number *type_remap, li_environment *env) { ; }
   virtual void load_done() { ; }
 
-  // load & save type instance information
+  //! Load & save type instance information
   virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env) = 0;
   virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
                                  li_environment *env) = 0;
 
   li_type_function_table() { editor=0; type=0;}
-  virtual li_object *copy(li_object *o) //make a copy of self
+  //! Make a copy of self
+  virtual li_object *copy(li_object *o) 
 	  {
 	  //just returns o if copying is not meaningfull or allowed (i.e types, symbols)
 	  return o;
 	  }
   virtual ~li_type_function_table() { ; }
+  void set_editor(li_type_edit_class* _editor)
+  {
+	  editor=_editor;
+  }
+  i4_bool has_editor()
+  {
+	  return editor!=NULL;
+  }
+
+  //This is a shortcut for editor->create_edit_controls
+  //This causes another indirection, but is much better style.
+  int create_edit_controls(i4_str name,
+	  li_object *object, 
+	  li_object *property_list,
+	  i4_window_class **windows, 
+	  int max_windows,
+	  li_environment *env);
+  i4_bool can_apply_edit_controls(li_object *objectw, 
+	  li_object *property_list,
+	  i4_window_class **windows,
+	  li_environment *env);
+  li_object *apply_edit_controls(li_object *o, 
+	  li_object *property_list,
+	  i4_window_class **windows,
+	  li_environment *env);
 };
 
 extern li_type_function_table **li_types;
