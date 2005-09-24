@@ -125,6 +125,7 @@ i4_str *i4_const_str::vsprintf(w32 max_length, va_list &ap) const
 {
   i4_str *ns=new i4_str(*this,(w16)max_length);
   char *fmt=ptr,*out=ns->ptr;
+  int charsleft=max_length-1;
   int l=length();
 
   while (*fmt && l)
@@ -143,6 +144,9 @@ i4_str *i4_const_str::vsprintf(w32 max_length, va_list &ap) const
           {
             *out=(char)it.get().value();
             out++;
+			charsleft--;
+			if (charsleft<=0)
+				goto out_of_space;
             ++it;
           }
         }
@@ -178,35 +182,65 @@ i4_str *i4_const_str::vsprintf(w32 max_length, va_list &ap) const
           case 'x' :
           case 'X' :
           case 'o' :
+			  if (charsleft<=20) //assume they never take more than this
+				  goto out_of_space;
             ::sprintf(out,fmt_str,va_arg(ap,int));
             break;
           case 'f' :
           {
+			  if (charsleft<=20)
+				  goto out_of_space;
             float f=(float)va_arg(ap, double);
             ::sprintf(out,fmt_str,f);
           } break;
           case 'g' :
+			  if (charsleft<=20)
+				  goto out_of_space;
             ::sprintf(out,fmt_str,va_arg(ap,double));
             break;
+		  case 's':
+			  {
+				  char *s=va_arg(ap,char*);
+				  int str_l=strlen(s);
+				  if (charsleft<=str_l)
+					goto out_of_space;
+				  ::sprintf(out,fmt_str,s);
+				break;
+			  }
           default :
+			  if (charsleft<=20)
+				  goto out_of_space;
             ::sprintf(out,fmt_str,va_arg(ap,void *));
             break;
         }
-        while (*out) 
+        while (*out)
+		{
           out++;
+		  charsleft--;
+		  if (charsleft<=0)
+			  goto out_of_space;
+		}
       } 
       
     } else 
     {
       *out=*fmt;
       out++;
+	  charsleft--;
     }
     fmt++;
     l--;
   }
+
   *out=0;
 
   ns->len=strlen(ns->ptr);
+  return ns;
+out_of_space:
+  *out=0;
+
+  ns->len=strlen(ns->ptr);
+  i4_error("CRITICAL: Out of space formating strings. Possible reasons: Internal Bug or Hacker Buffer Overrun Attack");
   return ns;
 }
 
