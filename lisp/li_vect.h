@@ -14,21 +14,36 @@
 #include "math/vector.h"
 #include "lisp/li_class.h"
 
-extern li_type_number li_vect_type;
 class li_vect : public li_object
 {
   friend class li_vect_type_function_table;
   i4_3d_vector v;
 public:
-  li_vect(i4_3d_vector _v) : v(_v), li_object(li_vect_type) 
+  li_vect(i4_3d_vector _v) : li_object(LI_VECT), v(_v)
   { 
+  }
+  li_vect(i4_float x,i4_float y, i4_float z):li_object(LI_VECT),
+	  v(x,y,z)
+  {
   }
 
   //li_vect(i4_3d_vector *v) : v(v), li_object(li_vect_type) {}
 
   i4_3d_vector &value() { return v; }  
   static li_vect *get(li_object *o, li_environment *env)
-  { check_type(o, li_vect_type, env); return ((li_vect *)o); }
+  { check_type(o, LI_VECT, env); return ((li_vect *)o); }
+  i4_float x()
+  {
+	  return v.x;
+  }
+  i4_float y()
+  {
+	  return v.y;
+  }
+  i4_float z()
+  {
+	  return v.z;
+  }
 } ;
 
 

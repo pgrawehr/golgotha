@@ -304,7 +304,7 @@ public:
 				i4_str strvectout("out");
 				i4_const_str afl("( %f , %f , %f )");
 				i4_3d_vector &v=obj->mount_store[sel_elem];
-				i4_str *strvectin=afl.sprintf(10,v.x,
+				i4_str *strvectin=afl.sprintf(100,v.x,
 					v.y,v.z);
 				
 				if (i4_input_box("Vector","Enter components of vector",*strvectin,

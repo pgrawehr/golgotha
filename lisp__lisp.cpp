@@ -5332,6 +5332,91 @@ public:
 
 } li_generic_edit_instance;
 
+class li_vector_edit_class : public li_type_edit_class
+{
+public:
+
+	virtual int create_edit_controls(i4_str name,
+		li_object *o, 
+		li_object *property_list,
+		i4_window_class **windows, 
+		int max_windows,
+		li_environment *env)
+	{
+		if (max_windows<2) return 0;
+		
+		li_vect *v=li_vect::get(o,env);
+		i4_const_str afl("( %f , %f , %f )");
+		i4_str *strvectin=afl.sprintf(100,v->x(),
+			v->y(),v->z());
+
+		i4_graphical_style_class *style=i4_current_app->get_style();
+
+		//Do some beautification on the identifier
+		//Replace any underscores by blanks (these are identifiers shown to the user)
+		for (int i=0;i<name.length();i++)
+		{
+			if (name[i]=='_') 
+				name[i]=' ';
+		}
+		//Make the first character uppercase 
+		if (name.length()>1)
+		{
+			name[0]=(i4_char(name[0]).to_upper().ascii_value());
+		}
+
+		windows[0]=new i4_text_window_class(name, style);
+		  
+		windows[1]=new i4_text_input_class(style,*strvectin,200,300);
+		delete strvectin;
+
+		return 2;
+	}
+
+	i4_bool can_apply_edit_controls(li_object *o, 
+		li_object *property_list,
+		i4_window_class **windows,
+		li_environment *env)
+	{
+		if (windows==0)
+			return i4_T;
+		//the following assignment doesn't always hold, but we won't access 
+		//it, if the type doesn't fit.
+		i4_text_input_class *w=((i4_text_input_class *)windows[1]);
+		
+		char buf[200];
+		i4_float x=0,y=0,z=0;
+		i4_os_string(*(w->get_edit_string()),buf,200);
+		if (sscanf(buf,"( %f , %f , %f )",&x,&y,&z)<3)
+		{
+			i4_message_box("Invalid Input","You entered something that cannot be interpreted as a vector.",MSG_OK);
+			return false;
+		}
+
+		return true; 
+
+	}
+
+	virtual li_object *apply_edit_controls(li_object *o, 
+		li_object *property_list,
+		i4_window_class **windows,
+		li_environment *env)
+	{
+		char buf[300];
+		i4_text_input_class *w=((i4_text_input_class *)windows[1]);
+
+		i4_float x=0,y=0,z=0;
+		i4_os_string(*(w->get_edit_string()),buf,200);
+		if (sscanf(buf,"( %f , %f , %f )",&x,&y,&z)<3)
+		{
+			I4_ASSERT(false,"INTERNAL: Interpretation of already accepted value failed");
+		}
+		return new li_vect(x,y,z);
+	}
+
+
+} li_vector_edit_instance;
+
 
 class li_class_dialog_item : public li_dialog_item
 {
@@ -5517,6 +5602,7 @@ public:
      li_get_type(LI_FLOAT)->set_editor(&li_generic_edit_instance);
      li_get_type(LI_SYMBOL)->set_editor(&li_generic_edit_instance);
      li_get_type(LI_STRING)->set_editor(&li_generic_edit_instance);
+	 li_get_type(LI_VECT)->set_editor(&li_vector_edit_instance);
      li_set_class_editor(&li_class_edit_instance);
    }
 
@@ -7033,6 +7119,7 @@ i4_bool li_equal_bignum(li_bignum *a, li_bignum *b);
 
 class li_bignum_type_function : public li_type_function_table
 { 
+public:
   virtual li_object *copy(li_object *o)
 	  {
 	  li_bignum *b=li_bignum::get(o,0);
@@ -7089,6 +7176,82 @@ class li_bignum_type_function : public li_type_function_table
   }
 
 };
+
+// lisp/li_vect.cpp
+/********************************************************************** <BR>
+This file is part of Crack dot Com's free source code release of
+Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+information about compiling & licensing issues visit this URL</a> 
+<PRE> If that doesn't help, contact Jonathan Clark at 
+golgotha_source@usa.net (Subject should have "GOLG" in it) 
+***********************************************************************/
+
+class li_vect_type_function_table : public li_type_function_table
+{ 
+public:
+	// free data associated with an instance of this type
+	virtual void free(li_object   *o)
+	{
+		//delete li_vect::get(o,0)->v;
+	}
+
+	virtual int equal(li_object  *o1, li_object *o2) 
+	{ 
+		i4_3d_vector v1=li_vect::get(o1,0)->value(), v2=li_vect::get(o2,0)->value();
+		return v1.x==v2.x && v1.y==v2.y && v1.z==v1.z;
+	}
+
+	virtual void print(li_object  *o, i4_file_class *stream)
+	{
+		i4_3d_vector v=li_vect::get(o,0)->value();
+		stream->printf("(vector %f %f %f)",v.x, v.y, v.z);
+	}
+
+	virtual char *name() { return "vector"; }
+
+	virtual li_object *create(li_object *params, li_environment *env)
+	{
+		i4_3d_vector v;
+		if (params)
+		{
+			v.x=(float)li_get_float(li_eval(li_car(params,env), env),env); params=li_cdr(params,env);
+			v.y=(float)li_get_float(li_eval(li_car(params,env), env),env); params=li_cdr(params,env);
+			v.z=(float)li_get_float(li_eval(li_car(params,env), env),env); params=li_cdr(params,env);
+		}
+		else
+		{
+			v.x=0;
+			v.y=0;
+			v.z=0;
+		}
+
+		return new li_vect(v);
+	}
+
+
+	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	{
+		i4_3d_vector v=li_vect::get(o,env)->value();
+		fp->write_float(v.x);
+		fp->write_float(v.y);
+		fp->write_float(v.z);
+
+	}
+
+	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
+		li_environment *env)
+	{
+		i4_3d_vector v;
+		v.x=fp->read_float();
+		v.y=fp->read_float();
+		v.z=fp->read_float();
+		return new li_vect(v);
+	}
+};
+
+//This now has a static assignment (id 13) -> PG, 14.9.05
+//li_automatic_add_type(li_vect_type_function_table, li_vect_type);
+
 
 class li_type_manager_class : public i4_init_class
 {
@@ -7166,6 +7329,12 @@ public:
 	table[LI_USER_FUNCTION]=new li_user_function_type_function;
 	table[LI_VECTOR]=new li_vector_type_function;
 	table[LI_BIGNUM]=new li_bignum_type_function;
+	//The LI_VECT is kinda of a class type and is created using (new vector)
+	//or (new vector x y z), therefore we have to set the symbol definition.
+	li_type_function_table *v_type=new li_vect_type_function_table;
+	table[LI_VECT]=v_type; 
+	li_symbol *sym=li_get_symbol(v_type->name());
+	li_set_value(sym, new li_type(LI_VECT), NULL);
   }
 
   int find(char *name)
@@ -7238,83 +7407,6 @@ int li_max_types()
 {
   return li_type_man.table.size();
 }
-
-// lisp/li_vect.cpp
-/********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
-
-
-li_type_number li_vect_type;
-class li_vect_type_function_table : public li_type_function_table
-{ 
-public:
-  // free data associated with an instance of this type
-  virtual void free(li_object   *o)
-  {
-    //delete li_vect::get(o,0)->v;
-  }
-
-  virtual int equal(li_object  *o1, li_object *o2) 
-  { 
-    i4_3d_vector v1=li_vect::get(o1,0)->value(), v2=li_vect::get(o2,0)->value();
-    return v1.x==v2.x && v1.y==v2.y && v1.z==v1.z;
-  }
-
-  virtual void print(li_object  *o, i4_file_class *stream)
-  {
-    i4_3d_vector v=li_vect::get(o,0)->value();
-    stream->printf("(vector %f %f %f)",v.x, v.y, v.z);
-  }
-
-  virtual char *name() { return "vector"; }
-
-  virtual li_object *create(li_object *params, li_environment *env)
-  {
-    i4_3d_vector v;
-    if (params)
-    {
-      v.x=(float)li_get_float(li_eval(li_car(params,env), env),env); params=li_cdr(params,env);
-      v.y=(float)li_get_float(li_eval(li_car(params,env), env),env); params=li_cdr(params,env);
-      v.z=(float)li_get_float(li_eval(li_car(params,env), env),env); params=li_cdr(params,env);
-    }
-	else
-		{
-		v.x=0;
-		v.y=0;
-		v.z=0;
-		}
-      
-    return new li_vect(v);
-  }
-
-
-  virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
-  {
-    i4_3d_vector v=li_vect::get(o,env)->value();
-    fp->write_float(v.x);
-    fp->write_float(v.y);
-    fp->write_float(v.z);
-
-  }
-
-  virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
-                                 li_environment *env)
-  {
-    i4_3d_vector v;
-    v.x=fp->read_float();
-    v.y=fp->read_float();
-    v.z=fp->read_float();
-    return new li_vect(v);
-  }
-};
-
-li_automatic_add_type(li_vect_type_function_table, li_vect_type);
-
 
 #ifndef __sgi
 //SGI Mipspro doesn't like this form of operator delete. 

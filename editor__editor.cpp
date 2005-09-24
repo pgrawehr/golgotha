@@ -6517,7 +6517,7 @@ g1_time_line::g1_time_line(i4_parent_window_class *parent,
   
   i4_const_str fmt=g1_editor_instance.get_editor_string("frame_format");
   w32 scene_d=current_movie() ? current_movie()->get_scene()+1 : 1;
-  i4_str *scene_number=fmt.sprintf(10, scene_d);
+  i4_str *scene_number=fmt.sprintf(25, scene_d);
   scene_number_input=new i4_text_input_class(style,*scene_number, 40, 8, this);
   delete scene_number;
 

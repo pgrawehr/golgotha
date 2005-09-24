@@ -40,6 +40,7 @@ enum {
   LI_USER_FUNCTION,
   LI_VECTOR,//not to be mistaken for a li_vect (3d-vector only)
   LI_BIGNUM,
+  LI_VECT,  // A 3D Vector
   LI_LAST_TYPE
 };
 
