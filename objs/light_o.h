@@ -23,9 +23,6 @@ public:
   {
     if (!obj || obj->id != g1_lightbulb_type)
     { 
-#ifdef I4_CAST_WARN
-      i4_warning("bad cast to lightbulb_obj!\n"); 
-#endif
       return 0; 
     }
     

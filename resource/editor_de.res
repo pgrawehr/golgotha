@@ -460,6 +460,30 @@ y+(8)
 ]
 "
 
+light_object_dialog = 
+"
+[down x+(5) y+(20)     
+
+ [right text('r             ') %p=text_input(50 '%d')]
+y+(8)
+ [right text('g             ') %p=text_input(50 '%d')]
+y+(8)
+ [right text('b             ') %p=text_input(50 '%d')]
+y+(8)
+ [right text('c1            ') %p=text_input(50 '%d')]
+y+(8)
+ [right text('c2            ') %p=text_input(50 '%d')]
+y+(8)
+ [right text('c3            ') %p=text_input(50 '%d')]
+
+ y+(20)
+ [right
+  button(text('  Ok  ') user_ev(%p %d))
+  x+(2)
+  button(text('Cancel') user_ev(%p %d))]]
+]
+"
+
 tile_edit_dialog = 
 "
 [down x+(5) y+(20)     

@@ -227,6 +227,11 @@ algorithm.
 Some objects (i.e rocket_launcher) require special "Viewpos" mount-point. 
 
 The light-bulb object should have an edit-dialog. 
+Implemented. Can now choose the color of the light. The c1-c3 settings are a bit strange though...
+
 
 3D-Vectors should have a lisp editor associated. 
+Implemented. Just enter the new value as (x, y, z)
 
+I should check the behaviour of lights. They could be more intense, and they have to little
+effect if very near to the floor.

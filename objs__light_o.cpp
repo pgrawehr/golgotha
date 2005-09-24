@@ -18,13 +18,138 @@
 #include "flare.h"
 #include "time/profile.h"
 #include "map_vert.h"
+#include "gui/create_dialog.h"
+#include "gui/text_input.h"
+#include "gui/smp_dial.h"
+#include "window/colorwin.h"
+#include "editor/editor.h"
+#include "editor/e_res.h"
 
 static i4_profile_class pf_light_occupy("light::occupy"), pf_light_unoccupy("light::unoccupy");
 
 g1_object_type g1_lightbulb_type;
+
 void g1_light_object_init();
 
-g1_object_definer<g1_light_object_class>
+class g1_light_obj_edit_class : public i4_color_window_class
+{ 
+	w32 selected_objects[G1_MAX_OBJECTS];
+	int t_sel;
+	i4_text_input_class 
+		*ti_r,
+		*ti_g,
+		*ti_b,
+		*ti_c1,
+		*ti_c2,
+		*ti_c3;
+public:
+
+	
+
+	enum { 
+		OK=1, CANCEL=2};
+
+		char *name() { return "light_obj editor"; }
+		g1_light_obj_edit_class(i4_graphical_style_class *style)
+
+			: i4_color_window_class(400, 200, style->color_hint->neutral(), style)
+		{
+			t_sel=g1_get_map()->make_selected_objects_list(selected_objects, G1_MAX_OBJECTS);
+
+			g1_light_object_class *light;
+			if (!t_sel)
+				return;
+			light=g1_light_object_class::cast(g1_global_id.get(selected_objects[0]));
+			if (light)
+			{
+				
+
+				i4_create_dialog(g1_ges("light_object_dialog"), this, style,
+					&ti_r, int(light->r*255),  
+					&ti_g, int(light->g*255),
+					&ti_b, int(light->b*255),
+					&ti_c1, int(light->c1*255),//Standard values for these are (0.05, 0.25, 0.5)
+					&ti_c2, int(light->c2*255), 
+					&ti_c3, int(light->c3*255),
+					this, OK,
+					this, CANCEL);
+			}
+		}
+
+		void receive_event(i4_event *ev)
+		{
+			i4_color_window_class::receive_event(ev);
+
+			if (ev->type()==i4_event::USER_MESSAGE)
+			{
+				CAST_PTR(uev, i4_user_message_event_class, ev);
+				switch (uev->sub_type)
+				{
+				
+
+				case OK :
+					{
+						i4_float f_r=((float)ti_r->get_number())/255;
+						i4_float f_g=((float)ti_g->get_number())/255;
+						i4_float f_b=((float)ti_b->get_number())/255;
+						i4_float f_c1=((float)ti_c1->get_number())/255;
+						i4_float f_c2=((float)ti_c2->get_number())/255;
+						i4_float f_c3=((float)ti_c3->get_number())/255;
+						if (f_r<0 || f_r>1 || 
+							f_g<0 || f_g>1 ||
+							f_b<0 || f_b>1 ||
+							f_c1<0 || f_c1>1||
+							f_c2<0 || f_c2>1||
+							f_c3<0 || f_c3>1
+							)
+						{
+							i4_message_box("Invalid input", "All intensity values must be between 0 and 255");
+						}
+						else
+						{
+							g1_light_object_class *light;
+
+							for (int i=0; i<t_sel; i++)
+								if (g1_global_id.check_id(selected_objects[i]))
+								{
+									light=g1_light_object_class::cast(g1_global_id.get(selected_objects[i]));
+									light->setup(light->x,light->y,light->h,f_r,
+										f_g,f_b,0,f_c1,f_c2,f_c3);
+								}
+
+						}
+
+						li_call("object_changed");
+
+					} break;
+
+				case CANCEL :
+					li_call("object_changed");
+					break;
+
+				}
+			}
+
+		}
+
+};
+
+class g1_light_object_def_class:
+	public g1_object_definer<g1_light_object_class>
+{
+public:
+	g1_light_object_def_class(char *name,
+		w32 type_flags=0,
+		function_type _init = 0,
+		function_type _uninit = 0)
+		: g1_object_definer<g1_light_object_class>(name, type_flags ,_init, _uninit) {}
+	
+		i4_window_class *create_edit_dialog()
+
+		{    
+			return new g1_light_obj_edit_class(i4_current_app->get_style());
+		}
+}
 g1_light_object_def("lightbulb", 
                     g1_object_definition_class::EDITOR_SELECTABLE,
                     g1_light_object_init);
