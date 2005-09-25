@@ -2166,12 +2166,12 @@ static void widget(i4_image_class *im,
 
 class i4_mwm_close_button_class : public i4_window_class
 {  
-private:
+protected:
   i4_graphical_style_class *hint;
   i4_bool active;
 
 public:
-  char *name() { return "close_button"; }
+  virtual char *name() { return "close_button"; }
 
   i4_mwm_close_button_class(w16 w, w16 h,i4_graphical_style_class *hint) 
     : i4_window_class (w,h),hint(hint)
@@ -2193,7 +2193,7 @@ public:
       i4_kernel.send_event(parent,&c);
   }
  
-  void draw(i4_draw_context_class &context)
+  virtual void draw(i4_draw_context_class &context)
   {
     i4_color_hint_class::bevel *color;
     /*    if (active)
@@ -2218,6 +2218,52 @@ public:
     sprintf(fmt,"%%%ds mwm_close_button",indent);
     i4_warning(fmt," ");
   }
+} ;
+
+// A close button that cannot be pressed
+class i4_mwm_passive_close_button_class : public i4_mwm_close_button_class
+{  
+
+public:
+	virtual char *name() { return "passive_close_button"; }
+
+	i4_mwm_passive_close_button_class(w16 w, w16 h,i4_graphical_style_class *hint) 
+		: i4_mwm_close_button_class (w,h,hint)
+	{ 
+		active=i4_F;
+	}
+
+
+	virtual void receive_event(i4_event *ev)
+	{
+		//No reaction whatsoever
+	}
+
+	virtual void draw(i4_draw_context_class &context)
+	{
+		i4_color_hint_class::bevel *color;
+		/*    if (active)
+		color=&hint->color_hint->window.active;
+		else */
+		color=&hint->color_hint->window.passive;
+
+		local_image->add_dirty(0,0,width()-1,height()-1,context);
+
+
+
+		widget(local_image, 0,0,width()-2,height()-2,color->bright,color->medium,color->dark,context);
+		local_image->bar(0,height()-1,width()-1,height()-1,hint->color_hint->black,context);
+		local_image->bar(width()-1,0,width()-1,height()-1,hint->color_hint->black,context);
+
+		//mwm_style.icon_hint->close_icon->put_image(local_image,2,2,context);    
+	}
+
+	virtual void show_self(w32 indent) 
+	{    
+		char fmt[50];
+		sprintf(fmt,"%%%ds mwm_passive_close_button",indent);
+		i4_warning(fmt," ");
+	}
 } ;
 
 
@@ -2369,6 +2415,7 @@ public:
 
   i4_mwm_window_class(w16 width, w16 height, 
                       const i4_const_str &title, 
+					  i4_bool show_close_button,
                       i4_graphical_style_class *hint,
                       i4_event_reaction_class *on_delete)
     : i4_draggable_window_class(width,height), hint(hint),
@@ -2396,11 +2443,22 @@ public:
                                    title,hint);
     add_child(2,2,drag);
 
-    close_button=new i4_mwm_close_button_class((w16)close_button_width(hint),
-                                               (w16)close_button_height(hint),
-                                               hint);
+	if (show_close_button)
+	{
+		close_button=new i4_mwm_close_button_class((w16)close_button_width(hint),
+												(w16)close_button_height(hint),
+												hint);
 
-    add_child((short)(w-right-close_button_width(hint)),2,close_button);
+		add_child((short)(w-right-close_button_width(hint)),2,close_button);
+	}
+	else
+	{
+		close_button=new i4_mwm_passive_close_button_class((w16)close_button_width(hint),
+			(w16)close_button_height(hint),
+			hint);
+
+		add_child((short)(w-right-close_button_width(hint)),2,close_button);
+	}
 
     user_area=i4_add_color_window(this, hint->color_hint->window.passive.medium,
                                   hint,
@@ -2451,69 +2509,69 @@ public:
 
   virtual i4_bool need_redraw() 
   { 
-    return (i4_bool)(i4_parent_window_class::need_redraw()|draw_frame); 
+	  return (i4_bool)(i4_parent_window_class::need_redraw()|draw_frame); 
   }
 
   void receive_event(i4_event *ev)
   {
-    if (ev->type()==i4_event::WINDOW_MESSAGE)
-    {
-      CAST_PTR(f,i4_window_message_class,ev);
-      if (f->sub_type==i4_window_message_class::GOT_MOUSE_FOCUS)
-      {
-	active=i4_T;
-        drag->activate(i4_T);
-	close_button->activate(i4_T);
-	draw_frame=i4_T;
+	  if (ev->type()==i4_event::WINDOW_MESSAGE)
+	  {
+		  CAST_PTR(f,i4_window_message_class,ev);
+		  if (f->sub_type==i4_window_message_class::GOT_MOUSE_FOCUS)
+		  {
+			  active=i4_T;
+			  drag->activate(i4_T);
+			  close_button->activate(i4_T);
+			  draw_frame=i4_T;
 
-      }
-      else if (f->sub_type==i4_window_message_class::LOST_MOUSE_FOCUS)
-      {
-        drag->activate(i4_F);
-	close_button->activate(i4_F);
-	active=i4_F;
-	draw_frame=i4_T;
+		  }
+		  else if (f->sub_type==i4_window_message_class::LOST_MOUSE_FOCUS)
+		  {
+			  drag->activate(i4_F);
+			  close_button->activate(i4_F);
+			  active=i4_F;
+			  draw_frame=i4_T;
 
-      } 
-      else if (f->sub_type==i4_window_message_class::NOTIFY_RESIZE)
-      {
-        CAST_PTR(res,i4_window_notify_resize_class,ev);
+		  } 
+		  else if (f->sub_type==i4_window_message_class::NOTIFY_RESIZE)
+		  {
+			  CAST_PTR(res,i4_window_notify_resize_class,ev);
 
-		//Fixme: Must not add a window in answer to notify_resize
-		//or fix the resize() recursion;
-		//actually, we can just safely ignore this message.
-		//It would be usefull for sizeable windows, but
-		//mwm_windows are not sizeable (currently).
+			  //Fixme: Must not add a window in answer to notify_resize
+			  //or fix the resize() recursion;
+			  //actually, we can just safely ignore this message.
+			  //It would be usefull for sizeable windows, but
+			  //mwm_windows are not sizeable (currently).
 
-        //i4_mwm_window_class *new_parent=new i4_mwm_window_class(res->new_width,
-        //                                                        res->new_height,
-        //                                                        drag->title,
-        //                                                        hint,
-        //                                                        on_delete ? 
-        //                                                        on_delete->copy() : 0);
+			  //i4_mwm_window_class *new_parent=new i4_mwm_window_class(res->new_width,
+			  //                                                        res->new_height,
+			  //                                                        drag->title,
+			  //                                                        hint,
+			  //                                                        on_delete ? 
+			  //                                                        on_delete->copy() : 0);
 
-        //user_area->transfer_children(new_parent->user_area,0,0);
+			  //user_area->transfer_children(new_parent->user_area,0,0);
 
-        // this will be post-poned
-        //i4_kernel.delete_handler(this);
-		//parent->add_child(x(),y(),new_parent);
+			  // this will be post-poned
+			  //i4_kernel.delete_handler(this);
+			  //parent->add_child(x(),y(),new_parent);
 
-		//resize(res->new_width,res->new_height);
+			  //resize(res->new_width,res->new_height);
 
-      }
+		  }
 
-      i4_draggable_window_class::receive_event(ev);
-    } else if (ev->type()==i4_event::USER_MESSAGE)
-    {
-      CAST_PTR(f,i4_mwm_event_class,ev);
-      if (f->sub_type==i4_mwm_event_class::CLOSE_YOURSELF)
-      {
-        if (on_delete)
-          i4_kernel.send(on_delete);
+		  i4_draggable_window_class::receive_event(ev);
+	  } else if (ev->type()==i4_event::USER_MESSAGE)
+	  {
+		  CAST_PTR(f,i4_mwm_event_class,ev);
+		  if (f->sub_type==i4_mwm_event_class::CLOSE_YOURSELF)
+		  {
+			  if (on_delete)
+				  i4_kernel.send(on_delete);
 
-        i4_kernel.delete_handler(this);
-      }
-    } else i4_draggable_window_class::receive_event(ev);    
+			  i4_kernel.delete_handler(this);
+		  }
+	  } else i4_draggable_window_class::receive_event(ev);    
   }
 
 } ;
@@ -2526,7 +2584,7 @@ class i4_mwm_modal_window_class:public i4_mwm_window_class
 		i4_graphical_style_class *hint,
 		i4_event_reaction_class *on_delete)
 		:i4_mwm_window_class(width,height, 
-                      title, 
+                      title, i4_F, 
                       hint,
                       on_delete)
 		{
@@ -2565,7 +2623,7 @@ i4_parent_window_class *i4_mwm_style_class::create_mp_window(i4_coord x, i4_coor
 {
     i4_parent_window_class *parent=i4_current_app->get_root_window();
 
-  i4_mwm_window_class *win=new i4_mwm_window_class(w,h,title,this,on_delete);
+  i4_mwm_window_class *win=new i4_mwm_window_class(w,h,title,i4_T,this,on_delete);
   if (x==-1) 
     x=parent->width()/2-w/2;
   if (y==-1)

@@ -309,7 +309,7 @@ i4_3d_vector m1_vector_input(const i4_const_str &msg, i4_3d_vector oldvalue)
     i4_str strvectout("out");
 	i4_const_str afl("( %f , %f , %f )");
 	i4_3d_vector &v=oldvalue;
-	i4_str *strvectin=afl.sprintf(10,v.x,
+	i4_str *strvectin=afl.sprintf(100,v.x,
 		v.y,v.z);
 	
 	if (i4_input_box("Vector",msg,*strvectin,
