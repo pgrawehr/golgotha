@@ -116,10 +116,10 @@ public:
 									light->setup(light->x,light->y,light->h,f_r,
 										f_g,f_b,0,f_c1,f_c2,f_c3);
 								}
-
+							li_call("object_changed");
 						}
 
-						li_call("object_changed");
+						
 
 					} break;
 
