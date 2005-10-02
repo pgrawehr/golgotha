@@ -26,53 +26,66 @@ extern i4_float g1_vert_height_table[256];
 class g1_map_vertex_class
 {
 public:
-  i4_3d_vector v;        // view space transformed coordinates
-  i4_float px, py;       // projected screen x & y
-  i4_float w;            // 1/z
+  //! view space transformed coordinates
+  i4_3d_vector v;        
+  //! projected screen x (any screen drawing function requires only these)
+  i4_float px;
+  //! projected screen y
+  i4_float py;
+  //! w=1/z
+  i4_float w;            
 
 
-  // 8-8-8 lighting values for r,g,b, dynamic light cannot be recalculated
-  // dynamic light is assummed to come from straight down, this value is changed by light objects
-  // but is normally 0
+  //! 8-8-8 lighting values for r,g,b, dynamic light cannot be recalculated
+  //! dynamic light is assummed to come from straight down, this value is changed by lightbulb objects
+  //! but is normally 0
   w32 dynamic_light;
 
 
-  // sum of dynamic, static, and global light values packed into 8-8-8, top bit indicates
-  // need to recalculate.  Set need-to-recalc if dynamic light or normal changes
+  //! sum of dynamic, static, and global light values packed into 8-8-8, top bit indicates
+  //! need to recalculate.  Set need-to-recalc if dynamic light or normal changes
   w32 light_sum;
 
-  w16 normal;            // 5-5-5,  x,y,z, top bit indicates needs recalc
+  //! 5-5-5,  x,y,z, top bit indicates needs recalc
+  w16 normal;            
 
 
   w16 flags;  
 
-  // amount of light (0..255) visible from the directional light (in the direction of the
-  // of the global directional light) - cannot be calculated in game because it requires
-  // ray-tracing and radiocity (not implemented yet)
+  //! amount of light (0..255) visible from the directional light (in the direction of the
+  //! global directional light) - cannot be calculated in game because it requires
+  //! ray-tracing and radiocity (not implemented yet)
   w8  static_intensity;  
 
-  // 0-256 shadow subtraction for clouds
+  //! 0-256 shadow subtraction for clouds
   w8 shadow_subtract;
 
-  w8 height;             // height above ground increments of .05
+  //! Height above ground.
+  //! This field really indicates the geographical height of a vertex. It is an entry in the
+  //! g1_vert_height_table table, whose increment is 0.05 by default (but can be changed on
+  //! a per level basis)
+  w8 height;             
+
+  //! Flags used for clipping. 
   w8 clip_code;
 
-  i4_float t_height;                         // height with t-intersection adjustment
+  //! Height with t-intersection adjustment
+  i4_float t_height;                         
 
   enum { 
-    SELECTED            = (1<<0),            // only used by editor
-    FOGGED              = (1<<1),            // fog of war
+    SELECTED            = (1<<0),            //< only used by editor
+    FOGGED              = (1<<1),            //< fog of war
 
     TRANSFORMED         = (1<<2),
     PROJECTED           = (1<<3),
     CLIP_CODE_CALCULATED= (1<<4),
     W_CALCULATED        = (1<<5),
 
-    NEED_UNDO_SAVE      = (1<<6),            // only used by editor
-    WAS_DRAWN_LAST_FRAME= (1<<7),            // only used by editor
-    APPLY_WAVE_FUNCTION = (1<<8),            // if vert is part of water
+    NEED_UNDO_SAVE      = (1<<6),            //< only used by editor
+    WAS_DRAWN_LAST_FRAME= (1<<7),            //< only used by editor
+    APPLY_WAVE_FUNCTION = (1<<8),            //< if vert is part of water
 
-    T_INTERSECTION      = (1<<9),            // used to determine that this is a T intersection
+    T_INTERSECTION      = (1<<9),            //< used to determine that this is a T intersection
   };
 
   enum {SAVED_FLAGS = SELECTED | FOGGED};

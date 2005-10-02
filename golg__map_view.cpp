@@ -240,286 +240,286 @@ void g1_draw_strategy_border(i4_image_class *im)
 
 
 void g1_render_map_area(i4_image_class *im, 
-                        g1_radar_params_struct *p,
-                        int gx1, int gy1, int gx2, int gy2,
-                        i4_status_class *status,
-                        i4_bool interlaced,
+						g1_radar_params_struct *p,
+						int gx1, int gy1, int gx2, int gy2,
+						i4_status_class *status,
+						i4_bool interlaced,
 						i4_bool edit_mode)
 {
-  g1_map_class *map=g1_get_map();
+	g1_map_class *map=g1_get_map();
 
-  int map_width=map->width(), map_height=map->height();  
-  if (gx1>0)
-    gx1-=1;
-  if (gy1>0)
-    gy1-=1;
+	int map_width=map->width(), map_height=map->height();  
+	if (gx1>0)
+		gx1-=1;
+	if (gy1>0)
+		gy1-=1;
 
-  if (gy2<map_height-1)
-    gy2+=1;
-  if (gx2<map_width-1)
-    gx2+=1;
+	if (gy2<map_height-1)
+		gy2+=1;
+	if (gx2<map_width-1)
+		gx2+=1;
 
-  const i4_pal *pal=i4_current_app->get_display()->get_palette();
-  calc_tables();
+	const i4_pal *pal=i4_current_app->get_display()->get_palette();
+	calc_tables();
 
-  float map_x, map_y, map_x_step, map_y_step;
-
-
-  sw32 x,y;
-//  float r,g,b;
-  float im_y1, im_x1, im_x2, im_y2;
-  p->game_2_mouse((float)gx1,(float)gy1, im_x1, im_y1);
-  p->game_2_mouse((float)gx2,(float)gy2, im_x2, im_y2);
-  int i_im_y1=i4_f_to_i(im_y1), i_im_x1=i4_f_to_i(im_x1);
-  int i_im_y2=i4_f_to_i(im_y2), i_im_x2=i4_f_to_i(im_x2);
+	float map_x, map_y, map_x_step, map_y_step;
 
 
-  float map_x_start, map_y_start;
-  p->mouse_2_game((float)i_im_x1, (float)i_im_y1, map_x_start, map_y_start);
+	sw32 x,y;
+	//  float r,g,b;
+	float im_y1, im_x1, im_x2, im_y2;
+	p->game_2_mouse((float)gx1,(float)gy1, im_x1, im_y1);
+	p->game_2_mouse((float)gx2,(float)gy2, im_x2, im_y2);
+	int i_im_y1=i4_f_to_i(im_y1), i_im_x1=i4_f_to_i(im_x1);
+	int i_im_y2=i4_f_to_i(im_y2), i_im_x2=i4_f_to_i(im_x2);
 
 
-  map_x_step=p->m2gx;
-  map_y_step=p->m2gy;
-
-  map_y=map_y_start;
-  if (interlaced)
-    i_im_y1=i_im_y1&(~1);
+	float map_x_start, map_y_start;
+	p->mouse_2_game((float)i_im_x1, (float)i_im_y1, map_x_start, map_y_start);
 
 
-  for (y=i_im_y1; y>=i_im_y2;)
-  {
-    if (status)
-      status->update(map_y/(float)g1_get_map()->height());
-        
-    map_x=map_x_start;
+	map_x_step=p->m2gx;
+	map_y_step=p->m2gy;
 
-    // assuming 16bit
-	if (im->get_pal()->source.pixel_depth==16)
+	map_y=map_y_start;
+	if (interlaced)
+		i_im_y1=i_im_y1&(~1);
+
+
+	for (y=i_im_y1; y>=i_im_y2;)
+	{
+		if (status)
+			status->update(map_y/(float)g1_get_map()->height());
+
+		map_x=map_x_start;
+
+		// assuming 16bit
+		if (im->get_pal()->source.pixel_depth==16)
 		{
-    w16 *i1 = (w16 *)(((w8 *)im->data) + im->bpl*y + i_im_x1*2);
+			w16 *i1 = (w16 *)(((w8 *)im->data) + im->bpl*y + i_im_x1*2);
 
-    for (x=i_im_x1; x<=i_im_x2; x++)
-    {
-      int i_map_x=i4_f_to_i(map_x), i_map_y=i4_f_to_i(map_y);
-      g1_map_cell_class *cell1   = map->cell(i_map_x, i_map_y);        
-      w32 color;
+			for (x=i_im_x1; x<=i_im_x2; x++)
+			{
+				int i_map_x=i4_f_to_i(map_x), i_map_y=i4_f_to_i(map_y);
+				g1_map_cell_class *cell1   = map->cell(i_map_x, i_map_y);        
+				w32 color;
 
-      if (i_map_x<map_width-1 && i_map_y<map_height-1)
-      {
-        int ratio=i4_f_to_i((map_x-i_map_x)*32.0f);
+				if (i_map_x<map_width-1 && i_map_y<map_height-1)
+				{
+					int ratio=i4_f_to_i((map_x-i_map_x)*32.0f);
 
-        g1_map_vertex_class *v=map->vertex(i_map_x, i_map_y);
+					g1_map_vertex_class *v=map->vertex(i_map_x, i_map_y);
 
-        if (v[0].light_sum & 0x80000000)
-          v[0].recalc_light_sum(i_map_x, i_map_y);
+					if (v[0].light_sum & 0x80000000)
+						v[0].recalc_light_sum(i_map_x, i_map_y);
 
-        if (v[1].light_sum & 0x80000000)
-          v[1].recalc_light_sum(i_map_x+1, i_map_y);
+					if (v[1].light_sum & 0x80000000)
+						v[1].recalc_light_sum(i_map_x+1, i_map_y);
 
-        int lv1=v[0].light_sum;
-        int lv2=v[1].light_sum;
-
-
-        int c1=get_mat_color(cell1,edit_mode);
-        int c2=get_mat_color(cell1+1,edit_mode);
-
-        // separate color components
-        
-        c1>>=3;
-        int b1=c1&31;  c1>>=8; 
-        int g1=c1&31;  c1>>=8; 
-        int r1=c1&31;
-
-        c2>>=3;
-        int b2=c2&31;  c2>>=8;
-        int g2=c2&31;  c2>>=8;
-        int r2=c2&31;
-        
-
-        lv1>>=3;
-        int lv1r=lv1&31;  lv1>>=8;
-        int lv1g=lv1&31;  lv1>>=8;
-        int lv1b=lv1&31;
-
-        lv2>>=3;
-        int lv2r=lv2&31;  lv2>>=8;
-        int lv2g=lv2&31;  lv2>>=8;
-        int lv2b=lv2&31;
+					int lv1=v[0].light_sum;
+					int lv2=v[1].light_sum;
 
 
-        // interpolate color
-        int ur=interpolate_555(r1, r2, ratio);
-        int ug=interpolate_555(g1, g2, ratio);
-        int ub=interpolate_555(b1, b2, ratio);
+					int c1=get_mat_color(cell1,edit_mode);
+					int c2=get_mat_color(cell1+1,edit_mode);
 
-        // interpolate light value
-        int lvr=interpolate_555(lv1r, lv2r, ratio);
-        int lvg=interpolate_555(lv1g, lv2g, ratio);
-        int lvb=interpolate_555(lv1b, lv2b, ratio);
+					// separate color components
 
-        // apply lighting
-        int r = light_555(ur, lvr);
-        int g = light_555(ug, lvg);
-        int b = light_555(ub, lvb);
-        
+					c1>>=3;
+					int b1=c1&31;  c1>>=8; 
+					int g1=c1&31;  c1>>=8; 
+					int r1=c1&31;
 
-        color = (r<<r_shift) | (g<<g_shift) | (b<<b_shift);
-      }
-      else
-      {
-        g1_map_vertex_class *v1=map->vertex(i_map_x, i_map_y);
-        if (v1[0].light_sum & 0x80000000)
-          v1[0].recalc_light_sum(i_map_x, i_map_y);
-
-        int lv1=v1[0].light_sum;
-        lv1>>=3;
-        int lv1r=lv1&31;  lv1>>=8;
-        int lv1g=lv1&31;  lv1>>=8;
-        int lv1b=lv1&31;
-
-        int c1=get_mat_color(cell1,edit_mode);
-
-        // separate color components        
-        c1>>=3;
-        int b1=c1&31;  c1>>=8; 
-        int g1=c1&31;  c1>>=8; 
-        int r1=c1&31;
+					c2>>=3;
+					int b2=c2&31;  c2>>=8;
+					int g2=c2&31;  c2>>=8;
+					int r2=c2&31;
 
 
-        // apply lighting
-        int r = light_555(r1, lv1r);
-        int g = light_555(g1, lv1g);
-        int b = light_555(b1, lv1b);
-        color = (r<<r_shift) | (g<<g_shift) | (b<<b_shift);
-      }
+					lv1>>=3;
+					int lv1r=lv1&31;  lv1>>=8;
+					int lv1g=lv1&31;  lv1>>=8;
+					int lv1b=lv1&31;
 
-      *i1=(w16)color;
+					lv2>>=3;
+					int lv2r=lv2&31;  lv2>>=8;
+					int lv2g=lv2&31;  lv2>>=8;
+					int lv2b=lv2&31;
 
-      map_x+=map_x_step;
-      ++i1;
-    }
+
+					// interpolate color
+					int ur=interpolate_555(r1, r2, ratio);
+					int ug=interpolate_555(g1, g2, ratio);
+					int ub=interpolate_555(b1, b2, ratio);
+
+					// interpolate light value
+					int lvr=interpolate_555(lv1r, lv2r, ratio);
+					int lvg=interpolate_555(lv1g, lv2g, ratio);
+					int lvb=interpolate_555(lv1b, lv2b, ratio);
+
+					// apply lighting
+					int r = light_555(ur, lvr);
+					int g = light_555(ug, lvg);
+					int b = light_555(ub, lvb);
+
+
+					color = (r<<r_shift) | (g<<g_shift) | (b<<b_shift);
+				}
+				else
+				{
+					g1_map_vertex_class *v1=map->vertex(i_map_x, i_map_y);
+					if (v1[0].light_sum & 0x80000000)
+						v1[0].recalc_light_sum(i_map_x, i_map_y);
+
+					int lv1=v1[0].light_sum;
+					lv1>>=3;
+					int lv1r=lv1&31;  lv1>>=8;
+					int lv1g=lv1&31;  lv1>>=8;
+					int lv1b=lv1&31;
+
+					int c1=get_mat_color(cell1,edit_mode);
+
+					// separate color components        
+					c1>>=3;
+					int b1=c1&31;  c1>>=8; 
+					int g1=c1&31;  c1>>=8; 
+					int r1=c1&31;
+
+
+					// apply lighting
+					int r = light_555(r1, lv1r);
+					int g = light_555(g1, lv1g);
+					int b = light_555(b1, lv1b);
+					color = (r<<r_shift) | (g<<g_shift) | (b<<b_shift);
+				}
+
+				*i1=(w16)color;
+
+				map_x+=map_x_step;
+				++i1;
+			}
 
 		}//end of 16 bit (fast) code
 		else
-			{//here comes universal (slower) code
+		{//here comes universal (slower) code
 			//w16 *i1 = (w16 *)(((w8 *)im->data) + im->bpl*y + i_im_x1*2);
 			w32 imx=i_im_x1;
 
-    for (x=i_im_x1; x<=i_im_x2; x++)
-    {
-      int i_map_x=i4_f_to_i(map_x), i_map_y=i4_f_to_i(map_y);
-      g1_map_cell_class *cell1   = map->cell(i_map_x, i_map_y);        
-      w32 color;
+			for (x=i_im_x1; x<=i_im_x2; x++)
+			{
+				int i_map_x=i4_f_to_i(map_x), i_map_y=i4_f_to_i(map_y);
+				g1_map_cell_class *cell1   = map->cell(i_map_x, i_map_y);        
+				w32 color;
 
-      if (i_map_x<map_width-1 && i_map_y<map_height-1)
-      {
-        int ratio=i4_f_to_i((map_x-i_map_x)*256.0f);
+				if (i_map_x<map_width-1 && i_map_y<map_height-1)
+				{
+					int ratio=i4_f_to_i((map_x-i_map_x)*256.0f);
 
-        g1_map_vertex_class *v=map->vertex(i_map_x, i_map_y);
+					g1_map_vertex_class *v=map->vertex(i_map_x, i_map_y);
 
-        if (v[0].light_sum & 0x80000000)
-          v[0].recalc_light_sum(i_map_x, i_map_y);
+					if (v[0].light_sum & 0x80000000)
+						v[0].recalc_light_sum(i_map_x, i_map_y);
 
-        if (v[1].light_sum & 0x80000000)
-          v[1].recalc_light_sum(i_map_x+1, i_map_y);
+					if (v[1].light_sum & 0x80000000)
+						v[1].recalc_light_sum(i_map_x+1, i_map_y);
 
-        int lv1=v[0].light_sum;
-        int lv2=v[1].light_sum;
-
-
-        int c1=get_mat_color(cell1,edit_mode);
-        int c2=get_mat_color(cell1+1,edit_mode);
-
-        // seperate color components
-        
-        //c1>>=3;
-        int b1=c1&255;  c1>>=8; 
-        int g1=c1&255;  c1>>=8; 
-        int r1=c1&255;
-
-        //c2>>=3;
-        int b2=c2&255;  c2>>=8;
-        int g2=c2&255;  c2>>=8;
-        int r2=c2&255;
-        
-
-        //lv1>>=3;
-        int lv1r=lv1&255;  lv1>>=8;
-        int lv1g=lv1&255;  lv1>>=8;
-        int lv1b=lv1&255;
-
-        //lv2>>=3;
-        int lv2r=lv2&255;  lv2>>=8;
-        int lv2g=lv2&255;  lv2>>=8;
-        int lv2b=lv2&255;
+					int lv1=v[0].light_sum;
+					int lv2=v[1].light_sum;
 
 
-        // interpolate color
-        int ur=interpolate_888(r1, r2, ratio);
-        int ug=interpolate_888(g1, g2, ratio);
-        int ub=interpolate_888(b1, b2, ratio);
+					int c1=get_mat_color(cell1,edit_mode);
+					int c2=get_mat_color(cell1+1,edit_mode);
 
-        // interpolate light value
-        int lvr=interpolate_888(lv1r, lv2r, ratio);
-        int lvg=interpolate_888(lv1g, lv2g, ratio);
-        int lvb=interpolate_888(lv1b, lv2b, ratio);
+					// seperate color components
 
-        // apply lighting
-        int r = light_888(ur, lvr);
-        int g = light_888(ug, lvg);
-        int b = light_888(ub, lvb);
-        
+					//c1>>=3;
+					int b1=c1&255;  c1>>=8; 
+					int g1=c1&255;  c1>>=8; 
+					int r1=c1&255;
 
-        color = (r<<16) | (g<<8) | (b);
-      }
-      else
-      {
-        g1_map_vertex_class *v1=map->vertex(i_map_x, i_map_y);
-        if (v1[0].light_sum & 0x80000000)
-          v1[0].recalc_light_sum(i_map_x, i_map_y);
-
-        int lv1=v1[0].light_sum;
-        //lv1>>=3;
-        int lv1r=lv1&255;  lv1>>=8;
-        int lv1g=lv1&255;  lv1>>=8;
-        int lv1b=lv1&255;
-
-        int c1=get_mat_color(cell1,edit_mode);
-
-        // seperate color components        
-        //c1>>=3;
-        int b1=c1&255;  c1>>=8; 
-        int g1=c1&255;  c1>>=8; 
-        int r1=c1&255;
+					//c2>>=3;
+					int b2=c2&255;  c2>>=8;
+					int g2=c2&255;  c2>>=8;
+					int r2=c2&255;
 
 
-        // apply lighting
-        int r = light_888(r1, lv1r);
-        int g = light_888(g1, lv1g);
-        int b = light_888(b1, lv1b);
-        color = (r<<16) | (g<<8) | (b);
-      }
+					//lv1>>=3;
+					int lv1r=lv1&255;  lv1>>=8;
+					int lv1g=lv1&255;  lv1>>=8;
+					int lv1b=lv1&255;
 
-      //*i1=(w16)color;
-	  im->put_pixel(imx,y,color);
+					//lv2>>=3;
+					int lv2r=lv2&255;  lv2>>=8;
+					int lv2g=lv2&255;  lv2>>=8;
+					int lv2b=lv2&255;
 
-      map_x+=map_x_step;
-      //++i1;
-	  ++imx;
 
-			}
+					// interpolate color
+					int ur=interpolate_888(r1, r2, ratio);
+					int ug=interpolate_888(g1, g2, ratio);
+					int ub=interpolate_888(b1, b2, ratio);
+
+					// interpolate light value
+					int lvr=interpolate_888(lv1r, lv2r, ratio);
+					int lvg=interpolate_888(lv1g, lv2g, ratio);
+					int lvb=interpolate_888(lv1b, lv2b, ratio);
+
+					// apply lighting
+					int r = light_888(ur, lvr);
+					int g = light_888(ug, lvg);
+					int b = light_888(ub, lvb);
+
+
+					color = (r<<16) | (g<<8) | (b);
+				}
+				else
+				{
+					g1_map_vertex_class *v1=map->vertex(i_map_x, i_map_y);
+					if (v1[0].light_sum & 0x80000000)
+						v1[0].recalc_light_sum(i_map_x, i_map_y);
+
+					int lv1=v1[0].light_sum;
+					//lv1>>=3;
+					int lv1r=lv1&255;  lv1>>=8;
+					int lv1g=lv1&255;  lv1>>=8;
+					int lv1b=lv1&255;
+
+					int c1=get_mat_color(cell1,edit_mode);
+
+					// seperate color components        
+					//c1>>=3;
+					int b1=c1&255;  c1>>=8; 
+					int g1=c1&255;  c1>>=8; 
+					int r1=c1&255;
+
+
+					// apply lighting
+					int r = light_888(r1, lv1r);
+					int g = light_888(g1, lv1g);
+					int b = light_888(b1, lv1b);
+					color = (r<<16) | (g<<8) | (b);
+				}
+
+				//*i1=(w16)color;
+				im->put_pixel(imx,y,color);
+
+				map_x+=map_x_step;
+				//++i1;
+				++imx;
 
 			}
-    
-    map_y+=map_y_step;
-    y--;
-    if (interlaced)
-    {
-      y--;
-      map_y+=map_y_step;
-    }
 
-  }
+		}
+
+		map_y+=map_y_step;
+		y--;
+		if (interlaced)
+		{
+			y--;
+			map_y+=map_y_step;
+		}
+
+	}
 
 
 

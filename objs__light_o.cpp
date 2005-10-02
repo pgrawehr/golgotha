@@ -265,7 +265,7 @@ i4_bool g1_light_object_class::occupy_location()
 {
   if (!add_intensities)
   {
-    i4_warning("call light::setup before occupy_location");
+	  i4_error("INTERNAL: Call g1_light_object_class::setup() before occupy_location!");
     
     return i4_F;
   }
@@ -309,7 +309,8 @@ i4_bool g1_light_object_class::occupy_location()
           i4_float ndl = normal.dot(dir);
           i4_float atten =  1.0f/(c1 + c3*dist*dist);
 
-          if (atten>1) atten=1;
+          if (atten>1) 
+			  atten=1;
 
           i4_float intensity=ndl*atten;
           if (intensity<0) intensity=0;

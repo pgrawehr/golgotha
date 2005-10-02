@@ -506,9 +506,12 @@ void g1_map_vertex_class::recalc_light_sum(int cvx, int cvy)
   g=g1_table_0_255_to_0_1[((dynamic_light>>8)&0xff)] + i;
   b=g1_table_0_255_to_0_1[((dynamic_light)&0xff)] + i;
 
-  if (r>1) r=1;
-  if (g>1) g=1;
-  if (b>1) b=1;
+  if (r>1) 
+	  r=1;
+  if (g>1) 
+	  g=1;
+  if (b>1) 
+	  b=1;
 
   light_sum=(i4_f_to_i(r*255.0f) << 16) |
     (i4_f_to_i(g*255.0f) << 8) |
