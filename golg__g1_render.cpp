@@ -1503,7 +1503,7 @@ void g1_render_class::add_translucent_trail(i4_transform_class *t,
 inline g1_map_vertex_class *g1vmin(g1_map_vertex_class *v1,
                                    g1_map_vertex_class *v2)
 {
-  if (v1->height<v2->height)
+  if (v1->get_height_value()<v2->get_height_value())
     return v1;
   else return v2;
 }

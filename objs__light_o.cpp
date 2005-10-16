@@ -290,7 +290,7 @@ i4_bool g1_light_object_class::occupy_location()
         {
           i4_3d_vector normal;
           i4_float tz;
-          w32 old_rgb=v->dynamic_light;
+          w32 old_rgb=v->get_dynamic_light();
 
           v->get_normal(normal, tx, ty);
           tz=v->get_height();
@@ -331,8 +331,7 @@ i4_bool g1_light_object_class::occupy_location()
 
           *a=(ra<<16)|(ga<<8)|ba;           // store the added amount so we can subtract out later
         
-          v->dynamic_light=((ra+o_r)<<16) | ((ga+og)<<8) | (ba+ob);
-          v->light_sum|=0x80000000;
+          v->set_dynamic_light(((ra+o_r)<<16) | ((ga+og)<<8) | (ba+ob));
           v++;
         }
       }
@@ -368,9 +367,9 @@ void g1_light_object_class::unoccupy_location()
     {
       if (tx>=0 && ty>=0 && tx<=g1_get_map()->width() && ty<=g1_get_map()->height())      
       {
-        v->dynamic_light-=*a;
+        v->decrement_dynamic_light(*a);
         v++;
-        v->light_sum=0x80000000;
+        //v->light_sum=0x80000000;
       }
     }
   }

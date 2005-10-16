@@ -59,7 +59,7 @@ i4_bool g1_breadth_first_map_solver_class::add_cell(w32 x,w32 y,w8 d, i4_float l
   //advanced method that makes blocked areas sometimes passable.
   if (block->is_blocked((w16)x,(w16)y,d))
 	  {
-	  if (credits<=0 || (g1_get_map()->vertex(x,y)->flags & g1_map_vertex_class::APPLY_WAVE_FUNCTION))
+	  if (credits<=0 || (g1_get_map()->vertex(x,y)->get_flag(g1_map_vertex_class::APPLY_WAVE_FUNCTION)))
 		  return i4_F;
 	  else
 		  {

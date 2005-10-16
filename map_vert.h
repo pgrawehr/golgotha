@@ -20,12 +20,43 @@
 
 class i4_file_class;
 class i4_saver_class;
+class g1_cloud_class;
+class i4_saver_class;
+class g1_lod_context_class;
 
 extern i4_float g1_vert_height_table[256];
 
 class g1_map_vertex_class
 {
+	friend g1_map_vertex_class *g1_vertex_min(g1_map_vertex_class *v1,g1_map_vertex_class *v2);
+	friend g1_map_class;
+	friend g1_cloud_class; //clouds have a special way of creating shadows
+	friend void g1_save_map_verts(g1_map_vertex_class *list, 
+		int lsize, 
+		i4_saver_class *fp,
+		int mark_sections);
+	friend i4_bool g1_load_map_verts(g1_map_vertex_class *list, int lsize, 
+		i4_loader_class *fp,
+		int goto_sections);
+	friend g1_lod_context_class;
 public:
+	enum { 
+		SELECTED            = (1<<0),            //< only used by editor
+		FOGGED              = (1<<1),            //< fog of war
+
+		TRANSFORMED         = (1<<2),
+		PROJECTED           = (1<<3),
+		CLIP_CODE_CALCULATED= (1<<4),
+		W_CALCULATED        = (1<<5),
+
+		NEED_UNDO_SAVE      = (1<<6),            //< only used by editor
+		WAS_DRAWN_LAST_FRAME= (1<<7),            //< only used by editor
+		APPLY_WAVE_FUNCTION = (1<<8),            //< if vert is part of water
+
+		T_INTERSECTION      = (1<<9),            //< used to determine that this is a T intersection
+	};
+
+	enum {SAVED_FLAGS = SELECTED | FOGGED};
   //! view space transformed coordinates
   i4_3d_vector v;        
   //! projected screen x (any screen drawing function requires only these)
@@ -35,12 +66,11 @@ public:
   //! w=1/z
   i4_float w;            
 
-
+private:
   //! 8-8-8 lighting values for r,g,b, dynamic light cannot be recalculated
   //! dynamic light is assummed to come from straight down, this value is changed by lightbulb objects
   //! but is normally 0
   w32 dynamic_light;
-
 
   //! sum of dynamic, static, and global light values packed into 8-8-8, top bit indicates
   //! need to recalculate.  Set need-to-recalc if dynamic light or normal changes
@@ -58,7 +88,7 @@ public:
   w8  static_intensity;  
 
   //! 0-256 shadow subtraction for clouds
-  w8 shadow_subtract;
+  w8 shadow_subtract; 
 
   //! Height above ground.
   //! This field really indicates the geographical height of a vertex. It is an entry in the
@@ -72,30 +102,16 @@ public:
   //! Height with t-intersection adjustment
   i4_float t_height;                         
 
-  enum { 
-    SELECTED            = (1<<0),            //< only used by editor
-    FOGGED              = (1<<1),            //< fog of war
 
-    TRANSFORMED         = (1<<2),
-    PROJECTED           = (1<<3),
-    CLIP_CODE_CALCULATED= (1<<4),
-    W_CALCULATED        = (1<<5),
-
-    NEED_UNDO_SAVE      = (1<<6),            //< only used by editor
-    WAS_DRAWN_LAST_FRAME= (1<<7),            //< only used by editor
-    APPLY_WAVE_FUNCTION = (1<<8),            //< if vert is part of water
-
-    T_INTERSECTION      = (1<<9),            //< used to determine that this is a T intersection
-  };
-
-  enum {SAVED_FLAGS = SELECTED | FOGGED};
-
+public:
 
   w16 get_flag(w16 f) { return (flags & f); }
-  void set_flag(w16 f, int on_off) 
+  void set_flag(w16 f, int on_off=1) 
   { 
-    if (on_off) flags|=f;
-    else flags&=~f;
+    if (on_off) 
+		flags|=f;
+    else 
+		flags&=~f;
   }
 
   w8 is_transformed() { return (w8)get_flag(TRANSFORMED); }
@@ -122,9 +138,68 @@ public:
   }
   
 
-  float get_non_dynamic_ligth_intensity(int cvx, int cvy);
+  float get_non_dynamic_light_intensity(int cvx, int cvy);
+private:
   void recalc_normal(int cvx, int cvy);
-  void recalc_light_sum(int cvx, int cvy);
+public:
+  w32 recalc_light_sum(int cvx, int cvy);
+
+  template<typename T>
+  void increment_height(T amount)
+  {
+	  height+=(w8)amount;
+	  light_sum |= 0x80000000;
+	  normal=0x8000;
+  }
+  template<typename T>
+  void set_height(T new_height)
+  {
+	  height=(w8)new_height;
+	  light_sum |= 0x80000000;
+	  normal=0x8000;
+  }
+  template<typename T>
+  void decrement_height(T amount)
+  {
+	  height-=(w8) amount;
+	  light_sum |= 0x80000000;
+	  normal=0x8000;
+  }
+  w8 get_height_value()
+  {
+	  return height;
+  }
+
+  void set_dynamic_light(w32 new_light_color)
+  {
+	  dynamic_light=new_light_color;
+	  light_sum |= 0x80000000;
+  }
+  void increment_dynamic_light(w32 extra_color)
+  {
+	  dynamic_light+=extra_color;
+	  light_sum |= 0x80000000;
+  }
+
+  void decrement_dynamic_light(w32 extra_color)
+  {
+	  dynamic_light-=extra_color;
+	  light_sum |= 0x80000000;
+  }
+  w32 get_dynamic_light()
+  {
+	  return dynamic_light;
+  }
+
+  w32 get_light_sum()
+  {
+	  return light_sum;
+  }
+
+  void set_static_intensity(w8 intensity)
+  {
+	  static_intensity=intensity;
+  }
 
   void get_normal(i4_3d_vector &v, int cvx, int cvy)
   {
@@ -145,17 +220,15 @@ public:
     r=g1_table_0_255_to_0_1[((ls>>16)&0xff)];
     g=g1_table_0_255_to_0_1[((ls>>8)&0xff)];
     b=g1_table_0_255_to_0_1[((ls)&0xff)];
-  }
-
-  float get_r(int cvx, int cvy)
-  {
-    if (light_sum & 0x80000000)
-      recalc_light_sum(cvx, cvy);
-
-    return g1_table_0_255_to_0_1[((light_sum>>16)&0xff)];
+	r=1;
+	g=1;
+	b=1;
   }
   
-  i4_float get_height() { return g1_vert_height_table[height]; }
+  i4_float get_height() 
+  { 
+	  return g1_vert_height_table[height]; 
+  }
 
   void wave_transform(i4_transform_class &t, float map_x, float map_y);
 

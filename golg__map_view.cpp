@@ -310,15 +310,9 @@ void g1_render_map_area(i4_image_class *im,
 
 					g1_map_vertex_class *v=map->vertex(i_map_x, i_map_y);
 
-					if (v[0].light_sum & 0x80000000)
-						v[0].recalc_light_sum(i_map_x, i_map_y);
+					int lv1=v[0].recalc_light_sum(i_map_x, i_map_y);
 
-					if (v[1].light_sum & 0x80000000)
-						v[1].recalc_light_sum(i_map_x+1, i_map_y);
-
-					int lv1=v[0].light_sum;
-					int lv2=v[1].light_sum;
-
+					int lv2=v[1].recalc_light_sum(i_map_x+1, i_map_y);
 
 					int c1=get_mat_color(cell1,edit_mode);
 					int c2=get_mat_color(cell1+1,edit_mode);
@@ -368,10 +362,8 @@ void g1_render_map_area(i4_image_class *im,
 				else
 				{
 					g1_map_vertex_class *v1=map->vertex(i_map_x, i_map_y);
-					if (v1[0].light_sum & 0x80000000)
-						v1[0].recalc_light_sum(i_map_x, i_map_y);
+					int lv1=v1[0].recalc_light_sum(i_map_x, i_map_y);
 
-					int lv1=v1[0].light_sum;
 					lv1>>=3;
 					int lv1r=lv1&31;  lv1>>=8;
 					int lv1g=lv1&31;  lv1>>=8;
@@ -417,15 +409,9 @@ void g1_render_map_area(i4_image_class *im,
 
 					g1_map_vertex_class *v=map->vertex(i_map_x, i_map_y);
 
-					if (v[0].light_sum & 0x80000000)
-						v[0].recalc_light_sum(i_map_x, i_map_y);
+					int lv1=v[0].recalc_light_sum(i_map_x, i_map_y);
 
-					if (v[1].light_sum & 0x80000000)
-						v[1].recalc_light_sum(i_map_x+1, i_map_y);
-
-					int lv1=v[0].light_sum;
-					int lv2=v[1].light_sum;
-
+					int lv2=v[1].recalc_light_sum(i_map_x+1, i_map_y);
 
 					int c1=get_mat_color(cell1,edit_mode);
 					int c2=get_mat_color(cell1+1,edit_mode);
@@ -475,10 +461,8 @@ void g1_render_map_area(i4_image_class *im,
 				else
 				{
 					g1_map_vertex_class *v1=map->vertex(i_map_x, i_map_y);
-					if (v1[0].light_sum & 0x80000000)
-						v1[0].recalc_light_sum(i_map_x, i_map_y);
+					int lv1=v1[0].recalc_light_sum(i_map_x, i_map_y);
 
-					int lv1=v1[0].light_sum;
 					//lv1>>=3;
 					int lv1r=lv1&255;  lv1>>=8;
 					int lv1g=lv1&255;  lv1>>=8;

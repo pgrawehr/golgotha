@@ -26,7 +26,7 @@
 i4_profile_class pf_get_map_height("get_map_height");
 i4_profile_class pf_calc_height_pitch_roll("calc_height_pitch_roll");
 i4_profile_class pf_calc_pitch_roll("calc_pitch_roll");
-i4_profile_class pf_recalc_light_sum("recalc_light_sum");
+//i4_profile_class pf_recalc_light_sum("recalc_light_sum");
 i4_profile_class pf_terrain_height("terrain_height");
 
 
@@ -466,7 +466,7 @@ void g1_map_class::get_illumination_light(i4_float wx, i4_float wy,
 }
 
 
-float g1_map_vertex_class::get_non_dynamic_ligth_intensity(int cvx, int cvy)
+float g1_map_vertex_class::get_non_dynamic_light_intensity(int cvx, int cvy)
 {
   i4_3d_vector n;
   get_normal(n, cvx, cvy);
@@ -480,9 +480,11 @@ float g1_map_vertex_class::get_non_dynamic_ligth_intensity(int cvx, int cvy)
   return i;
 }
 
-void g1_map_vertex_class::recalc_light_sum(int cvx, int cvy)
+w32 g1_map_vertex_class::recalc_light_sum(int cvx, int cvy)
 {
-  pf_recalc_light_sum.start();
+	if ((light_sum&0x80000000)==0)
+		return light_sum;
+  //pf_recalc_light_sum.start();
 
   float r,g,b;
   i4_3d_vector n;
@@ -493,8 +495,6 @@ void g1_map_vertex_class::recalc_light_sum(int cvx, int cvy)
   float i=-n.dot(g1_lights.direction) * static_intensity * (1.0f/255.0f);
   i = (i<0) ? 0 : i;
 
-  if (i>1)
-    i4_warning("intensity>1");
 
   // global contribution (white light)
   i+=g1_lights.ambient_intensity;
@@ -517,7 +517,8 @@ void g1_map_vertex_class::recalc_light_sum(int cvx, int cvy)
     (i4_f_to_i(g*255.0f) << 8) |
     (i4_f_to_i(b*255.0f));
 
-  pf_recalc_light_sum.stop();
+  //pf_recalc_light_sum.stop();
+  return light_sum;
 }
 
 

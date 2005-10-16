@@ -214,7 +214,7 @@ public:
                i4_float r, i4_float g, i4_float b, i4_float a,
                g1_vert_transformer &vp)
     {
-      if ((v->flags & g1_map_vertex_class::APPLY_WAVE_FUNCTION)==0)
+      if ((v->get_flag(g1_map_vertex_class::APPLY_WAVE_FUNCTION))==0)
       {
         i4_float h=v->get_height();
         i4_3d_vector v_air;

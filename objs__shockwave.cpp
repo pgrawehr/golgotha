@@ -178,11 +178,9 @@ i4_bool g1_shockwave_class::occupy_location()
       
         vo->displacement=new_height_value;      
 
-        v->height+=(w8)vo->displacement;
-        v->light_sum=0x80000000;
-        v->normal=0x8000;
+        v->increment_height(vo->displacement);
 
-        w16 old_rgb=(w16)v->dynamic_light;
+        w16 old_rgb=(w16)v->get_dynamic_light();
         sw32 r,g,b, o_r,og,ob;
         r=i4_f_to_i(red_intensity*multiplier*255);
         g=i4_f_to_i(green_intensity*multiplier*255);
@@ -197,7 +195,7 @@ i4_bool g1_shockwave_class::occupy_location()
         if (b+ob>255) b=255-ob;
 
         vo->color = (r<<16) | (g<<8) | b;
-        v->dynamic_light += vo->color;
+        v->increment_dynamic_light(vo->color);
       }
     }
 
@@ -237,10 +235,8 @@ void g1_shockwave_class::unoccupy_location()
 
       for (ix=x_left; ix<=x_right; ix++, vo++, v++)
       {
-        v->height-=(w8)vo->displacement;
-        v->dynamic_light-=vo->color;
-        v->light_sum=0x80000000;
-        v->normal=0x8000;
+        v->decrement_height(vo->displacement);
+        v->decrement_dynamic_light(vo->color);
       }
     }
   }
@@ -459,44 +455,19 @@ i4_bool g2_water_wave_class::occupy_location()
 //         float t=dist * oor;
         float alpha=(float)fabs((dist - focal_radius)*2.0f);
         float multiplier=(2 / (alpha*alpha+1))-1;//now between -1 and +1
-        //if (multiplier>1.0) multiplier=1.0;
         float new_height=multiplier*strength;
 
-        sw32 new_height_value = v->height-i4_f_to_i(new_height/0.05f);
+        sw32 height_displacement = i4_f_to_i(new_height/0.05f);
 
-        if (new_height_value>3)//don't make to big waves
-          new_height_value=3;
-        else if (new_height_value<-3)
-          new_height_value=3;
-	
-		//can't do this, because other shockwaves might have added something, too.
-		//v->height=(w8)new_height_value;
+        if (height_displacement>3)//don't make to big waves
+          height_displacement=3;
+        else if (height_displacement<-3)
+          height_displacement=-3;
       
-        vo->displacement=new_height_value;      
+        vo->displacement=height_displacement;      
 
-        v->height+=(w8)vo->displacement;
-		//no change of light here
-        /*
-		v->light_sum=0x80000000;
-        v->normal=0x8000;
-
-        w16 old_rgb=(w16)v->dynamic_light;
-        sw32 r,g,b, o_r,og,ob;
-        r=i4_f_to_i(red_intensity*multiplier*255);
-        g=i4_f_to_i(green_intensity*multiplier*255);
-        b=i4_f_to_i(blue_intensity*multiplier*255);
-        
-        o_r=(old_rgb>>16)&255;              // grab the old light values
-        og=(old_rgb>>8)&255;
-        ob=(old_rgb)&255;
-        
-        if (r+o_r>255) r=255-o_r;           // adjust for overflow
-        if (g+og>255) g=255-og;
-        if (b+ob>255) b=255-ob;
-
-        vo->color = (r<<16) | (g<<8) | b;
-        v->dynamic_light += vo->color;
-		*/
+        v->increment_height(vo->displacement);
+		
       }
     }
 
@@ -536,7 +507,7 @@ void g2_water_wave_class::unoccupy_location()
 
       for (ix=x_left; ix<=x_right; ix++, vo++, v++)
       {
-        v->height-=(w8)vo->displacement;
+        v->decrement_height(vo->displacement);
         //v->dynamic_light-=vo->color;
         //v->light_sum=0x80000000;
         //v->normal=0x8000;

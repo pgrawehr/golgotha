@@ -1145,12 +1145,12 @@ void g1_controller_edit_class::move_selected_heights(sw32 z_change)
       {
         w8 nh;
 
-        if ((sw32)v->height+z_change<0)
+        if ((sw32)v->get_height_value()+z_change<0)
           nh=0;
-        else if ((sw32)v->height+z_change>255)
+        else if ((sw32)v->get_height_value()+z_change>255)
           nh=255;
         else
-          nh=(w8)(v->height+z_change);
+          nh=(w8)(v->get_height_value()+z_change);
 
         get_map()->change_vert_height(vx,vy, nh);
       }
@@ -8613,7 +8613,7 @@ li_object *g1_fog_map(li_object *, li_environment *env)
   t=(g1_map_width+1) * (g1_map_height+1);
 
   for (i=0; i<t; i++, v++)
-    v->flags |= g1_map_vertex_class::FOGGED;
+	  v->set_flag(g1_map_vertex_class::FOGGED);
 
 
   li_call("redraw");
@@ -8635,7 +8635,7 @@ li_object *g1_unfog_map(li_object *, li_environment *env)
   t=(g1_map_width+1) * (g1_map_height+1);
 
   for (i=0; i<t; i++, v++)
-    v->flags &= ~g1_map_vertex_class::FOGGED;
+    v->set_flag(g1_map_vertex_class::FOGGED,0);
 
 
   li_call("redraw");
@@ -9632,8 +9632,8 @@ void g1_editor_class::flatten_terrain()
       g1_map_vertex_class *v=get_map()->vertex(x,y);
       if (v->is_selected())
       {
-        if (v->height<lowest)
-          lowest=v->height;
+        if (v->get_height_value()<lowest)
+          lowest=v->get_height_value();
 
         t++;
       }
@@ -9787,7 +9787,7 @@ void g1_editor_class::noise_terrain_ok()
         g1_map_vertex_class *v=get_map()->vertex(x,y);
         if (v->is_selected())
         {
-          int h=(int)v->height + (i4_rand() % am) - am/2;
+          int h=(int)v->get_height_value() + (i4_rand() % am) - am/2;
           if (h<0) h=0;
           if (h>255) h=255;
           get_map()->change_vert_height(x,y, h);
@@ -9886,7 +9886,7 @@ void g1_editor_class::save_height_bitmap_ok(i4_event *ev)
       for (y=0; y<mh; y++)
         for (x=0; x<mw; x++, v++)
         {
-          *i32=get_map()->vertex(x,mh-y-1)->height;
+          *i32=get_map()->vertex(x,mh-y-1)->get_height_value();
           i32++;
         }
 
@@ -10528,7 +10528,7 @@ void g1_path_window_class::draw_to_bitmap()
     
     for (x=0; x<mw; x++)
     {
-      w32 color = map->vertex(x,y)->height;
+      w32 color = map->vertex(x,y)->get_height_value();
       
       //color |= critical_color(x,y);
       color |=0xff000000;//This is fully visible

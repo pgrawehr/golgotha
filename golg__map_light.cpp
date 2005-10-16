@@ -31,8 +31,7 @@ void g1_calc_static_lighting()
   for (y=0; y<=mh; y++)
     for (x=0; x<=mw; x++, v++)
     {
-      v->light_sum=0x80000000;  // mark for recalc
-      v->normal=0x8000;    // mark for recalc
+      v->increment_height(0);  // mark for recalc
     }
 
   g1_map_cell_class *c=g1_get_map()->cell(0,0);
@@ -49,7 +48,7 @@ void g1_calc_static_lighting()
     for (x=0; x<=mw; x++, v++)
     {
       float r,g,b;
-      v->static_intensity=(w8)i4_f_to_i(g1_lights.directional_intensity * 255.0f);
+      v->set_static_intensity((w8)i4_f_to_i(g1_lights.directional_intensity * 255.0f));
       v->get_rgb(r,g,b, x,y);  // this will force it to be recalculated
     }
 
