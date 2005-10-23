@@ -29,8 +29,8 @@ extern i4_float g1_vert_height_table[256];
 class g1_map_vertex_class
 {
 	friend g1_map_vertex_class *g1_vertex_min(g1_map_vertex_class *v1,g1_map_vertex_class *v2);
-	friend g1_map_class;
-	friend g1_cloud_class; //clouds have a special way of creating shadows
+	friend class g1_map_class;
+	friend class g1_cloud_class; //clouds have a special way of creating shadows
 	friend void g1_save_map_verts(g1_map_vertex_class *list, 
 		int lsize, 
 		i4_saver_class *fp,
@@ -38,7 +38,7 @@ class g1_map_vertex_class
 	friend i4_bool g1_load_map_verts(g1_map_vertex_class *list, int lsize, 
 		i4_loader_class *fp,
 		int goto_sections);
-	friend g1_lod_context_class;
+	friend class g1_lod_context_class;
 public:
 	enum { 
 		SELECTED            = (1<<0),            //< only used by editor
