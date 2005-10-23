@@ -39,7 +39,7 @@ int GetOsVersion(LPSTR s){
             strcpy( s, "Betriebssystemkern: Windows 9x-Typ" );
             break;
         case VER_PLATFORM_WIN32_NT:
-            strcpy( s, "Betriebssystemkern: Windows NT-Typ" );
+            strcpy( s, "Betriebssystemkern: Windows NT/2000/XP-Typ" );
             break;
 		case VER_PLATFORM_WIN32s:
 			strcpy(s,  "Windows 3.1 16Bit Betriebsysstemkern mit Win32s Erweiterung");
@@ -54,6 +54,7 @@ int GetOsVersion(LPSTR s){
 	strcat(s,itoa(vinfo.dwMinorVersion,buffer,10));
 	strcat(s,".");
 	strcat(s,itoa(LOWORD(vinfo.dwBuildNumber),buffer,10));
+	strcat(s," ");
 	strcat(s,vinfo.szCSDVersion);
 	return TRUE;
 }

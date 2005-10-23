@@ -118,9 +118,11 @@ public:
     : mem(0), next(0),
       name(_name), 
       grow(_grow),
-      size(_size),
-	  blocks(0),
+      size(_size)
+#ifdef I4_DEBUG
+	  ,blocks(0),
 	  items(0)
+#endif
   //
   //  Create linear allocator
   //

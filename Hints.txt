@@ -229,9 +229,15 @@ Some objects (i.e rocket_launcher) require special "Viewpos" mount-point.
 The light-bulb object should have an edit-dialog. 
 Implemented. Can now choose the color of the light. The c1-c3 settings are a bit strange though...
 
-
 3D-Vectors should have a lisp editor associated. 
 Implemented. Just enter the new value as (x, y, z)
 
 I should check the behaviour of lights. They could be more intense, and they have to little
-effect if very near to the floor.
+effect if very near to the floor. This behaviour is exspected. The lightbulb object currently is
+implemented kinda like a spotlight looking vertically down, so the intensity will reduce 
+significantly when moving away from the center. It also checks the angle of a (landscape) squad 
+against the direction. The intensity calculation also looks right, since it is ok that a light
+has little effect if the ambient light is already high. Also it makes little sense that a 
+surface becomes white under light if it was red. 
+
+

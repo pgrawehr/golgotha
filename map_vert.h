@@ -220,9 +220,6 @@ public:
     r=g1_table_0_255_to_0_1[((ls>>16)&0xff)];
     g=g1_table_0_255_to_0_1[((ls>>8)&0xff)];
     b=g1_table_0_255_to_0_1[((ls)&0xff)];
-	r=1;
-	g=1;
-	b=1;
   }
   
   i4_float get_height() 

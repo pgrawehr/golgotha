@@ -307,7 +307,7 @@ i4_bool g1_light_object_class::occupy_location()
           dir.z*=odist;
 
           i4_float ndl = normal.dot(dir);
-          i4_float atten =  1.0f/(c1 + c3*dist*dist);
+          i4_float atten =  1.0f/(c1 + c2*dist+ c3*dist*dist);
 
           if (atten>1) 
 			  atten=1;
@@ -369,7 +369,6 @@ void g1_light_object_class::unoccupy_location()
       {
         v->decrement_dynamic_light(*a);
         v++;
-        //v->light_sum=0x80000000;
       }
     }
   }
