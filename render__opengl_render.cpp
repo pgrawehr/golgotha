@@ -49,6 +49,10 @@ static struct static_info_struct
 //class r1_opengl_render_class;
 //extern r1_opengl_render_class r1_opengl_render;
 
+// Only activate this one if really required. Is extremelly slow. 
+//#define OGL_ERROR_CHECK() check_error(__FILE__,__LINE__)
+#define OGL_ERROR_CHECK() 
+
 class r1_opengl_render_window_class : public r1_render_window_class
 {
 public:
@@ -130,7 +134,7 @@ void r1_opengl_render_window_class::draw(i4_draw_context_class &_context)
   in_render_rec=i4_F;
 }
 
-
+  static float opengl_z_scale=0,opengl_w_scale=0;
 class r1_opengl_render_class : public r1_render_api_class
 {
 private:
@@ -143,19 +147,33 @@ private:
 
   i4_bool texture_mode;
   i4_bool holy_mode;
+  i4_float min_z,max_z;
 
 i4_bool pass_verticies(int t_verts, r1_vert *src)
 {
-  float x, y, z, r=0, g=0, b=0, a;
-
+  float x, y, z, r=0, g=0, b=0, a,w;
+  float w_fact;
   while (t_verts--)
   {
 	x = src->px + static_info.xoff;
 	y = src->py + static_info.yoff;
 
-	z = 1.f/src->w;
-	z = (z - r1_near_clip_z) / (r1_far_clip_z - r1_near_clip_z) * 2.f - 1.f;
-
+	//z = 1.f/src->w;
+	//z = (z - r1_near_clip_z) / (r1_far_clip_z - r1_near_clip_z) * 2.f - 1.f;
+	//z = src->w+1.f;
+	//if (z<1.0)
+	//	z=1.0f;
+	z = (src->w);
+	z = (z-r1_near_clip_z) / (r1_far_clip_z-r1_near_clip_z);
+	w = src->w;
+	if (z<min_z)
+		min_z=z;
+	if (z>max_z)
+		max_z=z;
+	//w_fact= 1.0f/(r1_far_clip_z-r1_near_clip_z);
+	w = 1.0f/z;
+	//if (w<0)
+	//	w=0;
 	a = src->a;
 
 	if (shade_mode == R1_WHITE_SHADING)
@@ -191,11 +209,10 @@ i4_bool pass_verticies(int t_verts, r1_vert *src)
 	}
 
 	glColor4f(r,g,b,a);
-
 	if (texture_mode)
 	  glTexCoord2f(src->s,src->t);
-
-	glVertex3f( oo_half_width * x - 1.0 , 1.0 - oo_half_height * y , z);
+	glVertex4f( w*(oo_half_width * x - 1.0) , 
+			w*(1.0 - oo_half_height * y) , w*z, w);
 	src++;
   }
 
@@ -209,6 +226,7 @@ public:
 
   void disable_texture();
   void enable_texture();
+  void check_error(char *file, int line);
 
   void set_write_mode(r1_write_mask_type mask) {
 
@@ -223,15 +241,17 @@ public:
 	  else
 		glDepthMask(GL_FALSE);
 	}
+	OGL_ERROR_CHECK();
 
 	if (diff & R1_COMPARE_W) {
 	  if (mask & R1_COMPARE_W) {
 		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LEQUAL);
+		glDepthFunc(GL_GREATER);
 	  }
 	  else
 		glDisable(GL_DEPTH_TEST);
 	}
+	OGL_ERROR_CHECK();
 
 	if (diff & R1_WRITE_COLOR) {
 	  if (mask & R1_WRITE_COLOR) {
@@ -241,6 +261,7 @@ public:
 		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	  }
 	}
+	OGL_ERROR_CHECK();
 
 	r1_render_api_class::set_write_mode(mask);
 
@@ -278,7 +299,7 @@ public:
 	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	  break;
 	}
-
+    OGL_ERROR_CHECK();
 	r1_render_api_class::set_filter_mode(type);
   }
 
@@ -297,7 +318,8 @@ public:
 	render_device_flags = 0;
 	x_off=0;
 	y_off=0;
-
+	min_z=10000;
+	max_z=-1000;
   }
 
   // destructor
@@ -319,6 +341,7 @@ public:
 	  set_write_mode(pre_holy_write_mask);
 	  glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 	}
+	OGL_ERROR_CHECK();
 
   }
 
@@ -343,6 +366,7 @@ public:
 	  float b = (const_color & 0xff) / 255.0;
 	  //glBlendColorEXT(r,g,b,a);
 	  glColor4f(r,g,b,a);
+	  OGL_ERROR_CHECK();
 
   }
 
@@ -352,6 +376,8 @@ public:
 	w32 old_constant_color = get_constant_color();
 	if (z<r1_near_clip_z)
 		z=r1_near_clip_z;
+	if (z>r1_far_clip_z)
+		z=r1_far_clip_z;
 	set_constant_color(color);
 	i4_bool renable_texture = texture_mode;
 	
@@ -370,15 +396,20 @@ public:
 	v[0].px = x1;     v[0].py = y1;
 	v[1].px = x1;     v[1].py = y2+1;
 	v[2].px = x2+1;   v[2].py = y2+1;
-    	v[3].px = x2+1;   v[3].py = y1;
+    v[3].px = x2+1;   v[3].py = y1;
 
-	v[0].w = v[1].w = v[2].w = v[3].w = 1.f/z;
+	v[0].w = v[1].w = v[2].w = v[3].w = 0;
 
 	v[0].a = v[1].a = v[2].a = v[3].a = 0.f;
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_ALWAYS);
 	render_poly(4,v);
-	glDepthFunc(GL_LEQUAL);
+	glDepthFunc(GL_GREATER);
+	OGL_ERROR_CHECK();
+	//glClearColor(0,0,0,0);
+	//glClear(GL_COLOR_BUFFER_BIT);
+	glClearDepth(0);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	if (renable_texture == i4_T)
 	  enable_texture();
@@ -387,8 +418,11 @@ public:
 	set_constant_color(old_constant_color);
   }
 
+
   virtual void set_z_range(float nearvalue, float farvalue)
   {
+	opengl_z_scale=0.999f/farvalue;
+	opengl_w_scale=nearvalue*0.999f;  
 	r1_near_clip_z = nearvalue;
 	r1_far_clip_z = farvalue;
   }
@@ -414,16 +448,18 @@ public:
 	  break;
 
 	}
-
+	OGL_ERROR_CHECK();
 	r1_render_api_class::set_alpha_mode(type);
   }
+ 
 
 
   virtual void render_poly(int t_verts, r1_vert *verts)
   {
-	glBegin(GL_POLYGON);
+	glBegin(GL_TRIANGLE_FAN);
 	pass_verticies(t_verts,verts);
 	glEnd();
+	OGL_ERROR_CHECK();
   }
 
   virtual void render_lines(int t_lines, r1_vert *verts)
@@ -431,6 +467,7 @@ public:
 	glBegin(GL_LINE_STRIP);
 	pass_verticies(t_lines,verts);
 	glEnd();
+	OGL_ERROR_CHECK();
   }
 
   virtual void render_pixel(r1_vert *pixel)
@@ -438,12 +475,14 @@ public:
 	glBegin(GL_POINTS);
 	pass_verticies(1,pixel);
 	glEnd();
+	OGL_ERROR_CHECK();
   }
   void render_pixel(int t_points, r1_vert *pixel)
   {
   	glBegin(GL_POINTS);
 	pass_verticies(t_points,pixel);
 	glEnd();
+	OGL_ERROR_CHECK();
   }
 
   r1_render_window_class *create_render_window(int visw, int vish, r1_expand_type type)
@@ -497,7 +536,7 @@ void r1_opengl_render_class::copy_part(i4_image_class *im,
 	  glDisable(GL_DEPTH_TEST);
 	  glDepthMask(GL_FALSE);
 	  glDisable(GL_BLEND);
-
+	  OGL_ERROR_CHECK();
 	  glPixelZoom(1.,-1.);
 	  glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 
@@ -508,9 +547,47 @@ void r1_opengl_render_class::copy_part(i4_image_class *im,
 
 	  delete dst_im;
 	  glEnable(GL_DEPTH_TEST);
+	  glDepthMask(GL_TRUE);
+	  glEnable(GL_TEXTURE_2D);
+	  glEnable(GL_BLEND);
+	  OGL_ERROR_CHECK();
 	}
 
   }
+}
+
+void r1_opengl_render_class::check_error(char* file, int line)
+{
+	GLenum e=glGetError();
+	if (e==GL_NO_ERROR)
+		return;
+	char *s="";
+	switch(e)
+	{
+		case GL_INVALID_ENUM:
+			s="GL_INVALID_ENUM";
+			break;
+		case GL_INVALID_VALUE:
+			s="GL_INVALID_VALUE";
+			break;
+		case GL_INVALID_OPERATION:
+			s="GL_INVALID_OPERATION";
+			break;
+		case GL_STACK_OVERFLOW:
+			s="GL_STACK_OVERFLOW";
+			break;
+		case GL_STACK_UNDERFLOW:
+			s="GL_STACK_UNDERFLOW";
+			break;
+		case GL_OUT_OF_MEMORY:
+			s="GL_OUT_OF_MEMORY";
+			break;
+		default:
+			s="UNKNOWN_GL_ERROR";
+			break;					
+			
+	}
+	i4_warning("Opengl Error in File %s, line %d: %s\n",file,line,s);
 }
 
 void r1_opengl_render_class::disable_texture() {
@@ -520,6 +597,7 @@ void r1_opengl_render_class::disable_texture() {
 	texture_mode = i4_F;
 	last_node = 0;
   }
+  OGL_ERROR_CHECK();
 
 }
 
@@ -530,6 +608,7 @@ void r1_opengl_render_class::enable_texture() {
 	texture_mode = i4_T;
 	last_node = 0;
   }
+  OGL_ERROR_CHECK();
 
 }
 
@@ -546,9 +625,9 @@ i4_bool r1_opengl_render_class::init(i4_display_class *_display)
 	  // initial depth buffer state
 	  glDepthMask(GL_TRUE);
 	  glEnable(GL_DEPTH_TEST);
-	  glDepthFunc(GL_LEQUAL);
+	  glDepthFunc(GL_GREATER);
 	  
-	  
+	  OGL_ERROR_CHECK();
 
 	  // set up glBlendColor
 	  set_constant_color(get_constant_color());
@@ -557,14 +636,23 @@ i4_bool r1_opengl_render_class::init(i4_display_class *_display)
 	  oo_half_width = 2.f / (float)display->width();
 	  oo_half_height = 2.f /(float)display->height();
 
+	  glDepthRange(0.f,1.f);
 	  glMatrixMode(GL_PROJECTION);
 	  glLoadIdentity();
+	  OGL_ERROR_CHECK();
+	  
+	  glMatrixMode(GL_TEXTURE);
+	  glLoadIdentity();
+	  OGL_ERROR_CHECK();
 
 	  glMatrixMode(GL_MODELVIEW);
 	  glLoadIdentity();
+	  OGL_ERROR_CHECK();
+	  
 	  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S, GL_CLAMP);
 	  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_CLAMP);
-
+	  OGL_ERROR_CHECK();
+	  glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST);
 	}
 	else
         { //it's not an opengl capable display driver that was instantiated
@@ -587,7 +675,7 @@ void r1_opengl_render_class::enable_holy()
         set_write_mode(R1_WRITE_W | R1_COMPARE_W | R1_WRITE_COLOR);
         glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
         set_alpha_mode(R1_ALPHA_LINEAR);
-        
+        OGL_ERROR_CHECK();
         holy_mode = i4_T;
         }
     }
@@ -623,6 +711,7 @@ void r1_opengl_render_class::use_texture(w32 index, r1_texture_handle handle, sw
 	  break;
 
 	}
+	OGL_ERROR_CHECK();
 
 	if (mip->entry->is_alphatexture() == i4_T || mip->entry->is_transparent())
 	  enable_holy();
@@ -665,7 +754,7 @@ void r1_opengl_render_class::use_texture(r1_texture_handle handle,
 	  break;
 
 	}
-
+	OGL_ERROR_CHECK();
 	if (mip->entry->is_alphatexture() == i4_T || mip->entry->is_transparent())
 	  enable_holy();
 	else
