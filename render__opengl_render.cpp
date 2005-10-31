@@ -163,7 +163,7 @@ i4_bool pass_verticies(int t_verts, r1_vert *src)
 	//z = src->w+1.f;
 	//if (z<1.0)
 	//	z=1.0f;
-	z = (src->w);
+	z = 10*(src->w);
 	z = (z-r1_near_clip_z) / (r1_far_clip_z-r1_near_clip_z);
 	w = src->w;
 	if (z<min_z)
