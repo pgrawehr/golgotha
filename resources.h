@@ -215,7 +215,11 @@ extern g1_resource_class g1_resources;
 
 //These values where set all over the place.
 #define RENDER_DEFAULT_NEAR_DISTANCE 0.01f
-#define RENDER_DEFAULT_FAR_DISTANCE 1000.0f
+// The far value must currently be exactly 100.0, otherwise strange things might
+// happen using the different rendering interfaces, like lost z-buffer precision, 
+// nothing visible at all, etc... I have no idea where this limitation comes 
+// from, but it must have something to do with the world-to-screen transformation code.
+#define RENDER_DEFAULT_FAR_DISTANCE 100.0f
 
 //inline i4_float g1_near_z_range() { return 0.01f; }
 //inline i4_float g1_far_z_range() { return 100.0; }

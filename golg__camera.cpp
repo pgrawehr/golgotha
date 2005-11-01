@@ -895,15 +895,17 @@ void g1_view_state_class::update()
 }
 
 /*!  
-calc_tranform(). Very important code bellow!
-this calculates the actual world-to-screen tranform for this window.
-transformations at the top will be applied to the camera-coordinate system
-transformations at the bottom of the function will be in world-coordinates
+This method calculates the view to world transformation matrix for the current frame.
+Very important code bellow!
+This calculates the actual world-to-screen tranform for this window.
+Transformations at the top will be applied to the camera-coordinate system
+Transformations at the bottom of the function will be in world-coordinates
 Editing anything in-between is not recommended (except you know _exactly_ 
 what you are doing.
 This code is called once per frame and window, so speed is not so much
 an issue here.
-\param transform an i4_transform_class reference that will contain the world to screen transform
+\param transform an i4_transform_class reference that will be filled 
+with the world to screen transformation matrix. 
 */
 
 void g1_view_state_class::calc_transform(i4_transform_class &transform)

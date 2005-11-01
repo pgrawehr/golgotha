@@ -187,7 +187,7 @@ i4_bool r1_render_api_class::init(i4_display_class *display)
 
   set_filter_mode(R1_BILINEAR_FILTERING);
 
-  set_z_range(0.001f, 1.0f);
+  set_z_range(0.01f, 1.0f);
   return i4_T;
 }
 

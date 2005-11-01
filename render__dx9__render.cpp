@@ -137,8 +137,7 @@ void r1_dx9_class::set_write_mode(r1_write_mask_type mask)
 
   if (mask & R1_COMPARE_W)
   {
-	  UINT cmpfn=D3DCMP_GREATER;
-    d3d_device->SetRenderState(D3DRS_ZFUNC,cmpfn);
+    d3d_device->SetRenderState(D3DRS_ZFUNC,D3DCMP_GREATEREQUAL);
   }
   else
     d3d_device->SetRenderState(D3DRS_ZFUNC,D3DCMP_ALWAYS);

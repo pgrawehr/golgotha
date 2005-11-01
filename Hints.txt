@@ -225,6 +225,8 @@ Need to improve efficiency of guided_missile. Maybe add some randomness in the t
 algorithm. 
 
 Some objects (i.e rocket_launcher) require special "Viewpos" mount-point. 
+Done for some of the most obvious cases where it looked strange. Don't know wheter I've got
+all of them. 
 
 The light-bulb object should have an edit-dialog. 
 Implemented. Can now choose the color of the light. The c1-c3 settings are a bit strange though...
