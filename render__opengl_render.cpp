@@ -165,10 +165,10 @@ i4_bool pass_verticies(int t_verts, r1_vert *src)
 	//	z=1.0f;
 	z = (src->w);
 	z = (z) / (r1_far_clip_z);
-	//if (z<0)
-	//	z=0;
-	//if (z>1.0f)
-	//	z=1.0f;
+	if (z<0)
+		z=0;
+	if (z>1.0f)
+		z=1.0f;
 	w = src->w;
 	if (z<min_z)
 		min_z=z;
@@ -417,22 +417,30 @@ public:
 		GLenum old_draw_buffer=0;
 		glGetIntegerv(GL_DRAW_BUFFER, (GLint*) &old_draw_buffer);
 		v[0].w = v[1].w = v[2].w = v[3].w = 0.01;
+		i4_float fx1,fy1,fx2,fy2;
 		//set_constant_color(0xff323277);
 		//glDrawBuffer(GL_NONE);// Don't draw into any color buffer, only z-buffer
 		//glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
 		//render_poly(4,v);
 		glBegin(GL_POLYGON);
-		//x1+=static_info.xoff;//adjust for window position
-		//x2+=static_info.xoff;
-		//y1+=static_info.yoff;
-		//y2+=static_info.yoff;
-		//glColor4f(0,0,0,0);
-		//glVertex3i(x1, y1, z);
-		//glVertex3i(x2, y1, z);
-		//glVertex3i(x2, y2, z);
-		//glVertex3i(x1, y2, z);
+		fx1=x1+static_info.xoff;//adjust for window position
+		fx2=x2+static_info.xoff+1;
+		fy1=y1+static_info.yoff;
+		fy2=y2+static_info.yoff+1;
+		fx1=(oo_half_width * fx1 - 1.0);
+		fx2=(oo_half_width * fx2 - 1.0);
+		fy1=(1.0 - oo_half_height * fy1);
+		fy2=(1.0 - oo_half_height * fy2);
 		
-		pass_verticies(4,v);
+		glColor4f(0,0,0,0);
+		z/=r1_far_clip_z;
+		z=1-z;
+		glVertex3f(fx1, fy1, z);
+		glVertex3f(fx2, fy1, z);
+		glVertex3f(fx2, fy2, z);
+		glVertex3f(fx1, fy2, z);
+		
+		//pass_verticies(4,v);
 		glEnd();
 		glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
 		glDrawBuffer(old_draw_buffer);
