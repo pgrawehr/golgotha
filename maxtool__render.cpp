@@ -1127,7 +1127,7 @@ void m1_utility_window_class::parent_draw(i4_draw_context_class &context)
 	for (cl = clip->list.begin(); cl != clip->list.end(); ++cl)
       api->clear_area(cl->x1, cl->y1, cl->x2, cl->y2, 
                     m1_info.bg_color, 
-                    0.999*RENDER_DEFAULT_FAR_DISTANCE);  //???
+                    RENDER_DEFAULT_FAR_DISTANCE); 
     
     api->set_filter_mode(R1_BILINEAR_FILTERING);
 
