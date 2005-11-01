@@ -105,9 +105,7 @@ r1_opengl_render_window_class::~r1_opengl_render_window_class()
 void r1_opengl_render_window_class::draw(i4_draw_context_class &_context)
 {
   volatile static i4_bool in_render_rec=i4_F;
-  //r1_opengl_render.x_off=_context.xoff;
-  //r1_opengl_render.y_off=_context.yoff;
-  //r1_render_api_class::context = &_context;
+
   if (in_render_rec)
   {
   	r1_render_window_class::draw(_context);
@@ -134,7 +132,7 @@ void r1_opengl_render_window_class::draw(i4_draw_context_class &_context)
   in_render_rec=i4_F;
 }
 
-  static float opengl_z_scale=0,opengl_w_scale=0;
+ // static float opengl_z_scale=0,opengl_w_scale=0;
 class r1_opengl_render_class : public r1_render_api_class
 {
 private:
@@ -147,12 +145,10 @@ private:
 
   i4_bool texture_mode;
   i4_bool holy_mode;
-  i4_float min_z,max_z;
 
 i4_bool pass_verticies(int t_verts, r1_vert *src)
 {
   float x, y, z, r=0, g=0, b=0, a,w;
-  float w_fact;
   while (t_verts--)
   {
 	x = src->px + static_info.xoff;
@@ -160,24 +156,14 @@ i4_bool pass_verticies(int t_verts, r1_vert *src)
 
 	//z = 1.f/src->w;
 	//z = (z - r1_near_clip_z) / (r1_far_clip_z - r1_near_clip_z) * 2.f - 1.f;
-	//z = src->w+1.f;
-	//if (z<1.0)
-	//	z=1.0f;
+	
 	z = (src->w);
 	z = (z) / (r1_far_clip_z);
-	if (z<0)
-		z=0;
-	if (z>1.0f)
-		z=1.0f;
+	
 	w = src->w;
-	if (z<min_z)
-		min_z=z;
-	if (z>max_z)
-		max_z=z;
-	//w_fact= 1.0f/(r1_far_clip_z-r1_near_clip_z);
+	
 	w = 1.0f/z;
-	//if (w<0)
-	//	w=0;
+	
 	a = src->a;
 
 	if (shade_mode == R1_WHITE_SHADING)
@@ -226,7 +212,6 @@ i4_bool pass_verticies(int t_verts, r1_vert *src)
 
 public:
 
-  i4_float x_off,y_off;
 
   void disable_texture();
   void enable_texture();
@@ -320,10 +305,8 @@ public:
 
 	// currently only R1_SOFTWARE
 	render_device_flags = 0;
-	x_off=0;
-	y_off=0;
-	min_z=10000;
-	max_z=-1000;
+
+
   }
 
   // destructor
@@ -395,33 +378,31 @@ public:
 
 	disable_texture();
 
-	r1_vert v[4];
-
-	v[0].px = x1;     v[0].py = y1;
-	v[1].px = x1;     v[1].py = y2+1;
-	v[2].px = x2+1;   v[2].py = y2+1;
-    v[3].px = x2+1;   v[3].py = y1;
-	v[0].a = v[1].a = v[2].a = v[3].a = 0.f;
+	
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 	glDepthFunc(GL_ALWAYS);
 	if (write_mask & R1_WRITE_COLOR)
 	{
 		glDepthMask(GL_FALSE);
+		r1_vert v[4];
+
+		v[0].px = x1;     v[0].py = y1;
+		v[1].px = x1;     v[1].py = y2+1;
+		v[2].px = x2+1;   v[2].py = y2+1;
+    	v[3].px = x2+1;   v[3].py = y1;
+		v[0].a = v[1].a = v[2].a = v[3].a = 0.f;
 		v[0].w = v[1].w = v[2].w = v[3].w = 1.0;
 		render_poly(4,v);
 		glDepthMask(GL_TRUE); //This must be set to true by default
 	}
 	if (write_mask & R1_WRITE_W)
 	{
-		GLenum old_draw_buffer=0;
-		glGetIntegerv(GL_DRAW_BUFFER, (GLint*) &old_draw_buffer);
-		v[0].w = v[1].w = v[2].w = v[3].w = 0.01;
 		i4_float fx1,fy1,fx2,fy2;
-		//set_constant_color(0xff323277);
-		//glDrawBuffer(GL_NONE);// Don't draw into any color buffer, only z-buffer
-		//glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
-		//render_poly(4,v);
+		//Disable rendering to the color buffer althogeter -> This will 
+		//render to the z-buffer only
+		glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE); 
+		
 		glBegin(GL_POLYGON);
 		fx1=x1+static_info.xoff;//adjust for window position
 		fx2=x2+static_info.xoff+1;
@@ -432,7 +413,6 @@ public:
 		fy1=(1.0 - oo_half_height * fy1);
 		fy2=(1.0 - oo_half_height * fy2);
 		
-		glColor4f(0,0,0,0);
 		z/=r1_far_clip_z;
 		z=1-z;
 		glVertex3f(fx1, fy1, z);
@@ -440,10 +420,8 @@ public:
 		glVertex3f(fx2, fy2, z);
 		glVertex3f(fx1, fy2, z);
 		
-		//pass_verticies(4,v);
 		glEnd();
 		glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
-		glDrawBuffer(old_draw_buffer);
 	}
 	
 	glDepthFunc(GL_GEQUAL);
@@ -464,8 +442,6 @@ public:
 
   virtual void set_z_range(float nearvalue, float farvalue)
   {
-	opengl_z_scale=0.999f/farvalue;
-	opengl_w_scale=nearvalue*0.999f;  
 	r1_near_clip_z = nearvalue;
 	r1_far_clip_z = farvalue;
   }
