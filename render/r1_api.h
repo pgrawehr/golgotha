@@ -299,8 +299,8 @@ public:
   /// Render polygons , indexed.
   /// This does the same as the 2-parameter version, except that the
   /// indices must not be in order.
-  virtual void render_poly(int t_verts, r1_vert *verts, int *vertex_index);
-  virtual void render_poly(int t_verts, r1_vert *verts, w16 *vertex_index);
+  void render_poly(int t_verts, r1_vert *verts, int *vertex_index);
+  void render_poly(int t_verts, r1_vert *verts, w16 *vertex_index);
   virtual void flush_vert_buffer()//Only used for dx right now
 	  {
 	  };
@@ -317,10 +317,11 @@ public:
   virtual void render_pixel(int t_points, r1_vert *pixel)                             = 0;
   /// Renders lines as line-strips.
   /// Not properly supported by all HAL layers, but might be emulated 
-  /// using triangle strips (the only primitive known to be fully supported
+  /// using triangle strips (the only primitive required to be fully supported
   /// by all HAL drivers and gfx cards)
   /// \param t_lines The number of lines to draw. This method draws line
-  /// strips (polylines). Minimum value=1, Maximum value=255
+  /// strips (polylines). Minimum value=1, Maximum value=255. Important: Unlike
+  /// render_poly(), this method takes the number of lines, not points to draw! 
   /// \param verts The vertices of the corners of the polylines. 
   /// The array must be one larger than t_lines. 
   virtual void render_lines(int t_lines, r1_vert *verts )                             = 0;
@@ -328,8 +329,11 @@ public:
   /// Writtes a rectangle of the given color to the screen. 
   /// Color is standard argb, (z should be within range specifed by set_z_range)
   /// The function takes care of the render settings, so if z-buffer
-  /// write is disabled, it will NOT be cleared. 
-  /// The function might decide to just render polygons. 
+  /// write is disabled, it will NOT be cleared. Vice versa, if the write mode 
+  /// is R1_WRITE_W only, only the Z-Buffer is affected (this is used to clip out the
+  /// user interface windows from the render windows)
+  /// The function might decide to just render polygons at depth z, depending on wheter
+  /// the underlying rendering interface supports clearing parts of a buffer directly. 
   virtual void clear_area(int x1, int y1, int x2, int y2, w32 color, float z);
   
   /// Get an image compatible to the screen. 
