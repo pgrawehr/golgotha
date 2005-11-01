@@ -163,8 +163,12 @@ i4_bool pass_verticies(int t_verts, r1_vert *src)
 	//z = src->w+1.f;
 	//if (z<1.0)
 	//	z=1.0f;
-	z = 10*(src->w);
-	z = (z-r1_near_clip_z) / (r1_far_clip_z-r1_near_clip_z);
+	z = (src->w);
+	z = (z) / (r1_far_clip_z);
+	//if (z<0)
+	//	z=0;
+	//if (z>1.0f)
+	//	z=1.0f;
 	w = src->w;
 	if (z<min_z)
 		min_z=z;
@@ -246,7 +250,7 @@ public:
 	if (diff & R1_COMPARE_W) {
 	  if (mask & R1_COMPARE_W) {
 		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_GREATER);
+		glDepthFunc(GL_GEQUAL);
 	  }
 	  else
 		glDisable(GL_DEPTH_TEST);
@@ -397,19 +401,50 @@ public:
 	v[1].px = x1;     v[1].py = y2+1;
 	v[2].px = x2+1;   v[2].py = y2+1;
     v[3].px = x2+1;   v[3].py = y1;
-
-	v[0].w = v[1].w = v[2].w = v[3].w = 0;
-
 	v[0].a = v[1].a = v[2].a = v[3].a = 0.f;
 	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
 	glDepthFunc(GL_ALWAYS);
-	render_poly(4,v);
-	glDepthFunc(GL_GREATER);
+	if (write_mask & R1_WRITE_COLOR)
+	{
+		glDepthMask(GL_FALSE);
+		v[0].w = v[1].w = v[2].w = v[3].w = 1.0;
+		render_poly(4,v);
+		glDepthMask(GL_TRUE); //This must be set to true by default
+	}
+	if (write_mask & R1_WRITE_W)
+	{
+		GLenum old_draw_buffer=0;
+		glGetIntegerv(GL_DRAW_BUFFER, (GLint*) &old_draw_buffer);
+		v[0].w = v[1].w = v[2].w = v[3].w = 0.01;
+		//set_constant_color(0xff323277);
+		//glDrawBuffer(GL_NONE);// Don't draw into any color buffer, only z-buffer
+		//glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
+		//render_poly(4,v);
+		glBegin(GL_POLYGON);
+		//x1+=static_info.xoff;//adjust for window position
+		//x2+=static_info.xoff;
+		//y1+=static_info.yoff;
+		//y2+=static_info.yoff;
+		//glColor4f(0,0,0,0);
+		//glVertex3i(x1, y1, z);
+		//glVertex3i(x2, y1, z);
+		//glVertex3i(x2, y2, z);
+		//glVertex3i(x1, y2, z);
+		
+		pass_verticies(4,v);
+		glEnd();
+		glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
+		glDrawBuffer(old_draw_buffer);
+	}
+	
+	glDepthFunc(GL_GEQUAL);
 	OGL_ERROR_CHECK();
+	
 	//glClearColor(0,0,0,0);
 	//glClear(GL_COLOR_BUFFER_BIT);
-	glClearDepth(0);
-	glClear(GL_DEPTH_BUFFER_BIT);
+	//glClearDepth(0);
+	//glClear(GL_DEPTH_BUFFER_BIT);
 
 	if (renable_texture == i4_T)
 	  enable_texture();
@@ -625,7 +660,7 @@ i4_bool r1_opengl_render_class::init(i4_display_class *_display)
 	  // initial depth buffer state
 	  glDepthMask(GL_TRUE);
 	  glEnable(GL_DEPTH_TEST);
-	  glDepthFunc(GL_GREATER);
+	  glDepthFunc(GL_GEQUAL);
 	  
 	  OGL_ERROR_CHECK();
 
