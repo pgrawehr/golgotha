@@ -173,7 +173,7 @@ const int octreeChildCenterOffsetInt[][3] = {
 //! It contains an octree and is the same as a node of the tree.
 class g1_octree
 {
-
+    
 	protected:
 
 	/// Protected default constructor.
@@ -358,7 +358,7 @@ class g1_octree
 	//! Returns true if the given ray intersects with this node of the tree.
 	//! This function also returns the sides which are intercepted (at most two). 
 	//! Either out-parameter might return -1 if the start or the end of the ray lies inside the cube.
-	bool CheckCollision(const i4_3d_vector &start, const i4_3d_vector &ray, int &side_in, int &side_out);
+	i4_bool CheckCollision(const i4_3d_vector &start, const i4_3d_vector &ray, int &side_in, int &side_out);
 
 	//! Returns a leaf node of the tree intersected by start and ray.
 	//! Yup, you've read right: This returns just ANY node that is intersected.
@@ -658,7 +658,7 @@ class g1_octree
 		return NULL;
 	}
 
-
+    friend class iterator;
 protected:
     i4_bool PointInCube(i4_3d_vector p) const;
 	i4_bool RayShorterThanCubeSize(i4_3d_vector ray) const;

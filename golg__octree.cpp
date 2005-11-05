@@ -113,8 +113,9 @@ void g1_octree_debug::RenderDebugLines(i4_transform_class *transform)
 	r1_shading_type shade=api->get_shade_mode();
 	api->set_shading_mode(R1_SHADE_DISABLED);
 	api->set_constant_color(0xFFFF00);
+    int i;
 	// Go through the whole list of lines stored in the vector m_vLines.
-	for(int i = 0; i < m_vLines.size(); i+=2)
+	for(i = 0; i < m_vLines.size(); i+=2)
 	{
 		// Pass in the current point to be rendered as part of a line
 		i4_3d_point_class v1(m_vLines[i]);
@@ -123,7 +124,7 @@ void g1_octree_debug::RenderDebugLines(i4_transform_class *transform)
 		g1_render.render_3d_line(v1,v2,0xffff00,0xffff00,
 			transform,i4_T);
 	}
-	for(int i = 0; i < m_vSelectedLines.size(); i+=2)
+	for(i = 0; i < m_vSelectedLines.size(); i+=2)
 	{
 		// Pass in the current point to be rendered as part of a line
 		i4_3d_point_class v3(m_vSelectedLines[i]);
@@ -2689,7 +2690,7 @@ void g1_octree::GetBorderSide(int side,
 	
 }
 
-bool g1_octree::CheckCollision(const i4_3d_vector &start, const i4_3d_vector &ray, int &side_in, int &side_out)
+i4_bool g1_octree::CheckCollision(const i4_3d_vector &start, const i4_3d_vector &ray, int &side_in, int &side_out)
 {
 	//The following code is mainly similar to the ray-to-object intersection test
 	//in g1_quad_object_class::intersect()
@@ -2704,8 +2705,8 @@ bool g1_octree::CheckCollision(const i4_3d_vector &start, const i4_3d_vector &ra
 	i4_3d_vector vert[4];
 	i4_3d_vector normal;
 	i4_bool frontside=true;
-	bool inside;
-	bool hit=false;
+	i4_bool inside;
+	i4_bool hit=false;
 	side_in=-1;
 	side_out=-1;
 	int i,u,v,j;

@@ -5,13 +5,6 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 Project: "Golgotha"=.\Golgotha.dsp - Package Owner=<4>
 
-Package=<5>
-{{{
-    begin source code control
-    "$/Golgotha", GNOAAAAA
-    .
-    end source code control
-}}}
 
 Package=<4>
 {{{
@@ -21,13 +14,6 @@ Package=<4>
 
 Project: "Tests"=.\Tests\Tests.dsp - Package Owner=<4>
 
-Package=<5>
-{{{
-    begin source code control
-    "$/Golgotha/Tests", RCVAAAAA
-    .\tests
-    end source code control
-}}}
 
 Package=<4>
 {{{
@@ -61,13 +47,7 @@ Package=<4>
 
 Project: "ivcon"=.\ivcon\ivcon.dsp - Package Owner=<4>
 
-Package=<5>
-{{{
-    begin source code control
-    "$/Golgotha/ivcon", ZBVAAAAA
-    .\ivcon
-    end source code control
-}}}
+
 
 Package=<4>
 {{{
@@ -77,13 +57,7 @@ Package=<4>
 
 Project: "map2def"=.\map2def\map2def.dsp - Package Owner=<4>
 
-Package=<5>
-{{{
-    begin source code control
-    "$/Golgotha/map2def", FCVAAAAA
-    .\map2def
-    end source code control
-}}}
+
 
 Package=<4>
 {{{
