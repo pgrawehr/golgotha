@@ -6,13 +6,13 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 
-#ifndef I4_TGA_WRITE_HH
-#define I4_TGA_WRITE_HH
+#ifndef __IMAGE_WRITE_HPP_
+#define __IMAGE_WRITE_HPP_
 
 #include "arch.h"
-class i4_image_class;
-class i4_file_class;
-i4_bool i4_write_tga(i4_image_class *im, i4_file_class *fp, int include_alpha=0);
-i4_bool i4_write_tga(i4_image_class *im, const i4_const_str &name, i4_bool include_alpha=false);
+
+#include "loaders/bmp_write.h"
+#include "loaders/tga_write.h"
+#include "loaders/jpg_write.h"
 
 #endif

@@ -9,6 +9,7 @@
 #include "image/image.h"
 #include "file/file.h"
 #include "status/status.h"
+#include "loaders/jpg_write.h"
 #include "loaders/jpg/jpeglib.h"
 
 
@@ -55,6 +56,23 @@ void i4_jpg_fin(j_compress_ptr cinfo)
   i4_jpg_write_mgr *m=i4_current_jpg_write_mgr;
   int ws=(w8 *)m->next_output_byte-m->buf;
   i4_current_jpg_write_mgr->fp->write(m->buf, ws);
+}
+
+i4_bool i4_write_jpeg(i4_image_class *im, const i4_const_str &name, int quality)
+{
+	i4_file_class* fp=i4_open(name,I4_WRITE);
+	if (fp)
+	{
+		int ret=i4_write_jpeg(im,fp,quality,NULL);
+		delete fp;
+		if (ret>0)
+		{
+			i4_unlink(name);
+			return i4_F;
+		}
+		return i4_T;
+	}
+	return i4_F;
 }
 
 // return size of jpeg written

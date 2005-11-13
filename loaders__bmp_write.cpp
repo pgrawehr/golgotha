@@ -18,6 +18,23 @@ inline void i4_32bpp_to_rgb(w32 color, w8 &r, w8 &g, w8 &b)
   b=(w8)(color&0xff);
 }
 
+i4_bool i4_write_bmp(i4_image_class *im, const i4_const_str &name)
+{
+	i4_file_class* fp=i4_open(name,I4_WRITE);
+	if (fp)
+	{
+		i4_bool bret=i4_write_bmp(im,fp);
+		delete fp;
+		if (bret==i4_F)
+		{
+			i4_unlink(name);
+			return i4_F;
+		}
+		return i4_T;
+	}
+	return i4_F;
+}
+
 i4_bool i4_write_bmp(i4_image_class *im, i4_file_class *fp)
 {
   const i4_pal *pal=im->get_pal();

@@ -2275,6 +2275,9 @@
 				RelativePath=".\window\wmanager.h">
 			</File>
 			<File
+				RelativePath=".\loaders\write.h">
+			</File>
+			<File
 				RelativePath=".\x86_proc.h">
 			</File>
 			<File

@@ -54,7 +54,7 @@ public:
       i4_image_class *screen=display->lock_frame_buffer(I4_BACK_FRAME_BUFFER, I4_FRAME_BUFFER_READ);
       if (screen)
       {
-        i4_tga_write(screen, fp);
+        i4_write_tga(screen, fp);
         display->unlock_frame_buffer(I4_BACK_FRAME_BUFFER);
       }
  

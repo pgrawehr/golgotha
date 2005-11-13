@@ -55,7 +55,7 @@
 
 #include "mess_id.h"
 #include "loaders/load.h"
-#include "loaders/tga_write.h"
+#include "loaders/write.h"
 #include "file/get_filename.h"
 #include "m_flow.h"
 #include "input.h"
@@ -8373,44 +8373,83 @@ public:
   char *name() { return "map_renderer"; }
 };
 
+void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_image_class* image)
+{
+	r1_render_api_class *api=g1_render.r_api;
+	r1_texture_manager_class *tman=api->get_tmanager();
+	float s, t, s_step, t_step;
+	s_step=(im_w)/(float)(x2-x1);//t and s must be [0..256) ??
+	t_step=(im_h)/(float)(y2-y1);
+	int x,y;
+	t=0;
+	i4_image_class *current_texture=0;
+	r1_miplevel_t *mip=0;
+	w32 col=0;
+	i4_draw_context_class context(0,0,im_w-1, im_h-1);
+	sw32 act_w=0,act_h=0;
+	for (y=y1; y<y2; y++, t+=t_step)
+	{
+		s=0;
+		for (x=x1; x<x2; x++, s+=s_step)
+		{
+			g1_map_cell_class *c=g1_cells + g1_map_width*y+x;
+			g1_map_vertex_class *v1=g1_verts + (g1_map_width+1)*y+x, *v2,*v3,*v4;
+			v2=v1+1;
+			v3=v2+g1_map_width+1;  // order is: v1 -- v2
+			v4=v3-1;               //           |      |
+								   //           v4 -- v3 (counterclockwise for drawing)
+			g1_tile_class* tile=g1_tile_man.get(c->type);
+			int texture=tile->texture;
+			mip=tman->get_texture(texture,0,8,act_w,act_h);
+			col=mip->entry->average_color;
+			image->bar(s,t,s+s_step,t+t_step,col,context);
+			delete current_texture;
+		}
+	}
+	i4_str str=i4_str("temp_image_%d.tga");
+	i4_str *res_str=str.sprintf(100,x1*y1+x2);
+	i4_write_tga(image,*res_str,false);
+	delete res_str;
+}
 
 i4_image_class *render_map_section(int x1, int y1, int x2, int y2, int im_w, int im_h)
-{//BUG: The last few pixels of the given rectangle (lower right corner)
-//always stay black. FIXED
-  r1_render_api_class *api=g1_render.r_api;
+{
+	//BUG: The last few pixels of the given rectangle (lower right corner)
+	//always stay black. FIXED
+ // r1_render_api_class *api=g1_render.r_api;
 
-  r1_render_window_class *rwin=api->create_render_window(im_w, im_h);
-  map_renderer_class *map_r=new map_renderer_class(im_w, im_h);
+ // r1_render_window_class *rwin=api->create_render_window(im_w, im_h);
+ // map_renderer_class *map_r=new map_renderer_class(im_w, im_h);
 
-  map_r->ax1=x1;
-  map_r->ay1=y1;
-  map_r->ax2=x2;
-  map_r->ay2=y2;
+ // map_r->ax1=x1;
+ // map_r->ay1=y1;
+ // map_r->ax2=x2;
+ // map_r->ay2=y2;
 
 
-  rwin->add_child(0,0, map_r);
-  i4_current_app->get_window_manager()->add_child(0,0,rwin);
-  
-  
-  i4_draw_context_class context(0,0,im_w-1, im_h-1);
+ // rwin->add_child(0,0, map_r);
+ // i4_current_app->get_window_manager()->add_child(0,0,rwin);
+ // 
+ // 
+ i4_draw_context_class context(0,0,im_w-1, im_h-1);
 
-  i4_display_class *display=i4_current_app->get_display();
-  
-  int tries=0;
-  r1_texture_manager_class *tman=api->get_tmanager();
-  do
-  {
-    tman->next_frame();
-    rwin->draw(context);
-    display->flush();
+ // i4_display_class *display=i4_current_app->get_display();
+ // 
+ // int tries=0;
+ // r1_texture_manager_class *tman=api->get_tmanager();
+ // do
+ // {
+ //   tman->next_frame();
+ //   rwin->draw(context);
+ //   display->flush();
 
-    tries++;
-	i4_thread_sleep(200);//wait a bit for the loader to load up some data
-    // repeat until textures have rez-ed in
-    // or it doens't look like it'll happen
-	// Need at least two tries to be sure the entire display chain is up to date.
-  } while ((map_r->do_it_again && tries<100) || tries<2);
-  tman->next_frame();
+ //   tries++;
+	//i4_thread_sleep(200);//wait a bit for the loader to load up some data
+ //   // repeat until textures have rez-ed in
+ //   // or it doens't look like it'll happen
+	//// Need at least two tries to be sure the entire display chain is up to date.
+ // } while ((map_r->do_it_again && tries<100) || tries<2);
+ // tman->next_frame();
 
 
   i4_pixel_format fmt;
@@ -8419,20 +8458,19 @@ i4_image_class *render_map_section(int x1, int y1, int x2, int y2, int im_w, int
   fmt.calc_shift();
   const i4_pal *pal=i4_pal_man.register_pal(&fmt);
 
-  i4_image_class *fb;
+  //i4_image_class *fb;
   i4_image_class *to=0;
 
-  fb=display->lock_frame_buffer(I4_BACK_FRAME_BUFFER, I4_FRAME_BUFFER_READ);
-  if (fb)
-  {
+  //fb=display->lock_frame_buffer(I4_BACK_FRAME_BUFFER, I4_FRAME_BUFFER_READ);
     to = i4_create_image(im_w, im_h, pal);
     to->bar(0,0,im_w-1,im_h-1,0x0007000,context);//perhaps another color 
+	render_map_to_image(x1,y1,x2,y2,im_w,im_h,to);
+	
     //(the second last element) would prove more usefull for debugging?
-    fb->put_part(to, 0,0, 0,0, im_w-1, im_h-1, context);
-    display->unlock_frame_buffer(I4_BACK_FRAME_BUFFER);
-  }
+    //fb->put_part(to, 0,0, 0,0, im_w-1, im_h-1, context);
+    //display->unlock_frame_buffer(I4_BACK_FRAME_BUFFER);
 
-  delete rwin;
+  //delete rwin;
 
   return to;
 }
@@ -8573,7 +8611,7 @@ li_object *g1_dump_level(li_object *o, li_environment *env)
       char fn[MAX_PATH];
       sprintf(fn,"mapdebug/%d.tga", i-2);
       i4_file_class *mfp=i4_open(fn, I4_WRITE);
-      i4_tga_write(to, mfp);
+      i4_write_tga(to, mfp);
 	  delete mfp;
       delete to;
     }
@@ -9891,7 +9929,7 @@ void g1_editor_class::save_height_bitmap_ok(i4_event *ev)
         }
 
 
-      i4_tga_write(im,fp);
+      i4_write_tga(im,fp);
       delete fp;
       delete im;
 
