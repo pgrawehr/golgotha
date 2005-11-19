@@ -735,7 +735,7 @@ i4_bool r1_dx9_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 		{
 		w32 co,r,g,b;
 		w16 *tex=(w16*)texture_ptr;
-		const i4_pal *p=i4_current_app->get_display()->get_palette();//the 24bit pal
+		const i4_pal *p=i4_pal_man.default_no_alpha_24();//the 24bit pal
 		for (i=0;i<mip->width*mip->height;i++)
 			{
 			b=load_info->src_file->read_8();
@@ -749,7 +749,7 @@ i4_bool r1_dx9_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 		{
 		w32 co,r,g,b;
 		w16 *tex=(w16*)texture_ptr;
-		const i4_pal *p=i4_current_app->get_display()->get_palette();//the 32bit pal
+		const i4_pal *p=i4_pal_man.default_no_alpha_32();
 		for (i=0;i<mip->width*mip->height;i++)
 			{
 			//The order here is a bit strange (argb backwards).
@@ -1369,7 +1369,8 @@ i4_pal *r1_dx9_texture_class::MatchingPal(LPDDSURFACEDESC ddsd)
 	return i4_pal_man.register_pal(&alpha32_format);
 	}
 
-i4_image_class *r1_dx9_texture_class::get_texture_image(r1_texture_handle handle)
+i4_image_class *r1_dx9_texture_class::get_texture_image(r1_texture_handle handle, 
+														int frame_counter, int desired_width)
 	{
 	sw32 act_w=0,act_h=0;
 	w32 tid=registered_tnames[handle].id;
@@ -1378,7 +1379,9 @@ i4_image_class *r1_dx9_texture_class::get_texture_image(r1_texture_handle handle
 		if (memory_images[i].id==tid)
 			return memory_images[i].image->copy();//directly return the stored image
 		}
-	r1_miplevel_t *best=get_texture(handle,0,max_texture_dimention,act_w,act_h);
+	r1_miplevel_t *best=get_texture(handle,frame_counter,
+		desired_width<0?max_texture_dimention:desired_width,
+		act_w,act_h);
 	//float bla1,bla2;
 	//select_texture(best->vram_handle,bla1,bla2);
 	used_node *u=(used_node*) best->vram_handle;

@@ -64,7 +64,7 @@ public:
                              sw32 &w, sw32 &h);
 
   //!Returns the texture data for the given handle in a new image.
-  i4_image_class *get_texture_image(r1_texture_handle handle);
+  i4_image_class *get_texture_image(r1_texture_handle handle, int frame_counter, int desired_width);
 
   //!Changes the given texture to the new image
   int set_texture_image(r1_texture_handle handle, i4_image_class *im);

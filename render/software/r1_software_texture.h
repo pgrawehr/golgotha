@@ -59,7 +59,8 @@ public:
   i4_bool immediate_mip_load(r1_mip_load_info *load_info);
   i4_bool async_mip_load(r1_mip_load_info *load_info);
   
-  i4_image_class *get_texture_image(r1_texture_handle handle);
+  i4_image_class *get_texture_image(r1_texture_handle handle, int frame_counter,
+	  int desired_width);
   int set_texture_image(r1_texture_handle handle, i4_image_class *im);
   void free_mip(r1_vram_handle_type vram_handle);
   

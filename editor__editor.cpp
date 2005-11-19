@@ -8406,10 +8406,10 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 			delete current_texture;
 		}
 	}
-	i4_str str=i4_str("temp_image_%d.tga");
-	i4_str *res_str=str.sprintf(100,x1*y1+x2);
-	i4_write_tga(image,*res_str,false);
-	delete res_str;
+	//i4_str str=i4_str("temp_image_%d.tga");
+	//i4_str *res_str=str.sprintf(100,x1*y1+x2);
+	//i4_write_tga(image,*res_str,false);
+	//delete res_str;
 }
 
 i4_image_class *render_map_section(int x1, int y1, int x2, int y2, int im_w, int im_h)

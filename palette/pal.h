@@ -15,8 +15,8 @@
 typedef unsigned char w24[3];
 enum i4_pixel_depth
 { 
-  I4_32BIT=32,      // 16.7 mil & alpha
-  I4_24BIT=24,      // 16.7 mil, no alpha
+  I4_32BIT=32,      // 16.7 mil & alpha, or 16.7 mil & padding, used on most modern graphic cards
+  I4_24BIT=24,      // 16.7 mil, no alpha, used by older cards to support true color but save memory
   I4_16BIT=16,      // 64K color
   I4_8BIT=8,       // 256 color
   I4_4BIT=4,       // 16 color

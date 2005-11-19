@@ -116,12 +116,10 @@ public:
 	};
 //#define RENDER_VERYMUCHSLOWER
 
-/*!
-  The base class of all texture managers.
-  Currently, we have two working implementations: DirectX (Windows) and
-  OpenGL (Linux/Unix).
+/*! The base class of all texture managers.
+  Currently, we have several working implementations: DirectX 5 (Windows), DirectX 9 (Windows),
+  OpenGL (Linux/Unix) and one for the software renderer
 */
-
 class r1_texture_manager_class
 {  
 
@@ -141,15 +139,28 @@ public:
   sw32 no_of_textures_loaded;//don't mix with the bool value textures_loaded from superclass!
 
 
-  /*!Resamples the given image to the texture data size*/
+  /*!Resamples the given image to the texture data size.
+  This method is used to convert a texture image to the format required by the rendering
+  hardware. It performs resampling, resizing or color conversion if required. The 
+  resample filter is currently nearest, so this method might certainly be improved in the future.
+  \param dest Pointer to the destination buffer (raw image data)
+  \param image Pointer to the source image (may have any bitdepth or size, but the more
+  conversions are required, the longer time is used to perform the transformation)
+  \param width The destination image width
+  \param height The destination image height
+  \param target_depth The destination bytes-per-pixel value (2,3 or 4)
+  \param chroma True if the source image is color-keyed
+  \param alpha True if the source image has an alpha channel
+  \return Success or failure. 
+  */
   static i4_bool size_image_to_texture(
-	  void *dest, //the destination buffer (raw image data)
-	  i4_image_class *image,//the source image
-	  w32 width,//the destination width
-	  w32 height, //the destination height
-	  w32 target_depth, //the target pixel size (2,3 or 4)
-	  i4_bool chroma,//the source image is color-keyed
-	  i4_bool alpha);//the source image has an alpha-channel
+	  void *dest, 
+	  i4_image_class *image,
+	  w32 width,
+	  w32 height, 
+	  w32 target_depth, 
+	  i4_bool chroma,
+	  i4_bool alpha);
 
   /*!The constructor*/
   r1_texture_manager_class(const i4_pal *pal);
@@ -157,8 +168,12 @@ public:
   /*!The destructor*/
   virtual ~r1_texture_manager_class();
 
-  virtual void init();///<init the tman
-  virtual void uninit();  ///<clear everything. Beware: All Handles become invalid
+  /*! Initializes the texture manager */
+  virtual void init();
+  /*! clear Everything. 
+  Beware: All Handles become invalid 
+  */
+  virtual void uninit();
 
   /*!Free up memory but don't free the registered_tnames field.
     Registering textures is possible again. Need to load_texture() again!
@@ -203,7 +218,8 @@ public:
   r1_texture_handle register_image(i4_image_class *image);
 
   //!Returns the texture data for the given handle in a new image.
-  virtual i4_image_class *get_texture_image(r1_texture_handle handle)=0;
+  virtual i4_image_class *get_texture_image(r1_texture_handle handle, 
+	  int frame_counter, int desired_width)=0;
 
   //!Changes the given texture to the new image
   virtual int set_texture_image(r1_texture_handle handle, i4_image_class *im)=0;

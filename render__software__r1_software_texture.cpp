@@ -223,12 +223,14 @@ int r1_software_texture_class::set_texture_image(r1_texture_handle handle, i4_im
 
 
 
-i4_image_class *r1_software_texture_class::get_texture_image(r1_texture_handle handle)
+i4_image_class *r1_software_texture_class::get_texture_image(r1_texture_handle handle,
+															 int frame_counter, int desired_width)
 	{
 	sw32 act_w=0,act_h=0;
 	w32 tid=registered_tnames[handle].id;
 	//get the best one currently loaded
-	r1_miplevel_t *best=get_texture(handle,0,max_texture_dimention,act_w,act_h);
+	r1_miplevel_t *best=get_texture(handle,frame_counter,
+		desired_width<0?max_texture_dimention:desired_width,act_w,act_h);
 	used_node *u=(used_node*)best->vram_handle;
 	for (int i=0;i<memory_images.size();i++)
 		{

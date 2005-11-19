@@ -1266,7 +1266,8 @@ i4_pal *r1_dx5_texture_class::MatchingPal(LPDDSURFACEDESC ddsd)
 	return i4_pal_man.register_pal(&alpha32_format);
 	}
 
-i4_image_class *r1_dx5_texture_class::get_texture_image(r1_texture_handle handle)
+i4_image_class *r1_dx5_texture_class::get_texture_image(r1_texture_handle handle,
+														int frame_counter, int desired_width)
 	{
 	sw32 act_w=0,act_h=0;
 	w32 tid=registered_tnames[handle].id;
@@ -1275,7 +1276,8 @@ i4_image_class *r1_dx5_texture_class::get_texture_image(r1_texture_handle handle
 		if (memory_images[i].id==tid)
 			return memory_images[i].image->copy();//directly return the stored image
 		}
-	r1_miplevel_t *best=get_texture(handle,0,max_texture_dimention,act_w,act_h);
+	r1_miplevel_t *best=get_texture(handle,frame_counter,
+		desired_width<0?max_texture_dimention:desired_width,act_w,act_h);
 	//float bla1,bla2;
 	//select_texture(best->vram_handle,bla1,bla2);
 	used_node *u=(used_node*) best->vram_handle;
