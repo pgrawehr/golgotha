@@ -242,4 +242,6 @@ against the direction. The intensity calculation also looks right, since it is o
 has little effect if the ambient light is already high. Also it makes little sense that a 
 surface becomes white under light if it was red. 
 
+There's again massive flickering in dx9, when running golg in fullscreen, especially in the main
+menu and with the mouse cursor. Thîs should be fixed asap.
 

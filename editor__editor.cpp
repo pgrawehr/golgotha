@@ -8382,33 +8382,34 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 	s_step=(im_w)/(float)(x2-x1);//t and s must be [0..256) ??
 	t_step=(im_h)/(float)(y2-y1);
 	int x,y;
-	int s_corr_each=im_w+1; //if the steps match exactly, we never need to correct. 
-	if (i4_fract(s_step)!=0.0)
-	{
-		s_corr_each=(int) (1.0f/(i4_fract(s_step)));
-	}
-	int t_corr_each=im_h+1;
-	if (i4_fract(t_step)!=0.0)
-	{
-		t_corr_each=(int) (1.0f/(i4_fract(t_step)));
-	}
 	
-	t=0;
+	float t_fract_step=i4_fract(t_step);
+	float s_fract_step=i4_fract(s_step);
+	
 	i4_image_class *current_texture=0;
 	w32 col=0;
 	i4_draw_context_class context(0,0,im_w-1, im_h-1);
 	sw32 act_w=0,act_h=0;
-	int i=0,j=0;
 	int s_corr;
 	int t_corr;
-	for (y=y1; y<y2; y++, t+=t_step, i++)
+	t=0;
+	for (y=y1; y<y2; y++, t+=t_step)
 	{
 		s=0;
-		j=0;
-		t_corr=(i % t_corr_each == 0)?1:0;
-		for (x=x1; x<x2; x++, s+=s_step, j++)
+		t_corr=0;
+		//Copy an additional pixel if the next step would skip one or it's the last element
+		//to be copied (this is due to rounding errors)
+		if (i4_fract(t)+t_fract_step>=1.0f || y==(y2-1))
 		{
-			s_corr=(j % s_corr_each == 0)?1:0;
+			t_corr=1;
+		}
+		for (x=x1; x<x2; x++, s+=s_step)
+		{
+			s_corr=0;
+			if (i4_fract(s)+s_fract_step>=1.0f || x==(x2-1))
+			{
+				s_corr=1;
+			}
 			g1_map_cell_class *c=g1_cells + g1_map_width*y+x;
 
 			g1_tile_class* tile=g1_tile_man.get(c->type);
@@ -8416,7 +8417,8 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 			//Get the lowest miplevel, this is better than average color and certainly loaded
 			//at this point. 
 			current_texture=tman->get_texture_image(texture,0,8); 
-			current_texture->copy_image_to(image,s,t,s_step+s_corr,t_step+t_corr,c->get_rotation(),c->mirrored());
+			current_texture->copy_image_to(image,(i4_coord)s,(i4_coord)t,
+				(sw32)s_step+s_corr,(sw32)t_step+t_corr,c->get_rotation(),c->mirrored());
 			delete current_texture;
 		}
 	}
