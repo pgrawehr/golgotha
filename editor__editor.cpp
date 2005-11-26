@@ -7,6 +7,7 @@
   golgotha_source@usa.net (Subject should have "GOLG" in it) 
 ***********************************************************************/
 #include "pch.h"
+#include "math/trig.h"
 #include "app/app.h"
 #include "editor/editor.h"
 #include "editor/edit_id.h"
@@ -8381,28 +8382,41 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 	s_step=(im_w)/(float)(x2-x1);//t and s must be [0..256) ??
 	t_step=(im_h)/(float)(y2-y1);
 	int x,y;
+	int s_corr_each=im_w+1; //if the steps match exactly, we never need to correct. 
+	if (i4_fract(s_step)!=0.0)
+	{
+		s_corr_each=(int) (1.0f/(i4_fract(s_step)));
+	}
+	int t_corr_each=im_h+1;
+	if (i4_fract(t_step)!=0.0)
+	{
+		t_corr_each=(int) (1.0f/(i4_fract(t_step)));
+	}
+	
 	t=0;
 	i4_image_class *current_texture=0;
-	r1_miplevel_t *mip=0;
 	w32 col=0;
 	i4_draw_context_class context(0,0,im_w-1, im_h-1);
 	sw32 act_w=0,act_h=0;
-	for (y=y1; y<y2; y++, t+=t_step)
+	int i=0,j=0;
+	int s_corr;
+	int t_corr;
+	for (y=y1; y<y2; y++, t+=t_step, i++)
 	{
 		s=0;
-		for (x=x1; x<x2; x++, s+=s_step)
+		j=0;
+		t_corr=(i % t_corr_each == 0)?1:0;
+		for (x=x1; x<x2; x++, s+=s_step, j++)
 		{
+			s_corr=(j % s_corr_each == 0)?1:0;
 			g1_map_cell_class *c=g1_cells + g1_map_width*y+x;
-			g1_map_vertex_class *v1=g1_verts + (g1_map_width+1)*y+x, *v2,*v3,*v4;
-			v2=v1+1;
-			v3=v2+g1_map_width+1;  // order is: v1 -- v2
-			v4=v3-1;               //           |      |
-								   //           v4 -- v3 (counterclockwise for drawing)
+
 			g1_tile_class* tile=g1_tile_man.get(c->type);
 			int texture=tile->texture;
-			mip=tman->get_texture(texture,0,8,act_w,act_h);
-			col=mip->entry->average_color;
-			image->bar(s,t,s+s_step,t+t_step,col,context);
+			//Get the lowest miplevel, this is better than average color and certainly loaded
+			//at this point. 
+			current_texture=tman->get_texture_image(texture,0,8); 
+			current_texture->copy_image_to(image,s,t,s_step+s_corr,t_step+t_corr,c->get_rotation(),c->mirrored());
 			delete current_texture;
 		}
 	}

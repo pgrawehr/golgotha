@@ -15,7 +15,7 @@ class i4_rect_list_class;
 class i4_draw_context_class;
 
 #include "arch.h"
-
+#include "rotation.h"
 
 class i4_image_class
 {  
@@ -62,8 +62,16 @@ public:
                  i4_coord y2, i4_draw_context_class &context);
 
   
-  //{ put_part :
-  //  put_part transfers a rectanguar image of yourself to location x,y on image 'to'
+  //! Copies a part of this image to the destination image. 
+  //! put_part transfers a rectanguar image of yourself to location x,y on image 'to'
+  //! \param to Target image
+  //! \param x Where to put the image relative to the target upper left corner, x coordinate
+  //! \param y y coordinate
+  //! \param x1 Upper left corner of source rectangle
+  //! \param y1 Upper left corner of source rectangle
+  //! \param x2 Lower right corner of source rectangle
+  //! \param y2 Lower right corner of source rectangle
+  //! \param context The context to use
   virtual void put_part(i4_image_class *to, 
 			i4_coord x,  i4_coord y,                              
 			i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2, 
@@ -77,10 +85,17 @@ public:
   // copy is not expanded by the image template, it needs to be implemented per image
   virtual i4_image_class *copy();
 
-  // Non-virtual functions, these are implemented as a convience 
-  // not as a primative to be derived from
+  //! Copies this image to a specific location in another image.
+  //! Non-virtual functions, these are implemented as a convience 
+  //! not as a primative to be derived from
+  //! \param to Target image
+  //! \param x Where to put the image relative to the target upper left corner, x coordinate
+  //! \param y y coordinate
+  //! \param context The context to use
   void put_image(i4_image_class *to, i4_coord x, i4_coord y, i4_draw_context_class &context)
   { put_part(to,x,y,0,0,width()-1,height()-1,context); }
+
+  void put_image(i4_image_class *to, i4_coord x, i4_coord y);
 
   void put_image_trans(i4_image_class *to, 
                        i4_coord x, i4_coord y, i4_color trans_color, 
@@ -92,17 +107,25 @@ public:
 
   virtual void rectangle(i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2, i4_color color, 
                          i4_draw_context_class &context);
-  //no idea what this one does
   void widget(i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2, i4_color bright, i4_color med, i4_color dark, i4_draw_context_class &context);
 
 
-  //scales the current image to size (newx,newy)
-  //if to==0, a new image is created. if to is supplied, its size must match newx,newy
-  //if to==0 and pal==0, the destination pal is same as source
-  //if to==0 and pal!=0, the new pal is pal
-  //if to!=0 pal is ignored
+  //! Scales the current image to size (newx,newy).
+  //! If to==0, a new image is created. if to is supplied, its size must match newx,newy. 
+  //! If to==0 and pal==0, the destination pal is same as source.
+  //! If to==0 and pal!=0, the new pal is pal.
+  //! If to!=0 pal is ignored
   i4_image_class *scale_image(i4_image_class *to,i4_coord newx, i4_coord newy,
-  const i4_pal *pal);
+	const i4_pal *pal);
+
+  //! Rotates and mirrors the given image. 
+  //! This rotates the given image by 90, 180 or 270 degress and/or mirrors it about the
+  //! diagonal axis. 
+  i4_image_class *rotate_image(g1_rotation_type rotation, i4_bool mirror);
+
+  //! Copies this image to a specific location in image to, with a new size and possibly a new orientation.
+  void copy_image_to(i4_image_class *to, i4_coord new_xpos, i4_coord new_ypos,
+	  sw32 xsize, sw32 ysize, g1_rotation_type rotation, i4_bool mirror);
 
   i4_image_class() { dont_free_data=i4_F; }
   virtual ~i4_image_class() { ; }

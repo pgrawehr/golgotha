@@ -553,6 +553,118 @@ i4_image_class *i4_image_class::scale_image(i4_image_class *to,i4_coord newx,i4_
 	return r;
 	}
 
+	void i4_image_class::put_image(i4_image_class *to, i4_coord x, i4_coord y)
+	{
+		i4_draw_context_class ctx(0,0,to->width(),to->height());
+		put_image(to,x,y,ctx);
+	}
+
+	i4_image_class* i4_image_class::rotate_image(g1_rotation_type rotation, i4_bool mirror)
+	{
+		int neww=width();
+		int newh=height();
+		if (rotation==G1_ROTATE_90 || rotation == G1_ROTATE_270)
+		{
+			neww=height();
+			newh=width();
+		}
+		if (mirror)
+		{
+			int temp=newh;
+			newh=neww;
+			neww=temp;
+		}
+		i4_image_class *ret=i4_create_image(neww,newh,this->get_pal());
+		int y,x;
+		for (y=0;y<height();y++)
+		{
+			for (x=0;x<width();x++)
+			{
+				int newxpos=0;
+				int newypos=0;
+				if (mirror)
+				{
+					switch(rotation)
+					{
+					case G1_ROTATE_0:
+						{
+							newypos=newh-x-1; //always fast-incrementing line first
+							newxpos=neww-y-1;
+						}
+					case G1_ROTATE_90:
+						{
+							newxpos=neww-x-1;
+							newypos=y;
+						}
+					case G1_ROTATE_180:
+						{
+							newypos=x;
+							newxpos=y;
+						}
+					case G1_ROTATE_270:
+						{
+							newxpos=x;
+							newypos=newh-y-1;
+						}
+					}
+				}
+				else
+				{
+					switch(rotation)
+					{
+					case G1_ROTATE_0: //The very easy case. 
+						{
+							newxpos=x;
+							newypos=y;
+						}
+					case G1_ROTATE_90:
+						{
+							newypos=x;
+							newxpos=neww-y-1;
+						}
+					case G1_ROTATE_180:
+						{
+							newxpos=neww-x-1;
+							newypos=newh-y-1;
+						}
+					case G1_ROTATE_270:
+						{
+							newypos=newh-x-1;
+							newxpos=y;
+						}
+					}
+				}
+				w32 color=get_pixel(x,y);
+				I4_ASSERT(newxpos<ret->width() && newypos< ret->height() &&
+					(newxpos>=0) && (newypos>=0) ,"SEVERE: Image rotation index transposition confusion");
+				ret->put_pixel(newxpos,newypos,color);
+			}
+		}
+		return ret;
+		
+	}
+
+	void i4_image_class::copy_image_to(i4_image_class *to, 
+		i4_coord new_xpos, i4_coord new_ypos, 
+		sw32 xsize, sw32 ysize, 
+		g1_rotation_type rotation, i4_bool mirror)
+	{
+		i4_image_class *temp_im1=NULL, *temp_im2=NULL;
+		bool inverse_size=false;
+		//If rotating by 90 or 270 degrees, the x and y size are exchanged. 
+		if (rotation==G1_ROTATE_90 || rotation==G1_ROTATE_270) 
+			inverse_size=true;
+		//Rotate image and mirror image
+		temp_im1=rotate_image(rotation,mirror);
+		//Scale image to target size and convert color depth. 
+		//Copy image to location in target image.
+		
+		temp_im2=temp_im1->scale_image(NULL,xsize,ysize,to->get_pal());
+		delete temp_im1;
+		temp_im2->put_image(to,new_xpos,new_ypos);
+		delete temp_im2;
+	}
+
 // IMAGE8
 /********************************************************************** <BR>
   This file is part of Crack dot Com's free source code release of

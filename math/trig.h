@@ -41,5 +41,10 @@ inline i4_float i4_flog(float f)
 	return (float)log(f);
 	};
 
+inline i4_float i4_fract(float f)
+{
+	return f-i4_ffloor(f);
+}
+
 
 #endif
