@@ -1781,18 +1781,14 @@ void g1_render_class::draw_rectangle(int sx1, int sy1, int sx2, int sy2, i4_colo
 }
 
 
-#define V0 0,1
-#define V1 1,1
-#define V2 1,0
-#define V3 0,0
-
 void g1_setup_tri_texture_coords(r1_vert *tri1, r1_vert *tri2,
                                  int cell_rotation, int cell_is_mirrored)
 {
-  float u[4]={0,1,1,0};
-  float v[4]={1,1,0,0};
+	float u[4]={1,0,0,1};
+	float v[4]={1,1,0,0};
   
-  int dir=cell_is_mirrored ? 1 : 3, on=cell_rotation;
+	int on_remap[4]={1,0,3,2};
+  int dir=cell_is_mirrored ? 1 : 3, on=on_remap[cell_rotation];
 
   tri1[0].s=u[on];
   tri1[0].t=v[on];  
@@ -1806,7 +1802,7 @@ void g1_setup_tri_texture_coords(r1_vert *tri1, r1_vert *tri2,
   tri1[2].t=v[on];
 
 
-  on=cell_rotation;
+  on=on_remap[cell_rotation];
 
   tri2[0].s=u[on];
   tri2[0].t=v[on];

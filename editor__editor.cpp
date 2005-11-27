@@ -5090,6 +5090,8 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
         rot=remap[rot];
         c->set_rotation((g1_rotation_type)rot);
       }
+	  i4_warning("rotation = %d, mirrored = %d", c->get_rotation(), c->mirrored());
+
       show_focus();
     } break;
 
@@ -5117,6 +5119,7 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
     {
       hide_focus();
       g1_e_tile.set_mirrored((i4_bool)!g1_e_tile.get_mirrored());
+	  i4_warning("New rotation = %d, mirrored = %d", g1_e_tile.get_cell_rotation(), g1_e_tile.get_mirrored());
 
       show_focus();
     } break;
@@ -5163,6 +5166,7 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
       else      
         g1_e_tile.set_cell_rotation((g1_rotation_type)(g1_e_tile.get_cell_rotation()+1));
       show_focus();
+	  i4_warning("New rotation = %d, mirrored = %d", g1_e_tile.get_cell_rotation(), g1_e_tile.get_mirrored());
 
 
     } break;
@@ -5220,6 +5224,8 @@ void g1_tile_params::cleanup()
     get_style()->close_mp_window(mp_window.get());
     picker=0;
   }
+  current_cell_rotation=G1_ROTATE_0;   
+  mirrored=i4_F;
 }
 
 void g1_tile_params::open_picker()
@@ -7951,6 +7957,7 @@ void g1_tile_picker_class::rotate()
     g1_e_tile.set_cell_rotation(G1_ROTATE_0);
   else      
     g1_e_tile.set_cell_rotation((g1_rotation_type)(g1_e_tile.get_cell_rotation()+1));
+  i4_warning("New rotation = %d, mirrored = %d", g1_e_tile.get_cell_rotation(), g1_e_tile.get_mirrored());
 
 
 }
@@ -7958,6 +7965,8 @@ void g1_tile_picker_class::rotate()
 void g1_tile_picker_class::mirror()
 {
   g1_e_tile.set_mirrored((i4_bool)(!g1_e_tile.get_mirrored()));
+  i4_warning("New rotation = %d, mirrored = %d", g1_e_tile.get_cell_rotation(), g1_e_tile.get_mirrored());
+
 }
 
 i4_bool g1_tile_picker_class::remove(i4_menu_item_class *window)
@@ -8002,13 +8011,6 @@ i4_bool g1_tile_picker_class::edit(i4_menu_item_class *window)
 	int t=g1_tile_man.get_remap(tilewin->tile_num);
 	g1_tile_class *tile=g1_tile_man.get(t);
 	
-	//i4_create_dialog(g1_ges("tile_edit_dialog"), this, style,
-	//	&edit_fract, /*tile->friction_fraction*/ 0,
-	//	&edit_tile_damage, tile->damage,
-	//	&edit_wave, (tile->flags&g1_tile_class::WAVE)?i4_T:i4_F,
-	//	&edit_blocking, (tile->flags&g1_tile_class::BLOCKING)?i4_T:i4_F,
-	//	this, KEY_OK,
-	//	this, KEY_CANCEL);
 	li_class *dlg=(li_class*)li_new("tile_edit_dialog");
 	li_class_context ctx(dlg);
 	dlg->set("friction_fraction",new li_float(tile->friction_fraction));
