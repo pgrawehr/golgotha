@@ -8395,7 +8395,13 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 	int s_corr;
 	int t_corr;
 	t=0;
-	for (y=y1; y<y2; y++, t+=t_step)
+ 	g1_rotation_type rotation_remap[4]={G1_ROTATE_270,G1_ROTATE_0,G1_ROTATE_90,G1_ROTATE_180};
+	g1_rotation_type rotation_remap_mirror[4]={G1_ROTATE_90,G1_ROTATE_180,G1_ROTATE_270,G1_ROTATE_0};
+	g1_rotation_type rot;
+	g1_map_cell_class *c;
+	g1_tile_class* tile;
+	int texture;
+	for (y=y1; y<y2; y++, t+=t_step)  
 	{
 		s=0;
 		t_corr=0;
@@ -8412,15 +8418,23 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 			{
 				s_corr=1;
 			}
-			g1_map_cell_class *c=g1_cells + g1_map_width*y+x;
+			c=g1_cells + g1_map_width*y+x;
 
-			g1_tile_class* tile=g1_tile_man.get(c->type);
-			int texture=tile->texture;
+			tile=g1_tile_man.get(c->type);
+			texture=tile->texture;
 			//Get the lowest miplevel, this is better than average color and certainly loaded
 			//at this point. 
+			if (c->mirrored())
+			{
+				rot=rotation_remap_mirror[c->get_rotation()];
+			}
+			else
+			{
+				rot=rotation_remap[c->get_rotation()];
+			}
 			current_texture=tman->get_texture_image(texture,0,8); 
 			current_texture->copy_image_to(image,(i4_coord)s,(i4_coord)t,
-				(sw32)s_step+s_corr,(sw32)t_step+t_corr,c->get_rotation(),c->mirrored());
+				(sw32)s_step+s_corr,(sw32)t_step+t_corr,rot,c->mirrored());
 			delete current_texture;
 		}
 	}

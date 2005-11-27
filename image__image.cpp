@@ -582,7 +582,7 @@ i4_image_class *i4_image_class::scale_image(i4_image_class *to,i4_coord newx,i4_
 			{
 				int newxpos=0;
 				int newypos=0;
-				if (mirror)
+				if (!mirror)
 				{
 					switch(rotation)
 					{
@@ -590,22 +590,22 @@ i4_image_class *i4_image_class::scale_image(i4_image_class *to,i4_coord newx,i4_
 						{
 							newypos=newh-x-1; //always fast-incrementing line first
 							newxpos=neww-y-1;
-						}
+						}break;
 					case G1_ROTATE_90:
 						{
 							newxpos=neww-x-1;
 							newypos=y;
-						}
+						}break;
 					case G1_ROTATE_180:
 						{
 							newypos=x;
 							newxpos=y;
-						}
+						}break;
 					case G1_ROTATE_270:
 						{
 							newxpos=x;
 							newypos=newh-y-1;
-						}
+						}break;
 					}
 				}
 				else
@@ -616,22 +616,22 @@ i4_image_class *i4_image_class::scale_image(i4_image_class *to,i4_coord newx,i4_
 						{
 							newxpos=x;
 							newypos=y;
-						}
+						}break;
 					case G1_ROTATE_90:
 						{
 							newypos=x;
 							newxpos=neww-y-1;
-						}
+						}break;
 					case G1_ROTATE_180:
 						{
 							newxpos=neww-x-1;
 							newypos=newh-y-1;
-						}
+						}break;
 					case G1_ROTATE_270:
 						{
 							newypos=newh-x-1;
 							newxpos=y;
-						}
+						}break;
 					}
 				}
 				w32 color=get_pixel(x,y);
@@ -650,10 +650,6 @@ i4_image_class *i4_image_class::scale_image(i4_image_class *to,i4_coord newx,i4_
 		g1_rotation_type rotation, i4_bool mirror)
 	{
 		i4_image_class *temp_im1=NULL, *temp_im2=NULL;
-		bool inverse_size=false;
-		//If rotating by 90 or 270 degrees, the x and y size are exchanged. 
-		if (rotation==G1_ROTATE_90 || rotation==G1_ROTATE_270) 
-			inverse_size=true;
 		//Rotate image and mirror image
 		temp_im1=rotate_image(rotation,mirror);
 		//Scale image to target size and convert color depth. 

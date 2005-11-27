@@ -1788,32 +1788,32 @@ void g1_setup_tri_texture_coords(r1_vert *tri1, r1_vert *tri2,
 	float v[4]={1,1,0,0};
   
 	int on_remap[4]={1,0,3,2};
-  int dir=cell_is_mirrored ? 1 : 3, on=on_remap[cell_rotation];
+	int dir=cell_is_mirrored ? 1 : 3, on=on_remap[cell_rotation];
 
-  tri1[0].s=u[on];
-  tri1[0].t=v[on];  
-  on=(on+dir)&3;
+	tri1[0].s=u[on];
+	tri1[0].t=v[on];  
+	on=(on+dir)&3;
 
-  tri1[1].s=u[on];
-  tri1[1].t=v[on];  
-  on=(on+dir)&3;
+	tri1[1].s=u[on];
+	tri1[1].t=v[on];  
+	on=(on+dir)&3;
 
-  tri1[2].s=u[on];
-  tri1[2].t=v[on];
+	tri1[2].s=u[on];
+	tri1[2].t=v[on];
 
 
-  on=on_remap[cell_rotation];
+	on=on_remap[cell_rotation];
 
-  tri2[0].s=u[on];
-  tri2[0].t=v[on];
-  on=(on+dir+dir)&3;
+	tri2[0].s=u[on];
+	tri2[0].t=v[on];
+	on=(on+dir+dir)&3;
 
-  tri2[1].s=u[on];
-  tri2[1].t=v[on];
-  on=(on+dir)&3;
+	tri2[1].s=u[on];
+	tri2[1].t=v[on];
+	on=(on+dir)&3;
 
-  tri2[2].s=u[on];
-  tri2[2].t=v[on];
+	tri2[2].s=u[on];
+	tri2[2].t=v[on];
 }
 
 
