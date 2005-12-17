@@ -237,8 +237,8 @@ i4_image_class *r1_software_texture_class::get_texture_image(r1_texture_handle h
 		if (memory_images[i].id==tid)
 			return memory_images[i].image->copy();//directly return the stored image
 		}
-	float bla_1,bla_2;
-	select_texture(best->vram_handle,bla_1,bla_2);
+	//float bla_1,bla_2;
+	//select_texture(best->vram_handle,bla_1,bla_2);
 	i4_image_class *ima=0;
 	free_node *f=(free_node*)u->node;
 	if (f->mip->entry->is_transparent())
@@ -256,7 +256,7 @@ i4_image_class *r1_software_texture_class::get_texture_image(r1_texture_handle h
 	if (!ima)
 		return 0;
 	
-	memcpy(ima->data,f->data,act_w*act_h*2);
+	memcpy(ima->data,(void*)f->start,act_w*act_h*2);
 	return ima;
 	}
 
