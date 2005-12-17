@@ -168,19 +168,35 @@ i4_bool r1_opengl_texture_manager_class::immediate_mip_load(r1_mip_load_info *lo
 		//for opengl, we currently use only this case, since we support only 16 bit color depth
 		//This is for loading data from the tex_cache only, where the data format 
 		//is always known.
-		load_info->src_file->read(new_used->data,mip->width * mip->height * 2);
+		//Unfortunatelly, the above statement is just plain wrong... This
+		//code is also used to load up the lowest miplevel (distant terrain)
+		//texture. Therefore, we convert here
+		
+		if (load_info->flags & R1_MIPFLAGS_SRC32)
+		{
+			w32 co=0,r=0,g=0,b=0;
+			w16 *tex=(w16*)(new_used->data);
+			const i4_pal *p=i4_pal_man.default_no_alpha_32();
+			for (int i=0;i<mip->width*mip->height;i++)
+				{
+				//The order here is a bit strange (argb backwards).
+				//I don't know why it should be like this (testing shows it's right on my system,
+				//but it might as well be hardware dependent)
+				b=load_info->src_file->read_8();
+				g=load_info->src_file->read_8();
+				r=load_info->src_file->read_8();
+				load_info->src_file->read_8();
+				co=p->convert(r<<16|g<<8|b,&regular_format);
+				tex[i]=(w16)co;
+				}
+		}
+		else
+		{
+			load_info->src_file->read(new_used->data,mip->width * mip->height * 2);
+		}
 		}
 	else 
 		{
-		/*
-		i4_str *fn = r1_texture_id_to_filename(mip->entry->id,r1_get_decompressed_dir());    
-		
-        	i4_file_class *fp = i4_open(*fn,I4_READ | I4_NO_BUFFER);
-		delete fn;
-		fp->seek(mip->entry->file_offsets[mip->level]+8);
-		fp->read(new_used->data,mip->width*mip->height*2);
-		delete fp;
-		*/
 		load_texture_from_file(load_info->texture_name,
 			mip->entry->id,new_used->data,
 			mip->width, mip->height, 
@@ -268,12 +284,13 @@ void r1_opengl_texture_manager_class::async_load_finished(used_node *u)
   array_lock.unlock();
 	}
 
-i4_image_class *r1_opengl_texture_manager_class::get_texture_image(r1_texture_handle handle)
+i4_image_class *r1_opengl_texture_manager_class::get_texture_image(
+		r1_texture_handle handle, int frame_counter, int desired_width)
 	{
 	sw32 act_w=0,act_h=0;
 	w32 tid=registered_tnames[handle].id;
 	//get the best one currently loaded
-	r1_miplevel_t *best=get_texture(handle,0,max_texture_dimention,act_w,act_h);
+	r1_miplevel_t *best=get_texture(handle,frame_counter,desired_width,act_w,act_h);
 	used_node *u=(used_node*)best->vram_handle;
 	for (int i=0;i<memory_images.size();i++)
 		{
