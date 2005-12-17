@@ -545,9 +545,10 @@ i4_image_class *i4_image_class::scale_image(i4_image_class *to,i4_coord newx,i4_
 			{    
 			w32 c = get_pixel((i4_coord) i4_f_to_i((float) i * (float) width_ratio),
 				(i4_coord) i4_f_to_i((float) j * (float) height_ratio));
-			
-			w32 c2=get_pal()->convert(c,&newpal->source);
-			r->put_pixel(i,j,c2);
+			//get_pixel() always returns a 32-Bit color value, so conversion is not 
+			//needed here. 
+			//w32 c2=get_pal()->convert(c,&newpal->source);
+			r->put_pixel(i,j,c);
 			}
 		
 	return r;

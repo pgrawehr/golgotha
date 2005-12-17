@@ -8433,15 +8433,21 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 				rot=rotation_remap[c->get_rotation()];
 			}
 			current_texture=tman->get_texture_image(texture,0,8); 
+			//The following code can be used to "graphically" debug the creation of the
+			//landscape lod-texture (creates a whole bunch of files in the golgotha directory!)
+			/*i4_str text_name_etc("tex_image_%d_%d_%d_%d.tga");
+			i4_str *file_name=text_name_etc.sprintf(200,x1,y1,(w32)s,(w32)t);
+			i4_write_tga(current_texture,*file_name,false);
+			delete file_name;*/
 			current_texture->copy_image_to(image,(i4_coord)s,(i4_coord)t,
 				(sw32)s_step+s_corr,(sw32)t_step+t_corr,rot,c->mirrored());
 			delete current_texture;
 		}
 	}
-	//i4_str str=i4_str("temp_image_%d.tga");
-	//i4_str *res_str=str.sprintf(100,x1*y1+x2);
-	//i4_write_tga(image,*res_str,false);
-	//delete res_str;
+	/*i4_str str=i4_str("temp_image_%d_%d.tga");
+	i4_str *res_str=str.sprintf(100,x1,y1);
+	i4_write_tga(image,*res_str,false);
+	delete res_str;*/
 }
 
 i4_image_class *render_map_section(int x1, int y1, int x2, int y2, int im_w, int im_h)
