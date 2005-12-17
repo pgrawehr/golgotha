@@ -156,7 +156,28 @@ i4_bool r1_software_texture_class::immediate_mip_load(r1_mip_load_info *load_inf
   
   if (load_info->src_file)
   {
-    load_info->src_file->read((w16 *)f->start,mip->width*mip->height*2);
+	  if ((load_info->flags&R1_MIPFLAGS_SRC32))
+	  {
+		  w32 co,r,g,b;
+		  w16 *tex=(w16*)f->start;
+		  const i4_pal *p=i4_pal_man.default_no_alpha_32();
+		  for (int i=0;i<mip->width*mip->height;i++)
+		  {
+			  //The order here is a bit strange (argb backwards).
+			  //I don't know why it should be like this (testing shows it's right on my system,
+			  //but it might as well be hardware dependent)
+			  b=load_info->src_file->read_8();
+			  g=load_info->src_file->read_8();
+			  r=load_info->src_file->read_8();
+			  load_info->src_file->read_8();//dummy read to skip alpha
+			  co=p->convert(r<<16|g<<8|b,&regular_format);
+			  tex[i]=(w16)co;
+		  }
+	  }
+	  else
+	  {
+		load_info->src_file->read((w16 *)f->start,mip->width*mip->height*2);
+	  }
   }
   else
   {
