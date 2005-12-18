@@ -91,6 +91,10 @@ public:
   CD3DEnumeration			    *d3denum;
 
   dx9_common_class();
+  ~dx9_common_class()
+  {
+	  cleanup();
+  }
 
   IDirect3DSurface9 *create_surface(dx9_surface_type type,
                                       int width=0, int height=0, 
