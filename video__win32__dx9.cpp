@@ -711,7 +711,7 @@ void i4_dx9_display_class::flush()
 	
 	//start of copy stuff
 	pf_dx9_copy.start();
-	//be shure the display exists first
+	//be sure the display exists first
 	//This is actually the only location where the different surfaces
 	//get correctly reallocated. If you encounter an DDERR_SURFACELOST
 	//somewhere else, just abort the operation with an error and 
@@ -730,7 +730,7 @@ void i4_dx9_display_class::flush()
 			return;
 		}
         screen_is_gdi=i4_T;
-		context->add_both_dirty(0,0,width(),height());//Be shure everything gets redrawn.
+		context->add_both_dirty(0,0,width(),height());//Be sure everything gets redrawn.
 
 		//due to a bug i'm gona fix soon, these are not commutative 
 	    //Update: This should have been fixed
@@ -745,8 +745,7 @@ void i4_dx9_display_class::flush()
 		i4_warning("Done restoring surfaces");
 		
 		}
-	
-	
+
 	context->both_dirty->intersect_area(0,0,width()-1,height()-1);//Minimum requirements
 	//better use the directdraw-clipper to solve this problem
 	/*if (dx9_common.lpddclipper)

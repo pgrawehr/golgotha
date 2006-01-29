@@ -30,7 +30,7 @@ class dx9_mouse_class
       save_buffer=0;
     }
   } 
-  current, last;
+  current;
 
   i4_cursor_class cursor;
   i4_bool page_flipped;

@@ -19,7 +19,7 @@ dx9_mouse_class::dx9_mouse_class(i4_bool page_flipped)
   cursor.pict=0;
   cursor.hot_x=0;
   cursor.hot_y=0;
-  last.save_buffer=0;
+  //last.save_buffer=0;
   current.save_buffer=0;
   last_was_gdi=i4_T;
 
@@ -77,7 +77,7 @@ void dx9_mouse_class::set_cursor(i4_cursor_class *c)
   i4_bool g=primary_is_gdi();
   last_was_gdi=!g;
   current.isgdi=g;
-  last.isgdi=!g;
+  //last.isgdi=!g;
 }
 
 dx9_mouse_class::~dx9_mouse_class()
@@ -240,13 +240,13 @@ void dx9_mouse_class::save_and_draw(int x, int y)
 		  last.save_buffer->surface->Restore();
 	  }
   */
-  if (page_flipped)
+ /* if (page_flipped)
   {
     save_struct tmp=current;
     current=last;
     last=tmp;
     tmp.save_buffer=0;  
-  }
+  }*/
 
 }
 

@@ -42,6 +42,7 @@ public:
     if (active)
       act_im->put_image(local_image, 0,0, context);
     i4_window_class::draw(context);
+	parent->request_redraw(i4_T);
   }
 
   virtual void receive_event(i4_event *ev)
@@ -122,30 +123,27 @@ g1_main_menu_class::g1_main_menu_class(w16 w, w16 h,
 
 void g1_main_menu_class::parent_draw(i4_draw_context_class &context)
 {
-  i4_rect_list_class child_clip(&context.clip,0,0);
-  child_clip.intersect_list(&undrawn_area);
-  child_clip.swap(&context.clip);
+  //i4_rect_list_class child_clip(&context.clip,0,0);
+  //child_clip.intersect_list(&undrawn_area);
+  //child_clip.swap(&context.clip);
 
-  if (deco)
-  {
-    i4_coord xp,yp;
+  I4_ASSERT(deco!=NULL,"FATAL: Menu background image missing");
+  
+	i4_coord xp,yp;
 
-    xp=width()/2-deco->width()/2;
-    yp=height()/2-deco->height()/2;
-    if (!undrawn_area.empty())
-      local_image->clear(0,context);
+	xp=width()/2-deco->width()/2;
+	yp=height()/2-deco->height()/2;
+	/*if (!undrawn_area.empty())
+		local_image->clear(0,context);*/
 
+	
+	deco->put_image(local_image,xp,yp,context);
+	//context.clip.remove_area(xp,yp,xp+deco->width(),yp+deco->height());
+	//local_image->clear(0,context);
+  
+  request_redraw(i4_F);
 
-    deco->put_image(local_image,xp,yp,context);
-  } 
-  else 
-  {
-    if (!undrawn_area.empty())
-      local_image->clear(0,context);
-    request_redraw();
-  }
-
-  child_clip.swap(&context.clip);
+  //child_clip.swap(&context.clip);
   i4_parent_window_class::parent_draw(context);
 
 }
