@@ -161,7 +161,8 @@ i4_do_command_event_class::i4_do_command_event_class(char *_command, int command
 {
   int len=strlen(_command);
   if (len>=sizeof(command))
-    i4_error("command too long");
+	  //Bail out with fatal error here, might be vulnerable to buffer-overruns otherwise. 
+	  i4_error("FATAL: Command too long");
   strcpy(command, _command);
 }
 
@@ -170,7 +171,7 @@ i4_do_command_event_class::i4_do_command_event_class(char *_command, int command
 {
   int len=strlen(_command);
   if (len>=sizeof(command))
-    i4_error("command too long");
+    i4_error("FATAL: Command too long");
   strcpy(command, _command);
 }
 
@@ -186,7 +187,7 @@ i4_end_command_event_class::i4_end_command_event_class(char *_command, int comma
 {
   int len=strlen(_command);
   if (len>=sizeof(command))
-    i4_error("command too long");
+    i4_error("FATAL: Command too long");
   strcpy(command, _command);
 }
 
@@ -195,7 +196,7 @@ i4_end_command_event_class::i4_end_command_event_class(char *_command, int comma
 {
   int len=strlen(_command);
   if (len>=sizeof(command))
-    i4_error("command too long");
+    i4_error("FATAL: Command too long");
   strcpy(command, _command);
 }
 // KERNEL.CPP
@@ -272,9 +273,12 @@ void i4_kernel_device_class::show_pending()
   list_lock.lock();
 
   i4_isl_list<defered_event>::iterator i=list.begin();
-
+  char buf[i4_event::MAX_NAME_BUFFER_SIZE];
   for (;i!=list.end();++i)
-    i4_warning("'%s' for '%s'",i->ev_copy->name(), i->send_to.get()->name());    
+  {
+	  i->ev_copy->name(buf);
+    i4_warning("'%s' for '%s'",buf, i->send_to.get()->name());    
+  }
   
   list_lock.unlock();
 }
@@ -316,34 +320,42 @@ void i4_kernel_device_class::deque_events(i4_event_handler_class *for_who)
 void i4_kernel_device_class::send_event(i4_event_handler_class *send_to, i4_event *ev)
 {
 
-
-  if (ev->when()!=i4_event::NOW)
-  {   
 #ifndef I4_RETAIL
-    if (i4_show_events==I4_SHOW_ALL || 
-        (i4_show_events==I4_SHOW_NON_TRIVIAL && 
-         !(ev->type()==i4_event::MOUSE_MOVE || ev->type()==i4_event::WINDOW_MESSAGE)))
-      i4_warning("queing : '%s' to '%s'",ev->name(), send_to->name());
+	char debug_buf[i4_event::MAX_NAME_BUFFER_SIZE];
 #endif
-    defered_event *dv=new defered_event(send_to,ev);
-
-    list_lock.lock(); 
-    list.insert_end(*dv);   
-    list_lock.unlock();
-  } else 
-  {
+	if (ev->when()!=i4_event::NOW)
+	{   
 #ifndef I4_RETAIL
-    if (i4_show_events==I4_SHOW_ALL || 
-        (i4_show_events==I4_SHOW_NON_TRIVIAL && 
-         !(ev->type()==i4_event::MOUSE_MOVE || ev->type()==i4_event::WINDOW_MESSAGE)))
-      i4_warning("sending : '%s' to '%s'",ev->name(), send_to->name());
+		if (i4_show_events==I4_SHOW_ALL || 
+			(i4_show_events==I4_SHOW_NON_TRIVIAL && 
+			!(ev->type()==i4_event::MOUSE_MOVE || ev->type()==i4_event::WINDOW_MESSAGE)))
+		{
+			ev->name(debug_buf);
+			i4_warning("queing : '%s' to '%s'",debug_buf, send_to->name());
+		}
+#endif
+		defered_event *dv=new defered_event(send_to,ev);
+
+		list_lock.lock(); 
+		list.insert_end(*dv);   
+		list_lock.unlock();
+	} else 
+	{
+#ifndef I4_RETAIL
+		if (i4_show_events==I4_SHOW_ALL || 
+			(i4_show_events==I4_SHOW_NON_TRIVIAL && 
+			!(ev->type()==i4_event::MOUSE_MOVE || ev->type()==i4_event::WINDOW_MESSAGE)))
+		{
+			ev->name(debug_buf);
+			i4_warning("sending : '%s' to '%s'",debug_buf, send_to->name());
+		}
 #endif
 
-    send_to->call_stack_counter++;
-    events_sent++;
-    send_to->receive_event(ev);
-    send_to->call_stack_counter--;
-  }  
+		send_to->call_stack_counter++;
+		events_sent++;
+		send_to->receive_event(ev);
+		send_to->call_stack_counter--;
+	}  
 }
 
 i4_bool i4_kernel_device_class::process_events()       // returns true if an event was dispatched  
@@ -414,48 +426,49 @@ void i4_kernel_device_class::flush_handlers()
     list_lock.unlock();
     }
 
-i4_bool i4_kernel_device_class::flush_events()
-{
+	i4_bool i4_kernel_device_class::flush_events()
+	{
+		i4_bool ret=i4_F;
 
+		// send any events that were queued
+		while (list.begin()!=list.end())
+		{
+			list_lock.lock();
+			i4_isl_list<defered_event>::iterator old=list.begin();
+			list.erase();
+			list_lock.unlock();
 
-  i4_bool ret=i4_F;
-
-  // send any events that were queued
-  while (list.begin()!=list.end())
-  {
-    list_lock.lock();
-    i4_isl_list<defered_event>::iterator old=list.begin();
-    list.erase();
-    list_lock.unlock();
-
-    // make sure event handler is still around..
-    i4_event_handler_class *eh=old->send_to.get();   
-    if (eh)
-    {
+			// make sure event handler is still around..
+			i4_event_handler_class *eh=old->send_to.get();   
+			if (eh)
+			{
 #ifdef _DEBUG
-      i4_event *ev=old->ev_copy;
-      if (i4_show_events==I4_SHOW_ALL || 
-          (i4_show_events==I4_SHOW_NON_TRIVIAL && 
-           !(ev->type()==i4_event::MOUSE_MOVE || ev->type()==i4_event::WINDOW_MESSAGE)))
-        i4_warning("sending : '%s' to '%s'",old->ev_copy->name(), eh->name());
+				i4_event *ev=old->ev_copy;
+				char buf[i4_event::MAX_NAME_BUFFER_SIZE];
+				if (i4_show_events==I4_SHOW_ALL || 
+					(i4_show_events==I4_SHOW_NON_TRIVIAL && 
+					!(ev->type()==i4_event::MOUSE_MOVE || ev->type()==i4_event::WINDOW_MESSAGE)))
+				{
+					old->ev_copy->name(buf);
+					i4_warning("sending : '%s' to '%s'",buf, eh->name());
+				}
 #endif
+				eh->call_stack_counter++;
+				events_sent++;
+				eh->receive_event(old->ev_copy);
+				eh->call_stack_counter--;
+			}
 
-      eh->call_stack_counter++;
-      events_sent++;
-      eh->receive_event(old->ev_copy);
-      eh->call_stack_counter--;
-    }
+			delete &*old;
 
-    delete &*old;
-
-    ret=i4_T;
-  }
+			ret=i4_T;
+		}
 
 
-  flush_handlers();
+		flush_handlers();
 
-  return ret;
-}
+		return ret;
+	}
 
 
 void i4_kernel_device_class::request_events(i4_event_handler_class *for_who, w32 event_types)

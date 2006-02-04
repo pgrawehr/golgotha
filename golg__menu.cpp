@@ -127,7 +127,8 @@ void g1_main_menu_class::parent_draw(i4_draw_context_class &context)
   //child_clip.intersect_list(&undrawn_area);
   //child_clip.swap(&context.clip);
 
-  I4_ASSERT(deco!=NULL,"FATAL: Menu background image missing");
+  if (deco==NULL)
+	  i4_error("FATAL: Menu background image missing");
   
 	i4_coord xp,yp;
 
@@ -136,7 +137,6 @@ void g1_main_menu_class::parent_draw(i4_draw_context_class &context)
 	/*if (!undrawn_area.empty())
 		local_image->clear(0,context);*/
 
-	
 	deco->put_image(local_image,xp,yp,context);
 	//context.clip.remove_area(xp,yp,xp+deco->width(),yp+deco->height());
 	//local_image->clear(0,context);

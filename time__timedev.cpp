@@ -137,7 +137,11 @@ i4_bool i4_time_device_class::process_events()       // returns true if an event
 
 #ifndef I4_RETAIL
       if (i4_show_events)
-        i4_warning("sending : '%s' to '%s'",i->event->name(), i->send_to->name());
+	  {
+		  char buf[i4_event::MAX_NAME_BUFFER_SIZE];
+		  i->event->name(buf);
+        i4_warning("sending : '%s' to '%s'",buf, i->send_to->name());
+	  }
 #endif
       del=i;
       ++i;

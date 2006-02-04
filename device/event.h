@@ -13,10 +13,10 @@
 #include "time/time.h"
 #include <stdlib.h>
 
-// Event summary :
-/*
+
+/*! User Interface event base class.
   
-  all events should be derived from i4_event. 
+  All events should be derived from i4_event. 
   All events should have a type() and copy() function defined.  Since all user application events
   should be be OBJECT_MESSAGE or USER_MESSAGE type does not need to be defined.
 
@@ -27,7 +27,7 @@
   A events default to being sent ANYTIME, but be over-riding the when() function.  
   Events can be sent
   LATER. (i.e. qued up and sent at another time... hence the need for a copy() function). or NOW.
-  If an event returns ANYTIME for when() the implementation choses.  This currently default to NOW.
+  If an event returns ANYTIME for when() the implementation choses.  This currently defaults to NOW.
 
   Events should be sent through a channel and not directly.  i.e.
 
@@ -38,9 +38,11 @@
 
   note : events are passed as pointers to event.
 
-  whenever you receive_event() you should first check it's 
+  whenever you receive_event() you should first check its 
   type throught the type() function. Then you
-  should CAST_PTR into the event type it actually is : example
+  should CAST_PTR into the event type it actually is. 
+  Example:
+  \code
   void receive_event(i4_event *ev)
   {
     if (ev->type()==i4_event::KEY_PRESS)
@@ -49,16 +51,15 @@
       printf("Key pressed %d\n",key_ev->key);
     }
   }
+  \endcode
 
   IMPORTANT : if you are derived from a parent who has a receive_event() 
   you most likely want to call it
   or you will not get any of it's default behaviors.  This is especially true 
   with i4_window_class derivatives.
 
-  Note that keycodes are defined in event/keys.hh
+  Note that keycodes are defined in event/keys.h
 */
-
-
 class i4_event
 {
 public:
@@ -69,40 +70,54 @@ public:
     MOUSE_BUTTON_UP, 
     KEY_PRESS, 
     KEY_RELEASE, 
-    SYSTEM_SIGNAL,    // CTRL-C, BUS, PIPE, etc
-    WINDOW_MESSAGE,   // Events only seen by windows
-    DISPLAY_CHANGE,   // When a refresh is need ore resolution changes
-    DISPLAY_CLOSE,    // when close button on window is clicked, or the like
-    OBJECT_MESSAGE,   // events specific to a specific instance (uses memory address to clarify)
-    QUERY_MESSAGE,    // used by gui/ objects for querying and returning info
-    USER_MESSAGE,     // global user evetns
-    DO_COMMAND,
-    END_COMMAND,      // sent when key or menu item is depressed
-	CHAR_SEND,		  // For Text-Edit-Controlls, where exact Ascii-Translations are needed
-    IDLE_MESSAGE
+    SYSTEM_SIGNAL,    //< CTRL-C, BUS, PIPE, etc
+    WINDOW_MESSAGE,   //< Events only seen by windows
+    DISPLAY_CHANGE,   //< When a refresh is need ore resolution changes
+    DISPLAY_CLOSE,    //< when close button on window is clicked, or the like
+    OBJECT_MESSAGE,   //< events specific to a specific instance (uses memory address to clarify)
+    QUERY_MESSAGE,    //< used by gui/ objects for querying and returning info
+    USER_MESSAGE,     //< global user evetns
+    DO_COMMAND,		  //< Window command to be executed
+    END_COMMAND,      //< sent when key or menu item is depressed
+	CHAR_SEND,		  //< For Text-Edit-Controlls, where exact Ascii-Translations are needed
+    IDLE_MESSAGE      //< This message is sent periodically, if nothing else needs to be done
   } ;
   
   enum dispatch_time
     {
-    ANYTIME,
-    NOW,
-    LATER
+    ANYTIME,		//< Whenever the kernel likes to (defaults to NOW)
+    NOW,		    //< Immediatelly
+    LATER			//< Queue for later execution. Will execute next time the main loop is executed. 
   };
   
-  // most events can be sent now or defered, if you need to be defered till later or sent
-  // immidately, this can be replaced
+  //! Event dispatch time. 
+  //! Most events can be sent now or defered, if you need to be defered till later or sent
+  //! immidately, this can be replaced
   virtual dispatch_time when() { return ANYTIME; }  
 
+  //! Return the main event type.
   virtual event_type type() = 0;
+  //! Return a copy of yourself.
+  //! Usually, this calls the own constructor with the own fields as parameters. 
   virtual i4_event  *copy() = 0;
+  //! Virtual destructor, usually not overriden for events. 
   virtual ~i4_event() { ; }
 
-  // translates any coordinates to client's window space
+  //! translates any coordinates to client's window space
   virtual void move(int x_offset, int y_offset) { ; } 
 
-//#ifndef I4_RETAIL
-  virtual char *name() = 0;
-//#endif
+  //! Returns a descriptive name of the event and its parameters.
+  //! This is used for debugging only. 
+  virtual void name(char* buffer) = 0;
+  static const int MAX_NAME_BUFFER_SIZE=128;
+protected:
+  
+  void static_name(char* buffer, const char* str)
+  {
+	  strncpy(buffer,str,MAX_NAME_BUFFER_SIZE);
+	  buffer[MAX_NAME_BUFFER_SIZE-1]=0;
+  }
+
 };
 
 class i4_mouse_move_event_class         : public i4_event
@@ -115,7 +130,10 @@ public:
   virtual i4_event  *copy() { return new i4_mouse_move_event_class(lx,ly,x,y); }
   i4_mouse_move_event_class(i4_coord lx, i4_coord ly, i4_coord x, i4_coord y) 
     : lx(lx), ly(ly), x(x),y(y) {}
-  char *name() { return "mouse_move"; }
+  void name(char* buffer) 
+  { 
+	   static_name(buffer,"mouse_move"); 
+  }
 
   void move(int x_offset, int y_offset) 
   { 
@@ -135,9 +153,6 @@ public:
 
   virtual event_type type() = 0;
   virtual i4_event  *copy() = 0;
-#ifndef I4_RETAIL
-  virtual char *name() = 0;
-#endif
 
   i4_bool left() { return (i4_bool)(but==LEFT); }
   i4_bool right() { return (i4_bool)(but==RIGHT); }
@@ -169,7 +184,10 @@ public:
     return new i4_mouse_button_down_event_class(but,x,y,time,last_time, double_click); 
   }
 
-  char *name() { return "mouse_button_down"; }
+  void name(char* buffer) 
+  { 
+	  sprintf(buffer,"mouse_button_down at %d,%d with button %d",x,y,but); 
+  }
 } ;
 
 class i4_mouse_button_up_event_class    : public i4_mouse_button_event_class
@@ -187,7 +205,10 @@ public:
     return new i4_mouse_button_up_event_class(but,x,y,time,last_time, double_click); 
   }
 
-  char *name() { return "mouse_button_up"; }
+  void name(char* buffer) 
+  { 
+	  sprintf(buffer,"mouse_button_up at %d,%d with button %d",x,y,but); 
+  }
 } ;
 
 
@@ -202,7 +223,11 @@ public:
   i4_do_command_event_class(char *_command, int command_id, i4_time_class &time);
   virtual event_type type() { return DO_COMMAND; } 
   virtual i4_event  *copy();
-  char *name() { return "do_command"; }
+  void name(char* buffer) 
+  { 
+	  _snprintf(buffer,MAX_NAME_BUFFER_SIZE-1,"do_command_event_class %s",command); 
+	  buffer[MAX_NAME_BUFFER_SIZE-1]=0;
+  }
 } ;
 
 
@@ -219,7 +244,11 @@ public:
 
   virtual event_type type() { return END_COMMAND; } 
   virtual i4_event  *copy() { return new i4_end_command_event_class(command, command_id, time); }
-  char *name() { return "end_command"; }
+  void name(char* buffer) 
+  { 
+	  _snprintf(buffer,MAX_NAME_BUFFER_SIZE-1,"end_command_event_class %s",command); 
+	  buffer[MAX_NAME_BUFFER_SIZE-1]=0;
+  }
 } ;
 
 
@@ -236,7 +265,10 @@ public:
     : key(key), key_code(key_code), modifiers(modifiers), time(time) {}
   virtual event_type type() { return KEY_PRESS; }
   virtual i4_event  *copy() { return new i4_key_press_event_class(key,key_code,modifiers,time); }
-  char *name() { return "key_press"; }
+  void name(char* buffer) 
+  { 
+	  sprintf(buffer,"key_press %d,%d",(w32)key,(w32)key_code); 
+  }
 } ;
 
 class i4_char_send_event_class : public i4_event
@@ -248,7 +280,10 @@ class i4_char_send_event_class : public i4_event
 			:character(thekey),time(time){}
 		virtual event_type type() { return CHAR_SEND;}
 		virtual i4_event *copy() { return new i4_char_send_event_class(character,time);}
-		char *name() {return "char_send";}
+		void name(char* buffer) 
+		{ 
+			sprintf(buffer,"char_send %c",character); 
+		}
 	};
 
 
@@ -264,7 +299,10 @@ public:
     : key(key), key_code(key_code), modifiers(modifiers), time(time) {}
   virtual event_type type() { return KEY_RELEASE; }
   virtual i4_event  *copy() { return new i4_key_release_event_class(key,key_code,modifiers,time); }
-  char *name() { return "key_release"; }
+  void name(char* buffer) 
+  { 
+	  sprintf(buffer,"key_release %d,%d",(w32)key,(w32)key_code); 
+  }
 } ;
 
 class i4_display_class;
@@ -286,7 +324,10 @@ public:
   virtual dispatch_time when()  { return NOW; }  
   virtual event_type type()     { return DISPLAY_CHANGE; }
   virtual i4_event  *copy()     { return new i4_display_change_event_class(display,change); }  
-  char *name() { return "display_change"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"display_change"); 
+  }
 };
 
 class i4_display_close_event_class      : public i4_event
@@ -298,7 +339,10 @@ public:
   virtual dispatch_time when()  { return LATER; }  
   virtual event_type type()     { return DISPLAY_CLOSE; }
   virtual i4_event  *copy()     { return new i4_display_close_event_class(display); }
-  char *name() { return "display_close"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"display_close"); 
+  }
 };
 
 class i4_user_message_event_class       : public i4_event
@@ -309,7 +353,10 @@ public:
   virtual event_type type() { return USER_MESSAGE; }
   i4_user_message_event_class(w32 sub_type) : sub_type(sub_type) {}
   virtual i4_event  *copy() { return new i4_user_message_event_class(sub_type); }  
-  char *name() { return "user_message"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"user_message"); 
+  }
 } ;
 
 class i4_query_message_event_class      : public i4_event
@@ -318,7 +365,10 @@ public:
   virtual event_type type() { return QUERY_MESSAGE; }
   virtual i4_event  *copy() = 0;
   virtual dispatch_time when()  { return NOW; }  
-  char *name() { return "query_message"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"query_message"); 
+  }
 } ;
 
 class i4_object_message_event_class     : public i4_event
@@ -333,7 +383,10 @@ public:
   i4_object_message_event_class(void *object, w32 sub_type=0, dispatch_time when=ANYTIME)
     : object(object), sub_type(sub_type), dtime(when) {}
   virtual i4_event  *copy() { return new i4_object_message_event_class(object, sub_type); }
-  char *name() { return "object_message"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"object_message"); 
+  }
 } ;
 
 class i4_system_signal_event_class      : public i4_event
@@ -352,7 +405,10 @@ public:
   virtual i4_event  *copy() { return new i4_system_signal_event_class(signal_number); }
 
   i4_system_signal_event_class(signal_type sig) : signal_number(sig) {}
-  char *name() { return "signal"; }
+  void name(char* buffer) 
+  { 
+	  sprintf(buffer,"system_signal %d",(w32)signal_number); 
+  }
 } ;
 
 
@@ -362,7 +418,10 @@ class i4_user_idle_event_class        : public i4_event
 public:
   virtual event_type type() { return IDLE_MESSAGE; }
   virtual i4_event  *copy() { return new i4_user_idle_event_class; }
-  char *name() { return "idle_message"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"idle_event"); 
+  }
 } ;
 
 

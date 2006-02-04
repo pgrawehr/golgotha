@@ -72,7 +72,10 @@ class i4_window_message_class : public i4_event
   virtual dispatch_time when() { return NOW; }  
   virtual event_type type() { return WINDOW_MESSAGE; }
   virtual i4_event  *copy() { return new i4_window_message_class(sub_type,from_window); }
-  char *name() { return "window_message"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"window_message"); 
+  }
 } ;
 
 class i4_window_got_mouse_focus_class : public i4_window_message_class
@@ -85,7 +88,10 @@ public:
 
   i4_window_got_mouse_focus_class(i4_window_class *from, int x, int y)
     : i4_window_message_class(GOT_MOUSE_FOCUS, from), x(x), y(y) {}
-  char *name() { return "got_mouse_focus"; }
+	void name(char* buffer) 
+	{ 
+		static_name(buffer,"got_mouse_focus"); 
+	}
   virtual dispatch_time when() { return NOW; }   
   virtual i4_event  *copy() { return new i4_window_got_mouse_focus_class(from_window,x,y); }
 };
@@ -99,7 +105,10 @@ public:
   i4_window_lost_mouse_focus_class(i4_window_class *from,
                                    i4_window_class *lost_to)
     : i4_window_message_class(LOST_MOUSE_FOCUS, from), lost_to(lost_to) {}
-  char *name() { return "lost_mouse_focus"; }
+	void name(char* buffer) 
+	{ 
+		static_name(buffer,"lost_mouse_focus"); 
+	}
   virtual dispatch_time when() { return NOW; }   
   virtual i4_event  *copy() { return new i4_window_lost_mouse_focus_class(from_window, lost_to); }
 };
@@ -110,7 +119,10 @@ public:
   i4_window_request_drag_drop_end_class(i4_window_class *from)    
     : i4_window_message_class(REQUEST_DRAG_DROP_END, from)
   {}
-  char *name() { return "request_drag_drop_end"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"request_drag_drop_end"); 
+  }
 };
 
 
@@ -134,7 +146,10 @@ public:
 
   virtual i4_event  *copy() 
   { return new i4_window_drag_drop_move_class(from_window, x,y, reference_id, further_info); }
-  char *name() { return "drag_drop_move"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"drag_drop_move"); 
+  }
 
 };
 
@@ -163,7 +178,10 @@ class i4_window_request_drag_drop_start_class : public i4_window_message_class
                                                        drag_cursor, reference_id, further_info); }
 
   virtual dispatch_time when() { return NOW; }  // send now because a result is expected
-  char *name() { return "request_drag_drop_start"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"request_drag_drop_start"); 
+  }
 } ;
 
 class i4_str;
@@ -200,7 +218,10 @@ public:
     return dg;
   }
 
-  char *name() { return "got_drag_drop_focus"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"got_drag_drop_focus"); 
+  }
 };
 
 class i4_window_got_drop_class : public i4_window_message_class
@@ -220,7 +241,10 @@ public:
     return dg;
   }
 
-  char *name() { return "got_drop"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"got_drop"); 
+  }
 };
 
 
@@ -230,7 +254,10 @@ public:
   i4_window_lost_drag_drop_focus_class(i4_window_class *from)    
     : i4_window_message_class(LOST_DROP_FOCUS, from)
   {}
-  char *name() { return "lost_drag_drop_focus"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"lost_drop_focus"); 
+  }
 };
 
 
@@ -245,7 +272,10 @@ class i4_window_request_key_grab_class : public i4_window_message_class
 
   virtual i4_event  *copy() { return new i4_window_request_key_grab_class(from_window); }
   virtual dispatch_time when() { return NOW; }  // send now because a result is expected
-  char *name() { return "request_key_grab"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"request_key_grab"); 
+  }
 } ;
 
 
@@ -265,7 +295,10 @@ class i4_window_request_mouse_grab_class : public i4_window_message_class
   }
 
   virtual dispatch_time when() { return NOW; }  // send now because a result is expected
-  char *name() { return "request_mouse_grab"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"request_mouse_grab"); 
+  }
 } ;
 
 
@@ -280,7 +313,10 @@ class i4_window_request_mouse_ungrab_class : public i4_window_message_class
 
   virtual i4_event  *copy() { return new i4_window_request_mouse_ungrab_class(from_window); }
   virtual dispatch_time when() { return NOW; }  // send now because a result is expected
-  char *name() { return "request_mouse_ungrab"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"request_mouse_ungrab"); 
+  }
 } ;
 
 // return_result is set to i4_T if the parent was able to start dragging
@@ -297,7 +333,10 @@ class i4_window_request_drag_start_class : public i4_window_message_class
 
   virtual dispatch_time when() 
   { return NOW; }  // send now because a result is expected
-  char *name() { return "request_drag_start"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"request_drag_start"); 
+  }
 } ;
 
 
@@ -314,7 +353,10 @@ class i4_window_request_drag_end_class : public i4_window_message_class
   virtual dispatch_time when() 
   { return NOW; }  // send now because a result is expected
 
-  char *name() { return "request_drag_end"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"request_drag_end"); 
+  }
 } ;
 
 
@@ -338,7 +380,10 @@ class i4_window_change_cursor_class : public i4_window_message_class
 
   // send now in case the cursor gets destoryed before delivery
   virtual dispatch_time when() { return NOW; }   
-  char *name() { return "change_cursor"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"change_cursor"); 
+  }
 } ;
 
 
@@ -359,7 +404,10 @@ class i4_window_notify_resize_class : public i4_window_message_class
 
   // send now so recepient doesn't draw incorrect before event is delivered
   virtual dispatch_time when() { return NOW; }  
-  char *name() { return "notify_resize"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"notify_resize"); 
+  }
 } ;
 
 // this event is sent to your parent and children automatically by redepth()
@@ -373,7 +421,10 @@ class i4_window_notify_redepth_class: public i4_window_message_class
 	  new_bitdepth(new_bitdepth)
 		  { draw_covered=i4_T; }
 	  virtual dispatch_time when() { return NOW; }
-	  char *name() { return "notify_redepth"; }
+	  void name(char* buffer) 
+	  { 
+		  static_name(buffer,"notify_redepth"); 
+	  }
 	};
 
 
@@ -397,7 +448,10 @@ class i4_window_notify_move_class : public i4_window_message_class
 
   virtual dispatch_time when() 
   { return NOW; }  // send now so reciever doesn't draw incorrectly before it arrives
-  char *name() { return "notify_move"; }
+  void name(char* buffer) 
+  { 
+	  static_name(buffer,"notify_move"); 
+  }
 } ;
 
 
