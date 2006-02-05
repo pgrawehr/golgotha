@@ -21,6 +21,7 @@ class g1_main_menu_class : public i4_parent_window_class
   i4_event_handler_class *notify;
   i4_image_class *deco;
   i4_graphical_style_class *style;
+  int num_paintings;
 
 public:
 
@@ -32,6 +33,7 @@ public:
   virtual void parent_draw(i4_draw_context_class &context);
 
 
+  void receive_event(i4_event *ev);
   ~g1_main_menu_class();
   char *name() { return "g1_main_menu"; }
 };

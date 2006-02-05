@@ -82,7 +82,8 @@ g1_main_menu_class::g1_main_menu_class(w16 w, w16 h,
                                        i4_graphical_style_class *style)
   : i4_parent_window_class(w,h),
     notify(notify),
-    style(style)
+    style(style),
+	num_paintings(0)
 {
   li_call("Pause");
   deco=i4_load_image(i4gets("title_screen"));
@@ -127,6 +128,7 @@ void g1_main_menu_class::parent_draw(i4_draw_context_class &context)
   //child_clip.intersect_list(&undrawn_area);
   //child_clip.swap(&context.clip);
 
+	num_paintings++;
   if (deco==NULL)
 	  i4_error("FATAL: Menu background image missing");
   
@@ -146,6 +148,13 @@ void g1_main_menu_class::parent_draw(i4_draw_context_class &context)
   //child_clip.swap(&context.clip);
   i4_parent_window_class::parent_draw(context);
 
+}
+
+void g1_main_menu_class::receive_event(i4_event *ev)
+{
+	if (num_paintings<5)
+		request_redraw(i4_F);
+	i4_parent_window_class::receive_event(ev);
 }
 
 
