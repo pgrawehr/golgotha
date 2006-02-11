@@ -19,7 +19,7 @@ dx9_mouse_class::dx9_mouse_class(i4_bool page_flipped)
   cursor.pict=0;
   cursor.hot_x=0;
   cursor.hot_y=0;
-  //last.save_buffer=0;
+  last.save_buffer=0;
   current.save_buffer=0;
   last_was_gdi=i4_T;
 
@@ -77,7 +77,7 @@ void dx9_mouse_class::set_cursor(i4_cursor_class *c)
   i4_bool g=primary_is_gdi();
   last_was_gdi=!g;
   current.isgdi=g;
-  //last.isgdi=!g;
+  last.isgdi=!g;
 }
 
 dx9_mouse_class::~dx9_mouse_class()
@@ -163,17 +163,18 @@ void dx9_mouse_class::save_and_draw(int x, int y)
   src.right  = current.x + cwidth;
   src.top    = current.y;
   src.bottom = current.y + cheight;
-  HRESULT hr=0;
-  //i4_warning("TRACE: Mouse second part");
-  //no i4_dx9_check here as we allways get an error when the cursor is outside the window
-  //TODO: This doesn't work...
-  D3DLOCKED_RECT lock;
-  dx9_common.back_surface->LockRect(&lock,&src,D3DLOCK_NOSYSLOCK);
   int sfcby=2;
   if (cursor.pict->get_pal()->source.pixel_depth==I4_24BIT)
 	  sfcby=3;
   if (cursor.pict->get_pal()->source.pixel_depth==I4_32BIT)
 	  sfcby=4;
+  HRESULT hr=0;
+  //i4_warning("TRACE: Mouse second part");
+  //no i4_dx9_check here as we allways get an error when the cursor is outside the window
+  //TODO: This doesn't work...
+  D3DLOCKED_RECT lock;
+  i4_dx9_check(dx9_common.back_surface->LockRect(&lock,&src,D3DLOCK_NOSYSLOCK));
+  
   int linelen=lock.Pitch;
   current.save_buffer->lock();
   //Step 1: Copy backbuffer to savebuffer
@@ -223,30 +224,17 @@ void dx9_mouse_class::save_and_draw(int x, int y)
 	  }
   }
   dx9_common.back_surface->UnlockRect();
-  /*
-  if (i4_dx9_check(hr=current.save_buffer->surface->BltFast(0,0, dx9_common.back_surface, &src,DDBLTFAST_NOCOLORKEY|DDBLTFAST_WAIT)))
-	  {
-	  //i4_warning("TRACE: Mouse third part");
-	  
-	  i4_dx9_check(dx9_common.back_surface->BltFast(current.x, current.y,
-                                                ((i4_dx9_image_class *)cursor.pict)->surface,0 ,
-                                                DDBLTFAST_SRCCOLORKEY|DDBLTFAST_WAIT));
-	  }
-  else
-	  {
-	  if (current.save_buffer&&current.save_buffer->surface)
-		  current.save_buffer->surface->Restore();
-	  if (last.save_buffer&&last.save_buffer->surface) 
-		  last.save_buffer->surface->Restore();
-	  }
-  */
- /* if (page_flipped)
+  if (page_flipped)
   {
     save_struct tmp=current;
     current=last;
     last=tmp;
     tmp.save_buffer=0;  
-  }*/
+  }
+
+
+
+
 
 }
 
@@ -254,33 +242,43 @@ void dx9_mouse_class::save_and_draw(int x, int y)
 void dx9_mouse_class::restore()
 {  
 
-  if (current.save_buffer)
-  {
-    RECT src;
-    src.left   = current.x;
-    src.right  = current.x+cursor.pict->width();
-    src.top    = current.y;
-    src.bottom = current.y+cursor.pict->height();
-	i4_bool g=primary_is_gdi();
-	
-    D3DLOCKED_RECT lock;
-  dx9_common.back_surface->LockRect(&lock,&src,D3DLOCK_NOSYSLOCK);
-  int sfcby=2;
-  if (cursor.pict->get_pal()->source.pixel_depth==I4_24BIT)
-	  sfcby=3;
-  if (cursor.pict->get_pal()->source.pixel_depth==I4_32BIT)
-	  sfcby=4;
-  int linelen=lock.Pitch;
-  current.save_buffer->lock();
-  //Step 3: copy savebuffer back to the backbuffer
-  int yp;
-  for (yp=0;yp<cursor.pict->height();yp++)
-  {
-	  memcpy(yp*linelen+(w8*)lock.pBits,
-		  current.save_buffer->data+yp*sfcby*cursor.pict->width(),
-		  sfcby*cursor.pict->width());
-  }
-  current.save_buffer->unlock();
-  dx9_common.back_surface->UnlockRect();
-  }
+	if (current.save_buffer)
+	{
+		RECT src;
+		src.left   = current.x;
+		src.right  = current.x+cursor.pict->width();
+		src.top    = current.y;
+		src.bottom = current.y+cursor.pict->height();
+
+		D3DLOCKED_RECT lock;
+		dx9_common.back_surface->LockRect(&lock,&src,D3DLOCK_NOSYSLOCK);
+		int sfcby=2;
+		if (cursor.pict->get_pal()->source.pixel_depth==I4_24BIT)
+			sfcby=3;
+		if (cursor.pict->get_pal()->source.pixel_depth==I4_32BIT)
+			sfcby=4;
+		int linelen=lock.Pitch;
+		current.save_buffer->lock();
+		//Step 3: copy savebuffer back to the backbuffer
+		int yp;
+		for (yp=0;yp<cursor.pict->height();yp++)
+		{
+			w8* dest=yp*linelen+(w8*)lock.pBits;
+			int bytes=sfcby*cursor.pict->width();
+			w8* src=current.save_buffer->data+yp*bytes;
+			memcpy(dest,src,bytes);
+		}
+		//This code is for testing only. 
+		/*for (int yp=0;yp<cursor.pict->height();yp++)
+		{
+			for (int xp=0;xp<cursor.pict->width();xp++)
+			{
+				w8* p=yp*linelen+xp*sfcby+(w8*)lock.pBits;
+				w32* p32=(w32*)p;
+				*p32=0x00FF00FF;
+			}
+		}*/
+		current.save_buffer->unlock();
+		dx9_common.back_surface->UnlockRect();
+	}
 }

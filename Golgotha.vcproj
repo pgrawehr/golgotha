@@ -1300,6 +1300,12 @@
 				RelativePath="video\win32\dx5.h">
 			</File>
 			<File
+				RelativePath=".\video\win32\dx5_error.h">
+			</File>
+			<File
+				RelativePath=".\video\win32\dx5_mouse.h">
+			</File>
+			<File
 				RelativePath=".\video\win32\dx5_util.h">
 			</File>
 			<File
