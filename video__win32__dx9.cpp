@@ -479,6 +479,7 @@ i4_bool i4_dx9_display_class::initialize_mode()
   context             = new i4_draw_context_class(0,0, last_mode.xres-1, last_mode.yres-1);
   context->both_dirty = new i4_rect_list_class;
   context->single_dirty= new i4_rect_list_class;
+  context->render_area=new i4_rect_list_class;
 
   memcpy(&cur_mode, &last_mode, sizeof(last_mode));
 
@@ -603,6 +604,7 @@ i4_bool i4_dx9_display_class::change_mode(w16 newwidth, w16 newheight,
 	context             = new i4_draw_context_class(0,0, newwidth-1, newheight-1);
 	context->both_dirty = new i4_rect_list_class;
 	context->single_dirty=new i4_rect_list_class;
+	context->render_area=new i4_rect_list_class;
 	
 	cur_mode.xres=newwidth;//must be sure that these settings are correct as code depends on them
 	cur_mode.yres=newheight;
@@ -879,6 +881,7 @@ void i4_dx9_display_class::flush()
 		if (mouse)
 			mouse->restore();
 	}
+	context->render_area->delete_list();
 	pf_dx9_mouse.stop();  
 	}
 

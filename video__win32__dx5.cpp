@@ -527,6 +527,7 @@ i4_bool i4_dx5_display_class::change_mode(w16 newwidth, w16 newheight,
 	context             = new i4_draw_context_class(0,0, newwidth-1, newheight-1);
 	context->both_dirty = new i4_rect_list_class;
 	context->single_dirty=new i4_rect_list_class;
+	context->render_area= new i4_rect_list_class;
 	
 	cur_mode.xres=newwidth;//must be shure that these settings are correct as code depends on them
 	cur_mode.yres=newheight;

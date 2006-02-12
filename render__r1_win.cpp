@@ -42,16 +42,25 @@ void r1_render_window_class::clip_with_z(i4_draw_context_class &context, i4_floa
   api->set_write_mode(R1_WRITE_W);  
 
   for (cl = clip->list.begin(); cl != clip->list.end(); ++cl)
+  {
     api->clear_area(cl->x1+dx1, cl->y1+dy1, cl->x2+dx1, cl->y2+dy1, 
                     api->get_constant_color(), 
                     far_z);
+	if (context.render_area!=NULL)
+		context.render_area->add_area(cl->x1+dx1, cl->y1+dy1,cl->x2+dx1,cl->y2+dy1);
+  }
 
   for (cl = area_to_mask.list.begin(); cl!= area_to_mask.list.end(); ++cl)
-    api->clear_area(cl->x1+dx1, cl->y1+dy1, cl->x2+dx1, cl->y2+dy1, 
+  {
+	api->clear_area(cl->x1+dx1, cl->y1+dy1, cl->x2+dx1, cl->y2+dy1, 
                     api->get_constant_color(), 
                     0.00001f);
+	if (context.render_area!=NULL)
+		context.render_area->remove_area(cl->x1+dx1, cl->y1+dy1,cl->x2+dx1,cl->y2+dy1);
+  }
 
   api->set_write_mode(R1_WRITE_W | R1_WRITE_COLOR | R1_COMPARE_W);
+
 }
 
 int r1_render_window_class::render_area_width() 

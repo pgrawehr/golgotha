@@ -36,11 +36,11 @@ struct CUSTOMVERTEX //used for the dx9 vertex pipeline (yuk!)
 #define FVF_CUSTOMVERTEX (D3DFVF_DIFFUSE|D3DFVF_XYZRHW|D3DFVF_TEX1)
 #endif
 
-class CR1_dx9_render_window_class : public r1_render_window_class
+class r1_dx9_render_window_class : public r1_render_window_class
 {
 public:  
-            CR1_dx9_render_window_class(w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class *api);
-           ~CR1_dx9_render_window_class();
+            r1_dx9_render_window_class(w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class *api);
+           ~r1_dx9_render_window_class();
 
     void    draw( i4_draw_context_class &context );
     char*   name( void ) { return "dx9 render window"; }  

@@ -252,4 +252,9 @@ void dx9_mouse_class::add_dirty_area(i4_draw_context_class* context)
 	int mouse_y=current.y;
 	context->both_dirty->add_area(mouse_x,mouse_y,
 		mouse_x+cursor.pict->width(),mouse_y+cursor.pict->height());
+	i4_rect_list_class::area_iter cl;
+	for (cl = context->render_area->list.begin(); cl!= context->render_area->list.end(); ++cl)
+	{
+		context->both_dirty->remove_area(cl->x1,cl->y1,cl->x2,cl->y2);
+	}
 }

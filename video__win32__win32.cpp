@@ -200,6 +200,7 @@ public:
     context=new i4_draw_context_class(0,0, w-1, h-1);
     context->both_dirty=new i4_rect_list_class;
     context->single_dirty=new i4_rect_list_class;
+	context->render_area=new i4_rect_list_class;
 
     HDC dc=GetDC(input.get_window_handle());
 

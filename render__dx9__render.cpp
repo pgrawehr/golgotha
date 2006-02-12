@@ -29,11 +29,11 @@ i4_profile_class pf_dx9_use_texture("dx9::use_texture");
 //i4_profile_class pf_dx9_vertex_setup("dx9::vertex_setup");
 i4_profile_class pf_dx9_drawprimitive("dx9::drawprimitive");
 
-CR1_dx9_render_window_class::~CR1_dx9_render_window_class()
+r1_dx9_render_window_class::~r1_dx9_render_window_class()
 {
 }
 
-CR1_dx9_render_window_class::CR1_dx9_render_window_class(w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class *api)
+r1_dx9_render_window_class::r1_dx9_render_window_class(w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class *api)
     : r1_render_window_class(w,h, expand_type, api) {}
 
 
@@ -77,7 +77,7 @@ void r1_dx9_class::copy_part(i4_image_class *im,
 }
 
 
-void CR1_dx9_render_window_class::draw(i4_draw_context_class &context)
+void r1_dx9_render_window_class::draw(i4_draw_context_class &context)
 {
   static i4_bool recursion=i4_F;
   r1_dx9_class_instance.x_off = context.xoff;
@@ -98,12 +98,10 @@ void CR1_dx9_render_window_class::draw(i4_draw_context_class &context)
       //api->set_z_range(0.01f, 1000.0f);
 	  clip_with_z(context,RENDER_DEFAULT_NEAR_DISTANCE, RENDER_DEFAULT_FAR_DISTANCE);
 	  
-      //r1_dx9_class_instance.d3d_device->SetRenderState(0,0);
       r1_render_window_class::draw(context);  
 
       r1_dx9_class_instance.flush_vert_buffer();
-
-      //r1_dx9_class_instance.d3d_device->EndScene();  
+ 
 	  dx9_common.device->EndScene();
       recursion=i4_F;
 	  //i4_warning("TRACE: Frame rendered successfully");
@@ -119,7 +117,7 @@ void CR1_dx9_render_window_class::draw(i4_draw_context_class &context)
 r1_render_window_class *r1_dx9_class::create_render_window(int visable_w, int visable_h,
                                                            r1_expand_type type)
 {
-  return new CR1_dx9_render_window_class(visable_w, visable_h, type, this);
+  return new r1_dx9_render_window_class(visable_w, visable_h, type, this);
 }
 
 void r1_dx9_class::set_write_mode(r1_write_mask_type mask)

@@ -15,8 +15,14 @@ class i4_draw_context_class
 {
   public :
   i4_rect_list_class clip;
-  i4_rect_list_class *single_dirty; // all areas that only need updating for the next frame
-  i4_rect_list_class *both_dirty;   // all areas that need updating on all future frames
+  // all areas that only need updating for the next frame
+  // This list is very sparsely used
+  i4_rect_list_class *single_dirty; 
+  // all areas that need updating on all future frames
+  // This usually means it is updated twice (for the two buffers of the screen flip chain)
+  i4_rect_list_class *both_dirty;  
+  // The region which was used by the render windows in the last frame
+  i4_rect_list_class *render_area;
   sw16 xoff,yoff;
 
   i4_draw_context_class(sw16 x1, sw16 y1, sw16 x2, sw16 y2)
@@ -24,6 +30,7 @@ class i4_draw_context_class
     clip.add_area(x1,y1,x2,y2);
     single_dirty=0;
     both_dirty=0;
+	render_area=0;
     xoff=0;
     yoff=0;
   }
@@ -33,6 +40,8 @@ class i4_draw_context_class
       delete single_dirty;
     if (both_dirty)
       delete both_dirty;
+	if (render_area)
+		delete render_area;
   }
 
   void add_single_dirty(sw16 x1, sw16 y1, sw16 x2, sw16 y2)
