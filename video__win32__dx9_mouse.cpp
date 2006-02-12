@@ -21,7 +21,6 @@ dx9_mouse_class::dx9_mouse_class(i4_bool page_flipped)
   cursor.hot_y=0;
   last.save_buffer=0;
   current.save_buffer=0;
-  last_was_gdi=i4_T;
 
 }
 
@@ -74,10 +73,7 @@ void dx9_mouse_class::set_cursor(i4_cursor_class *c)
 	  delete cursor.pict;
 	  cursor.pict=0;//hide cursor
 	  }
-  i4_bool g=primary_is_gdi();
-  last_was_gdi=!g;
-  current.isgdi=g;
-  last.isgdi=!g;
+
 }
 
 dx9_mouse_class::~dx9_mouse_class()
@@ -89,35 +85,6 @@ dx9_mouse_class::~dx9_mouse_class()
   }
 }
 
-i4_bool dx9_mouse_class::primary_is_gdi()
-	{
-		return i4_T;
-	//i4_bool ret;
-		/*
-	LPDIRECTDRAWSURFACE lpgdi=0;
-	LPDIRECTDRAWSURFACE3 lpgdi3=0;
-	//LPSURFACEDESC lpsd=0;
-	//DDSCAPS caps;
-	//dx9_common.primary_surface->GetCaps(&caps);
-	//if (caps.dwCaps&DDSCAPS_PRIMARYSURFACE)
-	//	return i4_T;
-	//else
-	//	return i4_F;
-	i4_dx9_check(dx9_common.ddraw->GetGDISurface(&lpgdi));
-	i4_dx9_check(lpgdi->QueryInterface(IID_IDirectDrawSurface3,(void**)&lpgdi3));
-	if (lpgdi) lpgdi->Release();
-	if (dx9_common.primary_surface==lpgdi3)
-		{
-		if (lpgdi3) lpgdi3->Release();
-		return i4_T;
-		}
-	else
-		{
-		if (lpgdi3) lpgdi3->Release();
-		return i4_F;
-		}
-		*/
-	}
 
 void dx9_mouse_class::save_and_draw(int x, int y)
 {
@@ -232,10 +199,6 @@ void dx9_mouse_class::save_and_draw(int x, int y)
     tmp.save_buffer=0;  
   }
 
-
-
-
-
 }
 
 
@@ -281,4 +244,12 @@ void dx9_mouse_class::restore()
 		current.save_buffer->unlock();
 		dx9_common.back_surface->UnlockRect();
 	}
+}
+
+void dx9_mouse_class::add_dirty_area(i4_draw_context_class* context)
+{
+	int mouse_x=current.x;
+	int mouse_y=current.y;
+	context->both_dirty->add_area(mouse_x,mouse_y,
+		mouse_x+cursor.pict->width(),mouse_y+cursor.pict->height());
 }

@@ -20,7 +20,7 @@ class dx9_mouse_class
   {
     i4_dx9_image_class *save_buffer;
     int x,y;
-    save_struct() { save_buffer=0; isgdi=i4_F;}
+    save_struct() { save_buffer=0;x=0;y=0;}
 	i4_bool isgdi;//to sync the buffer with the on - screen data (may skip frames)
 
     ~save_struct()
@@ -34,14 +34,12 @@ class dx9_mouse_class
 
   i4_cursor_class cursor;
   i4_bool page_flipped;
-  i4_bool last_was_gdi;
 public:
   dx9_mouse_class(i4_bool page_flipped);
-  static i4_bool primary_is_gdi();
   virtual void save_and_draw(int x, int y);
   virtual void restore();
   virtual void set_cursor(i4_cursor_class *cursor);
-
+  void add_dirty_area(i4_draw_context_class* context);
   virtual ~dx9_mouse_class();
 } ;
 

@@ -782,9 +782,11 @@ void i4_dx9_display_class::flush()
 		for (;a!=context->both_dirty->list.end();++a)
 			next_frame_copy.add_area(a->x1, a->y1, a->x2, a->y2);
 		//is adding the single - dirty list a good idea? It's of no use.
-		/*a=context->single_dirty->list.begin();
+		a=context->single_dirty->list.begin();
 		for (;a!=context->single_dirty->list.end();++a)
-		next_frame_copy.add_area(a->x1,a->y1,a->x2,a->y2);*/
+		{
+			next_frame_copy.add_area(a->x1,a->y1,a->x2,a->y2);
+		}
 		use_list=&next_frame_copy;
 		}
 	else
@@ -864,10 +866,19 @@ void i4_dx9_display_class::flush()
 		next_frame_copy.swap(context->both_dirty);
 	
 	context->both_dirty->delete_list();
+	context->single_dirty->delete_list();
 
 	pf_dx9_mouse.start();
-	if (mouse)
-		mouse->restore();
+	if (use_page_flip)
+	{
+		if (mouse)
+			mouse->add_dirty_area(context);
+	}
+	else
+	{
+		if (mouse)
+			mouse->restore();
+	}
 	pf_dx9_mouse.stop();  
 	}
 
