@@ -13,16 +13,18 @@
 #include "memory/lalloc.h"
 #include "isllist.h"
 
-/*
+#undef new
+/*!
 
-  A rect list manages a list of disjoint rectangles.  This is used for clipping, dirty_rectangles,
+  A rect list manages a list of disjoint rectangles.  
+  This is used for clipping, dirty_rectangles,
   and a few other misc. things.  The operations should be straitforward.
 
   The rectlist is actually just a point to a list of area nodes.  Rectlist should be passed as
   a reference.
 
   ussage example :
-
+  \code
   // create a list containing the rectangle [0,0-320,200]
   i4_rectlist l(0,0,320,200);      
 
@@ -30,10 +32,10 @@
   l.remove_area(5,5,320-5,200-5);  
 
   // list now conains the areas [100,0,105,5] & [100,200-5,105,200]
-  l. intersect_area(100,0,105,200); 
-
+  l.intersect_area(100,0,105,200); 
+  \endcode
  */
-#undef new
+
 
 class i4_rect_list_class
 {
@@ -101,11 +103,12 @@ public:
   i4_rect_list_class() {}
   i4_rect_list_class(i4_rect_list_class *copy_from, i4_coord xoff, i4_coord yoff);
 
-  // initial size of rect area
+  //! Initial size of rect area
   i4_rect_list_class(i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2)       
   { list.insert(*(new_area(x1,y1,x2,y2))); }
 
-  // exchanges the contents of two rect_list : used to replace the display's clip list
+  //! Exchanges the contents of two rect_list.
+  //! Used to replace the display's clip list
   void swap(i4_rect_list_class *other);                    
 
   i4_bool empty() { return list.empty(); }
@@ -121,24 +124,24 @@ public:
     }
   }
   
-  // subtracts this area from rect rects
+  //! Subtracts this area from rect rects.
   void remove_area(i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2);    
 
-  // combines this area with rects in list
+  //! Combines this area with rects in list.
   void add_area(i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
                                                   i4_bool combine=i4_F);
 
-  // reduces area list to that which intersects this area
+  //! Reduces area list to that which intersects this area.
   void intersect_area(i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2); 
 
-  // reduces area list to that which intersects this area list
+  //! Reduces area list to that which intersects this area list.
   void intersect_list(i4_rect_list_class *other);                                 
 
-  // return i4_T if area is totally clipped away
-  // this can be used to skip expensive drawing operations
+  //! Return i4_T if area is totally clipped away.
+  //! This can be used to skip expensive drawing operations
   i4_bool clipped_away(i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2); 
                                                                             
-  // debuggin purposes only
+  //! Debuggin' purposes only
   void inspect(int print=0);                                                
 
   
@@ -148,8 +151,3 @@ public:
 #include "memory/new.h"
 
 #endif
-//{{{ Emacs Locals
-// Local Variables:
-// folded-file: t
-// End:
-//}}}
