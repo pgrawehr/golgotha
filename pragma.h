@@ -56,6 +56,8 @@
 #pragma warning(error: 4034) // sizeof returns 0
 #pragma warning(3:4130)     // Comparison of string using ==
 #pragma warning(error: 4131) //Old style function declaration
+#pragma warning(2: 4263 4264 4301) //Virtual function has similar name than base class, but is not overriding. 
+#pragma warning(1: 4249) // A member of the virtual base class cannot be accessed from the derived class because the derived class does not have access rights. The member was not accessed.
 //#pragma warning(3:4189)     // initialized but not used local var
 //
 //                           (clip here)
