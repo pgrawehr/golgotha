@@ -7392,6 +7392,9 @@ void g1_3d_pick_window::parent_draw(i4_draw_context_class &context)
   i4_transform_class  tmp;
   i4_transform_class  transform;
 
+  request_redraw(i4_T);
+  request_redraw(i4_F);
+
   transform.identity();
 
   tmp.translate(0,0,camera.view_dist);  transform.multiply(tmp);    

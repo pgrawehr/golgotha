@@ -82,7 +82,8 @@ void r1_dx9_render_window_class::draw(i4_draw_context_class &context)
   static i4_bool recursion=i4_F;
   r1_dx9_class_instance.x_off = context.xoff;
   r1_dx9_class_instance.y_off = context.yoff;
-  
+  request_redraw(i4_T);
+
   if (!recursion)//if this is called recursively, ignore second call.
 	  {//must not call BeginScene twice
 	  recursion=i4_T;
@@ -91,7 +92,6 @@ void r1_dx9_render_window_class::draw(i4_draw_context_class &context)
 		  {
 		  
 		  recursion=i4_F;
-		  request_redraw();
 		  return;//skip current frame (might be other problems pending)
 		  }
 	  dx9_common.device->BeginScene();
