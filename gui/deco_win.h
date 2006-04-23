@@ -59,7 +59,7 @@ public:
 //                      context);
   }
 
-  char *name() { return "deco_window"; }
+  void name(char* buffer) { static_name(buffer,"deco_window"); }
 } ;
 
 #endif

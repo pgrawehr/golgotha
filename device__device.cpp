@@ -274,10 +274,12 @@ void i4_kernel_device_class::show_pending()
 
   i4_isl_list<defered_event>::iterator i=list.begin();
   char buf[i4_event::MAX_NAME_BUFFER_SIZE];
+  char buf2[i4_event::MAX_NAME_BUFFER_SIZE];
   for (;i!=list.end();++i)
   {
 	  i->ev_copy->name(buf);
-    i4_warning("'%s' for '%s'",buf, i->send_to.get()->name());    
+	  i->send_to->name(buf2);
+    i4_warning("'%s' for '%s'",buf, buf2);    
   }
   
   list_lock.unlock();
@@ -322,6 +324,7 @@ void i4_kernel_device_class::send_event(i4_event_handler_class *send_to, i4_even
 
 #ifndef I4_RETAIL
 	char debug_buf[i4_event::MAX_NAME_BUFFER_SIZE];
+	char debug_buf2[i4_event::MAX_NAME_BUFFER_SIZE];
 #endif
 	if (ev->when()!=i4_event::NOW)
 	{   
@@ -331,7 +334,8 @@ void i4_kernel_device_class::send_event(i4_event_handler_class *send_to, i4_even
 			!(ev->type()==i4_event::MOUSE_MOVE || ev->type()==i4_event::WINDOW_MESSAGE)))
 		{
 			ev->name(debug_buf);
-			i4_warning("queing : '%s' to '%s'",debug_buf, send_to->name());
+			send_to->name(debug_buf2);
+			i4_warning("queing : '%s' to '%s'",debug_buf, debug_buf2);
 		}
 #endif
 		defered_event *dv=new defered_event(send_to,ev);
@@ -347,7 +351,8 @@ void i4_kernel_device_class::send_event(i4_event_handler_class *send_to, i4_even
 			!(ev->type()==i4_event::MOUSE_MOVE || ev->type()==i4_event::WINDOW_MESSAGE)))
 		{
 			ev->name(debug_buf);
-			i4_warning("sending : '%s' to '%s'",debug_buf, send_to->name());
+			send_to->name(debug_buf2);
+			i4_warning("sending : '%s' to '%s'",debug_buf, debug_buf2);
 		}
 #endif
 
@@ -445,12 +450,14 @@ void i4_kernel_device_class::flush_handlers()
 #ifdef _DEBUG
 				i4_event *ev=old->ev_copy;
 				char buf[i4_event::MAX_NAME_BUFFER_SIZE];
+				char buf2[i4_event::MAX_NAME_BUFFER_SIZE];
 				if (i4_show_events==I4_SHOW_ALL || 
 					(i4_show_events==I4_SHOW_NON_TRIVIAL && 
 					!(ev->type()==i4_event::MOUSE_MOVE || ev->type()==i4_event::WINDOW_MESSAGE)))
 				{
 					old->ev_copy->name(buf);
-					i4_warning("sending : '%s' to '%s'",buf, eh->name());
+					eh->name(buf2);
+					i4_warning("sending : '%s' to '%s'",buf, buf2);
 				}
 #endif
 				eh->call_stack_counter++;

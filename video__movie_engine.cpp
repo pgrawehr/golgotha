@@ -34,7 +34,7 @@ class i4_win32_movie_engine_class: public i4_movie_engine_class, public i4_init_
 		{
 		waitfornotify=i4_F;
 		};
-	virtual char *name(){return "win32_movie_engine";};
+	void name(char* buffer){static_name(buffer,"win32 movie engine");};
 	virtual void init()
 		{
 		if (mciSendString("open avivideo", NULL, 0, NULL) != 0)

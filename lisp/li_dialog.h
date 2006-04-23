@@ -69,7 +69,7 @@ public:
 	  return i4_F;
   }
   virtual ~li_dialog_item();
-  char *name() { return "li_dialog_item"; }
+  void name(char* buffer) { static_name(buffer,"li_dialog_item"); }
 };
 
 
@@ -94,7 +94,7 @@ public:
   ~li_dialog_window_class();
 
   void receive_event(i4_event *ev);
-  char *name() { return "li_dialog_window"; }
+  void name(char* buffer) { static_name(buffer,"li_dialog_window"); }
 };
 
 

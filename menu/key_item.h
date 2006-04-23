@@ -44,7 +44,7 @@ class i4_key_item_class : public i4_menu_item_class
 
   ~i4_key_item_class();
 
-  char *name() { return "key_item"; }
+  void name(char* buffer) { static_name(buffer,"key_item"); }
 
   virtual void parent_draw(i4_draw_context_class &context);
   virtual void receive_event(i4_event *ev);
@@ -86,7 +86,7 @@ public:
   void unwatch_key(i4_key_item_class *who, w16 key, w16 modifiers);
   void receive_event(i4_event *ev);
   
-  char *name() { return "key accel watcher"; }
+  void name(char* buffer) { static_name(buffer,"key accel watcher"); }
 };
 
 

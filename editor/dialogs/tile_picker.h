@@ -42,7 +42,7 @@ public:
                        g1_scroll_picker_info *info,
                        i4_image_class *active_back,
                        i4_image_class *passive_back);
-  char *name() { return "tile_picker_class"; }
+  void name(char* buffer) { static_name(buffer,"tile_picker_class"); }
 
 
 

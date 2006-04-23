@@ -44,7 +44,7 @@ public:
 class g1_camera_params : public g1_mode_creator
 {
 public:
-  char *name() { return "CAMERA"; }
+  void name(char* buffer) { static_name(buffer,"CAMERA"); }
   g1_camera_params();
 
   enum

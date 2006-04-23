@@ -84,7 +84,16 @@ public:
   //Although this class is abstract, the following function must not be pure
   //virtual as it is not always correctly overwritten which result is problems
   //when the name is used.
-  virtual char *name() {return ("i4_event_handler_class");};
+  virtual void name(char *buffer) =0;
+  //{return ("i4_event_handler_class");};
+
+protected:
+  static const int MAX_NAME_BUFFER_SIZE=128;
+	void static_name(char* buffer, const char* str)
+	{
+		strncpy(buffer,str,MAX_NAME_BUFFER_SIZE);
+		buffer[MAX_NAME_BUFFER_SIZE-1]=0;
+	}
 
 };
 

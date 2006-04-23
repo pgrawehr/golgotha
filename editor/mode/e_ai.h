@@ -41,7 +41,7 @@ public:
 class g1_ai_params : public g1_mode_creator
 {
 public:
-  char *name() { return "AI"; }
+  void name(char* buffer) { static_name(buffer,"AI"); }
 
   enum minor_mode_type
   {

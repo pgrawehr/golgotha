@@ -49,7 +49,7 @@ class i4_menu_item_class : public i4_parent_window_class
   } send;
 
   
-  char *name() { return "menu item"; }
+  void name(char* buffer) { static_name(buffer,"menu item"); }
   i4_menu_item_class(const i4_const_str *idle_context_help,  // can be null
                      i4_graphical_style_class *hint,         // can be null if idle_help is null
                      w16 w, w16 h,
@@ -101,7 +101,7 @@ public:
   virtual void note_reaction_sent(i4_menu_item_class *who,       // this is who sent it
                                   i4_event_reaction_class *ev,   // who it was to 
                                   i4_menu_item_class::reaction_type type) { ; }
-  char *name() { return "menu item parent"; }
+  void name(char* buffer) { static_name(buffer,"menu item parent"); }
 };
 
 #endif

@@ -35,7 +35,7 @@ public:
          
   g1_scene_editor_class() { parent=0; wx=wy=0; }
 
-  char *name() { return "scene_editor"; }
+  void name(char* buffer) { static_name(buffer,"scene_editor"); }
 
   void receive_event(i4_event *ev);
 

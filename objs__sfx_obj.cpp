@@ -48,7 +48,7 @@ public:
     OK, CANCEL,
     BROWSE };
 
-  char *name() { return "sfx_obj editor"; }
+  void name(char* buffer) { static_name(buffer,"sfx_obj editor"); }
   g1_sfx_obj_edit_class(i4_graphical_style_class *style)
 
     : i4_color_window_class(400, 200, style->color_hint->neutral(), style)

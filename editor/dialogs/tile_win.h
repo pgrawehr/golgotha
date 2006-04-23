@@ -46,7 +46,7 @@ class g1_3d_tile_window : public g1_3d_pick_window
                                                             camera, act, pass,
                                                             reaction->copy()); }
   
-  char *name() { return "object window"; }
+  void name(char* buffer) { static_name(buffer,"object window"); }
 } ;
 
 

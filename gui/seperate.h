@@ -53,7 +53,7 @@ public:
 
   i4_menu_item_class *copy() { return new i4_seperator_line_class(style, bg, lr, ud); }
 
-  char *name() { return "seperator_line"; }
+  void name(char* buffer) { static_name(buffer,"seperator_line"); }
 };
 
 

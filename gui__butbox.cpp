@@ -1638,7 +1638,7 @@ public:
     i4_deco_window_class::receive_event(ev);
   }
 
-  char *name() { return "list_box_pull_down"; }
+  void name(char* buffer) { static_name(buffer,"list_box_pull_down"); }
 };
 
 void i4_list_box_class::show(i4_parent_window_class *show_on, i4_coord px, i4_coord py)
@@ -1807,7 +1807,7 @@ public:
         }
   }
 
-  char *name() { return "scroll_button"; }
+  void name(char* buffer) { static_name(buffer,"scroll_button"); }
 
 
   i4_scroll_button(i4_scroll_bar *buddy)
@@ -2344,7 +2344,7 @@ class i4_simple_dlg_class : public i4_parent_window_class
 public:
   enum { YES, NO };
 
-  char *name() { return "simple dlg"; }
+  void name(char* buffer) { static_name(buffer,"simple dlg"); }
   i4_event_handler_class *send_to;
   i4_event *yes_event, *no_event;
   i4_color bg_color;

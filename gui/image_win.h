@@ -31,7 +31,7 @@ public:
   virtual void parent_draw(i4_draw_context_class &context);
   void receive_event(i4_event *ev);
   ~i4_image_window_class();
-  char *name() { return "image_window"; }
+  void name(char* buffer) { static_name(buffer,"image_window"); }
 } ;
 
 #endif

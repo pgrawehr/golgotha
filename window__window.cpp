@@ -1365,15 +1365,19 @@ i4_window_class *i4_parent_window_class::get_nth_window(w32 win_num)
 //#ifndef I4_RETAIL
 void i4_window_class::debug_show()
 {
-  i4_warning("- %s",name());
+	char debug_buf[MAX_NAME_BUFFER_SIZE];
+	name(debug_buf);
+  i4_warning("- %s",debug_buf);
   //if (parent)
   //  parent->debug_show();  
 }
 //#endif
 
 void i4_parent_window_class::debug_show()
-	{
-	i4_warning("%s has the following children:",name());
+{
+	char debug_buf[MAX_NAME_BUFFER_SIZE];
+	name(debug_buf);
+	i4_warning("%s has the following children:",debug_buf);
 	win_iter c=children.begin();
 	w32 nochildren=0;
 	for (;c!=children.end();++c)
@@ -1381,8 +1385,8 @@ void i4_parent_window_class::debug_show()
 		c->debug_show();
 		nochildren++;
 		}
-	i4_warning("----end of children for %s (total %i)----",name(),nochildren);
-	}
+	i4_warning("----end of children for %s (total %i)----",debug_buf,nochildren);
+}
 
 i4_bool i4_parent_window_class::isa_child(i4_window_class *w)
 {
@@ -1941,7 +1945,7 @@ public:
       call_stack_counter--;
       }
 
-  char *name() { return "i4_mwm_context_help"; }
+  void name(char* buffer) { static_name(buffer,"i4_mwm_context_help"); }
 };
 
 class i4_mwm_style_class : public i4_graphical_style_class
@@ -2171,7 +2175,7 @@ protected:
   i4_bool active;
 
 public:
-  virtual char *name() { return "close_button"; }
+  virtual void name(char* buffer) { static_name(buffer,"close_button"); }
 
   i4_mwm_close_button_class(w16 w, w16 h,i4_graphical_style_class *hint) 
     : i4_window_class (w,h),hint(hint)
@@ -2225,7 +2229,7 @@ class i4_mwm_passive_close_button_class : public i4_mwm_close_button_class
 {  
 
 public:
-	virtual char *name() { return "passive_close_button"; }
+	virtual void name(char* buffer) { static_name(buffer,"passive_close_button"); }
 
 	i4_mwm_passive_close_button_class(w16 w, w16 h,i4_graphical_style_class *hint) 
 		: i4_mwm_close_button_class (w,h,hint)
@@ -2287,7 +2291,7 @@ private:
 public:
   i4_const_str title;
 
-  char *name() { return "drag_bar"; }
+  void name(char* buffer) { static_name(buffer,"drag_bar"); }
 
   enum 
   {
@@ -2410,7 +2414,7 @@ public:
       delete on_delete;
     on_delete = 0;
   }
-  char *name() { return "mwm window"; }
+  void name(char* buffer) { static_name(buffer,"mwm window"); }
   i4_parent_window_class *user_window() { return user_area; }
 
   i4_mwm_window_class(w16 width, w16 height, 
@@ -2612,7 +2616,10 @@ class i4_mwm_modal_window_class:public i4_mwm_window_class
 		{
 		i4_kernel.end_modal(this);
 		}
-	virtual char *name() {return "i4_mwm_modal_window";};
+	virtual void name(char* buffer) 
+	{
+		static_name(buffer, "i4_mwm_modal_window");
+	};
 	};
 
 
@@ -2667,7 +2674,7 @@ class i4_drag_frame_class : public i4_window_class
   i4_bool need_remove_ghost,
     draw_self;
 
-  char *name() { return "drag_frame"; }
+  void name(char* buffer) { static_name(buffer,"drag_frame"); }
 
   i4_drag_frame_class(w16 w, w16 h) : 
     i4_window_class(w,h)

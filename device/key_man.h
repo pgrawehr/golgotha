@@ -79,7 +79,7 @@ public:
 
   i4_key_man_class();
 
-  char *name() { return "key manager"; }
+  void name(char* buffer) { static_name(buffer,"key manager"); }
   i4_bool load(const i4_const_str &filename);
   void uninit();
 

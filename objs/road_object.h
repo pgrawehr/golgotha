@@ -128,7 +128,7 @@ class g1_road_object_class: public g1_path_object_class
 	g1_road_object_class(g1_object_type id, g1_loader_class *fp);
 	~g1_road_object_class();
 	void save(g1_saver_class *fp);
-	i4_float occupancy_radius();//with all neighbours
+	//i4_float occupancy_radius() const;//with all neighbours
 	i4_bool occupy_location();//such that the graphics fits.
 	void setup(node_id thisid, i4_float x, i4_float y, i4_float h);
 	void request_remove();

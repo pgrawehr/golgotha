@@ -35,7 +35,7 @@ public:
   g1_path_tool_window_class(i4_graphical_style_class *style, i4_event_handler_class *send_to,
                             int buttons, i4_image_class **img, i4_const_str **help_names);
   
-  char *name() { return "path_tool_win"; }
+  void name(char* buffer) { static_name(buffer,"path_tool_win"); }
 };
 
 class g1_map_class;
@@ -102,7 +102,7 @@ public:
   virtual void receive_event(i4_event *ev);
 
   
-  char *name() { return "path_win"; }
+  void name(char* buffer) { static_name(buffer,"path_win"); }
 private:
 	w16 map_size_x(g1_map_class *map);
 	w16 map_size_y(g1_map_class *map);

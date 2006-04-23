@@ -45,7 +45,7 @@ public:
   i4_bool alt_pressed() { return (key_modifiers_pressed & I4_MODIFIER_ALT) ? i4_T : i4_F; }
   i4_bool shift_pressed() { return (key_modifiers_pressed & I4_MODIFIER_SHIFT) ? i4_T : i4_F; }
 
-  char *name() { return "window_manager"; }
+  void name(char* buffer) { static_name(buffer,"window_manager"); }
 
   i4_graphical_style_class *get_style();
 

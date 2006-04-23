@@ -105,7 +105,7 @@ public:
   g1_get_root_image_event() : i4_user_message_event_class(G1_GET_ROOT_IMAGE) { result=0; }
   virtual i4_event  *copy() { return new g1_get_root_image_event; }  
   virtual dispatch_time when()  { return NOW; }  
-  char *name() { return "get_root_image"; }
+  void name(char* buffer) { static_name(buffer,"get_root_image"); }
 } ;
 
 

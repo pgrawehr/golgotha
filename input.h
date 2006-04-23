@@ -120,7 +120,7 @@ public:
   void reset_esc() { esc=i4_F; }
 
   void uninit();
-  char *name() { return "g1_input"; }
+  void name(char* buffer) { static_name(buffer,"g1_input"); }
 };
 
 extern g1_input_class g1_input;

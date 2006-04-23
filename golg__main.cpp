@@ -416,7 +416,7 @@ public:
 
   void choice_first_level();
 
-  char *name() { return "golgotha_app"; }
+  void name(char* buffer) { static_name(buffer,"golgotha_app"); }
 } ;
 
 golgotha_app *g1_app=0;

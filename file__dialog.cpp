@@ -487,7 +487,7 @@ void add_drives_to_list(i4_array<i4_window_class*> &l)
 #endif
     }
 public:
-  char *name() { return "load dialog"; }
+  void name(char* buffer) { static_name(buffer,"load dialog"); }
 };
 
 

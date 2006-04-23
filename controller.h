@@ -281,7 +281,7 @@ public:
          MOUSE_RIGHT=2 };
   w8 mouse_mask;
 
-  char *name() { return "g1_object_controller"; }
+  void name(char* buffer) { static_name(buffer,"g1_object_controller"); }
   ~g1_object_controller_class();
 
 };
@@ -306,7 +306,7 @@ class g1_map_object_event_class:public i4_object_message_event_class
 			env=0;
 			result=0;
 			};
-		char *name(){return "Map object event";};
+		void name(char* buffer){static_name(buffer,"Map object event");};
 		void typed_get(li_symbol **_msg, li_object **_params,
 			li_environment **_env)
 			{

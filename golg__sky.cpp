@@ -279,7 +279,7 @@ class li_sky_change_button_class : public i4_button_class
 public:
   i4_text_window_class *show_name;
   i4_const_str current_name;
-  char *name() { return "sky_change_button"; }
+  void name(char* buffer) { static_name(buffer,"sky_change_button"); }
   void update_name()
   {
     //char buf[200];

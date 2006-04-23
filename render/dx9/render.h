@@ -43,8 +43,7 @@ public:
            ~r1_dx9_render_window_class();
 
     void    draw( i4_draw_context_class &context );
-    char*   name( void ) { return "dx9 render window"; }  
-//  I4_EVENT_NAME("dx5 render window"); //COMMENTED BY JJ 2000.04.10
+    void name(char* buffer){static_name(buffer,"dx9 render window");};
   
 };
 

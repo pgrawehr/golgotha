@@ -73,7 +73,7 @@ public:
 
   virtual void receive_event(i4_event *ev);
 
-  char *name() { return "scroll_bar"; }
+  void name(char* buffer) { static_name(buffer,"scroll_bar"); }
 };
 
 

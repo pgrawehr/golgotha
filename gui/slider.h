@@ -24,7 +24,7 @@ public:
   i4_slider_event(void *object, w32 x, w32 divisor)
     : i4_object_message_event_class(object), x(x), divisor(divisor)  {}
   i4_event *copy() { return new i4_slider_event(object,x,divisor); }
-  char *name() { return "slide event"; }
+  void name(char* buffer) { static_name(buffer,"slide event"); }
 };
 
 class i4_slider_class : public i4_window_class
@@ -53,7 +53,7 @@ public:
 
   void draw(i4_draw_context_class &context);
   void receive_event(i4_event *ev);
-  char *name() { return "slider"; }
+  void name(char* buffer) { static_name(buffer,"slider"); }
 };
 
 

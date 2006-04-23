@@ -24,7 +24,7 @@ public:
            ~CR1_dx5_render_window_class();
 
     void    draw( i4_draw_context_class &context );
-    char*   name( void ) { return "dx5 render window"; }  
+    void name(char* buffer){static_name(buffer,"dx5 render window");};
 //  I4_EVENT_NAME("dx5 render window"); //COMMENTED BY JJ 2000.04.10
   
 };

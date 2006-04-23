@@ -51,7 +51,7 @@ public:
     deleted=i4_F;
   }
   virtual ~i4_menu_class();
-  char *name() { return "menu class"; }
+  void name(char* buffer) { static_name(buffer,"menu class"); }
 
   virtual void add_child(i4_coord x, i4_coord y, i4_window_class *child)
   { i4_error("use add_item"); }
@@ -82,7 +82,7 @@ public:
                                               lost_to); 
   }
   
-  char *name() { return "menu lost focus"; }
+  void name(char* buffer) { static_name(buffer,"menu lost focus"); }
 };
 
 

@@ -84,7 +84,7 @@ public:
   void receive_event(i4_event *ev);
   void parent_draw(i4_draw_context_class &context);
   void change_current_select();
-  char *name() { return "scroll_picker_class"; }
+  void name(char* buffer) { static_name(buffer,"scroll_picker_class"); }
 };
 
 

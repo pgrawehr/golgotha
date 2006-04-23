@@ -194,7 +194,7 @@ public:
   void major_mode_change();
   g1_mode_handler *get_mode() { return mode; }
 
-  char *name() { return "contedit"; }
+  void name(char* buffer) { static_name(buffer,"contedit"); }
 };
 
 

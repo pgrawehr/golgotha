@@ -752,7 +752,7 @@ public:
     } else return s;
   }
 
-  char *name() { return "TCP/IP"; }
+  char* name() { return "TCP/IP"; }
   i4_protocol_type type() { return I4_TCPIP; }
 };
 

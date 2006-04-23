@@ -1882,9 +1882,15 @@ void g1_controller_edit_class::setup_mode()
   mode=0;
 
 
+  char buf[250];
   for (g1_mode_creator *mc=g1_mode_creator::first; mc; mc=mc->next)
-    if (strcmp(g1_edit_state.major_mode, mc->name())==0)
+  {
+	  mc->name(buf);
+    if (strcmp(g1_edit_state.major_mode, buf)==0)
+	{
       mode=mc->create_mode_handler(this);
+	}
+  }
 
   if (mode && active())
     mode->show_focus();
@@ -2673,13 +2679,14 @@ i4_window_class *g1_edit_state_class::create_buttons(w32 height)
 
   int i=0;
   g1_mode_creator *mc, *cur=0;
-
+  char buf[250];
   for (mc=g1_mode_creator::first; mc; mc=mc->next, i++)
   {
-    if (strcmp(major_mode, mc->name())==0)
+	  mc->name(buf);
+    if (strcmp(major_mode, buf)==0)
       cur=mc;
   
-    add_but(box, mc->name(), 0, (i4_bool) (cur==mc), new g1_set_major_mode_event(mc->name()));
+    add_but(box, buf, 0, (i4_bool) (cur==mc), new g1_set_major_mode_event(buf));
   }
 
   if (cur)
@@ -2779,9 +2786,12 @@ g1_edit_state_class::g1_edit_state_class()
 
 g1_mode_creator *g1_edit_state_class::get_major_mode()
 {
+	char buf[250];
   for (g1_mode_creator *mc=g1_mode_creator::first; mc; mc=mc->next)
   {
-    if (strcmp(major_mode, mc->name())==0)
+
+	  mc->name(buf);
+    if (strcmp(major_mode, buf)==0)
       return mc;
   }
 
@@ -2792,11 +2802,13 @@ i4_bool g1_edit_state_class::set_major_mode(char *mode_name)
 { 
   hide_focus();
 
+  char buf[250];
   for (g1_mode_creator *mc=g1_mode_creator::first; mc; mc=mc->next)
   {
-    if (strcmp(mode_name, mc->name())==0)
+	  mc->name(buf);
+    if (strcmp(mode_name, buf)==0)
     {
-      strcpy(major_mode, mc->name());
+      strcpy(major_mode, buf);
 
       if (tools)
         delete tools;
@@ -5316,7 +5328,7 @@ public:
          DELETE_YES,
          DELETE_NO };
   
-  char *name() { return "cut_scene_editor"; }
+  void name(char* buffer) { static_name(buffer,"cut_scene_editor"); }
 
   ~g1_cut_scene_editor_class()
   {
@@ -5707,7 +5719,7 @@ class g1_bulb_ewin : public i4_color_window_class
 public:
 
 
-  char *name() { return "bulb edit"; }
+  void name(char* buffer) { static_name(buffer,"bulb edit"); }
 
   g1_bulb_ewin(i4_graphical_style_class *style,
                g1_object_class *def)
@@ -5810,7 +5822,7 @@ class g1_time_edit_window : public i4_color_window_class
   w32 t_sec, t_msec;
 
 public:
-  char *name() { return "time edit"; }
+  void name(char* buffer) { static_name(buffer,"time edit"); }
 
   g1_time_edit_window(i4_graphical_style_class *style, w32 cur_frame)
     : i4_color_window_class(0,0,style->color_hint->neutral(), style)
@@ -5923,7 +5935,7 @@ class g1_debug_window_class : public i4_parent_window_class
   i4_bool need_clear;
 
 public:
-  char *name() { return "debug_window"; }
+  void name(char* buffer) { static_name(buffer,"debug_window"); }
 
   g1_debug_window_class(i4_graphical_style_class *style,
 			i4_color text_foreground,
@@ -6196,7 +6208,7 @@ public:
     delete out;
   }
 
-  char *name() { return "time show"; }
+  void name(char* buffer) { static_name(buffer,"time show"); }
 };
 
 class g1_frame_show : public i4_text_input_class
@@ -6280,7 +6292,7 @@ public:
     delete st;
   }
     
-  char *name() { return "time show"; }
+  void name(char* buffer) { static_name(buffer,"time show"); }
 };
 
 class g1_time_scroller : public i4_parent_window_class
@@ -6291,7 +6303,7 @@ class g1_time_scroller : public i4_parent_window_class
   i4_bool mouse_down;
 
 public:
-  char *name() { return "time sroller"; }
+  void name(char* buffer) { static_name(buffer,"time sroller"); }
 
   g1_time_scroller(w16 w, w16 h, 
                    i4_graphical_style_class *style,
@@ -6938,7 +6950,7 @@ public:
     request_redraw(i4_T);
   }
 
-  char *name() { return "object_picker_class"; }
+  void name(char* buffer) { static_name(buffer,"object_picker_class"); }
   g1_object_picker_class()
     : i4_color_window_class(W, H, i4_current_app->get_style()->color_hint->neutral(),
                             i4_current_app->get_style()),
@@ -7143,7 +7155,7 @@ class li_objref_change_button_class : public i4_button_class
 public:
   i4_text_window_class *show_name;
   w32 current_id;
-  char *name() { return "objref_change_button"; }
+  void name(char* buffer) { static_name(buffer,"objref_change_button"); }
   void update_name()
   {
     char buf[200];
@@ -7273,7 +7285,7 @@ public:
     else i4_parent_window_class::receive_event(ev);
   }
 
-  char *name() { return "objref_list_controls"; }
+  void name(char* buffer) { static_name(buffer,"objref_list_controls"); }
 
 };
 
@@ -8376,7 +8388,7 @@ public:
 	api->flush_vert_buffer();
     api->set_filter_mode(R1_BILINEAR_FILTERING);
   }
-  char *name() { return "map_renderer"; }
+  void name(char* buffer) { static_name(buffer,"map_renderer"); }
 };
 
 void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_image_class* image)
@@ -9271,7 +9283,7 @@ public:
     add_child(100,5,input);
   }
 
-  char *name() { return "set health dialog"; }
+  void name(char* buffer) { static_name(buffer,"set health dialog"); }
 
   virtual void receive_event(i4_event *ev)
   {

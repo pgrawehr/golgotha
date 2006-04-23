@@ -40,7 +40,7 @@ public:
 
   void parent_draw(i4_draw_context_class &context);
   void receive_event(i4_event *ev);
-  char *name() { return "divider"; }
+  void name(char* buffer) { static_name(buffer,"divider"); }
 };
 
 #endif

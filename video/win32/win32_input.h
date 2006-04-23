@@ -79,7 +79,7 @@ public:
 
   win32_input_class(char *extra_message);
 
-  char *name() { return "Win32 device manager"; } 
+  void name(char* buffer) { static_name(buffer,"Win32 device manager"); } 
 
   void get_window_area(int &x, int &y, int &w, int &h);
 

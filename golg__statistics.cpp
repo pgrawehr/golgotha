@@ -171,7 +171,7 @@ public:
     i4_time_dev.cancel_event(poll_id);
   }
 
-  char *name() { return "stat_win"; }
+  void name(char* buffer) { static_name(buffer,"stat_win"); }
 };
 
 void g1_statistics_counter_class::show()

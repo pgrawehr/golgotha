@@ -107,7 +107,7 @@ public:
   virtual void uninit();
 
   virtual i4_bool available_for_display(i4_display_class *whom) = 0;
-  virtual char *name() = 0;
+  virtual char *name()=0;
 
   // window will automatically be added to parent at location x,y
   // on_delete will be deleted when the window closes

@@ -144,7 +144,7 @@ public:
   w32 tools_width();
 
 
-  char *name() { return "edit_state"; }
+  void name(char* buffer) { static_name(buffer,"edit_state"); }
 };
 
 extern g1_edit_state_class g1_edit_state;

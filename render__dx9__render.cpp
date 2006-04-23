@@ -82,7 +82,7 @@ void r1_dx9_render_window_class::draw(i4_draw_context_class &context)
   static i4_bool recursion=i4_F;
   r1_dx9_class_instance.x_off = context.xoff;
   r1_dx9_class_instance.y_off = context.yoff;
-  request_redraw(i4_T);
+  //request_redraw(i4_T);
 
   if (!recursion)//if this is called recursively, ignore second call.
 	  {//must not call BeginScene twice
@@ -111,7 +111,8 @@ void r1_dx9_render_window_class::draw(i4_draw_context_class &context)
 	  r1_render_window_class::draw(context);//the render context is already active.
 	  r1_dx9_class_instance.flush_vert_buffer();
 	  }
-  //request_redraw(i4_T);//request redrawing of our childs for next frame
+  request_redraw(i4_T);//request redrawing of our childs for next frame
+  request_redraw();
 };
 
 r1_render_window_class *r1_dx9_class::create_render_window(int visable_w, int visable_h,

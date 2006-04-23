@@ -50,7 +50,7 @@ protected:                           // for use by derived classes
   const i4_pal *pal;
 
 public:                             // called by main program
-  char *name() { return "g1_cwin_man_class"; }
+  void name(char* buffer) { static_name(buffer,"g1_cwin_man_class"); }
 
   virtual void create_views();
   virtual void destroy_views();

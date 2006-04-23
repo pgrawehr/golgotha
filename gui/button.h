@@ -27,7 +27,7 @@ class i4_button_class : public i4_menu_item_class
   i4_event_reaction_class *repeat_event;
 
   public :
-  char *name() { return "button_class"; }
+  void name(char* buffer) { static_name(buffer,"button_class"); }
   i4_button_class(const i4_const_str *idle_context_help,  // can be null
                   i4_window_class *child,
                   i4_graphical_style_class *hint,

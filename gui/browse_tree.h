@@ -19,7 +19,7 @@ class i4_graphical_style_class;
 class i4_browse_window_class : public i4_parent_window_class
 {
 public:
-  char *name() { return "browse_window"; }
+  void name(char* buffer) { static_name(buffer,"browse_window"); }
 
   i4_bool expanded;
   i4_parent_window_class *title_area;
@@ -51,7 +51,7 @@ class i4_vertical_compact_window_class : public i4_parent_window_class
   i4_color color;
   i4_bool center;
 public:
-  char *name() { return "vertical_compact"; }
+  void name(char* buffer) { static_name(buffer,"vertical_compact"); }
 
   virtual void receive_event(i4_event *ev);
   virtual void parent_draw(i4_draw_context_class &context);
@@ -70,7 +70,7 @@ class i4_horizontal_compact_window_class : public i4_parent_window_class
   i4_color color;
   i4_bool center;
 public:
-  char *name() { return "vertical_compact"; }
+  void name(char* buffer) { static_name(buffer,"vertical_compact"); }
 
   virtual void receive_event(i4_event *ev);
   virtual void parent_draw(i4_draw_context_class &context);

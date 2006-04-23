@@ -33,5 +33,5 @@ public:
   virtual void receive_event(i4_event *ev);
 
   virtual i4_menu_item_class *copy();
-  char *name() { return "image_item"; }
+  void name(char* buffer) { static_name(buffer,"image_item"); }
 };

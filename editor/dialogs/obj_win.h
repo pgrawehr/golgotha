@@ -50,7 +50,7 @@ public:
 
   void do_idle();
 
-  char *name() { return "object window"; }
+  void name(char* buffer) { static_name(buffer,"object window"); }
 } ;
 
 

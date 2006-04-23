@@ -48,7 +48,7 @@ class i4_text_item_class : public i4_menu_item_class
     delete check_enable_fn;
   }
 
-  char *name() { return "text_item"; }
+  void name(char* buffer) { static_name(buffer,"text_item"); }
 
   virtual void parent_draw(i4_draw_context_class &context);
   virtual void receive_event(i4_event *ev);
@@ -113,7 +113,7 @@ class i4_checkbox_class:public i4_text_item_class
                w16 pad_left_right=0,
                w16 pad_up_down=0
 			   );
-	virtual char *name(){return "Checkbox";};
+	virtual void name(char* buffer){static_name(buffer,"Checkbox");};
 
 	virtual i4_bool set_state(w32 newstate)
 		{

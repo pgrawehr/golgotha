@@ -53,7 +53,7 @@ public:
 
   void parent_draw(i4_draw_context_class &context);
 
-  char *name() { return "list_box"; }
+  void name(char* buffer) { static_name(buffer,"list_box"); }
 };
 
 

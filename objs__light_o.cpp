@@ -49,7 +49,7 @@ public:
 	enum { 
 		OK=1, CANCEL=2};
 
-		char *name() { return "light_obj editor"; }
+		void name(char* buffer) { static_name(buffer,"light_obj editor"); }
 		g1_light_obj_edit_class(i4_graphical_style_class *style)
 
 			: i4_color_window_class(400, 200, style->color_hint->neutral(), style)

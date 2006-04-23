@@ -103,7 +103,7 @@ public:
 
 
   void damage(g1_object_class *obj, int hp, i4_3d_vector damage_dir);
-  void notify_damage(g1_object_class *obj, int hp);
+  void notify_damage(g1_object_class *obj, sw32 hp);
   i4_bool deploy_to(float x, float y, g1_path_handle ph);
 
   g1_dynamic_object_class(g1_object_type type, g1_loader_class *fp);
@@ -154,7 +154,7 @@ public:
 
 
   void damage(g1_object_class *obj, int hp, i4_3d_vector damage_dir);
-  void notify_damage(g1_object_class *obj, int hp);
+  void notify_damage(g1_object_class *obj, sw32 hp);
   i4_bool deploy_to(float x, float y, g1_path_handle ph);
 
   g1_movable_dynamic_object_class(g1_object_type type, g1_loader_class *fp);

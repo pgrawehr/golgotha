@@ -73,7 +73,7 @@ class g1_object_params : public g1_mode_creator
 public:
 
   g1_object_params();
-  char *name() { return "OBJECT"; }
+  void name(char* buffer) { static_name(buffer,"OBJECT"); }
   enum  { ROTATE,    ZOOM,    ADD,    SELECT,    MOVE,    OBJECT_ROTATE  };
 
 

@@ -69,7 +69,7 @@ class g1_message_box: public i4_color_window_class
 	w32 flags;
 	//static i4_str *text;
 	public:
-	virtual char *name() {return "Message Box class";};
+	void name(char* buffer){static_name(buffer,"MessageBox class");};
 	virtual void receive_event(i4_event *ev);
 	g1_message_box(w16 w, w16 h, i4_graphical_style_class *style, 
 		//i4_const_str &title, i4_const_str &message, 

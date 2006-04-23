@@ -27,7 +27,7 @@ public:
   virtual void broadcast_message(char *message);
   virtual void broadcast_message(i4_const_str &message);
   virtual i4_bool process_events(){return i4_F;};       // returns true if an event was dispatched
-  virtual char *name() { return "Debug Message Device"; }
+  virtual void name(char* buffer) { static_name(buffer,"Debug Message Device"); }
   //virtual device_flags reports_events() { return 0; }  // does not report common events
 };
 
@@ -39,7 +39,7 @@ public:
   char *msg;
   i4_bool del_on_destruct;
   virtual dispatch_time when() { return NOW; }  
-  virtual char *name() {return "debug_message";}
+  virtual void name(char* buffer) {strncpy(buffer,msg,127);}
   g1_send_debug_message_class(i4_const_str &message) 
     : i4_user_message_event_class(G1_DEBUG_SEND_EVENT)
       

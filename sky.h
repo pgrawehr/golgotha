@@ -96,7 +96,7 @@ public:
 
   void receive_event(i4_event *ev);
 
-  char *name() { return "sky_view"; }
+  void name(char* buffer) { static_name(buffer,"sky_view"); }
 };
 
 class r1_render_window_class;
@@ -113,7 +113,7 @@ public:
   ~g1_sky_picker_class();
 
   void receive_event(i4_event *ev);
-  char *name() { return "sky picker"; }
+  void name(char* buffer) { static_name(buffer,"sky picker"); }
 };
 
 

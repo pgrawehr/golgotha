@@ -155,7 +155,7 @@ public:
 	//li_gc_object_marker_class::~li_gc_object_marker_class();//called implicitly by compiler
   }
 
-  char *name() { return "Lisp_Interaction_Window"; }
+  void name(char* buffer) { static_name(buffer,"Lisp_Interaction_Window"); }
 };
 
 i4_parent_window_class *i4_lisp_int_win=0;

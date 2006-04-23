@@ -47,7 +47,7 @@ public:
   void change_current_verts();
   void select_point(int point);
 
-  char *name() { return "texture coord editor"; }
+  void name(char* buffer) { static_name(buffer,"texture coord editor"); }
 };
 
 extern i4_event_handler_reference_class<m1_st_edit_window_class> m1_st_edit;

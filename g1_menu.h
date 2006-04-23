@@ -35,7 +35,7 @@ public:
 
   void receive_event(i4_event *ev);
   ~g1_main_menu_class();
-  char *name() { return "g1_main_menu"; }
+  void name(char* buffer) { static_name(buffer,"g1_main_menu"); }
 };
 
 #endif

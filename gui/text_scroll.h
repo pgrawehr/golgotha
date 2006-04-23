@@ -35,7 +35,7 @@ class i4_text_scroll_window_class : public i4_parent_window_class
   i4_graphical_style_class *style;
 
 public:
-  char *name() { return "text_scroll_window"; }
+  void name(char* buffer) { static_name(buffer,"text_scroll_window"); }
 
   void resize(w16 new_width, w16 new_height);
 

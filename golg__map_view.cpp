@@ -1078,7 +1078,7 @@ public:
     }
   }
 
-  char *name() { return "radar_view"; }
+  void name(char* buffer) { static_name(buffer,"radar_view"); }
 };
 
 

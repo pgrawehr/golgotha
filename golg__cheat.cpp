@@ -76,7 +76,7 @@ public:
     
   }
   
-  char *name() { return "cheat_handler"; }
+  void name(char* buffer) { static_name(buffer,"cheat_handler"); }
 } cheat_handler;
 
 li_object *g1_cheat_menu(li_object *o, li_environment *env)

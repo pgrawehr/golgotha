@@ -106,7 +106,7 @@ public:
 
   virtual void receive_event(i4_event *ev);
 
-  char *name() { return "object window"; }
+  void name(char* buffer) { static_name(buffer,"object window"); }
 } ;
 
 

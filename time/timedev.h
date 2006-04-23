@@ -58,7 +58,7 @@ public:
   i4_bool cancel_event(const id &handle);
    
   virtual i4_bool process_events();       // returns true if an event was dispatched
-  virtual char *name() { return "Time Device"; }
+  virtual void name(char* buffer) { static_name(buffer,"Time Device"); }
   virtual device_flags reports_events() { return 0; }  // doesn't not report common events
 } ;
 

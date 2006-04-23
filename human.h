@@ -78,7 +78,7 @@ class g1_human_class : public g1_team_api_class
   i4_bool select_path(float gx,float gy);
   void clear_selected();
   virtual void think();
-  virtual char *name() { return "Human"; }
+  //char* ai_name() { return "Human"; }
 
   virtual void load(g1_loader_class *fp);
 };

@@ -144,7 +144,7 @@ public:
 		return text;
 	}
 
-	char *name() { return "text_window"; }
+	void name(char* buffer) { static_name(buffer,"text_window"); }
 };
 
 

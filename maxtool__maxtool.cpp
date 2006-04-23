@@ -183,7 +183,7 @@ public:
 //   }
 
 
-  char *name() { return "m1_utility_app_class"; }
+  void name(char* buffer) { static_name(buffer,"m1_utility_app_class"); }
 
   void update_fly(const i4_const_str &name, i4_bool check)
   {

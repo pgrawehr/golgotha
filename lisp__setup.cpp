@@ -886,7 +886,7 @@ public:
     return i4_T;
   }
 
-  char *name() { return "test_app"; }
+  void name(char* buffer) { static_name(buffer,"test_app"); }
 };
 
 void i4_main(w32 argc, i4_const_str *argv)

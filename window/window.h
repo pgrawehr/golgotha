@@ -208,7 +208,7 @@ public:
   /// If this is true, then parent will not clip you out when it draws
   virtual i4_bool transparent() { return i4_F; }
   /// A descriptive name of the class, used for debugging. 
-  virtual char *name() {return ("i4_window_class");}
+  virtual void name(char* buffer) { static_name(buffer,"i4_window_class");}
   /// Returns the parent of the window, might be NULL. 
   i4_parent_window_class *get_parent() { return parent; }
   /// Shows name and children of current window.
@@ -259,7 +259,7 @@ protected:
 public:
   i4_bool has_mouse_focus() { return have_mouse_focus; }
   virtual i4_bool find_new_mouse_focus();  // return true if focus changed
-  virtual char *name() {return ("i4_parent_window_class");};
+  virtual void name(char* buffer) { static_name(buffer,"i4_parent_window_class");};
 
   virtual i4_parent_window_class *root_window();
 

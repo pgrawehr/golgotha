@@ -100,7 +100,7 @@ public:
 
   g1_mode_handler(g1_controller_edit_class *c);
 
-  char *name() { return "mode handler"; }
+  void name(char* buffer) { static_name(buffer,"mode handler"); }
 };
 
 
@@ -124,7 +124,7 @@ public:
   virtual void create_buttons(i4_parent_window_class *container) = 0;
 
   // the name is used to find the major button, & major mode button help
-  virtual char *name() = 0;
+  void name(char* buffer)=0;
 
   // creates on of the above which handles mouse & keys for this mode
   virtual g1_mode_handler *create_mode_handler(g1_controller_edit_class *c) = 0;

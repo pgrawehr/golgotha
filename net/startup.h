@@ -71,7 +71,7 @@ public:
                     i4_graphical_style_class *style,
                     i4_net_protocol *protocol);
 
-  char *name() { return "net_startup"; }
+  void name(char* buffer) { static_name(buffer,"net_startup"); }
   ~g1_startup_window();
 };
 
@@ -89,7 +89,7 @@ public:
   virtual void object_message(int id);
   virtual void poll();
 
-  char *name() { return "server_menu"; }
+  void name(char* buffer) { static_name(buffer,"server_menu"); }
   ~g1_server_start_window();
 };
 
@@ -106,7 +106,7 @@ public:
   virtual void object_message(int id);
   virtual void poll();
 
-  char *name() { return "client_wait"; }
+  void name(char* buffer) { static_name(buffer,"client_wait"); }
   ~g1_client_wait_window();
 };
 

@@ -81,7 +81,7 @@ public:
   void draw(i4_draw_context_class &context);
   //void receive_event(i4_event *ev);
   
-  char *name() { return "dd software render window"; }
+  void name(char* buffer) { static_name(buffer,"dd software render window"); }
 };
 
 class r1_software_gdi_render_window_class : public r1_software_render_window_class
@@ -99,7 +99,7 @@ public:
   void draw(i4_draw_context_class &context);
   //void receive_event(i4_event *ev);
   
-  char *name() { return "gdi software render window"; }
+  void name(char* buffer) { static_name(buffer,"gdi software render window"); }
 };
 
 //extern r1_software_class r1_software_class_instance;

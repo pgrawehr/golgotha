@@ -342,7 +342,7 @@ void g1_movable_dynamic_object_class::damage(g1_object_class *obj, int hp, i4_3d
 	  };
 }
 
-void g1_dynamic_object_class::notify_damage(g1_object_class *obj, int hp)
+void g1_dynamic_object_class::notify_damage(g1_object_class *obj, sw32 hp)
 {
   g1_dynamic_object_type_class *t=get_type();
   if (t->funs[G1_F_NOTIFY_DAMAGE])
@@ -359,7 +359,7 @@ void g1_dynamic_object_class::notify_damage(g1_object_class *obj, int hp)
     g1_object_class::notify_damage(obj, hp);
 }
 
-void g1_movable_dynamic_object_class::notify_damage(g1_object_class *obj, int hp)
+void g1_movable_dynamic_object_class::notify_damage(g1_object_class *obj, sw32 hp)
 {
   g1_dynamic_object_type_class *t=get_type();
   if (t->funs[G1_F_NOTIFY_DAMAGE])

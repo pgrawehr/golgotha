@@ -49,7 +49,7 @@ protected:
   i4_graphical_style_class *style;
   w32 sel_elem;
 public:
-  char *name() { return "m1_mount_window_class"; }
+  void name(char* buffer) { static_name(buffer,"m1_mount_window_class"); }
   void add_item(int &h, int item)
   {
     

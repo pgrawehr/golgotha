@@ -148,7 +148,7 @@ void i4_horizontal_compact_window_class::parent_draw(i4_draw_context_class &cont
 class i4_browse_toggle_class : public i4_window_class
 {
 public:
-  char *name() { return "browse_toggle"; }
+  void name(char* buffer) { static_name(buffer,"browse_toggle"); }
 
   enum { EXPANDED, COMPACTED, NO_CHILDREN } state;
 
@@ -288,7 +288,7 @@ class i4_browse_title_container_class : public i4_parent_window_class
 {
 public:
   i4_browse_title_container_class() : i4_parent_window_class(0,0) {}
-  char *name() { return "browse title container"; }
+  void name(char* buffer) { static_name(buffer,"browse title container"); }
 };
 
 i4_browse_window_class::i4_browse_window_class(i4_graphical_style_class *style,

@@ -26,7 +26,7 @@ protected:
   virtual void add_child(i4_coord x, i4_coord y, i4_window_class *child);
 
 public:
-  char *name() { return "button_box"; }
+  void name(char* buffer) { static_name(buffer,"button_box"); }
 
   i4_button_box_class(i4_event_handler_class *receiver,
                       i4_bool require_one_down=i4_T);
@@ -75,7 +75,7 @@ class i4_button_group_class:public i4_button_box_class
 	virtual void push_button(i4_button_class *which,i4_bool send_event);
 	//virtual void arrange_right_down();
 	//virtual void arrange_down_right();
-	virtual char *name(){return "i4_button_group_class";};
+	void name(char* buffer){static_name(buffer,"i4_button_group_class");};
 	};
 
 

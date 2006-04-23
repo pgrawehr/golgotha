@@ -367,7 +367,7 @@ public:
     delete show_str;
   }
   
-  char *name() { return "gui_stat_window"; }
+  void name(char* buffer) { static_name(buffer,"gui_stat_window"); }
 };
 
 int show_blts=0;
@@ -403,7 +403,7 @@ class i4_gui_status_creator_class : public i4_event_handler_class
 
 
 public:
-  char *name() { return "gui_status"; }
+  void name(char* buffer) { static_name(buffer,"gui_status"); }
   i4_gui_status_creator_class(i4_window_manager_class *wm,
                               i4_display_class *display)
     : wins(2,10),

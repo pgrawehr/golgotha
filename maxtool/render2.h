@@ -87,7 +87,7 @@ public:
   i4_transform_class transform;
 
 
-  char *name() { return "m1_utility_window_class"; }
+  void name(char* buffer) { static_name(buffer,"m1_utility_window_class"); }
 
   m1_utility_window_class(w16 window_width, 
                           w16 window_height,

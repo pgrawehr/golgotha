@@ -140,7 +140,7 @@ public:
   const char *object_name;
   i4_image_class *logo;
 
-  char *name() { return "g1_object_stats"; }
+  void name(char* buffer) { static_name(buffer,"g1_object_stats"); }
   i4_graphical_style_class *style;
 
   g1_object_stats_window_class(const char *object_name, 
@@ -289,7 +289,7 @@ public:
     }
   }
 
-  char *name() { return "g1_build_but"; }
+  void name(char* buffer) { static_name(buffer,"g1_build_but"); }
   
   virtual void parent_draw(i4_draw_context_class &context)
   {

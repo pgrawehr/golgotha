@@ -14,7 +14,7 @@ class g1_create_object_message_class : public i4_user_message_event_class
 { 
 public:
   w16 object_type;
-  virtual char *name() {return "create_object_message";}
+  void name(char* buffer){static_name(buffer,"create_object_message");};
   g1_create_object_message_class(w16 object_type) 
     : i4_user_message_event_class(G1_EDITOR_CREATE_OBJECT),
       object_type(object_type)

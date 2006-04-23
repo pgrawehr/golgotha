@@ -52,7 +52,7 @@ public:
 		LB_SCROLLSELF=0x80000000,
 		
 		};
-  char *name() { return "list_pick"; }
+  void name(char* buffer) { static_name(buffer,"list_pick"); }
   
   i4_list_pick(w16 width, w16 height,
                w32 total_items,

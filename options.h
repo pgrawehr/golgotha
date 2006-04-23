@@ -65,7 +65,7 @@ public:
   g1_option_window(w16 w, w16 h,i4_event_handler_class *notify,
                                 i4_graphical_style_class *style);
   void receive_event(i4_event *ev);
-  char *name() { return "g1_option_window"; }
+  void name(char* buffer) { static_name(buffer,"g1_option_window"); }
 };
 
 

@@ -58,7 +58,7 @@ public:
   g1_edit_state_class *state;
 
 
-  char *name() { return "time_line"; }
+  void name(char* buffer) { static_name(buffer,"time_line"); }
 
 
 

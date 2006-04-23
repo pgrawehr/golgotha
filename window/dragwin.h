@@ -24,7 +24,7 @@ class i4_draggable_window_class : public i4_parent_window_class
   public :
   virtual void receive_event(i4_event *ev);
   i4_draggable_window_class(w16 w, w16 h);
-  char *name() { return "drag_frame"; }
+  void name(char* buffer) { static_name(buffer,"drag_frame"); }
 } ;
 
 

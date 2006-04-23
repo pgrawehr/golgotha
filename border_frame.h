@@ -107,7 +107,7 @@ public:
   virtual void receive_event(i4_event *ev);
   virtual void resize(w16 w,w16 h);
   ~g1_border_frame_class();
-  char *name() { return "border_frame"; }
+  void name(char* buffer) { static_name(buffer,"border_frame"); }
 
 };
 
@@ -123,7 +123,7 @@ public:
   int shrink;              // how many pixels the 3d view is shrinked in for speed-up
   i4_image_class *frame;
   i4_window_class *strategy_window;
-  char *name() { return "strategy screen"; }
+  void name(char* buffer) { static_name(buffer,"strategy screen"); }
   void create_build_buttons();
 
   virtual void parent_draw(i4_draw_context_class &context);
@@ -165,7 +165,7 @@ void change_icon(i4_image_class *new_im,i4_image_class *new_dark);
     if (dark_im&&own_dark) delete dark_im;
   }
 
-  char *name() { return "amount_display"; }
+  void name(char* buffer) { static_name(buffer,"amount_display"); }
 };
 
 
@@ -180,7 +180,7 @@ class g1_help_screen_class : public i4_parent_window_class
   i4_image_class *help;
   w32 mess_id_to_send;
 public:
-  char *name() { return "help screen"; }
+  void name(char* buffer) { static_name(buffer,"help screen"); }
 
   g1_help_screen_class(w16 w, w16 h, 
                        i4_graphical_style_class *style, 
@@ -197,7 +197,7 @@ class g1_win_screen_class: public g1_help_screen_class
 	private:
 		i4_str fname;
 	public: 
-		char *name() { return "win screen"; }
+		void name(char* buffer) { static_name(buffer,"win screen"); }
 		g1_win_screen_class(w16 w, w16 h,
 			i4_graphical_style_class *style,
 			const i4_const_str &image_name,

@@ -5425,7 +5425,7 @@ protected:
 	{
 	};
 public:
-  char *name() { return "li_class_item"; }
+  void name(char* buffer) { static_name(buffer,"li_class_item"); }
 
   i4_array<li_dialog_item *> items;
 
@@ -5527,10 +5527,11 @@ public:
 
 	i4_window_class *window(){return rw;};
 
-	char *name()
+	void name(char* buffer)
 	{
-		return "dummy_class_dialog_item";
-	}
+		static_name(buffer,"dummy_class_dialog_item");
+	};
+	
 	i4_bool can_apply(li_environment *env)
 	{
 		return i4_T;
@@ -6231,7 +6232,10 @@ class li_symbol_type_function : public li_type_function_table
     char *name=s->name()->value();    
     stream->write(name, strlen(name));
   }
-  virtual char *name() { return "symbol"; }
+  char* name() 
+  {
+	  return "symbol"; 
+  }
 
   virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
   {

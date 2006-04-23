@@ -101,7 +101,7 @@ protected:
   char textbuf[512];//longer texts cannot be handled by getValue()
 
 public:  
-  char *name() { return "text_input"; }
+  void name(char* buffer) { static_name(buffer,"text_input"); }
 
   void send_to_parent(i4_event *ev)  {    parent->receive_event(ev);  }
 

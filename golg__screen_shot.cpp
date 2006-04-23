@@ -72,7 +72,7 @@ public:
     }
   }
 
-  char *name() { return "screen_shot watcher"; }
+  void name(char* buffer) { static_name(buffer,"screen_shot watcher"); }
 };
 
 static g1_screen_shot_watcher_class *g1_screen_shot_instance=0;

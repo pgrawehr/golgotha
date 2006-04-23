@@ -166,7 +166,7 @@ class r1_software_render_window_class: public r1_render_window_class
  
         ~r1_software_render_window_class();
 		void receive_event(i4_event *ev);
-		char *name()=0;//force class to be abstract;(even if member is inherited)
+		//char *name()=0;//force class to be abstract;(even if member is inherited)
 	};
 
 extern r1_software_class *r1_software_class_ptr; 

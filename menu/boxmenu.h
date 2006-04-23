@@ -33,7 +33,7 @@ class i4_box_menu_class : public i4_menu_class
     style(style)
   { ; }
 
-  char *name() { return "box_menu"; }
+  void name(char* buffer) { static_name(buffer,"box_menu"); }
 
 } ;
 

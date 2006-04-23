@@ -61,7 +61,7 @@ class g1_tile_params : public g1_mode_creator
 
 public:
   g1_tile_params();
-  char *name() { return "TILE"; }//Warning: Do not change this! Must match entries in res file.
+  void name(char* buffer) { static_name(buffer,"TILE"); }//Warning: Do not change this! Must match entries in res file.
 
   enum
   { ROTATE,

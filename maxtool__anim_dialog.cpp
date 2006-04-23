@@ -39,7 +39,7 @@ protected:
   i4_text_input_class *input[ITEMS];
 public:
   g1_texture_animation *special;
-  char *name() { return "animation dialog"; }
+  void name(char* buffer) { static_name(buffer,"animation dialog"); }
   void add_item(int &h, int item)
   //{{{
   {

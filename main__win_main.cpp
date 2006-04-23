@@ -611,7 +611,7 @@ class g1_debug_output_writer:public i4_init_class, public i4_event_handler_class
 #endif
 			}
 		}
-	char *name(){return "debug_output_writer";};
+	void name(char* buffer){static_name(buffer,"debug_output_writer");};
 	}g1_debug_output_writer_instance;
 
 //#ifdef _WINDOWS

@@ -34,7 +34,7 @@ public:
     active=i4_F;
   }
 
-  char *name() { return "g1_menu_item"; }
+  void name(char* buffer) { static_name(buffer,"g1_menu_item"); }
   
   virtual i4_bool transparent() { return !active; }
   virtual void draw(i4_draw_context_class &context)

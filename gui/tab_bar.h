@@ -31,7 +31,7 @@ public:
 
   virtual void parent_draw(i4_draw_context_class &context);
   ~i4_tab_bar();
-  char *name() { return "tab_bar"; }
+  void name(char* buffer) { static_name(buffer,"tab_bar"); }
 };
 
 

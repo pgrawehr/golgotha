@@ -54,7 +54,7 @@ li_object *m1_save(li_object *o, li_environment *env)
 class m1_saveas_handler_class : public i4_event_handler_class
 {
 public:
-  char *name() { return "saveas"; }
+  void name(char* buffer) { static_name(buffer,"saveas"); }
   void receive_event(i4_event *ev)
   {    
     CAST_PTR(f, i4_file_open_message_class, ev);
@@ -91,7 +91,7 @@ li_object *m1_saveas(li_object *o, li_environment *env)
 class m1_open_handler_class : public i4_event_handler_class
 {
 public:
-  char *name() { return "open"; }
+  void name(char* buffer) { static_name(buffer,"open"); }
   void receive_event(i4_event *ev)
   {    
     CAST_PTR(f, i4_file_open_message_class, ev);

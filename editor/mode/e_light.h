@@ -24,7 +24,7 @@ public:
 class g1_light_params : public g1_mode_creator
 {
 public:
-  char *name() { return "LIGHT"; }
+  void name(char* buffer) { static_name(buffer,"LIGHT"); }
   enum 
   {
     ROTATE,

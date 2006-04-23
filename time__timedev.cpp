@@ -139,8 +139,10 @@ i4_bool i4_time_device_class::process_events()       // returns true if an event
       if (i4_show_events)
 	  {
 		  char buf[i4_event::MAX_NAME_BUFFER_SIZE];
+		  char win_name[i4_event::MAX_NAME_BUFFER_SIZE];
 		  i->event->name(buf);
-        i4_warning("sending : '%s' to '%s'",buf, i->send_to->name());
+		  i->send_to->name(win_name);
+        i4_warning("sending : '%s' to '%s'",buf, win_name);
 	  }
 #endif
       del=i;
@@ -662,7 +664,7 @@ public:
     i4_profile_on=0;
   }
 
-  char *name() { return "profile window"; }
+  void name(char* buffer) { static_name(buffer,"profile window"); }
 };
 
 i4_parent_window_class *i4_prof_win=0;

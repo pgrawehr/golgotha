@@ -63,7 +63,7 @@ public:
     show_on->add_child(_x, _y, this);
   }
 
-  char *name() { return "pull_menu"; }
+  void name(char* buffer) { static_name(buffer,"pull_menu"); }
 };
 
 

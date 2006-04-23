@@ -97,7 +97,7 @@ public:
                     w16 pad_up_down
                     );
   virtual void action();
-  char *name() { return "editor_key_item"; }
+  void name(char* buffer) { static_name(buffer,"editor_key_item"); }
 
 };
 
