@@ -12,7 +12,7 @@
 #include "window/window.h"
 #include "r1_api.h"
 
-class r1_render_window_class : public i4_parent_window_class
+class r1_render_window_class : public i4_window_class
 {  
 protected:
   r1_render_api_class *api;
@@ -27,7 +27,7 @@ public:
   r1_render_window_class(w16 w, w16 h,
                          r1_expand_type expand_type,
                          r1_render_api_class *api)
-    : i4_parent_window_class(w,h),
+    : i4_window_class(w,h),
       expand_type(expand_type),
       api(api)
   {
@@ -41,6 +41,9 @@ public:
 
   virtual void begin_render() {}
   virtual void end_render() {}
+  void add_child(i4_coord x, i4_coord y, i4_window_class* window)
+  {
+  };
 };
 
 #endif
