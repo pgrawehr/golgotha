@@ -1067,12 +1067,12 @@ void r1_software_render_window_class::receive_event(i4_event *ev)
     mev->x/=2;
     mev->y/=2;
 
-    i4_window_class::receive_event(ev);
+    i4_parent_window_class::receive_event(ev);
 
     mev->lx=o_lx;
     mev->ly=o_ly;
     mev->x=o_x;
     mev->y=o_y;
   } 
-  else i4_window_class::receive_event(ev);
+  else i4_parent_window_class::receive_event(ev);
 }

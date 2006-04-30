@@ -84,17 +84,17 @@ int r1_render_window_class::render_area_height()
 
 void r1_render_window_class::redepth(w16 new_bitdepth)
 	{
-	/*if (children.begin()!=children.end())
-		children.begin()->redepth(new_bitdepth);*/
+	if (children.begin()!=children.end())
+		children.begin()->redepth(new_bitdepth);
 	api->redepth(new_bitdepth);
-	i4_window_class::redepth(new_bitdepth);
+	i4_parent_window_class::redepth(new_bitdepth);
 	}
 
 void r1_render_window_class::resize(w16 new_width, w16 new_height)
 {
-  /*if (children.begin()!=children.end())
-    children.begin()->resize(new_width, new_height);*/
+  if (children.begin()!=children.end())
+    children.begin()->resize(new_width, new_height);
   api->resize(new_width,new_height);
-  i4_window_class::resize(new_width, new_height);
+  i4_parent_window_class::resize(new_width, new_height);
 }
 
