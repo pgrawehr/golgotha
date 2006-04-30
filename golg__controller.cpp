@@ -369,7 +369,9 @@ void g1_object_controller_class::parent_draw(i4_draw_context_class &context)
     return ;
   }
 
-  i4_parent_window_class::parent_draw(context);
+  //i4_parent_window_class::parent_draw(context);
+   redraw_flag=i4_T; //The controller is always dirty. (should be redrawed with every frame)
+   request_redraw(i4_T);
   
   //update_cursor();
 
