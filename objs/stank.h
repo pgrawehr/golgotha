@@ -168,7 +168,7 @@ public:
   i4_bool fire_weapon(int slot_number);
   void save(g1_saver_class *fp);
 
-  virtual void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   virtual void think();
   //void set_path(g1_path_handle _path);
   //virtual i4_bool deploy_to(float x, float y);

@@ -93,7 +93,7 @@ public:
   }
 
   // called when the object is on a map cell that is drawn
-  void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   void think();
   li_object *message(li_symbol *name, li_object *params, li_environment *env);
 
@@ -143,7 +143,7 @@ public:
   }
 
   // called when the object is on a map cell that is drawn
-  void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   void think();
   i4_bool can_attack(g1_object_class *who);
   li_object *message(li_symbol *name, li_object *params, li_environment *env);

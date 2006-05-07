@@ -68,9 +68,9 @@ void g1_goal_class::save(g1_saver_class *fp)
   g1_object_class::save(fp);
 }
 
-void g1_goal_class::draw(g1_draw_context_class *context)
+void g1_goal_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {  
-  g1_editor_model_draw(this, draw_params, context);
+  g1_editor_model_draw(this, draw_params, context, viewer_position);
 }
 
 void g1_goal_class::think()

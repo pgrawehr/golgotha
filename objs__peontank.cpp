@@ -266,9 +266,9 @@ void g1_peon_tank_class::think()
   }
 }
 
-void g1_peon_tank_class::draw(g1_draw_context_class *context)
+void g1_peon_tank_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   turret->offset.x = i4_interpolate(lturret_kick, turret_kick, g1_render.frame_ratio);
 
-  g1_map_piece_class::draw(context);
+  g1_map_piece_class::draw(context, viewer_position);
 }

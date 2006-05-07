@@ -188,7 +188,7 @@ public:
     request_think();
   }
 
-  void draw(g1_draw_context_class *context)
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
   {  
     // don't do anything because this is done by draw_sky
   }

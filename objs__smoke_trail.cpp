@@ -118,7 +118,7 @@ void g1_smoke_trail_class::update_head(i4_float nx, i4_float ny, i4_float nh)
   }
 }
 
-void g1_smoke_trail_class::draw(g1_draw_context_class *context)
+void g1_smoke_trail_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   //w32 cur_frame=context->tmap->get_frame_counter();
 

@@ -42,11 +42,11 @@ g1_dropped_bomb_def("dropped_bomb",
 
 S1_SFX(mo_money, "explosion/ariplane_bomb_explosion_one_22khz.wav", S1_STREAMED | S1_3D, 70);
 
-void g1_dropped_bomb_class::draw(g1_draw_context_class *context)
+void g1_dropped_bomb_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
-  g1_model_draw(this, draw_params, context);
+  g1_model_draw(this, draw_params, context, viewer_position);
   if (smoke_trail.valid())
-    smoke_trail->draw(context);
+    smoke_trail->draw(context, viewer_position);
 }
 
 g1_dropped_bomb_class::g1_dropped_bomb_class(g1_object_type id,

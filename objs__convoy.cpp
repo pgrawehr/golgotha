@@ -94,7 +94,7 @@ void g1_convoy_class::remove_object(g1_object_class *obj)
 	//units()->remove(obj);
 	}
 
-void g1_convoy_class::draw(g1_draw_context_class *context)
+void g1_convoy_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 	{
 	
 	if (context->draw_editor_stuff)

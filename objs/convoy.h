@@ -24,7 +24,7 @@ public:
   void save(g1_saver_class *fp);
   
   i4_bool move(i4_float x_amount,i4_float y_amount);
-  void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   i4_bool deploy_to(i4_float x, i4_float y, g1_path_handle ph);//needed to ensure the entire convoy takes the same route
   void fire();
   void think();

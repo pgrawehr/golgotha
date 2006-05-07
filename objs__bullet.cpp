@@ -241,7 +241,7 @@ void g1_bullet_class::load(g1_loader_class *fp)
 	}
 
 
-void g1_bullet_class::draw(g1_draw_context_class *context)
+void g1_bullet_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   if ((bullet_flags & IS_SPRITE)==0)
   {
@@ -249,7 +249,7 @@ void g1_bullet_class::draw(g1_draw_context_class *context)
     g1_render.get_ambient=g1_bright_ambient;
 
     //g1_render.r_api->set_filter_mode(R1_BILINEAR_FILTERING);
-    g1_model_draw(this, draw_params, context);
+    g1_model_draw(this, draw_params, context, viewer_position);
     //g1_render.r_api->set_filter_mode(R1_NO_FILTERING);
 
     g1_render.get_ambient=old_ambient;

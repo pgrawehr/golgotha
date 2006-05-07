@@ -60,7 +60,7 @@ public:
   virtual void skipload(g1_loader_class *fp);
   
   virtual void think();
-  virtual void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
 
   virtual i4_bool move(i4_float x_amount,
                        i4_float y_amount,

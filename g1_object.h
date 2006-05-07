@@ -320,7 +320,9 @@ public:
   //! This function is called exactly once per frame when the object
   //! is actually visible. Under most circumstances, this function
   //! should not change the internal state of the object. 
-  virtual void draw(g1_draw_context_class *context);
+  //! The \a viewer_position argument is used to decide which lod level is used in drawing. 
+  //! If the object is to far away from the viewer, nothing might happen at all. 
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
 
   //! called for each object after everything else has been drawn and in editor mode
   virtual void editor_draw(g1_draw_context_class *context);

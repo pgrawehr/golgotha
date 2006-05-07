@@ -97,7 +97,7 @@ void g1_bolt_class::save(g1_saver_class *fp)
 }
 //}}}
 
-void g1_bolt_class::draw(g1_draw_context_class *context)
+void g1_bolt_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 //{{{
 {  
   int i;

@@ -200,7 +200,7 @@ static void draw_sprite(const i4_3d_vector &p, r1_texture_handle tex, float spri
   }
 }
 
-void g1_beam_weapon_class::draw(g1_draw_context_class *context)
+void g1_beam_weapon_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   if (should_draw)
   {

@@ -174,7 +174,7 @@ public:
   virtual void init();
 
   virtual void think();
-  virtual void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   i4_bool check_turn_radius();
 
   virtual void request_remove();//remove me from map

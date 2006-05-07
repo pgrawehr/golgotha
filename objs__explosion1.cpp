@@ -128,7 +128,7 @@ void g1_explosion1_class::think()
 
 void fast_transform(i4_transform_class *t,const i4_3d_vector &src, r1_3d_point_class &dst);
 
-void g1_explosion1_class::draw(g1_draw_context_class *context)
+void g1_explosion1_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   if (model_id && exp_frame<num_exp_frames)
   {

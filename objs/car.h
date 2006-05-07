@@ -32,7 +32,7 @@ class g2_car_object_class:public g1_map_piece_class
 		i4_bool occupy_location();
 		void unoccupy_location();
 		i4_bool can_attack(g1_object_class *who){return i4_F;}
-		void draw(g1_draw_context_class *context);
+		virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
 		li_object *message(li_symbol *message_name,
                                       li_object *message_params, 
                                       li_environment *env);

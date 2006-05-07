@@ -913,16 +913,19 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class  *context)
           }
       }
   
+	  //Finally, draw all objects in view. 
   for (i=0;i<g1_objs_in_view_dyn.size();i++)
   {
     o=g1_objs_in_view_dyn[i];
     if (o)
     {
       li_this=o->vars;
-
+	  //reset the scratch bit (was set to indicate the object is already in the list)
       o->set_flag(g1_object_class::SCRATCH_BIT, 0);
       if (o->world_transform!=0)
-        o->draw(context);
+		  //pass the draw context (window settings) and the current position to the
+		  //draw function, for clipping. 
+        o->draw(context,pos); 
     }
   }
 

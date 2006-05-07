@@ -210,7 +210,7 @@ void g1_path_object_class::unoccupy_location()
   }
 }
 
-void g1_path_object_class::draw(g1_draw_context_class *context)
+void g1_path_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   if (g1_show_list)
   {
@@ -233,7 +233,7 @@ void g1_path_object_class::draw(g1_draw_context_class *context)
     g1_model_draw(this, draw_params, context);
   else
 #endif
-    g1_editor_model_draw(this, draw_params, context);
+    g1_editor_model_draw(this, draw_params, context, viewer_position);
 
 }
   
@@ -850,7 +850,7 @@ void g1_road_object_class::editor_draw(g1_draw_context_class *context)
 		
 	}
 
-void g1_road_object_class::draw(g1_draw_context_class *context)
+void g1_road_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 	{
 	//g1_path_object_class::draw(context);
 	//editor_draw(context);

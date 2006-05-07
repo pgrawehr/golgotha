@@ -50,7 +50,7 @@ public:
 
   g1_crate_class(g1_object_type id, g1_loader_class *fp);
   i4_bool occupy_location();
-  void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
 
   void setup(const i4_3d_vector &pos, ctype t, atype amount, int ticks=-1);
   void think();

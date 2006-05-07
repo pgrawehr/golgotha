@@ -6838,9 +6838,10 @@ void g1_3d_object_window::draw_object(g1_draw_context_class *context)
 
       
     li_class_context c(object->vars);
+	i4_3d_vector pos(0,0,0); //not checked anyway when FORCEDRAW is on. 
 	w32 oldflags=object->draw_params.flags;
 	object->draw_params.flags|=g1_model_draw_parameters::FORCEDRAW;//draw this object regardless of its position
-    object->draw(context);
+    object->draw(context,pos);
     object->draw_params.flags=oldflags;
     //put the old ambient function back
     g1_render.get_ambient = last_ambient_func;

@@ -44,9 +44,9 @@ i4_bool g1_target_class::occupy_location()
   return g1_object_class::occupy_location();
 }
 
-void g1_target_class::draw(g1_draw_context_class *context)
+void g1_target_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
-  g1_model_draw(this, draw_params, context);
+  g1_model_draw(this, draw_params, context, viewer_position);
 }
 
 void g1_target_class::setup(i4_float _x, i4_float _y)

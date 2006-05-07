@@ -72,9 +72,9 @@ g1_object_definition_class *g1_object_type_array[G1_MAX_OBJECT_TYPES];
 
 
 
-void g1_object_class::draw(g1_draw_context_class *context)
+void g1_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
-  g1_model_draw(this, draw_params, context);
+  g1_model_draw(this, draw_params, context, viewer_position);
 }
 
 

@@ -23,7 +23,7 @@ public:
   g1_flak_class(g1_object_type id, g1_loader_class *fp);
   virtual void setup(const i4_3d_vector &pos, i4_float size);
   
-  virtual void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   virtual void think();
 };
 

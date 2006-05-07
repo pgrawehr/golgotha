@@ -56,11 +56,13 @@ struct g1_model_draw_parameters
 
 void g1_model_draw(g1_object_class *_this,
                    g1_model_draw_parameters &params,
-                   g1_draw_context_class *context);
+                   g1_draw_context_class *context,
+				   i4_3d_vector& viewer_position);
 
 
 void g1_editor_model_draw(g1_object_class *_this,
                           g1_model_draw_parameters &params,
-                          g1_draw_context_class *context);    // calls model draw if in edit mode
+                          g1_draw_context_class *context,
+						  i4_3d_vector& viewer_position);    // calls model draw if in edit mode
 
 #endif

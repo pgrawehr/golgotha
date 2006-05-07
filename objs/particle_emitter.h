@@ -73,7 +73,7 @@ public:
   void occupy_bounds();
 
   void setup(float x, float y, float h, g1_particle_emitter_params &params);
-  virtual void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   virtual void think();
 
   void stop() { stopping=i4_T; } 

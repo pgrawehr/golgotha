@@ -59,7 +59,7 @@ public:
   virtual i4_bool occupy_location();
   virtual void unoccupy_location();
 
-  virtual void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   virtual void editor_draw(g1_draw_context_class *context);
   virtual void think() {}  
   virtual i4_float occupancy_radius() const { return 0; }

@@ -67,7 +67,7 @@ void g1_flak_class::think()
   }
 }
 
-void g1_flak_class::draw(g1_draw_context_class *context)
+void g1_flak_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   i4_3d_vector screen_pos;
   context->transform->transform(i4_3d_point_class(x,y,h), screen_pos);

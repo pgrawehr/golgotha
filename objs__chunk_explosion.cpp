@@ -52,9 +52,9 @@ void g1_chunk_explosion_class::setup(const i4_3d_vector &pos,
   request_think();
 }             
              
-void g1_chunk_explosion_class::draw(g1_draw_context_class *context)
+void g1_chunk_explosion_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
-  g1_model_draw(this, draw_params, context);
+  g1_model_draw(this, draw_params, context, viewer_position);
 }
 
 static li_symbol_ref explode_model("explode_model");

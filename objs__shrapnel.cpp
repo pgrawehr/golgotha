@@ -66,7 +66,7 @@ void g1_shrapnel_class::save(g1_saver_class *fp)
 
 i4_float t_grad_width=0.2f;
 
-void g1_shrapnel_class::draw(g1_draw_context_class *context)
+void g1_shrapnel_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {    
   w32 i;
   

@@ -26,7 +26,7 @@ public:
              g1_quad_object_class *model,
              const i4_3d_vector &dir,
              int ticks_till_explode);  
-  void draw(g1_draw_context_class *context);  
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   void think();  
 }; 
 

@@ -42,11 +42,11 @@ g1_object_definer<g1_super_mortar_class>
 g1_super_mortar_def("super_mortar", 0, g1_super_mortar_init);
 
 
-void g1_super_mortar_class::draw(g1_draw_context_class *context)
+void g1_super_mortar_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
-  g1_model_draw(this, draw_params, context);
+  g1_model_draw(this, draw_params, context, viewer_position);
   if (smoke_trail.valid())
-    smoke_trail->draw(context);
+    smoke_trail->draw(context, viewer_position);
 }
 
 g1_super_mortar_class::g1_super_mortar_class(g1_object_type id,

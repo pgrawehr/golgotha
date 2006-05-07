@@ -371,6 +371,14 @@ public:
     }
 	li_call("def_skys",0,0);//this ensures that even the last dx5 images 
 	//get deleted before shutdown
+
+	//Must destroy the views before the maps, since they might contain references to objects
+	//on the map. 
+	g1_cwin_man->destroy_views();//unload editor
+	g1_cwin_man->uninit();
+	m1_maxtool_man->destroy_views();
+	m1_maxtool_man->uninit();//unload maxtool
+
     if (g1_map_is_loaded())
       g1_destroy_map();
 
@@ -382,11 +390,6 @@ public:
 	s1_unload();//unload sound buffers
     g1_unload_images();
 
-
-    g1_cwin_man->destroy_views();//unload editor
-    g1_cwin_man->uninit();
-	m1_maxtool_man->destroy_views();
-	m1_maxtool_man->uninit();//unload maxtool
 	i4_uninit_gui_status();//shouldn't do this to early.
 	hide_main_menu();
 	main_menu=0;

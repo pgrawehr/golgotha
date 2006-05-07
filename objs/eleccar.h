@@ -46,7 +46,7 @@ public:
   virtual void fire();  //FIRE FIRE FIRE!!!!
   virtual void post_think();
 
-  virtual void draw(g1_draw_context_class *context);  
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);  
 
   electric_car_strategy strategy;
   g1_mini_object        *wheel;

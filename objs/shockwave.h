@@ -37,7 +37,7 @@ class g1_shockwave_class : public g1_object_class
   void alloc_vert_map();
 public:
 
-  virtual void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   virtual void think();
 
   g1_shockwave_class(g1_object_type id, g1_loader_class *fp);

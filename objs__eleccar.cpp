@@ -342,9 +342,9 @@ void g1_electric_car_class::skipload(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 	}
 
-void g1_electric_car_class::draw(g1_draw_context_class *context)
+void g1_electric_car_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {  
-  g1_map_piece_class::draw(context);
+  g1_map_piece_class::draw(context, viewer_position);
 
   sw32 i;
 

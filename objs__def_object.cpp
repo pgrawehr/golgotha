@@ -251,7 +251,7 @@ li_object *g1_movable_dynamic_object_class::message(li_symbol *name, li_object *
 g1_draw_context_class *g1_draw_context;
 
 // called when the object is on a map cell that is drawn
-void g1_dynamic_object_class::draw(g1_draw_context_class *context)
+void g1_dynamic_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   g1_dynamic_object_type_class *t=get_type();
   if (t->funs[G1_F_DRAW])
@@ -267,11 +267,11 @@ void g1_dynamic_object_class::draw(g1_draw_context_class *context)
   {
     g1_model_draw_parameters mp;
     mp.model=get_type()->model;
-    g1_model_draw(this, mp, context);
+    g1_model_draw(this, mp, context, viewer_position);
   }
 }
 
-void g1_movable_dynamic_object_class::draw(g1_draw_context_class *context)
+void g1_movable_dynamic_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   g1_movable_dynamic_object_type_class *t=get_type();
   if (t->funs[G1_F_DRAW])
@@ -288,7 +288,7 @@ void g1_movable_dynamic_object_class::draw(g1_draw_context_class *context)
     //g1_model_draw_parameters mp;
     //mp.model=get_type()->model;
     //g1_model_draw(this, mp, context);
-    g1_map_piece_class::draw(context);
+    g1_map_piece_class::draw(context, viewer_position);
   }
 }
 

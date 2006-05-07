@@ -58,7 +58,7 @@ public:
 
   void move(float new_x, float new_y, float new_h);
             
-  virtual void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
   virtual void think();
   ~g1_light_object_class();
 };

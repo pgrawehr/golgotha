@@ -241,9 +241,9 @@ void g1_light_object_class::save(g1_saver_class *fp)
   fp->end_version();
 }
 
-void g1_light_object_class::draw(g1_draw_context_class *context)
+void g1_light_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {  
-  g1_editor_model_draw(this, draw_params, context);
+  g1_editor_model_draw(this, draw_params, context, viewer_position);
 }
 
 

@@ -219,7 +219,10 @@ class g1_director_class : public g1_object_class
 {
 public:
   g1_model_draw_parameters draw_params;
-  void draw(g1_draw_context_class *context)  { g1_model_draw(this, draw_params, context); }
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+  { 
+	  g1_model_draw(this, draw_params, context, viewer_position); 
+  }
   virtual i4_float occupancy_radius() const { return draw_params.extent(); }
   
   g1_director_class(g1_object_type id, g1_loader_class *fp)

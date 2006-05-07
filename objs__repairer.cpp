@@ -273,10 +273,10 @@ void g1_repairer_class::think()
   request_think();
 }
 
-void g1_repairer_class::draw(g1_draw_context_class *context)
+void g1_repairer_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   //g1_model_draw(this, draw_params, context);
-  g1_map_piece_class::draw(context);
+  g1_map_piece_class::draw(context, viewer_position);
   if (repairing)
 	  {
 	  int i;

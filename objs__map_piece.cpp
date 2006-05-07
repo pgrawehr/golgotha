@@ -127,7 +127,7 @@ void g1_dead_ambient(i4_transform_class *object_to_world,
   ab *=0.4f;
 }
 
-void g1_map_piece_class::draw(g1_draw_context_class *context)
+void g1_map_piece_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   if (g1_show_list)
   {
@@ -145,7 +145,7 @@ void g1_map_piece_class::draw(g1_draw_context_class *context)
                              0xff00ff, 0, context->transform);
   }
 
-  g1_model_draw(this, draw_params, context);
+  g1_model_draw(this, draw_params, context, viewer_position);
 
   if (context->draw_editor_stuff)
   {

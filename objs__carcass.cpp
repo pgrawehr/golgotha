@@ -92,9 +92,9 @@ public:
 	  fp->end_version(I4_LF);
 	  }
   
-  void draw(g1_draw_context_class *context)
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
   {
-    g1_model_draw(this, draw_params, context);
+    g1_model_draw(this, draw_params, context, viewer_position);
     flags|=TARGETABLE | GROUND | BLOCKING | CAN_DRIVE_ON;
   };
   

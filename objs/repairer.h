@@ -55,7 +55,7 @@ public:
   virtual void save(g1_saver_class *fp);
   virtual void load(g1_loader_class *fp);
   virtual void skipload(g1_loader_class *fp);
-  virtual void draw(g1_draw_context_class *context);  
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);  
 
   virtual void setup_flare_look(i4_float _size,
                   i4_float start_width,     i4_float end_width,

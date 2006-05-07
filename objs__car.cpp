@@ -469,7 +469,7 @@ i4_bool g2_car_object_class::start(w32 current_time, link_id for_dest)
 	return i4_T;
 	}
 
-void g2_car_object_class::draw(g1_draw_context_class *context)
+void g2_car_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 	{
 	//todo: draw a point
 	r1_vert v[2];

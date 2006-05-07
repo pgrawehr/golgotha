@@ -23,7 +23,7 @@ public:
   void load(g1_loader_class *fp);
   void skipload(g1_loader_class *fp);
 
-  virtual void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
 
   virtual void fire();
   virtual void think();

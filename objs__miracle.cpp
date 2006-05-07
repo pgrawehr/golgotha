@@ -79,7 +79,7 @@ g1_miracle_class::~g1_miracle_class()
   //}    
 }
 
-void g1_miracle_class::draw(g1_draw_context_class *context)
+void g1_miracle_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {  
   sw32 i,j;
 

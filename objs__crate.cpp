@@ -345,7 +345,7 @@ void g1_crate_class::note_stank_near(g1_player_piece_class *s)
   }    
 }
 
-void g1_crate_class::draw(g1_draw_context_class *context)
+void g1_crate_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   i4_transform_class *old = context->transform;  
   i4_transform_class view_transform;

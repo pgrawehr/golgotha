@@ -1559,7 +1559,7 @@ void g1_player_piece_class::look_for_targets()
   } 
 }
 
-void g1_player_piece_class::draw(g1_draw_context_class *context)
+void g1_player_piece_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   g1_player_piece_class *local_stank=g1_player_man.get_local()->get_commander();
     

@@ -179,12 +179,12 @@ void g1_rocket_class::think()
   move((float)cos(theta) * speed, (float)sin(theta) * speed, zv);
 }
 
-void g1_rocket_class::draw(g1_draw_context_class *context)
+void g1_rocket_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
-  g1_model_draw(this, draw_params, context);
+  g1_model_draw(this, draw_params, context, viewer_position);
 
   if (smoke_trail.valid())
-    smoke_trail->draw(context);
+    smoke_trail->draw(context, viewer_position);
 }
 
 i4_bool g1_rocket_class::move(i4_float x_amount,

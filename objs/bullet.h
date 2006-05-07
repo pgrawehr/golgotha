@@ -65,7 +65,8 @@ public:
                      r1_texture_handle sprite_texture=0,
                      g1_light_object_class *light=0);
 
-  virtual void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+
   virtual void think();
 };
 

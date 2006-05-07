@@ -275,7 +275,7 @@ r1_texture_ref g1_burnt_texture("solid_black");
 
 void fast_transform(i4_transform_class *t, const i4_3d_vector &src, r1_3d_point_class &dst);
 
-void g1_explode_model_class::draw(g1_draw_context_class *context)
+void g1_explode_model_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
 {
   pf_exp_model_draw.start();
 

@@ -105,21 +105,19 @@ static li_symbol_ref team_icons("team_icons");
 
 void g1_model_draw(g1_object_class *_this,
                    g1_model_draw_parameters &params,
-                   g1_draw_context_class *context)
+                   g1_draw_context_class *context,
+				   i4_3d_vector& viewer_position)
 {  
-  i4_3d_vector cpos;
 
-  if (!g1_current_controller.get())
-    return;
 
-  g1_current_controller->get_pos(cpos);
+  //this needs fixing, as it is not what we want if multiple viewports are available.  
   //set this to a very small value if forcedraw, so that we always use the default model
   float dist_sqrd=1.0f;
   if (! (params.flags&g1_model_draw_parameters::FORCEDRAW))
 	  {
-	  dist_sqrd=(cpos.x-_this->x)*(cpos.x-_this->x)+
-		(cpos.y-_this->y)*(cpos.y-_this->y)+
-        (cpos.z-_this->h)*(cpos.z-_this->h);
+	  dist_sqrd=(viewer_position.x-_this->x)*(viewer_position.x-_this->x)+
+		(viewer_position.y-_this->y)*(viewer_position.y-_this->y)+
+        (viewer_position.z-_this->h)*(viewer_position.z-_this->h);
 
   
 	  if (dist_sqrd>g1_resources.lod_disappear_dist)
@@ -266,10 +264,11 @@ void g1_model_draw(g1_object_class *_this,
 
 void g1_editor_model_draw(g1_object_class *_this,
                           g1_model_draw_parameters &params,
-                          g1_draw_context_class *context)
+                          g1_draw_context_class *context,
+						  i4_3d_vector& viewer_position)
 {
   if (context->draw_editor_stuff)
-    g1_model_draw(_this, params, context);
+    g1_model_draw(_this, params, context, viewer_position);
 }
 
 

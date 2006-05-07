@@ -121,7 +121,7 @@ class g1_road_object_class: public g1_path_object_class
 	int find_path(g1_team_type type, g1_path_object_class **stack, int stack_size);
 	int find_path(g1_team_type type, g1_path_object_class *dest,
 		g1_path_object_class **stack, int stack_size);//from this to dest
-	void draw(g1_draw_context_class *context);//with (outgoing) links
+	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);//with (outgoing) links
 	void calc_world_transform(i4_float ratio, i4_transform_class *transform=0)
 		{};//not needed for these objects
     void editor_draw(g1_draw_context_class *context);//same

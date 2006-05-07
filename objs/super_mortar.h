@@ -52,7 +52,7 @@ public:
   
   virtual i4_bool move(i4_3d_vector &vel);
 
-  void draw(g1_draw_context_class *context);
+  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
 };
 
 #endif
