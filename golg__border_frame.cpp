@@ -443,7 +443,7 @@ g1_border_frame_class::g1_border_frame_class()
   controller_window=rwin;
   strategy_on_top=i4_F;
 
-  view->view.view_mode=G1_ACTION_MODE;
+  view->view.set_view_mode(G1_ACTION_MODE);
   i4_key_man.set_context("action");
 
  
@@ -691,7 +691,7 @@ void g1_border_frame_class::update()   // check for changes in the game
 
   i4_str new_frame_name;
   g1_object_class *frame_for_obj=0;
-  w32 fid=g1_current_controller->view.follow_object_id;
+  w32 fid=g1_current_controller->view.get_following_object();
   if (fid)
       {
       frame_for_obj=g1_global_id.checked_get(fid);

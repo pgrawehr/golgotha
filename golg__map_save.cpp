@@ -621,8 +621,8 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 
     int a_size=w * h *sizeof(g1_map_cell_class);
     cells=(g1_map_cell_class *)malloc(a_size);
+	memset(cells,0,a_size);
     g1_cells=cells;
-    memset(cells, 0, a_size);
 
     w16 *tile_remap=g1_map_get_tile_remap(fp);
     if (!tile_remap)

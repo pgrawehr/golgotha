@@ -364,8 +364,8 @@ g1_editor_class::g1_editor_class()
       //must do it manually here, since some prerequisites
       //are not yet met when we first use this constructor. 
       //view_states[i].suggest_camera_mode(G1_EDIT_MODE);
-      view_states[i].view_mode=G1_EDIT_MODE;
-      view_states[i].mode_changed=i4_T;
+      view_states[i].set_view_mode(G1_EDIT_MODE);
+      //view_states[i].mode_changed=i4_T;
       }
 
   vert_noise_amount=3;
@@ -2556,7 +2556,6 @@ g1_controller_edit_class::g1_controller_edit_class(w16 w, w16 h,
 
   edit_win=0;
   drag_select=i4_F;
-  move_points=i4_F;
 
   graph_changed=i4_F;
   need_restore_cell=i4_F;     

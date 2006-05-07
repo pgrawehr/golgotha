@@ -101,13 +101,13 @@ li_object *g1_toggle_follow_mode(li_object *_o, li_environment *env)
       return 0;
   g1_object_class *o=g1_player_man.get_local()->get_commander();
   
-  if (g1_current_controller->view.follow_object_id)
+  if (g1_current_controller->view.get_following_object())
       {
-      o=g1_global_id.get(g1_current_controller->view.follow_object_id);
+      o=g1_global_id.get(g1_current_controller->view.get_following_object());
       }
   if (o)
       {
-      if (g1_current_controller->view.view_mode==G1_FOLLOW_MODE)
+      if (g1_current_controller->view.get_view_mode()==G1_FOLLOW_MODE)
           g1_current_controller->view.suggest_camera_mode(G1_ACTION_MODE, o->global_id);
       else
           g1_current_controller->view.suggest_camera_mode(G1_FOLLOW_MODE, o->global_id);
@@ -177,13 +177,13 @@ li_object *g1_camera_mode(li_object *o, li_environment *env)
 {
   if (g1_current_view_state())
 	  {
-	  g1_view_mode_type curr_mode=g1_current_view_state()->view_mode;
+	  g1_view_mode_type curr_mode=g1_current_view_state()->get_view_mode();
 	  if (curr_mode==G1_WATCH_MODE)
 		  curr_mode=G1_ACTION_MODE;
 	  else 
 		  curr_mode=G1_WATCH_MODE;
 	  g1_current_view_state()->suggest_camera_mode(curr_mode,
-          g1_current_view_state()->follow_object_id);
+          g1_current_view_state()->get_following_object());
 	  }
   return 0;
 }

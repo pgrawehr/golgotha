@@ -1567,8 +1567,8 @@ void g1_player_piece_class::draw(g1_draw_context_class *context)
 
   if (g1_current_controller.get() &&
       this==local_stank && g1_current_controller->view.get_view_mode()==G1_ACTION_MODE &&
-	  ((g1_current_controller->view.follow_object_id==global_id) ||
-      (g1_current_controller->view.follow_object_id==0)))
+	  ((g1_current_controller->view.is_following_object(global_id)) ||
+      (g1_current_controller->view.is_following_object(0))))
       {
       in_local_stank=i4_T;
       }

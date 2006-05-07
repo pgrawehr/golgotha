@@ -35,7 +35,7 @@ class g1_controller_edit_class : public g1_object_controller_class
   g1_mode_handler *mode;
 
   i4_bool graph_changed;
-  i4_bool drag_select, move_points, focus_visible;
+  i4_bool drag_select, focus_visible;
 
   i4_spline_class::point *move_point;
   g1_object_class *place_object;

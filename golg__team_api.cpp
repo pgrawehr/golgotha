@@ -61,8 +61,8 @@ g1_map_piece_class *g1_team_api_class::controlled() const
     if (!g1_current_controller.get())
         return 0;
     g1_map_piece_class *obj=
-    g1_map_piece_class::cast(
-        g1_global_id.checked_get(g1_current_controller->view.follow_object_id));
+		g1_map_piece_class::cast(
+			g1_global_id.checked_get(g1_current_controller->view.get_following_object()));
     if (obj==commander())
         return 0;
     return obj;

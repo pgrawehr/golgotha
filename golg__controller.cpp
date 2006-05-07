@@ -1110,13 +1110,14 @@ void g1_object_controller_class::scale(i4_float x, i4_float y, i4_float z)
 static li_float_class_member cx("x"),cy("y"),cz("z"),scx("scalex"),
 scy("scaley"),scz("scalez"),rotx("rotatex"),roty("rotatey"),rotz("rotatez");
 
+//The next two methods are friend of g1_view_state_class, therefore they are allowed
+//to set the members directly. 
 li_object *g1_set_camera_params(li_object *o, li_environment *env)
 {
   if (o==0)
 	  return 0;
   li_class *c=li_class::get(li_car(o, env),env);
   li_class_context ctx(c);
-  //todo: complete this.
   g1_current_controller->scale(scx(),scy(),scz());
   g1_current_controller->view.end.gx=cx();
   g1_current_controller->view.end.gy=cy();

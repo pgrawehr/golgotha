@@ -242,7 +242,8 @@ w32 g1_human_class::show_selection(g1_object_controller_class *for_who,
 		}
 	g1_convoy_class *c=(g1_convoy_class*) selected_object.get();
 	li_class_context ctx(c->vars);
-	int i,j;
+	int i;
+	w32 j;
 	int nums=units()->size();
 	g1_screen_box *b=0,*thisbb=0;
 	//doesn't work because i4_array cannot correctly handle the garbage collector
@@ -332,7 +333,7 @@ w32 g1_human_class::show_selection(g1_object_controller_class *for_who,
 void g1_human_class::draw_button_model(char *buttoncmd, i4_float posx, i4_float posy, i4_float posz, g1_object_class *forobj)
 	{
 	//i4_3d_vector pos(posx/10,posy/10,0.3f);
-	i4_float w=0.5*r1_near_clip_z;//defines the size of the model
+	i4_float w=0.5f*r1_near_clip_z;//defines the size of the model
 	//i4_float wcorr=r1_near_clip_z/g1_render.center_x;
 	//i4_float maxxof=(g1_render.center_x)*r1_near_clip_z/g1_render.center_x;
 	//i4_float maxyof=(g1_render.center_y)*r1_near_clip_z/g1_render.center_y;
@@ -343,9 +344,9 @@ void g1_human_class::draw_button_model(char *buttoncmd, i4_float posx, i4_float 
 		return;
 	//posx=10;
 	//posy=2*g1_render.center_y-20;
-	i4_float xof=(posx-g1_render.center_x)*0.8*r1_near_clip_z/g1_render.center_x;
+	i4_float xof=(posx-g1_render.center_x)*0.8f*r1_near_clip_z/g1_render.center_x;
 	//xof+=xof/maxxof;
-	i4_float yof=(posy-g1_render.center_y)*0.8*r1_near_clip_z/g1_render.center_y;
+	i4_float yof=(posy-g1_render.center_y)*0.8f*r1_near_clip_z/g1_render.center_y;
 	//yof+=yof/maxyof;
 	i4_float zof=0;
 	i4_3d_vector pos(xof,yof,1.1*r1_near_clip_z);
@@ -390,7 +391,7 @@ void g1_human_class::draw_button_model(char *buttoncmd, i4_float posx, i4_float 
 //for most cases, this takes world coordinates, but not always!!!
 void g1_human_class::player_clicked(g1_object_class *obj, float gx, float gy,w32 command)
 {
-  w32 convoy_type=g1_get_object_type(li_convoy.get());
+  g1_object_type convoy_type=g1_get_object_type(li_convoy.get());
   switch (command)
 	  {
 	  case DEFAULT:

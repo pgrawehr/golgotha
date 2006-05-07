@@ -84,32 +84,19 @@ extern int stereoport;//The default port address for lpt1
 
 class g1_view_state_class
 {
+  friend li_object *g1_set_camera_params(li_object *o, li_environment *env);
+  friend li_object *g1_edit_camera_params(li_object *o, li_environment *env);
+  friend li_object *g1_toggle_glasses(li_object *o, li_environment *env);
 public:
   enum { DATA_VERSION=1 };
-  
+  enum {STEREO_NONE, STEREO_LEFT, STEREO_RIGHT, STEREO_BLACK} stereomode;
+
+private:
   i4_3d_vector move_offset;    // next time the camera updates it will move this distance (not z)
   i4_float strategy_height_offset;//used to keep track of the height diff.
   i4_bool mode_changed;
-  enum {STEREO_NONE, STEREO_LEFT, STEREO_RIGHT, STEREO_BLACK} stereomode;
 
-  i4_bool stereo_enabled() 
-	  {
-	  if (stereomode==STEREO_NONE)
-		  {
-		  return i4_F;
-		  }
-	  else
-		  return i4_T;
-	  }
-
-  void enable_stereo(i4_bool enable=i4_T)
-	  {
-	  if (enable)
-		  stereomode=STEREO_LEFT;
-	  else
-		  stereomode=STEREO_NONE;
-	  }
-
+private:
   struct circle_info
   {
     float zvel,
@@ -148,8 +135,26 @@ public:
     
 
   i4_bool start_invalid;      // when the game first starts, the start camera is invalid
+public:
 
-  
+	i4_bool stereo_enabled() 
+	{
+		if (stereomode==STEREO_NONE)
+		{
+			return i4_F;
+		}
+		else
+			return i4_T;
+	}
+
+	void enable_stereo(i4_bool enable=i4_T)
+	{
+		if (enable)
+			stereomode=STEREO_LEFT;
+		else
+			stereomode=STEREO_NONE;
+	}
+public:
   void defaults();
   
   void update_circle_mode();
@@ -174,12 +179,32 @@ public:
   void update();                   // should be called after every tick, updates end camera pos
   
   g1_view_mode_type get_view_mode() { return view_mode; }
-  void set_view_mode(g1_view_mode_type mode) { view_mode=mode; }
+  void set_view_mode(g1_view_mode_type mode) 
+  { 
+	  if (view_mode!=mode)
+		  mode_changed=i4_T;
+	  view_mode=mode; 
+  }
 
   void calc_transform(i4_transform_class &t);
 
   void suggest_camera_mode(g1_view_mode_type mode,
                            w32 follow_object_global_id=0);
+
+  bool is_following_object(w32 object_id)
+  {
+	return follow_object_id==object_id;
+  }
+
+  w32 get_following_object()
+  {
+	  return follow_object_id;
+  }
+
+  void follow_object(w32 id)
+  {
+	  follow_object_id=id;
+  }
 
   // called by radar map
   void set_camera_position(float game_x, float game_y);

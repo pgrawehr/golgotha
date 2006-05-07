@@ -693,7 +693,7 @@ void g1_map_piece_class::set_as_controlled_object(g1_view_mode_type mode)
     {
     if (g1_current_controller.get())
         {
-        if (g1_current_controller->view.view_mode==G1_STRATEGY_MODE)
+        if (g1_current_controller->view.get_view_mode()==G1_STRATEGY_MODE)
             {
             li_call("strategy_on_bottom",0,0);
             }
@@ -1158,15 +1158,15 @@ i4_bool g1_map_piece_class::controled()
     {
     if (!g1_current_controller.get())
         return i4_F;
-    if ((g1_current_controller->view.follow_object_id==global_id )
+    if ((g1_current_controller->view.is_following_object(global_id))
         &&
-        ((g1_current_controller->view.view_mode==G1_ACTION_MODE)||
-        (g1_current_controller->view.view_mode==G1_FOLLOW_MODE) ) )
+        ((g1_current_controller->view.get_view_mode()==G1_ACTION_MODE)||
+        (g1_current_controller->view.get_view_mode()==G1_FOLLOW_MODE) ) )
         return i4_T;
-    if ((g1_current_controller->view.follow_object_id==0 )
+    if ((g1_current_controller->view.is_following_object(0) )
         && this==g1_player_man.get_local()->get_commander() &&
-        ((g1_current_controller->view.view_mode==G1_ACTION_MODE)||
-        (g1_current_controller->view.view_mode==G1_FOLLOW_MODE) ) )
+        ((g1_current_controller->view.get_view_mode()==G1_ACTION_MODE)||
+        (g1_current_controller->view.get_view_mode()==G1_FOLLOW_MODE) ) )
         return i4_T;
     return i4_F;
     }
