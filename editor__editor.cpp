@@ -1341,7 +1341,7 @@ i4_parent_window_class *g1_editor_class::create_modal(w32 w, w32 h, char *title_
 
 
   modal_window=style->create_modal_window(-1, -1, (w16)w, (w16)h,
-                                       g1_ges(title_res), 
+                                       g1_ges(title_res), true,
                                        new i4_event_reaction_class(this, closed_modal));
 
   return modal_window.get();

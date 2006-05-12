@@ -2541,7 +2541,8 @@ w32 i4_input_box(const i4_const_str &title, const i4_const_str &message, const i
   sd->resize((w16)w,(w16)h);
 
   i4_parent_window_class *p; 
-  p=style->create_modal_window(root->width()/2-w/2, root->height()/2-h/2, (w16)w,(w16)h, title);
+  p=style->create_modal_window(root->width()/2-w/2, root->height()/2-h/2, (w16)w,(w16)h, title,
+	  false);
 
 
   i=0;
@@ -2645,7 +2646,7 @@ w32 i4_message_box(const i4_const_str &title, const i4_const_str &message, w32 f
   sd->resize((w16)w,(w16)h);
 
   i4_parent_window_class *p; 
-  p=style->create_modal_window(root->width()/2-w/2, root->height()/2-h/2, (w16)w,(w16)h, title);
+  p=style->create_modal_window(root->width()/2-w/2, root->height()/2-h/2, (w16)w,(w16)h, title,false);
 
 
   i=0;

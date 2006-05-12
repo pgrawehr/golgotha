@@ -1973,6 +1973,7 @@ public:
   virtual i4_parent_window_class *create_modal_window(i4_coord x, i4_coord y, 
                                                    w16 w, w16 h, 
                                                    const i4_const_str &title,
+												   i4_bool show_close_button,
                                                    i4_event_reaction_class *on_delete=0
                                                    );
 
@@ -2585,10 +2586,11 @@ class i4_mwm_modal_window_class:public i4_mwm_window_class
 	public:
 	i4_mwm_modal_window_class(w16 width, w16 height,
 		const i4_const_str &title,
+		i4_bool show_close_button, 
 		i4_graphical_style_class *hint,
 		i4_event_reaction_class *on_delete)
 		:i4_mwm_window_class(width,height, 
-                      title, i4_F, 
+                      title, show_close_button, 
                       hint,
                       on_delete)
 		{
@@ -2643,11 +2645,13 @@ i4_parent_window_class *i4_mwm_style_class::create_mp_window(i4_coord x, i4_coor
 i4_parent_window_class *i4_mwm_style_class::create_modal_window(i4_coord x, i4_coord y, 
                                                              w16 w, w16 h, 
                                                              const i4_const_str &title,
+															 i4_bool show_close_button,
                                                              i4_event_reaction_class *on_delete)
 	{
 	i4_parent_window_class *root=i4_current_app->get_root_window();
 
-    i4_mwm_modal_window_class *win=new i4_mwm_modal_window_class(w,h,title,this,on_delete);
+    i4_mwm_modal_window_class *win=new i4_mwm_modal_window_class(w,h,title,
+		show_close_button,this,on_delete);
     if (x==-1) 
       x=root->width()/2-w/2;
     if (y==-1)

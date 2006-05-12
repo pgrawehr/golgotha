@@ -120,6 +120,7 @@ public:
   virtual i4_parent_window_class *create_modal_window(i4_coord x, i4_coord y,
 	  w16 w, w16 h,
 	  const i4_const_str &title,
+	  i4_bool show_close_button,
 	  i4_event_reaction_class *on_delete=0) = 0;
 
   virtual i4_bool close_mp_window(i4_parent_window_class *created_window) = 0;
