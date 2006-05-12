@@ -144,7 +144,7 @@ void g1_sky_view::draw(i4_draw_context_class &context)
 
     }
     else
-      han=0;
+      han=-1;
 
 
 
@@ -156,7 +156,7 @@ void g1_sky_view::draw(i4_draw_context_class &context)
     else               
       api->set_constant_color(0x9f9f9f);
 
-    if (han)      
+    if (han>=0)      
       api->use_texture(han, width(), 0);
 	else
 		{

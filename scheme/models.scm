@@ -202,6 +202,7 @@ Programmer's resource file
  ("tron_grid")
  ("target_cursor")
   "gun_target_cursor"
+  "nuk_sky"
   "nuk_sky1"
   "nuk_sky2"
   "skycloudyblue1"
