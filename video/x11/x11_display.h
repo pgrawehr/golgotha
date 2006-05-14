@@ -47,7 +47,10 @@ class x11_display_input_class : public x11_input_class
 public:
   virtual void resize(int w, int h);
   virtual void note_event(XEvent &xev);
-
+  virtual void name(char *buf)
+  {
+	  static_name(buf, "x11_display_input_class");
+  }  
 };
 
 class x11_display_class : public i4_display_class

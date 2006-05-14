@@ -225,7 +225,7 @@ public:
   virtual i4_event  *copy();
   void name(char* buffer) 
   { 
-	  _snprintf(buffer,MAX_NAME_BUFFER_SIZE-1,"do_command_event_class %s",command); 
+	  snprintf(buffer,MAX_NAME_BUFFER_SIZE-1,"do_command_event_class %s",command); 
 	  buffer[MAX_NAME_BUFFER_SIZE-1]=0;
   }
 } ;
@@ -246,7 +246,7 @@ public:
   virtual i4_event  *copy() { return new i4_end_command_event_class(command, command_id, time); }
   void name(char* buffer) 
   { 
-	  _snprintf(buffer,MAX_NAME_BUFFER_SIZE-1,"end_command_event_class %s",command); 
+	  snprintf(buffer,MAX_NAME_BUFFER_SIZE-1,"end_command_event_class %s",command); 
 	  buffer[MAX_NAME_BUFFER_SIZE-1]=0;
   }
 } ;

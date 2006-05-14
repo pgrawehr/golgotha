@@ -93,6 +93,11 @@ public:
     mouse_locked=yes_no;
     return i4_T;
   }
+  
+  virtual void name(char *buf)
+  {
+	  static_name(buf, "x11_input_class");
+  } 
 
   x11_input_class();
   ~x11_input_class();

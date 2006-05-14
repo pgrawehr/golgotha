@@ -22,7 +22,8 @@ class g1_mapsingle_class : public g1_object_class
 	//singleton objects don't take damage
 	virtual void damage(g1_object_class *who_is_hurting, 
 		int how_much_hurt, i4_3d_vector damage_dir);
-	virtual void draw(g1_draw_context_class *context);
+	virtual void draw(g1_draw_context_class *context, 
+			i4_3d_vector &viewer_position);
 	};
 
 class g1_day_night_class : public g1_mapsingle_class
