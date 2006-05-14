@@ -19,6 +19,7 @@
 #include "video/movie_engine.h"
 #include "window/window.h"
 #include <mmsystem.h>
+#include "net/server.h"
 
 //this code is os-dependent
 
@@ -85,7 +86,7 @@ i4_bool win32_input_class::process_events()
       }
     }
   }*/
-  if (active)
+  if (active||i4_network_active())//do not pause when a netgame is in progress. 
 	  {
 	  while (PeekMessage(&msg, NULL, 0,0, PM_REMOVE)==TRUE)//not only for whandle
 		  {

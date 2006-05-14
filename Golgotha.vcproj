@@ -720,6 +720,9 @@
 				RelativePath=".\objs__damager.cpp">
 			</File>
 			<File
+				RelativePath=".\objs__day_night.cpp">
+			</File>
+			<File
 				RelativePath=".\objs__debris.cpp">
 			</File>
 			<File
@@ -1232,6 +1235,9 @@
 			</File>
 			<File
 				RelativePath=".\objs\damager.h">
+			</File>
+			<File
+				RelativePath=".\objs\day_night.h">
 			</File>
 			<File
 				RelativePath=".\video\win32\dd_cursor.h">

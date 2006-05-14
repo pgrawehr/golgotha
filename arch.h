@@ -58,6 +58,8 @@ typedef unsigned char   w8;
 typedef signed long     sw32;
 typedef signed short    sw16;
 typedef signed char     sw8;
+
+#define snprintf _snprintf
 #undef I4_UNIX /*Windows is not unix*/
 
 #ifdef __WATCOMC__                   // visual c has __int64

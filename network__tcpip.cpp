@@ -167,13 +167,13 @@ public:
 
     if (bind(fd, (sockaddr *) &host,  sizeof(host))==-1)
     { 
-      i4_warning("bind failed"); 
+      i4_error("Bind to port %d failed", port);
       return 0; 
     }
 
     if (stype==I4_CONTINOUS_STREAM && ::listen(fd, 5)==-1)
     {
-      i4_warning("listen failed");
+      i4_error("Listen on port %d failed",port);
       return 0;
     }
       
@@ -348,11 +348,11 @@ public:
     poll_fd=-1; listen_fd=-1;
 
     if (!i4_get_my_addr(my_addr))
-    { i4_warning("couldn't get my ip"); return 0; }
+    { i4_warning("Couldn't get my own IP"); return 0; }
 
     poll_fd=socket(AF_INET, SOCK_DGRAM, 0);
     if (poll_fd<0)
-    { i4_warning("out of sockets"); return 0; }
+    { i4_warning("out of sockets creating the poll socket"); return 0; }
 
     sockaddr_in host;
     memset( (char*) &host,0, sizeof(host));
@@ -388,18 +388,27 @@ public:
 	maxmsgsize=MAX_PACKET_SIZE;
 
     if (connect(poll_fd, (sockaddr *) &host, sizeof(host))==-1)
-    { i4_warning("connect failed"); return 0; }
+    { 
+		i4_warning("Connect to host failed"); 
+		return 0; 
+	}
 
 
     listen_fd=socket(AF_INET, SOCK_DGRAM, 0);
     if (listen_fd<0)
-    { i4_warning("out of sockets"); return 0; }
+    { 
+		i4_warning("Out of sockets creating the listener socket"); 
+		return 0; 
+	}
 
     host.sin_port = htons(listen_port);
     host.sin_addr.s_addr = htonl (INADDR_ANY);
 
     if (bind(listen_fd, (sockaddr *) &host,  sizeof(host))==-1)
-    { i4_warning("bind failed"); return 0; }
+    { 
+		i4_warning("Could not bind the socket to the connection"); 
+		return 0; 
+	}
 
     last_ping.get();
     return 1;
