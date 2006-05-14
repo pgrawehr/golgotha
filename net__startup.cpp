@@ -231,7 +231,10 @@ void g1_startup_window::object_message(int id)
     grab_uname();
 
     i4_finder_socket::server s;
-    find->get_server(id-LAST, s);
+	if (find)
+		find->get_server(id-LAST, s);
+	else
+		i4_finder_socket::get_localhost(s);
 
     s.addr->set_port(g1_resources.net_udp_port);
     g1_client=new g1_client_class(s.addr, g1_resources.net_udp_port, protocol);
@@ -244,6 +247,7 @@ void g1_startup_window::object_message(int id)
 void g1_startup_window::poll()
 {
   if (find)
+  {
     if (find->poll())
     {
       free_buts();
@@ -265,6 +269,23 @@ void g1_startup_window::poll()
         y+=buts[i]->height()+1;
       }
     }
+  }
+  //if find is null, this usually means the broadcast class couldn't be initialized
+  //because the port was already open, possibly by another instance of golgotha. 
+  //Let's add "localhost" to the list in this case. 
+  else
+  {
+	free_buts();
+	i4_finder_socket::server s;
+	i4_finder_socket::get_localhost(s);
+	buts=(i4_button_class **)I4_MALLOC(sizeof(i4_button_class *),"but array");
+	t_buts=1;
+	i4_text_window_class *loc=new i4_text_window_class(*s.notification_string, style);
+	buts[0]=new i4_button_class(0,loc,style,create_orec(LAST));
+	int y1=g1_resources.net_found_y, x1=g1_resources.net_found_x1;
+	add_child(x1,y1,buts[0]);
+	
+  }
 }
 
 g1_startup_window::~g1_startup_window()
@@ -1227,6 +1248,8 @@ int g1_server_class::prepare_command(int command)
 			if (ok)
 				{
 				i4_warning("Switching to running state as we seem to be running server-only");
+				if (!network_file)
+					network_file=new i4_temp_file_class(2000,2000);
 				state=RUNNING;
 				return NE_ERROR_OK;
 				}

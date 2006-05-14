@@ -40,6 +40,7 @@ public:
   virtual i4_bool poll() = 0;   // returns true if list changed
   virtual int total_servers() = 0;
   virtual void get_server(int num, server &s) = 0;
+  static void get_localhost(server &s);
 
   //the following function is used if the destination address is known.
   //choose 0 as ipaddr to revert to broadcast.

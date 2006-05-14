@@ -758,6 +758,16 @@ public:
 
 i4_tcpip_protocol i4_tcpip_protocol_instance;
 
+void i4_finder_socket::get_localhost(server &s)
+{
+	s.notification_string=new i4_str("localhost");
+	s.addr=new i4_tcpip_address();
+	i4_tcpip_address *temp=((i4_tcpip_address *)s.addr);
+	temp->addr.sin_family=AF_INET;
+	temp->addr.sin_addr.s_addr=inet_addr("127.0.0.1");
+	s.addr->set_port(g1_resources.net_udp_port);
+	s.addr->protocol=&i4_tcpip_protocol_instance;
+}
 
 void i4_tcpip_sock::set_select_status(i4_bool read, i4_bool write, i4_bool error) 
 {
