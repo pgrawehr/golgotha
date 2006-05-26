@@ -220,7 +220,7 @@ void g1_trike_class::think()
             }      
 		return;   
         }
-	else if (next_path->valid())
+	else if (next_path.valid())
 	{
 		//Need a new target because our's just blew away without our help...
 		if (speed>(defaults->speed+defaults->accel))

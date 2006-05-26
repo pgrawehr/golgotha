@@ -6626,7 +6626,7 @@ void g1_time_line::update_scene()
   g1_movie_flow_class *m=current_movie();
 
   i4_const_str fmt=g1_editor_instance.get_editor_string("frame_format");
-  i4_str *scene_number=fmt.sprintf(10, m->get_scene()+1);
+  i4_str *scene_number=fmt.sprintf(30, m->get_scene()+1);
   scene_number_input->change_text(*scene_number);
   delete scene_number;
 }

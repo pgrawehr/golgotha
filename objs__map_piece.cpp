@@ -926,13 +926,14 @@ void g1_map_piece_class::advance_path()
 	  if (!my_solver) 
 		  my_solver=prefered_solver();
 	  }	  
-  if (my_solver) 
-      return;
+  //if (my_solver&&!next_path.valid()) 
+  //    return;
 	  
   //g1_team_type type=g1_player_man.get(player_num)->get_team();
       
   if (next_path.valid())
   {
+	  solveparams|=SF_USE_PATHS; //If we once used a path, we suppose we are allowed to. 
     message(reached.get(), new li_g1_ref(next_path->global_id), 0);
 
     unlink();
