@@ -369,11 +369,12 @@ public:
 	  for (i=0; i<time.size(); i++)
 		  {
 		  if (!convoys[i]->valid())//an entire convoy was killed
-			  {
+		      {
+			  delete convoys[i];
 			  convoys.remove(i);
 			  time.remove(i);
 			  i--;
-			  }
+		      }
 		  
 		  }
 	  float tx,ty;
@@ -618,9 +619,11 @@ public:
 			  delete goals[n];
 		  goals.clear();
 		  for (n=0;n<numgoals;n++)
-			  {
-			  goals.add(new g1_typed_reference_class<g1_object_class>(buf[n]));
-			  }
+		  {
+			  //Do not add goals we already own. 
+			  if (buf[n]->player_num!=team())
+				goals.add(new g1_typed_reference_class<g1_object_class>(buf[n]));
+		  }
 		  build_mode=BUILDWAIT;
 		  build_wait=10;
 		  }

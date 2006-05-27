@@ -296,7 +296,7 @@ w32 i4_loader_class::read (void *buffer, w32 size)
 
 w32 i4_loader_class::write(const void *buffer, w32 size)
 {
-  i4_error("Bad bad");
+	i4_error("ERROR: Attempting to write to a file being loaded");
   return 0;
 }
 

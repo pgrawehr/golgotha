@@ -227,7 +227,7 @@ void g1_convoy_class::calcsize()
 			maxh=mp->h;
 
 		}
-	if (maxx<minx) //this can oldy happen if nothing is found
+	if (maxx<minx) //this can only happen if nothing is found
 		{
 		meanx=meany=meanh=0;
 		sizex=sizey=0;
@@ -270,6 +270,7 @@ void g1_convoy_class::setup(g1_object_class *firstobj)
 i4_bool g1_convoy_class::deploy_to(i4_float destx,i4_float desty, g1_path_handle ph)
 	{
 	i4_float point[MAX_SOLVEPOINTS*2];
+	i4_float point_copy[MAX_SOLVEPOINTS*2];
 	w16 tpoints=0;
 	li_class_context c(vars);
 	g1_map_piece_class *mp;
@@ -303,19 +304,27 @@ i4_bool g1_convoy_class::deploy_to(i4_float destx,i4_float desty, g1_path_handle
 				mp=g1_map_piece_class::cast(units()->value(i));
 				if (!mp)
 					{
-					
 					continue;
 					}
 				xdiff=mp->x-x;
 				ydiff=mp->y-y;
-				point[0]=destx-xdiff;
+				
+				for (int k=0;k<tpoints;k++)
+				{
+					point_copy[k*2]=point[k*2]-xdiff;
+					point_copy[k*2+1]=point[k*2+1]-ydiff;
+				}
+				ph1=g1_path_manager.alloc_path(tpoints,point_copy);
+				mp->deploy_to(destx,desty,ph1);
+
+				//This doesn't really work, since the units will try to find 
+				//the startpoint of the common path, which is the same for everyone,
+				//which in turn leads to a pile-up. 
+				//The last point of the path is point[0]/point[1] (for x/y)
+				/*point[0]=destx-xdiff;
 				point[1]=desty-ydiff;
 				ph1=g1_path_manager.alloc_path(tpoints,point);
-				mp->deploy_to(destx,desty,ph1);
-				//mp->solveparams&=~SF_USE_PATHS;
-				//mp->my_solver=0;
-				//mp->unlink();
-				//mp->set_path(ph);
+				mp->deploy_to(destx,desty,ph1);*/
 				}
 			return i4_T;
 			}

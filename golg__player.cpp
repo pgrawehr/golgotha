@@ -94,7 +94,7 @@ void g1_player_info_class::remove_object(w32 global_id)
       return ;
     }
 
-  i4_warning("object not found");
+  i4_warning("Object doesn't belong to current player");
 }
 
 void g1_player_info_class::add_object(w32 global_id)

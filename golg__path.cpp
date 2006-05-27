@@ -68,10 +68,14 @@ public:
 
   g1_path_class(g1_loader_class *fp)
   {
-//    w16 ver,data_size;
+    w16 ver=0,data_size=0;
 
-    if (fp && fp->check_version(VERSION))
+
+    if (fp)
     {
+	  ver=fp->read_16();
+	  I4_ASSERT(ver==VERSION,"ERROR: Unknown version of path data encountered");
+	  data_size=fp->read_16();
       nodes = fp->read_8();
       current = fp->read_8();
       alloc();
@@ -81,7 +85,6 @@ public:
         node[i].y = fp->read_float();
       }
 
-      fp->end_version(I4_LF);
     }
     else
     {
@@ -92,7 +95,11 @@ public:
 
   void save(g1_saver_class *fp)
   {
-    fp->start_version(VERSION);
+	  //Since this is saved trough an object, we must not use start_version/end_version,
+	  //because that mechanism does not support recursion. 
+    //fp->start_version(VERSION);
+	fp->write_16(VERSION);
+	fp->write_16(nodes*8+6); //Number of bytes
     fp->write_8(nodes);
     fp->write_8(current);
     for (w8 i=0; i<nodes; i++)
@@ -100,7 +107,7 @@ public:
       fp->write_float(node[i].x);
       fp->write_float(node[i].y);
     }
-    fp->end_version();
+    //fp->end_version();
   }
 
   ~g1_path_class()
