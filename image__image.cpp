@@ -564,22 +564,34 @@ i4_image_class *i4_image_class::scale_image(i4_image_class *to,i4_coord newx,i4_
 	{
 		int neww=width();
 		int newh=height();
+		bool bReverse=i4_T; //true if x and y are exchanged (is true by default, 
+		                    //for unknown historical reasons)
+		//I4_ASSERT(neww==newh,"Width not equal height");
 		if (rotation==G1_ROTATE_90 || rotation == G1_ROTATE_270)
 		{
+			bReverse=!bReverse;
 			neww=height();
 			newh=width();
 		}
 		if (mirror)
 		{
+			bReverse=!bReverse;
 			int temp=newh;
 			newh=neww;
 			neww=temp;
 		}
 		i4_image_class *ret=i4_create_image(neww,newh,this->get_pal());
 		int y,x;
-		for (y=0;y<height();y++)
+		int outerloop=newh;
+		int innerloop=neww;
+		if (bReverse)
 		{
-			for (x=0;x<width();x++)
+			outerloop=neww;
+			innerloop=newh;
+		}
+		for (y=0;y<outerloop;y++)
+		{
+			for (x=0;x<innerloop;x++)
 			{
 				int newxpos=0;
 				int newypos=0;
