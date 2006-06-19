@@ -499,6 +499,8 @@ public:
 
   void change_vert_height(sw32 x, sw32 y, w8 new_height);
 
+  w8 get_vert_height(sw32 x, sw32 y);
+
   // how much light illuminates an object at this position
   void get_illumination_light(i4_float x, i4_float y, i4_float &r, i4_float &g, i4_float &b);
 

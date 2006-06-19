@@ -10051,6 +10051,24 @@ void g1_editor_class::load_height_bitmap_ok(i4_event *ev)
           
         }
 
+		int min_z=255;
+		int max_z=0;
+
+		for (y=0; y<mh; y++)
+		{
+		
+			for (x=0; x<mw; x++, v++)
+			{
+				int curr_z=get_map()->get_vert_height(x,mh-y-1);
+				if (min_z>curr_z)
+					min_z=curr_z;
+				if (max_z<curr_z)
+					max_z=curr_z;
+			}
+
+		}
+		
+
         if (stat)
           delete stat;
         delete im;

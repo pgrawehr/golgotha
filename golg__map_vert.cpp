@@ -370,6 +370,12 @@ void g1_map_class::change_vert_height(sw32 x, sw32 y, w8 new_height)
   v->light_sum=0x80000000; 
 }
 
+w8 g1_map_class::get_vert_height(sw32 x, sw32 y)
+{
+	g1_map_vertex_class* v=verts+ x+ y*(w+1);
+	return v->height;
+}
+
 
 void g1_map_vertex_class::recalc_normal(int x, int y)
 {

@@ -24,13 +24,14 @@ void g1_breadth_first_map_solver_class::set_block_map(g1_block_map_class *_block
   {
     if (solve_map)
 		{
-        i4_free(solve_map);
+        free(solve_map);
 		delete [] length_map;
 		}
     wx = block->width();
     wy = block->height();
-    solve_map = (w8*)I4_MALLOC(wx*wy,"solve_map");
+    solve_map = (w8*)malloc(wx*wy);//don't use I4_MALLOC here, since that can fail for large chunks.
 	length_map = new i4_float[wx*wy];
+	I4_ASSERT(solve_map&&length_map,"Insufficient memory for block maps");
   }
 }
 //}}}
@@ -40,7 +41,7 @@ g1_breadth_first_map_solver_class::~g1_breadth_first_map_solver_class()
 {
   if (solve_map)
 	  {
-      i4_free(solve_map);
+      free(solve_map);
 	  delete [] length_map;
 	  }
 }
