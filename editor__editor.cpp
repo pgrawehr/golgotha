@@ -8415,48 +8415,73 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 	g1_rotation_type rot;
 	g1_map_cell_class *c;
 	g1_tile_class* tile;
+	w32 tile_color=0;
 	int texture;
-	for (y=y1; y<y2; y++, t+=t_step)  
+	//If the map is very huge, the lod image will contain less than one pixel per tile, such
+	//that it is ok to just use the average color (and save a lot of time)
+	if (t_step<1 || s_step <1)
 	{
-		s=0;
-		t_corr=0;
-		//Copy an additional pixel if the next step would skip one or it's the last element
-		//to be copied (this is due to rounding errors)
-		if (i4_fract(t)+t_fract_step>=1.0f || y==(y2-1))
+		for (y=y1 ; y<y2; y++, t+=t_step)
 		{
-			t_corr=1;
-		}
-		for (x=x1; x<x2; x++, s+=s_step)
-		{
-			s_corr=0;
-			if (i4_fract(s)+s_fract_step>=1.0f || x==(x2-1))
+			s=0;
+			//Copy an additional pixel if the next step would skip one or it's the last element
+			//to be copied (this is due to rounding errors)
+			for (x=x1; x<x2; x++, s+=s_step)
 			{
-				s_corr=1;
-			}
-			c=g1_cells + g1_map_width*y+x;
+				c=g1_cells + g1_map_width*y+x;
 
-			tile=g1_tile_man.get(c->type);
-			texture=tile->texture;
-			//Get the lowest miplevel, this is better than average color and certainly loaded
-			//at this point. 
-			if (c->mirrored())
-			{
-				rot=rotation_remap_mirror[c->get_rotation()];
+				tile=g1_tile_man.get(c->type);
+				texture=tile->texture;
+				
+				tile_color=tman->average_texture_color(texture,0);
+				image->put_pixel((i4_coord)s,(i4_coord)t,tile_color);
 			}
-			else
+		}
+	}
+	else
+	{
+		for (y=y1; y<y2; y++, t+=t_step)  
+		{
+			s=0;
+			t_corr=0;
+			//Copy an additional pixel if the next step would skip one or it's the last element
+			//to be copied (this is due to rounding errors)
+			if (i4_fract(t)+t_fract_step>=1.0f || y==(y2-1))
 			{
-				rot=rotation_remap[c->get_rotation()];
+				t_corr=1;
 			}
-			current_texture=tman->get_texture_image(texture,0,8); 
-			//The following code can be used to "graphically" debug the creation of the
-			//landscape lod-texture (creates a whole bunch of files in the golgotha directory!)
-			/*i4_str text_name_etc("tex_image_%d_%d_%d_%d.tga");
-			i4_str *file_name=text_name_etc.sprintf(200,x1,y1,(w32)s,(w32)t);
-			i4_write_tga(current_texture,*file_name,false);
-			delete file_name;*/
-			current_texture->copy_image_to(image,(i4_coord)s,(i4_coord)t,
-				(sw32)s_step+s_corr,(sw32)t_step+t_corr,rot,c->mirrored());
-			delete current_texture;
+			for (x=x1; x<x2; x++, s+=s_step)
+			{
+				s_corr=0;
+				if (i4_fract(s)+s_fract_step>=1.0f || x==(x2-1))
+				{
+					s_corr=1;
+				}
+				c=g1_cells + g1_map_width*y+x;
+
+				tile=g1_tile_man.get(c->type);
+				texture=tile->texture;
+				//Get the lowest miplevel, this is better than average color and certainly loaded
+				//at this point. 
+				if (c->mirrored())
+				{
+					rot=rotation_remap_mirror[c->get_rotation()];
+				}
+				else
+				{
+					rot=rotation_remap[c->get_rotation()];
+				}
+				current_texture=tman->get_texture_image(texture,0,8); 
+				//The following code can be used to "graphically" debug the creation of the
+				//landscape lod-texture (creates a whole bunch of files in the golgotha directory!)
+				/*i4_str text_name_etc("tex_image_%d_%d_%d_%d.tga");
+				i4_str *file_name=text_name_etc.sprintf(200,x1,y1,(w32)s,(w32)t);
+				i4_write_tga(current_texture,*file_name,false);
+				delete file_name;*/
+				current_texture->copy_image_to(image,(i4_coord)s,(i4_coord)t,
+					(sw32)s_step+s_corr,(sw32)t_step+t_corr,rot,c->mirrored());
+				delete current_texture;
+			}
 		}
 	}
 	/*i4_str str=i4_str("temp_image_%d_%d.tga");

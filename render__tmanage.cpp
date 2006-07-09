@@ -911,7 +911,7 @@ w32 r1_texture_manager_class::average_texture_color(r1_texture_handle _handle, w
   r1_texture_entry_struct *e;
   
   if (handle>=total_textures)
-    i4_error("asking for bad texture");
+	  i4_error("SEVERE: Asking for bad texture");
 
   if (handle<0)  // this is an animation
   {
