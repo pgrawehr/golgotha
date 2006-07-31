@@ -95,10 +95,10 @@ struct g1_radar_params_struct
     g2mx = 1.0f/m2gx;
     g2my = 1.0f/m2gy;
 	radius[0]=0;
-	radius[1]=(0.5*m2gx)>1?(int)(0.5*m2gx):1;
-	radius[2]=(1.0*m2gx)>2?(int)(1.0*m2gx):2;
-	radius[3]=(int)(0.1*m2gx);//almost always invisible
-	radius[4]=(2.0*m2gx)>3?(int)(2.0*m2gx):3;
+	radius[1]=(0.5*g2mx)>1?(int)(0.5*g2mx):1;
+	radius[2]=(1.0*g2mx)>2?(int)(1.0*g2mx):2;
+	radius[3]=(int)(0.1*g2mx);//almost always invisible
+	radius[4]=(2.0*g2mx)>3?(int)(2.0*g2mx):3;
 	radius[5]=0;
   }
 
@@ -834,216 +834,170 @@ public:
     }
   }
 
- 
+	void parent_draw(i4_draw_context_class &context)
+	{
+		if (background)
+		{
+			if (flags & G1_RADAR_USE_DIRTIES)
+			{
+				i4_rect_list_class::area_iter i;
+				for (i=undrawn_area.list.begin(); i!=undrawn_area.list.end(); ++i)
+				{
+					int x=i->x1, y=i->y1;      
+					background->put_part(local_image, x,y, i->x1, i->y1, i->x2, i->y2, context);
+				}       
+			}
+			else if (background)    
+				background->put_image(local_image,0,0, context);
 
 
+			float ix,iy;
 
-  void parent_draw(i4_draw_context_class &context)
-	  {
-	  if (background)
-		  {
-		  if (flags & G1_RADAR_USE_DIRTIES)
-			  {
-			  i4_rect_list_class::area_iter i;
-			  for (i=undrawn_area.list.begin(); i!=undrawn_area.list.end(); ++i)
-				  {
-				  int x=i->x1, y=i->y1;      
-				  background->put_part(local_image, x,y, i->x1, i->y1, i->x2, i->y2, context);
-				  }       
-			  }
-		  else if (background)    
-			  background->put_image(local_image,0,0, context);
-		  
+			int map_width=g1_get_map()->width();
 
-		  float ix,iy;
-		  
-		  int map_width=g1_get_map()->width();
-		  
-		  
-		  int i;
-		  w32 color;
-		  
-		  g1_team_type my_team=g1_player_man.get_local()->get_team();
-		  li_symbol_class_member tsim("traffic_sim");
-		  i4_bool alldrawn=i4_F;
-		  if (g1_map_vars.vars()->get(tsim)!=li_nil)
-			  {
-			  alldrawn=i4_T;
-			  color=0xc8ff00;//trafsim roads are kinda yellow.
-			  g1_object_class *olist[G1_MAX_OBJECTS];
-			  int t=g1_get_map()->make_object_list(olist,G1_MAX_OBJECTS),i;
-			  for (i=0;i<t;i++)
-				  {
-				  g1_path_object_class *po=g1_path_object_class::cast(olist[i]);
-				  if (po)
-					  {//quite an overkill. but does it work?
-					  //draw_all_paths(G1_ALLY,p,0xffffffff,context);
-					  g1_team_type team=G1_ALLY;
-					  int t=po->total_links(team);
-					  for (int k=0; k<t; k++)
-						  {
-						  g1_path_object_class *p2=po->get_link(team,k);
-						  if (p2)
-							  {
-							  float x1,y1,x2,y2;
-							  setup.game_2_mouse(po->x, po->y, x1,y1);
-							  setup.game_2_mouse(p2->x, p2->y, x2,y2);
-							  local_image->line((short)i4_f_to_i(x1), (short)i4_f_to_i(y1),
-								  (short)i4_f_to_i(x2), (short)i4_f_to_i(y2),
-								  color, context);
-							  //po->set_flag(g1_object_class::SCRATCH_BIT,1);
-							  //draw_all_paths(team, p2, color, context);
-							  //po->set_flag(g1_object_class::SCRATCH_BIT,0);
-							  } 
-						  }
-					  }
-				  }
-			  }
-		  if ((flags & G1_RADAR_DRAW_UNHIDDEN_PATHS) && !alldrawn)
-			  {
-			  g1_factory_class *f;
-			  for (f=g1_factory_list.first(); f; f=f->next)
-				  {
-				  if (g1_player_man.get(f->player_num)->get_team()==my_team)
-					  {
-					  g1_path_object_class *start=f->get_start();
-					  if (start)
-						  {
-						  
-						  draw_all_paths(my_team, start, f->get_path_color(),
-								  context);
-						  
-						  draw_recent_path(my_team, start, f->get_selected_path_color(),
-							  context);
-						  }
-					  
-					  }
-				  }
-			  }
-		  if ((flags & G1_RADAR_DRAW_UNHIDDEN_PATHS) && alldrawn)
-			  {
-			  g1_factory_class *f;
-			  for (f=g1_factory_list.first(); f; f=f->next)
-				  {
-				  if (g1_player_man.get(f->player_num)->get_team()==my_team)
-					  {
-					  g1_path_object_class *start=f->get_start();
-					  if (start)
-						  {
-						  
-						  //draw_all_paths(my_team, start, f->get_path_color(),
-						//		  context);
-							 
 
-						  
-						  draw_recent_path(my_team, start, f->get_selected_path_color(),
-							  context);
-						  }
-					  
-					  }
-				  }
-			  }
-		  /*
-		  //Combined this with the next one to save time and code
-		  for (i=0; i<G1_MAX_PLAYERS; i++)
-			  {
-			  g1_team_type team=g1_player_man.get(i)->get_team();
-			  
-			  color=g1_player_man.get(i)->map_player_color;
-			  
-			  i4_array<w32> &a=g1_player_man.get(i)->owned_objects;
-			  int t=a.size();
-			  for (int j=0; j<t; j++)
-				  {
-				  g1_object_class *p=g1_global_id.checked_get(a[j]);
-				  
-				  if (p && p->radar_type!=G1_RADAR_NONE)
-					  {            
-					  int cx=i4_f_to_i(p->x);
-					  int cy=i4_f_to_i(p->y);
-					  
-					  if ((g1_cells[map_width * cy + cx].flags & g1_map_cell_class::FOGGED)==0)
-						  {
-						  setup.game_2_mouse(p->x, p->y, ix,iy);
-						  
-						  
-						  if ((flags & G1_RADAR_USE_ICONS)==0 || !p->radar_image)
-							  {
-							  int r=radius[p->radar_type];
-							  
-							  int ix1=i4_f_to_i(ix)-r, iy1=i4_f_to_i(iy)-r;
-							  int ix2=i4_f_to_i(ix)+r, iy2=i4_f_to_i(iy)+r;
-							  local_image->bar(ix1-1,iy1-1,ix2+1,iy2+1, 0, context);
-							  local_image->bar(ix1,iy1,ix2,iy2, color, context);
-							  }
-						  }            
-					  } 
-				  }
-			  }*/
-		      //if (flags & G1_RADAR_USE_ICONS)
-			  //{
-			  for (i=0; i<G1_MAX_PLAYERS; i++)
-				  {
-				  i4_array<w32> &a=g1_player_man.get(i)->owned_objects;
-				  int t=a.size();
-				  color=g1_player_man.get(i)->map_player_color;
-				  
-				  for (int j=0; j<t; j++)
-					  {
-					  g1_object_class *p=g1_global_id.checked_get(a[j]);
-					  
-					  if (!p || p->radar_type==G1_RADAR_NONE)
-						  continue;
-					  if (p->radar_image && (flags & G1_RADAR_USE_ICONS))
-						  {
-						  int cx=i4_f_to_i(p->x);
-						  int cy=i4_f_to_i(p->y);
-						  
-						  if ((g1_cells[map_width * cy + cx].flags & g1_map_cell_class::FOGGED)==0)
-							  {
-							  setup.game_2_mouse(p->x, p->y, ix,iy);
-							  
-							  
-							  i4_image_class *i=p->radar_image->tinted_icons[p->player_num];
-							  int ix1=i4_f_to_i(ix)-i->width()/2;
-							  int iy1=i4_f_to_i(iy)-i->height()/2;
-							  
-							  i->put_image(local_image, ix1,iy1,context);
-							  }
-						  }
-					  
-					  else
-						{            
-					  int cx=i4_f_to_i(p->x);
-					  int cy=i4_f_to_i(p->y);
-					  
-					  if ((g1_cells[map_width * cy + cx].flags & g1_map_cell_class::FOGGED)==0)
-						  {
-						  setup.game_2_mouse(p->x, p->y, ix,iy);
-						  
-						  
-						  //if ((flags & G1_RADAR_USE_ICONS)==0 || !p->radar_image)
-							//  {
-							  int r=radius[p->radar_type];
-							  
-							  int ix1=i4_f_to_i(ix)-r, iy1=i4_f_to_i(iy)-r;
-							  int ix2=i4_f_to_i(ix)+r, iy2=i4_f_to_i(iy)+r;
-							  local_image->bar(ix1-1,iy1-1,ix2+1,iy2+1, 0, context);
-							  local_image->bar(ix1,iy1,ix2,iy2, color, context);
-							//  }
-						  }            
-						} //else
-				  
-					  }//for (all owned objects)
-			  }// for (all players)
-		  
-		  
-		  //      draw_paths();
-		  
-		  
-    } 
-	else local_image->clear(0, context);
-  }
+			int i;
+			w32 color;
+
+			g1_team_type my_team=g1_player_man.get_local()->get_team();
+			li_symbol_class_member tsim("traffic_sim");
+			i4_bool alldrawn=i4_F;
+			if (g1_map_vars.vars()->get(tsim)!=li_nil)
+			{
+				alldrawn=i4_T;
+				color=0xc8ff00;//trafsim roads are kinda yellow.
+				g1_object_class *olist[G1_MAX_OBJECTS];
+				int t=g1_get_map()->make_object_list(olist,G1_MAX_OBJECTS),i;
+				for (i=0;i<t;i++)
+				{
+					g1_path_object_class *po=g1_path_object_class::cast(olist[i]);
+					if (po)
+					{
+						//quite an overkill. but does it work?
+						//draw_all_paths(G1_ALLY,p,0xffffffff,context);
+						g1_team_type team=G1_ALLY;
+						int t=po->total_links(team);
+						for (int k=0; k<t; k++)
+						{
+							g1_path_object_class *p2=po->get_link(team,k);
+							if (p2)
+							{
+								float x1,y1,x2,y2;
+								setup.game_2_mouse(po->x, po->y, x1,y1);
+								setup.game_2_mouse(p2->x, p2->y, x2,y2);
+								local_image->line((short)i4_f_to_i(x1), (short)i4_f_to_i(y1),
+									(short)i4_f_to_i(x2), (short)i4_f_to_i(y2),
+									color, context);
+								//po->set_flag(g1_object_class::SCRATCH_BIT,1);
+								//draw_all_paths(team, p2, color, context);
+								//po->set_flag(g1_object_class::SCRATCH_BIT,0);
+							} 
+						}
+					}
+				}
+			}
+			if ((flags & G1_RADAR_DRAW_UNHIDDEN_PATHS) && !alldrawn)
+			{
+				g1_factory_class *f;
+				for (f=g1_factory_list.first(); f; f=f->next)
+				{
+					if (g1_player_man.get(f->player_num)->get_team()==my_team)
+					{
+						g1_path_object_class *start=f->get_start();
+						if (start)
+						{
+
+							draw_all_paths(my_team, start, f->get_path_color(),
+								context);
+
+							draw_recent_path(my_team, start, f->get_selected_path_color(),
+								context);
+						}
+
+					}
+				}
+			}
+			if ((flags & G1_RADAR_DRAW_UNHIDDEN_PATHS) && alldrawn)
+			{
+				g1_factory_class *f;
+				for (f=g1_factory_list.first(); f; f=f->next)
+				{
+					if (g1_player_man.get(f->player_num)->get_team()==my_team)
+					{
+						g1_path_object_class *start=f->get_start();
+						if (start)
+						{
+
+							//draw_all_paths(my_team, start, f->get_path_color(),
+							//		  context);
+
+							draw_recent_path(my_team, start, f->get_selected_path_color(),
+								context);
+						}
+
+					}
+				}
+			}
+
+			//Show anything about the units at all? if not, we're done now. 
+			if (flags & G1_RADAR_NO_UNITS)
+				return;
+
+			for (i=0; i<G1_MAX_PLAYERS; i++)
+			{
+				i4_array<w32> &a=g1_player_man.get(i)->owned_objects;
+				int t=a.size();
+				color=g1_player_man.get(i)->map_player_color;
+
+				for (int j=0; j<t; j++)
+				{
+					g1_object_class *p=g1_global_id.checked_get(a[j]);
+
+					if (!p || p->radar_type==G1_RADAR_NONE)
+						continue;
+					if (p->radar_image && (flags & G1_RADAR_USE_ICONS))
+					{
+						int cx=i4_f_to_i(p->x);
+						int cy=i4_f_to_i(p->y);
+
+						if ((g1_cells[map_width * cy + cx].flags & g1_map_cell_class::FOGGED)==0)
+						{
+							setup.game_2_mouse(p->x, p->y, ix,iy);
+
+
+							i4_image_class *i=p->radar_image->tinted_icons[p->player_num];
+							int ix1=i4_f_to_i(ix)-i->width()/2;
+							int iy1=i4_f_to_i(iy)-i->height()/2;
+
+							i->put_image(local_image, ix1,iy1,context);
+						}
+					}
+
+					else
+					{            
+						int cx=i4_f_to_i(p->x);
+						int cy=i4_f_to_i(p->y);
+
+						if ((g1_cells[map_width * cy + cx].flags & g1_map_cell_class::FOGGED)==0)
+						{
+							setup.game_2_mouse(p->x, p->y, ix,iy);
+
+							int r=radius[p->radar_type];
+
+							int ix1=i4_f_to_i(ix)-r, iy1=i4_f_to_i(iy)-r;
+							int ix2=i4_f_to_i(ix)+r, iy2=i4_f_to_i(iy)+r;
+							local_image->bar(ix1-1,iy1-1,ix2+1,iy2+1, 0, context);
+							local_image->bar(ix1,iy1,ix2,iy2, color, context);
+						}            
+					} 
+
+				}//for (all owned objects)
+			}// for (all players)
+			//      draw_paths();
+		} 
+		else 
+			local_image->clear(0, context);
+	}
 
 
   void refresh_area(int gx1, int gy1, int gx2, int gy2)

@@ -172,7 +172,32 @@ void g1_editor_class::create_radar()
   if (!radar_parent.get())
   {
     g1_map_class *map=g1_get_map();
-    i4_parent_window_class *mv=g1_create_radar_view(map->width(), map->height(),
+	int maxw=map->width();
+	int maxh=map->height();
+
+	if (maxw>(parent->width()/2) || maxh>(parent->height()/2))
+	{
+		if (maxw>maxh)
+		{
+			int targetw=parent->width()/2;
+			while (maxw>targetw)
+			{
+				maxw=maxw/2;
+				maxh=maxh/2;
+			}
+		}
+		else
+		{
+			int targeth=parent->height()/2;
+			while (maxh>targeth)
+			{
+				maxh=maxh/2;
+				maxw=maxw/2;
+			}
+		}
+	}
+	
+    i4_parent_window_class *mv=g1_create_radar_view(maxw, maxh,
                                                     G1_RADAR_CLICK_HOLDS_VIEW |
                                                     G1_RADAR_DRAW_ALL_PATHS);
 
@@ -8418,14 +8443,12 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 	w32 tile_color=0;
 	int texture;
 	//If the map is very huge, the lod image will contain less than one pixel per tile, such
-	//that it is ok to just use the average color (and save a lot of time)
+	//that it is ok to just use the average color (and save a *lot* of time)
 	if (t_step<1 || s_step <1)
 	{
 		for (y=y1 ; y<y2; y++, t+=t_step)
 		{
 			s=0;
-			//Copy an additional pixel if the next step would skip one or it's the last element
-			//to be copied (this is due to rounding errors)
 			for (x=x1; x<x2; x++, s+=s_step)
 			{
 				c=g1_cells + g1_map_width*y+x;
@@ -10394,6 +10417,8 @@ enum {
 
   P1_FOG_MAP,//15 Restores fog to radar view.
 
+  P1_UNFOG_MAP, //16, Removes fog from radar view. 
+
   P1_UNSET_BLOCK_EVENT
 };
 
@@ -10486,7 +10511,7 @@ g1_path_window_class::g1_path_window_class(g1_map_class *_map,
 	  G1_RADAR_NO_MAP_EVENTS|
 	  G1_RADAR_SUPRESS_STATUS|
 	  G1_RADAR_CLICK_HOLDS_VIEW|
-	  G1_RADAR_EDIT_MODE);
+	  G1_RADAR_EDIT_MODE|G1_RADAR_NO_UNITS);
   radar_x_pos=width()-RADAR_SIZEX+1;
   add_child(radar_x_pos,0,radar_overview);
 }
@@ -10829,10 +10854,8 @@ void g1_path_window_class::draw_to_bitmap()
   }
 
 }
-//}}}
 
 void g1_path_window_class::parent_draw(i4_draw_context_class &context)
-//{{{
 {
   int mw=map->width(), mh=map->height();
 
@@ -10871,8 +10894,7 @@ void g1_path_window_class::parent_draw(i4_draw_context_class &context)
   }
   local_image->bar(radar_x_pos,RADAR_SIZEY,width(),height(),0x0,context);
 }
-//}}}
-  
+
 void g1_path_window_class::receive_event(i4_event *ev)
 {
     
@@ -11109,6 +11131,31 @@ void g1_path_window_class::receive_event(i4_event *ev)
 					}
 				}
 			
+			}
+			break;
+		case P1_UNFOG_MAP:
+			{
+				int y,x,mw=map->width(),mh=map->height();
+				g1_map_cell_class *c;
+				for (y=0;y<mh;y++)
+				{
+					c=map->cell(0,y);
+					for (x=0;x<mw;x++,c++)
+					{
+						c->flags&= ~g1_map_cell_class::FOGGED;
+					}
+				}
+				g1_map_vertex_class *v=map->vertex(0,0);
+				mh++;//one vertex per row more than cells
+				mw++;
+				for(y=0;y<mh;y++)
+				{
+					for (x=0;x<mw;x++,v++)
+					{
+						v->set_flag(g1_map_vertex_class::FOGGED,0);
+					}
+				}
+
 			}
 			break;
         //}}}
