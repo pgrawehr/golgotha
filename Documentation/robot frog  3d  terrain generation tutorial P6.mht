@@ -1,0 +1,376 @@
+From: <Mit Microsoft Internet Explorer 5 gespeichert>
+Subject: robot frog | 3d | terrain generation tutorial
+Date: Sun, 14 Oct 2001 08:31:27 +0200
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	boundary="----=_NextPart_000_00B3_01C1548A.9DFB59C0";
+	type="text/html"
+X-MimeOLE: Produced By Microsoft MimeOLE V5.00.2615.200
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.robot-frog.com/3d/hills/code.html
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>robot frog | 3d | terrain generation tutorial</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Diso-8859-1"><LINK=20
+media=3Dall href=3D"http://www.robot-frog.com/style.css" type=3Dtext/css =
+
+rel=3DStyleSheet>
+<META content=3D"MSHTML 6.00.2600.0" name=3DGENERATOR></HEAD>
+<BODY vLink=3D#336666 aLink=3D#99cccc link=3D#669999 bgColor=3D#ffffff =
+leftMargin=3D0=20
+background=3Dhttp://www.robot-frog.com/images/background.gif =
+topMargin=3D0=20
+marginheight=3D"0" marginwidth=3D"0">
+<TABLE cellSpacing=3D0 cellPadding=3D0 border=3D0>
+  <TBODY>
+  <TR>
+    <TD><IMG height=3D20 =
+src=3D"http://www.robot-frog.com/images/null.gif"=20
+      width=3D20></TD>
+    <TD><IMG height=3D20 =
+src=3D"http://www.robot-frog.com/images/null.gif"=20
+      width=3D20></TD>
+    <TD><IMG height=3D20 =
+src=3D"http://www.robot-frog.com/images/null.gif"=20
+      width=3D30></TD>
+    <TD></TD>
+    <TD><IMG height=3D20 =
+src=3D"http://www.robot-frog.com/images/null.gif"=20
+      width=3D40></TD></TR>
+  <TR>
+    <TD></TD>
+    <TD vAlign=3Dtop align=3Dleft><A =
+href=3D"http://www.robot-frog.com/"><IMG=20
+      height=3D30 alt=3D[:|] =
+src=3D"http://www.robot-frog.com/images/logo.gif"=20
+      width=3D33 border=3D0></A></TD>
+    <TD></TD>
+    <TD vAlign=3Dcenter align=3Dleft><A =
+href=3D"http://www.robot-frog.com/"><IMG=20
+      height=3D21 alt=3D"robot frog"=20
+      src=3D"http://www.robot-frog.com/images/robot_frog.gif" =
+width=3D111=20
+      border=3D0></A><IMG height=3D21=20
+      src=3D"http://www.robot-frog.com/images/subtitle_colon.gif" =
+width=3D12><A=20
+      href=3D"http://www.robot-frog.com/3d/index.html"><IMG height=3D21=20
+      src=3D"http://www.robot-frog.com/images/subtitle_3d.gif" =
+width=3D21=20
+      border=3D0></A> </TD>
+    <TD></TD></TR>
+  <TR>
+    <TD><IMG height=3D20 =
+src=3D"http://www.robot-frog.com/images/null.gif"=20
+      width=3D20></TD>
+    <TD></TD>
+    <TD></TD>
+    <TD></TD>
+    <TD></TD></TR>
+  <TR>
+    <TD></TD>
+    <TD vAlign=3Dtop align=3Dleft><A=20
+      href=3D"http://www.robot-frog.com/index.html"><IMG height=3D22 =
+alt=3Dnews=20
+      src=3D"http://www.robot-frog.com/images/nav_news_off.gif" =
+width=3D82=20
+      border=3D0></A><BR><A =
+href=3D"http://www.robot-frog.com/3d/index.html"><IMG=20
+      height=3D23 alt=3D3d =
+src=3D"http://www.robot-frog.com/images/nav_3d_on.gif"=20
+      width=3D82 border=3D0></A><BR><A=20
+      href=3D"http://www.robot-frog.com/games/index.html"><IMG =
+height=3D23 alt=3Dgames=20
+      src=3D"http://www.robot-frog.com/images/nav_games_off.gif" =
+width=3D82=20
+      border=3D0></A><BR><A =
+href=3D"http://www.robot-frog.com/icon/index.html"><IMG=20
+      height=3D23 alt=3Dicons=20
+      src=3D"http://www.robot-frog.com/images/nav_icons_off.gif" =
+width=3D82=20
+      border=3D0></A><BR><A =
+href=3D"http://www.robot-frog.com/picts/index.html"><IMG=20
+      height=3D23 alt=3Dpicts=20
+      src=3D"http://www.robot-frog.com/images/nav_picts_off.gif" =
+width=3D82=20
+      border=3D0></A><BR><A =
+href=3D"http://www.robot-frog.com/misc/index.html"><IMG=20
+      height=3D23 alt=3Dmisc =
+src=3D"http://www.robot-frog.com/images/nav_misc_off.gif"=20
+      width=3D82 border=3D0></A><BR><A=20
+      href=3D"http://www.robot-frog.com/links/index.html"><IMG =
+height=3D23 alt=3Dlinks=20
+      src=3D"http://www.robot-frog.com/images/nav_links_off.gif" =
+width=3D82=20
+      border=3D0></A> </TD>
+    <TD>&nbsp;</TD>
+    <TD vAlign=3Dtop align=3Dleft>
+      <H1>Terrain Generation Tutorial: Code<BR></H1><SPAN =
+class=3Dsubnav><A=20
+      =
+href=3D"http://www.robot-frog.com/3d/hills/island.html">previous</A> | =
+next=20
+      | code</SPAN>=20
+      <P>I've written a complete C++ class you can use to generate =
+terrains=20
+      using the described algorithm. The class takes care of managing =
+the=20
+      heightmap memory for you as well. It does not perform any =
+rendering; it=20
+      only creates and generates the heightmaps. It has parameters to =
+allow you=20
+      to set the size of the heightmap, the range of hill sizes, the =
+number of=20
+      hills, whether or not to generate and island, the amount of =
+flattening,=20
+      and the random seed used. To use it, all you need to do is =
+this:</P><PRE>#include "rfHillTerrain.h"
+
+using namespace RobotFrog; // the class is in this namespace
+
+int main( void )
+{
+    HillTerrain terrain(); // you can also specify terrain params here
+    terrain.Generate();
+       =20
+    for( int x =3D 0; x &lt; terrain.GetSize(); ++x )
+    {
+        for( int y =3D 0; y &lt; terrain.GetSize(); ++y )
+        {
+            float z =3D terrain.GetCell( x, y );
+            // do whatever with the z values here to draw your terrain
+        }
+    }
+}</PRE>
+      <P>The constructor has parameters for all of the variables =
+affecting the=20
+      algorithm. In addition, you can also change the parameters on an =
+existing=20
+      terrain and regenerate it. The terrain also stores the random seed =
+it uses=20
+      to generate itself so that you can create the same terrain when =
+you need=20
+      to.</P>
+      <H2>Platforms</H2>
+      <P>The code has been tested and it runs fine on MacOS and Windows. =
+It=20
+      should theoretically run without problems on any platform that has =
+
+      &lt;math.h&gt; for sin() and cos(), &lt;stdlib.h&gt; for rand() =
+and=20
+      srand(), &lt;assert.h&gt; for assert(), and &lt;new.h&gt; for=20
+      std::bad_alloc. The class is put inside the namespace RobotFrog, =
+so you=20
+      will need to either specify the namespace when using it, or just =
+import=20
+      it. The constructor also throws an exception if it can't allocate =
+enough=20
+      memory, so you will need to enable exception handling.</P>
+      <H2>Inheritance</H2>
+      <P>The class was not designed to be inherited, but if you felt =
+like=20
+      implementing other algorithms using it as a base, it should be =
+fairly easy=20
+      to modify. Basically, you would need to make Generate() virtual, =
+and then=20
+      override it. </P>
+      <H2>Downloading</H2>
+      <P>The two links below download the class in either .sit or .zip =
+format.=20
+      This includes only the class files, you'll have to write your own=20
+      main().</P>
+      <P align=3Dcenter><A=20
+      =
+href=3D"http://www.robot-frog.com/3d/hills/HillTerrain.sit">StuffIt =
+Archive=20
+      (Mac Text)</A> | <A=20
+      href=3D"http://www.robot-frog.com/3d/hills/HillTerrain.zip">ZIP =
+Archive (PC=20
+      Text)</A></P>
+      <H2>Licensing</H2>
+      <P>This code is licensed under the <A=20
+      href=3D"http://www.opensource.org/licenses/mit-license.html">MIT=20
+      license</A>. This basically means you can do whatever you want =
+with it=20
+      except hold me responsible. If you want to use this in your game, =
+personal=20
+      or professional, feel free. You can do whatever you want with it. =
+I would=20
+      appreciate it if you would <A =
+href=3D"mailto:bob@robot-frog.com">let me=20
+      know</A> when you use it, for my personal gratification.</P>
+      <P><SPAN class=3Dcopyright>Copyright =A9 1999-2001 Bob =
+Nystrom.</SPAN></P></TD>
+    <TD></TD></TR></TBODY></TABLE></BODY></HTML>
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/null.gif
+
+R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/logo.gif
+
+R0lGODlhIQAeAJEAAGaZmWbMMwAzAAAAACH5BAAAAAAALAAAAAAhAB4AAAJnlI8Jm+2PFoC0yuqC
+3vtcw4VNyHkMSGpjGpgTmq4t7B4dndyC/u0qjtDxTr5ZUUaCsIw2ltKZg2akzaU1Gb1qf8HtFuld
+gsOxLJkKxKjTa4yu7T6LzXIRvf6G4Uv3/dgPFyg4SFhRAAA7
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/robot_frog.gif
+
+R0lGODlhbwAVAIAAAAAzAP///yH5BAAAAAAALAAAAABvABUAAAK6jI+pB70PG4BKSoqz3ndHx1mT
+R5ZYZyJoJo7pm66vTNHwHbqw/fD43wPdfBUh8NQSJpVLRtOw1CWizmS1dY2KshYuigp9LsABsllr
+DafL4vO6uHZj1WR49a7Gs6V7D833xeQyNyaoFzholJdjF5T4yPUBudhH+adYgwloaLnlSCjnqYIp
+2VgYhyYJ2iamx6JJSieKxucluPpG+cq3iZp7BBw8FCtcbJxZe6y8rMvsXEz4LA0cPW09bFEAADs=
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/subtitle_colon.gif
+
+R0lGODlhDAAVAIAAAP///wAzACH5BAAAAAAALAAAAAAMABUAAAIVhI+py+3fgoyTyQCzVpdiW23i
+SDoFADs=
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/subtitle_3d.gif
+
+R0lGODlhFQAVAIAAAP///wBmMyH5BAAAAAAALAAAAAAVABUAAAI3hI95werJwpsg0mevyhrFDy7g
+OIrkKRno1qht9Zqym3ovh4d0ud+nmSOxah1a0UbE/C4r5pJSAAA7
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_news_off.gif
+
+R0lGODlhUgAWAKIAAAAAAGaZmTNmZv///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABYAAAOp
+KLrc/jDGQau9OAvCu/9gKI6hkJ2otZFs635mKmPra9/wrFc17r+x3az3K46CwhTRyPQgk6dls/mE
+0piALMCj7Ww5X0LXaVVivWC0eP0N58rRc1qsbbO9bk4VTpHawnYgW3lrZHxXRoB4WWiAjG+HKlOT
+HXt8fpQ+lnCYmTebZZ2eQJEXoqMtoFanqCSqUBKxsrMQpRYBuLm6u7y9vr++r0nAxMXGvcJCCQA7
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_3d_on.gif
+
+R0lGODlhUgAXALMAAGbMMzOZAAAAAABmAMzMzJn/ZjNmZmaZmf///wAAAAAAAAAAAAAAAAAAAAAA
+AAAAACH5BAAAAAAALAAAAABSABcAAATR8MhJq704Y4O6/2AoGmRpnmiqrqvovh8Hz3Rtg4Mt33x/
+D4UcbecrGj/AQnB4bBqTyiWM6CwKftGs0EWtigTgrw2aVW5DXe/n2mGva+SymauuucFh2iCuHRBG
+dTB5CHdwAHxBAX5/IGmBb4QebjADAIdlAwGKBJyNjyGFkW2GllCZmoudHo6BeGuuepaliZqbnKoI
+rJ9NlbKnqLfBHbq7R72HtanCw8W7vafKtzHNzsjRuMzUn3vXjNPa28HSaCzl5ucpgRrr7O0XxD3u
+8vMbgREAOw==
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_games_off.gif
+
+R0lGODlhUgAXAKIAAAAAADNmZmaZmf///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABcAAAO3
+KLrc/jDCMKq9OOvAu/9gKI6jZp5XQKxs675wLMMUamfqrO+8W9/AQa5HLPqCwaFx2fshUUqmVOZ8
+mqLTbKtqxWm/x+4J+wKYAaxzWq1eo91h8Ub3JtTTq7o+j7fHuHIVZC17eW2FfnZnencrgIGDfYmF
+iG+NhHGBKTuLbpaSjGaGl49ykWVgOqVip6Opqpper1+rXa2zPLVWt7iwsZu9U7pPJMXGxyK/FxLM
+zc4Pw0jP09QTyhYJADs=
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_icons_off.gif
+
+R0lGODlhUgAXAKIAAAAAADNmZmaZmf///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABcAAAOs
+KLrc/jDCMKq9OOvAu/9gKI6jZp5XQKxs675wLMMUamfqrO+8W9/AQa5HLPqCwaFx2fshUUqmVOZ8
+mqJFwJRqtWG3YEK1i/n2tCuAOr1mt91H8nWKRqdZdfydJp9L83p7doN2LGN9QnR7i4AEhY5xiCmK
+cI5vg5Uth31mYVKbcp2eS6BkoqNFpV2nqE2SZa1hqlassTqzTyS6u7wirxcSwcLDD7hIxMjJE78W
+CQA7
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_picts_off.gif
+
+R0lGODlhUgAXAKIAAAAAADNmZmaZmf///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABcAAAOx
+KLrc/jDCMKq9OOvAu/9gKI6jZp5XQKxs675wLMMUamfqrO+8W9/AQa5HLPqCwaFx2fshUUqmVOZ8
+mqLTFiC21VWtuKyxO/uCU2KAmsxWE9bd9fF8TbPiK3L+HjPThXZ7b4J8d3orfnRYY4V4Wi+HiWeL
+RXCFb255W3JzfxiURIdikmCgPaJZpFamYkyqT6ytRq9IsbJEtEm3t7lAJL/AwSKeGRLGx8gPvTfJ
+zc4TxBgJADs=
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_misc_off.gif
+
+R0lGODlhUgAXAKIAAAAAADNmZmaZmf///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABcAAAOr
+KLrc/jDCMKq9OOvAu/9gKI6jZp5XQKxs675wLMMUamfqrO+8W9/AQa5HLPqCwaFx2fshUUqmVOZ8
+mqLTGMBYteKyYJoXCgaYt2fWdpVmm4/ja1lNJ6zX9Vc3XsEa8YBsaoFifF9ZhHaCLXcxe3x+RYmN
+dm+DeCuPcZFhUppjnJ1Ln16hokWkVqanTYaHrFmpT6uwOrJIJLm6uyKuGBLAwcIPt0HDx8gTvhcJ
+ADs=
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_links_off.gif
+
+R0lGODlhUgAXAKIAAAAAADNmZmaZmf///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABcAAAOw
+KLrc/jDCMKq9OOvAu/9gKI6jZp5XQKxs675wLMMUamfqrO+8W9/AQa5HLPqCwaFx2fshUUomAbCj
+8pxPU5RptcK8OmwWJ22BY2eZeJwqs7orgNwLj8uPbK07zp+++XQxa3lCe36HgVN3b2mDeVtLdYl1
+fy2ObJBGkpWBcy+XY5mGUqBZoqNLpU+nqEWqSKytTYQbsoavSbZ7uEAkvr/AIrQZEsXGxw+8N8jM
+zRPDGAkAOw==
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/background.gif
+
+R0lGODlheAUCAJEAADNmZmaZmf///wAAACH5BAAAAAAALAAAAAB4BQIAAAJHjI+py+2/gJi02ouz
+3rz7D4biSJbmiabqyrbuC8fyTNf2jef6zvf+DwwKh0SI8YhMHiTEpvMJjUqn1Kr1is1qt9yu9wvu
+FQAAOw==
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0
+Content-Type: text/css;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.robot-frog.com/style.css
+
+P {
+	FONT: 10px/1.5 verdana, arial, geneva, sans-serif; COLOR: #000000
+}
+LI {
+	FONT: 10px/1.5 verdana, arial, geneva, sans-serif; COLOR: #000000
+}
+H1 {
+	FONT: bold 12px verdana, arial, geneva, sans-serif; COLOR: #000000
+}
+H2 {
+	FONT: bold 10px verdana, arial, geneva, sans-serif; COLOR: #336666
+}
+SPAN.copyright {
+	BORDER-TOP: #999999 1px solid; PADDING-BOTTOM: 20px; FONT: 9px verdana, =
+arial, geneva, sans-serif; COLOR: #666666; PADDING-TOP: 5px
+}
+SPAN.caption {
+	FONT: 9px verdana, arial, geneva, sans-serif; COLOR: #666666
+}
+SPAN.subnav {
+	FONT: 9px verdana, arial, geneva, sans-serif; COLOR: #666666
+}
+PRE {
+	BORDER-RIGHT: #999999 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: =
+#999999 1px solid; PADDING-LEFT: 5px; BACKGROUND: #eeeeee; =
+PADDING-BOTTOM: 5px; FONT: 9px/1.2 monaco, courier, sans-serif; =
+MARGIN-LEFT: 20px; BORDER-LEFT: #999999 1px solid; COLOR: #333333; =
+MARGIN-RIGHT: 20px; PADDING-TOP: 5px; BORDER-BOTTOM: #999999 1px solid
+}
+
+------=_NextPart_000_00B3_01C1548A.9DFB59C0--

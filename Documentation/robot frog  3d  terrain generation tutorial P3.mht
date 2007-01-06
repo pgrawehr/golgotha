@@ -1,0 +1,480 @@
+From: <Mit Microsoft Internet Explorer 5 gespeichert>
+Subject: robot frog | 3d | terrain generation tutorial
+Date: Sun, 14 Oct 2001 08:25:19 +0200
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	boundary="----=_NextPart_000_0048_01C15489.C29238E0";
+	type="text/html"
+X-MimeOLE: Produced By Microsoft MimeOLE V5.00.2615.200
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.robot-frog.com/3d/hills/normalize.html
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>robot frog | 3d | terrain generation tutorial</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Diso-8859-1"><LINK=20
+media=3Dall href=3D"http://www.robot-frog.com/style.css" type=3Dtext/css =
+
+rel=3DStyleSheet>
+<META content=3D"MSHTML 6.00.2600.0" name=3DGENERATOR></HEAD>
+<BODY vLink=3D#336666 aLink=3D#99cccc link=3D#669999 bgColor=3D#ffffff =
+leftMargin=3D0=20
+background=3Dhttp://www.robot-frog.com/images/background.gif =
+topMargin=3D0=20
+marginheight=3D"0" marginwidth=3D"0">
+<TABLE cellSpacing=3D0 cellPadding=3D0 border=3D0>
+  <TBODY>
+  <TR>
+    <TD><IMG height=3D20 =
+src=3D"http://www.robot-frog.com/images/null.gif"=20
+      width=3D20></TD>
+    <TD><IMG height=3D20 =
+src=3D"http://www.robot-frog.com/images/null.gif"=20
+      width=3D20></TD>
+    <TD><IMG height=3D20 =
+src=3D"http://www.robot-frog.com/images/null.gif"=20
+      width=3D30></TD>
+    <TD></TD>
+    <TD><IMG height=3D20 =
+src=3D"http://www.robot-frog.com/images/null.gif"=20
+      width=3D40></TD></TR>
+  <TR>
+    <TD></TD>
+    <TD vAlign=3Dtop align=3Dleft><A =
+href=3D"http://www.robot-frog.com/"><IMG=20
+      height=3D30 alt=3D[:|] =
+src=3D"http://www.robot-frog.com/images/logo.gif"=20
+      width=3D33 border=3D0></A></TD>
+    <TD></TD>
+    <TD vAlign=3Dcenter align=3Dleft><A =
+href=3D"http://www.robot-frog.com/"><IMG=20
+      height=3D21 alt=3D"robot frog"=20
+      src=3D"http://www.robot-frog.com/images/robot_frog.gif" =
+width=3D111=20
+      border=3D0></A><IMG height=3D21=20
+      src=3D"http://www.robot-frog.com/images/subtitle_colon.gif" =
+width=3D12><A=20
+      href=3D"http://www.robot-frog.com/3d/index.html"><IMG height=3D21=20
+      src=3D"http://www.robot-frog.com/images/subtitle_3d.gif" =
+width=3D21=20
+      border=3D0></A> </TD>
+    <TD></TD></TR>
+  <TR>
+    <TD><IMG height=3D20 =
+src=3D"http://www.robot-frog.com/images/null.gif"=20
+      width=3D20></TD>
+    <TD></TD>
+    <TD></TD>
+    <TD></TD>
+    <TD></TD></TR>
+  <TR>
+    <TD></TD>
+    <TD vAlign=3Dtop align=3Dleft><A=20
+      href=3D"http://www.robot-frog.com/index.html"><IMG height=3D22 =
+alt=3Dnews=20
+      src=3D"http://www.robot-frog.com/images/nav_news_off.gif" =
+width=3D82=20
+      border=3D0></A><BR><A =
+href=3D"http://www.robot-frog.com/3d/index.html"><IMG=20
+      height=3D23 alt=3D3d =
+src=3D"http://www.robot-frog.com/images/nav_3d_on.gif"=20
+      width=3D82 border=3D0></A><BR><A=20
+      href=3D"http://www.robot-frog.com/games/index.html"><IMG =
+height=3D23 alt=3Dgames=20
+      src=3D"http://www.robot-frog.com/images/nav_games_off.gif" =
+width=3D82=20
+      border=3D0></A><BR><A =
+href=3D"http://www.robot-frog.com/icon/index.html"><IMG=20
+      height=3D23 alt=3Dicons=20
+      src=3D"http://www.robot-frog.com/images/nav_icons_off.gif" =
+width=3D82=20
+      border=3D0></A><BR><A =
+href=3D"http://www.robot-frog.com/picts/index.html"><IMG=20
+      height=3D23 alt=3Dpicts=20
+      src=3D"http://www.robot-frog.com/images/nav_picts_off.gif" =
+width=3D82=20
+      border=3D0></A><BR><A =
+href=3D"http://www.robot-frog.com/misc/index.html"><IMG=20
+      height=3D23 alt=3Dmisc =
+src=3D"http://www.robot-frog.com/images/nav_misc_off.gif"=20
+      width=3D82 border=3D0></A><BR><A=20
+      href=3D"http://www.robot-frog.com/links/index.html"><IMG =
+height=3D23 alt=3Dlinks=20
+      src=3D"http://www.robot-frog.com/images/nav_links_off.gif" =
+width=3D82=20
+      border=3D0></A> </TD>
+    <TD>&nbsp;</TD>
+    <TD vAlign=3Dtop align=3Dleft>
+      <H1>Terrain Generation Tutorial: Normalize<BR></H1><SPAN =
+class=3Dsubnav><A=20
+      href=3D"http://www.robot-frog.com/3d/hills/hill.html">previous</A> =
+| <A=20
+      href=3D"http://www.robot-frog.com/3d/hills/flatten.html">next</A> =
+| <A=20
+      =
+href=3D"http://www.robot-frog.com/3d/hills/code.html">code</A></SPAN>=20
+      <P>One facet of the terrain algorithm we are using is that it does =
+not=20
+      automatically clamp height values into some numeric range. This =
+means that=20
+      after generating, our lowest valley could be above zero, and the =
+highest=20
+      mountain could be anywhere. This makes things a bit difficult. =
+Ideally,=20
+      the height values would range from zero to one, so that we can =
+scale the=20
+      entire terrain to make it as tall as we want without affecting =
+anything=20
+      else. To do this, we need to <STRONG>normalize</STRONG> the =
+terrain.</P>
+      <P>Normalizing is a simple mathematical process of getting values =
+in some=20
+      range, and mapping them to another range. Graphically, it looks =
+some like=20
+      this:</P>
+      <P align=3Dcenter><IMG height=3D241=20
+      src=3D"http://www.robot-frog.com/3d/hills/normalize.gif" =
+width=3D500><BR><SPAN=20
+      class=3Dcaption>The graph on the left shows a curve which has not =
+been=20
+      normalized. Its values fit the<BR>range (1.0, 4.0). After =
+normalization,=20
+      you can see that the curve has been smoothly<BR>scaled to fit the =
+range=20
+      (0.0, 1.0 ).</SPAN></P>
+      <P>To do this to our terrain, we simply scan through all of our =
+height=20
+      values, keeping track of the lowest and highest ones found. Once =
+we know=20
+      this minimum and maximum, we scan through the heightmap again, =
+this time=20
+      normalizing each height from the range (minimum, maximum) to the =
+range (0,=20
+      1). The equation to do that looks like this:</P>
+      <P align=3Dcenter><IMG height=3D47=20
+      src=3D"http://www.robot-frog.com/3d/hills/normal_equation.gif"=20
+width=3D171></P>
+      <P>Now, we know that the lowest point in our terrain will always =
+be zero,=20
+      and the highest peak will always be one. This will come in handy =
+later. To=20
+      see how, click <A=20
+      =
+href=3D"http://www.robot-frog.com/3d/hills/flatten.html">here</A>.</P>
+      <P><SPAN class=3Dcopyright>Copyright =A9 1999-2001 Bob =
+Nystrom.</SPAN></P></TD>
+    <TD></TD></TR></TBODY></TABLE></BODY></HTML>
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/null.gif
+
+R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/logo.gif
+
+R0lGODlhIQAeAJEAAGaZmWbMMwAzAAAAACH5BAAAAAAALAAAAAAhAB4AAAJnlI8Jm+2PFoC0yuqC
+3vtcw4VNyHkMSGpjGpgTmq4t7B4dndyC/u0qjtDxTr5ZUUaCsIw2ltKZg2akzaU1Gb1qf8HtFuld
+gsOxLJkKxKjTa4yu7T6LzXIRvf6G4Uv3/dgPFyg4SFhRAAA7
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/robot_frog.gif
+
+R0lGODlhbwAVAIAAAAAzAP///yH5BAAAAAAALAAAAABvABUAAAK6jI+pB70PG4BKSoqz3ndHx1mT
+R5ZYZyJoJo7pm66vTNHwHbqw/fD43wPdfBUh8NQSJpVLRtOw1CWizmS1dY2KshYuigp9LsABsllr
+DafL4vO6uHZj1WR49a7Gs6V7D833xeQyNyaoFzholJdjF5T4yPUBudhH+adYgwloaLnlSCjnqYIp
+2VgYhyYJ2iamx6JJSieKxucluPpG+cq3iZp7BBw8FCtcbJxZe6y8rMvsXEz4LA0cPW09bFEAADs=
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/subtitle_colon.gif
+
+R0lGODlhDAAVAIAAAP///wAzACH5BAAAAAAALAAAAAAMABUAAAIVhI+py+3fgoyTyQCzVpdiW23i
+SDoFADs=
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/subtitle_3d.gif
+
+R0lGODlhFQAVAIAAAP///wBmMyH5BAAAAAAALAAAAAAVABUAAAI3hI95werJwpsg0mevyhrFDy7g
+OIrkKRno1qht9Zqym3ovh4d0ud+nmSOxah1a0UbE/C4r5pJSAAA7
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_news_off.gif
+
+R0lGODlhUgAWAKIAAAAAAGaZmTNmZv///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABYAAAOp
+KLrc/jDGQau9OAvCu/9gKI6hkJ2otZFs635mKmPra9/wrFc17r+x3az3K46CwhTRyPQgk6dls/mE
+0piALMCj7Ww5X0LXaVVivWC0eP0N58rRc1qsbbO9bk4VTpHawnYgW3lrZHxXRoB4WWiAjG+HKlOT
+HXt8fpQ+lnCYmTebZZ2eQJEXoqMtoFanqCSqUBKxsrMQpRYBuLm6u7y9vr++r0nAxMXGvcJCCQA7
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_3d_on.gif
+
+R0lGODlhUgAXALMAAGbMMzOZAAAAAABmAMzMzJn/ZjNmZmaZmf///wAAAAAAAAAAAAAAAAAAAAAA
+AAAAACH5BAAAAAAALAAAAABSABcAAATR8MhJq704Y4O6/2AoGmRpnmiqrqvovh8Hz3Rtg4Mt33x/
+D4UcbecrGj/AQnB4bBqTyiWM6CwKftGs0EWtigTgrw2aVW5DXe/n2mGva+SymauuucFh2iCuHRBG
+dTB5CHdwAHxBAX5/IGmBb4QebjADAIdlAwGKBJyNjyGFkW2GllCZmoudHo6BeGuuepaliZqbnKoI
+rJ9NlbKnqLfBHbq7R72HtanCw8W7vafKtzHNzsjRuMzUn3vXjNPa28HSaCzl5ucpgRrr7O0XxD3u
+8vMbgREAOw==
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_games_off.gif
+
+R0lGODlhUgAXAKIAAAAAADNmZmaZmf///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABcAAAO3
+KLrc/jDCMKq9OOvAu/9gKI6jZp5XQKxs675wLMMUamfqrO+8W9/AQa5HLPqCwaFx2fshUUqmVOZ8
+mqLTbKtqxWm/x+4J+wKYAaxzWq1eo91h8Ub3JtTTq7o+j7fHuHIVZC17eW2FfnZnencrgIGDfYmF
+iG+NhHGBKTuLbpaSjGaGl49ykWVgOqVip6Opqpper1+rXa2zPLVWt7iwsZu9U7pPJMXGxyK/FxLM
+zc4Pw0jP09QTyhYJADs=
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_icons_off.gif
+
+R0lGODlhUgAXAKIAAAAAADNmZmaZmf///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABcAAAOs
+KLrc/jDCMKq9OOvAu/9gKI6jZp5XQKxs675wLMMUamfqrO+8W9/AQa5HLPqCwaFx2fshUUqmVOZ8
+mqJFwJRqtWG3YEK1i/n2tCuAOr1mt91H8nWKRqdZdfydJp9L83p7doN2LGN9QnR7i4AEhY5xiCmK
+cI5vg5Uth31mYVKbcp2eS6BkoqNFpV2nqE2SZa1hqlassTqzTyS6u7wirxcSwcLDD7hIxMjJE78W
+CQA7
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_picts_off.gif
+
+R0lGODlhUgAXAKIAAAAAADNmZmaZmf///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABcAAAOx
+KLrc/jDCMKq9OOvAu/9gKI6jZp5XQKxs675wLMMUamfqrO+8W9/AQa5HLPqCwaFx2fshUUqmVOZ8
+mqLTFiC21VWtuKyxO/uCU2KAmsxWE9bd9fF8TbPiK3L+HjPThXZ7b4J8d3orfnRYY4V4Wi+HiWeL
+RXCFb255W3JzfxiURIdikmCgPaJZpFamYkyqT6ytRq9IsbJEtEm3t7lAJL/AwSKeGRLGx8gPvTfJ
+zc4TxBgJADs=
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_misc_off.gif
+
+R0lGODlhUgAXAKIAAAAAADNmZmaZmf///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABcAAAOr
+KLrc/jDCMKq9OOvAu/9gKI6jZp5XQKxs675wLMMUamfqrO+8W9/AQa5HLPqCwaFx2fshUUqmVOZ8
+mqLTGMBYteKyYJoXCgaYt2fWdpVmm4/ja1lNJ6zX9Vc3XsEa8YBsaoFifF9ZhHaCLXcxe3x+RYmN
+dm+DeCuPcZFhUppjnJ1Ln16hokWkVqanTYaHrFmpT6uwOrJIJLm6uyKuGBLAwcIPt0HDx8gTvhcJ
+ADs=
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/nav_links_off.gif
+
+R0lGODlhUgAXAKIAAAAAADNmZmaZmf///5nMzAAAAAAAAAAAACH5BAAAAAAALAAAAABSABcAAAOw
+KLrc/jDCMKq9OOvAu/9gKI6jZp5XQKxs675wLMMUamfqrO+8W9/AQa5HLPqCwaFx2fshUUomAbCj
+8pxPU5RptcK8OmwWJ22BY2eZeJwqs7orgNwLj8uPbK07zp+++XQxa3lCe36HgVN3b2mDeVtLdYl1
+fy2ObJBGkpWBcy+XY5mGUqBZoqNLpU+nqEWqSKytTYQbsoavSbZ7uEAkvr/AIrQZEsXGxw+8N8jM
+zRPDGAkAOw==
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/3d/hills/normalize.gif
+
+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
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/3d/hills/normal_equation.gif
+
+R0lGODlhqwAvAKIAACkpKW9vb7y8vOjo6EVFRYqKigAAAP///yH5BAAAAAAALAAAAACrAC8AAAP/
+eLrc/jDKSau9OOvNu/9gKI5kaZ5oqq5dUbBwLG+EMd94vrh67//A4MVFJLZeBQKhMDgkCYGmgjdF
+KgMCoXZi6Hq7nVrAQACQzWUDYFFjG8Zpg3RLj9RenBpAagZknQZ/bQp6UgVvdYkOhwQeNX+AeAcC
+BniDB48LA2SKnZNqEQNFkg2XgJCUljaEqwucnnWUchGyXY0PpoeolaxuDa+wWgOZoQLGxhC5gQup
+vc6ut8FCdyHKu6q+DMDSP2MBItbMvJitpgfb3Dqyo0x5rafi2M8K6BnsVOlDX1+QGeEKzchlg+Zh
+n5d8CGVQS8gwBSN1Br80hLhGh6h7+CbKkDWH/1vEjyBDihxJsqRIB8OWITTJsqXLlyEdLHQgQEkf
+PCnVZKlZgwDPLgAO6XzAU4lRoxpleKPVpQDHA2acdhkga8k6oQEOVWww7KjXpDCuFplD6dYYY4g+
+YXlVll5Fc2CDCDV4bUogXdACBnwFN66IjCQC6sJLz+e4vbf6+gWhGITgu4ff6B3H993iv6QCj9O1
+ac+Bs5PxVL6c7nGWMQDMfAtdeB5mJ0raPYnCQJTRdgouMhDglAOPJ7KvzMH3+0q/DFSlJAfo4s/y
+A8+RTTpe7c2Z62m2blKTfQ6x7R0xiMGOps/A8XHCky6koM8fwmMkxdc0lRz1C+yhDoUnkJVnQMbf
+kMYAMZHEo0AABJA1jl1rRUODSgUCNM4lBG7ioID/fJLZdDOxAgYEFxmByzuEafiMOfVclmFAopgB
+1IISwthALSn2Z1ddNqJ44XokQhhQT05RJeMYoIB4jHQy9YgjhZbV6NeKvLRloDhLyOiPklMy+cuO
+KmIp4QuUBMiKJAOY0R6EGkApj42tCTgQfybq51QSaEgx3ydbpellnFpqw+ViagLk4htlRrnNIRta
+EGiOTf7ppgXGKCeAeo9WaumlmGaq6aakJQAAOw==
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://www.robot-frog.com/images/background.gif
+
+R0lGODlheAUCAJEAADNmZmaZmf///wAAACH5BAAAAAAALAAAAAB4BQIAAAJHjI+py+2/gJi02ouz
+3rz7D4biSJbmiabqyrbuC8fyTNf2jef6zvf+DwwKh0SI8YhMHiTEpvMJjUqn1Kr1is1qt9yu9wvu
+FQAAOw==
+
+------=_NextPart_000_0048_01C15489.C29238E0
+Content-Type: text/css;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.robot-frog.com/style.css
+
+P {
+	FONT: 10px/1.5 verdana, arial, geneva, sans-serif; COLOR: #000000
+}
+LI {
+	FONT: 10px/1.5 verdana, arial, geneva, sans-serif; COLOR: #000000
+}
+H1 {
+	FONT: bold 12px verdana, arial, geneva, sans-serif; COLOR: #000000
+}
+H2 {
+	FONT: bold 10px verdana, arial, geneva, sans-serif; COLOR: #336666
+}
+SPAN.copyright {
+	BORDER-TOP: #999999 1px solid; PADDING-BOTTOM: 20px; FONT: 9px verdana, =
+arial, geneva, sans-serif; COLOR: #666666; PADDING-TOP: 5px
+}
+SPAN.caption {
+	FONT: 9px verdana, arial, geneva, sans-serif; COLOR: #666666
+}
+SPAN.subnav {
+	FONT: 9px verdana, arial, geneva, sans-serif; COLOR: #666666
+}
+PRE {
+	BORDER-RIGHT: #999999 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: =
+#999999 1px solid; PADDING-LEFT: 5px; BACKGROUND: #eeeeee; =
+PADDING-BOTTOM: 5px; FONT: 9px/1.2 monaco, courier, sans-serif; =
+MARGIN-LEFT: 20px; BORDER-LEFT: #999999 1px solid; COLOR: #333333; =
+MARGIN-RIGHT: 20px; PADDING-TOP: 5px; BORDER-BOTTOM: #999999 1px solid
+}
+
+------=_NextPart_000_0048_01C15489.C29238E0--
