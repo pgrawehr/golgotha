@@ -66,13 +66,13 @@ stat_win_title  = "Statistiken"
 sky_model    = x:/jc/gdata/sky/sky1.gmod
 title_screen = bitmaps/title_screen.jpg
 title_buts = {
-  bitmaps/menu/lit_return.jpg     198 17
-  bitmaps/menu/lit_newgame.jpg    248 88
-  bitmaps/menu/lit_load.jpg       280 144
-  bitmaps/menu/lit_save.jpg       282 193
-  bitmaps/menu/lit_network.jpg    213 303
-  bitmaps/menu/lit_options.jpg    256 353
-  bitmaps/menu/lit_quit.jpg       282 414
+  bitmaps/menu/lit_return.jpg     143 22
+  bitmaps/menu/lit_newgame.jpg    198 74
+  bitmaps/menu/lit_load.jpg       201 121
+  bitmaps/menu/lit_save.jpg       199 167
+  bitmaps/menu/lit_network.jpg    171 247
+  bitmaps/menu/lit_options.jpg    180 303
+  bitmaps/menu/lit_quit.jpg       263 363
 }
 
 
