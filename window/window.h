@@ -69,11 +69,12 @@ protected:
   This will transform all drawing coordinates 
   from local-space to glabal space
   plus when drawing is done from draw() 
-  proper clipping for you window is setup beforehand 
+  proper clipping for your window is setup beforehand 
   */
   i4_image_class *local_image;        
   /// Pointer to the parent window. 
-  i4_parent_window_class *parent;     // this may be 0
+  /// This may be NULL (but in general, it should only be NULL for the root level window)
+  i4_parent_window_class *parent;     
   i4_cursor_class *cursor;
 
 public:
@@ -239,11 +240,10 @@ protected:
   win_iter key_focus, mouse_focus, drag_drop_focus;
   
 
-  // Note:
-  // so a parent can refresh itself and children more efficiently it keeps a list of dirty area.
-  // this is kept in global coordinates for several reasons.   It is important to note that
-  // request_redraw(x1,y1,x2,y2) takes coordinates in local_space, but transforms them to
-  // local space when adding to dirty_area
+  //! Note: So a parent can refresh itself and children more efficiently, it keeps a list of dirty area.
+  //! this is kept in global coordinates for several reasons.   It is important to note that
+  //! request_redraw(x1,y1,x2,y2) takes coordinates in local_space, but transforms them to
+  //! local space when adding to dirty_area
   i4_rect_list_class undrawn_area;   
 
 
@@ -276,7 +276,7 @@ public:
   virtual void down_key_focus();
   
   /// Final draw method of \a i4_parent_window_class derived elements. 
-  /// Because a parent window needs to tells it's children 
+  /// Because a parent window needs to tell it's children 
   /// to draw() as well and setup proper clipping for itself,
   /// a parent_draw() function is supplied which is called by draw() which is where all drawing 
   /// done by a derived class of i4_window_class should go.  parent_draw() will have the correct clipping 

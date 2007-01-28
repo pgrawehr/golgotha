@@ -29,7 +29,6 @@ void r1_render_window_class::clip_with_z(i4_draw_context_class &context, i4_floa
   dx2=dx1 + render_area_width() -1; 
   dy2=dy1 + render_area_height() -1;
 
-
   area_to_mask.add_area(dx1, dy1, dx2, dy2);
   for (cl = clip->list.begin(); cl !=  clip->list.end(); ++cl)
     area_to_mask.remove_area(cl->x1, cl->y1, cl->x2, cl->y2);
@@ -55,7 +54,7 @@ void r1_render_window_class::clip_with_z(i4_draw_context_class &context, i4_floa
   {
 	api->clear_area(cl->x1+dx1, cl->y1+dy1, cl->x2+dx1, cl->y2+dy1, 
                     api->get_constant_color(), 
-                    0.00001f);
+                    near_z);
 	if (context.render_area!=NULL)
 		context.render_area->remove_area(cl->x1+dx1+context.xoff, cl->y1+dy1+context.yoff,
 			cl->x2+dx1+context.xoff,cl->y2+dy1+context.yoff);

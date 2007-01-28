@@ -301,6 +301,7 @@ void i4_parent_window_class::draw(i4_draw_context_class &context)
                                d->y()-y(),
                                d->x()+d->width()-1-x(),
                                d->y()+d->height()-1-y());
+	  //d->debug_show();
     }
 
     child_clip.swap(&context.clip);
