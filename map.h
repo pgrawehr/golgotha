@@ -226,23 +226,34 @@ public:
   w32 think_head, think_tail;
   i4_str *sky_name;
 
-  void recalc_static_stuff();///< update the map data structures
+  //! Update the map data structures.
+  //! This method recomputes static map data, like ambient light vectors and block maps. 
+  //! It uses the recalc variable (set by mark_for_recalc()) to identify the data sets to be
+  //! recomputed. 
+  void recalc_static_stuff();
 
-  void remove_from_think_list(g1_object_class *o);/// <do not think any more
+  //! Remove an object from the think list.
+  //! Calling this is necessary before the object is destroyed. 
+  void remove_from_think_list(g1_object_class *o);
 
-  void mark_for_recalc(w32 flags) { recalc |= flags; }/// <will recalc on next frame
+  //! Recalc the given data set on next frame.
+  //! \param flags A bit combination from the G1_RECALC_ enumeration type.
+  void mark_for_recalc(w32 flags) { recalc |= flags; }
 
-  ///gets block map for this grade
+  //! Gets the block map for the specified grade. 
   g1_block_map_class *get_block_map(w8 grade) const { return const_cast<g1_block_map_class*>(&block[grade]); }
 
-  ///get astar solver (usefull for stank only)
+  //! Get the A* solver.
+  //! Currently, this is used only when an unit is manually commanded to go a large distance,
+  //! when no graph solver class is available or the unit is an stank. 
   g1_astar_map_solver_class *get_astar_solver() {return astar_solver;}
 
-  ///usefull way solver
+  //! Usefull way solver.
   g1_breadth_first_map_solver_class *get_breadth_solver(w8 grade)
 	  {return solvemap[grade];};
 
-  ///faster way solver (uses precalculated data)
+  //! Faster way solver (uses precalculated data).
+  //! This is only available if has_graph() returns true. 
   g1_breadth_first_graph_solver_class *get_graph_solver()
 	  {return solvegraph;};
 

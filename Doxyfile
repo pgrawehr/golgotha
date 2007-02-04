@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = Golgotha
-PROJECT_NUMBER         = V1.1.0.1
+PROJECT_NUMBER         = V1.1.1.1
 OUTPUT_DIRECTORY       = doxygen_docs
 CREATE_SUBDIRS         = YES
 OUTPUT_LANGUAGE        = English
@@ -87,7 +87,8 @@ EXCLUDE                = Tests \
                          coredll.cpp \
                          utildll.cpp \
                          geomdll.cpp \
-                         backup
+                         backup \
+                         max_plugin/
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = .svn
 EXAMPLE_PATH           = 

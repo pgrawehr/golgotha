@@ -4,9 +4,9 @@
 
 //This string is in the format "X, X, X, X" as the windows resource
 //compiler expects it
-#define GOLGOTHA_VERSION "1, 1, 0, 1\0"
-#define GOLGOTHA_VERSION_ROOT 1, 1, 0, 1
+#define GOLGOTHA_VERSION "1, 1, 1, 1\0"
+#define GOLGOTHA_VERSION_ROOT 1, 1, 1, 1
 
 //This string is in user readable format. 
-#define GOLGOTHA_VERSION_STR "V1.1.0.1"
+#define GOLGOTHA_VERSION_STR "V1.1.1.1"
 

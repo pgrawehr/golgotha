@@ -991,30 +991,15 @@ void i4_image16::put_part(i4_image_class *to,
       to_format->blue_mask != from_format->blue_mask) &&
       (from_format->alpha_mask==0 || to_format->alpha_mask))
 	  {
-	  //I don't think I'll get much out here.
-	  /*
-	  if (to_format->pixel_depth==I4_32BIT)
-		  {
-		  if (to_format->alpha_bits==0&&from_format->alpha_bits==0)
-			  {//16 to 32 expansion, no alpha.
-			  if (from_format->green_bits==6)
-				  {
-				  //convert 565 to 888
-
-				  }
-			  }
-		  }
-	  else if(...)
-		*/
-	  if (!success)
-	  {
-	  // depths aren't the same and I dono a fast conversion
-	  // do it the slow way
-	  // simple conversions in bitdepth (like from 565 to 1444 or something)
-	  // should be very rare anyway
-      i4_image_class::put_part(to, _x, _y, x1,y1,x2,y2, context);
-	  return;
-	  }
+		if (!success)
+		{
+			// depths aren't the same and I dono a fast conversion
+			// do it the slow way
+			// simple conversions in bitdepth (like from 565 to 1444 or something)
+			// should be very rare anyway
+			i4_image_class::put_part(to, _x, _y, x1,y1,x2,y2, context);
+			return;
+		}
 	  }
   else
   {  

@@ -27,9 +27,10 @@ public:
                            i4_coord x1, i4_coord y1,
                            i4_coord x2, i4_coord y2);
 
-  //overwritten to implement faster 32 to 16 bit transforms
-  //and 32 to 32 copy.
-  void put_part(i4_image_class *to, i4_coord x, i4_coord y, i4_coord x1,
+  //! Copy parts of one image to another image, doing color space conversions. 
+  //! Overwritten to implement faster 32 to 16 bit transforms
+  //! and 32 to 32 copy.
+  void put_part(i4_image_class *to, i4_coord _x, i4_coord _y, i4_coord x1,
 	  i4_coord y1, i4_coord x2, i4_coord y2, i4_draw_context_class &context);
 
   

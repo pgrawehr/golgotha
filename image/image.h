@@ -65,15 +65,15 @@ public:
   //! Copies a part of this image to the destination image. 
   //! put_part transfers a rectanguar image of yourself to location x,y on image 'to'
   //! \param to Target image
-  //! \param x Where to put the image relative to the target upper left corner, x coordinate
-  //! \param y y coordinate
+  //! \param _x Where to put the image relative to the target upper left corner, x coordinate
+  //! \param _y y coordinate
   //! \param x1 Upper left corner of source rectangle
   //! \param y1 Upper left corner of source rectangle
   //! \param x2 Lower right corner of source rectangle
   //! \param y2 Lower right corner of source rectangle
-  //! \param context The context to use
+  //! \param context The context to use (for clipping purposes)
   virtual void put_part(i4_image_class *to, 
-			i4_coord x,  i4_coord y,                              
+			i4_coord _x,  i4_coord _y,                              
 			i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2, 
                         i4_draw_context_class &context);
 
