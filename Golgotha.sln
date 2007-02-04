@@ -28,6 +28,7 @@ Global
 		{E0160ED3-7D75-44AE-9F23-53AA8C753F97}.Debug.ActiveCfg = Debug|Win32
 		{E0160ED3-7D75-44AE-9F23-53AA8C753F97}.Debug.Build.0 = Debug|Win32
 		{E0160ED3-7D75-44AE-9F23-53AA8C753F97}.Release.ActiveCfg = Release|Win32
+		{E0160ED3-7D75-44AE-9F23-53AA8C753F97}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

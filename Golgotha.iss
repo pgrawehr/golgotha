@@ -2,7 +2,7 @@
 EnableISX=true
 
 [Files]
-Source: {src}\Golgotha.exe; DestDir: {app}; Components: core; Flags: external
+Source: {src}\Release\Golgotha.exe; DestDir: {app}; Components: core; Flags: external
 Source: {src}\resource.res; DestDir: {app}; Flags: promptifolder external; Components: core
 Source: {src}\Manual.doc; DestDir: {app}; Components: manual; Flags: external
 Source: Readme.txt; DestDir: {app}; Flags: isreadme; Components: core
@@ -329,8 +329,6 @@ Source: {src}\Golgotha.sln; DestDir: {app}; Flags: external promptifolder; Compo
 Source: {src}\Golgotha.vcproj; DestDir: {app}; Flags: external promptifolder; Components: source
 Source: {src}\map2def\*.*; DestDir: {app}\map2def; Flags: external promptifolder; Components: source
 Source: {src}\ivcon\*.*; DestDir: {app}\ivcon; Flags: external promptifolder; Components: source
-Source: ivcon\ivcon.elf; DestDir: {app}\ivcon; Components: linux_exec
-Source: golgotha.elf; DestDir: {app}; Components: linux_exec
 Source: {src}\app\*.*; DestDir: {app}\app; Flags: external promptifolder; Components: source
 Source: {src}\area\*.*; DestDir: {app}\area; Flags: external promptifolder; Components: source
 Source: {src}\checksum\*.*; DestDir: {app}\checksum; Flags: external promptifolder; Components: source
@@ -405,7 +403,6 @@ Name: music; Description: Music; Types: fullsource full
 Name: manual; Description: User Manual; Types: fullsource custom full
 Name: objects; Description: All the Model files; Types: fullsource custom typical full
 Name: ivcon; Description: IVCON - 3D Format converter utility; Types: custom fullsource
-Name: linux_exec; Description: Executables for linux; Types: full
 
 [Types]
 Name: full; Description: Full installation

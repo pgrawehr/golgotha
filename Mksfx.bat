@@ -1,5 +1,5 @@
 @echo off
-echo This file creates a source code distribution of Golgotha.
+echo This file creates a distribution of Golgotha's music. 
 if "%1"=="" goto :needfile
 goto doit
 :needfile

@@ -299,7 +299,7 @@ int                pov_write ( FILE *fileout );
 int                rcol_find ( float a[][COR3_MAX], int m, int n, float r[] );
 float              rgb_to_hue ( float r, float g, float b );
 short int          short_int_read ( FILE *filein );
-int                short_int_write ( FILE *fileout, short int int_val );
+int                short_int_write ( FILE *fileout, unsigned short int int_val );
 int                smf_read ( FILE *filein );
 int                smf_write ( FILE *fileout );
 int                stla_read ( FILE *filein );
@@ -426,8 +426,8 @@ int ase_read ( FILE *filein )
   int   count;
   float gval;
   int   i;
-  int   iface;
-  int   ivert;
+  int   iface=0;
+  int   ivert=0;
   int   iword;
   int   level;
   char *next;
@@ -5558,7 +5558,7 @@ int hrc_read ( FILE *filein )
   float g;
   int   i;
   int   icor3;
-  int   ivert;
+  int   ivert=0;
   int   iword;
   int   jval;
   int   level;
@@ -7561,7 +7561,7 @@ int iv_read ( FILE *filein )
   int   inormface;
   int   iface_num;
   int   irow;
-  int   iuv;
+  int   iuv=0;
   int   ivert;
   int   iword;
   int   ix;
@@ -7595,6 +7595,8 @@ int iv_read ( FILE *filein )
   inormface = 0;
   iface_num = face_num;
   irow = 0;
+  ivert=0;
+  icolor=0;
   ix = 0;
   ixyz = 0;
   iy = 0;
@@ -10521,9 +10523,9 @@ float rgb_to_hue ( float r, float g, float b )
     the color is monochromatic.
 */
 {
-  float h;
-  float rgbmax;
-  float rgbmin;
+  float h=0;
+  float rgbmax=0;
+  float rgbmin=0;
 /*
   Make sure the colors are between 0 and 1.
 */
@@ -10633,7 +10635,7 @@ short int short_int_read ( FILE *filein )
 }
 /******************************************************************************/
 
-int short_int_write ( FILE *fileout, short int short_int_val )
+int short_int_write ( FILE *fileout, unsigned short int short_int_val )
 
 /******************************************************************************/
 
@@ -10652,7 +10654,7 @@ int short_int_write ( FILE *fileout, short int short_int_val )
 */
 {
   union {
-    short int yint;
+    unsigned short int yint;
     char ychar[2];
   } y;
 
@@ -12339,7 +12341,7 @@ unsigned long tds_read_alpha_section ( FILE *filein , unsigned long matindex)
   unsigned short int  temp_int;
   unsigned long int   temp_pointer;
   unsigned long int   teller; 
-  bool                hadf;
+  bool                hadf=false;
   //unsigned char       true_c_val[3];
   unsigned char       c;
  
@@ -13488,7 +13490,7 @@ unsigned long tds_read_obj_section ( FILE *filein )
 					*/
 				//material_num++;
 				tds_read_name(filein);
-				matoffset=-1;
+				matoffset=0xFFFFFFFF;
 				for (i=0;i<material_num;i++)
 					{
 					if (strcmp(material_name[i],temp_name)==0)
@@ -14092,7 +14094,7 @@ int tds_write ( FILE *fileout )
   long int            lb030;
   long int            long_int_val;
   int                 name_length;
-  short int           short_int_val;
+  unsigned short int           short_int_val;
   unsigned short int  u_short_int_val;
 
   bytes_num = 0;
@@ -14127,14 +14129,14 @@ int tds_write ( FILE *fileout )
   M3DMAGIC begin.
     tag, size.
 */
-  short_int_val = ( short ) 0x4d4d;
+  short_int_val = 0x4d4d;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, l4d4d );
 /*
   M3D_VERSION begin.
     tag, size, version.
 */
-  short_int_val = ( short ) 0x0002;
+  short_int_val = 0x0002;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, l0002 );
   long_int_val = 3;
@@ -14144,14 +14146,14 @@ int tds_write ( FILE *fileout )
   MDATA begin.
     tag, size.
 */
-  short_int_val = ( short ) 0x3d3d;
+  short_int_val = 0x3d3d;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, l3d3d );
 /*  
   MESH_VERSION begin.
     tag, size, version.
 */
-  short_int_val = ( short ) 0x3d3e;
+  short_int_val = 0x3d3e;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, l3d3e );
   long_int_val = 3;
@@ -14161,7 +14163,7 @@ int tds_write ( FILE *fileout )
   MASTER_SCALE begin.  
     tag, size, scale.
 */
-  short_int_val = ( short ) 0x0100;
+  short_int_val = 0x0100;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, l0100 );
   float_val = 1.0;
@@ -14171,7 +14173,7 @@ int tds_write ( FILE *fileout )
   NAMED_OBJECT begin. 
     tag, size, name. 
 */
-  short_int_val = ( short ) 0x4000;
+  short_int_val = 0x4000;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, l4000 );
   bytes_num = bytes_num + tds_write_string ( fileout, object_name );
@@ -14179,7 +14181,7 @@ int tds_write ( FILE *fileout )
   N_TRI_OBJECT begin.  
     tag, size.
 */
-  short_int_val = ( short ) 0x4100;
+  short_int_val = 0x4100;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, l4100 );
 /*
@@ -14187,7 +14189,7 @@ int tds_write ( FILE *fileout )
     tag, size, number of points, coordinates of points.
   Warning! number of points could exceed a short!
 */
-  short_int_val = ( short ) 0x4110;
+  short_int_val = 0x4110;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, l4110 );
 
@@ -14204,7 +14206,7 @@ int tds_write ( FILE *fileout )
   MESH_MATRIX begin.  
     tag, size, 4 by 3 matrix.
 */
-  short_int_val = ( short ) 0x4160;
+  short_int_val = 0x4160;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, l4160 );
 
@@ -14255,14 +14257,14 @@ int tds_write ( FILE *fileout )
   MDATA end. 
   KFDATA begin.
 */
-  short_int_val = ( short ) 0xb000;
+  short_int_val = 0xb000;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb000 );
 /*
   KFHDR begin.  
     tag, size, revision, filename, animlen.
 */
-  short_int_val = ( short ) 0xb00a;
+  short_int_val = 0xb00a;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb00a );
   short_int_val = 5;
@@ -14277,7 +14279,7 @@ int tds_write ( FILE *fileout )
   KFSEG begin.  
     tag, size, start, end.
 */
-  short_int_val = ( short ) 0xb008;
+  short_int_val = 0xb008;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb008 );
   long_int_val = 0;
@@ -14289,7 +14291,7 @@ int tds_write ( FILE *fileout )
   KFCURTIME begin.
     tag, size, current_frame.
 */
-  short_int_val = ( short ) 0xb009;
+  short_int_val = 0xb009;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb009 );
   long_int_val = 0;
@@ -14299,14 +14301,14 @@ int tds_write ( FILE *fileout )
   OBJECT_NODE_TAG begin.
     tag, size.  
 */
-  short_int_val = ( short ) 0xb002;
+  short_int_val = 0xb002;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb002 );
 /*
   NODE_ID begin.
     tag, size, id.
 */
-  short_int_val = ( short ) 0xb030;
+  short_int_val = 0xb030;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb030 );
   short_int_val = 0;
@@ -14316,7 +14318,7 @@ int tds_write ( FILE *fileout )
   NODE_HDR begin. 
     tag, size, object_name, flag1, flag2, hierarchy.
 */
-  short_int_val = ( short ) 0xb010;
+  short_int_val = 0xb010;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb010 );
   bytes_num = bytes_num + tds_write_string ( fileout, object_name );
@@ -14324,14 +14326,14 @@ int tds_write ( FILE *fileout )
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   short_int_val = 0;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
-  short_int_val = -1;
+  short_int_val = 0xFFFF;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
 /*
   NODE_HDR end. 
   PIVOT begin. 
     tag, size, pivot_x, pivot_y, pivot_z.
 */
-  short_int_val = ( short ) 0xb013;
+  short_int_val = 0xb013;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb013 );
   for ( i = 0; i < 3; i++ ) {
@@ -14343,7 +14345,7 @@ int tds_write ( FILE *fileout )
   POS_TRACK_TAG begin.  
     tag, size, flag, i1, i2, i3, i4, i5, i6, frame, l1, pos_x, pos_y, pos_z.
 */
-  short_int_val = ( short ) 0xb020;
+  short_int_val = 0xb020;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb020 );
   short_int_val = 0;
@@ -14373,7 +14375,7 @@ int tds_write ( FILE *fileout )
   ROT_TRACK_TAG begin. 
     tag, size, i1, i2, i3, i4, i5, i6, i7, i8, l1, rad, axis_x, axis_y, axis_z. 
 */
-  short_int_val = ( short ) 0xb021;
+  short_int_val = 0xb021;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb021 );
   short_int_val = 0;
@@ -14404,7 +14406,7 @@ int tds_write ( FILE *fileout )
   SCL_TRACK_TAG begin.  
     tag, size, i1, i2, i3, i4, i5, i6, i7, i8, l1, scale_x, scale_y, scale_z.
 */
-  short_int_val = ( short ) 0xb022;
+  short_int_val = 0xb022;
   bytes_num = bytes_num + short_int_write ( fileout, short_int_val );
   bytes_num = bytes_num + long_int_write ( fileout, lb022 );
   short_int_val = 0;
