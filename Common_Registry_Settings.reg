@@ -1,0 +1,21 @@
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Crack dot Com\Golgotha\1.0]
+"Fullscreen"=dword:00000000
+"xres"=dword:00000320
+"yres"=dword:00000258
+"use2dsound"=dword:00000000
+"use3dsound"=dword:00000000
+"bits"=dword:00000020
+"max_texture_quality"=dword:00000200
+"max_view_distance"=dword:00000046
+"texture_bitdepth"=dword:00000000
+"stereo_mode"=dword:00000000
+"stereo_port"=dword:000003bc
+"render_type"=dword:ffffffff
+"RenderDevice"=""
+"Screen"=hex:00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+"Sound"=hex:00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+"display2 (not functional right now)"="DirectX9 ASUS Extreme AX600 Series Secondary : HAL device \\\\.\\DISPLAY2"
+"display"=""
+
