@@ -7,7 +7,6 @@
 #include "dsound.h"
 #include "OptionSound.h"
 #include "main/win_main.h"
-#include "lisp/lisp.h"
 
 #ifdef _DEBUG
 #undef new
@@ -115,10 +114,11 @@ void COptionSound::Apply()
 		i4_win32_startup_options.use3dsound =FALSE;
 		i4_win32_startup_options.use2dsound =FALSE;
 		}
-	li_call("enable_sound");
 
 }
 
+//Disabled for now, doesn't work in most cases anyway. 
+//But enable_sound is always called uppon return from the dialog.
 void COptionSound::OnEnableSound() 
 {
 	
@@ -129,7 +129,7 @@ void COptionSound::OnEnableSound()
 //that we want to kill their buffers, otherwise they pocess an
 //old pointer to a directsound-buffer object but the directsound
 //object itself is gone -> HUGE crash.
-	li_call("enable_sound");
+	//li_call("enable_sound");
 }
 
 BOOL CALLBACK DSCapsProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)

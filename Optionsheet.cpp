@@ -11,7 +11,6 @@
 #include "Optionsheet.h"
 #include "resource.h"
 #include "main/win_main.h"
-#include "lisp/lisp.h"
 
 #ifdef _DEBUG
 #undef new
@@ -33,7 +32,6 @@ COptionsheet::COptionsheet(UINT nIDCaption, CWnd* pParentWnd, UINT iSelectPage)
 COptionsheet::COptionsheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectPage)
 	:CPropertySheet(pszCaption, pParentWnd, iSelectPage)
 {
-	li_call("show_gdi_surface");
 	AddPage(&graphics);
 	AddPage(&sound);
 	AddPage(&extras);
@@ -103,5 +101,5 @@ void COptionsheet::OnClose()
 	// TODO: Code für die Behandlungsroutine für Nachrichten hier einfügen und/oder Standard aufrufen
 	
 	CPropertySheet::OnClose();
-    li_call("hide_gdi_surface");
+    
 }

@@ -93,6 +93,8 @@ public:
   int save_option(void);//write changes to registry
 };
 
+void ShowSystemOptions();
+
 extern i4_win32_startup_options_struct i4_win32_startup_options;
 
 #endif

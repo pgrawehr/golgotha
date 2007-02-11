@@ -187,103 +187,112 @@ void i4_win32_startup_options_struct::check_option(char *opt)
 }
 */
 
-void i4_win32_startup_options_struct::check_option(w32 argc,i4_const_str *argv)
+	void i4_win32_startup_options_struct::check_option(w32 argc,i4_const_str *argv)
 	{
 #ifndef _CONSOLE
-	//render=R1_RENDER_DIRECTX5;//These options are not saved at the moment
-	int temp=0;//Call this method only once.
-	if (i4_get_int("Fullscreen",&temp)==ERROR_SUCCESS) fullscreen=(temp?TRUE:FALSE);
-	if (i4_get_int("xres",&temp)==ERROR_SUCCESS) xres=(short int)temp;
-	if (i4_get_int("yres",&temp)==ERROR_SUCCESS) yres=(short int)temp;
-	if (i4_get_int("use2dsound",&temp)==ERROR_SUCCESS) use2dsound=temp;
-	if (i4_get_int("use3dsound",&temp)==ERROR_SUCCESS) use3dsound=temp;
-	if (i4_get_int("bits",&temp)==ERROR_SUCCESS) bits=(short int)temp;
-	if (i4_get_int("max_view_distance",&temp)==ERROR_SUCCESS) max_view_distance=temp;
-	if (i4_get_int("max_texture_quality",&temp)==ERROR_SUCCESS) max_texture_quality=temp;
-	if (i4_get_int("texture_bitdepth",&temp)==ERROR_SUCCESS) texture_bitdepth=temp;
-	if (i4_get_int("stereo_mode",&temp)==ERROR_SUCCESS) stereo=temp;
-	if (i4_get_int("stereo_port",&temp)==ERROR_SUCCESS) stereoport=temp;
-	if (i4_get_int("render_type",&temp)==ERROR_SUCCESS) render=temp;
-	char buf[256];
-	buf[0]=0;
-	if (i4_get_registry(I4_REGISTRY_USER,0,"RenderDevice",buf,256))
+		//render=R1_RENDER_DIRECTX5;//These options are not saved at the moment
+		int temp=0;//Call this method only once.
+		if (i4_get_int("Fullscreen",&temp)==ERROR_SUCCESS) fullscreen=(temp?TRUE:FALSE);
+		if (i4_get_int("xres",&temp)==ERROR_SUCCESS) xres=(short int)temp;
+		if (i4_get_int("yres",&temp)==ERROR_SUCCESS) yres=(short int)temp;
+		if (i4_get_int("use2dsound",&temp)==ERROR_SUCCESS) use2dsound=temp;
+		if (i4_get_int("use3dsound",&temp)==ERROR_SUCCESS) use3dsound=temp;
+		if (i4_get_int("bits",&temp)==ERROR_SUCCESS) bits=(short int)temp;
+		if (i4_get_int("max_view_distance",&temp)==ERROR_SUCCESS) max_view_distance=temp;
+		if (i4_get_int("max_texture_quality",&temp)==ERROR_SUCCESS) max_texture_quality=temp;
+		if (i4_get_int("texture_bitdepth",&temp)==ERROR_SUCCESS) texture_bitdepth=temp;
+		if (i4_get_int("stereo_mode",&temp)==ERROR_SUCCESS) stereo=temp;
+		if (i4_get_int("stereo_port",&temp)==ERROR_SUCCESS) stereoport=temp;
+		if (i4_get_int("render_type",&temp)==ERROR_SUCCESS) render=temp;
+		char buf[256];
+		buf[0]=0;
+		if (i4_get_registry(I4_REGISTRY_USER,0,"RenderDevice",buf,256))
 		{
-		if (strlen(buf)>0)
+			if (strlen(buf)>0)
 			{
-			render_data_size=strlen(buf)+1;
-			render_data=(char*)malloc(render_data_size);
-			strcpy(render_data,buf);
+				render_data_size=strlen(buf)+1;
+				render_data=(char*)malloc(render_data_size);
+				strcpy(render_data,buf);
 			}
 		}
-    buf[0]=0;
-    if (i4_get_registry(I4_REGISTRY_USER,0,"language",buf,256))
+		buf[0]=0;
+		if (i4_get_registry(I4_REGISTRY_USER,0,"language",buf,256))
 		{
-		if (strlen(buf)>0&&strlen(buf)<9)
+			if (strlen(buf)>0&&strlen(buf)<9)
 			{
-			strcpy(langcode,buf);
+				strcpy(langcode,buf);
 			}
 		}
 #ifdef _WINDOWS
-	HKEY key;
-	if (RegOpenKeyEx(HKEY_CURRENT_USER,
-                   GOLGOTHA_REG_PATH,
-                   0,
-                   KEY_READ,
-                   &key)==ERROR_SUCCESS)
+		HKEY key;
+		if (RegOpenKeyEx(HKEY_CURRENT_USER,
+			GOLGOTHA_REG_PATH,
+			0,
+			KEY_READ,
+			&key)==ERROR_SUCCESS)
 		{
-		ULONG s=sizeof(GUID);
-		RegQueryValueEx(key,"Screen",0,
-			0,(w8*)&guid_screen,&s);
-		RegQueryValueEx(key,"Sound",0,
-			0,(w8*)&guid_sound,&s);
-		RegCloseKey(key);
-		key=0;
+			ULONG s=sizeof(GUID);
+			RegQueryValueEx(key,"Screen",0,
+				0,(w8*)&guid_screen,&s);
+			RegQueryValueEx(key,"Sound",0,
+				0,(w8*)&guid_sound,&s);
+			RegCloseKey(key);
+			key=0;
 		}
 #endif
-  
+
 #endif
-	for (w32 i=1;i<=argc;i++)//Check Command-Line override
+		bool bImmediatellyShowOptions=false;
+		for (w32 i=1;i<=argc;i++)//Check Command-Line override
 		{
-		if (argv[i]==i4_const_str("-no_full"))
-			fullscreen=i4_F;
-		if (argv[i]==i4_const_str("-default"))//with these settings,
+			if (argv[i]==i4_const_str("-no_full"))
+				fullscreen=i4_F;
+			if (argv[i]==i4_const_str("-default"))//with these settings,
 			{//all systems should at least be able to show the main menu
-			xres=640;
-			yres=480;
-			bits=16;
-			texture_bitdepth=0;
-			stereo=false;
-			if (render_data)
+				xres=640;
+				yres=480;
+				bits=16;
+				texture_bitdepth=0;
+				stereo=false;
+				if (render_data)
 				{
-				free(render_data);
-				render_data=0;
-				render_data_size=0;
+					free(render_data);
+					render_data=0;
+					render_data_size=0;
 				}
-			render=R1_RENDER_USEDEFAULT;
+				render=R1_RENDER_USEDEFAULT;
 			}
 
-		if (argv[i]==i4_const_str("-no_sound"))
+			if (argv[i]==i4_const_str("-no_sound"))
 			{
-			use2dsound=FALSE;
-			use3dsound=FALSE;
+				use2dsound=FALSE;
+				use3dsound=FALSE;
 			}
-		if (argv[i]==i4_const_str("-full"))
+			if (argv[i]==i4_const_str("-full"))
 			{
-			fullscreen=i4_T;
+				fullscreen=i4_T;
+			}
+			if (argv[i]==i4_const_str("-setup"))
+			{
+				bImmediatellyShowOptions=true;
 			}
 		}
 #ifdef _WINDOWS
-	if (!fullscreen)
+		if (!fullscreen)
 		{
-		HDC dc;
-		int i;
-		dc=GetDC(NULL);
-		i=GetDeviceCaps(dc,BITSPIXEL);
-		ReleaseDC(NULL,dc);
-		bits=i;
-		//if running in window set desired bitdepth to desktop bitdepth
+			HDC dc;
+			int i;
+			dc=GetDC(NULL);
+			i=GetDeviceCaps(dc,BITSPIXEL);
+			ReleaseDC(NULL,dc);
+			bits=i;
+			//if running in window set desired bitdepth to desktop bitdepth
 		}
 #endif
+		if (bImmediatellyShowOptions)
+		{
+			ShowSystemOptions();
+		}
 	}
 
 	
@@ -899,6 +908,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   //inifile=new CDataFile("golgotha.ini");
   i4_win32_startup_options.check_option(i4_global_argc,i4_global_argv);
   char memfailbuf[200];
+  ZeroMemory(memfailbuf,sizeof(memfailbuf));
   try
 	  {
 	  i4_main(count, tmp); 

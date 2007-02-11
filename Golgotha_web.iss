@@ -343,6 +343,7 @@ VersionInfoTextVersion=1.1.1.1
 LicenseFile=D:\golgotha\Documentation\License.rtf
 MergeDuplicateFiles=false
 VersionInfoCopyright=(c) 2007 Golgotha Revival Group et al.
+AppID={{D30F5398-C709-4F78-9106-765E7C581BD3}
 
 [Code]
 function ShouldInstallComCtlUpdate: Boolean;
@@ -376,17 +377,20 @@ Name: custom; Description: Custom installation settings; Flags: iscustom
 Name: fullsource; Description: Full installation with source
 
 [Dirs]
-Name: {app}\savegame
-Name: {app}\g_decompressed; Components: core
+Name: {app}\savegame; Components: core; Flags: uninsalwaysuninstall
+Name: {app}\g_decompressed; Components: core; Flags: uninsalwaysuninstall
+Name: {app}\plugins; Components: core; Flags: uninsalwaysuninstall
+Name: {app}\undo; Components: core; Flags: uninsalwaysuninstall
 
 [Icons]
-Name: {group}\Golgotha; Filename: {app}\Golgotha.exe; WorkingDir: {app}; IconFilename: {app}\Golgotha.exe; IconIndex: 0; Components: core
+Name: {group}\Golgotha; Filename: {app}\Release\Golgotha.exe; WorkingDir: {app}; IconFilename: {app}\Golgotha.exe; IconIndex: 0; Components: core
 Name: {group}\Read Readme file; Filename: {app}\Readme.txt; Components: core
 Name: {group}\Manual; Filename: {app}\Manual.doc; Flags: createonlyiffileexists
-Name: {group}\IVCON; Filename: {app}\ivcon\ivcon.exe; WorkingDir: {app}\ivcon; IconFilename: {app}\ivcon\ivcon.exe; Components: ivcon; Flags: createonlyiffileexists
+Name: {group}\IVCON; Filename: {app}\ivcon\Release\ivcon.exe; WorkingDir: {app}\ivcon; IconFilename: {app}\ivcon\ivcon.exe; Components: ivcon; Flags: createonlyiffileexists
 Name: {group}\Visit the Golgotha Website; Filename: {app}\GolgothaWebsite.url
 
 [Registry]
-Root: HKCU; Subkey: """Software\Crack dot Com\Golgotha\1.0"""; ValueType: string; ValueName: installpath; ValueData: {app}; Flags: createvalueifdoesntexist; Components: core
+Root: HKCU; Subkey: Software\Crack dot Com\Golgotha\1.0; ValueType: string; ValueName: installpath; ValueData: {app}; Components: core; Flags: uninsdeletekey
+Root: HKCU; Subkey: Software\Crack dot Com\Golgotha\1.0; ValueType: dword; ValueData: $3bc; Flags: createvalueifdoesntexist uninsclearvalue
 [Run]
 Filename: {tmp}\50comupd.exe; Parameters: /r:n /q:1; Check: ShouldInstallComCtlUpdate

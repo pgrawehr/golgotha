@@ -107,7 +107,8 @@ BOOL COptionInfo::OnInitDialog()
             break;
     }
 	strcat(strBuff,"\r\n");
-	strcat(strBuff,i4_current_app->display_mode_name);
+	if (i4_current_app!=NULL)
+		strcat(strBuff,i4_current_app->display_mode_name);
 	strcat(strBuff,"\r\n");
 	MEMORYSTATUS memstat;
 	ZeroMemory(&memstat,sizeof(memstat));

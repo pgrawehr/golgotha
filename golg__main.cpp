@@ -349,7 +349,7 @@ public:
   void client_wait_menu();
   void do_main_menu();
   void hide_main_menu();
-  void do_options();
+  static void do_options(); //To be able to call it directly during init. 
   void open_savegame();
   void save_savegame();
   void save_savegame_ok(i4_user_message_event_class *ev);
@@ -487,23 +487,36 @@ void golgotha_app::post_play_load()
   need_post_play_load=i4_F;
 }
 
+//Global method to load the options screen, because in some cases the setting might
+//be screwed up to much to even be able to get to the main menu. 
+void ShowSystemOptions()
+{
+	golgotha_app::do_options();
+}
 
 void golgotha_app::do_options()
 { //This displays the wrong options-settings (Only pop-up window)
-   /*if (main_menu)
-     delete main_menu;
+	/*if (main_menu)
+	delete main_menu;
 
-   main_menu=new g1_option_window(wm->width(), wm->height(), this, wm->get_style());
-   wm->add_child(0,0,main_menu);*/
-   //cwnd.Attach(current_window_handle);
+	main_menu=new g1_option_window(wm->width(), wm->height(), this, wm->get_style());
+	wm->add_child(0,0,main_menu);*/
+	//cwnd.Attach(current_window_handle);
 #ifdef _WINDOWS
-   ShowCursor(TRUE);
-   COptionsheet op("Options");
-   op.EnableStackedTabs(FALSE);
-   op.DoModal();
-   ShowCursor(FALSE);
+	ShowCursor(TRUE);
+	if (g1_app!=NULL)
+		li_call("show_gdi_surface");
+	COptionsheet op("Options");
+	op.EnableStackedTabs(FALSE);
+	op.DoModal();
+	if (g1_app!=NULL)
+	{
+		li_call("enable_sound");
+		li_call("hide_gdi_surface");
+	}
+	ShowCursor(FALSE);
 
-   //todo: add options for linux
+	//todo: add options for linux
 #endif
 }
 
@@ -950,8 +963,8 @@ void golgotha_app::init()
 	i4_warning("Detected architecture is little endian.");
 	if (i4_litend!=1)
 	{
-		i4_error("FATAL: Golgotha was compiled with big-endian settings"
-    " included. Please rebuild Golgotha with the correct endianness setting in arch.h");
+		i4_error("FATAL: Golgotha was compiled for a big-endian system. "
+		"Please rebuild Golgotha with the correct endianness setting in arch.h");
 		exit(92);
         };
   }
@@ -960,8 +973,8 @@ void golgotha_app::init()
 	i4_warning("Detected architecture is big endian.");
 	if (i4_litend!=0)
 	{
-		i4_error("FATAL: Golgotha was compiled with little-endian settings"
-" included. Please rebuild Golgotha with the correct endianness setting in arch.h");
+		i4_error("FATAL: Golgotha was compiled for a little-endian system. "
+		"Please rebuild Golgotha with the correct endianness setting in arch.h");
 		exit(92);
 	};
   }
