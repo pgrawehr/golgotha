@@ -16,7 +16,6 @@ can be ignored.
 
 Parameters: 
 ----------
-Those with ? indicated are not yet tested.
 For unix type systems, the registry is replaced by a file called "golgotha.ini".
 -no_full:	Open the game in a window on the desktop (default is fullscreen)
 			This is required for debugging except if a second monitor (or 
@@ -25,6 +24,8 @@ For unix type systems, the registry is replaced by a file called "golgotha.ini".
 -default        Use 640x480x16, regardless of registry setting. Usefull if you
 			choosed some setting that doesn't work on your system
 			and you therefore cannot change the settings any more.
+-setup		Show the configuration dialog right on startup (use if golgotha won't start
+		with the default settings)
 -no_sound       Disable sound
 -eout filename	Write (append) the debug log to the given file.
 -max_memory n	Maximum amount of Memory to be used for i4_mem_manager

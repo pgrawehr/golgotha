@@ -383,10 +383,10 @@ Name: {app}\plugins; Components: core; Flags: uninsalwaysuninstall
 Name: {app}\undo; Components: core; Flags: uninsalwaysuninstall
 
 [Icons]
-Name: {group}\Golgotha; Filename: {app}\Release\Golgotha.exe; WorkingDir: {app}; IconFilename: {app}\Golgotha.exe; IconIndex: 0; Components: core
+Name: {group}\Golgotha; Filename: {app}\Golgotha.exe; WorkingDir: {app}; IconFilename: {app}\Golgotha.exe; IconIndex: 0; Components: core
 Name: {group}\Read Readme file; Filename: {app}\Readme.txt; Components: core
 Name: {group}\Manual; Filename: {app}\Manual.doc; Flags: createonlyiffileexists
-Name: {group}\IVCON; Filename: {app}\ivcon\Release\ivcon.exe; WorkingDir: {app}\ivcon; IconFilename: {app}\ivcon\ivcon.exe; Components: ivcon; Flags: createonlyiffileexists
+Name: {group}\IVCON; Filename: {app}\ivcon\ivcon.exe; WorkingDir: {app}\ivcon; IconFilename: {app}\ivcon\ivcon.exe; Components: ivcon; Flags: createonlyiffileexists
 Name: {group}\Visit the Golgotha Website; Filename: {app}\GolgothaWebsite.url
 
 [Registry]
