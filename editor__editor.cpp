@@ -8335,7 +8335,7 @@ public:
     float s, t, s_step, t_step;
     s_step=(width())/(float)(ax2-ax1);//t and s must be [0..256) ??
     t_step=(height())/(float)(ay2-ay1);
-    //there's a bug somewhere here, such that the map looses the last edge.
+
     api->default_state();
     api->clear_area(0,0,width()-1,height()-1, 0x0, RENDER_DEFAULT_FAR_DISTANCE);  
 
@@ -8413,6 +8413,7 @@ public:
 	api->flush_vert_buffer();
     api->set_filter_mode(R1_BILINEAR_FILTERING);
   }
+
   void name(char* buffer) { static_name(buffer,"map_renderer"); }
 };
 
@@ -8515,73 +8516,35 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 
 i4_image_class *render_map_section(int x1, int y1, int x2, int y2, int im_w, int im_h)
 {
-	//BUG: The last few pixels of the given rectangle (lower right corner)
-	//always stay black. FIXED
- // r1_render_api_class *api=g1_render.r_api;
 
- // r1_render_window_class *rwin=api->create_render_window(im_w, im_h);
- // map_renderer_class *map_r=new map_renderer_class(im_w, im_h);
+	i4_draw_context_class context(0,0,im_w-1, im_h-1);
+	i4_pixel_format fmt;
+	fmt.default_format();
+	fmt.alpha_mask=0;
+	fmt.calc_shift();
+	const i4_pal *pal=i4_pal_man.register_pal(&fmt);
 
- // map_r->ax1=x1;
- // map_r->ay1=y1;
- // map_r->ax2=x2;
- // map_r->ay2=y2;
+	i4_image_class *to=0;
 
-
- // rwin->add_child(0,0, map_r);
- // i4_current_app->get_window_manager()->add_child(0,0,rwin);
- // 
- // 
- i4_draw_context_class context(0,0,im_w-1, im_h-1);
-
- // i4_display_class *display=i4_current_app->get_display();
- // 
- // int tries=0;
- // r1_texture_manager_class *tman=api->get_tmanager();
- // do
- // {
- //   tman->next_frame();
- //   rwin->draw(context);
- //   display->flush();
-
- //   tries++;
-	//i4_thread_sleep(200);//wait a bit for the loader to load up some data
- //   // repeat until textures have rez-ed in
- //   // or it doens't look like it'll happen
-	//// Need at least two tries to be sure the entire display chain is up to date.
- // } while ((map_r->do_it_again && tries<100) || tries<2);
- // tman->next_frame();
-
-
-  i4_pixel_format fmt;
-  fmt.default_format();
-  fmt.alpha_mask=0;
-  fmt.calc_shift();
-  const i4_pal *pal=i4_pal_man.register_pal(&fmt);
-
-  //i4_image_class *fb;
-  i4_image_class *to=0;
-
-  //fb=display->lock_frame_buffer(I4_BACK_FRAME_BUFFER, I4_FRAME_BUFFER_READ);
-    to = i4_create_image(im_w, im_h, pal);
-    to->bar(0,0,im_w-1,im_h-1,0x0007000,context);//perhaps another color 
+	to = i4_create_image(im_w, im_h, pal);
+	to->bar(0,0,im_w-1,im_h-1,0x0007000,context);//perhaps another color 
 	render_map_to_image(x1,y1,x2,y2,im_w,im_h,to);
-	
-    //(the second last element) would prove more usefull for debugging?
-    //fb->put_part(to, 0,0, 0,0, im_w-1, im_h-1, context);
-    //display->unlock_frame_buffer(I4_BACK_FRAME_BUFFER);
 
-  //delete rwin;
-
-  return to;
+	return to;
 }
 
 
 struct area
 {
   int x1,y1,x2,y2;
-  area(int x1, int y1, int x2, int y2) : x1(x1),y1(y1),x2(x2),y2(y2) {}
-  area() {}
+
+  area(int x1, int y1, int x2, int y2) 
+	  : x1(x1),y1(y1),x2(x2),y2(y2) 
+  {
+  }
+  area()
+	  : x1(0),y1(0),x2(0),y2(0)
+  {}
 };
 
 static i4_array<area *> *list;
