@@ -27,6 +27,7 @@ class g1_team_api_definition_class;
 class g1_border_frame_class;
 class g1_takeover_pad_class;
 class g1_path_object_class;          // objs/path_object.hh
+
 class g1_player_info_class
 {
 public:
@@ -43,6 +44,7 @@ private:
   int &num_points();
   int &num_stank_deaths();
   g1_typed_reference_class<g1_player_piece_class> commander;
+  i4_array<w32> owned_objects;
 public:
   //i4_bool continue_wait;
   int &num_stank_lives();
@@ -63,9 +65,17 @@ public:
   int &income_rate();
   float &damage_multiplier();
 
-  i4_array<w32> owned_objects;
+
+public:
   void remove_object(w32 global_id);
   void add_object(w32 global_id);
+  int num_valid_objects();
+  void clear_owned_objects();
+  int owned_objects_size()
+  {
+	  return owned_objects.size();
+  }
+  g1_object_class* get_owned_object(int idx);
 
   g1_player_info_class();    
   g1_team_api_class *get_ai() const { return ai; }

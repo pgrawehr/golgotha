@@ -970,6 +970,32 @@ LI_HEADER(vector_element)
 	return 0;
 	}
 
+LI_HEADER(get_object_of_player)
+{
+	li_string* object_type=li_string::get(li_eval(li_first(o,env),env),env);
+	if (!g1_get_map())
+		return li_nil;
+	int player_num=li_int::get(li_eval(li_second(o,env),env),env)->value();
+	g1_object_class* obj=g1_get_map()->find_player_object(g1_get_object_type(object_type->value()),
+		player_num);
+	if (obj)
+	{
+		return new li_g1_ref(obj->global_id);
+	}
+	else
+		return li_nil;
+
+}
+
+LI_HEADER(player_has_no_units)
+{
+	int player_num=li_int::get(li_eval(li_first(o,env),env),env)->value();
+	g1_player_info_class* p=g1_player_man.get(player_num);
+	if (p->num_valid_objects()==0)
+		return li_true_sym;
+	return li_nil;
+}
+
 LI_HEADER(objects_in_range)
 	{
 	g1_object_class *c=get_object_param(o,env);
@@ -1637,6 +1663,8 @@ class g1_li_fn_inits: public i4_init_class
 			li_add_function("set_mini_object_pos",li_set_mini_object_pos);
 			li_add_function("create_object", li_create_object);
 			li_add_function("player_variables",li_player_variables);
+			li_add_function("get_object_of_player",li_get_object_of_player);
+			li_add_function("player_has_no_units",li_player_has_no_units);
 			}
 		int init_type() {return I4_INIT_TYPE_LISP_FUNCTIONS;}
 	}g1_li_fn_inits_inst;

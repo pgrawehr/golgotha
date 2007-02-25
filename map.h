@@ -473,7 +473,12 @@ public:
   \param prefered_team A player id. If possible, the function returns an object that belongs
   to the given player.
   */
-  g1_object_class *find_object_by_id(w32 object_id, g1_player_type prefered_team);
+  g1_object_class* find_object_by_id(w32 object_id, g1_player_type prefered_team);
+  /*! This method returns the first object of the given type of the given player.
+  \param object_id An objects type id.
+  \param player_num The owner of the object
+  */
+  g1_object_class* find_player_object(w32 object_id, g1_player_type player_num);
 
   // this is not stank specific!
   //i4_bool find_path(i4_float start_x, i4_float start_y,

@@ -839,11 +839,22 @@ g1_win_screen_class::g1_win_screen_class(w16 w, w16 h,
 
 	}
 
-void g1_help_screen_class::parent_draw(i4_draw_context_class &context)
-{
-  if (help)
-    help->put_image(local_image, 0,0, context);
-}
+	void g1_help_screen_class::parent_draw(i4_draw_context_class &context)
+	{
+		if (help)
+		{
+			local_image->clear(0,context);
+			w16 fullw=this->width();
+			w16 fullh=this->height();
+			fullw-=help->w;
+			if (fullw<0)
+				fullw=0;
+			fullh-=help->h;
+			if (fullh<0)
+				fullh=0;
+			help->put_image(local_image, fullw/2,fullh/2, context);
+		}
+	}
 
 void g1_win_screen_class::parent_draw(i4_draw_context_class &context)
 	{

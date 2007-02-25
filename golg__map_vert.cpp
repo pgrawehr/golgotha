@@ -303,7 +303,11 @@ void g1_map_class::calc_pitch_and_roll(i4_float x, i4_float y, i4_float z,
   g1_map_cell_class *c = cell(ix,iy);  
 
   if (!(ix>=0 && iy>=0 && ix<(int)w && iy<(int)h))
-    i4_error("off map");
+  {
+	  i4_error("WARNING: Attempt to compute terrain slope outside map. ");
+	  ix=0;
+	  iy=0;
+  }
 
   g1_object_chain_class *chain=c->get_solid_list();
   for (;chain; chain=chain->next_solid())

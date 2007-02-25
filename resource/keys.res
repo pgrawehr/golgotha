@@ -132,8 +132,7 @@
 (def_key "Alt+Q"		   "global_options"              action follow strategy
 editor maxtool menu)
 
-(def_key  "F1"                     "Show_Help"                   action follow strategy
-menu)
+(def_key  "F1"                     "Show_Help"                   action follow strategy menu)
 (def_key  "F2"                     "Screen Shot"                 action follow strategy editor maxtool menu)
 
 (def_key  "F3"                     "play_demo"                   action follow strategy)

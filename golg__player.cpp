@@ -72,7 +72,7 @@ void g1_player_manager_class::show_message(const i4_const_str &message, w32 colo
 
 g1_player_info_class::g1_player_info_class() 
   : ai(0),
-    owned_objects(0,32)
+    owned_objects(0,128)
 {
   refresh_money=1;
 }
@@ -115,6 +115,36 @@ void g1_player_info_class::add_object(w32 global_id)
     }
 
   owned_objects.add(global_id);
+}
+
+int g1_player_info_class::num_valid_objects()
+{
+	int t=owned_objects.size();
+	int valid_num=0;
+	for (int i=0; i<t; i++)
+	{
+		if (!g1_global_id.check_id(owned_objects[i]))
+		{
+			owned_objects[i]=g1_global_id.invalid_id();
+		}
+		else
+		{
+			valid_num++;
+		}
+	}
+	return valid_num;
+}
+
+g1_object_class* g1_player_info_class::get_owned_object(int idx)
+{
+	if (idx<0 || idx>=owned_objects.size())
+		return NULL;
+	return g1_global_id.checked_get(owned_objects[idx]);
+}
+
+void g1_player_info_class::clear_owned_objects()
+{
+	owned_objects.clear();
 }
 
 float g1_player_info_class::kill_ratio()

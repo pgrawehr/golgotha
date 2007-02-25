@@ -389,7 +389,7 @@ g1_object_class **g1_map_class::load_objects(g1_loader_class *fp, w32 &tobjs)
   g1_object_type *o_remap=0;
 
   for (i=0; i<G1_MAX_PLAYERS; i++)
-      g1_player_man.get(i)->owned_objects.clear();
+      g1_player_man.get(i)->clear_owned_objects();
 
   if (fp->goto_section(G1_SECTION_OBJECT_TYPES_V1))
   {

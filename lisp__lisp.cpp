@@ -2175,11 +2175,11 @@ LI_HEADER(append)
 
 
 
-
-
+//! Open a new scope, with new variable declarations. 
+//! The assignments are done "simoultaneously", so use old environment for 
+//! var_list evaluations.
 LI_HEADER(let)
-	{//the assignments are done "simoultaneously", so use old environment for 
-	//var_list evaluations
+	{
 	li_object *var_list=li_car(o,env);
 	li_object *block_list=li_cdr(o,env);
 	if (!env) env=new li_environment(0,i4_F);

@@ -180,3 +180,17 @@
 (models
  object_format
  "greclighthouse_lod")
+
+(defun loose_function (tick local_player) "loose if player has no own mainbase any more"
+    (let ((ret nil))
+    (if (equal (get_object_of_player "mainbasepad" local_player) nil) (setq ret T))
+    ret
+    )
+)
+
+(defun winning_function (tick local_player) "win if the opponent has no units any more"
+    (let ((ret nil))
+        (if (equal (player_has_no_units 2) T) (setq ret "snow.level"))
+    ret
+    )
+)

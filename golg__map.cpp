@@ -870,6 +870,26 @@ g1_object_class *g1_map_class::find_object_by_id(w32 object_id,
   return best;
 }
 
+g1_object_class* g1_map_class::find_player_object(w32 object_id, g1_player_type player_num)
+{
+	sw32 i,j=width()*height();
+	g1_map_cell_class *c=cells;
+	g1_object_chain_class *o;
+
+	for (i=0; i<j; i++, c++)
+	{
+		for (o=c->get_obj_list(); o; o=o->next)
+		{
+			if ((w32)o->object->id==object_id && o->object->player_num==player_num)
+			{            
+					return o->object;
+			}
+		}
+	}
+	return NULL;
+	
+}
+
 
 void g1_map_class::remove_from_think_list(g1_object_class *obj)
 {

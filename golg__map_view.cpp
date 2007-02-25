@@ -945,13 +945,13 @@ public:
 
 			for (i=0; i<G1_MAX_PLAYERS; i++)
 			{
-				i4_array<w32> &a=g1_player_man.get(i)->owned_objects;
-				int t=a.size();
-				color=g1_player_man.get(i)->map_player_color;
+				g1_player_info_class* info=g1_player_man.get(i);
+				int t=info->owned_objects_size();
+				color=info->map_player_color;
 
 				for (int j=0; j<t; j++)
 				{
-					g1_object_class *p=g1_global_id.checked_get(a[j]);
+					g1_object_class *p=info->get_owned_object(j);
 
 					if (!p || p->radar_type==G1_RADAR_NONE)
 						continue;

@@ -85,7 +85,7 @@ g1_main_menu_class::g1_main_menu_class(w16 w, w16 h,
     style(style),
 	num_paintings(0)
 {
-  li_call("Pause");
+  li_call("ForcePause");
   deco=i4_load_image(i4gets("title_screen"));
   i4_coord xp,yp;
 
