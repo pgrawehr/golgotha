@@ -32,7 +32,7 @@ class g1_3d_tile_window : public g1_3d_pick_window
 
   g1_3d_tile_window(w16 w, w16 h,
                     int tile_num,
-                    g1_3d_pick_window::camera_struct &camera,
+                    g1_3d_pick_window_camera_struct &camera,
                     i4_image_class *active_back,
                     i4_image_class *passive_back,
                     i4_event_reaction_class *reaction);

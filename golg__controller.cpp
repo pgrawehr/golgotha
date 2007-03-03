@@ -452,8 +452,7 @@ void g1_object_controller_class::parent_draw(i4_draw_context_class &context)
         view.get_view_mode()==G1_STRATEGY_MODE ||
         view.get_view_mode()==G1_FOLLOW_MODE)     
       draw_counts();
-	g1_render.r_api->states_have_changed=i4_T;
-	g1_render.r_api->flush_vert_buffer();
+	g1_render.flush_vert_buffer();
     g1_render.r_api->get_tmanager()->next_frame();
     g1_stat_counter.t_frames++;
 

@@ -1456,8 +1456,8 @@ void draw_spining_tris(float px, float py, float z,
  
     if (!off)
     {
-      g1_render.r_api->use_texture(q->material_ref, 8, 0);
-      g1_render.r_api->render_poly(t_verts, tv);
+      api->use_texture(q->material_ref, 8, 0);
+      api->render_poly(t_verts, tv);
     }
   }
 }

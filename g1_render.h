@@ -94,6 +94,11 @@ void g1_get_ambient_function(i4_transform_class *object_to_world,
 
 enum { G1_REVERSE_POINTS=2};
 
+//! High level object render interface.
+//! This singleton class is the high level render interface, it contains methods to render whole
+//! object to the screen in a single call. 
+//! The single instance of this class is always accessible trough g1_render.
+//! Remark: This class should be refactorized (make members private, add access functions). 
 class g1_render_class:public i4_init_class
 {
 public:
@@ -264,6 +269,12 @@ public:
 											   w8 &ORCODE);
 
   void ensure_capacity(int max_vertices);
+
+  void flush_vert_buffer()
+  {
+	  r_api->states_have_changed=i4_T;
+	  r_api->flush_vert_buffer();
+  }
   //void set_quad_vertices(g1_vert_class *src_arr, 
   //	  r1_vert* v, g1_quad_class *quad, i4_transform_class *transform);
 };

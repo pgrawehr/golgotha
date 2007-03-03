@@ -37,7 +37,7 @@ public:
   g1_3d_object_window(w16 w, w16 h,
                       g1_object_type obj_type,
                       w16 array_index,
-                      g1_3d_pick_window::camera_struct &camera,
+                      g1_3d_pick_window_camera_struct &camera,
                       i4_image_class *active_back,
                       i4_image_class *passive_back,
                       i4_event_reaction_class *reaction);

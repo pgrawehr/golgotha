@@ -2837,9 +2837,11 @@ i4_bool g1_edit_state_class::set_major_mode(char *mode_name)
       if (tools)
         delete tools;
 
-      tools=create_buttons(win_h);
-      parent->add_child(parent->width()-tools->width(), 0, tools);
-
+	  if (parent)
+	  {
+		tools=create_buttons(win_h);
+		parent->add_child(parent->width()-tools->width(), 0, tools);
+	  }
       show_focus();      
   
       g1_editor_instance.major_mode_change();
@@ -6792,12 +6794,20 @@ void g1_3d_object_window::set_object_type(g1_object_type type,
   if (type>=0)
   {
     object=g1_create_object(type);
+	camera.init();//reset camera to default location
     if (object.valid())
     {
       object->x=object->lx=object->y=object->ly=object->h=object->lh=0;
+	  //object->y=object->ly=-object->occupancy_radius()/3;
       object->player_num=g1_edit_state.current_team;
+	  //Set the distance such that the whole object is visible
+	  camera.view_dist=object->occupancy_radius()*1.25; 
     }
-	camera.init();//reset camera to default location
+	
+	
+	//And turn it upright (look at it from the side)
+	camera.phi=i4_pi_2();
+	camera.center_z=camera.view_dist/3;
   }
 
   object_type=type;
@@ -6808,7 +6818,7 @@ void g1_3d_object_window::set_object_type(g1_object_type type,
 g1_3d_object_window::g1_3d_object_window(w16 w, w16 h,
                                          g1_object_type obj_type,
                                          w16 _array_index,
-                                         g1_3d_pick_window::camera_struct &camera,
+                                         g1_3d_pick_window_camera_struct &camera,
                                          i4_image_class *active_back,
                                          i4_image_class *passive_back,
                                          i4_event_reaction_class *reaction)
@@ -6868,6 +6878,7 @@ void g1_3d_object_window::draw_object(g1_draw_context_class *context)
 	object->draw_params.flags|=g1_model_draw_parameters::FORCEDRAW;//draw this object regardless of its position
     object->draw(context,pos);
     object->draw_params.flags=oldflags;
+	g1_render.flush_vert_buffer();
     //put the old ambient function back
     g1_render.get_ambient = last_ambient_func;
 
@@ -6932,7 +6943,7 @@ class g1_object_picker_class : public i4_color_window_class
 public:
   enum { W=128,H=400 };
 
-  void recolor_text()
+  virtual void recolor_text()
   {
     for (int i=0; i<text.size(); i++)
     {     
@@ -6951,7 +6962,7 @@ public:
     }
   }
 
-  void reorient_text()
+  virtual void reorient_text()
   {
     for (int i=0; i<text.size(); i++)
     {
@@ -6965,17 +6976,17 @@ public:
     recolor_text();
   }
 
-  void refresh()
+  virtual void refresh()
   {
     obj_view->set_object_type(g1_e_object.get_object_type(), 0);
 
-    if (obj_view->object.valid())
-      obj_view->camera.view_dist=obj_view->object->occupancy_radius()*1.25f;
+    //if (obj_view->object.valid())
+    //  obj_view->camera.view_dist=obj_view->object->occupancy_radius()*1.25f;
 
     request_redraw(i4_T);
   }
 
-  void name(char* buffer) { static_name(buffer,"object_picker_class"); }
+  virtual void name(char* buffer) { static_name(buffer,"object_picker_class"); }
   g1_object_picker_class()
     : i4_color_window_class(W, H, i4_current_app->get_style()->color_hint->neutral(),
                             i4_current_app->get_style()),
@@ -6985,8 +6996,7 @@ public:
 
     offset=0;
 
-    g1_3d_pick_window::camera_struct camera;
-    camera.init();
+    g1_3d_pick_window_camera_struct camera;
 
     i4_graphical_style_class *style=i4_current_app->get_style();
 
@@ -7061,7 +7071,7 @@ public:
   }
 
 
-  void select_type(int type)
+  virtual void select_type(int type)
   {
     g1_edit_state.hide_focus();
 
@@ -7078,7 +7088,7 @@ public:
     g1_edit_state.show_focus();
   }
 
-  void receive_event(i4_event *ev)
+  virtual void receive_event(i4_event *ev)
   {
     if (ev->type()==i4_event::USER_MESSAGE)
     {
@@ -7107,7 +7117,11 @@ public:
       CAST_PTR(kev, i4_key_press_event_class, ev);
       if (kev->key_code==I4_UP)
       {
-        if (offset) { offset--; reorient_text(); }       
+        if (offset) 
+		{ 
+			offset--; 
+			reorient_text(); 
+		}       
       }
       else if (kev->key_code==I4_DOWN)
       {
@@ -7117,17 +7131,19 @@ public:
           reorient_text();
         }
       }
-
-      for (int i=0; i<selectable.size(); i++)
-        if (to_upper(*g1_object_type_array[selectable[i]]->name())==kev->key_code)
-        {
-          offset=i;
-          select_type(selectable[i]);
-          return ;
-        }
-    }
-    else 
-      i4_color_window_class::receive_event(ev);
+	}
+	else if (ev->type()==i4_event::CHAR_SEND)
+	{
+		CAST_PTR(cev,i4_char_send_event_class,ev);
+		for (int i=0; i<selectable.size(); i++)
+			if (to_upper(*g1_object_type_array[selectable[i]]->name())==cev->character)
+			{
+				offset=i;
+				select_type(selectable[i]);
+				return ;
+			}
+    } 
+    i4_color_window_class::receive_event(ev);
   }
 
 };
@@ -7483,13 +7499,17 @@ void g1_3d_pick_window::parent_draw(i4_draw_context_class &context)
     start.get();
 
     
-    i4_float d=(float)fabs(cos(camera.zrot)*4)-i4_pi();
-    camera.theta=d;
+	//This caused the object to turn back and forth, but I think
+	//it looks nicer if it turns more slowly and in full circles. 
+    //i4_float d=(float)fabs(cos(camera.zrot)*4)-i4_pi();
+	//camera.theta=d;
+    camera.theta=camera.theta+0.01;
 
     if (camera.theta>2*i4_pi())
       camera.theta-=2*i4_pi();
     if (camera.theta<0)
       camera.theta+=2*i4_pi();
+
   }
   else
     start.get();
@@ -7598,6 +7618,8 @@ void g1_3d_pick_window::receive_event(i4_event *ev)
   }
   else if (ev->type()==i4_event::KEY_PRESS)
   {
+	  //These keycodes are not documented, so it's not a really
+	  //big issue if they're confusing. 
     CAST_PTR(kev, i4_key_press_event_class, ev);
     if (kev->key=='x')
       camera.theta+=0.2f;
@@ -7607,6 +7629,18 @@ void g1_3d_pick_window::receive_event(i4_event *ev)
       camera.phi+=0.2f;
     else if (kev->key=='Y')
       camera.phi-=0.2f;    
+	if (kev->key=='b')
+		camera.center_x-=0.2f;
+	else if (kev->key=='B')
+		camera.center_x+=0.2f;
+	if (kev->key=='c')
+		camera.center_y-=0.2f;
+	else if (kev->key=='C')
+		camera.center_y+=0.2f;
+	if (kev->key=='v')
+		camera.center_z-=0.2f;
+	else if (kev->key=='V')
+		camera.center_z+=0.2f;
   }
 
   i4_menu_item_class::receive_event(ev);
@@ -7744,7 +7778,7 @@ void g1_scroll_picker_class::parent_draw(i4_draw_context_class &context)
 
   r1_texture_manager_class *tman=g1_render.r_api->get_tmanager();
 
-  g1_render.r_api->flush_vert_buffer();
+  g1_render.flush_vert_buffer();
 
   tman->next_frame();
 }
@@ -7965,7 +7999,7 @@ i4_menu_item_class *g1_tile_picker_class::create_window(w16 w, w16 h, int scroll
   if (scroll_object_num>=t)
     return 0;
 
-  g1_3d_pick_window::camera_struct tile_state;
+  g1_3d_pick_window_camera_struct tile_state;
   tile_state.init();
 
   g1_3d_tile_window *neww;
@@ -8082,7 +8116,7 @@ i4_bool g1_tile_picker_class::edit(i4_menu_item_class *window)
 
 g1_3d_tile_window::g1_3d_tile_window(w16 w, w16 h,
                                      int tile_num,
-                                     g1_3d_pick_window::camera_struct &camera,
+                                     g1_3d_pick_window_camera_struct &camera,
                                      i4_image_class *active_back,
                                      i4_image_class *passive_back,
                                      i4_event_reaction_class *reaction)

@@ -17,13 +17,51 @@
 class i4_image_class;
 class g1_draw_context_class;
 
+struct g1_3d_pick_window_camera_struct
+{
+	g1_3d_pick_window_camera_struct()
+	{
+		init();
+	}
+	g1_3d_pick_window_camera_struct(g1_3d_pick_window_camera_struct& from)
+	{
+		theta=from.theta;
+		phi=from.phi;
+		zrot=from.zrot;
+		view_dist=from.view_dist;
+		center_x=from.center_x;
+		center_y=from.center_y;
+		center_z=from.center_z;
+		stopped=from.stopped;
+	}
+	i4_float theta, phi, zrot;
+
+	i4_float view_dist,
+		center_x,
+		center_y,
+		center_z; 
+
+	i4_bool stopped;
+
+	void init() 
+	{ 
+		stopped=i4_F; 
+		center_x=0;
+		center_y=0;
+		center_z=0;
+		view_dist=1;
+		theta=0;
+		phi=0;
+		zrot=0;
+	}
+
+};
+
 class g1_3d_pick_window : public i4_menu_item_class
 {
  
 protected:
   i4_bool need_flip_update;
-
-
 
   sw32 last_mx, last_my;
 
@@ -31,36 +69,14 @@ protected:
   i4_image_class *act,*pass;
   i4_time_class start;
   i4_event_reaction_class *reaction;
+  g1_3d_pick_window_camera_struct camera;
 public:
-  struct camera_struct
-  {
-    i4_float theta, phi, zrot;
-
-    i4_float view_dist,
-      center_x,
-      center_y,
-      center_z; 
-    
-    i4_bool stopped;
-
-    void init() 
-    { 
-      stopped=i4_F; 
-      center_x=0;
-      center_y=0;
-      center_z=0;
-      view_dist=1;
-      theta=0;
-      phi=0;
-      zrot=0;
-    }
-
-  } camera;
+  
 
   g1_3d_pick_window(w16 w, w16 h,
                     i4_image_class *active_back,
                     i4_image_class *passive_back,
-                    camera_struct &camera,
+                    g1_3d_pick_window_camera_struct &camera,
                     i4_event_reaction_class *reaction)
     
     : i4_menu_item_class(0,0,w,h),
