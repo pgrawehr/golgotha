@@ -490,8 +490,8 @@ g1_object_class::g1_object_class(g1_object_type id,
     default:
       //if the file has an unrecognized version, seek past it
       if (fp) fp->seek(fp->tell() + data_size);
-
-      health=get_type()->defaults->health;
+	  g1_object_definition_class* this_objs_type=get_type();
+      health=this_objs_type->defaults->health;
       global_id=g1_global_id.alloc(this);
       lx=x=(float)g1_get_map()->width()/2;
       ly=y=(float)g1_get_map()->height()/2;
@@ -1111,7 +1111,7 @@ void g1_remove_object_type(g1_object_type type)
     g1_last_object_type--;
 }
 
-static void change_obj(int i, int j)
+static void exchange_obj(int i, int j)
 {
 	g1_object_definition_class *ic=g1_object_type_array[i];
 	g1_object_definition_class *jc=g1_object_type_array[j];
@@ -1132,7 +1132,7 @@ void g1_initialize_loaded_objects()
 		  if ((g1_object_type_array[i]==0)&&
 			  (g1_object_type_array[j]!=0))
 		  {
-			  change_obj(i,j);
+			  exchange_obj(i,j);
 			  continue;
 		  }
 		  if ((g1_object_type_array[i]!=0) &&
@@ -1141,7 +1141,7 @@ void g1_initialize_loaded_objects()
 			  if (strcmp(g1_object_type_array[i]->name(),
 				  g1_object_type_array[j]->name())>0)
 			  {
-				  change_obj(i,j);
+				  exchange_obj(i,j);
 			  }
 		  }
 	  }

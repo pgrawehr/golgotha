@@ -112,7 +112,6 @@ void g1_model_list_class::scale_models(i4_float to)
 
 void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_manager_class *tmap)
 {
-
 	free_array();
 	if (g1_object_heap)  
 		g1_object_heap->clear();
@@ -128,6 +127,7 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 
 	pf_load_models.start();
 
+	//"Loading models..."
 	i4_status_class *stat=i4_create_status(i4gets("loading_models"));
 
 	total_models=model_names.size();
@@ -141,11 +141,15 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 		if (stat) 
 			stat->update(i/(float)model_names.size());
 
+		//The default scale. 
 		model_scaling=0.1f;
+
 		pf_model_load_open.start();
+		//A string of the form "objects/%s.gmod"
 		li_object *fmt=li_get_value("object_format", 0);
 		char *n=li_string::get(fmt,0)->value();
 		sprintf(nbuf,n,model_names[i]->c_str());
+
 		i4_file_class *in_file=i4_open(nbuf);
 		if (in_file)
 		{
@@ -198,6 +202,73 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 
 	pf_load_models.stop();
 
+}
+
+void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager_class *tmap)
+{
+	//Ensure we're running.
+	if (total_models==0 || array==NULL) 
+		return;
+
+	total_models++;
+	array=(model_info *)I4_REALLOC(array,total_models * sizeof(model_info), "model list extension");
+
+	int actual_total=total_models-1;
+	g1_quad_object_loader_class loader(g1_object_heap);
+	char nbuf[MAX_PATH];
+	
+	
+	//A string of the form "objects/%s.gmod"
+	li_object *fmt=li_get_value("object_format", 0);
+	char *n=li_string::get(fmt,0)->value();
+	sprintf(nbuf,n,model_name.c_str());
+
+	i4_file_class *in_file=i4_open(nbuf);
+	if (in_file)
+	{
+		g1_loader_class *fp=g1_open_save_file(in_file);        
+		pf_model_load_open.stop();
+		if (fp)
+		{
+			array[actual_total].model=loader.load(fp, model_name, tmap);
+
+			if (array[actual_total].model)
+			{
+				i4_filename_struct fn;
+				i4_split_path(model_name, fn);
+
+				array[actual_total].model->scale(model_scaling);
+
+
+				// copy the name into the name buffer
+				int len=strlen(fn.filename)+1;
+				char *c=(char *)name_buffer->malloc(len, "name");
+				strcpy(c, fn.filename);
+
+				array[actual_total].name_start=c;
+				actual_total++;        
+			}
+			delete fp;
+
+		}
+		else
+			i4_alert(i4gets("old_model_file"),200, model_name);
+
+	}
+	else
+	{
+		pf_model_load_open.stop();
+		i4_alert(i4gets("file_missing"), 200, model_name);
+	}
+
+
+	total_models=actual_total;
+	qsort(array, total_models, sizeof(model_info), g1_model_info_compare);
+
+
+	// reset the model_reference values
+	for (g1_model_ref *mi=model_references; mi; mi=mi->next)
+		mi->value=find_handle(mi->name);
 }
 
 w16 g1_model_list_class::find_handle(char *name) const

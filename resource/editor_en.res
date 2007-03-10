@@ -265,6 +265,9 @@ new_tile_texture_title "Add new tile texture"
 new_tile_texture_mask_name "Textures"
 new_tile_texture_mask "*.jpg;*.tga"
 
+new_object_title "Load a new object"
+new_object_mask_name "objects"
+new_object_mask "*.gmod"
 
 undo_file "undo/undo_%d.dat"    // don't translate
 undo_dir  "undo"                // don't translate

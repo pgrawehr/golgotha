@@ -144,6 +144,7 @@
 #include "objs/def_object.h"
 #include "objs/light_o.h"
 #include "objs/bases.h"
+#include "objs/miscobjs.h"
 
 #include "render/r1_win.h"
 #include "render/r1_api.h"
@@ -6801,7 +6802,7 @@ void g1_3d_object_window::set_object_type(g1_object_type type,
 	  //object->y=object->ly=-object->occupancy_radius()/3;
       object->player_num=g1_edit_state.current_team;
 	  //Set the distance such that the whole object is visible
-	  camera.view_dist=object->occupancy_radius()*1.25; 
+	  camera.view_dist=object->occupancy_radius()*1.25f; 
     }
 	
 	
@@ -6933,6 +6934,8 @@ int obj_name_compare(const g1_object_type *a, const g1_object_type *b)
 class g1_object_picker_class : public i4_color_window_class
 {
   g1_3d_object_window *obj_view;
+  i4_scroll_bar *scrollbar;
+  i4_deco_window_class *deco;
 
   i4_array<g1_object_type> selectable;
   i4_array<i4_text_item_class *> text;
@@ -6991,7 +6994,8 @@ public:
     : i4_color_window_class(W, H, i4_current_app->get_style()->color_hint->neutral(),
                             i4_current_app->get_style()),
       selectable(0,32),
-      text(0,32)
+      text(0,32),
+	  scrollbar(0)
   {
 
     offset=0;
@@ -7008,7 +7012,7 @@ public:
     ow=W-(l+r)-2;
     oh=W-(t+b);
 
-    i4_deco_window_class *deco=new i4_deco_window_class((w16)ow, (w16)oh, i4_T, style);
+    deco=new i4_deco_window_class((w16)ow, (w16)oh, i4_T, style);
     
 
     // object view must reside in a render window
@@ -7024,27 +7028,39 @@ public:
     rwin->add_child(0,0, obj_view);
     deco->add_child((short)deco->get_x1(), (short)deco->get_y1(), rwin);   
     add_child((short)l,(short)t, deco);
+	update_selectable_list();
+  }
 
-
-
+  void update_selectable_list()
+  {
+	  selectable.clear();
     // find out which objects are visible to the editor user
-    int i=0, y;
+    int i=0;
     for (i=0; i<=g1_last_object_type; i++)
+	{
       if (g1_object_type_array[i] && 
           g1_object_type_array[i]->flags & g1_object_definition_class::EDITOR_SELECTABLE)
-        selectable.add(i);
+          selectable.add(i);
+	}
 
     selectable.sort(obj_name_compare);
 
 
     bg_color=style->color_hint->neutral();
 
+	for(int j=0;j<text.size();j++)
+	{
+		remove_child(text[j]);
+		delete text[j];
+	}
+	text.clear();
+
     // create text fields so we know how many items fit on the screen
-    for (t=0, y=deco->height()+2; y < height() && t < (w16)selectable.size(); y++)
+    for (int t=0, y=deco->height()+2; y < height() && t < (w16)selectable.size(); y++)
     {
       text.add(new i4_text_item_class(g1_object_type_array[selectable[t]]->name(),
                                       style, style->color_hint, style->font_hint->small_font,
-                                      new i4_event_reaction_class(this, t+1)));
+                                      new i4_event_reaction_class(this, t+10)));
 
       if (selectable[t]==g1_e_object.get_object_type())
         text[t]->bg_color=0xffff00;
@@ -7060,14 +7076,17 @@ public:
       
 
     // now add a scroll bar
-    i4_scroll_bar *sb=new i4_scroll_bar(i4_T, height()-deco->height(), 
+	if (scrollbar)
+		remove_child(scrollbar);
+	delete scrollbar;
+    scrollbar=new i4_scroll_bar(i4_T, height()-deco->height(), 
                                         t, selectable.size(), 0, this, style);
 
-    add_child(width()-sb->width(), deco->height()+2, sb);
+    add_child(width()-scrollbar->width(), deco->height()+2, scrollbar);
 
     // new resize the text fields to fit with the scroll bar
     for (i=0; i<text.size(); i++)
-      text[i]->resize(W-sb->width(), text[i]->height());
+      text[i]->resize(W-scrollbar->width(), text[i]->height());
   }
 
 
@@ -7088,62 +7107,95 @@ public:
     g1_edit_state.show_focus();
   }
 
+  void add_new_object(const i4_str &newobj)
+  {
+	  //invalid entry choosen, perhaps we should ask the user for a new object
+	  //to add to the list
+	  g1_object_type item=g1_create_deco_object(newobj.c_str(),0);
+	  //to initialize the lisp vars and the defaults, we need to call init
+	  //(normally done during g1_initialize_loaded_objects)
+	  g1_object_type_array[item]->init(); 
+
+	  g1_model_list_man.add_model(newobj,g1_render.r_api->get_tmanager());
+	  update_selectable_list();
+	  //Reload the textures, in case the new object needs some new ones. 
+	  li_call("reload_main_textures");
+  }
+
   virtual void receive_event(i4_event *ev)
   {
-    if (ev->type()==i4_event::USER_MESSAGE)
-    {
-      CAST_PTR(uev, i4_user_message_event_class, ev);
-      
-      if (uev->sub_type==0)  // SCROLLBAR message
-      {      
-        CAST_PTR(sbm, i4_scroll_message, ev);
-        offset=sbm->amount;
-        reorient_text();
-      }
-      else                  // selected one of the text fields
-		  {
-		  sw32 index=(sw32) (uev->sub_type-1+offset);
-		  if (index>=selectable.size())
-			  {
-			  //invalid entry choosen, perhaps we should ask the user for a new object
-			  //to add to the list
-			  }
-		  else
-			  select_type(selectable[index]);
+	  if (ev->type()==i4_event::USER_MESSAGE)
+	  {
+		  CAST_PTR(uev, i4_user_message_event_class, ev);
+
+		  if (uev->sub_type==0)  // SCROLLBAR message
+		  {      
+			  CAST_PTR(sbm, i4_scroll_message, ev);
+			  offset=sbm->amount;
+			  reorient_text();
 		  }
-    }
-    else if (ev->type()==i4_event::KEY_PRESS)
-    {
-      CAST_PTR(kev, i4_key_press_event_class, ev);
-      if (kev->key_code==I4_UP)
-      {
-        if (offset) 
-		{ 
-			offset--; 
-			reorient_text(); 
-		}       
-      }
-      else if (kev->key_code==I4_DOWN)
-      {
-        if (offset<selectable.size()-1)
-        {
-          offset++;
-          reorient_text();
-        }
-      }
-	}
-	else if (ev->type()==i4_event::CHAR_SEND)
-	{
-		CAST_PTR(cev,i4_char_send_event_class,ev);
-		for (int i=0; i<selectable.size(); i++)
-			if (to_upper(*g1_object_type_array[selectable[i]]->name())==cev->character)
-			{
-				offset=i;
-				select_type(selectable[i]);
-				return ;
-			}
-    } 
-    i4_color_window_class::receive_event(ev);
+		  //Selected a new object
+		  else if (uev->sub_type==1)
+		  {
+			  CAST_PTR(f, i4_file_open_message_class, ev);
+			  if (f->filename)
+			  {
+				  i4_filename_struct fname_struct;
+				  i4_split_path(*f->filename,fname_struct);
+				  add_new_object(fname_struct.filename);
+			  }
+			  refresh();
+		  }
+		  else if (uev->sub_type>=10)      // selected one of the text fields
+		  {
+			  sw32 index=(sw32) (uev->sub_type-10+offset);
+			  if (index>=selectable.size())
+			  {
+				   i4_create_file_open_dialog(style,
+						g1_editor_instance.get_editor_string("new_object_title"),
+						"objects",  //cannot be changed
+						g1_editor_instance.get_editor_string("new_object_mask"),
+						g1_editor_instance.get_editor_string("new_object_mask_name"),
+						this,
+						1,
+						2);
+			  }
+			  else
+				  select_type(selectable[index]);
+		  }
+	  }
+	  else if (ev->type()==i4_event::KEY_PRESS)
+	  {
+		  CAST_PTR(kev, i4_key_press_event_class, ev);
+		  if (kev->key_code==I4_UP)
+		  {
+			  if (offset) 
+			  { 
+				  offset--; 
+				  reorient_text(); 
+			  }       
+		  }
+		  else if (kev->key_code==I4_DOWN)
+		  {
+			  if (offset<selectable.size()-1)
+			  {
+				  offset++;
+				  reorient_text();
+			  }
+		  }
+	  }
+	  else if (ev->type()==i4_event::CHAR_SEND)
+	  {
+		  CAST_PTR(cev,i4_char_send_event_class,ev);
+		  for (int i=0; i<selectable.size(); i++)
+			  if (to_upper(*g1_object_type_array[selectable[i]]->name())==cev->character)
+			  {
+				  offset=i;
+				  select_type(selectable[i]);
+				  return ;
+			  }
+	  } 
+	  i4_color_window_class::receive_event(ev);
   }
 
 };

@@ -23,7 +23,8 @@ class r1_texture_manager_class;
 
 typedef w16 g1_model_id_type;
 
-// G3d model repository for the game
+//! G3d model repository for the game.
+//! This class is always accessible by the static singleton g1_model_list_man. 
 class g1_model_list_class : public i4_init_class
 {
   friend int g1_model_info_compare(const void *a, const void *b);
@@ -43,15 +44,25 @@ class g1_model_list_class : public i4_init_class
   void free_array();
 
 public:
+  //! Resets the model manager.
+  //! Resets the model manager and loads the model with the given model names.
   void reset(i4_array<i4_str *> &model_names, r1_texture_manager_class *tmap);
 
+  //! Adds a model to the list.
+  //! Use this method to add a new model at runtime.
+  void add_model(const i4_str& model_name, r1_texture_manager_class *tmap);
+
+  //! Returns the current scale factor.
   i4_float get_scaling() const 
   {
 	  return model_scaling;
   };
-  void scale_models(i4_float to);//scales all models to this factor 
-  //(relative to 1, not the current size)
+  //!Scales all models to this factor.
+  //!Scales the models relative to 1, not the current size.
+  //! \param to Scale Factor
+  void scale_models(i4_float to);
 
+  //!Returns the model data for the given handle. 
   g1_quad_object_class *get_model(w16 handle) const
   { 
     if (handle>=total_models)
@@ -63,13 +74,17 @@ public:
     return array[handle].model; 
   }
 
+  //!Returns the Handle for a namely known model. 
   g1_model_id_type find_handle(char *name) const;
   void cleanup();
   
+  //!Returns the name for a handle.
   char *get_model_name(w16 handle) const
   {
     return array[handle].name_start;
   }
+
+  //!Total number of models currently loaded. 
   w16 total() const
   {
 	  return total_models;

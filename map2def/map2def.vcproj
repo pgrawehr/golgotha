@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="map2def"
+	RootNamespace="map2def"
 	SccProjectName=""
 	SccAuxPath=""
 	SccLocalPath=""
@@ -77,7 +78,8 @@
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			CharacterSet="2"
+			DeleteExtensionsOnClean="*.obj;*.ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath);$(TargetDir)map2def.ilk">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"

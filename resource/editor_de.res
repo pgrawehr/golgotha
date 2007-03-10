@@ -265,6 +265,10 @@ new_tile_texture_title "Eine neue Bodentextur laden"
 new_tile_texture_mask_name "Texturen"
 new_tile_texture_mask "*.jpg;*.tga"
 
+new_object_title "Ein neues Objekt laden"
+new_object_mask_name "Objekte"
+new_object_mask "*.gmod"
+
 
 undo_file "undo/undo_%d.dat"    // don't translate
 undo_dir  "undo"                // don't translate

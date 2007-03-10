@@ -96,7 +96,7 @@
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2"
-			DeleteExtensionsOnClean="*.obj;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;$(TargetPath);*.ilk">
+			DeleteExtensionsOnClean="*.obj;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;$(TargetPath);*.ilk;$(TargetDir)Golgotha.ilk;$(TargetDir)Golgotha.bsc;">
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/Zm200 "
