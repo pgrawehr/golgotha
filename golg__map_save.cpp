@@ -395,6 +395,7 @@ g1_object_class **g1_map_class::load_objects(g1_loader_class *fp, w32 &tobjs)
   {
     i4_array<g1_sorted_obj_struct> sorted_objs(g1_last_object_type+1, 0);
     for (i=0; i<=g1_last_object_type; i++)
+	{
       if (g1_object_type_array[i])
       {
         g1_sorted_obj_struct o;
@@ -402,6 +403,7 @@ g1_object_class **g1_map_class::load_objects(g1_loader_class *fp, w32 &tobjs)
         o.type=i;
         sorted_objs.add(o);
       }
+	}
       
     sorted_objs.sort(g1_sorted_obj_struct_compare);
 

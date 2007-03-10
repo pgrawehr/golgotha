@@ -242,8 +242,9 @@ li_object *g1_get_movable_object_textures(li_object *o, li_environment *env)
 static int defaults_set=0;
 
 
-//Returns the remainder of the script to be executed (actually the def_object
-//parts which only can be interpreted when the model names have been preprocessed once)
+//!Returns the remainder of the script to be executed.
+//!This returns the def_object part, which can be interpreted only 
+//!when the model names have been preprocessed once.
 li_object* g1_get_load_info(g1_loader_class* map_file,
 					  i4_file_class **fp, int t_files,
 					  i4_array<i4_str*> &texture_name_array,
@@ -251,10 +252,12 @@ li_object* g1_get_load_info(g1_loader_class* map_file,
                       int &total_tiles,
                       int include_model_textures)
 {
+	//this is needed, because functions are overwritten, just to get the texture names. The
+	//functions with the real implementation (def_*) are called just after g1_get_load_info
+	//in golg_level_load.cpp
   li_environment  *env=new li_environment(0,i4_T);
-  //this is needed, because functions are overwritten, just to get the textures
-  //li_environment *env=0;
-//Ursprünglich voller Pfad: x:/crack/golgotha/...
+ 
+
   li_set_value("texture_format", new li_string("textures/%s.tga"));
   li_set_value("building_format", new li_string("objects/%s.gmod"));
   li_set_value("object_format", new li_string("objects/%s.gmod"));
@@ -278,7 +281,10 @@ li_object* g1_get_load_info(g1_loader_class* map_file,
   g1_current_model_names = &model_name_array;
   g1_current_t_tiles=0;
 
+  //Load the default model lists (used for all levels)
   li_load("scheme/models.scm", env);
+
+  //Load individual level lists (usually contains exactly one entry, called levelname.scm)
   for (int j=0; j<t_files; j++)
     li_load(fp[j], env);
 
@@ -339,7 +345,27 @@ li_object* g1_get_load_info(g1_loader_class* map_file,
 		int num_add_m=map_file->read_32();
 		for(int k1=0;k1<num_add_m;k1++)
 		{
-			model_name_array.add(map_file->read_counted_str());
+			//First check wheter an object of this name already exists.
+			//If not, we need to def_building on this new model also, otherwise
+			//just add the model. (was added directly in the editor and is certainly only deco)
+			i4_str* new_model=map_file->read_counted_str();
+			bool bFound=false;
+
+			for(int i=0;i<model_name_array.size();i++)
+			{
+				if (*(model_name_array[i])==*new_model)
+					bFound=true;
+			}
+
+			if (!bFound)
+			{
+				//This adds the new object to the list of elements that need 
+				//def_building to be called upon (at the beginning of this function,
+				//the method def_buildings was replaced with a local function for this env).
+				li_call("def_buildings", new li_list(new li_string(*new_model)), env);
+			}
+
+			model_name_array.add(new_model);
 		}
 	}
   }
