@@ -1,12 +1,12 @@
 #include "pch.h"
 
 /********************************************************************** <BR>
-This file is part of Crack dot Com's free source code release of
-Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-information about compiling & licensing issues visit this URL</a> 
-<PRE> If that doesn't help, contact Jonathan Clark at 
-golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #include "objs/model_id.h"
 #include "string/string.h"
@@ -49,17 +49,26 @@ g1_model_ref::~g1_model_ref()
 
 
 	if (model_references==this)
+	{
 		model_references = next;
+	}
 	else
 	{
 		g1_model_ref *p;
 
-		for (p = model_references; p->next && p->next!=this; p=p->next) ;
+		for (p = model_references; p->next && p->next!=this; p=p->next)
+		{
+			;
+		}
 
 		if (!p->next)
+		{
 			i4_error("model reference not in list");
+		}
 		else
+		{
 			p->next = p->next->next;
+		}
 	}
 }
 
@@ -70,12 +79,12 @@ i4_grow_heap_class *g1_object_heap=0;
 int g1_model_info_compare(const void *a, const void *b)
 {
 	return strcmp(((g1_model_list_class::model_info *)a)->name_start,
-		((g1_model_list_class::model_info *)b)->name_start);
+				  ((g1_model_list_class::model_info *)b)->name_start);
 }
 
 void g1_model_list_class::free_array()
 {
-	for (int act=0;act<total_models;act++)
+	for (int act=0; act<total_models; act++)
 	{
 		array[act].model->~g1_quad_object_class();
 		array[act].model=0;
@@ -85,11 +94,15 @@ void g1_model_list_class::free_array()
 void g1_model_list_class::cleanup()
 {
 	free_array();
-	if (g1_object_heap)  
+	if (g1_object_heap)
+	{
 		delete g1_object_heap;
+	}
 
 	if (name_buffer)
+	{
 		delete name_buffer;
+	}
 
 	if (array)
 	{
@@ -102,9 +115,9 @@ static i4_profile_class pf_model_load_open("models:open");
 
 void g1_model_list_class::scale_models(i4_float to)
 {
-	for (int act=0;act<total_models;act++)
+	for (int act=0; act<total_models; act++)
 	{
-		array[act].model->scale(1/model_scaling);//restore to original
+		array[act].model->scale(1/model_scaling); //restore to original
 		array[act].model->scale(to);
 	}
 	model_scaling=to;
@@ -113,11 +126,15 @@ void g1_model_list_class::scale_models(i4_float to)
 void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_manager_class *tmap)
 {
 	free_array();
-	if (g1_object_heap)  
+	if (g1_object_heap)
+	{
 		g1_object_heap->clear();
+	}
 
 	if (name_buffer)
+	{
 		name_buffer->clear();
+	}
 
 	if (array)
 	{
@@ -138,10 +155,12 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 	char nbuf[MAX_PATH];
 	for (int i=0; i<model_names.size(); i++)
 	{
-		if (stat) 
+		if (stat)
+		{
 			stat->update(i/(float)model_names.size());
+		}
 
-		//The default scale. 
+		//The default scale.
 		model_scaling=0.1f;
 
 		pf_model_load_open.start();
@@ -153,7 +172,7 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 		i4_file_class *in_file=i4_open(nbuf);
 		if (in_file)
 		{
-			g1_loader_class *fp=g1_open_save_file(in_file);        
+			g1_loader_class *fp=g1_open_save_file(in_file);
 			pf_model_load_open.stop();
 			if (fp)
 			{
@@ -173,13 +192,15 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 					strcpy(c, fn.filename);
 
 					array[actual_total].name_start=c;
-					actual_total++;        
+					actual_total++;
 				}
 				delete fp;
 
 			}
 			else
+			{
 				i4_alert(i4gets("old_model_file"),200, model_names[i]);
+			}
 
 		}
 		else
@@ -198,7 +219,9 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 
 	// reset the model_reference values
 	for (g1_model_ref *mi=model_references; mi; mi=mi->next)
+	{
 		mi->value=find_handle(mi->name);
+	}
 
 	pf_load_models.stop();
 
@@ -207,8 +230,10 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager_class *tmap)
 {
 	//Ensure we're running.
-	if (total_models==0 || array==NULL) 
+	if (total_models==0 || array==NULL)
+	{
 		return;
+	}
 
 	total_models++;
 	array=(model_info *)I4_REALLOC(array,total_models * sizeof(model_info), "model list extension");
@@ -216,8 +241,8 @@ void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager
 	int actual_total=total_models-1;
 	g1_quad_object_loader_class loader(g1_object_heap);
 	char nbuf[MAX_PATH];
-	
-	
+
+
 	//A string of the form "objects/%s.gmod"
 	li_object *fmt=li_get_value("object_format", 0);
 	char *n=li_string::get(fmt,0)->value();
@@ -226,7 +251,7 @@ void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager
 	i4_file_class *in_file=i4_open(nbuf);
 	if (in_file)
 	{
-		g1_loader_class *fp=g1_open_save_file(in_file);        
+		g1_loader_class *fp=g1_open_save_file(in_file);
 		pf_model_load_open.stop();
 		if (fp)
 		{
@@ -246,13 +271,15 @@ void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager
 				strcpy(c, fn.filename);
 
 				array[actual_total].name_start=c;
-				actual_total++;        
+				actual_total++;
 			}
 			delete fp;
 
 		}
 		else
+		{
 			i4_alert(i4gets("old_model_file"),200, model_name);
+		}
 
 	}
 	else
@@ -268,12 +295,17 @@ void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager
 
 	// reset the model_reference values
 	for (g1_model_ref *mi=model_references; mi; mi=mi->next)
+	{
 		mi->value=find_handle(mi->name);
+	}
 }
 
 w16 g1_model_list_class::find_handle(char *name) const
 {
-	if (!name || !total_models) return 0;
+	if (!name || !total_models)
+	{
+		return 0;
+	}
 
 	sw32 lo=0,hi=total_models-1,mid;
 
@@ -282,10 +314,17 @@ w16 g1_model_list_class::find_handle(char *name) const
 	{
 		int comp=strcmp(array[mid].name_start,name);
 		if (comp==0)
+		{
 			return (w16)mid;
+		}
 		else if (comp<0)
+		{
 			lo=mid+1;
-		else hi=mid-1;
+		}
+		else
+		{
+			hi=mid-1;
+		}
 
 		w32 last_mid=mid;
 		mid=(hi+lo)/2;
@@ -296,7 +335,7 @@ w16 g1_model_list_class::find_handle(char *name) const
 			//return 0;
 			if (strstr(name,"_lod")!=0) //it's only a lod-model that was not found
 			{
-				return 0;//indicate that we don't have one.
+				return 0; //indicate that we don't have one.
 			}
 			if (comp>0)
 			{

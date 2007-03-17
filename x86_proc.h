@@ -67,7 +67,7 @@ typedef struct ProcessorCache
 
 typedef struct ProcessorL1Cache
 {
-    ProcessorCache Instruction;
+	ProcessorCache Instruction;
 	ProcessorCache Data;
 } ProcessorL1Cache;
 

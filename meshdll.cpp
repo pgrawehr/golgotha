@@ -5,26 +5,50 @@
 
 
 class Face
-	{
-	public:
+{
+public:
 	DWORD flags;
-	Face(){flags=0;};
-	~Face(){};
-	DllExport void setEdgeVisFlags(int i, int j, int k){};
+	Face()
+	{
+		flags=0;
 	};
+	~Face()
+	{
+	};
+	DllExport void setEdgeVisFlags(int i, int j, int k)
+	{
+	};
+};
 
-class Mesh {
+class Mesh
+{
 	friend class Face;
-	public:
-	DllExport Mesh(){};
-	DllExport ~Mesh(){}
-	DllExport BOOL 	setNumVerts(int ct, BOOL keep=FALSE){ return true;};
-
-	DllExport BOOL	setNumFaces(int ct, BOOL keep=FALSE){return true;};
-
-	DllExport void	InvalidateEdgeList(){}; // RB
-
-	DllExport void	buildBoundingBox(void){};
-
-	DllExport void  buildNormals(void){};
+public:
+	DllExport Mesh()
+	{
 	};
+	DllExport ~Mesh()
+	{
+	}
+	DllExport BOOL  setNumVerts(int ct, BOOL keep=FALSE)
+	{
+		return true;
+	};
+
+	DllExport BOOL  setNumFaces(int ct, BOOL keep=FALSE)
+	{
+		return true;
+	};
+
+	DllExport void  InvalidateEdgeList()
+	{
+	};                                      // RB
+
+	DllExport void  buildBoundingBox(void)
+	{
+	};
+
+	DllExport void  buildNormals(void)
+	{
+	};
+};

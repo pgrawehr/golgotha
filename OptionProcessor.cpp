@@ -1,4 +1,4 @@
-#include "pch.h"
+#include"pch.h"
 
 // Filename: Processor.cpp
 // =======================
@@ -6,194 +6,194 @@
 // File history: 27.02.2002  - File created. Support for Intel and AMD processors
 //               05.03.2002  - Fixed the CPUID bug: On Pre-Pentium CPUs the CPUID
 //                             command is not available
-//                           - The CProcessor::WriteInfoTextFile function do not 
+//                           - The CProcessor::WriteInfoTextFile function do not
 //                             longer use Win32 file functions (-> os independend)
 //                           - Optional include of the windows.h header which is
 //                             still need for CProcessor::GetCPUFrequency.
 //////////////////////////////////////////////////////////////////////////////////
 
 /*
-I was wondering why we get such strange CPU-Speeds. I found out that it seems to be a problem of the Sleep() function being unappropriate.
+   I was wondering why we get such strange CPU-Speeds. I found out that it seems to be a problem of the Sleep() function being unappropriate.
 
-I have updated the CProcessor::GetCPUFrequency function to use timeGetTime() to avoid giving up the time slice. It seems to be a bad idea to claim for REALTIME_PRIORITY_CLASS and then just calling Sleep().
+   I have updated the CProcessor::GetCPUFrequency function to use timeGetTime() to avoid giving up the time slice. It seems to be a bad idea to claim for REALTIME_PRIORITY_CLASS and then just calling Sleep().
 
-<cpp>
-// unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
-// =========================================================================
-// Function to measure the current CPU frequency
-////////////////////////////////////////////////////////////////////////////
-unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
-{
-#ifndef PROCESSOR_FREQUENCY_MEASURE_AVAILABLE
-	return 0;
-#else
-	// If there are invalid measure time parameters, zero msecs for example,
-	// we've to exit the function
-	if (uiMeasureMSecs < 1)
-	{
-		// If theres already a measured frequency available, we return it
-        if (uqwFrequency > 0)
-			return uqwFrequency;
-		else
-			return 0;
-	}
+   <cpp>
+   // unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
+   // =========================================================================
+   // Function to measure the current CPU frequency
+   ////////////////////////////////////////////////////////////////////////////
+   unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
+   {
+ #ifndef PROCESSOR_FREQUENCY_MEASURE_AVAILABLE
+   	return 0;
+ #else
+   	// If there are invalid measure time parameters, zero msecs for example,
+   	// we've to exit the function
+   	if (uiMeasureMSecs < 1)
+   	{
+   		// If theres already a measured frequency available, we return it
+   		if (uqwFrequency > 0)
+   			return uqwFrequency;
+   		else
+   			return 0;
+   	}
 
-	// Now we check if the CPUID command is available
-	if (!CheckCPUIDPresence())
-		return 0;
+   	// Now we check if the CPUID command is available
+   	if (!CheckCPUIDPresence())
+   		return 0;
 
-	
-	// First we get the CPUID standard level 0x00000001
-	unsigned long reg;
-	__asm
-	{
-		mov eax, 1
-        cpuid
-		mov reg, edx
-	}
 
-	// Then we check, if the RDTSC (Real Date Time Stamp Counter) is available.
-	// This function is necessary for our measure process.
-	if (!(reg & (1 << 4)))
-		return 0;
+   	// First we get the CPUID standard level 0x00000001
+   	unsigned long reg;
+   	__asm
+   	{
+   		mov eax, 1
+   		cpuid
+   		mov reg, edx
+   	}
 
-	// After that we declare some vars and check the frequency of the high
-	// resolution timer for the measure process.
-	// If there's no high-res timer, we exit.
-	__int64 starttime, endtime, timedif, freq, start, end, dif;
+   	// Then we check, if the RDTSC (Real Date Time Stamp Counter) is available.
+   	// This function is necessary for our measure process.
+   	if (!(reg & (1 << 4)))
+   		return 0;
 
-	bool hasperformancecounter=TRUE;
-	if (!QueryPerformanceFrequency((LARGE_INTEGER *) &freq))
-		hasperformancecounter=FALSE;
+   	// After that we declare some vars and check the frequency of the high
+   	// resolution timer for the measure process.
+   	// If there's no high-res timer, we exit.
+   	__int64 starttime, endtime, timedif, freq, start, end, dif;
 
-	// Now we can init the measure process. We set the process and thread priority
-	// to the highest available level (Realtime priority). Also we focus the
-	// first processor in the multiprocessor system.
-	HANDLE hProcess = GetCurrentProcess();
-	HANDLE hThread = GetCurrentThread();
-	unsigned long dwCurPriorityClass = GetPriorityClass(hProcess);
-	int iCurThreadPriority = GetThreadPriority(hThread);
-	unsigned long dwProcessMask, dwSystemMask, dwNewMask = 1;
-	GetProcessAffinityMask(hProcess, &dwProcessMask, &dwSystemMask);
+   	bool hasperformancecounter=TRUE;
+   	if (!QueryPerformanceFrequency((LARGE_INTEGER *) &freq))
+   		hasperformancecounter=FALSE;
 
-	SetProcessAffinityMask(hProcess, dwNewMask);
-	SetPriorityClass(hProcess, REALTIME_PRIORITY_CLASS);
-	SetThreadPriority(hThread, THREAD_PRIORITY_TIME_CRITICAL);
-	
-	// Now we call a CPUID to ensure, that all other prior called functions are
-	// completed now (serialization)
-	
-	DWORD tm=timeGetTime(),tms;
-	if (tm>0xffffffff-(uiMeasureMSecs+1000))//just about to overlap 
-		//(happens once every 47 days, so no trouble here
-		{
-		Sleep(uiMeasureMSecs+2000);//Wait some time.
-		}
+   	// Now we can init the measure process. We set the process and thread priority
+   	// to the highest available level (Realtime priority). Also we focus the
+   	// first processor in the multiprocessor system.
+   	HANDLE hProcess = GetCurrentProcess();
+   	HANDLE hThread = GetCurrentThread();
+   	unsigned long dwCurPriorityClass = GetPriorityClass(hProcess);
+   	int iCurThreadPriority = GetThreadPriority(hThread);
+   	unsigned long dwProcessMask, dwSystemMask, dwNewMask = 1;
+   	GetProcessAffinityMask(hProcess, &dwProcessMask, &dwSystemMask);
 
-	if (hasperformancecounter)
-		{
-		__asm cpuid
-			
-			// We ask the high-res timer for the start time
-		QueryPerformanceCounter((LARGE_INTEGER *) &starttime);
-		
-		// Then we get the current cpu clock and store it
-		__asm 
-			{
-			rdtsc
-				mov dword ptr [start+4], edx
-				mov dword ptr [start], eax
-			}
-		
-		// Now we wait for some msecs
-		//Sleep(uiMeasureMSecs);
-		tm=timeGetTime();
-		tms=uiMeasureMSecs+tm;
-		while (tms>timeGetTime());
-		
-		// We ask for the end time
-		QueryPerformanceCounter((LARGE_INTEGER *) &endtime);
-		
-		// And also for the end cpu clock
-		__asm 
-			{
-			rdtsc
-				mov dword ptr [end+4], edx
-				mov dword ptr [end], eax
-			}
-		}
-	else
-		{
-		DWORD tm=timeGetTime(),tms;
-		if (tm>0xffffffff-(uiMeasureMSecs+1000))//just about to overlap 
-			//(happens once every 47 days, so no trouble here
-			{
-			Sleep(uiMeasureMSecs+2000);//Wait some time.
-			}
-		
-		__asm cpuid
-		//use timeGetTime instead of the performance counter
-		starttime=timeGetTime();
-		while(timeGetTime()==starttime);//start when timer flips
-		
-		// Then we get the current cpu clock and store it
-		__asm 
-			{
-			rdtsc
-				mov dword ptr [start+4], edx
-				mov dword ptr [start], eax
-			}
-		
-		// Now we wait for some msecs
-		//Sleep(uiMeasureMSecs);
-		tm=timeGetTime();
-		tms=uiMeasureMSecs+tm;
-		while (tms>timeGetTime());
-		
-		// We ask for the end time
-		
-		endtime=timeGetTime();
-		
-		// And also for the end cpu clock
-		__asm 
-			{
-			rdtsc
-				mov dword ptr [end+4], edx
-				mov dword ptr [end], eax
-			}
-		freq=1000; //resolution is ms
-		}
-	// Now we can restore the default process and thread priorities
-	SetProcessAffinityMask(hProcess, dwProcessMask);
-	SetThreadPriority(hThread, iCurThreadPriority);
-	SetPriorityClass(hProcess, dwCurPriorityClass);
+   	SetProcessAffinityMask(hProcess, dwNewMask);
+   	SetPriorityClass(hProcess, REALTIME_PRIORITY_CLASS);
+   	SetThreadPriority(hThread, THREAD_PRIORITY_TIME_CRITICAL);
 
-	// Then we calculate the time and clock differences
-	dif = end - start;
-	timedif = endtime - starttime;
+   	// Now we call a CPUID to ensure, that all other prior called functions are
+   	// completed now (serialization)
 
-	// And finally the frequency is the clock difference divided by the time
-	// difference. 
-	uqwFrequency = (__int64) (((double) dif) / (((double) timedif) / freq));
+   	DWORD tm=timeGetTime(),tms;
+   	if (tm>0xffffffff-(uiMeasureMSecs+1000))//just about to overlap
+   		//(happens once every 47 days, so no trouble here
+   		{
+   		Sleep(uiMeasureMSecs+2000);//Wait some time.
+   		}
 
-	// At last we just return the frequency that is also stored in the call
-	// member var uqwFrequency
-	return uqwFrequency;
-#endif
-}
-</cpp>
+   	if (hasperformancecounter)
+   		{
+   		__asm cpuid
 
-This new implementation also works if the high-res performance timer is not available.
+   			// We ask the high-res timer for the start time
+   		QueryPerformanceCounter((LARGE_INTEGER *) &starttime);
 
-My measures show that it is much more appropriate than the original version. Please verify.
+   		// Then we get the current cpu clock and store it
+   		__asm
+   			{
+   			rdtsc
+   				mov dword ptr [start+4], edx
+   				mov dword ptr [start], eax
+   			}
 
-PS: I had to change unsigned __int64 to __int64 because MSVC complained otherwise.
+   		// Now we wait for some msecs
+   		//Sleep(uiMeasureMSecs);
+   		tm=timeGetTime();
+   		tms=uiMeasureMSecs+tm;
+   		while (tms>timeGetTime());
 
-PPS: Remember: If you actually exspect that the target system cannot use cpuid you can call GetSystemInfo() to get at least the cpu type.
+   		// We ask for the end time
+   		QueryPerformanceCounter((LARGE_INTEGER *) &endtime);
 
-PPPS: Don't forget to link winmm.lib now, or you'll run into linker errors.
+   		// And also for the end cpu clock
+   		__asm
+   			{
+   			rdtsc
+   				mov dword ptr [end+4], edx
+   				mov dword ptr [end], eax
+   			}
+   		}
+   	else
+   		{
+   		DWORD tm=timeGetTime(),tms;
+   		if (tm>0xffffffff-(uiMeasureMSecs+1000))//just about to overlap
+   			//(happens once every 47 days, so no trouble here
+   			{
+   			Sleep(uiMeasureMSecs+2000);//Wait some time.
+   			}
 
-*/
+   		__asm cpuid
+   		//use timeGetTime instead of the performance counter
+   		starttime=timeGetTime();
+   		while(timeGetTime()==starttime);//start when timer flips
+
+   		// Then we get the current cpu clock and store it
+   		__asm
+   			{
+   			rdtsc
+   				mov dword ptr [start+4], edx
+   				mov dword ptr [start], eax
+   			}
+
+   		// Now we wait for some msecs
+   		//Sleep(uiMeasureMSecs);
+   		tm=timeGetTime();
+   		tms=uiMeasureMSecs+tm;
+   		while (tms>timeGetTime());
+
+   		// We ask for the end time
+
+   		endtime=timeGetTime();
+
+   		// And also for the end cpu clock
+   		__asm
+   			{
+   			rdtsc
+   				mov dword ptr [end+4], edx
+   				mov dword ptr [end], eax
+   			}
+   		freq=1000; //resolution is ms
+   		}
+   	// Now we can restore the default process and thread priorities
+   	SetProcessAffinityMask(hProcess, dwProcessMask);
+   	SetThreadPriority(hThread, iCurThreadPriority);
+   	SetPriorityClass(hProcess, dwCurPriorityClass);
+
+   	// Then we calculate the time and clock differences
+   	dif = end - start;
+   	timedif = endtime - starttime;
+
+   	// And finally the frequency is the clock difference divided by the time
+   	// difference.
+   	uqwFrequency = (__int64) (((double) dif) / (((double) timedif) / freq));
+
+   	// At last we just return the frequency that is also stored in the call
+   	// member var uqwFrequency
+   	return uqwFrequency;
+ #endif
+   }
+   </cpp>
+
+   This new implementation also works if the high-res performance timer is not available.
+
+   My measures show that it is much more appropriate than the original version. Please verify.
+
+   PS: I had to change unsigned __int64 to __int64 because MSVC complained otherwise.
+
+   PPS: Remember: If you actually exspect that the target system cannot use cpuid you can call GetSystemInfo() to get at least the cpu type.
+
+   PPPS: Don't forget to link winmm.lib now, or you'll run into linker errors.
+
+ */
 #include <stdio.h>
 #include <string.h>
 #include <memory.h>
@@ -229,36 +229,45 @@ unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
 {
 #ifndef PROCESSOR_FREQUENCY_MEASURE_AVAILABLE
 	return 0;
+
 #else
 	// If there are invalid measure time parameters, zero msecs for example,
 	// we've to exit the function
 	if (uiMeasureMSecs < 1)
 	{
 		// If theres already a measured frequency available, we return it
-        if (uqwFrequency > 0)
+		if (uqwFrequency > 0)
+		{
 			return uqwFrequency;
+		}
 		else
+		{
 			return 0;
+		}
 	}
 
 	// Now we check if the CPUID command is available
 	if (!CheckCPUIDPresence())
+	{
 		return 0;
+	}
 
-	
+
 	// First we get the CPUID standard level 0x00000001
 	unsigned long reg;
 	__asm
 	{
 		mov eax, 1
-        cpuid
+		cpuid
 		mov reg, edx
 	}
 
 	// Then we check, if the RDTSC (Real Date Time Stamp Counter) is available.
 	// This function is necessary for our measure process.
 	if (!(reg & (1 << 4)))
+	{
 		return 0;
+	}
 
 	// After that we declare some vars and check the frequency of the high
 	// resolution timer for the measure process.
@@ -267,7 +276,9 @@ unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
 
 	bool hasperformancecounter=TRUE;
 	if (!QueryPerformanceFrequency((LARGE_INTEGER *) &freq))
+	{
 		hasperformancecounter=FALSE;
+	}
 
 	// Now we can init the measure process. We set the process and thread priority
 	// to the highest available level (Realtime priority). Also we focus the
@@ -282,90 +293,92 @@ unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
 	SetProcessAffinityMask(hProcess, dwNewMask);
 	SetPriorityClass(hProcess, REALTIME_PRIORITY_CLASS);
 	SetThreadPriority(hThread, THREAD_PRIORITY_TIME_CRITICAL);
-	
+
 	// Now we call a CPUID to ensure, that all other prior called functions are
 	// completed now (serialization)
-	
+
 	DWORD tm=timeGetTime(),tms;
-	if (tm>0xffffffff-(uiMeasureMSecs+1000))//just about to overlap 
-		//(happens once every 47 days, so no trouble here
-		{
-		Sleep(uiMeasureMSecs+2000);//Wait some time.
-		}
+	if (tm>0xffffffff-(uiMeasureMSecs+1000)) //just about to overlap
+	//(happens once every 47 days, so no trouble here
+	{
+		Sleep(uiMeasureMSecs+2000); //Wait some time.
+	}
 
 	if (hasperformancecounter)
-		{
+	{
 		__asm cpuid
-			
-			// We ask the high-res timer for the start time
+		// We ask the high-res timer for the start time
 		QueryPerformanceCounter((LARGE_INTEGER *) &starttime);
-		
+
 		// Then we get the current cpu clock and store it
-		__asm 
-			{
+		__asm
+		{
 			rdtsc
-				mov dword ptr [start+4], edx
-				mov dword ptr [start], eax
-			}
-		
+			mov dword ptr [start+4], edx
+			mov dword ptr [start], eax
+		}
+
 		// Now we wait for some msecs
 		//Sleep(uiMeasureMSecs);
 		tm=timeGetTime();
 		tms=uiMeasureMSecs+tm;
-		while (tms>timeGetTime());
-		
+		while (tms>timeGetTime()) ;
+
+
 		// We ask for the end time
 		QueryPerformanceCounter((LARGE_INTEGER *) &endtime);
-		
+
 		// And also for the end cpu clock
-		__asm 
-			{
-			rdtsc
-				mov dword ptr [end+4], edx
-				mov dword ptr [end], eax
-			}
-		}
-	else
+		__asm
 		{
+			rdtsc
+			mov dword ptr [end+4], edx
+			mov dword ptr [end], eax
+		}
+	}
+	else
+	{
 		DWORD tm=timeGetTime(),tms;
-		if (tm>0xffffffff-(uiMeasureMSecs+1000))//just about to overlap 
-			//(happens once every 47 days, so no trouble here
-			{
-			Sleep(uiMeasureMSecs+2000);//Wait some time.
-			}
-		
+		if (tm>0xffffffff-(uiMeasureMSecs+1000)) //just about to overlap
+		//(happens once every 47 days, so no trouble here
+		{
+			Sleep(uiMeasureMSecs+2000); //Wait some time.
+		}
+
 		__asm cpuid
 		//use timeGetTime instead of the performance counter
 		starttime=timeGetTime();
-		while(timeGetTime()==starttime);//start when timer flips
-		
+		while(timeGetTime()==starttime) ;
+		//start when timer flips
+
 		// Then we get the current cpu clock and store it
-		__asm 
-			{
+		__asm
+		{
 			rdtsc
-				mov dword ptr [start+4], edx
-				mov dword ptr [start], eax
-			}
-		
+			mov dword ptr [start+4], edx
+			mov dword ptr [start], eax
+		}
+
 		// Now we wait for some msecs
 		//Sleep(uiMeasureMSecs);
 		tm=timeGetTime();
 		tms=uiMeasureMSecs+tm;
-		while (tms>timeGetTime());
-		
+		while (tms>timeGetTime()) ;
+
+
 		// We ask for the end time
-		
+
 		endtime=timeGetTime();
-		
+
 		// And also for the end cpu clock
-		__asm 
-			{
+		__asm
+		{
 			rdtsc
-				mov dword ptr [end+4], edx
-				mov dword ptr [end], eax
-			}
-		freq=1000; //resolution is ms
+			mov dword ptr [end+4], edx
+			mov dword ptr [end], eax
 		}
+		freq=1000; //resolution is ms
+	}
 	// Now we can restore the default process and thread priorities
 	SetProcessAffinityMask(hProcess, dwProcessMask);
 	SetThreadPriority(hThread, iCurThreadPriority);
@@ -376,12 +389,13 @@ unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
 	timedif = endtime - starttime;
 
 	// And finally the frequency is the clock difference divided by the time
-	// difference. 
+	// difference.
 	uqwFrequency = (__int64) (((double) dif) / (((double) timedif) / freq));
 
 	// At last we just return the frequency that is also stored in the call
 	// member var uqwFrequency
 	return uqwFrequency;
+
 #endif
 }
 
@@ -395,7 +409,9 @@ bool CProcessor::AnalyzeIntelProcessor()
 
 	// First we check if the CPUID command is available
 	if (!CheckCPUIDPresence())
+	{
 		return false;
+	}
 
 	// Now we get the CPUID standard level 0x00000001
 	__asm
@@ -406,7 +422,7 @@ bool CProcessor::AnalyzeIntelProcessor()
 		mov ebxreg, ebx
 		mov edxreg, edx
 	}
-    
+
 	// Then get the cpu model, family, type, stepping and brand id by masking
 	// the eax and ebx register
 	CPUInfo.uiStepping = eaxreg & 0xF;
@@ -416,345 +432,350 @@ bool CProcessor::AnalyzeIntelProcessor()
 	CPUInfo.uiBrandID  = ebxreg & 0xF;
 
 	// Now we can translate the type number to a more understandable string format
-    switch (CPUInfo.uiType)
+	switch (CPUInfo.uiType)
 	{
-		case 0:			// Type = 0:  Original OEM processor
+		case 0:         // Type = 0:  Original OEM processor
 			strcpy(CPUInfo.strType, "Original OEM");
 			strcpy(strCPUName, CPUInfo.strType);
 			strcat(strCPUName, " ");
 			break;
-		case 1:			// Type = 1:  Overdrive processor
+		case 1:         // Type = 1:  Overdrive processor
 			strcpy(CPUInfo.strType, "Overdrive");
 			strcpy(strCPUName, CPUInfo.strType);
 			strcat(strCPUName, " ");
 			break;
-		case 2:			// Type = 2:  Dual-capable processor
+		case 2:         // Type = 2:  Dual-capable processor
 			strcpy(CPUInfo.strType, "Dual-capable");
 			strcpy(strCPUName, CPUInfo.strType);
 			strcat(strCPUName, " ");
 			break;
-		case 3:			// Type = 3:  Reserved for future use
+		case 3:         // Type = 3:  Reserved for future use
 			strcpy(CPUInfo.strType, "Reserved");
 			break;
-		default:		// This should be never called, cause we just mask 2 bits --> [0..3]
+		default:        // This should be never called, cause we just mask 2 bits --> [0..3]
 			strcpy(CPUInfo.strType, "Unknown");
 			break;
-    }
+	}
 
 	// Then we translate the brand id:
 	switch (CPUInfo.uiBrandID)
 	{
-		case 0:			// Brand id = 0:  Brand id not supported on this processor
+		case 0:         // Brand id = 0:  Brand id not supported on this processor
 			strcpy(CPUInfo.strBrandID, "Not supported");
 			break;
-		case 1:			// Brand id = 1:  Intel Celeron (0.18 µm) processor
+		case 1:         // Brand id = 1:  Intel Celeron (0.18 µm) processor
 			strcpy(CPUInfo.strBrandID, "0.18 µm Intel Celeron");
 			break;
-		case 2:			// Brand id = 2:  Intel Pentium III (0.18 µm) processor
+		case 2:         // Brand id = 2:  Intel Pentium III (0.18 µm) processor
 			strcpy(CPUInfo.strBrandID, "0.18 µm Intel Pentium III");
 			break;
-		case 3:			// Brand id = 3:  Model dependent
-			if (CPUInfo.uiModel == 6)	// If the cpu model is Celeron (well, I'm NOT SURE!!!)
+		case 3:         // Brand id = 3:  Model dependent
+			if (CPUInfo.uiModel == 6)
+			{
+				// If the cpu model is Celeron (well, I'm NOT SURE!!!)
 				strcpy(CPUInfo.strBrandID, "0.13 µm Intel Celeron");
+			}
 			else
+			{
 				strcpy(CPUInfo.strBrandID, "0.18 µm Intel Pentium III Xeon");
+			}
 			break;
-		case 4:			// Brand id = 4:  Intel Pentium III Tualatin (0.13 µm) processor
+		case 4:         // Brand id = 4:  Intel Pentium III Tualatin (0.13 µm) processor
 			strcpy(CPUInfo.strBrandID, "0.13 µm Intel Pentium III");
 			break;
-		case 6:			// Brand id = 6:  Intel Pentium III mobile (0.13 µm) processor
+		case 6:         // Brand id = 6:  Intel Pentium III mobile (0.13 µm) processor
 			strcpy(CPUInfo.strBrandID, "0.13 µm Intel Pentium III mobile");
 			break;
-		case 7:			// Brand id = 7:  Intel Celeron mobile (0.13 µm) processor
+		case 7:         // Brand id = 7:  Intel Celeron mobile (0.13 µm) processor
 			strcpy(CPUInfo.strBrandID, "0.13 µm Intel Celeron mobile");
 			break;
-		case 8:			// Brand id = 8:  Intel Pentium 4 Willamette (0.18 µm) processor
+		case 8:         // Brand id = 8:  Intel Pentium 4 Willamette (0.18 µm) processor
 			strcpy(CPUInfo.strBrandID, "0.18 µm Intel Pentium 4");
 			break;
-		case 9:			// Brand id = 9:  Intel Pentium 4 Northwood (0.13 µm) processor
+		case 9:         // Brand id = 9:  Intel Pentium 4 Northwood (0.13 µm) processor
 			strcpy(CPUInfo.strBrandID, "0.13 µm Intel Pentium 4");
 			break;
-		case 0xA:		// Brand id = 0xA:  Intel Pentium 4 Northwood (0.13 µm processor) 
+		case 0xA:       // Brand id = 0xA:  Intel Pentium 4 Northwood (0.13 µm processor)
 			strcpy(CPUInfo.strBrandID, "0.13 µm Intel Pentium 4");
-			break;		// No idea, where the difference to id=9 is
-		case 0xB:		// Brand id = 0xB:  Intel Pentium 4 Northwood Xeon (0.13 µm processor)
+			break;      // No idea, where the difference to id=9 is
+		case 0xB:       // Brand id = 0xB:  Intel Pentium 4 Northwood Xeon (0.13 µm processor)
 			strcpy(CPUInfo.strBrandID, "0.13 µm Intel Pentium 4 Xeon");
 			break;
-		case 0xE:		// Brand id = 0xE:  Intel Pentium 4 Willamette Xeon (0.18 µm processor)
+		case 0xE:       // Brand id = 0xE:  Intel Pentium 4 Willamette Xeon (0.18 µm processor)
 			strcpy(CPUInfo.strBrandID, "0.18 µm Intel Pentium 4 Xeon");
 			break;
-		default:		// Should be never called, but sure is sure
+		default:        // Should be never called, but sure is sure
 			strcpy(CPUInfo.strBrandID, "Unknown");
 			break;
 	}
 
 	// Then we translate the cpu family
-    switch (CPUInfo.uiFamily)
+	switch (CPUInfo.uiFamily)
 	{
-		case 3:			// Family = 3:  i386 (80386) processor family
+		case 3:         // Family = 3:  i386 (80386) processor family
 			strcpy(CPUInfo.strFamily, "Intel i386");
 			break;
-		case 4:			// Family = 4:  i486 (80486) processor family
+		case 4:         // Family = 4:  i486 (80486) processor family
 			strcpy(CPUInfo.strFamily, "Intel i486");
 			break;
-		case 5:			// Family = 5:  Pentium (80586) processor family
+		case 5:         // Family = 5:  Pentium (80586) processor family
 			strcpy(CPUInfo.strFamily, "Intel Pentium");
 			break;
-		case 6:			// Family = 6:  Pentium Pro (80686) processor family
+		case 6:         // Family = 6:  Pentium Pro (80686) processor family
 			strcpy(CPUInfo.strFamily, "Intel Pentium Pro");
 			break;
-		case 15:		// Family = 15:  Extended family specific
+		case 15:        // Family = 15:  Extended family specific
 			// Masking the extended family
 			CPUInfo.uiExtendedFamily = (eaxreg >> 20) & 0xFF;
 			switch (CPUInfo.uiExtendedFamily)
 			{
-				case 0:			// Family = 15, Ext. Family = 0:  Pentium 4 (80786 ??) processor family
+				case 0:         // Family = 15, Ext. Family = 0:  Pentium 4 (80786 ??) processor family
 					strcpy(CPUInfo.strFamily, "Intel Pentium 4");
 					break;
-				case 1:			// Family = 15, Ext. Family = 1:  McKinley (64-bit) processor family
+				case 1:         // Family = 15, Ext. Family = 1:  McKinley (64-bit) processor family
 					strcpy(CPUInfo.strFamily, "Intel McKinley (IA-64)");
 					break;
-				default:		// Sure is sure
+				default:        // Sure is sure
 					strcpy(CPUInfo.strFamily, "Unknown Intel Pentium 4+");
 					break;
 			}
 			break;
-		default:		// Failsave
+		default:        // Failsave
 			strcpy(CPUInfo.strFamily, "Unknown");
 			break;
-    }
+	}
 
 	// Now we come to the big deal, the exact model name
 	switch (CPUInfo.uiFamily)
 	{
-		case 3:			// i386 (80386) processor family
+		case 3:         // i386 (80386) processor family
 			strcpy(CPUInfo.strModel, "Unknown Intel i386");
 			strcat(strCPUName, "Intel i386");
 			break;
-		case 4:			// i486 (80486) processor family
+		case 4:         // i486 (80486) processor family
 			switch (CPUInfo.uiModel)
 			{
-				case 0:			// Model = 0:  i486 DX-25/33 processor model
+				case 0:         // Model = 0:  i486 DX-25/33 processor model
 					strcpy(CPUInfo.strModel, "Intel i486 DX-25/33");
 					strcat(strCPUName, "Intel i486 DX-25/33");
 					break;
-				case 1:			// Model = 1:  i486 DX-50 processor model
+				case 1:         // Model = 1:  i486 DX-50 processor model
 					strcpy(CPUInfo.strModel, "Intel i486 DX-50");
 					strcat(strCPUName, "Intel i486 DX-50");
 					break;
-				case 2:			// Model = 2:  i486 SX processor model
+				case 2:         // Model = 2:  i486 SX processor model
 					strcpy(CPUInfo.strModel, "Intel i486 SX");
 					strcat(strCPUName, "Intel i486 SX");
 					break;
-				case 3:			// Model = 3:  i486 DX2 (with i487 numeric coprocessor) processor model
+				case 3:         // Model = 3:  i486 DX2 (with i487 numeric coprocessor) processor model
 					strcpy(CPUInfo.strModel, "Intel i486 487/DX2");
 					strcat(strCPUName, "Intel i486 DX2 with i487 numeric coprocessor");
 					break;
-				case 4:			// Model = 4:  i486 SL processor model (never heard ?!?)
+				case 4:         // Model = 4:  i486 SL processor model (never heard ?!?)
 					strcpy(CPUInfo.strModel, "Intel i486 SL");
 					strcat(strCPUName, "Intel i486 SL");
 					break;
-				case 5:			// Model = 5:  i486 SX2 processor model
+				case 5:         // Model = 5:  i486 SX2 processor model
 					strcpy(CPUInfo.strModel, "Intel i486 SX2");
 					strcat(strCPUName, "Intel i486 SX2");
 					break;
-				case 7:			// Model = 7:  i486 write-back enhanced DX2 processor model
+				case 7:         // Model = 7:  i486 write-back enhanced DX2 processor model
 					strcpy(CPUInfo.strModel, "Intel i486 write-back enhanced DX2");
 					strcat(strCPUName, "Intel i486 write-back enhanced DX2");
 					break;
-				case 8:			// Model = 8:  i486 DX4 processor model
+				case 8:         // Model = 8:  i486 DX4 processor model
 					strcpy(CPUInfo.strModel, "Intel i486 DX4");
 					strcat(strCPUName, "Intel i486 DX4");
 					break;
-				case 9:			// Model = 9:  i486 write-back enhanced DX4 processor model
+				case 9:         // Model = 9:  i486 write-back enhanced DX4 processor model
 					strcpy(CPUInfo.strModel, "Intel i486 write-back enhanced DX4");
 					strcat(strCPUName, "Intel i486 DX4");
 					break;
-				default:		// ...
+				default:        // ...
 					strcpy(CPUInfo.strModel, "Unknown Intel i486");
 					strcat(strCPUName, "Intel i486 (Unknown model)");
 					break;
 			}
 			break;
-		case 5:			// Pentium (80586) processor family
+		case 5:         // Pentium (80586) processor family
 			switch (CPUInfo.uiModel)
 			{
-				case 0:			// Model = 0:  Pentium (P5 A-Step) processor model
+				case 0:         // Model = 0:  Pentium (P5 A-Step) processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium (P5 A-Step)");
 					strcat(strCPUName, "Intel Pentium (P5 A-Step core)");
-					break;		// Famous for the DIV bug, as far as I know
-				case 1:			// Model = 1:  Pentium 60/66 processor model
+					break;      // Famous for the DIV bug, as far as I know
+				case 1:         // Model = 1:  Pentium 60/66 processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium 60/66 (P5)");
 					strcat(strCPUName, "Intel Pentium 60/66 (P5 core)");
 					break;
-				case 2:			// Model = 2:  Pentium 75-200 (P54C) processor model
+				case 2:         // Model = 2:  Pentium 75-200 (P54C) processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium 75-200 (P54C)");
 					strcat(strCPUName, "Intel Pentium 75-200 (P54C core)");
 					break;
-				case 3:			// Model = 3:  Pentium overdrive for 486 systems processor model
+				case 3:         // Model = 3:  Pentium overdrive for 486 systems processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium for 486 system (P24T Overdrive)");
 					strcat(strCPUName, "Intel Pentium for 486 (P24T overdrive core)");
 					break;
-				case 4:			// Model = 4:  Pentium MMX processor model
+				case 4:         // Model = 4:  Pentium MMX processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium MMX (P55C)");
 					strcat(strCPUName, "Intel Pentium MMX (P55C core)");
 					break;
-				case 7:			// Model = 7:  Pentium processor model (don't know difference to Model=2)
+				case 7:         // Model = 7:  Pentium processor model (don't know difference to Model=2)
 					strcpy(CPUInfo.strModel, "Intel Pentium (P54C)");
 					strcat(strCPUName, "Intel Pentium (P54C core)");
 					break;
-				case 8:			// Model = 8:  Pentium MMX (0.25 µm) processor model
+				case 8:         // Model = 8:  Pentium MMX (0.25 µm) processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium MMX (P55C), 0.25 µm");
 					strcat(strCPUName, "Intel Pentium MMX (P55C core), 0.25 µm");
 					break;
-				default:		// ...
+				default:        // ...
 					strcpy(CPUInfo.strModel, "Unknown Intel Pentium");
 					strcat(strCPUName, "Intel Pentium (Unknown P5-model)");
 					break;
 			}
 			break;
-		case 6:			// Pentium Pro (80686) processor family
+		case 6:         // Pentium Pro (80686) processor family
 			switch (CPUInfo.uiModel)
 			{
-				case 0:			// Model = 0:  Pentium Pro (P6 A-Step) processor model
+				case 0:         // Model = 0:  Pentium Pro (P6 A-Step) processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium Pro (P6 A-Step)");
 					strcat(strCPUName, "Intel Pentium Pro (P6 A-Step core)");
 					break;
-				case 1:			// Model = 1:  Pentium Pro
+				case 1:         // Model = 1:  Pentium Pro
 					strcpy(CPUInfo.strModel, "Intel Pentium Pro (P6)");
 					strcat(strCPUName, "Intel Pentium Pro (P6 core)");
 					break;
-				case 3:			// Model = 3:  Pentium II (66 MHz FSB, I think) processor model
+				case 3:         // Model = 3:  Pentium II (66 MHz FSB, I think) processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium II Model 3, 0.28 µm");
 					strcat(strCPUName, "Intel Pentium II (Model 3 core, 0.28 µm process)");
 					break;
-				case 5:			// Model = 5:  Pentium II/Xeon/Celeron (0.25 µm) processor model
+				case 5:         // Model = 5:  Pentium II/Xeon/Celeron (0.25 µm) processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium II Model 5/Xeon/Celeron, 0.25 µm");
 					strcat(strCPUName, "Intel Pentium II/Xeon/Celeron (Model 5 core, 0.25 µm process)");
 					break;
-				case 6:			// Model = 6:  Celoron (on-die L2 cache) processor model
+				case 6:         // Model = 6:  Celoron (on-die L2 cache) processor model
 					strcpy(CPUInfo.strModel, "Intel Celeron - internal L2 cache");
 					strcat(strCPUName, "Intel Celeron with internal L2 cache");
 					break;
-				case 7:			// Model = 7:  Pentium III/Xeon (extern L2 cache) processor model
+				case 7:         // Model = 7:  Pentium III/Xeon (extern L2 cache) processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium III/Pentium III Xeon - external L2 cache, 0.25 µm");
 					strcat(strCPUName, "Intel Pentium III/Pentium III Xeon (0.25 µm process) with external L2 cache");
 					break;
-				case 8:			// Model = 8:  Pentium III/Xeon/Celeron (256 KB on-die L2 cache) processor model
+				case 8:         // Model = 8:  Pentium III/Xeon/Celeron (256 KB on-die L2 cache) processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium III/Celeron/Pentium III Xeon - internal L2 cache, 0.18 µm");
 					// We want to know it exactly:
 					switch (CPUInfo.uiBrandID)
 					{
-						case 1:			// Model = 8, Brand id = 1:  Celeron (on-die L2 cache) processor model
+						case 1:         // Model = 8, Brand id = 1:  Celeron (on-die L2 cache) processor model
 							strcat(strCPUName, "Intel Celeron (0.18 µm process) with internal L2 cache");
 							break;
-                        case 2:			// Model = 8, Brand id = 2:  Pentium III (on-die L2 cache) processor model (my current cpu :-))
+						case 2:         // Model = 8, Brand id = 2:  Pentium III (on-die L2 cache) processor model (my current cpu :-))
 							strcat(strCPUName, "Intel Pentium III (0.18 µm process) with internal L2 cache");
 							break;
-						case 3:			// Model = 8, Brand id = 3:  Pentium III Xeon (on-die L2 cache) processor model
-                            strcat(strCPUName, "Intel Pentium III Xeon (0.18 µm process) with internal L2 cache");
+						case 3:         // Model = 8, Brand id = 3:  Pentium III Xeon (on-die L2 cache) processor model
+							strcat(strCPUName, "Intel Pentium III Xeon (0.18 µm process) with internal L2 cache");
 							break;
-						default:		// ...²
+						default:        // ...²
 							strcat(strCPUName, "Intel Pentium III core (unknown model, 0.18 µm process) with internal L2 cache");
 							break;
 					}
 					break;
-				case 0xA:		// Model = 0xA:  Pentium III/Xeon/Celeron (1 or 2 MB on-die L2 cache) processor model
+				case 0xA:       // Model = 0xA:  Pentium III/Xeon/Celeron (1 or 2 MB on-die L2 cache) processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium III/Celeron/Pentium III Xeon - internal L2 cache, 0.18 µm");
 					// Exact detection:
 					switch (CPUInfo.uiBrandID)
 					{
-						case 1:			// Model = 0xA, Brand id = 1:  Celeron (1 or 2 MB on-die L2 cache (does it exist??)) processor model
+						case 1:         // Model = 0xA, Brand id = 1:  Celeron (1 or 2 MB on-die L2 cache (does it exist??)) processor model
 							strcat(strCPUName, "Intel Celeron (0.18 µm process) with internal L2 cache");
 							break;
-                        case 2:			// Model = 0xA, Brand id = 2:  Pentium III (1 or 2 MB on-die L2 cache (never seen...)) processor model
+						case 2:         // Model = 0xA, Brand id = 2:  Pentium III (1 or 2 MB on-die L2 cache (never seen...)) processor model
 							strcat(strCPUName, "Intel Pentium III (0.18 µm process) with internal L2 cache");
 							break;
-						case 3:			// Model = 0xA, Brand id = 3:  Pentium III Xeon (1 or 2 MB on-die L2 cache) processor model
-                            strcat(strCPUName, "Intel Pentium III Xeon (0.18 µm process) with internal L2 cache");
+						case 3:         // Model = 0xA, Brand id = 3:  Pentium III Xeon (1 or 2 MB on-die L2 cache) processor model
+							strcat(strCPUName, "Intel Pentium III Xeon (0.18 µm process) with internal L2 cache");
 							break;
-						default:		// Getting bored of this............
+						default:        // Getting bored of this............
 							strcat(strCPUName, "Intel Pentium III core (unknown model, 0.18 µm process) with internal L2 cache");
 							break;
 					}
 					break;
-				case 0xB:		// Model = 0xB: Pentium III/Xeon/Celeron (Tualatin core, on-die cache) processor model
+				case 0xB:       // Model = 0xB: Pentium III/Xeon/Celeron (Tualatin core, on-die cache) processor model
 					strcpy(CPUInfo.strModel, "Intel Pentium III/Celeron/Pentium III Xeon - internal L2 cache, 0.13 µm");
 					// Omniscient: ;-)
 					switch (CPUInfo.uiBrandID)
 					{
-						case 3:			// Model = 0xB, Brand id = 3:  Celeron (Tualatin core) processor model
+						case 3:         // Model = 0xB, Brand id = 3:  Celeron (Tualatin core) processor model
 							strcat(strCPUName, "Intel Celeron (Tualatin core, 0.13 µm process) with internal L2 cache");
 							break;
-                        case 4:			// Model = 0xB, Brand id = 4:  Pentium III (Tualatin core) processor model
+						case 4:         // Model = 0xB, Brand id = 4:  Pentium III (Tualatin core) processor model
 							strcat(strCPUName, "Intel Pentium III (Tualatin core, 0.13 µm process) with internal L2 cache");
 							break;
-						case 7:			// Model = 0xB, Brand id = 7:  Celeron mobile (Tualatin core) processor model
-                            strcat(strCPUName, "Intel Celeron mobile (Tualatin core, 0.13 µm process) with internal L2 cache");
+						case 7:         // Model = 0xB, Brand id = 7:  Celeron mobile (Tualatin core) processor model
+							strcat(strCPUName, "Intel Celeron mobile (Tualatin core, 0.13 µm process) with internal L2 cache");
 							break;
-						default:		// *bored*
+						default:        // *bored*
 							strcat(strCPUName, "Intel Pentium III Tualatin core (unknown model, 0.13 µm process) with internal L2 cache");
 							break;
 					}
 					break;
-				default:		// *more bored*
+				default:        // *more bored*
 					strcpy(CPUInfo.strModel, "Unknown Intel Pentium Pro");
 					strcat(strCPUName, "Intel Pentium Pro (Unknown model)");
 					break;
 			}
 			break;
-		case 15:		// Extended processor family
+		case 15:        // Extended processor family
 			// Masking the extended model
 			CPUInfo.uiExtendedModel = (eaxreg >> 16) & 0xFF;
 			switch (CPUInfo.uiModel)
 			{
-				case 0:			// Model = 0:  Pentium 4 Willamette (A-Step) core
-					if ((CPUInfo.uiBrandID) == 8)	// Brand id = 8:  P4 Willamette
+				case 0:         // Model = 0:  Pentium 4 Willamette (A-Step) core
+					if ((CPUInfo.uiBrandID) == 8)   // Brand id = 8:  P4 Willamette
 					{
 						strcpy(CPUInfo.strModel, "Intel Pentium 4 Willamette (A-Step)");
 						strcat(strCPUName, "Intel Pentium 4 Willamette (A-Step)");
 					}
-					else							// else Xeon
+					else                            // else Xeon
 					{
 						strcpy(CPUInfo.strModel, "Intel Pentium 4 Willamette Xeon (A-Step)");
 						strcat(strCPUName, "Intel Pentium 4 Willamette Xeon (A-Step)");
 					}
 					break;
-				case 1:			// Model = 1:  Pentium 4 Willamette core
-					if ((CPUInfo.uiBrandID) == 8)	// Brand id = 8:  P4 Willamette
+				case 1:         // Model = 1:  Pentium 4 Willamette core
+					if ((CPUInfo.uiBrandID) == 8)   // Brand id = 8:  P4 Willamette
 					{
 						strcpy(CPUInfo.strModel, "Intel Pentium 4 Willamette");
 						strcat(strCPUName, "Intel Pentium 4 Willamette");
 					}
-					else							// else Xeon
+					else                            // else Xeon
 					{
 						strcpy(CPUInfo.strModel, "Intel Pentium 4 Willamette Xeon");
 						strcat(strCPUName, "Intel Pentium 4 Willamette Xeon");
 					}
 					break;
-				case 2:			// Model = 2:  Pentium 4 Northwood core
-					if (((CPUInfo.uiBrandID) == 9) || ((CPUInfo.uiBrandID) == 0xA))		// P4 Willamette
+				case 2:         // Model = 2:  Pentium 4 Northwood core
+					if (((CPUInfo.uiBrandID) == 9) || ((CPUInfo.uiBrandID) == 0xA))     // P4 Willamette
 					{
 						strcpy(CPUInfo.strModel, "Intel Pentium 4 Northwood");
 						strcat(strCPUName, "Intel Pentium 4 Northwood");
 					}
-					else							// Xeon
+					else                            // Xeon
 					{
 						strcpy(CPUInfo.strModel, "Intel Pentium 4 Northwood Xeon");
 						strcat(strCPUName, "Intel Pentium 4 Northwood Xeon");
 					}
 					break;
-				default:		// Silly stupid never used failsave option
+				default:        // Silly stupid never used failsave option
 					strcpy(CPUInfo.strModel, "Unknown Intel Pentium 4");
 					strcat(strCPUName, "Intel Pentium 4 (Unknown model)");
 					break;
 			}
 			break;
-		default:		// *grmpf*
+		default:        // *grmpf*
 			strcpy(CPUInfo.strModel, "Unknown Intel model");
 			strcat(strCPUName, "Intel (Unknown model)");
 			break;
-    }
+	}
 
 	// After the long processor model block we now come to the processors serial
 	// number.
@@ -804,7 +825,9 @@ bool CProcessor::AnalyzeAMDProcessor()
 
 	// First of all we check if the CPUID command is available
 	if (!CheckCPUIDPresence())
+	{
 		return 0;
+	}
 
 	// Now we get the CPUID standard level 0x00000001
 	__asm
@@ -815,7 +838,7 @@ bool CProcessor::AnalyzeAMDProcessor()
 		mov ebxreg, ebx
 		mov edxreg, edx
 	}
-    
+
 	// Then we mask the model, family, stepping and type (AMD does not support brand id)
 	CPUInfo.uiStepping = eaxreg & 0xF;
 	CPUInfo.uiModel    = (eaxreg >> 4) & 0xF;
@@ -824,7 +847,7 @@ bool CProcessor::AnalyzeAMDProcessor()
 
 	// After that, we translate the processor type (see CProcessor::AnalyzeIntelProcessor()
 	// for further comments on this)
-    switch (CPUInfo.uiType)
+	switch (CPUInfo.uiType)
 	{
 		case 0:
 			strcpy(CPUInfo.strType, "Original OEM");
@@ -847,7 +870,7 @@ bool CProcessor::AnalyzeAMDProcessor()
 		default:
 			strcpy(CPUInfo.strType, "Unknown");
 			break;
-    }
+	}
 
 	// Now we check if the processor supports the brand id string extended CPUID level
 	if (CPUInfo.MaxSupportedExtendedLevel >= 0x80000004)
@@ -855,7 +878,7 @@ bool CProcessor::AnalyzeAMDProcessor()
 		// If it supports the extended CPUID level 0x80000004 we read the data
 		char tmp[52];
 		memset(tmp, 0, sizeof(tmp));
-        __asm
+		__asm
 		{
 			mov eax, 0x80000002
 			cpuid
@@ -886,13 +909,13 @@ bool CProcessor::AnalyzeAMDProcessor()
 	}
 
 	// After that we translate the processor family
-    switch(CPUInfo.uiFamily)
+	switch(CPUInfo.uiFamily)
 	{
-		case 4:			// Family = 4:  486 (80486) or 5x86 (80486) processor family
+		case 4:         // Family = 4:  486 (80486) or 5x86 (80486) processor family
 			switch (CPUInfo.uiModel)
 			{
-				case 3:			// Thanks to AMD for this nice form of family
-				case 7:			// detection.... *grmpf*
+				case 3:         // Thanks to AMD for this nice form of family
+				case 7:         // detection.... *grmpf*
 				case 8:
 				case 9:
 					strcpy(CPUInfo.strFamily, "AMD 80486");
@@ -906,7 +929,7 @@ bool CProcessor::AnalyzeAMDProcessor()
 					break;
 			}
 			break;
-		case 5:			// Family = 5:  K5 or K6 processor family
+		case 5:         // Family = 5:  K5 or K6 processor family
 			switch (CPUInfo.uiModel)
 			{
 				case 0:
@@ -926,10 +949,10 @@ bool CProcessor::AnalyzeAMDProcessor()
 					break;
 			}
 			break;
-		case 6:			// Family = 6:  K7 (Athlon, ...) processor family
+		case 6:         // Family = 6:  K7 (Athlon, ...) processor family
 			strcpy(CPUInfo.strFamily, "AMD K7");
 			break;
-		default:		// For security
+		default:        // For security
 			strcpy(CPUInfo.strFamily, "Unknown family");
 			break;
 	}
@@ -938,122 +961,122 @@ bool CProcessor::AnalyzeAMDProcessor()
 	// detection
 	switch (CPUInfo.uiFamily)
 	{
-		case 4:			// Family = 4:  486 (80486) or 5x85 (80486) processor family
+		case 4:         // Family = 4:  486 (80486) or 5x85 (80486) processor family
 			switch (CPUInfo.uiModel)
 			{
-				case 3:			// Model = 3:  80486 DX2
+				case 3:         // Model = 3:  80486 DX2
 					strcpy(CPUInfo.strModel, "AMD 80486 DX2");
 					strcat(strCPUName, "AMD 80486 DX2");
 					break;
-				case 7:			// Model = 7:  80486 write-back enhanced DX2
+				case 7:         // Model = 7:  80486 write-back enhanced DX2
 					strcpy(CPUInfo.strModel, "AMD 80486 write-back enhanced DX2");
 					strcat(strCPUName, "AMD 80486 write-back enhanced DX2");
 					break;
-				case 8:			// Model = 8:  80486 DX4
+				case 8:         // Model = 8:  80486 DX4
 					strcpy(CPUInfo.strModel, "AMD 80486 DX4");
 					strcat(strCPUName, "AMD 80486 DX4");
 					break;
-				case 9:			// Model = 9:  80486 write-back enhanced DX4
+				case 9:         // Model = 9:  80486 write-back enhanced DX4
 					strcpy(CPUInfo.strModel, "AMD 80486 write-back enhanced DX4");
 					strcat(strCPUName, "AMD 80486 write-back enhanced DX4");
 					break;
-				case 0xE:		// Model = 0xE:  5x86
+				case 0xE:       // Model = 0xE:  5x86
 					strcpy(CPUInfo.strModel, "AMD 5x86");
 					strcat(strCPUName, "AMD 5x86");
 					break;
-				case 0xF:		// Model = 0xF:  5x86 write-back enhanced (oh my god.....)
+				case 0xF:       // Model = 0xF:  5x86 write-back enhanced (oh my god.....)
 					strcpy(CPUInfo.strModel, "AMD 5x86 write-back enhanced");
 					strcat(strCPUName, "AMD 5x86 write-back enhanced");
 					break;
-				default:		// ...
+				default:        // ...
 					strcpy(CPUInfo.strModel, "Unknown AMD 80486 or 5x86 model");
 					strcat(strCPUName, "AMD 80486 or 5x86 (Unknown model)");
 					break;
 			}
 			break;
-		case 5:			// Family = 5:  K5 / K6 processor family
+		case 5:         // Family = 5:  K5 / K6 processor family
 			switch (CPUInfo.uiModel)
 			{
-				case 0:			// Model = 0:  K5 SSA 5 (Pentium Rating *ggg* 75, 90 and 100 Mhz)
+				case 0:         // Model = 0:  K5 SSA 5 (Pentium Rating *ggg* 75, 90 and 100 Mhz)
 					strcpy(CPUInfo.strModel, "AMD K5 SSA5 (PR75, PR90, PR100)");
 					strcat(strCPUName, "AMD K5 SSA5 (PR75, PR90, PR100)");
 					break;
-				case 1:			// Model = 1:  K5 5k86 (PR 120 and 133 MHz)
+				case 1:         // Model = 1:  K5 5k86 (PR 120 and 133 MHz)
 					strcpy(CPUInfo.strModel, "AMD K5 5k86 (PR120, PR133)");
 					strcat(strCPUName, "AMD K5 5k86 (PR120, PR133)");
 					break;
-				case 2:			// Model = 2:  K5 5k86 (PR 166 MHz)
+				case 2:         // Model = 2:  K5 5k86 (PR 166 MHz)
 					strcpy(CPUInfo.strModel, "AMD K5 5k86 (PR166)");
 					strcat(strCPUName, "AMD K5 5k86 (PR166)");
 					break;
-				case 3:			// Model = 3:  K5 5k86 (PR 200 MHz)
+				case 3:         // Model = 3:  K5 5k86 (PR 200 MHz)
 					strcpy(CPUInfo.strModel, "AMD K5 5k86 (PR200)");
 					strcat(strCPUName, "AMD K5 5k86 (PR200)");
 					break;
-				case 6:			// Model = 6:  K6
+				case 6:         // Model = 6:  K6
 					strcpy(CPUInfo.strModel, "AMD K6 (0.30 µm)");
 					strcat(strCPUName, "AMD K6 (0.30 µm)");
 					break;
-				case 7:			// Model = 7:  K6 (0.25 µm)
+				case 7:         // Model = 7:  K6 (0.25 µm)
 					strcpy(CPUInfo.strModel, "AMD K6 (0.25 µm)");
 					strcat(strCPUName, "AMD K6 (0.25 µm)");
 					break;
-				case 8:			// Model = 8:  K6-2
+				case 8:         // Model = 8:  K6-2
 					strcpy(CPUInfo.strModel, "AMD K6-2");
 					strcat(strCPUName, "AMD K6-2");
 					break;
-				case 9:			// Model = 9:  K6-III
+				case 9:         // Model = 9:  K6-III
 					strcpy(CPUInfo.strModel, "AMD K6-III");
 					strcat(strCPUName, "AMD K6-III");
 					break;
-				case 0xD:		// Model = 0xD:  K6-2+ / K6-III+
+				case 0xD:       // Model = 0xD:  K6-2+ / K6-III+
 					strcpy(CPUInfo.strModel, "AMD K6-2+ or K6-III+ (0.18 µm)");
 					strcat(strCPUName, "AMD K6-2+ or K6-III+ (0.18 µm)");
 					break;
-				default:		// ...
+				default:        // ...
 					strcpy(CPUInfo.strModel, "Unknown AMD K5 or K6 model");
 					strcat(strCPUName, "AMD K5 or K6 (Unknown model)");
 					break;
 			}
 			break;
-		case 6:			// Family = 6:  K7 processor family (AMDs first good processors)
+		case 6:         // Family = 6:  K7 processor family (AMDs first good processors)
 			switch (CPUInfo.uiModel)
 			{
-				case 1:			// Athlon
+				case 1:         // Athlon
 					strcpy(CPUInfo.strModel, "AMD Athlon (0.25 µm)");
 					strcat(strCPUName, "AMD Athlon (0.25 µm)");
 					break;
-				case 2:			// Athlon (0.18 µm)
+				case 2:         // Athlon (0.18 µm)
 					strcpy(CPUInfo.strModel, "AMD Athlon (0.18 µm)");
 					strcat(strCPUName, "AMD Athlon (0.18 µm)");
 					break;
-				case 3:			// Duron (Spitfire core)
+				case 3:         // Duron (Spitfire core)
 					strcpy(CPUInfo.strModel, "AMD Duron (Spitfire)");
 					strcat(strCPUName, "AMD Duron (Spitfire core)");
 					break;
-				case 4:			// Athlon (Thunderbird core)
+				case 4:         // Athlon (Thunderbird core)
 					strcpy(CPUInfo.strModel, "AMD Athlon (Thunderbird)");
 					strcat(strCPUName, "AMD Athlon (Thunderbird core)");
 					break;
-				case 6:			// Athlon MP / Mobile Athlon (Palomino core)
+				case 6:         // Athlon MP / Mobile Athlon (Palomino core)
 					strcpy(CPUInfo.strModel, "AMD Athlon MP/Mobile Athlon (Palomino)");
 					strcat(strCPUName, "AMD Athlon MP/Mobile Athlon (Palomino core)");
 					break;
-				case 7:			// Mobile Duron (Morgan core)
+				case 7:         // Mobile Duron (Morgan core)
 					strcpy(CPUInfo.strModel, "AMD Mobile Duron (Morgan)");
 					strcat(strCPUName, "AMD Mobile Duron (Morgan core)");
 					break;
-				default:		// ...
+				default:        // ...
 					strcpy(CPUInfo.strModel, "Unknown AMD K7 model");
 					strcat(strCPUName, "AMD K7 (Unknown model)");
 					break;
 			}
 			break;
-		default:		// ...
+		default:        // ...
 			strcpy(CPUInfo.strModel, "Unknown AMD model");
 			strcat(strCPUName, "AMD (Unknown model)");
 			break;
-    }
+	}
 
 	// Now we read the standard processor extension that are stored in the same
 	// way the Intel standard extensions are
@@ -1072,10 +1095,10 @@ bool CProcessor::AnalyzeAMDProcessor()
 		}
 
 		// Now we can mask some AMD specific cpu extensions
-		CPUInfo._Ext.EMMX_MultimediaExtensions					= CheckBit(edxreg, 22);
-		CPUInfo._Ext.AA64_AMD64BitArchitecture					= CheckBit(edxreg, 29);
-		CPUInfo._Ext._E3DNOW_InstructionExtensions				= CheckBit(edxreg, 30);
-		CPUInfo._Ext._3DNOW_InstructionExtensions				= CheckBit(edxreg, 31);
+		CPUInfo._Ext.EMMX_MultimediaExtensions                  = CheckBit(edxreg, 22);
+		CPUInfo._Ext.AA64_AMD64BitArchitecture                  = CheckBit(edxreg, 29);
+		CPUInfo._Ext._E3DNOW_InstructionExtensions              = CheckBit(edxreg, 30);
+		CPUInfo._Ext._3DNOW_InstructionExtensions               = CheckBit(edxreg, 31);
 	}
 
 	// After that we check if the processor supports the ext. CPUID level
@@ -1083,9 +1106,9 @@ bool CProcessor::AnalyzeAMDProcessor()
 	if (CPUInfo.MaxSupportedExtendedLevel >= 0x80000006)
 	{
 		// If it's present, we read it out
-        __asm
+		__asm
 		{
-            mov eax, 0x80000005
+			mov eax, 0x80000005
 			cpuid
 			mov eaxreg, eax
 			mov ebxreg, ebx
@@ -1116,7 +1139,9 @@ bool CProcessor::AnalyzeAMDProcessor()
 			CPUInfo._Data.uiEntries = (ebxreg >> 16) & 0xFF;
 		}
 		if (CPUInfo._Data.uiAssociativeWays == 0xFF)
+		{
 			CPUInfo._Data.uiAssociativeWays = (unsigned int) -1;
+		}
 
 		// Now the L1 Instruction/Code TLB information
 		if ((ebxreg & 0xFFFF) && (eaxreg & 0xFFFF))
@@ -1141,8 +1166,10 @@ bool CProcessor::AnalyzeAMDProcessor()
 			CPUInfo._Instruction.uiEntries = ebxreg & 0xFF;
 		}
 		if (CPUInfo._Instruction.uiAssociativeWays == 0xFF)
+		{
 			CPUInfo._Instruction.uiAssociativeWays = (unsigned int) -1;
-		
+		}
+
 		// Then we read the L1 data cache information
 		if ((ecxreg >> 24) > 0)
 		{
@@ -1165,7 +1192,7 @@ bool CProcessor::AnalyzeAMDProcessor()
 		// size for the TLB. Somebody should check it....
 
 		// Now we read the ext. CPUID level 0x80000006
-        __asm
+		__asm
 		{
 			mov eax, 0x80000006
 			cpuid
@@ -1230,13 +1257,15 @@ bool CProcessor::AnalyzeUnknownProcessor()
 
 	// We check if the CPUID command is available
 	if (!CheckCPUIDPresence())
+	{
 		return false;
+	}
 
 	// First of all we read the standard CPUID level 0x00000001
 	// This level should be available on every x86-processor clone
 	__asm
 	{
-        mov eax, 1
+		mov eax, 1
 		cpuid
 		mov eaxreg, eax
 		mov ebxreg, ebx
@@ -1258,7 +1287,7 @@ bool CProcessor::AnalyzeUnknownProcessor()
 
 	strcpy(CPUInfo._Data.strTLB, "Unknown");
 	strcpy(CPUInfo._Instruction.strTLB, "Unknown");
-	
+
 	strcpy(CPUInfo._Trace.strCache, "Unknown");
 	strcpy(CPUInfo._L1.Data.strCache, "Unknown");
 	strcpy(CPUInfo._L1.Instruction.strCache, "Unknown");
@@ -1273,7 +1302,7 @@ bool CProcessor::AnalyzeUnknownProcessor()
 	sprintf(CPUInfo.strModel, "Model number %d", CPUInfo.uiModel);
 
 	// Nevertheless we can determine the processor type
-    switch (CPUInfo.uiType)
+	switch (CPUInfo.uiType)
 	{
 		case 0:
 			strcpy(CPUInfo.strType, "Original OEM");
@@ -1290,7 +1319,7 @@ bool CProcessor::AnalyzeUnknownProcessor()
 		default:
 			strcpy(CPUInfo.strType, "Unknown");
 			break;
-    }
+	}
 
 	// And thats it
 	return true;
@@ -1304,7 +1333,7 @@ bool CProcessor::AnalyzeUnknownProcessor()
 bool CProcessor::CheckCPUIDPresence()
 {
 	unsigned long BitChanged;
-	
+
 	// We've to check if we can toggle the flag register bit 21
 	// If we can't the processor does not support the CPUID command
 	__asm
@@ -1312,12 +1341,12 @@ bool CProcessor::CheckCPUIDPresence()
 		pushfd
 		pop eax
 		mov ebx, eax
-		xor eax, 0x00200000 
+		xor eax, 0x00200000
 		push eax
 		popfd
 		pushfd
 		pop eax
-		xor eax,ebx 
+		xor eax,ebx
 		mov BitChanged, eax
 	}
 
@@ -1337,238 +1366,238 @@ void CProcessor::DecodeProcessorConfiguration(unsigned int cfg)
 	// Then we do a big switch
 	switch(cfg)
 	{
-		case 0:			// cfg = 0:  Unused
+		case 0:         // cfg = 0:  Unused
 			break;
-		case 0x1:		// cfg = 0x1:  code TLB present, 4 KB pages, 4 ways, 32 entries
+		case 0x1:       // cfg = 0x1:  code TLB present, 4 KB pages, 4 ways, 32 entries
 			CPUInfo._Instruction.bPresent = true;
 			strcpy(CPUInfo._Instruction.strPageSize, "4 KB");
 			CPUInfo._Instruction.uiAssociativeWays = 4;
 			CPUInfo._Instruction.uiEntries = 32;
 			break;
-		case 0x2:		// cfg = 0x2:  code TLB present, 4 MB pages, fully associative, 2 entries
+		case 0x2:       // cfg = 0x2:  code TLB present, 4 MB pages, fully associative, 2 entries
 			CPUInfo._Instruction.bPresent = true;
 			strcpy(CPUInfo._Instruction.strPageSize, "4 MB");
 			CPUInfo._Instruction.uiAssociativeWays = 4;
 			CPUInfo._Instruction.uiEntries = 2;
 			break;
-		case 0x3:		// cfg = 0x3:  data TLB present, 4 KB pages, 4 ways, 64 entries
+		case 0x3:       // cfg = 0x3:  data TLB present, 4 KB pages, 4 ways, 64 entries
 			CPUInfo._Data.bPresent = true;
 			strcpy(CPUInfo._Data.strPageSize, "4 KB");
 			CPUInfo._Data.uiAssociativeWays = 4;
 			CPUInfo._Data.uiEntries = 64;
 			break;
-		case 0x4:		// cfg = 0x4:  data TLB present, 4 MB pages, 4 ways, 8 entries
+		case 0x4:       // cfg = 0x4:  data TLB present, 4 MB pages, 4 ways, 8 entries
 			CPUInfo._Data.bPresent = true;
 			strcpy(CPUInfo._Data.strPageSize, "4 MB");
 			CPUInfo._Data.uiAssociativeWays = 4;
 			CPUInfo._Data.uiEntries = 8;
 			break;
-		case 0x6:		// cfg = 0x6:  code L1 cache present, 8 KB, 4 ways, 32 byte lines
+		case 0x6:       // cfg = 0x6:  code L1 cache present, 8 KB, 4 ways, 32 byte lines
 			CPUInfo._L1.Instruction.bPresent = true;
 			strcpy(CPUInfo._L1.Instruction.strSize, "8 KB");
 			CPUInfo._L1.Instruction.uiAssociativeWays = 4;
 			CPUInfo._L1.Instruction.uiLineSize = 32;
 			break;
-		case 0x8:		// cfg = 0x8:  code L1 cache present, 16 KB, 4 ways, 32 byte lines
+		case 0x8:       // cfg = 0x8:  code L1 cache present, 16 KB, 4 ways, 32 byte lines
 			CPUInfo._L1.Instruction.bPresent = true;
 			strcpy(CPUInfo._L1.Instruction.strSize, "16 KB");
 			CPUInfo._L1.Instruction.uiAssociativeWays = 4;
 			CPUInfo._L1.Instruction.uiLineSize = 32;
 			break;
-		case 0xA:		// cfg = 0xA:  data L1 cache present, 8 KB, 2 ways, 32 byte lines
+		case 0xA:       // cfg = 0xA:  data L1 cache present, 8 KB, 2 ways, 32 byte lines
 			CPUInfo._L1.Data.bPresent = true;
 			strcpy(CPUInfo._L1.Data.strSize, "8 KB");
 			CPUInfo._L1.Data.uiAssociativeWays = 2;
 			CPUInfo._L1.Data.uiLineSize = 32;
 			break;
-		case 0xC:		// cfg = 0xC:  data L1 cache present, 16 KB, 4 ways, 32 byte lines
+		case 0xC:       // cfg = 0xC:  data L1 cache present, 16 KB, 4 ways, 32 byte lines
 			CPUInfo._L1.Data.bPresent = true;
 			strcpy(CPUInfo._L1.Data.strSize, "16 KB");
 			CPUInfo._L1.Data.uiAssociativeWays = 4;
 			CPUInfo._L1.Data.uiLineSize = 32;
 			break;
-		case 0x22:		// cfg = 0x22:  code and data L3 cache present, 512 KB, 4 ways, 64 byte lines, sectored
+		case 0x22:      // cfg = 0x22:  code and data L3 cache present, 512 KB, 4 ways, 64 byte lines, sectored
 			CPUInfo._L3.bPresent = true;
 			strcpy(CPUInfo._L3.strSize, "512 KB");
 			CPUInfo._L3.uiAssociativeWays = 4;
 			CPUInfo._L3.uiLineSize = 64;
 			CPUInfo._L3.bSectored = true;
 			break;
-		case 0x23:		// cfg = 0x23:  code and data L3 cache present, 1024 KB, 8 ways, 64 byte lines, sectored
+		case 0x23:      // cfg = 0x23:  code and data L3 cache present, 1024 KB, 8 ways, 64 byte lines, sectored
 			CPUInfo._L3.bPresent = true;
 			strcpy(CPUInfo._L3.strSize, "1024 KB");
 			CPUInfo._L3.uiAssociativeWays = 8;
 			CPUInfo._L3.uiLineSize = 64;
 			CPUInfo._L3.bSectored = true;
 			break;
-		case 0x25:		// cfg = 0x25:  code and data L3 cache present, 2048 KB, 8 ways, 64 byte lines, sectored
+		case 0x25:      // cfg = 0x25:  code and data L3 cache present, 2048 KB, 8 ways, 64 byte lines, sectored
 			CPUInfo._L3.bPresent = true;
 			strcpy(CPUInfo._L3.strSize, "2048 KB");
 			CPUInfo._L3.uiAssociativeWays = 8;
 			CPUInfo._L3.uiLineSize = 64;
 			CPUInfo._L3.bSectored = true;
 			break;
-		case 0x29:		// cfg = 0x29:  code and data L3 cache present, 4096 KB, 8 ways, 64 byte lines, sectored
+		case 0x29:      // cfg = 0x29:  code and data L3 cache present, 4096 KB, 8 ways, 64 byte lines, sectored
 			CPUInfo._L3.bPresent = true;
 			strcpy(CPUInfo._L3.strSize, "4096 KB");
 			CPUInfo._L3.uiAssociativeWays = 8;
 			CPUInfo._L3.uiLineSize = 64;
 			CPUInfo._L3.bSectored = true;
 			break;
-		case 0x40:		// cfg = 0x40:  no integrated L2 cache (P6 core) or L3 cache (P4 core)
+		case 0x40:      // cfg = 0x40:  no integrated L2 cache (P6 core) or L3 cache (P4 core)
 			break;
-		case 0x41:		// cfg = 0x41:  code and data L2 cache present, 128 KB, 4 ways, 32 byte lines
+		case 0x41:      // cfg = 0x41:  code and data L2 cache present, 128 KB, 4 ways, 32 byte lines
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "128 KB");
 			CPUInfo._L2.uiAssociativeWays = 4;
 			CPUInfo._L2.uiLineSize = 32;
 			break;
-		case 0x42:		// cfg = 0x42:  code and data L2 cache present, 256 KB, 4 ways, 32 byte lines
+		case 0x42:      // cfg = 0x42:  code and data L2 cache present, 256 KB, 4 ways, 32 byte lines
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "256 KB");
 			CPUInfo._L2.uiAssociativeWays = 4;
 			CPUInfo._L2.uiLineSize = 32;
 			break;
-		case 0x43:		// cfg = 0x43:  code and data L2 cache present, 512 KB, 4 ways, 32 byte lines
+		case 0x43:      // cfg = 0x43:  code and data L2 cache present, 512 KB, 4 ways, 32 byte lines
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "512 KB");
 			CPUInfo._L2.uiAssociativeWays = 4;
 			CPUInfo._L2.uiLineSize = 32;
 			break;
-		case 0x44:		// cfg = 0x44:  code and data L2 cache present, 1024 KB, 4 ways, 32 byte lines
+		case 0x44:      // cfg = 0x44:  code and data L2 cache present, 1024 KB, 4 ways, 32 byte lines
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "1 MB");
 			CPUInfo._L2.uiAssociativeWays = 4;
 			CPUInfo._L2.uiLineSize = 32;
 			break;
-		case 0x45:		// cfg = 0x45:  code and data L2 cache present, 2048 KB, 4 ways, 32 byte lines
+		case 0x45:      // cfg = 0x45:  code and data L2 cache present, 2048 KB, 4 ways, 32 byte lines
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "2 MB");
 			CPUInfo._L2.uiAssociativeWays = 4;
 			CPUInfo._L2.uiLineSize = 32;
 			break;
-		case 0x50:		// cfg = 0x50:  code TLB present, 4 KB / 4 MB / 2 MB pages, fully associative, 64 entries
+		case 0x50:      // cfg = 0x50:  code TLB present, 4 KB / 4 MB / 2 MB pages, fully associative, 64 entries
 			CPUInfo._Instruction.bPresent = true;
 			strcpy(CPUInfo._Instruction.strPageSize, "4 KB / 2 MB / 4 MB");
 			CPUInfo._Instruction.uiAssociativeWays = (unsigned int) -1;
 			CPUInfo._Instruction.uiEntries = 64;
 			break;
-		case 0x51:		// cfg = 0x51:  code TLB present, 4 KB / 4 MB / 2 MB pages, fully associative, 128 entries
+		case 0x51:      // cfg = 0x51:  code TLB present, 4 KB / 4 MB / 2 MB pages, fully associative, 128 entries
 			CPUInfo._Instruction.bPresent = true;
 			strcpy(CPUInfo._Instruction.strPageSize, "4 KB / 2 MB / 4 MB");
 			CPUInfo._Instruction.uiAssociativeWays = (unsigned int) -1;
 			CPUInfo._Instruction.uiEntries = 128;
 			break;
-		case 0x52:		// cfg = 0x52:  code TLB present, 4 KB / 4 MB / 2 MB pages, fully associative, 256 entries
+		case 0x52:      // cfg = 0x52:  code TLB present, 4 KB / 4 MB / 2 MB pages, fully associative, 256 entries
 			CPUInfo._Instruction.bPresent = true;
 			strcpy(CPUInfo._Instruction.strPageSize, "4 KB / 2 MB / 4 MB");
 			CPUInfo._Instruction.uiAssociativeWays = (unsigned int) -1;
 			CPUInfo._Instruction.uiEntries = 256;
 			break;
-		case 0x5B:		// cfg = 0x5B:  data TLB present, 4 KB / 4 MB pages, fully associative, 64 entries
+		case 0x5B:      // cfg = 0x5B:  data TLB present, 4 KB / 4 MB pages, fully associative, 64 entries
 			CPUInfo._Data.bPresent = true;
 			strcpy(CPUInfo._Data.strPageSize, "4 KB / 4 MB");
 			CPUInfo._Data.uiAssociativeWays = (unsigned int) -1;
 			CPUInfo._Data.uiEntries = 64;
 			break;
-		case 0x5C:		// cfg = 0x5C:  data TLB present, 4 KB / 4 MB pages, fully associative, 128 entries
+		case 0x5C:      // cfg = 0x5C:  data TLB present, 4 KB / 4 MB pages, fully associative, 128 entries
 			CPUInfo._Data.bPresent = true;
 			strcpy(CPUInfo._Data.strPageSize, "4 KB / 4 MB");
 			CPUInfo._Data.uiAssociativeWays = (unsigned int) -1;
 			CPUInfo._Data.uiEntries = 128;
 			break;
-		case 0x5d:		// cfg = 0x5D:  data TLB present, 4 KB / 4 MB pages, fully associative, 256 entries
+		case 0x5d:      // cfg = 0x5D:  data TLB present, 4 KB / 4 MB pages, fully associative, 256 entries
 			CPUInfo._Data.bPresent = true;
 			strcpy(CPUInfo._Data.strPageSize, "4 KB / 4 MB");
 			CPUInfo._Data.uiAssociativeWays = (unsigned int) -1;
 			CPUInfo._Data.uiEntries = 256;
 			break;
-		case 0x66:		// cfg = 0x66:  data L1 cache present, 8 KB, 4 ways, 64 byte lines, sectored
+		case 0x66:      // cfg = 0x66:  data L1 cache present, 8 KB, 4 ways, 64 byte lines, sectored
 			CPUInfo._L1.Data.bPresent = true;
 			strcpy(CPUInfo._L1.Data.strSize, "8 KB");
 			CPUInfo._L1.Data.uiAssociativeWays = 4;
 			CPUInfo._L1.Data.uiLineSize = 64;
 			break;
-		case 0x67:		// cfg = 0x67:  data L1 cache present, 16 KB, 4 ways, 64 byte lines, sectored
+		case 0x67:      // cfg = 0x67:  data L1 cache present, 16 KB, 4 ways, 64 byte lines, sectored
 			CPUInfo._L1.Data.bPresent = true;
 			strcpy(CPUInfo._L1.Data.strSize, "16 KB");
 			CPUInfo._L1.Data.uiAssociativeWays = 4;
 			CPUInfo._L1.Data.uiLineSize = 64;
 			break;
-		case 0x68:		// cfg = 0x68:  data L1 cache present, 32 KB, 4 ways, 64 byte lines, sectored
+		case 0x68:      // cfg = 0x68:  data L1 cache present, 32 KB, 4 ways, 64 byte lines, sectored
 			CPUInfo._L1.Data.bPresent = true;
 			strcpy(CPUInfo._L1.Data.strSize, "32 KB");
 			CPUInfo._L1.Data.uiAssociativeWays = 4;
 			CPUInfo._L1.Data.uiLineSize = 64;
 			break;
-		case 0x70:		// cfg = 0x70:  trace L1 cache present, 12 KµOPs, 4 ways
+		case 0x70:      // cfg = 0x70:  trace L1 cache present, 12 KµOPs, 4 ways
 			CPUInfo._Trace.bPresent = true;
 			strcpy(CPUInfo._Trace.strSize, "12 K-micro-ops");
 			CPUInfo._Trace.uiAssociativeWays = 4;
 			break;
-		case 0x71:		// cfg = 0x71:  trace L1 cache present, 16 KµOPs, 4 ways
+		case 0x71:      // cfg = 0x71:  trace L1 cache present, 16 KµOPs, 4 ways
 			CPUInfo._Trace.bPresent = true;
 			strcpy(CPUInfo._Trace.strSize, "16 K-micro-ops");
 			CPUInfo._Trace.uiAssociativeWays = 4;
 			break;
-		case 0x72:		// cfg = 0x72:  trace L1 cache present, 32 KµOPs, 4 ways
+		case 0x72:      // cfg = 0x72:  trace L1 cache present, 32 KµOPs, 4 ways
 			CPUInfo._Trace.bPresent = true;
 			strcpy(CPUInfo._Trace.strSize, "32 K-micro-ops");
 			CPUInfo._Trace.uiAssociativeWays = 4;
 			break;
-		case 0x79:		// cfg = 0x79:  code and data L2 cache present, 128 KB, 8 ways, 64 byte lines, sectored
+		case 0x79:      // cfg = 0x79:  code and data L2 cache present, 128 KB, 8 ways, 64 byte lines, sectored
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "128 KB");
 			CPUInfo._L2.uiAssociativeWays = 8;
 			CPUInfo._L2.uiLineSize = 64;
 			CPUInfo._L2.bSectored = true;
 			break;
-		case 0x7A:		// cfg = 0x7A:  code and data L2 cache present, 256 KB, 8 ways, 64 byte lines, sectored
+		case 0x7A:      // cfg = 0x7A:  code and data L2 cache present, 256 KB, 8 ways, 64 byte lines, sectored
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "256 KB");
 			CPUInfo._L2.uiAssociativeWays = 8;
 			CPUInfo._L2.uiLineSize = 64;
 			CPUInfo._L2.bSectored = true;
 			break;
-		case 0x7B:		// cfg = 0x7B:  code and data L2 cache present, 512 KB, 8 ways, 64 byte lines, sectored
+		case 0x7B:      // cfg = 0x7B:  code and data L2 cache present, 512 KB, 8 ways, 64 byte lines, sectored
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "512 KB");
 			CPUInfo._L2.uiAssociativeWays = 8;
 			CPUInfo._L2.uiLineSize = 64;
 			CPUInfo._L2.bSectored = true;
 			break;
-		case 0x7C:		// cfg = 0x7C:  code and data L2 cache present, 1024 KB, 8 ways, 64 byte lines, sectored
+		case 0x7C:      // cfg = 0x7C:  code and data L2 cache present, 1024 KB, 8 ways, 64 byte lines, sectored
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "1 MB");
 			CPUInfo._L2.uiAssociativeWays = 8;
 			CPUInfo._L2.uiLineSize = 64;
 			CPUInfo._L2.bSectored = true;
 			break;
-		case 0x81:		// cfg = 0x81:  code and data L2 cache present, 128 KB, 8 ways, 32 byte lines
+		case 0x81:      // cfg = 0x81:  code and data L2 cache present, 128 KB, 8 ways, 32 byte lines
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "128 KB");
 			CPUInfo._L2.uiAssociativeWays = 8;
 			CPUInfo._L2.uiLineSize = 32;
 			break;
-		case 0x82:		// cfg = 0x82:  code and data L2 cache present, 256 KB, 8 ways, 32 byte lines
+		case 0x82:      // cfg = 0x82:  code and data L2 cache present, 256 KB, 8 ways, 32 byte lines
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "256 KB");
 			CPUInfo._L2.uiAssociativeWays = 8;
 			CPUInfo._L2.uiLineSize = 32;
 			break;
-		case 0x83:		// cfg = 0x83:  code and data L2 cache present, 512 KB, 8 ways, 32 byte lines
+		case 0x83:      // cfg = 0x83:  code and data L2 cache present, 512 KB, 8 ways, 32 byte lines
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "512 KB");
 			CPUInfo._L2.uiAssociativeWays = 8;
 			CPUInfo._L2.uiLineSize = 32;
 			break;
-		case 0x84:		// cfg = 0x84:  code and data L2 cache present, 1024 KB, 8 ways, 32 byte lines
+		case 0x84:      // cfg = 0x84:  code and data L2 cache present, 1024 KB, 8 ways, 32 byte lines
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "1 MB");
 			CPUInfo._L2.uiAssociativeWays = 8;
 			CPUInfo._L2.uiLineSize = 32;
 			break;
-		case 0x85:		// cfg = 0x85:  code and data L2 cache present, 2048 KB, 8 ways, 32 byte lines
+		case 0x85:      // cfg = 0x85:  code and data L2 cache present, 2048 KB, 8 ways, 32 byte lines
 			CPUInfo._L2.bPresent = true;
 			strcpy(CPUInfo._L2.strSize, "2 MB");
 			CPUInfo._L2.uiAssociativeWays = 8;
@@ -1580,16 +1609,27 @@ void CProcessor::DecodeProcessorConfiguration(unsigned int cfg)
 __forceinline static char *TranslateAssociativeWays(unsigned int uiWays, char *buf)
 {
 	// We define 0xFFFFFFFF (= -1) as fully associative
-    if (uiWays == ((unsigned int) -1))
+	if (uiWays == ((unsigned int) -1))
+	{
 		strcpy(buf, "fully associative");
+	}
 	else
 	{
-		if (uiWays == 1)			// A one way associative cache is just direct mapped
+		if (uiWays == 1)
+		{
+			// A one way associative cache is just direct mapped
 			strcpy(buf, "direct mapped");
-		else if (uiWays == 0)		// This should not happen...
+		}
+		else if (uiWays == 0)
+		{
+			// This should not happen...
 			strcpy(buf, "unknown associative ways");
-		else						// The x-way associative cache
+		}
+		else
+		{
+			// The x-way associative cache
 			sprintf(buf, "%d ways associative", uiWays);
+		}
 	}
 	// To ease the function use we return the buffer
 	return buf;
@@ -1600,21 +1640,27 @@ __forceinline static void TranslateTLB(ProcessorTLB *tlb)
 
 	// We just check if the TLB is present
 	if (tlb->bPresent)
-        sprintf(tlb->strTLB, "%s page size, %s, %d entries", tlb->strPageSize, TranslateAssociativeWays(tlb->uiAssociativeWays, buf), tlb->uiEntries);
+	{
+		sprintf(tlb->strTLB, "%s page size, %s, %d entries", tlb->strPageSize, TranslateAssociativeWays(tlb->uiAssociativeWays, buf), tlb->uiEntries);
+	}
 	else
-        strcpy(tlb->strTLB, "Not present");
+	{
+		strcpy(tlb->strTLB, "Not present");
+	}
 }
 __forceinline static void TranslateCache(ProcessorCache *cache)
 {
 	char buf[64];
 
 	// We just check if the cache is present
-    if (cache->bPresent)
+	if (cache->bPresent)
 	{
 		// If present we construct the string
 		sprintf(cache->strCache, "%s cache size, %s, %d bytes line size", cache->strSize, TranslateAssociativeWays(cache->uiAssociativeWays, buf), cache->uiLineSize);
 		if (cache->bSectored)
+		{
 			strcat(cache->strCache, ", sectored");
+		}
 	}
 	else
 	{
@@ -1652,7 +1698,9 @@ void CProcessor::GetStandardProcessorConfiguration()
 
 	// We check if the CPUID function is available
 	if (!CheckCPUIDPresence())
+	{
 		return;
+	}
 
 	// First we check if the processor supports the standard
 	// CPUID level 0x00000002
@@ -1717,7 +1765,9 @@ void CProcessor::GetStandardProcessorExtensions()
 
 	// We check if the CPUID command is available
 	if (!CheckCPUIDPresence())
+	{
 		return;
+	}
 	// We just get the standard CPUID level 0x00000001 which should be
 	// available on every x86 processor
 	__asm
@@ -1727,40 +1777,40 @@ void CProcessor::GetStandardProcessorExtensions()
 		mov ebxreg, ebx
 		mov edxreg, edx
 	}
-    
+
 	// Then we mask some bits
-	CPUInfo._Ext.FPU_FloatingPointUnit							= CheckBit(edxreg, 0);
-	CPUInfo._Ext.VME_Virtual8086ModeEnhancements				= CheckBit(edxreg, 1);
-	CPUInfo._Ext.DE_DebuggingExtensions							= CheckBit(edxreg, 2);
-	CPUInfo._Ext.PSE_PageSizeExtensions							= CheckBit(edxreg, 3);
-	CPUInfo._Ext.TSC_TimeStampCounter							= CheckBit(edxreg, 4);
-	CPUInfo._Ext.MSR_ModelSpecificRegisters						= CheckBit(edxreg, 5);
-	CPUInfo._Ext.PAE_PhysicalAddressExtension					= CheckBit(edxreg, 6);
-	CPUInfo._Ext.MCE_MachineCheckException						= CheckBit(edxreg, 7);
-	CPUInfo._Ext.CX8_COMPXCHG8B_Instruction						= CheckBit(edxreg, 8);
-	CPUInfo._Ext.APIC_AdvancedProgrammableInterruptController	= CheckBit(edxreg, 9);
+	CPUInfo._Ext.FPU_FloatingPointUnit                          = CheckBit(edxreg, 0);
+	CPUInfo._Ext.VME_Virtual8086ModeEnhancements                = CheckBit(edxreg, 1);
+	CPUInfo._Ext.DE_DebuggingExtensions                         = CheckBit(edxreg, 2);
+	CPUInfo._Ext.PSE_PageSizeExtensions                         = CheckBit(edxreg, 3);
+	CPUInfo._Ext.TSC_TimeStampCounter                           = CheckBit(edxreg, 4);
+	CPUInfo._Ext.MSR_ModelSpecificRegisters                     = CheckBit(edxreg, 5);
+	CPUInfo._Ext.PAE_PhysicalAddressExtension                   = CheckBit(edxreg, 6);
+	CPUInfo._Ext.MCE_MachineCheckException                      = CheckBit(edxreg, 7);
+	CPUInfo._Ext.CX8_COMPXCHG8B_Instruction                     = CheckBit(edxreg, 8);
+	CPUInfo._Ext.APIC_AdvancedProgrammableInterruptController   = CheckBit(edxreg, 9);
 	CPUInfo._Ext.APIC_ID = (ebxreg >> 24) & 0xFF;
-	CPUInfo._Ext.SEP_FastSystemCall								= CheckBit(edxreg, 11);
-	CPUInfo._Ext.MTRR_MemoryTypeRangeRegisters					= CheckBit(edxreg, 12);
-	CPUInfo._Ext.PGE_PTE_GlobalFlag								= CheckBit(edxreg, 13);
-	CPUInfo._Ext.MCA_MachineCheckArchitecture					= CheckBit(edxreg, 14);
-	CPUInfo._Ext.CMOV_ConditionalMoveAndCompareInstructions		= CheckBit(edxreg, 15);
-	CPUInfo._Ext.FGPAT_PageAttributeTable						= CheckBit(edxreg, 16);
-	CPUInfo._Ext.PSE36_36bitPageSizeExtension					= CheckBit(edxreg, 17);
-	CPUInfo._Ext.PN_ProcessorSerialNumber						= CheckBit(edxreg, 18);
-	CPUInfo._Ext.CLFSH_CFLUSH_Instruction						= CheckBit(edxreg, 19);
+	CPUInfo._Ext.SEP_FastSystemCall                             = CheckBit(edxreg, 11);
+	CPUInfo._Ext.MTRR_MemoryTypeRangeRegisters                  = CheckBit(edxreg, 12);
+	CPUInfo._Ext.PGE_PTE_GlobalFlag                             = CheckBit(edxreg, 13);
+	CPUInfo._Ext.MCA_MachineCheckArchitecture                   = CheckBit(edxreg, 14);
+	CPUInfo._Ext.CMOV_ConditionalMoveAndCompareInstructions     = CheckBit(edxreg, 15);
+	CPUInfo._Ext.FGPAT_PageAttributeTable                       = CheckBit(edxreg, 16);
+	CPUInfo._Ext.PSE36_36bitPageSizeExtension                   = CheckBit(edxreg, 17);
+	CPUInfo._Ext.PN_ProcessorSerialNumber                       = CheckBit(edxreg, 18);
+	CPUInfo._Ext.CLFSH_CFLUSH_Instruction                       = CheckBit(edxreg, 19);
 	CPUInfo._Ext.CLFLUSH_InstructionCacheLineSize = (ebxreg >> 8) & 0xFF;
-	CPUInfo._Ext.DS_DebugStore									= CheckBit(edxreg, 21);
-	CPUInfo._Ext.ACPI_ThermalMonitorAndClockControl				= CheckBit(edxreg, 22);
-	CPUInfo._Ext.MMX_MultimediaExtensions						= CheckBit(edxreg, 23);
-	CPUInfo._Ext.FXSR_FastStreamingSIMD_ExtensionsSaveRestore	= CheckBit(edxreg, 24);
-	CPUInfo._Ext.SSE_StreamingSIMD_Extensions					= CheckBit(edxreg, 25);
-	CPUInfo._Ext.SSE2_StreamingSIMD2_Extensions					= CheckBit(edxreg, 26);
-	CPUInfo._Ext.SS_SelfSnoop									= CheckBit(edxreg, 27);
-	CPUInfo._Ext.HT_HyperThreading								= CheckBit(edxreg, 28);
+	CPUInfo._Ext.DS_DebugStore                                  = CheckBit(edxreg, 21);
+	CPUInfo._Ext.ACPI_ThermalMonitorAndClockControl             = CheckBit(edxreg, 22);
+	CPUInfo._Ext.MMX_MultimediaExtensions                       = CheckBit(edxreg, 23);
+	CPUInfo._Ext.FXSR_FastStreamingSIMD_ExtensionsSaveRestore   = CheckBit(edxreg, 24);
+	CPUInfo._Ext.SSE_StreamingSIMD_Extensions                   = CheckBit(edxreg, 25);
+	CPUInfo._Ext.SSE2_StreamingSIMD2_Extensions                 = CheckBit(edxreg, 26);
+	CPUInfo._Ext.SS_SelfSnoop                                   = CheckBit(edxreg, 27);
+	CPUInfo._Ext.HT_HyperThreading                              = CheckBit(edxreg, 28);
 	CPUInfo._Ext.HT_HyterThreadingSiblings = (ebxreg >> 16) & 0xFF;
-	CPUInfo._Ext.TM_ThermalMonitor								= CheckBit(edxreg, 29);
-	CPUInfo._Ext.IA64_Intel64BitArchitecture					= CheckBit(edxreg, 30);
+	CPUInfo._Ext.TM_ThermalMonitor                              = CheckBit(edxreg, 29);
+	CPUInfo._Ext.IA64_Intel64BitArchitecture                    = CheckBit(edxreg, 30);
 }
 
 // const ProcessorInfo *CProcessor::GetCPUInfo()
@@ -1771,10 +1821,12 @@ void CProcessor::GetStandardProcessorExtensions()
 const ProcessorInfo *CProcessor::GetCPUInfo()
 {
 	unsigned long eaxreg, ebxreg, ecxreg, edxreg;
- 
+
 	// First of all we check if the CPUID command is available
 	if (!CheckCPUIDPresence())
+	{
 		return NULL;
+	}
 
 	// We read the standard CPUID level 0x00000000 which should
 	// be available on every x86 processor
@@ -1798,7 +1850,7 @@ const ProcessorInfo *CProcessor::GetCPUInfo()
 	// Then we read the ext. CPUID level 0x80000000
 	__asm
 	{
-        mov eax, 0x80000000
+		mov eax, 0x80000000
 		cpuid
 		mov eaxreg, eax
 	}
@@ -1808,13 +1860,13 @@ const ProcessorInfo *CProcessor::GetCPUInfo()
 	// Then we switch to the specific processor vendors
 	switch (ebxreg)
 	{
-		case 0x756E6547:	// GenuineIntel
+		case 0x756E6547:    // GenuineIntel
 			AnalyzeIntelProcessor();
 			break;
-		case 0x68747541:	// AuthenticAMD
+		case 0x68747541:    // AuthenticAMD
 			AnalyzeAMDProcessor();
 			break;
-		case 0x69727943:	// CyrixInstead
+		case 0x69727943:    // CyrixInstead
 			// I really do not know anyone owning such a piece of crab
 			// So we analyze it as an unknown processor *ggggg*
 		default:
@@ -1832,7 +1884,7 @@ const ProcessorInfo *CProcessor::GetCPUInfo()
 /////////////////////////////////////////////////////////////////////////
 bool CProcessor::CPUInfoToText(char *strBuffer, unsigned int uiMaxLen)
 {
-#define LENCHECK                len = (unsigned int) strlen(buf); if (len >= uiMaxLen) return false; strcpy(strBuffer, buf); strBuffer += len;
+#define LENCHECK                len = (unsigned int) strlen(buf); if (len >= uiMaxLen){return false;} strcpy(strBuffer, buf); strBuffer += len;
 #define COPYADD(str)            strcpy(buf, str); LENCHECK;
 #define FORMATADD(format, var)  sprintf(buf, format, var); LENCHECK;
 #define BOOLADD(str, boolvar)   COPYADD(str); if (boolvar) { COPYADD(" Yes\r\n"); } else { COPYADD(" No\r\n"); }
@@ -1841,12 +1893,12 @@ bool CProcessor::CPUInfoToText(char *strBuffer, unsigned int uiMaxLen)
 	unsigned int len;
 
 	// First we have to get the frequency
-    GetCPUFrequency(50);
+	GetCPUFrequency(50);
 
 	// Then we get the processor information
 	GetCPUInfo();
 
-    // Now we construct the string (see the macros at function beginning)
+	// Now we construct the string (see the macros at function beginning)
 	strBuffer[0] = 0;
 
 	COPYADD("// CPU General Information\r\n//////////////////////////\r\n");
@@ -1865,7 +1917,7 @@ bool CProcessor::CPUInfoToText(char *strBuffer, unsigned int uiMaxLen)
 	}
 	else
 	{
-	  COPYADD("Processor Serial: Disabled\r\n");
+		COPYADD("Processor Serial: Disabled\r\n");
 	}
 
 	COPYADD("\r\n\r\n// CPU Configuration\r\n////////////////////\r\n");
@@ -1938,12 +1990,16 @@ bool CProcessor::WriteInfoTextFile(const char *strFilename)
 
 	// First we get the string
 	if (!CPUInfoToText(buf, 16383))
+	{
 		return false;
+	}
 
 	// Then we create a new file (CREATE_ALWAYS)
 	FILE *file = fopen(strFilename, "wb");
 	if (!file)
+	{
 		return false;
+	}
 
 	// After that we write the string to the file
 	unsigned long dwBytesToWrite, dwBytesWritten;
@@ -1951,7 +2007,9 @@ bool CProcessor::WriteInfoTextFile(const char *strFilename)
 	dwBytesWritten = (unsigned long) fwrite(buf, 1, dwBytesToWrite, file);
 	fclose(file);
 	if (dwBytesToWrite != dwBytesWritten)
+	{
 		return false;
+	}
 
 	// Done
 	return true;

@@ -1,4 +1,4 @@
-#if !defined(AFX_OPTIONSHEET_H__DE83BCA1_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_)
+#if !defined (AFX_OPTIONSHEET_H__DE83BCA1_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_)
 #define AFX_OPTIONSHEET_H__DE83BCA1_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_
 
 #if _MSC_VER > 1000
@@ -10,25 +10,26 @@
 /////////////////////////////////////////////////////////////////////////////
 // COptionsheet
 
-class COptionsheet : public CPropertySheet
+class COptionsheet :
+	public CPropertySheet
 {
 	DECLARE_DYNAMIC(COptionsheet)
 
 // Konstruktion
 public:
-	COptionsheet(UINT nIDCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
-	COptionsheet(LPCTSTR pszCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
+	COptionsheet(UINT nIDCaption, CWnd *pParentWnd = NULL, UINT iSelectPage = 0);
+	COptionsheet(LPCTSTR pszCaption, CWnd *pParentWnd = NULL, UINT iSelectPage = 0);
 
 // Attribute
 public:
-   OptionsDialog graphics;
-   COptionInfo info;
-   COptionSound sound;
-   OptionExtras extras;
+	OptionsDialog graphics;
+	COptionInfo info;
+	COptionSound sound;
+	OptionExtras extras;
 
 // Operationen
 public:
-  
+
 // Überschreibungen
 	virtual BOOL OnInitDialog();
 	// Vom Klassen-Assistenten generierte virtuelle Funktionsüberschreibungen

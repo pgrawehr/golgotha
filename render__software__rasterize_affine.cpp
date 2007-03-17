@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 #include "pch.h"
 #include "render/software/r1_software.h"
 #include "render/software/r1_software_globals.h"
@@ -17,453 +17,452 @@
 
 void tri_draw_affine_lit(tri_edge &top_to_middle,tri_edge &top_to_bottom, tri_edge &mid_to_bottom, sw32 start_y, i4_bool edge_comp)
 {
-  sw32 cur_y = start_y;  
-  
-  w16 *screen_line;
-  
-  screen_line = r1_software_render_buffer_ptr + cur_y*r1_software_render_buffer_wpl;
-  
-  tri_edge *left;
-  tri_edge *right;
-  tri_edge *last_left = 0;
-  
-  affine_span cas; //cur_affine_span
-  
-  float cur_s=0,cur_t=0,cur_l=0;
-  float systep=0,tystep=0,lystep=0;
+	sw32 cur_y = start_y;
 
-  //rasterize top to middle / top to bottom
-  if (top_to_middle.dy)
-  {
-    if (edge_comp)
-    {      
-      left  = &top_to_bottom;
-      right = &top_to_middle;
-    }
-    else
-    {      
-      left  = &top_to_middle;
-      right = &top_to_bottom;
-    }
-    
-    last_left = left;
+	w16 *screen_line;
 
-    sw32 lx,rx;
+	screen_line = r1_software_render_buffer_ptr + cur_y*r1_software_render_buffer_wpl;
 
-    lx = (left->px  + 0xFFFF) >> 16;
-    rx = (right->px + 0xFFFF) >> 16;
-    
-    cur_s = cur_grads.sat00 + ((float)cur_y*cur_grads.dsdy) + ((float)lx * cur_grads.dsdx);
-    cur_t = cur_grads.tat00 + ((float)cur_y*cur_grads.dtdy) + ((float)lx * cur_grads.dtdx);
-    cur_l = cur_grads.lat00 + ((float)cur_y*cur_grads.dldy) + ((float)lx * cur_grads.dldx);
-    
-    systep = cur_grads.dsdy + cur_grads.dsdx * left->dxdy;
-    tystep = cur_grads.dtdy + cur_grads.dtdx * left->dxdy;
-    lystep = cur_grads.dldy + cur_grads.dldx * left->dxdy;
+	tri_edge *left;
+	tri_edge *right;
+	tri_edge *last_left = 0;
 
-    while (top_to_middle.dy)
-    {      
-      lx = (left->px  + 0xFFFF) >> 16;
-      rx = (right->px + 0xFFFF) >> 16;
+	affine_span cas; //cur_affine_span
 
-      sw32 width = rx - lx;
-      if (width>0)
-      {                
-        cas.s = qftoi(cur_s);
-        cas.t = qftoi(cur_t);
-        cas.l = qftoi(cur_l);
+	float cur_s=0,cur_t=0,cur_l=0;
+	float systep=0,tystep=0,lystep=0;
 
-        cur_scanline_texture_func(screen_line,(lx<<1),&cas,width);        
-      }
-     
-      //advance y down
-      cur_y++;
+	//rasterize top to middle / top to bottom
+	if (top_to_middle.dy)
+	{
+		if (edge_comp)
+		{
+			left  = &top_to_bottom;
+			right = &top_to_middle;
+		}
+		else
+		{
+			left  = &top_to_middle;
+			right = &top_to_bottom;
+		}
 
-      cur_s += systep;
-      cur_t += tystep;
-      cur_l += lystep;
+		last_left = left;
 
-      top_to_middle.px += top_to_middle.dxdy_fixed;
-      top_to_bottom.px += top_to_bottom.dxdy_fixed;
-      
-      top_to_middle.dy--;
-      top_to_bottom.dy--;
-      
-      screen_line += r1_software_render_buffer_wpl;
-    }    
-  }
-  
-  if (mid_to_bottom.dy)
-  {
-    if (edge_comp)
-    {
-      left  = &top_to_bottom;
-      right = &mid_to_bottom;
-    }
-    else
-    {
-      left  = &mid_to_bottom;
-      right = &top_to_bottom;
-    }
+		sw32 lx,rx;
 
-    sw32 lx,rx;
+		lx = (left->px  + 0xFFFF) >> 16;
+		rx = (right->px + 0xFFFF) >> 16;
 
-    lx = (left->px  + 0xFFFF) >> 16;
-    rx = (right->px + 0xFFFF) >> 16;
+		cur_s = cur_grads.sat00 + ((float)cur_y*cur_grads.dsdy) + ((float)lx * cur_grads.dsdx);
+		cur_t = cur_grads.tat00 + ((float)cur_y*cur_grads.dtdy) + ((float)lx * cur_grads.dtdx);
+		cur_l = cur_grads.lat00 + ((float)cur_y*cur_grads.dldy) + ((float)lx * cur_grads.dldx);
 
-    if (left != last_left)
-    {
-      cur_s = cur_grads.sat00 + ((float)cur_y*cur_grads.dsdy) + ((float)lx * cur_grads.dsdx);
-      cur_t = cur_grads.tat00 + ((float)cur_y*cur_grads.dtdy) + ((float)lx * cur_grads.dtdx);
-      cur_l = cur_grads.lat00 + ((float)cur_y*cur_grads.dldy) + ((float)lx * cur_grads.dldx);
-    
-      systep = cur_grads.dsdy + cur_grads.dsdx * left->dxdy;
-      tystep = cur_grads.dtdy + cur_grads.dtdx * left->dxdy;
-      lystep = cur_grads.dldy + cur_grads.dldx * left->dxdy;
-    }    
+		systep = cur_grads.dsdy + cur_grads.dsdx * left->dxdy;
+		tystep = cur_grads.dtdy + cur_grads.dtdx * left->dxdy;
+		lystep = cur_grads.dldy + cur_grads.dldx * left->dxdy;
 
-    while (mid_to_bottom.dy)
-    {      
-      lx = (left->px  + 0xFFFF) >> 16;
-      rx = (right->px + 0xFFFF) >> 16;
+		while (top_to_middle.dy)
+		{
+			lx = (left->px  + 0xFFFF) >> 16;
+			rx = (right->px + 0xFFFF) >> 16;
 
-      sw32 width = rx - lx;
-      if (width>0)
-      {                
-        cas.s = qftoi(cur_s);
-        cas.t = qftoi(cur_t);
-        cas.l = qftoi(cur_l);        
+			sw32 width = rx - lx;
+			if (width>0)
+			{
+				cas.s = qftoi(cur_s);
+				cas.t = qftoi(cur_t);
+				cas.l = qftoi(cur_l);
 
-        cur_scanline_texture_func(screen_line,(lx<<1),&cas,width);        
-      }
-     
-      //advance y down
-      cur_y++;
+				cur_scanline_texture_func(screen_line,(lx<<1),&cas,width);
+			}
 
-      cur_s += systep;
-      cur_t += tystep;
-      cur_l += lystep;
+			//advance y down
+			cur_y++;
 
-      top_to_bottom.px += top_to_bottom.dxdy_fixed;
-      mid_to_bottom.px += mid_to_bottom.dxdy_fixed;
-      
-      top_to_bottom.dy--;
-      mid_to_bottom.dy--;
-            
-      screen_line += r1_software_render_buffer_wpl;
-    }
-  }
+			cur_s += systep;
+			cur_t += tystep;
+			cur_l += lystep;
+
+			top_to_middle.px += top_to_middle.dxdy_fixed;
+			top_to_bottom.px += top_to_bottom.dxdy_fixed;
+
+			top_to_middle.dy--;
+			top_to_bottom.dy--;
+
+			screen_line += r1_software_render_buffer_wpl;
+		}
+	}
+
+	if (mid_to_bottom.dy)
+	{
+		if (edge_comp)
+		{
+			left  = &top_to_bottom;
+			right = &mid_to_bottom;
+		}
+		else
+		{
+			left  = &mid_to_bottom;
+			right = &top_to_bottom;
+		}
+
+		sw32 lx,rx;
+
+		lx = (left->px  + 0xFFFF) >> 16;
+		rx = (right->px + 0xFFFF) >> 16;
+
+		if (left != last_left)
+		{
+			cur_s = cur_grads.sat00 + ((float)cur_y*cur_grads.dsdy) + ((float)lx * cur_grads.dsdx);
+			cur_t = cur_grads.tat00 + ((float)cur_y*cur_grads.dtdy) + ((float)lx * cur_grads.dtdx);
+			cur_l = cur_grads.lat00 + ((float)cur_y*cur_grads.dldy) + ((float)lx * cur_grads.dldx);
+
+			systep = cur_grads.dsdy + cur_grads.dsdx * left->dxdy;
+			tystep = cur_grads.dtdy + cur_grads.dtdx * left->dxdy;
+			lystep = cur_grads.dldy + cur_grads.dldx * left->dxdy;
+		}
+
+		while (mid_to_bottom.dy)
+		{
+			lx = (left->px  + 0xFFFF) >> 16;
+			rx = (right->px + 0xFFFF) >> 16;
+
+			sw32 width = rx - lx;
+			if (width>0)
+			{
+				cas.s = qftoi(cur_s);
+				cas.t = qftoi(cur_t);
+				cas.l = qftoi(cur_l);
+
+				cur_scanline_texture_func(screen_line,(lx<<1),&cas,width);
+			}
+
+			//advance y down
+			cur_y++;
+
+			cur_s += systep;
+			cur_t += tystep;
+			cur_l += lystep;
+
+			top_to_bottom.px += top_to_bottom.dxdy_fixed;
+			mid_to_bottom.px += mid_to_bottom.dxdy_fixed;
+
+			top_to_bottom.dy--;
+			mid_to_bottom.dy--;
+
+			screen_line += r1_software_render_buffer_wpl;
+		}
+	}
 }
 
 void tri_draw_affine_unlit(tri_edge &top_to_middle,tri_edge &top_to_bottom, tri_edge &mid_to_bottom, sw32 start_y, i4_bool edge_comp)
 {
-  sw32 cur_y = start_y;
-  
-  w16 *screen_line;
-  
-  screen_line = r1_software_render_buffer_ptr + cur_y*r1_software_render_buffer_wpl;
+	sw32 cur_y = start_y;
 
-  tri_edge *left;
-  tri_edge *right;
-  tri_edge *last_left = 0;
-  
-  affine_span cas; //cur_affine_span
-  
-  float cur_s=0,cur_t=0;
-  float systep=0,tystep=0;
+	w16 *screen_line;
 
-  //rasterize top to middle / top to bottom
-  if (top_to_middle.dy)
-  {
-    if (edge_comp)
-    {      
-      left  = &top_to_bottom;
-      right = &top_to_middle;
-    }
-    else
-    {      
-      left  = &top_to_middle;
-      right = &top_to_bottom;
-    }
-    
-    last_left = left;
+	screen_line = r1_software_render_buffer_ptr + cur_y*r1_software_render_buffer_wpl;
 
-    sw32 lx,rx;
+	tri_edge *left;
+	tri_edge *right;
+	tri_edge *last_left = 0;
 
-    lx = (left->px  + 0xFFFF) >> 16;
-    rx = (right->px + 0xFFFF) >> 16;
-    
-    cur_s = cur_grads.sat00 + ((float)cur_y*cur_grads.dsdy) + ((float)lx * cur_grads.dsdx);
-    cur_t = cur_grads.tat00 + ((float)cur_y*cur_grads.dtdy) + ((float)lx * cur_grads.dtdx);    
-    
-    systep = cur_grads.dsdy + cur_grads.dsdx * left->dxdy;
-    tystep = cur_grads.dtdy + cur_grads.dtdx * left->dxdy;
+	affine_span cas; //cur_affine_span
 
-    while (top_to_middle.dy)
-    {      
-      lx = (left->px  + 0xFFFF) >> 16;
-      rx = (right->px + 0xFFFF) >> 16;
+	float cur_s=0,cur_t=0;
+	float systep=0,tystep=0;
 
-      sw32 width = rx - lx;
-      if (width>0)
-      {                
-        cas.s = qftoi(cur_s);
-        cas.t = qftoi(cur_t);        
+	//rasterize top to middle / top to bottom
+	if (top_to_middle.dy)
+	{
+		if (edge_comp)
+		{
+			left  = &top_to_bottom;
+			right = &top_to_middle;
+		}
+		else
+		{
+			left  = &top_to_middle;
+			right = &top_to_bottom;
+		}
 
-        cur_scanline_texture_func(screen_line,(lx<<1),&cas,width);        
-      }
-     
-      //advance y down
-      cur_y++;
+		last_left = left;
 
-      cur_s += systep;
-      cur_t += tystep;      
+		sw32 lx,rx;
 
-      top_to_middle.px += top_to_middle.dxdy_fixed;
-      top_to_bottom.px += top_to_bottom.dxdy_fixed;
-      
-      top_to_middle.dy--;
-      top_to_bottom.dy--;
-                  
-      screen_line += r1_software_render_buffer_wpl;
-    }    
-  }
-  
-  if (mid_to_bottom.dy)
-  {
-    if (edge_comp)
-    {
-      left  = &top_to_bottom;
-      right = &mid_to_bottom;
-    }
-    else
-    {
-      left  = &mid_to_bottom;
-      right = &top_to_bottom;
-    }
+		lx = (left->px  + 0xFFFF) >> 16;
+		rx = (right->px + 0xFFFF) >> 16;
 
-    sw32 lx,rx;
+		cur_s = cur_grads.sat00 + ((float)cur_y*cur_grads.dsdy) + ((float)lx * cur_grads.dsdx);
+		cur_t = cur_grads.tat00 + ((float)cur_y*cur_grads.dtdy) + ((float)lx * cur_grads.dtdx);
 
-    lx = (left->px  + 0xFFFF) >> 16;
-    rx = (right->px + 0xFFFF) >> 16;
+		systep = cur_grads.dsdy + cur_grads.dsdx * left->dxdy;
+		tystep = cur_grads.dtdy + cur_grads.dtdx * left->dxdy;
 
-    if (left != last_left)
-    {
-      cur_s = cur_grads.sat00 + ((float)cur_y*cur_grads.dsdy) + ((float)lx * cur_grads.dsdx);
-      cur_t = cur_grads.tat00 + ((float)cur_y*cur_grads.dtdy) + ((float)lx * cur_grads.dtdx);      
-    
-      systep = cur_grads.dsdy + cur_grads.dsdx * left->dxdy;
-      tystep = cur_grads.dtdy + cur_grads.dtdx * left->dxdy;
-    }    
+		while (top_to_middle.dy)
+		{
+			lx = (left->px  + 0xFFFF) >> 16;
+			rx = (right->px + 0xFFFF) >> 16;
 
-    while (mid_to_bottom.dy)
-    {      
-      lx = (left->px  + 0xFFFF) >> 16;
-      rx = (right->px + 0xFFFF) >> 16;
-   
-      sw32 width = rx - lx;
-      if (width>0)
-      {                
-        cas.s = qftoi(cur_s);
-        cas.t = qftoi(cur_t);        
+			sw32 width = rx - lx;
+			if (width>0)
+			{
+				cas.s = qftoi(cur_s);
+				cas.t = qftoi(cur_t);
 
-        cur_scanline_texture_func(screen_line,(lx<<1),&cas,width);        
-      }
-     
-      //advance y down
-      cur_y++;
+				cur_scanline_texture_func(screen_line,(lx<<1),&cas,width);
+			}
 
-      cur_s += systep;
-      cur_t += tystep;
+			//advance y down
+			cur_y++;
 
-      top_to_bottom.px += top_to_bottom.dxdy_fixed;
-      mid_to_bottom.px += mid_to_bottom.dxdy_fixed;
-      
-      top_to_bottom.dy--;
-      mid_to_bottom.dy--;
+			cur_s += systep;
+			cur_t += tystep;
 
-      screen_line += r1_software_render_buffer_wpl;
-    }
-  }
+			top_to_middle.px += top_to_middle.dxdy_fixed;
+			top_to_bottom.px += top_to_bottom.dxdy_fixed;
+
+			top_to_middle.dy--;
+			top_to_bottom.dy--;
+
+			screen_line += r1_software_render_buffer_wpl;
+		}
+	}
+
+	if (mid_to_bottom.dy)
+	{
+		if (edge_comp)
+		{
+			left  = &top_to_bottom;
+			right = &mid_to_bottom;
+		}
+		else
+		{
+			left  = &mid_to_bottom;
+			right = &top_to_bottom;
+		}
+
+		sw32 lx,rx;
+
+		lx = (left->px  + 0xFFFF) >> 16;
+		rx = (right->px + 0xFFFF) >> 16;
+
+		if (left != last_left)
+		{
+			cur_s = cur_grads.sat00 + ((float)cur_y*cur_grads.dsdy) + ((float)lx * cur_grads.dsdx);
+			cur_t = cur_grads.tat00 + ((float)cur_y*cur_grads.dtdy) + ((float)lx * cur_grads.dtdx);
+
+			systep = cur_grads.dsdy + cur_grads.dsdx * left->dxdy;
+			tystep = cur_grads.dtdy + cur_grads.dtdx * left->dxdy;
+		}
+
+		while (mid_to_bottom.dy)
+		{
+			lx = (left->px  + 0xFFFF) >> 16;
+			rx = (right->px + 0xFFFF) >> 16;
+
+			sw32 width = rx - lx;
+			if (width>0)
+			{
+				cas.s = qftoi(cur_s);
+				cas.t = qftoi(cur_t);
+
+				cur_scanline_texture_func(screen_line,(lx<<1),&cas,width);
+			}
+
+			//advance y down
+			cur_y++;
+
+			cur_s += systep;
+			cur_t += tystep;
+
+			top_to_bottom.px += top_to_bottom.dxdy_fixed;
+			mid_to_bottom.px += mid_to_bottom.dxdy_fixed;
+
+			top_to_bottom.dy--;
+			mid_to_bottom.dy--;
+
+			screen_line += r1_software_render_buffer_wpl;
+		}
+	}
 }
 
 void span_draw_affine_unlit(span_tri_info *tri)
-{  
-  //setup some of the global variables
-  r1_software_texture_ptr   = tri->texture;
-  r1_software_twidth_log2   = tri->twidth_log2;
-  r1_software_texture_width = tri->texture_width;
-  cur_grads                 = tri->grads;
+{
+	//setup some of the global variables
+	r1_software_texture_ptr   = tri->texture;
+	r1_software_twidth_log2   = tri->twidth_log2;
+	r1_software_texture_width = tri->texture_width;
+	cur_grads                 = tri->grads;
 
-  //about to draw, setup pertinent global vars (s_frac_add, t_frac_add, and s_t_carry)
-  temp_dsdx = qftoi(tri->grads.dsdx);
-  temp_dtdx = qftoi(tri->grads.dtdx);
+	//about to draw, setup pertinent global vars (s_frac_add, t_frac_add, and s_t_carry)
+	temp_dsdx = qftoi(tri->grads.dsdx);
+	temp_dtdx = qftoi(tri->grads.dtdx);
 
-  s_t_carry[1] = (temp_dsdx>>16) + ((temp_dtdx>>16)<<r1_software_twidth_log2); //integral add when t doesnt carry
-  s_t_carry[0] = s_t_carry[1] + r1_software_texture_width;                     //integral add when t carrys
+	s_t_carry[1] = (temp_dsdx>>16) + ((temp_dtdx>>16)<<r1_software_twidth_log2); //integral add when t doesnt carry
+	s_t_carry[0] = s_t_carry[1] + r1_software_texture_width;                   //integral add when t carrys
 
-  dsdx_frac = (temp_dsdx<<16);
-  dtdx_frac = (temp_dtdx<<16);
+	dsdx_frac = (temp_dsdx<<16);
+	dtdx_frac = (temp_dtdx<<16);
 
-  span_entry *s = &global_span_list[tri->span_list_head];
+	span_entry *s = &global_span_list[tri->span_list_head];
 
-  affine_span left;  
-  while (s!=global_span_list)
-  {    
-    float fx;
-	fx=(float)s->s.x;
-    float fy;
-	fy=(float)s->s.y;
+	affine_span left;
+	while (s!=global_span_list)
+	{
+		float fx;
+		fx=(float)s->s.x;
+		float fy;
+		fy=(float)s->s.y;
 
-    left.t   = qftoi(tri->grads.tat00 + (fx * tri->grads.dtdx) + (fy * tri->grads.dtdy)) + tri->grads.t_adjust;
-    left.s   = qftoi(tri->grads.sat00 + (fx * tri->grads.dsdx) + (fy * tri->grads.dsdy)) + tri->grads.s_adjust;    
-	left.l   =0;
-	
-    cur_scanline_texture_func(s->s.scanline_ptr,(s->s.x<<1),&left,s->s.width);    
-    s = &global_span_list[s->s.next_tri_span];
-  }  
+		left.t   = qftoi(tri->grads.tat00 + (fx * tri->grads.dtdx) + (fy * tri->grads.dtdy)) + tri->grads.t_adjust;
+		left.s   = qftoi(tri->grads.sat00 + (fx * tri->grads.dsdx) + (fy * tri->grads.dsdy)) + tri->grads.s_adjust;
+		left.l   =0;
+
+		cur_scanline_texture_func(s->s.scanline_ptr,(s->s.x<<1),&left,s->s.width);
+		s = &global_span_list[s->s.next_tri_span];
+	}
 }
 
 void span_draw_affine_lit(span_tri_info *tri)
-{  
-  //setup some of the global variables
-  r1_software_class_ptr->set_color_tint(tri->color_tint);
+{
+	//setup some of the global variables
+	r1_software_class_ptr->set_color_tint(tri->color_tint);
 
-  r1_software_texture_ptr   = tri->texture;
-  r1_software_twidth_log2   = tri->twidth_log2;
-  r1_software_texture_width = tri->texture_width;
-  cur_grads                 = tri->grads;
+	r1_software_texture_ptr   = tri->texture;
+	r1_software_twidth_log2   = tri->twidth_log2;
+	r1_software_texture_width = tri->texture_width;
+	cur_grads                 = tri->grads;
 
-  //about to draw, setup pertinent global vars (s_t_frac_add, s_t_carry, dldx_fixed)
-  temp_dsdx = qftoi(tri->grads.dsdx);
-  temp_dtdx = qftoi(tri->grads.dtdx);
+	//about to draw, setup pertinent global vars (s_t_frac_add, s_t_carry, dldx_fixed)
+	temp_dsdx = qftoi(tri->grads.dsdx);
+	temp_dtdx = qftoi(tri->grads.dtdx);
 
-  dsdx_frac = (temp_dsdx<<16);
-  dtdx_frac = (temp_dtdx<<16);
-    
-  s_t_carry[1] = (temp_dsdx>>16) + ((temp_dtdx>>16)<<r1_software_twidth_log2); //integral add when t doesnt carry
-  s_t_carry[0] = s_t_carry[1] + r1_software_texture_width;           //integral add when t carrys
+	dsdx_frac = (temp_dsdx<<16);
+	dtdx_frac = (temp_dtdx<<16);
 
-  //dont forget the light
-  dldx_fixed = qftoi(tri->grads.dldx);
+	s_t_carry[1] = (temp_dsdx>>16) + ((temp_dtdx>>16)<<r1_software_twidth_log2); //integral add when t doesnt carry
+	s_t_carry[0] = s_t_carry[1] + r1_software_texture_width;         //integral add when t carrys
 
-  span_entry *s = &global_span_list[tri->span_list_head];  
+	//dont forget the light
+	dldx_fixed = qftoi(tri->grads.dldx);
 
-  affine_span left;  
-  while (s!=global_span_list)
-  {
+	span_entry *s = &global_span_list[tri->span_list_head];
+
+	affine_span left;
+	while (s!=global_span_list)
+	{
 #ifndef USE_ASM
-    float fx;
-	fx = s->s.x;
-    float fy;
-	fy = s->s.y;
-    left.t   = qftoi(tri->grads.tat00 + (fx * tri->grads.dtdx) + (fy * tri->grads.dtdy)) + tri->grads.t_adjust;
-    left.s   = qftoi(tri->grads.sat00 + (fx * tri->grads.dsdx) + (fy * tri->grads.dsdy)) + tri->grads.s_adjust;
-    left.l   = qftoi(tri->grads.lat00 + (fx * tri->grads.dldx) + (fy * tri->grads.dldy));
+		float fx;
+		fx = s->s.x;
+		float fy;
+		fy = s->s.y;
+		left.t   = qftoi(tri->grads.tat00 + (fx * tri->grads.dtdx) + (fy * tri->grads.dtdy)) + tri->grads.t_adjust;
+		left.s   = qftoi(tri->grads.sat00 + (fx * tri->grads.dsdx) + (fy * tri->grads.dsdy)) + tri->grads.s_adjust;
+		left.l   = qftoi(tri->grads.lat00 + (fx * tri->grads.dldx) + (fy * tri->grads.dldy));
 #else
 
-    _asm
-    {
-      mov edi,dword ptr [s]
-      
-      fild dword ptr [edi]span_entry.s.x
-      fild dword ptr [edi]span_entry.s.y
+		_asm
+		{
+			mov edi,dword ptr [s]
 
-      fld dword ptr [cur_grads]tri_gradients.dtdx
-      fld dword ptr [cur_grads]tri_gradients.dtdy
+			fild dword ptr [edi] span_entry.s.x
+			fild dword ptr [edi] span_entry.s.y
 
-      //dtdy  dtdx  y   x
-      fmul st(0),st(2)
-      fxch st(1)
+			fld dword ptr [cur_grads] tri_gradients.dtdx
+			fld dword ptr [cur_grads] tri_gradients.dtdy
 
-      //dtdx  dtdy*y  y  x
+			//dtdy  dtdx  y   x
+			fmul st(0),st(2)
+			fxch st(1)
 
-      fmul st(0),st(3)
-      fxch st(1)
+			//dtdx  dtdy*y  y  x
 
-      //dtdy*y  dtdx*x  y  x
+			fmul st(0),st(3)
+			fxch st(1)
 
-      fld dword ptr [cur_grads]tri_gradients.dsdx
-      fld dword ptr [cur_grads]tri_gradients.dsdy
+			//dtdy*y  dtdx*x  y  x
 
-      //dsdy  dsdx  dtdy*y  dtdx*x  y  x
+			fld dword ptr [cur_grads] tri_gradients.dsdx
+			fld dword ptr [cur_grads] tri_gradients.dsdy
 
-      fmul st(0),st(4)
-      fxch st(1)
+			//dsdy  dsdx  dtdy*y  dtdx*x  y  x
 
-      //dsdx  dsdy*y  dtdy*y  dtdx*x  y  x
+			fmul st(0),st(4)
+			fxch st(1)
 
-      fmul st(0),st(5)
-      fxch st(1)
+			//dsdx  dsdy*y  dtdy*y  dtdx*x  y  x
 
-      //dsdy*y  dsdx*x  dtdy*y  dtdx*x  y  x
-      fld dword ptr [cur_grads]tri_gradients.dldx
-      fld dword ptr [cur_grads]tri_gradients.dldy
+			fmul st(0),st(5)
+			fxch st(1)
 
-      //dldy  dldx  dsdy*y  dsdx*x  dtdy*y  dtdx*x  y  x
+			//dsdy*y  dsdx*x  dtdy*y  dtdx*x  y  x
+			fld dword ptr [cur_grads] tri_gradients.dldx
+			fld dword ptr [cur_grads] tri_gradients.dldy
 
-      fmul st(0),st(6)
-      fxch st(1)
+			//dldy  dldx  dsdy*y  dsdx*x  dtdy*y  dtdx*x  y  x
 
-      //dldx  dldy*y  dsdy*y  dsdx*x  dtdy*y  dtdx*x  y  x
+			fmul st(0),st(6)
+			fxch st(1)
 
-      fmul st(0),st(7)
-      fxch st(4)
-      
-      //dtdy*y  dldx*x  dsdy*y  dsdx*x  dldy*y  dtdx*x  y  x
-      
-      fadd dword ptr [cur_grads]tri_gradients.tat00
-      fxch st(2)
+			//dldx  dldy*y  dsdy*y  dsdx*x  dtdy*y  dtdx*x  y  x
 
-      //dsdy*y  dldx*x  dtdy*y+tat00  dsdx*x  dldy*y  dtdx*x  y  x
+			fmul st(0),st(7)
+			fxch st(4)
 
-      fadd dword ptr [cur_grads]tri_gradients.sat00
-      fxch st(4)
+			//dtdy*y  dldx*x  dsdy*y  dsdx*x  dldy*y  dtdx*x  y  x
 
-      //dldy*y  dldx*x  dtdy*y+tat00  dsdx*x  dsdy*y+sat00  dtdx*x  y  x
+			fadd dword ptr [cur_grads] tri_gradients.tat00
+			fxch st(2)
 
-      fadd dword ptr [cur_grads]tri_gradients.lat00
-      fxch st(2)
+			//dsdy*y  dldx*x  dtdy*y+tat00  dsdx*x  dldy*y  dtdx*x  y  x
 
-      //dtdy*y+tat00  dldx*x  dldy*y+lat00  dsdx*x  dsdy*y+sat00  dtdx*x  y  x
-      faddp st(5),st(0)
+			fadd dword ptr [cur_grads] tri_gradients.sat00
+			fxch st(4)
 
-      //dldx*x  dldy*y+lat00  dsdx*x  dsdy*y+sat00  dtdx*x+dtdy*y+tat00  y  x
-      fxch st(3)
+			//dldy*y  dldx*x  dtdy*y+tat00  dsdx*x  dsdy*y+sat00  dtdx*x  y  x
 
-      //dsdy*y+sat00  dldy*y+lat00  dsdx*x  dldx*x  dtdx*x+dtdy*y+tat00  y  x
-      faddp st(2),st(0)
+			fadd dword ptr [cur_grads] tri_gradients.lat00
+			fxch st(2)
 
-      //dldy*y+lat00  dsdx*x+dsdy*y+sat00  dldx*x  dtdx*x+dtdy*y+tat00  y  x
-      faddp st(2),st(0)
+			//dtdy*y+tat00  dldx*x  dldy*y+lat00  dsdx*x  dsdy*y+sat00  dtdx*x  y  x
+			faddp st(5),st(0)
 
-      //dsdx*x+dsdy*y+sat00  dldx*x+dldy*y+lat00  dtdx*x+dtdy*y+tat00  y  x
-      fxch st(3)
-      
-      //y  dldx*x+dldy*y+lat00  dtdx*x+dtdy*y+tat00  dsdx*x+dsdy*y+sat00  x
-      fstp st(0)
-      fxch st(3)
-      
-      //x  dtdx*x+dtdy*y+tat00  dsdx*x+dsdy*y+sat00  dldx*x+dldy*y+lat00
-      fstp st(0)
+			//dldx*x  dldy*y+lat00  dsdx*x  dsdy*y+sat00  dtdx*x+dtdy*y+tat00  y  x
+			fxch st(3)
 
-      fistp dword ptr [left]affine_span.t
-      fistp dword ptr [left]affine_span.s
-      fistp dword ptr [left]affine_span.l
+			//dsdy*y+sat00  dldy*y+lat00  dsdx*x  dldx*x  dtdx*x+dtdy*y+tat00  y  x
+			faddp st(2),st(0)
 
-      mov eax,dword ptr [left]affine_span.s
-      mov ebx,dword ptr [left]affine_span.t
+			//dldy*y+lat00  dsdx*x+dsdy*y+sat00  dldx*x  dtdx*x+dtdy*y+tat00  y  x
+			faddp st(2),st(0)
 
-      add eax,dword ptr [cur_grads]tri_gradients.s_adjust
-      add ebx,dword ptr [cur_grads]tri_gradients.t_adjust
+			//dsdx*x+dsdy*y+sat00  dldx*x+dldy*y+lat00  dtdx*x+dtdy*y+tat00  y  x
+			fxch st(3)
 
-      mov dword ptr [left]affine_span.s,eax
-      mov dword ptr [left]affine_span.t,ebx
-    }
+			//y  dldx*x+dldy*y+lat00  dtdx*x+dtdy*y+tat00  dsdx*x+dsdy*y+sat00  x
+			fstp st(0)
+			fxch st(3)
+
+			//x  dtdx*x+dtdy*y+tat00  dsdx*x+dsdy*y+sat00  dldx*x+dldy*y+lat00
+			fstp st(0)
+
+			fistp dword ptr [left] affine_span.t
+			fistp dword ptr [left] affine_span.s
+			fistp dword ptr [left] affine_span.l
+
+			mov eax,dword ptr [left] affine_span.s
+			mov ebx,dword ptr [left] affine_span.t
+
+			add eax,dword ptr [cur_grads] tri_gradients.s_adjust
+			add ebx,dword ptr [cur_grads] tri_gradients.t_adjust
+
+			mov dword ptr [left] affine_span.s,eax
+			mov dword ptr [left] affine_span.t,ebx
+		}
 #endif
-    
-    cur_scanline_texture_func(s->s.scanline_ptr,(s->s.x<<1),&left,s->s.width);    
-    s = &global_span_list[s->s.next_tri_span];
-  }  
-}
 
+		cur_scanline_texture_func(s->s.scanline_ptr,(s->s.x<<1),&left,s->s.width);
+		s = &global_span_list[s->s.next_tri_span];
+	}
+}

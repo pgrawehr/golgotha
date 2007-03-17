@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef __I4_ERROR_HPP_
 #define __I4_ERROR_HPP_
@@ -41,7 +41,7 @@ extern i4_file_class *i4_debug;     // stream you can print debug messages to
 
 
 // this are so we can get the line and file an error occured on
-typedef int (*i4_error_pointer_type)(const char *format ...);
+typedef int (*i4_error_pointer_type)(const char *format...);
 i4_error_pointer_type i4_get_error_function_pointer(const char *file, int line);
 i4_error_pointer_type i4_get_warning_function_pointer(const char *file, int line);
 extern const char *i4_error_file_on;
@@ -54,7 +54,7 @@ extern int i4_error_line_on;
 #define I4_LF_ARGS int I4_LINE, char *I4_FILE
 #define I4_DEBUG
 #else
-#define I4_LF 
+#define I4_LF
 #define I4_LF_ARGS
 #define I4_LINE 0
 #define I4_FILE ""
@@ -71,15 +71,15 @@ extern int i4_error_line_on;
 
 #ifdef I4_DEBUG
 
-#define I4_ASSERT(x,y) ((x)?0:i4_error("%s:%d - %s\n",__FILE__,__LINE__,y))
-#define I4_TEST(x,y)   ((x)?0:i4_warning("%s:%d - %s\n",__FILE__,__LINE__,y))
+#define I4_ASSERT(x,y) ((x) ? 0 : i4_error("%s:%d - %s\n",__FILE__,__LINE__,y))
+#define I4_TEST(x,y)   ((x) ? 0 : i4_warning("%s:%d - %s\n",__FILE__,__LINE__,y))
 #define H()            i4_warning("Reached %s:%d\n",__FILE__,__LINE__)
 
 #else
 
-#define I4_ASSERT(x,y) 
-#define I4_TEST(x,y)   
-#define H()            
+#define I4_ASSERT(x,y)
+#define I4_TEST(x,y)
+#define H()
 
 #endif
 
@@ -88,4 +88,3 @@ extern int i4_error_line_on;
 #endif
 
 #endif
-

@@ -1,68 +1,77 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef __i4TIME_HPP_
 #define __i4TIME_HPP_
 
 #include "arch.h"
- 
+
 #include <stdlib.h>
 #include <string.h>
 
 class i4_time_class
 {
-  union
-  {
-    struct
-    {
-      sw32 sec, usec;
-    } unix_time;
+	union
+	{
+		struct
+		{
+			sw32 sec, usec;
+		} unix_time;
 
-    struct 
-    {
-      sw32 clock;
-      sw32 overflow;
-    } win32_time;
-  } time;
-  
+		struct
+		{
+			sw32 clock;
+			sw32 overflow;
+		} win32_time;
+	} time;
+
 public:
 
-  i4_time_class(sw32 milli_sec);
+	i4_time_class(sw32 milli_sec);
 
 
-  i4_bool operator <(const i4_time_class &other) const;
-  i4_bool operator >(const i4_time_class &other) const;
+	i4_bool operator <(const i4_time_class &other) const;
+	i4_bool operator >(const i4_time_class &other) const;
 
-  // copies the time from another previously created i4_time_class
-  i4_time_class(const i4_time_class &ref) 
-  { 
-    time=ref.time;
-  }
+	// copies the time from another previously created i4_time_class
+	i4_time_class(const i4_time_class &ref)
+	{
+		time=ref.time;
+	}
 
-  i4_time_class& operator= (const i4_time_class &other) {
-	  time=other.time;
-	  return *this;
-	  };
+	i4_time_class& operator=(const i4_time_class &other)
+	{
+		time=other.time;
+		return *this;
+	};
 
-  void get();    // gets the time from the system
+	void get();  // gets the time from the system
 #ifdef _WINDOWS
-  double value(){ return time.win32_time.clock;};
+	double value()
+	{
+		return time.win32_time.clock;
+	};
 #else
-  double value(){ return (((double) time.unix_time.sec)+(((double)time.unix_time.usec)/1E6));};
+	double value()
+	{
+		return (((double) time.unix_time.sec)+(((double)time.unix_time.usec)/1E6));
+	};
 #endif
 
-  void add_milli(sw32 milli_sec);
+	void add_milli(sw32 milli_sec);
 
-  i4_time_class()
-  { get(); }
+	i4_time_class()
+	{
+		get();
+	}
 
-  sw32 milli_diff(const i4_time_class &past_time) const;  
-  // returns difference between our time and a past time in 1/1000th of a second
+	sw32 milli_diff(const i4_time_class &past_time) const;
+	// returns difference between our time and a past time in 1/1000th of a second
 };
 
 w64 i4_get_system_clock();

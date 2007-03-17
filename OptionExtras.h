@@ -1,4 +1,4 @@
-#if !defined(AFX_OPTIONEXTRAS_H__78221363_B84D_11D6_9EE1_00E0987CDED7__INCLUDED_)
+#if !defined (AFX_OPTIONEXTRAS_H__78221363_B84D_11D6_9EE1_00E0987CDED7__INCLUDED_)
 #define AFX_OPTIONEXTRAS_H__78221363_B84D_11D6_9EE1_00E0987CDED7__INCLUDED_
 
 #if _MSC_VER > 1000
@@ -8,9 +8,10 @@
 //
 
 /////////////////////////////////////////////////////////////////////////////
-// Dialogfeld OptionExtras 
+// Dialogfeld OptionExtras
 
-class OptionExtras : public CPropertyPage
+class OptionExtras :
+	public CPropertyPage
 {
 	DECLARE_DYNCREATE(OptionExtras)
 
@@ -21,18 +22,20 @@ public:
 	void Apply();
 // Dialogfelddaten
 	//{{AFX_DATA(OptionExtras)
-	enum { IDD = IDD_EXTRAS };
-	CComboBoxEx	m_langselect;
+	enum {
+		IDD = IDD_EXTRAS
+	};
+	CComboBoxEx m_langselect;
 	//}}AFX_DATA
 
 
 // Überschreibungen
 	// Der Klassen-Assistent generiert virtuelle Funktionsüberschreibungen
 	//{{AFX_VIRTUAL(OptionExtras)
-	public:
+public:
 	virtual BOOL OnApply();
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+protected:
+	virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
 
 // Implementierung

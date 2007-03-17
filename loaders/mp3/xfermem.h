@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 /*
  *   xfermem.h
@@ -29,8 +29,8 @@
 typedef unsigned char byte;
 
 typedef struct {
-	int freeindex;	/* [W] next free index */
-	int readindex;	/* [R] next index to read */
+	int freeindex;  /* [W] next free index */
+	int readindex;  /* [R] next index to read */
 	int fd[2];
 	int wakeme[2];
 	byte *data;
@@ -44,24 +44,24 @@ typedef struct {
  *   All other entries are initialized once.
  */
 
-void xfermem_init (txfermem **xf, int bufsize, int msize);
-void xfermem_init_writer (txfermem *xf);
-void xfermem_init_reader (txfermem *xf);
+void xfermem_init(txfermem **xf, int bufsize, int msize);
+void xfermem_init_writer(txfermem *xf);
+void xfermem_init_reader(txfermem *xf);
 
-int  xfermem_write (txfermem *xf, byte *data, int count);
-int  xfermem_read  (txfermem *xf, byte *data, int count);
+int  xfermem_write(txfermem *xf, byte *data, int count);
+int  xfermem_read(txfermem *xf, byte *data, int count);
 
-int xfermem_get_freespace (txfermem *xf);
-int xfermem_get_usedspace (txfermem *xf);
+int xfermem_get_freespace(txfermem *xf);
+int xfermem_get_usedspace(txfermem *xf);
 #define XF_CMD_WAKEUP    0x02
 #define XF_CMD_TERMINATE 0x03
 #define XF_WRITER 0
 #define XF_READER 1
-int xfermem_getcmd (int fd, int block);
-int xfermem_putcmd (int fd, byte cmd);
-int xfermem_block (int fd, txfermem *xf);
+int xfermem_getcmd(int fd, int block);
+int xfermem_putcmd(int fd, byte cmd);
+int xfermem_block(int fd, txfermem *xf);
 
-void xfermem_done (txfermem *xf);
+void xfermem_done(txfermem *xf);
 #define xfermem_done_writer xfermem_init_reader
 #define xfermem_done_reader xfermem_init_writer
 

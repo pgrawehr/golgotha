@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef G1_CONTROLLER_WINDOW_MANAGER_HH
 #define G1_CONTROLLER_WINDOW_MANAGER_HH
@@ -33,48 +33,61 @@ class g1_loader_class;
 class g1_saver_class;
 
 // this class manages the view(s) of the game
-// derived from it is the g1_editor_class that creates 
+// derived from it is the g1_editor_class that creates
 // views with editing behavior (derived from g1_object_controller_class)
 
-class g1_cwin_man_class : public i4_event_handler_class
+class g1_cwin_man_class :
+	public i4_event_handler_class
 {
 private:
-  g1_view_state_class view_state;
-  
+	g1_view_state_class view_state;
+
 protected:                           // for use by derived classes
-  i4_graphical_style_class   *style;
-  i4_parent_window_class     *parent;
-  i4_image_class             *root_image;
+	i4_graphical_style_class *style;
+	i4_parent_window_class *parent;
+	i4_image_class *root_image;
 
 
-  const i4_pal *pal;
+	const i4_pal *pal;
 
 public:                             // called by main program
-  void name(char* buffer) { static_name(buffer,"g1_cwin_man_class"); }
+	void name(char *buffer)
+	{
+		static_name(buffer,"g1_cwin_man_class");
+	}
 
-  virtual void create_views();
-  virtual void destroy_views();
-  
-  virtual void map_changed();     // called when a new map is loaded/created
+	virtual void create_views();
+	virtual void destroy_views();
 
-  virtual void init(i4_parent_window_class *_parent,
-                    i4_graphical_style_class *_style,
-                    i4_image_class *_root_image,
-                    i4_display_class *display,
-                    i4_window_manager_class *wm);
-  
-  virtual void uninit() { ; }
+	virtual void map_changed();   // called when a new map is loaded/created
 
-  virtual i4_bool is_edit_mode() { return i4_F;}
+	virtual void init(i4_parent_window_class *_parent,
+					  i4_graphical_style_class *_style,
+					  i4_image_class *_root_image,
+					  i4_display_class *display,
+					  i4_window_manager_class *wm);
 
-  virtual void set_edit_mode(i4_bool yes_no) { ; }
+	virtual void uninit()
+	{
+		;
+	}
 
-  virtual void save_views(g1_saver_class *fp);
-  virtual void load_views(g1_loader_class *fp);
+	virtual i4_bool is_edit_mode()
+	{
+		return i4_F;
+	}
 
-  virtual void receive_event(i4_event *ev);
+	virtual void set_edit_mode(i4_bool yes_no)
+	{
+		;
+	}
 
-  g1_cwin_man_class();
+	virtual void save_views(g1_saver_class *fp);
+	virtual void load_views(g1_loader_class *fp);
+
+	virtual void receive_event(i4_event *ev);
+
+	g1_cwin_man_class();
 };
 
 

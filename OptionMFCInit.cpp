@@ -16,11 +16,11 @@ static char THIS_FILE[] = __FILE__;
 // CMfctestApp
 
 BEGIN_MESSAGE_MAP(CMfctestApp, CWinApp)
-	//{{AFX_MSG_MAP(CMfctestApp)
-		// HINWEIS - Hier werden Mapping-Makros vom Klassen-Assistenten eingefügt und entfernt.
-		//    Innerhalb dieser generierten Quelltextabschnitte NICHTS VERÄNDERN!
-	//}}AFX_MSG
-	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
+//{{AFX_MSG_MAP(CMfctestApp)
+// HINWEIS - Hier werden Mapping-Makros vom Klassen-Assistenten eingefügt und entfernt.
+//    Innerhalb dieser generierten Quelltextabschnitte NICHTS VERÄNDERN!
+//}}AFX_MSG
+ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,7 @@ BOOL CMfctestApp::InitInstance()
 	AfxEnableControlContainer();  //This has already been done
 
 	// Standardinitialisierung
-	// Wenn Sie diese Funktionen nicht nutzen und die Größe Ihrer fertigen 
+	// Wenn Sie diese Funktionen nicht nutzen und die Größe Ihrer fertigen
 	//  ausführbaren Datei reduzieren wollen, sollten Sie die nachfolgenden
 	//  spezifischen Initialisierungsroutinen, die Sie nicht benötigen, entfernen.
 
@@ -57,22 +57,21 @@ BOOL CMfctestApp::InitInstance()
 //#endif
 
 	/*CMfctestDlg dlg;
-	m_pMainWnd = &dlg;
-	int nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
-	{
-		// ZU ERLEDIGEN: Fügen Sie hier Code ein, um ein Schließen des
-		//  Dialogfelds über OK zu steuern
-	}
-	else if (nResponse == IDCANCEL)
-	{
-		// ZU ERLEDIGEN: Fügen Sie hier Code ein, um ein Schließen des
-		//  Dialogfelds über "Abbrechen" zu steuern
-	}
+	   m_pMainWnd = &dlg;
+	   int nResponse = dlg.DoModal();
+	   if (nResponse == IDOK)
+	   {
+	   	// ZU ERLEDIGEN: Fügen Sie hier Code ein, um ein Schließen des
+	   	//  Dialogfelds über OK zu steuern
+	   }
+	   else if (nResponse == IDCANCEL)
+	   {
+	   	// ZU ERLEDIGEN: Fügen Sie hier Code ein, um ein Schließen des
+	   	//  Dialogfelds über "Abbrechen" zu steuern
+	   }
 
-	// Da das Dialogfeld geschlossen wurde, FALSE zurückliefern, so dass wir die
-	//  Anwendung verlassen, anstatt das Nachrichtensystem der Anwendung zu starten.
-	return FALSE;*/
+	   // Da das Dialogfeld geschlossen wurde, FALSE zurückliefern, so dass wir die
+	   //  Anwendung verlassen, anstatt das Nachrichtensystem der Anwendung zu starten.
+	   return FALSE;*/
 	return TRUE;
 }
-

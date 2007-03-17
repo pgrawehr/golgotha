@@ -1,99 +1,117 @@
 #include "pch.h"
 
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #include "render/r1_win.h"
 #include "render/r1_clip.h"
 
 void r1_render_window_class::clip_with_z(i4_draw_context_class &context, i4_float near_z, i4_float far_z)
 {
-  api->set_constant_color(0);
+	api->set_constant_color(0);
 
-  api->set_alpha_mode(R1_ALPHA_DISABLED);  
-  api->set_shading_mode(R1_CONSTANT_SHADING);
-  api->disable_texture();
+	api->set_alpha_mode(R1_ALPHA_DISABLED);
+	api->set_shading_mode(R1_CONSTANT_SHADING);
+	api->disable_texture();
 
-  i4_rect_list_class area_to_mask;
+	i4_rect_list_class area_to_mask;
 
-  i4_rect_list_class::area_iter cl;
-  i4_rect_list_class *clip=&context.clip;
+	i4_rect_list_class::area_iter cl;
+	i4_rect_list_class *clip=&context.clip;
 
-  int dx1, dy1, dx2, dy2;
-  dx1=0;  dy1=0;
-  dx2=dx1 + render_area_width() -1; 
-  dy2=dy1 + render_area_height() -1;
+	int dx1, dy1, dx2, dy2;
+	dx1=0;
+	dy1=0;
+	dx2=dx1 + render_area_width() -1;
+	dy2=dy1 + render_area_height() -1;
 
-  area_to_mask.add_area(dx1, dy1, dx2, dy2);
-  for (cl = clip->list.begin(); cl !=  clip->list.end(); ++cl)
-    area_to_mask.remove_area(cl->x1, cl->y1, cl->x2, cl->y2);
-  
-  //i4_float near_z = near;//0.0001f;
-  //i4_float far_z  = far;
-  
-  api->set_z_range(near_z,far_z);
+	area_to_mask.add_area(dx1, dy1, dx2, dy2);
+	for (cl = clip->list.begin(); cl !=  clip->list.end(); ++cl)
+	{
+		area_to_mask.remove_area(cl->x1, cl->y1, cl->x2, cl->y2);
+	}
 
-  api->set_write_mode(R1_WRITE_W);  
+	//i4_float near_z = near;//0.0001f;
+	//i4_float far_z  = far;
 
-  for (cl = clip->list.begin(); cl != clip->list.end(); ++cl)
-  {
-    api->clear_area(cl->x1+dx1, cl->y1+dy1, cl->x2+dx1, cl->y2+dy1, 
-                    api->get_constant_color(), 
-                    far_z);
-	if (context.render_area!=NULL)
-		context.render_area->add_area(cl->x1+dx1+context.xoff, cl->y1+dy1+context.yoff,
-			cl->x2+dx1+context.xoff,cl->y2+dy1+context.yoff);
-  }
+	api->set_z_range(near_z,far_z);
 
-  for (cl = area_to_mask.list.begin(); cl!= area_to_mask.list.end(); ++cl)
-  {
-	api->clear_area(cl->x1+dx1, cl->y1+dy1, cl->x2+dx1, cl->y2+dy1, 
-                    api->get_constant_color(), 
-                    near_z);
-	if (context.render_area!=NULL)
-		context.render_area->remove_area(cl->x1+dx1+context.xoff, cl->y1+dy1+context.yoff,
-			cl->x2+dx1+context.xoff,cl->y2+dy1+context.yoff);
-  }
+	api->set_write_mode(R1_WRITE_W);
 
-  api->set_write_mode(R1_WRITE_W | R1_WRITE_COLOR | R1_COMPARE_W);
+	for (cl = clip->list.begin(); cl != clip->list.end(); ++cl)
+	{
+		api->clear_area(cl->x1+dx1, cl->y1+dy1, cl->x2+dx1, cl->y2+dy1,
+						api->get_constant_color(),
+						far_z);
+		if (context.render_area!=NULL)
+		{
+			context.render_area->add_area(cl->x1+dx1+context.xoff, cl->y1+dy1+context.yoff,
+										  cl->x2+dx1+context.xoff,cl->y2+dy1+context.yoff);
+		}
+	}
+
+	for (cl = area_to_mask.list.begin(); cl!= area_to_mask.list.end(); ++cl)
+	{
+		api->clear_area(cl->x1+dx1, cl->y1+dy1, cl->x2+dx1, cl->y2+dy1,
+						api->get_constant_color(),
+						near_z);
+		if (context.render_area!=NULL)
+		{
+			context.render_area->remove_area(cl->x1+dx1+context.xoff, cl->y1+dy1+context.yoff,
+											 cl->x2+dx1+context.xoff,cl->y2+dy1+context.yoff);
+		}
+	}
+
+	api->set_write_mode(R1_WRITE_W | R1_WRITE_COLOR | R1_COMPARE_W);
 
 }
 
-int r1_render_window_class::render_area_width() 
-{ 
-  if (expand_type == R1_COPY_1x1 ||
-      expand_type == R1_COPY_1x1_SCANLINE_SKIP)
-    return width();
-  else
-    return width()/2;
+int r1_render_window_class::render_area_width()
+{
+	if (expand_type == R1_COPY_1x1 ||
+		expand_type == R1_COPY_1x1_SCANLINE_SKIP)
+	{
+		return width();
+	}
+	else
+	{
+		return width()/2;
+	}
 }
 
 int r1_render_window_class::render_area_height()
 {
-  if (expand_type == R1_COPY_1x1 || expand_type == R1_COPY_1x1_SCANLINE_SKIP)
-    return height();
-  else
-    return height()/2;
+	if (expand_type == R1_COPY_1x1 || expand_type == R1_COPY_1x1_SCANLINE_SKIP)
+	{
+		return height();
+	}
+	else
+	{
+		return height()/2;
+	}
 }
 
 void r1_render_window_class::redepth(w16 new_bitdepth)
-	{
+{
 	if (children.begin()!=children.end())
+	{
 		children.begin()->redepth(new_bitdepth);
+	}
 	api->redepth(new_bitdepth);
 	i4_parent_window_class::redepth(new_bitdepth);
-	}
+}
 
 void r1_render_window_class::resize(w16 new_width, w16 new_height)
 {
-  if (children.begin()!=children.end())
-    children.begin()->resize(new_width, new_height);
-  api->resize(new_width,new_height);
-  i4_parent_window_class::resize(new_width, new_height);
+	if (children.begin()!=children.end())
+	{
+		children.begin()->resize(new_width, new_height);
+	}
+	api->resize(new_width,new_height);
+	i4_parent_window_class::resize(new_width, new_height);
 }
-

@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef __KERNEL_HPP_
 #define __KERNEL_HPP_
@@ -20,102 +20,109 @@ class i4_window_class;
 
 
 /*
-  The kernel is used to send all events to i4_event_handlers.  Currently whenever it gets an
-  event it calls it virtual when() function and determines if the event should be que up and
-  sent later (if when returns LATER) or sent immediatly (if when() return NOW or ANYTIME).
+   The kernel is used to send all events to i4_event_handlers.  Currently whenever it gets an
+   event it calls it virtual when() function and determines if the event should be que up and
+   sent later (if when returns LATER) or sent immediatly (if when() return NOW or ANYTIME).
 
-  example ussage :
-  
-  kernel.send_event(send_to,&ev);
+   example ussage :
+
+   kernel.send_event(send_to,&ev);
 
  */
 
 
-class i4_kernel_device_class: public i4_init_class
+class i4_kernel_device_class :
+	public i4_init_class
 {
-  enum {     
-    TYPE_MOUSE_MOVE, 
-    TYPE_MOUSE_BUTTON_DOWN, 
-    TYPE_MOUSE_BUTTON_UP,
-    TYPE_KEY_PRESS, 
-    TYPE_KEY_RELEASE,
-    TYPE_DISPLAY_CHANGE,   // when display screen changes (size, location, etc).
-    TYPE_DISPLAY_CLOSE,
-    TYPE_SYSTEM_SIGNAL,
-    TYPE_IDLE,
-    TYPE_DO_COMMAND,
-    TYPE_END_COMMAND,
-    TYPE_DRAG_DROP_EVENT,
-	TYPE_CHAR_SEND,
-	TYPE_USER_MSG,
-    LAST_TYPE
-  };
+	enum {
+		TYPE_MOUSE_MOVE,
+		TYPE_MOUSE_BUTTON_DOWN,
+		TYPE_MOUSE_BUTTON_UP,
+		TYPE_KEY_PRESS,
+		TYPE_KEY_RELEASE,
+		TYPE_DISPLAY_CHANGE, // when display screen changes (size, location, etc).
+		TYPE_DISPLAY_CLOSE,
+		TYPE_SYSTEM_SIGNAL,
+		TYPE_IDLE,
+		TYPE_DO_COMMAND,
+		TYPE_END_COMMAND,
+		TYPE_DRAG_DROP_EVENT,
+		TYPE_CHAR_SEND,
+		TYPE_USER_MSG,
+		LAST_TYPE
+	};
 
 #ifndef I4_RETAIL
-  void show_pending();
+	void show_pending();
 #endif
-  protected :
+protected:
 
 
-  struct response_type
-  {
-    i4_event_handler_class *who;
-    response_type *next;
-    response_type(i4_event_handler_class *who, response_type *next) : who(who), next(next) {}
-  } *response[LAST_TYPE];
+	struct response_type
+	{
+		i4_event_handler_class *who;
+		response_type *next;
+		response_type(i4_event_handler_class *who, response_type *next) :
+			who(who),
+			next(next) {
+		}
+	} *response[LAST_TYPE];
 
-  i4_device_class *device_list;
-  i4_stack<i4_window_class*> modal_stack;
-  i4_bool can_send_idle;
-  w32 milliseconds_before_idle_events_sent;
-  void check_for_idle();
+	i4_device_class *device_list;
+	i4_stack<i4_window_class *> modal_stack;
+	i4_bool can_send_idle;
+	w32 milliseconds_before_idle_events_sent;
+	void check_for_idle();
 
-  public :
-  virtual void init();
-  virtual void uninit();
-  virtual int init_type() {return I4_INIT_TYPE_PRIORITY;};//init just after memory manager
-  virtual void set_modal(i4_window_class *ref);//usually called with this as arg
-  virtual i4_window_class *modal();//returns top of modal stack (0 if no modal window active)
-  virtual void end_modal(i4_window_class *ref);//removes current modal reference from top of stack 
-  //ref is needed for stack management purposes only
+public:
+	virtual void init();
+	virtual void uninit();
+	virtual int init_type()
+	{
+		return I4_INIT_TYPE_PRIORITY;
+	};                                                    //init just after memory manager
+	virtual void set_modal(i4_window_class *ref); //usually called with this as arg
+	virtual i4_window_class *modal(); //returns top of modal stack (0 if no modal window active)
+	virtual void end_modal(i4_window_class *ref); //removes current modal reference from top of stack
+	//ref is needed for stack management purposes only
 
-  int events_sent;    // app uses this. if no events are sent and app is idle, then app sleeps
+	int events_sent;  // app uses this. if no events are sent and app is idle, then app sleeps
 
-  void set_milliseconds_before_idle_events_sent(w32 milli_seconds);
+	void set_milliseconds_before_idle_events_sent(w32 milli_seconds);
 
-  virtual i4_bool process_events();              // returns true if an event was dispatched  
+	virtual i4_bool process_events();            // returns true if an event was dispatched
 
-  void send_event(i4_event_handler_class *send_to, i4_event *ev);
+	void send_event(i4_event_handler_class *send_to, i4_event *ev);
 
-  void send(i4_event_reaction_class *r);  // r includes event and who to send to
+	void send(i4_event_reaction_class *r); // r includes event and who to send to
 
-  // call this if you want to deque any pending events for yourself
-  // this is called automatically by event_handler's desturctor ref_count!=0
-  void deque_events(i4_event_handler_class *for_who);
+	// call this if you want to deque any pending events for yourself
+	// this is called automatically by event_handler's desturctor ref_count!=0
+	void deque_events(i4_event_handler_class *for_who);
 
-  // this used used mainly by the 3ds tool because the process_events()
-  // never gets a chance to be called
-  i4_bool flush_events();
+	// this used used mainly by the 3ds tool because the process_events()
+	// never gets a chance to be called
+	i4_bool flush_events();
 
 
-  // call this when you want the kernel to think the use is not idle even though no user
-  // events are coming in (so it won't send out IDLE events for idle_time)
-  void not_idle(); 
+	// call this when you want the kernel to think the use is not idle even though no user
+	// events are coming in (so it won't send out IDLE events for idle_time)
+	void not_idle();
 
-  // this will add you to a list to receive events of this type
-  virtual void request_events(i4_event_handler_class *for_who, w32 event_types);  
+	// this will add you to a list to receive events of this type
+	virtual void request_events(i4_event_handler_class *for_who, w32 event_types);
 
-  // you will no longer receive events you requested previously
-  virtual void unrequest_events(i4_event_handler_class *for_who, w32 event_types);
+	// you will no longer receive events you requested previously
+	virtual void unrequest_events(i4_event_handler_class *for_who, w32 event_types);
 
-  void add_device(i4_device_class *device);       // returns 16 bits device id
-  void remove_device(i4_device_class *device);
-  i4_kernel_device_class();
+	void add_device(i4_device_class *device);     // returns 16 bits device id
+	void remove_device(i4_device_class *device);
+	i4_kernel_device_class();
 
-  void broadcast_event_type(i4_event *ev, w32 event_type);
-  void delete_handler(i4_event_handler_class *handler);
-  private:
-  void flush_handlers();
+	void broadcast_event_type(i4_event *ev, w32 event_type);
+	void delete_handler(i4_event_handler_class *handler);
+private:
+	void flush_handlers();
 } ;
 
 extern i4_kernel_device_class i4_kernel;

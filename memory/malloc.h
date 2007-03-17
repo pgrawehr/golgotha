@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef __I4_MALLOC_HPP_
 #define __I4_MALLOC_HPP_
@@ -46,14 +46,14 @@ void i4_set_min_memory_required(int bytes);
 void i4_free(void *ptr);
 
 inline void *i4_malloc(w32 size)
-    {
-    return i4_malloc(size,0,0);
-    }
+{
+	return i4_malloc(size,0,0);
+}
 
 inline void *i4_realloc(void *ptr,w32 size)
-    {
-    return i4_realloc(ptr,size,0,0);
-    }
+{
+	return i4_realloc(ptr,size,0,0);
+}
 
 void i4_mem_report(char *filename);
 long i4_allocated();

@@ -1,5 +1,5 @@
-//this file is for the programmer's convenience. 
-//It includes all lisp headers at once. 
+//this file is for the programmer's convenience.
+//It includes all lisp headers at once.
 
 #ifndef LISP_LI_ALL_H
 #define LISP_LI_ALL_H

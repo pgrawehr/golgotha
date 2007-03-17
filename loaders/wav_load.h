@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef WAV_LOAD_HH
 #define WAV_LOAD_HH
@@ -17,10 +17,10 @@ class i4_file_class;
 class i4_sound_info
 {
 public:
-  w32 size;          // size of sound data in bytes
-  w32 sample_rate;   // anything i.e. 22000
-  w32 channels;      // 1 or 2
-  w32 sample_size;   // 1 or 2 
+	w32 size;        // size of sound data in bytes
+	w32 sample_rate; // anything i.e. 22000
+	w32 channels;    // 1 or 2
+	w32 sample_size; // 1 or 2
 };
 
 

@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 /*
  *   getlopt.h
@@ -16,16 +16,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern int loptind;	/* index in argv[] */
-extern int loptchr;	/* index in argv[loptind] */
-extern char *loptarg;	/* points to argument if present, else to option */
+extern int loptind; /* index in argv[] */
+extern int loptchr; /* index in argv[loptind] */
+extern char *loptarg;   /* points to argument if present, else to option */
 
 typedef struct {
-	char sname;	/* short option name, can be 0 */
-	char *lname;	/* long option name, can be 0 */
-	int flags;	/* see below */
-	void (*func)(char *);	/* called if != 0 (after setting of var) */
-	void *var;	/* type is *int, *char or **char, see below */
+	char sname; /* short option name, can be 0 */
+	char *lname;    /* long option name, can be 0 */
+	int flags;  /* see below */
+	void (*func)(char *);   /* called if != 0 (after setting of var) */
+	void *var;  /* type is *int, *char or **char, see below */
 	int value;
 } topt;
 
@@ -55,12 +55,12 @@ typedef struct {
  *	 containing only zeroes.
  */
 
-#define GLO_END		0
-#define GLO_UNKNOWN	-1
-#define GLO_NOARG	-2
-#define GLO_CONTINUE	-3
+#define GLO_END     0
+#define GLO_UNKNOWN -1
+#define GLO_NOARG   -2
+#define GLO_CONTINUE    -3
 
-int getlopt (int argc, char *argv[], topt *opts);
+int getlopt(int argc, char *argv[], topt *opts);
 
 /* return values:
  *	GLO_END		(0)	end of options

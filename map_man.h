@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef G1_MAP_MAN_HH
 #define G1_MAP_MAN_HH
@@ -30,25 +30,30 @@ extern g1_map_class *g1_current_map_PRIVATE;
 void g1_set_map(g1_map_class *map);
 
 /*! Returns true if a map is loaded
-	Many commands will fail if this returns i4_F, so be sure to always check this first.
-	\return i4_T if map loaded, i4_F otherwise
-*/
+   	Many commands will fail if this returns i4_F, so be sure to always check this first.
+ \return i4_T if map loaded, i4_F otherwise
+ */
 inline i4_bool g1_map_is_loaded()
 {
-  if (g1_current_map_PRIVATE)
-    return i4_T;
-  else return i4_F;
+	if (g1_current_map_PRIVATE)
+	{
+		return i4_T;
+	}
+	else
+	{
+		return i4_F;
+	}
 }
-/*! This function returns the current map 
-	\return g1_current_map_PRIVATE (the current map)
-*/
+/*! This function returns the current map
+ \return g1_current_map_PRIVATE (the current map)
+ */
 inline g1_map_class *g1_get_map()
 {
 //#ifdef _DEBUG
 //  if (!g1_current_map_PRIVATE)
 //    i4_error("map missing");
 //#endif
-  return g1_current_map_PRIVATE;
+	return g1_current_map_PRIVATE;
 }
 
 void g1_destroy_map();

@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef MAPPERS_HH
 #define MAPPERS_HH
@@ -32,7 +32,7 @@ struct s_vert;
 struct tri_edge;
 
 //span sorting function types
-typedef i4_bool build_triangle_span_lists_func();
+typedef i4_bool build_triangle_span_lists_func ();
 typedef i4_bool (*build_triangle_span_lists_func_ptr)();
 
 build_triangle_span_lists_func intel_build_triangle_span_lists;
@@ -147,4 +147,3 @@ span_draw_func span_draw_perspective_lit_amd3d;
 #endif
 
 #endif
-

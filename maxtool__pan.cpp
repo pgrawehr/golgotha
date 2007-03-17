@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 //#include "max.h"
 
 #include "pch.h"
@@ -14,25 +14,26 @@
 #include "maxtool/render2.h"
 #include "math/pi.h"
 
-class m1_pan_state_class : public m1_utility_state_class
+class m1_pan_state_class :
+	public m1_utility_state_class
 {
 public:
-  virtual i4_bool mouse_drag()
-  {
-    i4_float p_x = i4_float(last_x() - mouse_x())/width();
-    i4_float p_y = i4_float(last_y() - mouse_y())/height();
-    
-    m1_render_window->pan(p_x,p_y);
-    m1_render_window->recalc_view();
+	virtual i4_bool mouse_drag()
+	{
+		i4_float p_x = i4_float(last_x() - mouse_x())/width();
+		i4_float p_y = i4_float(last_y() - mouse_y())/height();
 
-    return i4_T;
-  }
+		m1_render_window->pan(p_x,p_y);
+		m1_render_window->recalc_view();
 
-  virtual i4_bool mouse_up()
-  {
-    m1_render_window->restore_state();
-    return i4_T;
-  }
+		return i4_T;
+	}
+
+	virtual i4_bool mouse_up()
+	{
+		m1_render_window->restore_state();
+		return i4_T;
+	}
 };
 
 static m1_pan_state_class pan;
@@ -40,8 +41,8 @@ static m1_pan_state_class pan;
 li_object *m1_pan(li_object *o, li_environment *env)
 //{{{
 {
-  m1_render_window->set_state(&pan);
-  return 0;
+	m1_render_window->set_state(&pan);
+	return 0;
 }
 //}}}
 

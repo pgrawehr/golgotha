@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef MAP_VIEW_HH
 #define MAP_VIEW_HH
@@ -16,17 +16,17 @@ class i4_parent_window_class;
 
 enum
 {
-  G1_RADAR_CLICK_HOLDS_VIEW      =1,
-  G1_RADAR_DRAW_ALL_PATHS        =2,
-  G1_RADAR_DRAW_UNHIDDEN_PATHS   =4,
-  G1_RADAR_USE_DIRTIES           =8,
-  G1_RADAR_CLICK_SELECTS_PATH    =16,
-  G1_RADAR_INTERLACED            =32,
-  G1_RADAR_USE_ICONS             =64,
-  G1_RADAR_SUPRESS_STATUS		 =128,
-  G1_RADAR_NO_MAP_EVENTS         =256, //< Don't modify any map parameters
-  G1_RADAR_EDIT_MODE             =1024, //< Causes the map to be drawn fully regardless of FOW settings
-  G1_RADAR_NO_UNITS              =2048,
+	G1_RADAR_CLICK_HOLDS_VIEW      =1,
+	G1_RADAR_DRAW_ALL_PATHS        =2,
+	G1_RADAR_DRAW_UNHIDDEN_PATHS   =4,
+	G1_RADAR_USE_DIRTIES           =8,
+	G1_RADAR_CLICK_SELECTS_PATH    =16,
+	G1_RADAR_INTERLACED            =32,
+	G1_RADAR_USE_ICONS             =64,
+	G1_RADAR_SUPRESS_STATUS        =128,
+	G1_RADAR_NO_MAP_EVENTS         =256, //< Don't modify any map parameters
+	G1_RADAR_EDIT_MODE             =1024, //< Causes the map to be drawn fully regardless of FOW settings
+	G1_RADAR_NO_UNITS              =2048,
 };
 
 i4_parent_window_class *g1_create_radar_view(int max_w, int max_h, int flags);
@@ -43,10 +43,8 @@ void g1_radar_recalculate_backgrounds();
 
 // callled when radar should redraw (probably once 1-per second)
 void g1_radar_update();
-                         
+
 
 void g1_unfog_radius(const i4_3d_vector &v, float r);
 
 #endif
-
-

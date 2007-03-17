@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef BULLET_HH
 #define BULLET_HH
@@ -19,55 +19,62 @@ class g1_map_piece_class;
 class g1_light_object_class;
 class g1_particle_emitter_class;
 
-class g1_bullet_class : public g1_object_class
+class g1_bullet_class :
+	public g1_object_class
 {
-  enum { DATA_VERSION=7 };
-protected:  
-  void move_forward();
-  void done(i4_bool hit=i4_F,g1_object_class *hit_object=0);
+	enum {
+		DATA_VERSION=7
+	};
+protected:
+	void move_forward();
+	void done(i4_bool hit=i4_F,g1_object_class *hit_object=0);
 
-  r1_texture_handle tex;
+	r1_texture_handle tex;
 public:
-  g1_typed_reference_class<g1_object_class> who_fired_me;
-  g1_typed_reference_class<g1_light_object_class> light;
-  g1_typed_reference_class<g1_particle_emitter_class> particle_emitter;
+	g1_typed_reference_class<g1_object_class> who_fired_me;
+	g1_typed_reference_class<g1_light_object_class> light;
+	g1_typed_reference_class<g1_particle_emitter_class> particle_emitter;
 
-  enum { IS_SPRITE=2,
-         CREATES_ACID=4,
-         CREATES_NAPALM=8,
-         MAKE_SMOKE=16,
-         SPINS=32
-  };
-  
-  i4_float range,      // how much further we can travel
-    range_decrement;   // hom much range to subtract each tick
-  
-  i4_3d_vector vel;
+	enum {
+		IS_SPRITE=2,
+		CREATES_ACID=4,
+		CREATES_NAPALM=8,
+		MAKE_SMOKE=16,
+		SPINS=32
+	};
 
-  virtual i4_float occupancy_radius() const { return 0.1f; }
+	i4_float range,    // how much further we can travel
+			 range_decrement; // hom much range to subtract each tick
 
-  virtual i4_bool move();
+	i4_3d_vector vel;
 
-  g1_bullet_class(g1_object_type id, g1_loader_class *fp);
+	virtual i4_float occupancy_radius() const
+	{
+		return 0.1f;
+	}
 
-  virtual void save(g1_saver_class *fp);
-  void load(g1_loader_class *fp);
-  void skipload(g1_loader_class *fp);
+	virtual i4_bool move();
 
-  
-  w32 bullet_flags;
+	g1_bullet_class(g1_object_type id, g1_loader_class *fp);
 
-  virtual void setup(const i4_3d_vector &start_pos,
-                     const i4_3d_vector &vel,
-                     g1_object_class *this_guy_fired_me,
-                     i4_float range,
-                     w32 flags=0,
-                     r1_texture_handle sprite_texture=0,
-                     g1_light_object_class *light=0);
+	virtual void save(g1_saver_class *fp);
+	void load(g1_loader_class *fp);
+	void skipload(g1_loader_class *fp);
 
-  virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
 
-  virtual void think();
+	w32 bullet_flags;
+
+	virtual void setup(const i4_3d_vector &start_pos,
+					   const i4_3d_vector &vel,
+					   g1_object_class *this_guy_fired_me,
+					   i4_float range,
+					   w32 flags=0,
+					   r1_texture_handle sprite_texture=0,
+					   g1_light_object_class *light=0);
+
+	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+
+	virtual void think();
 };
 
 #endif

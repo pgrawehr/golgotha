@@ -1,32 +1,32 @@
 
-/********************************************************************** 
+/**********************************************************************
 
-Golgotha Forever - A portable, free 3D strategy and FPS game.
-Copyright (C) 1999 Golgotha Forever Developers
+   Golgotha Forever - A portable, free 3D strategy and FPS game.
+   Copyright (C) 1999 Golgotha Forever Developers
 
-Sources contained in this distribution were derived from
-Crack Dot Com's public release of Golgotha which can be
-found here:  http://www.crack.com
+   Sources contained in this distribution were derived from
+   Crack Dot Com's public release of Golgotha which can be
+   found here:  http://www.crack.com
 
-All changes and new works are licensed under the GPL:
+   All changes and new works are licensed under the GPL:
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-For the full license, see COPYING.
+   For the full license, see COPYING.
 
-***********************************************************************/
+ ***********************************************************************/
 
 #include "pch.h"
 #include "team_api.h"
@@ -42,7 +42,7 @@ For the full license, see COPYING.
 #include "player.h"
 
 
-char *unit_name_joe[] = 
+char *unit_name_joe[] =
 {
 	"stank",                      //0
 	"peon_tank",                  //1
@@ -53,24 +53,26 @@ char *unit_name_joe[] =
 	"engineer",                   //6
 	"trike"                       //7
 };
-const int num_unit_types=sizeof(unit_name_joe)/sizeof(char*);
+const int num_unit_types=sizeof(unit_name_joe)/sizeof(char *);
 w16 unit_type_joe[num_unit_types];
 
-char *goodies_name[] = 
+char *goodies_name[] =
 {
 	"takeover_pad",               //1
-	"floorpad"					  //2
+	"floorpad"                     //2
 	"mainbasepad"
 };
-const int num_goodies_types=sizeof(goodies_name)/sizeof(char*);
+const int num_goodies_types=sizeof(goodies_name)/sizeof(char *);
 w16 goodies_type[num_goodies_types];
 
 static i4_bool goodies_filter(g1_object_class *who)
 {
-	for (int i=0;i<num_goodies_types;i++)
+	for (int i=0; i<num_goodies_types; i++)
 	{
 		if (goodies_type[i]==who->id)
+		{
 			return i4_T;
+		}
 	}
 	return i4_F;
 }
@@ -79,125 +81,136 @@ static i4_bool goodies_filter(g1_object_class *who)
 char *formation_joe[] =
 {
 	"      "
-		"      "
-		"121212"
-		"      "
-		"1 63 1"
-		"  33  ", // stock
+	"      "
+	"121212"
+	"      "
+	"1 63 1"
+	"  33  ",    // stock
 
-		"222222"
-		"      "
-		"      "
-		"      "
-		"      "
-		"      ", // electric brigade
+	"222222"
+	"      "
+	"      "
+	"      "
+	"      "
+	"      ",    // electric brigade
 
-		"  11  "
-		" 1221 "
-		"123321"
-		"      "
-		"      "
-		"      ", // hole puncher
+	"  11  "
+	" 1221 "
+	"123321"
+	"      "
+	"      "
+	"      ",    // hole puncher
 
-		"12221 "
-		"23632 "
-		"      "
-		"      "
-		"      "
-		"      ", // armored convoy
+	"12221 "
+	"23632 "
+	"      "
+	"      "
+	"      "
+	"      ",    // armored convoy
 
-		"      "
-		"      "
-		"1 1 1 "
-		" 1 1 1"
-		"7 7 7 "
-		" 7 7 7", // gene's checker
+	"      "
+	"      "
+	"1 1 1 "
+	" 1 1 1"
+	"7 7 7 "
+	" 7 7 7",    // gene's checker
 
-		"  1   "
-		" 161  "
-		"1   1 "
-		"      "
-		"      "
-		"      ", // peon V
+	"  1   "
+	" 161  "
+	"1   1 "
+	"      "
+	"      "
+	"      ",    // peon V
 
-		"  4   "
-		" 4 4  "
-		"      "
-		"      "
-		"      "
-		"      ", // heli hell
+	"  4   "
+	" 4 4  "
+	"      "
+	"      "
+	"      "
+	"      ",    // heli hell
 
-		"111111"
-		" 3663 "
-		" 3333 "
-		"      "
-		"      "
-		"      ", // rockets R us
+	"111111"
+	" 3663 "
+	" 3333 "
+	"      "
+	"      "
+	"      ",    // rockets R us
 
-		"22    "
-		"66    "
-		"      "
-		"      "
-		"      "
-		"      ", // small band
+	"22    "
+	"66    "
+	"      "
+	"      "
+	"      "
+	"      ",    // small band
 
-		"22    "
-		"36    "
-		"      "
-		"      "
-		"      "
-		"      ", // yet another small band
+	"22    "
+	"36    "
+	"      "
+	"      "
+	"      "
+	"      ",    // yet another small band
 
-		"33    "
-		"66    "
-		"      "
-		"      "
-		"      "
-		"      ", // yet another small band
+	"33    "
+	"66    "
+	"      "
+	"      "
+	"      "
+	"      ",    // yet another small band
 
-		"6     "
-		"      "
-		"      "
-		"      "
-		"      "
-		"      ", // long shot
+	"6     "
+	"      "
+	"      "
+	"      "
+	"      "
+	"      ",    // long shot
 
-		"2222  "
-		"3333  "
-		"      "
-		"      "
-		"      "
-		"      ", // ouch!
+	"2222  "
+	"3333  "
+	"      "
+	"      "
+	"      "
+	"      ",    // ouch!
 };
 
-const int num_formations=sizeof(formation_joe)/sizeof(char*);
+const int num_formations=sizeof(formation_joe)/sizeof(char *);
 
-static const float xoffs[6]={-1.5f,-1.0f,-0.5f,0.5f,1.0f,1.5f}; //not really good...
-static const float yoffs[6]={-1.5f,-1.0f,-0.5f,0.5f,1.0f,1.5f};
+static const float xoffs[6]={
+	-1.5f,-1.0f,-0.5f,0.5f,1.0f,1.5f
+};                                                              //not really good...
+static const float yoffs[6]={
+	-1.5f,-1.0f,-0.5f,0.5f,1.0f,1.5f
+};
 enum eDir
 {
 	N, E, S, W
 };
 
-sw16 dirx[] = {-1, 1 , -1, 1};
-sw16 diry[] = {-1, -1,  1, 1};
+sw16 dirx[] = {
+	-1, 1, -1, 1
+};
+sw16 diry[] = {
+	-1, -1,  1, 1
+};
 
 
 typedef struct _temp_id_struct
 {
 	w32 id;
-}id_struct;
+} id_struct;
 
 i4_profile_class pf_ai_joe_setup_new_pieces("ai_joe_setup_new_pieces");
 i4_profile_class pf_ai_joe_guide_hero("ai_joe_guide_hero");
 i4_profile_class pf_ai_joe_think("ai_joe_think");
 
 
-class ai_joe : public g1_team_api_class
+class ai_joe :
+	public g1_team_api_class
 {
 public:
-	enum eBuildMode 
-	{ INIT, INITWAIT, IDLE, BUILDWAIT, BUILD, WAITFORPIECE, FORMANDMOVE, RESURRECT, COLLECT_GOALS };
+	enum eBuildMode
+	{
+		INIT, INITWAIT, IDLE, BUILDWAIT, BUILD, WAITFORPIECE, FORMANDMOVE, RESURRECT, COLLECT_GOALS
+	};
 
 
 	float bdiffx,bdiffy;
@@ -207,9 +220,9 @@ public:
 	//i4_array<unit_class> troop;
 	//Directly using typed references inside i4_arrays doesn't work for
 	//two reasons: First, the constructors and destructors are not correctly
-	//called, second, the objects could be moved around in memory. 
-	//Smart pointers cannot work then. 
-	i4_array<g1_typed_reference_class<g1_convoy_class> * > convoys;
+	//called, second, the objects could be moved around in memory.
+	//Smart pointers cannot work then.
+	i4_array<g1_typed_reference_class<g1_convoy_class> *> convoys;
 	i4_array<sw32> time;
 
 	g1_typed_reference_class<g1_convoy_class> building;
@@ -226,8 +239,10 @@ public:
 
 	//int reload;  // supertank is going to reload ammo
 
-	ai_joe(g1_loader_class *f=0) 
-		: convoys(40,40), time(40,40), goals(40,40)
+	ai_joe(g1_loader_class *f=0)
+		: convoys(40,40),
+		  time(40,40),
+		  goals(40,40)
 	{
 		build_mode = INIT;
 		formation_size=1;
@@ -240,12 +255,12 @@ public:
 
 	void clear_unitlists()
 	{
-		for (int i=0;i<convoys.size();i++)
+		for (int i=0; i<convoys.size(); i++)
 		{
-			delete convoys[i];//this deletes the reference classes;
+			delete convoys[i]; //this deletes the reference classes;
 		}
 		convoys.clear();
-		for (int j=0;j<goals.size();j++)
+		for (int j=0; j<goals.size(); j++)
 		{
 			delete goals[j];
 		}
@@ -270,26 +285,34 @@ public:
 		//    prody = _prody;
 
 		int
-			dx = int(_prodx - map_width()/2),
-			dy = int(_prody - map_height()/2);
+		dx = int (_prodx - map_width()/2),
+		dy = int (_prody - map_height()/2);
 
 		int num=0;
 
-		num |= (dx<0)  ?0:8;
-		num |= (dy<0)  ?0:4;
-		num |= (dx<dy) ?0:2;
-		num |= (dx<-dy)?0:1;
+		num |= (dx<0)  ? 0 : 8;
+		num |= (dy<0)  ? 0 : 4;
+		num |= (dx<dy) ? 0 : 2;
+		num |= (dx<-dy) ? 0 : 1;
 
 		switch (num)
 		{
-		case  5:  //N quadrant
-		case 13:  dir1 = S;  break;
-		case 15:  //E quadrant
-		case 11:  dir1 = W;  break;
-		case 10:  //S quadrant
-		case  2:  dir1 = N;  break;
-		case  0:  //W quadrant
-		case  4:  dir1 = E;  break;
+			case  5: //N quadrant
+			case 13:
+				dir1 = S;
+				break;
+			case 15: //E quadrant
+			case 11:
+				dir1 = W;
+				break;
+			case 10: //S quadrant
+			case  2:
+				dir1 = N;
+				break;
+			case  0: //W quadrant
+			case  4:
+				dir1 = E;
+				break;
 		}
 		dir2 = (dir1+1)%4;
 
@@ -304,9 +327,13 @@ public:
 		clear_unitlists();
 
 		for (i=0; i<num_unit_types; i++)
+		{
 			unit_type_joe[i] = object_type(unit_name_joe[i]);
+		}
 		for (i=0; i<num_goodies_types; i++)
+		{
 			goodies_type[i] = object_type(goodies_name[i]);
+		}
 		goal_type = object_type("goal");
 		convoy_type=object_type("convoy");
 
@@ -332,6 +359,7 @@ public:
 		while ((place<6*6) && (formation_joe[form][place]==' '))
 			place++;
 
+
 		if (place==6*6)
 		{
 			form=-1;
@@ -354,7 +382,7 @@ public:
 		int i;
 		for (i=0; i<time.size(); i++)
 		{
-			if (!convoys[i]->valid())//an entire convoy was killed
+			if (!convoys[i]->valid()) //an entire convoy was killed
 			{
 				delete convoys[i];
 				convoys.remove(i);
@@ -367,8 +395,10 @@ public:
 		for (i=0; i<time.size(); i++)
 		{
 			if (time[i]>0)
+			{
 				time[i]--;
-			else 
+			}
+			else
 			{
 				if (goals.size()>0)
 				{
@@ -379,13 +409,13 @@ public:
 					//PG: This should be a bit more random
 					tx = goals[i%goals.size()]->get()->x;
 					ty = goals[i%goals.size()]->get()->y;
-					if (deploy_unit(convoys[i]->operator*().global_id, tx,ty))
+					if (deploy_unit(convoys[i]->operator *().global_id, tx,ty))
 					{
 						time[i]=g1_rand(9)%500+500;
 					}
 					else
 					{
-						time[i]=5;//retry later
+						time[i]=5; //retry later
 					}
 
 				}
@@ -393,11 +423,11 @@ public:
 				{
 					tx = g1_rand(90)%(map_width()-10) + 5.5f;
 					ty = g1_rand(100)%(map_height()-10) + 5.5f;
-					if (deploy_unit(convoys[i]->operator*().global_id, tx,ty))
+					if (deploy_unit(convoys[i]->operator *().global_id, tx,ty))
 					{
 						time[i]=g1_rand(5)%500+500;
 					}
-					else 
+					else
 					{
 						time[i]=15;
 					}
@@ -425,17 +455,17 @@ public:
 			{
 				newconv=new g1_typed_reference_class<g1_convoy_class>(building.get());
 				convoys.add(newconv);
-				time.add(100);//immediatelly suggest a new way for this convoy.
+				time.add(100); //immediatelly suggest a new way for this convoy.
 				building=0;
-			};
+			}
 			where=toobj;
 		}
 		g1_convoy_class *myconv=0;
 		if (!building.valid())
 		{
-			myconv=(g1_convoy_class*)g1_create_object(convoy_type);
+			myconv=(g1_convoy_class *)g1_create_object(convoy_type);
 			myconv->setup(which);
-			myconv->change_player_num(team());//otherwise, deploy will 
+			myconv->change_player_num(team()); //otherwise, deploy will
 			//refuse to do its job.
 			building=myconv;
 		}
@@ -450,8 +480,8 @@ public:
 		point[2]=which->x;
 		point[3]=which->y;
 		g1_path_handle phn=g1_path_manager.alloc_path(2,point);
-		//we assume the path is straigt. 
-		which->deploy_to(bdiffx+toobj->x,bdiffy+toobj->y,phn);//it's a single unit
+		//we assume the path is straigt.
+		which->deploy_to(bdiffx+toobj->x,bdiffy+toobj->y,phn); //it's a single unit
 		if (!next_spot())
 		{
 			newconv=new g1_typed_reference_class<g1_convoy_class>(building.get());
@@ -462,20 +492,20 @@ public:
 			chooseform();
 		}
 	}
-	
+
 	void chooseform()
 	{
 		if (form<0)
 		{
 			// determine next formation
 			form = g1_rand(99)%num_formations;
-			place = -1;//will be increased just again
+			place = -1; //will be increased just again
 			next_spot();
 			build_count = 0;
 		}
 	}
 	virtual void think()
-		//{{{
+	//{{{
 	{
 		pf_ai_joe_think.start();
 		w16 unit_to_build;
@@ -488,96 +518,106 @@ public:
 
 		switch (build_mode)
 		{
-		case INIT:
-			{
-
-				build_mode = INITWAIT;
-				build_wait = 50;
-			} break;
-		case INITWAIT:
-			if (--build_wait<=0)
-				build_mode = IDLE;
-			break;
-		case IDLE:
-			{
-				build_mode = BUILD;
-			} break;
-		case BUILDWAIT:
-			if (--build_wait<=0)
-				build_mode = BUILD;
-			break;
-		case BUILD:
-			unit_to_build=unit_type_joe[formation_joe[form][place]-'0'];
-			if (build_unit(unit_to_build)==G1_BUILD_OK)
-			{
-				build_count++;
-
-				build_mode=BUILDWAIT;
-				build_wait=15;
-			}
-			else
-			{
-				build_mode = BUILDWAIT;
-				build_wait = 20;
-			}
-			if (formation_joe[form][place]==' ')
-			{
-				next_spot();
-			}
-
-			break;
-		case COLLECT_GOALS:
-			{
-				int numgoals;
-				g1_object_class **buf;
-				numgoals=g1_get_map()->make_object_list(buf,goodies_filter);
-				int n;
-				for (n=0;n<goals.size();n++)
-					delete goals[n];
-				goals.clear();
-				for (n=0;n<numgoals;n++)
+			case INIT:
 				{
-					//Do not add goals we already own. 
-					if (buf[n]->player_num!=team())
-						goals.add(new g1_typed_reference_class<g1_object_class>(buf[n]));
-				}
-				build_mode=BUILDWAIT;
-				build_wait=10;
-			}
-			break;
-		case WAITFORPIECE:
-			// wait for object_build or build_error to complete
-			break;
-		case FORMANDMOVE:     
-			build_mode=INITWAIT;
-			build_wait=g1_rand(103)%500+100;
-			break; 
 
-		case RESURRECT:
-			//guide_hero() assures that there exist always a commander
-			build_unit(unit_type_joe[0]);
-			//g1_player_man.get(team())->continue_wait=i4_F;
-			build_wait=20;
-			build_mode=INITWAIT;
-			break;
+					build_mode = INITWAIT;
+					build_wait = 50;
+				} break;
+			case INITWAIT:
+				if (--build_wait<=0)
+				{
+					build_mode = IDLE;
+				}
+				break;
+			case IDLE:
+				{
+					build_mode = BUILD;
+				} break;
+			case BUILDWAIT:
+				if (--build_wait<=0)
+				{
+					build_mode = BUILD;
+				}
+				break;
+			case BUILD:
+				unit_to_build=unit_type_joe[formation_joe[form][place]-'0'];
+				if (build_unit(unit_to_build)==G1_BUILD_OK)
+				{
+					build_count++;
+
+					build_mode=BUILDWAIT;
+					build_wait=15;
+				}
+				else
+				{
+					build_mode = BUILDWAIT;
+					build_wait = 20;
+				}
+				if (formation_joe[form][place]==' ')
+				{
+					next_spot();
+				}
+
+				break;
+			case COLLECT_GOALS:
+				{
+					int numgoals;
+					g1_object_class **buf;
+					numgoals=g1_get_map()->make_object_list(buf,goodies_filter);
+					int n;
+					for (n=0; n<goals.size(); n++)
+					{
+						delete goals[n];
+					}
+					goals.clear();
+					for (n=0; n<numgoals; n++)
+					{
+						//Do not add goals we already own.
+						if (buf[n]->player_num!=team())
+						{
+							goals.add(new g1_typed_reference_class<g1_object_class>(buf[n]));
+						}
+					}
+					build_mode=BUILDWAIT;
+					build_wait=10;
+				}
+				break;
+			case WAITFORPIECE:
+				// wait for object_build or build_error to complete
+				break;
+			case FORMANDMOVE:
+				build_mode=INITWAIT;
+				build_wait=g1_rand(103)%500+100;
+				break;
+
+			case RESURRECT:
+				//guide_hero() assures that there exist always a commander
+				build_unit(unit_type_joe[0]);
+				//g1_player_man.get(team())->continue_wait=i4_F;
+				build_wait=20;
+				build_mode=INITWAIT;
+				break;
 		}
 
 		pf_ai_joe_think.stop();
 	}
 
-	enum {JOE_DATA_VERSION=5};
+	enum {
+		JOE_DATA_VERSION=5
+	};
 	void save(g1_saver_class *fp)
 	{
 		fp->start_version(JOE_DATA_VERSION);
 		fp->write_reference(building);
 		fp->write_32(convoys.size());
-		for (int i=0;i<convoys.size();i++)
+		for (int i=0; i<convoys.size(); i++)
 		{
 			fp->write_reference(*convoys[i]);
 			fp->write_32(time[i]);
 		}
 		fp->write_format("ff11444444",&bdiffx,&bdiffy,&dir1,&dir2,
-			&form,&place,&formation_size,&build_count,&build_wait,&retry);
+						 &form,&place,&formation_size,&build_count,&build_wait,&retry);
 
 		fp->end_version();
 	}
@@ -592,7 +632,7 @@ public:
 		{
 			fp->read_reference(building);
 			int k=fp->read_32();
-			for (int i=0;i<k;i++)
+			for (int i=0; i<k; i++)
 			{
 				aref=new g1_typed_reference_class<g1_convoy_class>();
 				fp->read_reference(*aref);
@@ -600,7 +640,7 @@ public:
 				time.add(fp->read_32());
 			}
 			fp->read_format("ff11444444",&bdiffx,&bdiffy,&dir1,&dir2,
-				&form,&place,&formation_size,&build_count,&build_wait,&retry);
+							&form,&place,&formation_size,&build_count,&build_wait,&retry);
 
 		}
 		else
@@ -616,5 +656,3 @@ g1_team_api_definer<ai_joe> ai_joe_def("ai_joe");
 
 
 // AI joe is now chosen as the default through (g1_set_deault_ai "joe") in scheme/start.scm
-
-

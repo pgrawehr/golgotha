@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef LI_LOAD_HH
 #define LI_LOAD_HH
@@ -41,11 +41,11 @@ li_type_number  li_load_type(i4_file_class *fp, li_type_number *type_remap);
 
 // loads an object from disk.  If the type is not the type requested, it is discarded
 // and li_new is called to create a new instance of this type
-li_object *li_load_typed_object(char *type_name, i4_loader_class *fp, 
-                                li_type_number *type_remap,
-                                li_environment *env);
+li_object *li_load_typed_object(char *type_name, i4_loader_class *fp,
+								li_type_number *type_remap,
+								li_environment *env);
 
 li_object *li_load_typed_object(int type, i4_loader_class *fp, li_type_number *type_remap,
-                                li_environment *env);
+								li_environment *env);
 
 #endif

@@ -12,29 +12,44 @@
 #include "memory/array.h"
 #include "debug.h"
 
-UtilExport CStr::CStr(){}; 
+UtilExport CStr::CStr()
+{
+};
 
-		UtilExport CStr::CStr(const char *cs){};
+UtilExport CStr::CStr(const char *cs)
+{
+};
 
-		UtilExport CStr::CStr(const wchar_t *wcstr){};
+UtilExport CStr::CStr(const wchar_t *wcstr)
+{
+};
 
-		UtilExport CStr::CStr(const CStr& ws){};
+UtilExport CStr::CStr(const CStr& ws)
+{
+};
 
-		UtilExport CStr::~CStr(){}; 
+UtilExport CStr::~CStr()
+{
+};
 
-		UtilExport char CStr::*data(){return 0;};
+UtilExport char CStr::*data()
+{
+	return 0;
+};
 
-		UtilExport CStr::operator char *(){};
-
-
-
-		// realloc to nchars (padding with blanks)
-
-		UtilExport void CStr::Resize(int nchars){};
-
+UtilExport CStr::operator char*(){};
 
 
-		UtilExport int CStr::Length(){return 0;};
 
-		
+// realloc to nchars (padding with blanks)
 
+UtilExport void CStr::Resize(int nchars)
+{
+};
+
+
+
+UtilExport int CStr::Length()
+{
+	return 0;
+};

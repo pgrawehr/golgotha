@@ -1,4 +1,4 @@
-//This file contains dummy code to create a core.lib file 
+//This file contains dummy code to create a core.lib file
 #define BLD_CORE
 #include <windows.h>
 #include "crkutil.h"
@@ -15,22 +15,39 @@
 
 
 void CoreExport InitCustomControls( HINSTANCE hInst )
-	{
-	}
+{
+}
 
 
-CoreExport void DisableAccelerators(){};
+CoreExport void DisableAccelerators()
+{
+};
 
-CoreExport void EnableAccelerators(){};
+CoreExport void EnableAccelerators()
+{
+};
 
-CoreExport BOOL AcceleratorsEnabled(){return true;};
+CoreExport BOOL AcceleratorsEnabled()
+{
+	return true;
+};
 
-CoreExport void TempStore::PutBytes(int n, void *data, void *ptr){};
+CoreExport void TempStore::PutBytes(int n, void *data, void *ptr)
+{
+};
 
-CoreExport void TempStore::GetBytes(int n, void *data, void *ptr){};
+CoreExport void TempStore::GetBytes(int n, void *data, void *ptr)
+{
+};
 
 CoreExport Class_ID triObjectClassID;
 
-CoreExport void *CreateInstance(unsigned long i, Class_ID c){return 0;};
+CoreExport void *CreateInstance(unsigned long i, Class_ID c)
+{
+	return 0;
+};
 
-CoreExport TriObject *CreateNewTriObject(void){return 0;};
+CoreExport TriObject *CreateNewTriObject(void)
+{
+	return 0;
+};

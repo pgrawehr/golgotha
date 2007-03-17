@@ -1,5 +1,5 @@
 //This file is the main source for precompiled headers
-//This has no great advantage in compilling speed 
+//This has no great advantage in compilling speed
 //versus the need to recompile everything when one of
 //the include files changes.
 #ifndef __PCH_H
@@ -130,7 +130,7 @@
 #endif
 
 #ifdef HAVE_NETINET_IP_H
-//This header doesn't compile on some os's. 
+//This header doesn't compile on some os's.
 //#include <netinet/ip.h>
 #endif
 
@@ -142,7 +142,7 @@
 #define I4_WORDALIGN
 #endif
 
-#ifdef HAVE_PTHREAD_MUTEX_RECURSIVE 
+#ifdef HAVE_PTHREAD_MUTEX_RECURSIVE
 #define I4_MUTEX_RECURSIVE PTHREAD_MUTEX_RECURSIVE
 #endif
 #ifdef HAVE_PTHREAD_MUTEX_RECURSIVE_NP
@@ -150,7 +150,7 @@
 #define I4_MUTEX_RECURSIVE PTHREAD_MUTEX_RECURSIVE_NP
 #endif
 #ifndef I4_MUTEX_RECURSIVE
-#error Initializer for recursive mutexes not found. 
+#error Initializer for recursive mutexes not found.
 #endif
 
 #ifdef NEED_PTHREAD_MUTEXATTR_SETKIND_NP_DEF
@@ -163,7 +163,7 @@ extern "C" int pthread_mutexattr_settype(void *attr, int __kind);
 #ifdef HAVE_PTHREAD_MUTEXATTR_SETKIND_NP
 #define I4_MUTEX_SETTYPE(a,b) pthread_mutexattr_setkind_np((a),(b))
 #else
-#ifdef HAVE_PTHREAD_MUTEXATTR_SETTYPE 
+#ifdef HAVE_PTHREAD_MUTEXATTR_SETTYPE
 #define I4_MUTEX_SETTYPE(a,b) pthread_mutexattr_settype((a),(b))
 #else
 #error pthread_mutexattr_set...() not found on this system. Check your POSIX implementation
@@ -171,7 +171,7 @@ extern "C" int pthread_mutexattr_settype(void *attr, int __kind);
 #endif
 
 //One thing that probably needs to be done:
-//If the compiler is sgi MIPSPRO, #define __sgi 
+//If the compiler is sgi MIPSPRO, #define __sgi
 //That one is merely a compiler specific directive, not system specific.
 
 #endif
@@ -189,7 +189,3 @@ extern "C" int pthread_mutexattr_settype(void *attr, int __kind);
 
 
 #endif
-
-
-
-

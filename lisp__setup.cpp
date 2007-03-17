@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #include "pch.h"
 #include <time.h>
@@ -43,7 +43,9 @@
 //static i4_list_box_class *display_picker, *size_picker;
 //static i4_text_scroll_window_class *error_win;
 static char inst_path[200];
-int inst_sizes[3]={20,40,60};
+int inst_sizes[3]={
+	20,40,60
+};
 
 char *reg_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
 char *i4_display_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
@@ -58,31 +60,39 @@ int size_needed_to_install=0;
 //i4_text_input_class *path=0;
 
 /*
-enum { 
-  BROWSE_OK,
-  BROWSE_CANCEL,
-  BROWSE,
-  SAVE_AND_QUIT,
-  SAVE_AND_RUN,
-  INSTALL,
-  QUIT,
-  COMPACT,
-  TYPICAL,
-  UNINSTALL,
-  DISPLAY_SELECT
-};
-*/
+   enum {
+   BROWSE_OK,
+   BROWSE_CANCEL,
+   BROWSE,
+   SAVE_AND_QUIT,
+   SAVE_AND_RUN,
+   INSTALL,
+   QUIT,
+   COMPACT,
+   TYPICAL,
+   UNINSTALL,
+   DISPLAY_SELECT
+   };
+ */
 
 
 void fix_path(char *f)
 {
-  for (;*f; f++)
+	for (; *f; f++)
 #ifndef _WINDOWS
-    if (*f=='\\')
-      *f='/';
+	{
+		if (*f=='\\')
+		{
+			*f='/';
+		}
+	}
 #else
-    if (*f=='/')
-      *f='\\';
+	{
+		if (*f=='/')
+		{
+			*f='\\';
+		}
+	}
 #endif
 
 }
@@ -94,36 +104,40 @@ void fix_path(char *f)
 
 void write_header(i4_file_class *fp, i4_sound_info &fmt)
 {
-  fp->write("RIFF",4);
-  fp->write_32(36+fmt.size);       // 36 + snd->size
-  fp->write("WAVE", 4);
-  fp->write("fmt ", 4);
+	fp->write("RIFF",4);
+	fp->write_32(36+fmt.size);     // 36 + snd->size
+	fp->write("WAVE", 4);
+	fp->write("fmt ", 4);
 
-  fp->write_32(16);        // size of chunk
+	fp->write_32(16);      // size of chunk
 
-  fp->write_16(1);         // data type
+	fp->write_16(1);       // data type
 
-  fp->write_16((w16)fmt.channels);           // num channels
-  fp->write_32(fmt.sample_rate);   // sample rate
-  fp->write_32(fmt.sample_rate*
-               fmt.sample_size*fmt.channels);       // snd->sample_rate * snd->sample_size
-  fp->write_16((w16)(fmt.sample_size * fmt.channels));
-  fp->write_16((w16)(fmt.sample_size*8));
+	fp->write_16((w16)fmt.channels);         // num channels
+	fp->write_32(fmt.sample_rate); // sample rate
+	fp->write_32(fmt.sample_rate*
+				 fmt.sample_size*fmt.channels);     // snd->sample_rate * snd->sample_size
+	fp->write_16((w16)(fmt.sample_size * fmt.channels));
+	fp->write_16((w16)(fmt.sample_size*8));
 
 
-  fp->write("data",4);
-  fp->write_32(fmt.size);       // snd->size
+	fp->write("data",4);
+	fp->write_32(fmt.size);     // snd->size
 }
 
 
 
 char *forward_slash(char *f)
 {
-  char *r=f;
-  for (;*f; f++)
-    if (*f=='\\')
-      *f='/';
-  return r;
+	char *r=f;
+	for (; *f; f++)
+	{
+		if (*f=='\\')
+		{
+			*f='/';
+		}
+	}
+	return r;
 }
 
 
@@ -131,193 +145,221 @@ char *forward_slash(char *f)
 
 li_object *li_uninstall_cmd(li_object *o, li_environment *env)
 {
-  if (uninstall_script)
-  {
-    li_object *c=li_eval(li_car(o,env),env);
-    li_get_type(c->type())->print(c, uninstall_script);
-    return li_true_sym;
-  }
-  return li_nil;
+	if (uninstall_script)
+	{
+		li_object *c=li_eval(li_car(o,env),env);
+		li_get_type(c->type())->print(c, uninstall_script);
+		return li_true_sym;
+	}
+	return li_nil;
 }
 
 
 li_object *li_delete(li_object *o, li_environment *env)
 {
-  char p[200];
-  strcpy(p,li_get_string(li_eval(li_car(o,env), env),env));
-  fix_path(p);
+	char p[200];
+	strcpy(p,li_get_string(li_eval(li_car(o,env), env),env));
+	fix_path(p);
 
 
-  if (i4_unlink(p))
-    return li_true_sym;
-  else return li_nil;
+	if (i4_unlink(p))
+	{
+		return li_true_sym;
+	}
+	else
+	{
+		return li_nil;
+	}
 }
 
 li_object *li_mkdir(li_object *o, li_environment *env)
 {
-  char *fn=li_get_string(li_eval(li_car(o,env),env),env);
-  char p[200];
-  sprintf(p, "%s/%s", inst_path, fn);
-  fix_path(p);
+	char *fn=li_get_string(li_eval(li_car(o,env),env),env);
+	char p[200];
+	sprintf(p, "%s/%s", inst_path, fn);
+	fix_path(p);
 
-  if (i4_mkdir(p))
-  {
-    if (uninstall_script)
-      uninstall_script->printf("(rmdir \"%s\")\n", forward_slash(p));
-    
-    return li_true_sym;
-  }
-  else
-    return 0;
+	if (i4_mkdir(p))
+	{
+		if (uninstall_script)
+		{
+			uninstall_script->printf("(rmdir \"%s\")\n", forward_slash(p));
+		}
+
+		return li_true_sym;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 
 li_object *li_rmdir(li_object *o, li_environment *env)
 {
-  char *fn=li_get_string(li_eval(li_car(o,env),env),env);
-  fix_path(fn);
+	char *fn=li_get_string(li_eval(li_car(o,env),env),env);
+	fix_path(fn);
 
-  i4_directory_struct ds;
+	i4_directory_struct ds;
 
-  if (i4_get_directory(fn, ds))
-  {
-    int i;
-    char f2[256], f[256];
-    for (i=0; i<ds.tfiles; i++)
-    {
-      i4_os_string(*ds.files[i], f, 256);
-      sprintf(f2, "%s/%s", fn, f);
-      fix_path(f2);
-      i4_unlink(f2);
-    }
+	if (i4_get_directory(fn, ds))
+	{
+		int i;
+		char f2[256], f[256];
+		for (i=0; i<ds.tfiles; i++)
+		{
+			i4_os_string(*ds.files[i], f, 256);
+			sprintf(f2, "%s/%s", fn, f);
+			fix_path(f2);
+			i4_unlink(f2);
+		}
 
 
-    for (i=0; i<ds.tdirs; i++)
-    {
-      i4_os_string(*ds.dirs[i], f, 256);
-      if (!(strcmp(f, ".")==0 ||  strcmp(f, "..")==0))
-      {
-        sprintf(f2, "%s/%s", fn, f);
-        fix_path(f2);
-        li_rmdir(li_make_list(new li_string(f2),0),0);
-      }
-    }
-  }
+		for (i=0; i<ds.tdirs; i++)
+		{
+			i4_os_string(*ds.dirs[i], f, 256);
+			if (!(strcmp(f, ".")==0 ||  strcmp(f, "..")==0))
+			{
+				sprintf(f2, "%s/%s", fn, f);
+				fix_path(f2);
+				li_rmdir(li_make_list(new li_string(f2),0),0);
+			}
+		}
+	}
 
-  if (i4_rmdir(fn))
-    return li_true_sym;
-  else
-    return 0;
+	if (i4_rmdir(fn))
+	{
+		return li_true_sym;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 
 void down_sample_wav(char *in_file, char *out_file, int rate)
 {
-  i4_sound_info s;
-  i4_file_class *in=i4_open(in_file);
-  if (!in) return;
-  i4_file_class *out=i4_open(out_file, I4_WRITE);
-  if (!out) { delete in; return ; }
+	i4_sound_info s;
+	i4_file_class *in=i4_open(in_file);
+	if (!in)
+	{
+		return;
+	}
+	i4_file_class *out=i4_open(out_file, I4_WRITE);
+	if (!out)
+	{
+		delete in;
+		return ;
+	}
 
 
-  if (i4_load_wav_info(in, s))
-  {   
-    w16 *inm=(w16 *)I4_MALLOC(s.size,"");
-    in->read(inm, s.size);
+	if (i4_load_wav_info(in, s))
+	{
+		w16 *inm=(w16 *)I4_MALLOC(s.size,"");
+		in->read(inm, s.size);
 
-    float x_end=s.size/2;
-    float x=0, x_step=s.sample_rate/(float)rate;
-    int out_size=(int)((double)s.size * (double)rate / (double)s.sample_rate), outc=0;
-    int out_samples=out_size/2;
+		float x_end=s.size/2;
+		float x=0, x_step=s.sample_rate/(float)rate;
+		int out_size=(int)((double)s.size * (double)rate / (double)s.sample_rate), outc=0;
+		int out_samples=out_size/2;
 
 
-    w16 *outm=(w16 *)I4_MALLOC(out_size,"");
+		w16 *outm=(w16 *)I4_MALLOC(out_size,"");
 
-    
-    while (outc<out_samples)
-    {
-      outm[outc]=inm[(int)x];
-      x+=x_step;
-      outc++;
-    }
-   
 
-    s.sample_rate=rate;
-    s.size=out_size;
-    write_header(out, s);
-    out->write(outm, out_size);
+		while (outc<out_samples)
+		{
+			outm[outc]=inm[(int)x];
+			x+=x_step;
+			outc++;
+		}
 
-    i4_free(outm);
-    i4_free(inm);
-  }
 
-  delete in;
-  delete out;
+		s.sample_rate=rate;
+		s.size=out_size;
+		write_header(out, s);
+		out->write(outm, out_size);
+
+		i4_free(outm);
+		i4_free(inm);
+	}
+
+	delete in;
+	delete out;
 }
 
 li_object *mp3_2_wav(li_object *o, li_environment *env)
 {
-  char *fn=li_get_string(li_eval(li_car(o,env),env),env);
-  i4_filename_struct split;
+	char *fn=li_get_string(li_eval(li_car(o,env),env),env);
+	i4_filename_struct split;
 
-  int resample_rate=-1;
-  if (li_cdr(o,env))
-    resample_rate=li_get_int(li_eval(li_second(o,env),env),env);
-
-
-  i4_split_path(fn, split);
-  char out_name[256], tmp_name[256];
-
-  sprintf(out_name, "%s/%s/%s.wav", inst_path, split.path, split.filename);
-  sprintf(tmp_name, "%s/%s/%s_tmp.wav", inst_path, split.path, split.filename);
-  
-
-  fix_path(out_name);
-  fix_path(tmp_name);
-
-  
-  i4_file_class *out=i4_open(resample_rate==-1 ? out_name : tmp_name, I4_WRITE);
-  if (!out)
-    return 0;
-
-  if (uninstall_script)
-    uninstall_script->printf("(delete \"%s\")\n", forward_slash(out_name));
+	int resample_rate=-1;
+	if (li_cdr(o,env))
+	{
+		resample_rate=li_get_int(li_eval(li_second(o,env),env),env);
+	}
 
 
-  fix_path(fn);
-  i4_file_class *in=i4_open(fn);
-  if (!in)
-  {
-    delete out;
-    return 0;
-  }
+	i4_split_path(fn, split);
+	char out_name[256], tmp_name[256];
 
-  i4_sound_info fmt;
-  write_header(out, fmt);
-
-  char stat[200];
-  sprintf(stat, "Decoding MP3 : %s", fn);
-  i4_status_class *status=i4_create_status(stat);
-
-  i4_bool ret=i4_load_mp3(in, out, fmt, status);
-  out->seek(0);
-  write_header(out, fmt);
-    
-  delete status;
-  delete in;
-  delete out;
-
-  if (resample_rate)
-  {
-    down_sample_wav(tmp_name, out_name, resample_rate);
-    i4_unlink(tmp_name);
-  }
+	sprintf(out_name, "%s/%s/%s.wav", inst_path, split.path, split.filename);
+	sprintf(tmp_name, "%s/%s/%s_tmp.wav", inst_path, split.path, split.filename);
 
 
-  if (!ret)
-    return 0;
+	fix_path(out_name);
+	fix_path(tmp_name);
 
-  return li_true_sym; 
+
+	i4_file_class *out=i4_open(resample_rate==-1 ? out_name : tmp_name, I4_WRITE);
+	if (!out)
+	{
+		return 0;
+	}
+
+	if (uninstall_script)
+	{
+		uninstall_script->printf("(delete \"%s\")\n", forward_slash(out_name));
+	}
+
+
+	fix_path(fn);
+	i4_file_class *in=i4_open(fn);
+	if (!in)
+	{
+		delete out;
+		return 0;
+	}
+
+	i4_sound_info fmt;
+	write_header(out, fmt);
+
+	char stat[200];
+	sprintf(stat, "Decoding MP3 : %s", fn);
+	i4_status_class *status=i4_create_status(stat);
+
+	i4_bool ret=i4_load_mp3(in, out, fmt, status);
+	out->seek(0);
+	write_header(out, fmt);
+
+	delete status;
+	delete in;
+	delete out;
+
+	if (resample_rate)
+	{
+		down_sample_wav(tmp_name, out_name, resample_rate);
+		i4_unlink(tmp_name);
+	}
+
+
+	if (!ret)
+	{
+		return 0;
+	}
+
+	return li_true_sym;
 }
 
 
@@ -325,577 +367,587 @@ li_object *mp3_2_wav(li_object *o, li_environment *env)
 
 li_object *copy_file(li_object *o, li_environment *env)
 {
-  char *f1=li_get_string(li_eval(li_first(o,env),env),env);
-  char *f2=li_get_string(li_eval(li_second(o,env),env),env);
-  char full_f2[256];
-  sprintf(full_f2, "%s/%s", inst_path, f2);
+	char *f1=li_get_string(li_eval(li_first(o,env),env),env);
+	char *f2=li_get_string(li_eval(li_second(o,env),env),env);
+	char full_f2[256];
+	sprintf(full_f2, "%s/%s", inst_path, f2);
 
-  fix_path(full_f2);
-  i4_file_class *out=i4_open(full_f2, I4_WRITE | I4_NO_BUFFER);
-  if (!out)
-  {
-    i4_warning("Could not open output file %s\n", f2);
-    return 0;
-  }
+	fix_path(full_f2);
+	i4_file_class *out=i4_open(full_f2, I4_WRITE | I4_NO_BUFFER);
+	if (!out)
+	{
+		i4_warning("Could not open output file %s\n", f2);
+		return 0;
+	}
 
-  if (uninstall_script)
-    uninstall_script->printf("(delete \"%s\")\n", forward_slash(full_f2));
+	if (uninstall_script)
+	{
+		uninstall_script->printf("(delete \"%s\")\n", forward_slash(full_f2));
+	}
 
-  fix_path(f1);
-  i4_file_class *in=i4_open(f1, I4_NO_BUFFER | I4_READ);
-  if (!in)
-  {
-    i4_warning("Could not open %s\nAre you running setup from the correct directory?", f1);
-    return 0;
-  }
+	fix_path(f1);
+	i4_file_class *in=i4_open(f1, I4_NO_BUFFER | I4_READ);
+	if (!in)
+	{
+		i4_warning("Could not open %s\nAre you running setup from the correct directory?", f1);
+		return 0;
+	}
 
-  char s[200];
-  sprintf(s, "Copying to %s", f2);
-  i4_status_class *status=i4_create_status(s);
+	char s[200];
+	sprintf(s, "Copying to %s", f2);
+	i4_status_class *status=i4_create_status(s);
 
 
-  char buf[4096];
-  int tot=in->size(),size=0;
+	char buf[4096];
+	int tot=in->size(),size=0;
 
-  while (size<tot)
-  {
-    status->update((size+2)/(float)(tot+1));
+	while (size<tot)
+	{
+		status->update((size+2)/(float)(tot+1));
 
-    int t=in->read(buf, sizeof(buf));
-    if (out->write(buf, t)!=t)
-    {
-      i4_warning("Couldn't write target, out of disk space?\n");
-      return 0;
-    }
+		int t=in->read(buf, sizeof(buf));
+		if (out->write(buf, t)!=t)
+		{
+			i4_warning("Couldn't write target, out of disk space?\n");
+			return 0;
+		}
 
-    size+=t;
-  }
-  delete status;
+		size+=t;
+	}
+	delete status;
 
-  delete in;
-  delete out;
-  return li_true_sym;
+	delete in;
+	delete out;
+	return li_true_sym;
 }
 
 li_object *li_dir(li_object *o, li_environment *env)
-	{
+{
 	char *c;
 	if (li_first(o,env))
-		{
+	{
 		c=li_get_string(li_eval(li_first(o,env),env),env);
-		}
-	else 
+	}
+	else
+	{
 		c=".";
+	}
 	i4_const_str path(c);
 	i4_directory_struct ds;
 	i4_bool ok=i4_get_directory(path,ds,i4_T,NULL);
 	if (!ok)
-		{
+	{
 		//li_print(new li_string("Error: Invalid path specified"));
 		i4_warning("Error: Invalid path specified");
 		return li_nil;
-		}
+	}
 	int i;
 	char fname_buf[MAX_PATH];
 	i4_warning("Name   Size   Date");
-	for (i=0;i<ds.tdirs;i++)
-		{
+	for (i=0; i<ds.tdirs; i++)
+	{
 		i4_os_string(*ds.dirs[i],fname_buf,MAX_PATH);
 		i4_warning("%s  <DIR>  %i ",fname_buf,0);
-		}
-	for (i=0;i<ds.tfiles;i++)
-		{
+	}
+	for (i=0; i<ds.tfiles; i++)
+	{
 		i4_os_string(*ds.files[i],fname_buf,MAX_PATH);
 		w32 _32bitsize=(w32)ds.file_status[i].size;
-		char *_time=ctime((long*)&ds.file_status[i].last_modified);
+		char *_time=ctime((long *)&ds.file_status[i].last_modified);
 		if (ds.file_status[i].size>0xffffffff)
+		{
 			i4_warning("%s   >4GB  %s",fname_buf,_time);
-		else
-			i4_warning("%s  %i  %s", fname_buf, _32bitsize, _time); 
 		}
+		else
+		{
+			i4_warning("%s  %i  %s", fname_buf, _32bitsize, _time);
+		}
+	}
 	return li_true_sym;
-	};
+};
 
 
-class li_add_directory_funs_class : public i4_init_class            
-{                                                                  
-  int init_type() { return I4_INIT_TYPE_LISP_FUNCTIONS; }          
-  void init()  
-	  { 
-	  li_add_function("inst_mp3_2_wav",mp3_2_wav);
-	  li_add_function("mkdir", li_mkdir);
-	  li_add_function("md",li_mkdir);
-      li_add_function("rmdir", li_rmdir);
-      li_add_function("del", li_delete);
-      li_add_function("rm", li_delete);
-      li_add_function("copy", copy_file);
-      li_add_function("uninstall", li_uninstall_cmd);
-      li_add_function("ls", li_dir);
-      li_add_function("dir", li_dir);
-	  }
+class li_add_directory_funs_class :
+	public i4_init_class
+{
+	int init_type()
+	{
+		return I4_INIT_TYPE_LISP_FUNCTIONS;
+	}
+	void init()
+	{
+		li_add_function("inst_mp3_2_wav",mp3_2_wav);
+		li_add_function("mkdir", li_mkdir);
+		li_add_function("md",li_mkdir);
+		li_add_function("rmdir", li_rmdir);
+		li_add_function("del", li_delete);
+		li_add_function("rm", li_delete);
+		li_add_function("copy", copy_file);
+		li_add_function("uninstall", li_uninstall_cmd);
+		li_add_function("ls", li_dir);
+		li_add_function("dir", li_dir);
+	}
 } li_add_function_directory_funs_fun_name;
 
 
 /*
-i4_bool install(int install_type)
-{
-  char display[200];
-  i4_text_item_class *ti=(i4_text_item_class *)display_picker->get_current_item();
-  i4_os_string(ti->get_text(), display, 200);
+   i4_bool install(int install_type)
+   {
+   char display[200];
+   i4_text_item_class *ti=(i4_text_item_class *)display_picker->get_current_item();
+   i4_os_string(ti->get_text(), display, 200);
 
-#ifdef _WINDOWS
-    MakeShortcut();
-#endif
-  
-
-  if (!installed)
-  {
-
-    i4_os_string(*(path->get_edit_string()), inst_path, 200);
-
-    i4_file_status_struct r_stat;
-
-    int l=strlen(inst_path);
-
-    while (l && (inst_path[l-1]==' ' ||
-                 inst_path[l-1]=='\\' ||
-                 inst_path[l-1]=='/'))
-    {
-      inst_path[l-1]=0;
-      l--;
-    }
-
-    // try to make the installation path
-    if (!i4_mkdir(inst_path))
-    {
-      if (!i4_get_status(inst_path, r_stat))
-      {
-        error_win->printf("Could not create Directory '%s'\n", inst_path);
-        return i4_F;
-      }
-      else if ((r_stat.flags & I4_FILE_STATUS_DIRECTORY)==0)
-      {
-        error_win->printf("%s is a FILE not a Directory!\n", inst_path);
-        return i4_F;
-      }
-    }
-
-    char uscript[256];
-    sprintf(uscript, "%s/uninstall.scm", inst_path);
-    uninstall_script=i4_open(uscript, I4_WRITE);
-    if (!uninstall_script)
-    {
-      error_win->printf("Could not open %s for writing\n", uscript);
-      return i4_F;
-    }
+ #ifdef _WINDOWS
+   	MakeShortcut();
+ #endif
 
 
-    char cd_dest[200];
-    sprintf(cd_dest,"%s/golgotha.cd",inst_path);
+   if (!installed)
+   {
+
+   	i4_os_string(*(path->get_edit_string()), inst_path, 200);
+
+   	i4_file_status_struct r_stat;
+
+   	int l=strlen(inst_path);
+
+   	while (l && (inst_path[l-1]==' ' ||
+   				 inst_path[l-1]=='\\' ||
+   				 inst_path[l-1]=='/'))
+   	{
+   	  inst_path[l-1]=0;
+   	  l--;
+   	}
+
+   	// try to make the installation path
+   	if (!i4_mkdir(inst_path))
+   	{
+   	  if (!i4_get_status(inst_path, r_stat))
+   	  {
+   		error_win->printf("Could not create Directory '%s'\n", inst_path);
+   		return i4_F;
+   	  }
+   	  else if ((r_stat.flags & I4_FILE_STATUS_DIRECTORY)==0)
+   	  {
+   		error_win->printf("%s is a FILE not a Directory!\n", inst_path);
+   		return i4_F;
+   	  }
+   	}
+
+   	char uscript[256];
+   	sprintf(uscript, "%s/uninstall.scm", inst_path);
+   	uninstall_script=i4_open(uscript, I4_WRITE);
+   	if (!uninstall_script)
+   	{
+   	  error_win->printf("Could not open %s for writing\n", uscript);
+   	  return i4_F;
+   	}
 
 
-    if (copy_file(li_make_list(new li_string("golgotha.cd"), 
-                               new li_string("golgotha.cd"),0),0)==0)
-    {
-      delete uninstall_script; uninstall_script=0;
-      return i4_F;
-    }
-
-    g1_set_cd_image(cd_dest);
+   	char cd_dest[200];
+   	sprintf(cd_dest,"%s/golgotha.cd",inst_path);
 
 
+   	if (copy_file(li_make_list(new li_string("golgotha.cd"),
+   							   new li_string("golgotha.cd"),0),0)==0)
+   	{
+   	  delete uninstall_script; uninstall_script=0;
+   	  return i4_F;
+   	}
 
-    i4_status_class *s=i4_create_status("Decompressing Files");
-    li_load("install.scm", 0, s);
-    delete s;
-
-    delete uninstall_script; 
-    uninstall_script=0;
-
-
-  // check for enough free space
-    w32 needed_size=inst_sizes[size_picker->get_current()]*1024*1024;
-  
-  
-//     w32 free_space=i4_disk_free_space(inst_path);
-//     if (free_space<needed_size)
-//     {
-//       error_win->printf("Free space = %dMB, I need %dMB to install!\n"
-//                         "Please Remove some files or select smaller install\n",
-//                         free_space/(1024*1024), needed_size/(1024*1024));
-//       return i4_F;
-//     }    
-  }
+   	g1_set_cd_image(cd_dest);
 
 
-  char tmp_data[256];
 
-  // don't set sfx path if it's already set
-  if (install_type==INSTALL ||
-      !i4_get_registry(I4_REGISTRY_USER, sfx_key, "G_SFX_PATH", tmp_data, 256))
-  {
-    if (!i4_set_registry(I4_REGISTRY_USER, sfx_key, "G_SFX_PATH", "sfx"))
-      error_win->printf("Could not set Registry item\n");
-  }
+   	i4_status_class *s=i4_create_status("Decompressing Files");
+   	li_load("install.scm", 0, s);
+   	delete s;
 
-  // don't set install path if it's already set
-  if (install_type==INSTALL ||
-      !i4_get_registry(I4_REGISTRY_USER, reg_key, "install_path", tmp_data, 256))
-  {
-    if (!i4_set_registry(I4_REGISTRY_USER, reg_key, "install_path", inst_path))
-      error_win->printf("Could not set Registry item\n");
-  }
+   	delete uninstall_script;
+   	uninstall_script=0;
 
-  // always set the display they picked
-  if (!i4_set_registry(I4_REGISTRY_USER, i4_display_key, "display", display))
-  {
-    error_win->printf("Could not set Registry item\n");
-    return i4_F;
-  }
-     
-  if (install_type==INSTALL || install_type==SAVE_AND_RUN)
-  {
-    i4_chdir(inst_path);
-    system("golgotha");
-  }
- 
-  return i4_T;
 
-}
+   // check for enough free space
+   	w32 needed_size=inst_sizes[size_picker->get_current()]*1024*1024;
 
-  */
+
+   //     w32 free_space=i4_disk_free_space(inst_path);
+   //     if (free_space<needed_size)
+   //     {
+   //       error_win->printf("Free space = %dMB, I need %dMB to install!\n"
+   //                         "Please Remove some files or select smaller install\n",
+   //                         free_space/(1024*1024), needed_size/(1024*1024));
+   //       return i4_F;
+   //     }
+   }
+
+
+   char tmp_data[256];
+
+   // don't set sfx path if it's already set
+   if (install_type==INSTALL ||
+   	  !i4_get_registry(I4_REGISTRY_USER, sfx_key, "G_SFX_PATH", tmp_data, 256))
+   {
+   	if (!i4_set_registry(I4_REGISTRY_USER, sfx_key, "G_SFX_PATH", "sfx"))
+   	  error_win->printf("Could not set Registry item\n");
+   }
+
+   // don't set install path if it's already set
+   if (install_type==INSTALL ||
+   	  !i4_get_registry(I4_REGISTRY_USER, reg_key, "install_path", tmp_data, 256))
+   {
+   	if (!i4_set_registry(I4_REGISTRY_USER, reg_key, "install_path", inst_path))
+   	  error_win->printf("Could not set Registry item\n");
+   }
+
+   // always set the display they picked
+   if (!i4_set_registry(I4_REGISTRY_USER, i4_display_key, "display", display))
+   {
+   	error_win->printf("Could not set Registry item\n");
+   	return i4_F;
+   }
+
+   if (install_type==INSTALL || install_type==SAVE_AND_RUN)
+   {
+   	i4_chdir(inst_path);
+   	system("golgotha");
+   }
+
+   return i4_T;
+
+   }
+
+ */
 
 /*
-class setup_app : public i4_application_class
-{
-public:
-
-  
-
-
-  void add_display_picker(int x, int y, i4_parent_window_class *p)
-  {
-    i4_text_window_class *ti=new i4_text_window_class("Rendering Method", style);
-    p->add_child(x,y, ti);
-
-
-    x+=col2;
-
-    i4_list_box_class *lbox=new i4_list_box_class(250, style, wm);
-
-    char old_name[256];
-    if (!i4_get_registry(I4_REGISTRY_USER, i4_display_key, "display", old_name, 256))
-      old_name[0]=0;
-
-    int i=0, use=0;
-    for (i4_display_list_struct *f=i4_display_list; f; f=f->next) 
-    {
-      
-      if (strcmp(f->name, "Windowed GDI") &&  // these displays don't work with render/
-          strcmp(f->name, "X Windows"))
-      {
-        if (strcmp(f->name, old_name)==0)
-          use=i;
-
-        i4_str *s=new i4_str(f->name);
-        lbox->add_item(new i4_text_item_class(*s, style, 0,0, 
-                                              new i4_event_reaction_class(this,DISPLAY_SELECT + i)));      
-        i++;
-      }        
-    }
-
-    if (i==0)
-      i4_error("Golgotha requires DirectX5, or a 3dfx card\n"
-               "Make sure you have DX5 (and are in 16bit color mode)"
-               "Or that you have the current version Glide (for 3dfx) installed");
-
-    lbox->set_current_item(use);
-    display_picker=lbox;
-
-
-    p->add_child(x,y, lbox);
-  }
-
-  
-  void add_install_path(int x, int y, i4_parent_window_class *p)
-  {
-    p->add_child(x,y, new i4_text_window_class("Install Path", style));
-    x+=col2;
-
-    path=new i4_text_input_class(style, "c:\\golg", 200, 256, this);
-    p->add_child(x,y,path);
-
-    x+=path->width();
-    
-//     i4_button_class *but;
-//     but=new i4_button_class(0, new i4_text_window_class("Browse", style), style,
-//                                           new i4_event_reaction_class(this, BROWSE));
-//     but->set_popup(i4_T);
-//     p->add_child(x,y, but);
-                                          
+   class setup_app : public i4_application_class
+   {
+   public:
 
-  }
-
-
-  void add_texture_size_picker(int x, int y, i4_parent_window_class *p)
-  {
-    i4_text_window_class *ti=new i4_text_window_class("Install size", style);
-    p->add_child(x,y, ti);
-    x+=col2;
 
-    i4_list_box_class *lbox=new i4_list_box_class(250, style, wm);
-    lbox->add_item(new i4_text_item_class("75MB (Compact)", style, 0,0, 
-                                          new i4_event_reaction_class(this, COMPACT)));
-
-
-    lbox->add_item(new i4_text_item_class("100MB (Typical)", style, 0,0,
-                                          new i4_event_reaction_class(this, TYPICAL)));
-
-    size_needed_to_install=60*1024*1024;
-    lbox->set_current_item(1);
-    p->add_child(x,y, lbox);
-    size_picker=lbox;
-    
 
-  }
 
-  void add_buttons(int x, int y, i4_parent_window_class *p)
-  {
-    i4_button_class *b;
-    if (installed)
-    {
-      b=new i4_button_class(0, new i4_text_window_class("Save & Quit", style), style,
-                            new i4_event_reaction_class(this, SAVE_AND_QUIT));
-      b->set_popup(i4_T);
-      p->add_child(x,y,b);
-      x+=b->width();
+   void add_display_picker(int x, int y, i4_parent_window_class *p)
+   {
+   	i4_text_window_class *ti=new i4_text_window_class("Rendering Method", style);
+   	p->add_child(x,y, ti);
 
-      b=new i4_button_class(0, new i4_text_window_class("Save & Run", style), style,
-                            new i4_event_reaction_class(this, SAVE_AND_RUN));
-    }
-    else
-      b=new i4_button_class(0, new i4_text_window_class("Install & Run", style), style,
-                            new i4_event_reaction_class(this, INSTALL));
-    b->set_popup(i4_T);
-    p->add_child(x,y,b);
 
+   	x+=col2;
 
-    x+=b->width();
-    b=new i4_button_class(0, new i4_text_window_class("      Exit     ", style), style,
-                          new i4_event_reaction_class(this, QUIT));
-    p->add_child(x,y,b);
-    x+=b->width();
+   	i4_list_box_class *lbox=new i4_list_box_class(250, style, wm);
 
+   	char old_name[256];
+   	if (!i4_get_registry(I4_REGISTRY_USER, i4_display_key, "display", old_name, 256))
+   	  old_name[0]=0;
 
-    if (installed)
-    {
-      b=new i4_button_class(0, new i4_text_window_class("    Uninstall    ", style), style,
-                            new i4_event_reaction_class(this, UNINSTALL));
-      p->add_child(x,y,b);
-    }
+   	int i=0, use=0;
+   	for (i4_display_list_struct *f=i4_display_list; f; f=f->next)
+   	{
 
+   	  if (strcmp(f->name, "Windowed GDI") &&  // these displays don't work with render/
+   		  strcmp(f->name, "X Windows"))
+   	  {
+   		if (strcmp(f->name, old_name)==0)
+   		  use=i;
 
-  }
+   		i4_str *s=new i4_str(f->name);
+   		lbox->add_item(new i4_text_item_class(*s, style, 0,0,
+   											  new i4_event_reaction_class(this,DISPLAY_SELECT + i)));
+   		i++;
+   	  }
+   	}
 
-  i4_bool check_installed()
-  {
-    for (int i=1; i<i4_global_argc; i++)
-      if (i4_global_argv[i]=="-installed")
-      {
-        installed=1;
-        strcpy(inst_path, "c:/golg");
-        return i4_T;
-      }
+   	if (i==0)
+   	  i4_error("Golgotha requires DirectX5, or a 3dfx card\n"
+   			   "Make sure you have DX5 (and are in 16bit color mode)"
+   			   "Or that you have the current version Glide (for 3dfx) installed");
 
-    if (i4_get_registry(I4_REGISTRY_USER, reg_key, "install_path", inst_path, 256))
-    {
-      i4_file_status_struct s;
-      char f1[256];
-      sprintf(f1,"%s/golgotha.exe",inst_path);
-
-
-      if (!i4_get_status(f1, s))
-        return i4_F;
-
-
-      sprintf(f1,"%s/golgotha.cd",inst_path);
-      if (!i4_get_status(f1, s))
-        return i4_F;
-
-      installed=1;
-      return i4_T;
-    }
-
-    return i4_F;
-  }
-
-  void init()
-  {    
-    g1_set_cd_image(0);
-
-    i4_application_class::init();
-    style=get_style();
-    wm=get_window_manager();
-
-    i4_init_gui_status(wm, display);
-
-    li_add_function("mp3_2_wav", mp3_2_wav);
-    li_add_function("mkdir", li_mkdir);
-    li_add_function("rmdir", li_rmdir);
-    li_add_function("delete", li_delete);
-    li_add_function("copy_file", copy_file);
-    li_add_function("uninstall", li_uninstall_cmd);
-    
-    style->font_hint->normal_font=new i4_anti_proportional_font_class(i4_load_image("setup_font.tga"));
-    style->icon_hint->background_bitmap=i4_load_image("setup.jpg");
-
-    style->color_hint->text_foreground=0xffffff;
-    style->color_hint->text_background=0;
-
-    i4_image_window_class *im=new i4_image_window_class(style->icon_hint->background_bitmap,
-                                                        i4_T, i4_F);
-
-
-    wm->add_child(0,0, im);
-
-    i4_deco_window_class *deco=new i4_deco_window_class(400, 100, i4_F, style);
-    int x=120, y=110;
-
-    im->add_child(x, y, deco); 
-    y+=deco->height()+20;
-
-    i4_graphical_style_class *style=wm->get_style();
-
-
-    add_display_picker(10,10, deco);
-
-    if (!check_installed())
-    {
-      add_install_path(10, 40, deco);
-
-      add_texture_size_picker(10,70, deco);
-    
-      setup_window=new setup_options(380, 80, style);
-      deco=new i4_deco_window_class(400, 100, i4_F, style);
-      deco->add_child(deco->get_x1(), deco->get_y1(), setup_window);
-      wm->add_child(x,y, deco);
-      y+=deco->height()+5;
-    }
-
-    error_win=new i4_text_scroll_window_class(style, 0xff0000, style->color_hint->neutral(), 
-                                              400, 30);
-    wm->add_child(x, y, error_win);
-    y+=error_win->height()+10;
-
-    add_buttons(x, y, wm);
-
-  }
-
-  void receive_event(i4_event *ev)
-  {
-    if (ev->type()==i4_event::OBJECT_MESSAGE)
-      setup_changed();
-    else if (ev->type()==i4_event::USER_MESSAGE)
-    {
-
-      CAST_PTR(uev, i4_user_message_event_class, ev);
-      switch (uev->sub_type)
-      {
-        case QUIT :
-          quit();
-          break;
-          
-        case UNINSTALL :
-        {
-          char uscript[256];
-          sprintf(uscript, "%s/uninstall.scm", inst_path);
-          i4_status_class *stat=i4_create_status("Uninstalling");
-          li_load(uscript,0,stat);
-          delete stat;
-          quit();
-        } break;
+   	lbox->set_current_item(use);
+   	display_picker=lbox;
 
-//         case CHECK_SPACE_BEFORE_INSTALL :
-//         {
-//           if (i4_disk_free_space(inst_path)<size_needed_to_install)
-//           {
-//             i4_deco_window_class *deco=new i4_deco_window_class(200, 50, i4_T, style);
-//             i4_text_window_class *t=new i4_text_window_class("");
 
-//           deco->add_child(
+   	p->add_child(x,y, lbox);
+   }
 
-        //        } break;
 
-        case SAVE_AND_QUIT :
-        case SAVE_AND_RUN :
-        case INSTALL :
-        {
-          i4_image_class *im=i4_load_image("thanks.jpg");
-          i4_image_window_class *iwin=new i4_image_window_class(im, i4_T, i4_F);
-          wm->add_child(0,0,iwin);
-          
-          if (install(uev->sub_type))
-            quit();
+   void add_install_path(int x, int y, i4_parent_window_class *p)
+   {
+   	p->add_child(x,y, new i4_text_window_class("Install Path", style));
+   	x+=col2;
 
+   	path=new i4_text_input_class(style, "c:\\golg", 200, 256, this);
+   	p->add_child(x,y,path);
 
-          delete iwin;
+   	x+=path->width();
 
+   //     i4_button_class *but;
+   //     but=new i4_button_class(0, new i4_text_window_class("Browse", style), style,
+   //                                           new i4_event_reaction_class(this, BROWSE));
+   //     but->set_popup(i4_T);
+   //     p->add_child(x,y, but);
 
-        } break;
 
-        case BROWSE :
-        {
-            
-          char p[200];
-          i4_os_string(*(path->get_edit_string()), p, 200);
+   }
 
-          i4_create_file_save_dialog(style, 
-                                     p,
-                                     "Installation Path",
-                                     p,
-                                     "*",
-                                     "Directory",
-                                     this, BROWSE_OK,
-                                     BROWSE_CANCEL);
 
+   void add_texture_size_picker(int x, int y, i4_parent_window_class *p)
+   {
+   	i4_text_window_class *ti=new i4_text_window_class("Install size", style);
+   	p->add_child(x,y, ti);
+   	x+=col2;
 
+   	i4_list_box_class *lbox=new i4_list_box_class(250, style, wm);
+   	lbox->add_item(new i4_text_item_class("75MB (Compact)", style, 0,0,
+   										  new i4_event_reaction_class(this, COMPACT)));
 
-        } break;
 
-        case BROWSE_OK :
-        {
-          CAST_PTR(fev, i4_file_open_message_class, ev);
-          path->change_text(*fev->filename);
+   	lbox->add_item(new i4_text_item_class("100MB (Typical)", style, 0,0,
+   										  new i4_event_reaction_class(this, TYPICAL)));
 
-          setup_changed();
-        } break;
+   	size_needed_to_install=60*1024*1024;
+   	lbox->set_current_item(1);
+   	p->add_child(x,y, lbox);
+   	size_picker=lbox;
 
-        default:
-          setup_changed();
-          break;
 
-      }
-    }
-    else i4_application_class::receive_event(ev);
-  }
+   }
 
-  
-  i4_bool get_display_name(char *name, int max_len)
-  {
-    strcpy(name, "Windowed GDI");
-    return i4_T;
-  }
+   void add_buttons(int x, int y, i4_parent_window_class *p)
+   {
+   	i4_button_class *b;
+   	if (installed)
+   	{
+   	  b=new i4_button_class(0, new i4_text_window_class("Save & Quit", style), style,
+   							new i4_event_reaction_class(this, SAVE_AND_QUIT));
+   	  b->set_popup(i4_T);
+   	  p->add_child(x,y,b);
+   	  x+=b->width();
 
-  void name(char* buffer) { static_name(buffer,"test_app"); }
-};
+   	  b=new i4_button_class(0, new i4_text_window_class("Save & Run", style), style,
+   							new i4_event_reaction_class(this, SAVE_AND_RUN));
+   	}
+   	else
+   	  b=new i4_button_class(0, new i4_text_window_class("Install & Run", style), style,
+   							new i4_event_reaction_class(this, INSTALL));
+   	b->set_popup(i4_T);
+   	p->add_child(x,y,b);
 
-void i4_main(w32 argc, i4_const_str *argv)
-{
-  setup_app test;
-  test.run();
-}
 
+   	x+=b->width();
+   	b=new i4_button_class(0, new i4_text_window_class("      Exit     ", style), style,
+   						  new i4_event_reaction_class(this, QUIT));
+   	p->add_child(x,y,b);
+   	x+=b->width();
 
-*/
 
+   	if (installed)
+   	{
+   	  b=new i4_button_class(0, new i4_text_window_class("    Uninstall    ", style), style,
+   							new i4_event_reaction_class(this, UNINSTALL));
+   	  p->add_child(x,y,b);
+   	}
 
+
+   }
+
+   i4_bool check_installed()
+   {
+   	for (int i=1; i<i4_global_argc; i++)
+   	  if (i4_global_argv[i]=="-installed")
+   	  {
+   		installed=1;
+   		strcpy(inst_path, "c:/golg");
+   		return i4_T;
+   	  }
+
+   	if (i4_get_registry(I4_REGISTRY_USER, reg_key, "install_path", inst_path, 256))
+   	{
+   	  i4_file_status_struct s;
+   	  char f1[256];
+   	  sprintf(f1,"%s/golgotha.exe",inst_path);
+
+
+   	  if (!i4_get_status(f1, s))
+   		return i4_F;
+
+
+   	  sprintf(f1,"%s/golgotha.cd",inst_path);
+   	  if (!i4_get_status(f1, s))
+   		return i4_F;
+
+   	  installed=1;
+   	  return i4_T;
+   	}
+
+   	return i4_F;
+   }
+
+   void init()
+   {
+   	g1_set_cd_image(0);
+
+   	i4_application_class::init();
+   	style=get_style();
+   	wm=get_window_manager();
+
+   	i4_init_gui_status(wm, display);
+
+   	li_add_function("mp3_2_wav", mp3_2_wav);
+   	li_add_function("mkdir", li_mkdir);
+   	li_add_function("rmdir", li_rmdir);
+   	li_add_function("delete", li_delete);
+   	li_add_function("copy_file", copy_file);
+   	li_add_function("uninstall", li_uninstall_cmd);
+
+   	style->font_hint->normal_font=new i4_anti_proportional_font_class(i4_load_image("setup_font.tga"));
+   	style->icon_hint->background_bitmap=i4_load_image("setup.jpg");
+
+   	style->color_hint->text_foreground=0xffffff;
+   	style->color_hint->text_background=0;
+
+   	i4_image_window_class *im=new i4_image_window_class(style->icon_hint->background_bitmap,
+   														i4_T, i4_F);
+
+
+   	wm->add_child(0,0, im);
+
+   	i4_deco_window_class *deco=new i4_deco_window_class(400, 100, i4_F, style);
+   	int x=120, y=110;
+
+   	im->add_child(x, y, deco);
+   	y+=deco->height()+20;
+
+   	i4_graphical_style_class *style=wm->get_style();
+
+
+   	add_display_picker(10,10, deco);
+
+   	if (!check_installed())
+   	{
+   	  add_install_path(10, 40, deco);
+
+   	  add_texture_size_picker(10,70, deco);
+
+   	  setup_window=new setup_options(380, 80, style);
+   	  deco=new i4_deco_window_class(400, 100, i4_F, style);
+   	  deco->add_child(deco->get_x1(), deco->get_y1(), setup_window);
+   	  wm->add_child(x,y, deco);
+   	  y+=deco->height()+5;
+   	}
+
+   	error_win=new i4_text_scroll_window_class(style, 0xff0000, style->color_hint->neutral(),
+   											  400, 30);
+   	wm->add_child(x, y, error_win);
+   	y+=error_win->height()+10;
+
+   	add_buttons(x, y, wm);
+
+   }
+
+   void receive_event(i4_event *ev)
+   {
+   	if (ev->type()==i4_event::OBJECT_MESSAGE)
+   	  setup_changed();
+   	else if (ev->type()==i4_event::USER_MESSAGE)
+   	{
+
+   	  CAST_PTR(uev, i4_user_message_event_class, ev);
+   	  switch (uev->sub_type)
+   	  {
+   		case QUIT :
+   		  quit();
+   		  break;
+
+   		case UNINSTALL :
+   		{
+   		  char uscript[256];
+   		  sprintf(uscript, "%s/uninstall.scm", inst_path);
+   		  i4_status_class *stat=i4_create_status("Uninstalling");
+   		  li_load(uscript,0,stat);
+   		  delete stat;
+   		  quit();
+   		} break;
+
+   //         case CHECK_SPACE_BEFORE_INSTALL :
+   //         {
+   //           if (i4_disk_free_space(inst_path)<size_needed_to_install)
+   //           {
+   //             i4_deco_window_class *deco=new i4_deco_window_class(200, 50, i4_T, style);
+   //             i4_text_window_class *t=new i4_text_window_class("");
+
+   //           deco->add_child(
+
+   		//        } break;
+
+   		case SAVE_AND_QUIT :
+   		case SAVE_AND_RUN :
+   		case INSTALL :
+   		{
+   		  i4_image_class *im=i4_load_image("thanks.jpg");
+   		  i4_image_window_class *iwin=new i4_image_window_class(im, i4_T, i4_F);
+   		  wm->add_child(0,0,iwin);
+
+   		  if (install(uev->sub_type))
+   			quit();
+
+
+   		  delete iwin;
+
+
+   		} break;
+
+   		case BROWSE :
+   		{
+
+   		  char p[200];
+   		  i4_os_string(*(path->get_edit_string()), p, 200);
+
+   		  i4_create_file_save_dialog(style,
+   									 p,
+   									 "Installation Path",
+   									 p,
+   									 "*",
+   									 "Directory",
+   									 this, BROWSE_OK,
+   									 BROWSE_CANCEL);
+
+
+
+   		} break;
+
+   		case BROWSE_OK :
+   		{
+   		  CAST_PTR(fev, i4_file_open_message_class, ev);
+   		  path->change_text(*fev->filename);
+
+   		  setup_changed();
+   		} break;
+
+   		default:
+   		  setup_changed();
+   		  break;
+
+   	  }
+   	}
+   	else i4_application_class::receive_event(ev);
+   }
+
+
+   i4_bool get_display_name(char *name, int max_len)
+   {
+   	strcpy(name, "Windowed GDI");
+   	return i4_T;
+   }
+
+   void name(char* buffer) { static_name(buffer,"test_app"); }
+   };
+
+   void i4_main(w32 argc, i4_const_str *argv)
+   {
+   setup_app test;
+   test.run();
+   }
+
+
+ */

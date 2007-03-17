@@ -1,4 +1,4 @@
-#if !defined(AFX_OPTIONINFO_H__DE83BCA3_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_)
+#if !defined (AFX_OPTIONINFO_H__DE83BCA3_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_)
 #define AFX_OPTIONINFO_H__DE83BCA3_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_
 
 #include "x86_proc.h"
@@ -10,9 +10,10 @@
 //
 
 /////////////////////////////////////////////////////////////////////////////
-// Dialogfeld COptionInfo 
+// Dialogfeld COptionInfo
 
-class COptionInfo : public CPropertyPage
+class COptionInfo :
+	public CPropertyPage
 {
 	DECLARE_DYNCREATE(COptionInfo)
 
@@ -23,23 +24,25 @@ public:
 	CProcessor *cpu;
 // Dialogfelddaten
 	//{{AFX_DATA(COptionInfo)
-	enum { IDD = IDD_INFORMATION };
-	CEdit	m_informationtext;
+	enum {
+		IDD = IDD_INFORMATION
+	};
+	CEdit m_informationtext;
 	//}}AFX_DATA
 
 
 // Überschreibungen
 	// Der Klassen-Assistent generiert virtuelle Funktionsüberschreibungen
 	//{{AFX_VIRTUAL(COptionInfo)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+protected:
+	virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
 
 // Implementierung
 protected:
 	// Generierte Nachrichtenzuordnungsfunktionen
 	//{{AFX_MSG(COptionInfo)
-		// HINWEIS: Der Klassen-Assistent fügt hier Member-Funktionen ein
+	// HINWEIS: Der Klassen-Assistent fügt hier Member-Funktionen ein
 	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

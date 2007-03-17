@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef HUMAN_HH
 #define HUMAN_HH
@@ -14,73 +14,76 @@
 #include "memory/hashtable.h"
 
 class special_command_entry
-	{
-	public:
+{
+public:
 	char commandname[40];
-	};
+};
 
 extern i4_hashtable<special_command_entry> command_lookup_table;
 
-class g1_human_class : public g1_team_api_class
+class g1_human_class :
+	public g1_team_api_class
 {
-	
-	public:
-		i4_float dragstartx,dragstarty,dragdestx,dragdesty;
-  enum { MAX_COMMANDS = 30 };
-  enum {
-	  DEFAULT,
-	  GOTO,
-	  ATTACK,
-	  OPTIONS,
-	  FOLLOW_PATH,
-	  SELECT_PATH,
-	  BACK_TO_PATH,
-	  SELECT,
-	  DESELECT,
-	  START_DRAG,
-	  END_DRAG,
-	  DRAGGING,
-	  ADD_TO_LIST,
-	  NOTIFY,
-	  REMOVE,
-	  BUILD_UNIT,
-	  BUILD_BUILDING,
-	  CHANGE_OWNER,
-	  RESEARCH,
-	  NUM_COMMANDS
-	  };
-  enum {
-	  CLEAR_OLD,
-      ADD_TO_OLD,
-	  SUB_FROM_OLD
-	  };
+
+public:
+	i4_float dragstartx,dragstarty,dragdestx,dragdesty;
+	enum {
+		MAX_COMMANDS = 30
+	};
+	enum {
+		DEFAULT,
+		GOTO,
+		ATTACK,
+		OPTIONS,
+		FOLLOW_PATH,
+		SELECT_PATH,
+		BACK_TO_PATH,
+		SELECT,
+		DESELECT,
+		START_DRAG,
+		END_DRAG,
+		DRAGGING,
+		ADD_TO_LIST,
+		NOTIFY,
+		REMOVE,
+		BUILD_UNIT,
+		BUILD_BUILDING,
+		CHANGE_OWNER,
+		RESEARCH,
+		NUM_COMMANDS
+	};
+	enum {
+		CLEAR_OLD,
+		ADD_TO_OLD,
+		SUB_FROM_OLD
+	};
 
 
-  g1_human_class(g1_loader_class *f);
-  ~g1_human_class();
+	g1_human_class(g1_loader_class *f);
+	~g1_human_class();
 
-  i4_float mouse_look_increment_x, mouse_look_increment_y;
+	i4_float mouse_look_increment_x, mouse_look_increment_y;
 
-  g1_typed_reference_class<g1_object_class> selected_object;
-  g1_typed_reference_class<g1_object_class> preassigned[10];
+	g1_typed_reference_class<g1_object_class> selected_object;
+	g1_typed_reference_class<g1_object_class> preassigned[10];
 
-  void send_selected_units(i4_float x, i4_float y);
-  void attack_unit(g1_object_class *o, i4_float x, i4_float y);
-  void clicked_on_object(g1_object_class *o);
+	void send_selected_units(i4_float x, i4_float y);
+	void attack_unit(g1_object_class *o, i4_float x, i4_float y);
+	void clicked_on_object(g1_object_class *o);
 
-  w32 show_selection(g1_object_controller_class *for_who,
-	  i4_transform_class &transform, g1_draw_context_class *context);
+	w32 show_selection(g1_object_controller_class *for_who,
+					   i4_transform_class &transform, g1_draw_context_class *context);
 
-  void draw_button_model(char *buttoncmd, i4_float posx, i4_float posy, i4_float posz, g1_object_class *forobj);
-  w8 determine_cursor(g1_object_class *object_mouse_is_on);
-  void player_clicked(g1_object_class *o, float gx, float gy,w32 command);
-  int build_unit(g1_object_type type);
-  i4_bool select_path(float gx,float gy);
-  void clear_selected();
-  virtual void think();
-  //char* ai_name() { return "Human"; }
+	void draw_button_model(char *buttoncmd, i4_float posx, i4_float posy, i4_float posz, g1_object_class *forobj);
+	w8 determine_cursor(g1_object_class *object_mouse_is_on);
+	void player_clicked(g1_object_class *o, float gx, float gy,w32 command);
+	int build_unit(g1_object_type type);
+	i4_bool select_path(float gx,float gy);
+	void clear_selected();
+	virtual void think();
+	//char* ai_name() { return "Human"; }
 
-  virtual void load(g1_loader_class *fp);
+	virtual void load(g1_loader_class *fp);
 };
 
 

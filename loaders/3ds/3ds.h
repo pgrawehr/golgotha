@@ -1,33 +1,33 @@
 /*
-**************************************************************************
-Author: Terry Caton
-Date: January 24th, 2001
-Contact: tcaton@umr.edu
-Open Source. Use as you wish, but don't bitch if it breaks something. If you
-use this in any project worth mentioning, let me know, I'd love to see what 
-you've done. 
+ **************************************************************************
+   Author: Terry Caton
+   Date: January 24th, 2001
+   Contact: tcaton@umr.edu
+   Open Source. Use as you wish, but don't bitch if it breaks something. If you
+   use this in any project worth mentioning, let me know, I'd love to see what
+   you've done.
 
-Here's the framework for my 3D Studio File Loader. Currently, it supports
-loading the vertex/index list (of course), along with materials and hierarchy
-information. This is only a framework, however; you need to supply the code
-to input the data into your own buffers, as each API varies widely, as does
-each persons preference of how to organize data. At each point where data is
-read from the file, take that data and feed it into a buffer, or just discard
-it if you wish. 
+   Here's the framework for my 3D Studio File Loader. Currently, it supports
+   loading the vertex/index list (of course), along with materials and hierarchy
+   information. This is only a framework, however; you need to supply the code
+   to input the data into your own buffers, as each API varies widely, as does
+   each persons preference of how to organize data. At each point where data is
+   read from the file, take that data and feed it into a buffer, or just discard
+   it if you wish.
 
-The way I did it, and the way the framework here encourages, is to save all
-the data into a 3dsObject class (one for each object in the file), and then at
-the end when everything is done, assemble each into it's compiled vertex array/
-vertex buffer/whatever. Granted, this is my first attempt at a 3D engine, so 
-there may be a few fundamental flaws here, but hey, go easy on me.
+   The way I did it, and the way the framework here encourages, is to save all
+   the data into a 3dsObject class (one for each object in the file), and then at
+   the end when everything is done, assemble each into it's compiled vertex array/
+   vertex buffer/whatever. Granted, this is my first attempt at a 3D engine, so
+   there may be a few fundamental flaws here, but hey, go easy on me.
 
-If you so desire, contact me at tcaton@umr.edu. Questions, comments, money, 
-whatever. Source to my engine is also available upon request, with a working 
-example of this file loader in action. Thanks, and enjoy!!
+   If you so desire, contact me at tcaton@umr.edu. Questions, comments, money,
+   whatever. Source to my engine is also available upon request, with a working
+   example of this file loader in action. Thanks, and enjoy!!
 
 
-**************************************************************************
-*/
+ **************************************************************************
+ */
 
 
 
@@ -51,7 +51,7 @@ example of this file loader in action. Thanks, and enjoy!!
 #define EDITOBJECT    0x4000
 
 //>------ sub defines of EDITMATERIAL
-#define MATNAME       0xA000  
+#define MATNAME       0xA000
 #define MATLUMINANCE  0xA010
 #define MATDIFFUSE    0xA020
 #define MATSPECULAR   0xA030
@@ -87,7 +87,7 @@ class Load3ds
 public:
 	Load3ds();
 	~Load3ds();
-	void * Create(char *);
+	void *Create(char *);
 
 private:
 	int GetString(char *);
@@ -103,16 +103,16 @@ private:
 	int FillIndexBuffer(Chunk *);
 	int FillTexCoordBuffer(Chunk *);
 	int SortIndicesByMaterial(Chunk *);
-	
+
 	int ComputeNormals();
 	int CompileObjects();
 	int CleanUp();
-	
-	FILE * mFile;
-	void * mBuffer;
-	
-	Chunk * mCurrentChunk;
-	Chunk * mTempChunk;
+
+	FILE *mFile;
+	void *mBuffer;
+
+	Chunk *mCurrentChunk;
+	Chunk *mTempChunk;
 
 };
 

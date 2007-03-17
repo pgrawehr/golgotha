@@ -1,13 +1,13 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 /*
- * mpg123 defines 
+ * mpg123 defines
  * used source: musicout.h from mpegaudio package
  */
 
@@ -18,7 +18,7 @@
 #include        <string.h>
 #include        <signal.h>
 #include        <math.h>
-#include		<stdlib.h>
+#include        <stdlib.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -48,11 +48,11 @@
 #endif
 
 #ifdef REAL_IS_FLOAT
-#  define real float
-#elif defined(REAL_IS_LONG_DOUBLE)
-#  define real long double
+#define real float
+#elif defined (REAL_IS_LONG_DOUBLE)
+#define real long double
 #else
-#  define real double
+#define real double
 #endif
 
 #ifdef __GNUC__
@@ -62,7 +62,7 @@
 #endif
 
 #ifndef NAS
-#if defined(LINUX) || defined(__FreeBSD__)
+#if defined (LINUX) || defined (__FreeBSD__)
 #define VOXWARE
 #endif
 #endif
@@ -70,7 +70,7 @@
 #include "loaders/mp3/audio.h"
 
 /* AUDIOBUFSIZE = n*64 with n=1,2,3 ...  */
-#define		AUDIOBUFSIZE		16384
+#define     AUDIOBUFSIZE        16384
 
 #define         FALSE                   0
 #define         TRUE                    1
@@ -88,37 +88,37 @@
 #define MAXOUTBURST 32768
 
 
-struct al_table 
+struct al_table
 {
-  short bits;
-  short d;
+	short bits;
+	short d;
 };
 
 struct frame {
-    struct al_table *alloc;
-    int (*synth)(real *,int,unsigned char *);
-    int (*synth_mono)(real *,unsigned char *);
-    int stereo;
-    int jsbound;
-    int single;
-    int II_sblimit;
-    int lsf;
-    int mpeg25;
-    int down_sample;
-    int header_change;
-    int block_size;
-    int lay;
+	struct al_table *alloc;
+	int (*synth)(real *,int,unsigned char *);
+	int (*synth_mono)(real *,unsigned char *);
+	int stereo;
+	int jsbound;
+	int single;
+	int II_sblimit;
+	int lsf;
+	int mpeg25;
+	int down_sample;
+	int header_change;
+	int block_size;
+	int lay;
 	int (*do_layer)(struct frame *fr,int,struct audio_info_struct *);
-    int error_protection;
-    int bitrate_index;
-    int sampling_frequency;
-    int padding;
-    int extension;
-    int mode;
-    int mode_ext;
-    int copyright;
-    int original;
-    int emphasis;
+	int error_protection;
+	int bitrate_index;
+	int sampling_frequency;
+	int padding;
+	int extension;
+	int mode;
+	int mode_ext;
+	int copyright;
+	int original;
+	int emphasis;
 };
 
 struct flags {
@@ -126,7 +126,7 @@ struct flags {
 	int aggressive; /* renice to max. priority */
 };
 
-extern int outmode;  
+extern int outmode;
 extern int tryresync;
 extern int quiet;
 extern int halfspeed;
@@ -139,12 +139,12 @@ extern char *prgName, *prgVersion;
 
 extern char *proxyurl;
 extern unsigned long proxyip;
-extern FILE *http_open (char *url);
+extern FILE *http_open(char *url);
 
 /* ------ Declarations from "common.c" ------ */
 
 extern void audio_flush(int, struct audio_info_struct *);
-extern void (*catchsignal(int signum, void(*handler)()))();
+extern void (*catchsignal(int signum, void (*handler)()))();
 
 extern void print_header(struct frame *);
 extern void print_header_compact(struct frame *);
@@ -169,36 +169,36 @@ extern int playlimit;
 
 struct III_sideinfo
 {
-  unsigned main_data_begin;
-  unsigned private_bits;
-  struct what_the {
-    struct gr_info_s {
-      int scfsi;
-      unsigned part2_3_length;
-      unsigned big_values;
-      unsigned scalefac_compress;
-      unsigned block_type;
-      unsigned mixed_block_flag;
-      unsigned table_select[3];
-      unsigned subblock_gain[3];
-      unsigned maxband[3];
-      unsigned maxbandl;
-      unsigned maxb;
-      unsigned region1start;
-      unsigned region2start;
-      unsigned preflag;
-      unsigned scalefac_scale;
-      unsigned count1table_select;
-      real *full_gain[3];
-      real *pow2gain;
-    } gr[2];
-  } ch[2];
+	unsigned main_data_begin;
+	unsigned private_bits;
+	struct what_the {
+		struct gr_info_s {
+			int scfsi;
+			unsigned part2_3_length;
+			unsigned big_values;
+			unsigned scalefac_compress;
+			unsigned block_type;
+			unsigned mixed_block_flag;
+			unsigned table_select[3];
+			unsigned subblock_gain[3];
+			unsigned maxband[3];
+			unsigned maxbandl;
+			unsigned maxb;
+			unsigned region1start;
+			unsigned region2start;
+			unsigned preflag;
+			unsigned scalefac_scale;
+			unsigned count1table_select;
+			real *full_gain[3];
+			real *pow2gain;
+		} gr[2];
+	} ch[2];
 };
 
 extern void open_stream(char *,int fd);
 extern void close_stream(void);
 extern long tell_stream(void);
-extern void read_frame_init (void);
+extern void read_frame_init(void);
 extern int read_frame(struct frame *fr);
 extern int back_frame(struct frame *fr,int num);
 extern void play_frame(int init,struct frame *fr);
@@ -206,28 +206,28 @@ extern int do_layer3(struct frame *fr,int,struct audio_info_struct *);
 extern int do_layer2(struct frame *fr,int,struct audio_info_struct *);
 extern int do_layer1(struct frame *fr,int,struct audio_info_struct *);
 extern void do_equalizer(real *bandPtr,int channel);
-extern int synth_1to1 (real *,int,unsigned char *);
-extern int synth_1to1_8bit (real *,int,unsigned char *);
-extern int synth_2to1 (real *,int,unsigned char *);
-extern int synth_2to1_8bit (real *,int,unsigned char *);
-extern int synth_4to1 (real *,int,unsigned char *);
-extern int synth_4to1_8bit (real *,int,unsigned char *);
-extern int synth_1to1_mono (real *,unsigned char *);
-extern int synth_1to1_mono2stereo (real *,unsigned char *);
-extern int synth_1to1_8bit_mono (real *,unsigned char *);
-extern int synth_1to1_8bit_mono2stereo (real *,unsigned char *);
-extern int synth_2to1_mono (real *,unsigned char *);
-extern int synth_2to1_mono2stereo (real *,unsigned char *);
-extern int synth_2to1_8bit_mono (real *,unsigned char *);
-extern int synth_2to1_8bit_mono2stereo (real *,unsigned char *);
-extern int synth_4to1_mono (real *,unsigned char *);
-extern int synth_4to1_mono2stereo (real *,unsigned char *);
-extern int synth_4to1_8bit_mono (real *,unsigned char *);
-extern int synth_4to1_8bit_mono2stereo (real *,unsigned char *);
+extern int synth_1to1(real *,int,unsigned char *);
+extern int synth_1to1_8bit(real *,int,unsigned char *);
+extern int synth_2to1(real *,int,unsigned char *);
+extern int synth_2to1_8bit(real *,int,unsigned char *);
+extern int synth_4to1(real *,int,unsigned char *);
+extern int synth_4to1_8bit(real *,int,unsigned char *);
+extern int synth_1to1_mono(real *,unsigned char *);
+extern int synth_1to1_mono2stereo(real *,unsigned char *);
+extern int synth_1to1_8bit_mono(real *,unsigned char *);
+extern int synth_1to1_8bit_mono2stereo(real *,unsigned char *);
+extern int synth_2to1_mono(real *,unsigned char *);
+extern int synth_2to1_mono2stereo(real *,unsigned char *);
+extern int synth_2to1_8bit_mono(real *,unsigned char *);
+extern int synth_2to1_8bit_mono2stereo(real *,unsigned char *);
+extern int synth_4to1_mono(real *,unsigned char *);
+extern int synth_4to1_mono2stereo(real *,unsigned char *);
+extern int synth_4to1_8bit_mono(real *,unsigned char *);
+extern int synth_4to1_8bit_mono2stereo(real *,unsigned char *);
 extern void rewindNbits(int bits);
 extern int  hsstell(void);
 extern void set_pointer(long);
-extern void huffman_decoder(int ,int *);
+extern void huffman_decoder(int,int *);
 extern void huffman_count1(int,int *);
 
 extern void init_layer3(int);
@@ -250,5 +250,3 @@ extern real equalizer_sum[2][32];
 extern int equalizer_cnt;
 
 extern struct flags flags;
-
-

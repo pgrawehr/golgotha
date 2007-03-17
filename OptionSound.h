@@ -1,4 +1,4 @@
-#if !defined(AFX_OPTIONSOUND_H__DE83BCA2_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_)
+#if !defined (AFX_OPTIONSOUND_H__DE83BCA2_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_)
 #define AFX_OPTIONSOUND_H__DE83BCA2_10B8_11D5_9EDB_00E0987CDED7__INCLUDED_
 
 #if _MSC_VER > 1000
@@ -8,9 +8,10 @@
 //
 
 /////////////////////////////////////////////////////////////////////////////
-// Dialogfeld COptionSound 
+// Dialogfeld COptionSound
 
-class COptionSound : public CPropertyPage
+class COptionSound :
+	public CPropertyPage
 {
 	DECLARE_DYNCREATE(COptionSound)
 
@@ -22,16 +23,18 @@ public:
 
 // Dialogfelddaten
 	//{{AFX_DATA(COptionSound)
-	enum { IDD = IDD_SOUND };
-	CComboBox	m_soundcard;
+	enum {
+		IDD = IDD_SOUND
+	};
+	CComboBox m_soundcard;
 	//}}AFX_DATA
 
 
 // Überschreibungen
 	// Der Klassen-Assistent generiert virtuelle Funktionsüberschreibungen
 	//{{AFX_VIRTUAL(COptionSound)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+protected:
+	virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
 
 // Implementierung

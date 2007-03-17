@@ -1,14 +1,14 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 #include "pch.h"
 #include "map.h"
 #include "saver.h"
-#include "tile.h"       
+#include "tile.h"
 #include "g1_object.h"
 #include "path.h"
 #include "load3d.h"
@@ -39,220 +39,253 @@
 
 void g1_map_class::save_objects(g1_saver_class *out)
 {
-  g1_object_class *olist[G1_MAX_OBJECTS];
-  sw32 t=make_object_list(olist, G1_MAX_OBJECTS), ttypes=0, i;
-            
-  out->set_helpers(olist, t);
+	g1_object_class *olist[G1_MAX_OBJECTS];
+	sw32 t=make_object_list(olist, G1_MAX_OBJECTS), ttypes=0, i;
 
-  // save the names of all the object types
-  out->mark_section(G1_SECTION_OBJECT_TYPES_V1);
-  out->write_32(g1_last_object_type+1);
+	out->set_helpers(olist, t);
 
-  for (i=0; i<=g1_last_object_type; i++)
-    if (g1_object_type_array[i])
-    {
-      const char *name=g1_object_type_array[i]->name();
-      int len=strlen(name)+1;
-      out->write_16(len);
-      out->write((void*)name,len);
-    }
-    else out->write_16(0);
+	// save the names of all the object types
+	out->mark_section(G1_SECTION_OBJECT_TYPES_V1);
+	out->write_32(g1_last_object_type+1);
 
-
-  out->mark_section("golgotha object type info");
-  for (i=0; i<=g1_last_object_type; i++)
-  {
-    int han=out->mark_size();
-    if (g1_object_type_array[i])
-      g1_object_type_array[i]->save(out);      
-    out->end_mark_size(han);
-  }
+	for (i=0; i<=g1_last_object_type; i++)
+	{
+		if (g1_object_type_array[i])
+		{
+			const char *name=g1_object_type_array[i]->name();
+			int len=strlen(name)+1;
+			out->write_16(len);
+			out->write((void *)name,len);
+		}
+		else
+		{
+			out->write_16(0);
+		}
+	}
 
 
-  out->mark_section(G1_SECTION_OBJECTS_V1);
-  out->write_32(t);
+	out->mark_section("golgotha object type info");
+	for (i=0; i<=g1_last_object_type; i++)
+	{
+		int han=out->mark_size();
+		if (g1_object_type_array[i])
+		{
+			g1_object_type_array[i]->save(out);
+		}
+		out->end_mark_size(han);
+	}
 
-  // if objects change at a base level (g1_object_class) then a new section
-  // should be created here
-  out->mark_section(G1_SECTION_OBJECT_BASE_V1);
-  for (i=0; i<t; i++)
-  {
-    out->mark_section(G1_SECTION_OBJECT_LIST + i);
-    out->write_16(olist[i]->id);
-    olist[i]->save(out);
-  }
+
+	out->mark_section(G1_SECTION_OBJECTS_V1);
+	out->write_32(t);
+
+	// if objects change at a base level (g1_object_class) then a new section
+	// should be created here
+	out->mark_section(G1_SECTION_OBJECT_BASE_V1);
+	for (i=0; i<t; i++)
+	{
+		out->mark_section(G1_SECTION_OBJECT_LIST + i);
+		out->write_16(olist[i]->id);
+		olist[i]->save(out);
+	}
 }
 
 void g1_map_class::save(g1_saver_class *out, w32 sections)
 {
-  w32 i,tobjs=0;
+	w32 i,tobjs=0;
 
-  if (sections & G1_MAP_TEXTURE_NAMES)
-  {
-	  out->mark_section(G1_SECTION_TEXTURE_NAMES_V2);
-	  out->write_32(g1_tile_man.total()-1);
-	  //Don't write first entry (is always 0)
-	  for (i=1;i<g1_tile_man.total();i++)
-	  {
-		  g1_tile_class *tile=g1_tile_man.get(i);
-		  i4_const_str *name=g1_tile_man.get_name_from_tile(i);
-		  if (tile)
-		  {
-		      out->write_counted_str(*name);
-			  out->write_32(tile->flags);
-			  out->write_float(tile->friction_fraction);
-			  out->write_16(tile->damage);
-			  //We need to save the checksum separatelly, since it may not be the correct checksum
-			  //for name in case the texture had a "save_name" property argument
-			  out->write_32(tile->filename_checksum);
-			  out->write_32(0);//reserved
-			  out->write_counted_str("_reserved_"); //also reserved ;-)
-		  }
-		  delete name;
-	  }
-  }
-  if (sections & G1_MAP_MODEL_NAMES)
-  {
-	  out->mark_section(G1_SECTION_MODEL_NAMES_V1);
-	  out->write_32(g1_model_list_man.total());
-	  for (i=0;i<g1_model_list_man.total();i++)
-	  {
-		  i4_const_str name2(g1_model_list_man.get_model_name(i));
-		  if (!name2.null())
-			out->write_counted_str(name2);
-	  }
-  }
+	if (sections & G1_MAP_TEXTURE_NAMES)
+	{
+		out->mark_section(G1_SECTION_TEXTURE_NAMES_V2);
+		out->write_32(g1_tile_man.total()-1);
+		//Don't write first entry (is always 0)
+		for (i=1; i<g1_tile_man.total(); i++)
+		{
+			g1_tile_class *tile=g1_tile_man.get(i);
+			i4_const_str *name=g1_tile_man.get_name_from_tile(i);
+			if (tile)
+			{
+				out->write_counted_str(*name);
+				out->write_32(tile->flags);
+				out->write_float(tile->friction_fraction);
+				out->write_16(tile->damage);
+				//We need to save the checksum separatelly, since it may not be the correct checksum
+				//for name in case the texture had a "save_name" property argument
+				out->write_32(tile->filename_checksum);
+				out->write_32(0); //reserved
+				out->write_counted_str("_reserved_"); //also reserved ;-)
+			}
+			delete name;
+		}
+	}
+	if (sections & G1_MAP_MODEL_NAMES)
+	{
+		out->mark_section(G1_SECTION_MODEL_NAMES_V1);
+		out->write_32(g1_model_list_man.total());
+		for (i=0; i<g1_model_list_man.total(); i++)
+		{
+			i4_const_str name2(g1_model_list_man.get_model_name (i));
+			if (!name2.null())
+			{
+				out->write_counted_str(name2);
+			}
+		}
+	}
 
-  //The status probably gives problems because things might
-  //happen between the two calls of this function
-  //i4_status_class *stat=i4_create_status(i4gets("saving_level",i4_F),0);
-  //stat->update(0);
-  out->mark_section("li_type_info");
-  li_save_type_info(out,0);
-  //stat->update(0.1f);
-  // need to save the width and height of the map if saves cells or verts
-  if (sections & (G1_MAP_CELLS | G1_MAP_VERTS))
-  {
-    out->mark_section(G1_SECTION_MAP_DIMENSIONS_V1);
-    out->write_16(width());
-    out->write_16(height());
-  }
-  //stat->update(0.2f);
-  if (sections & G1_MAP_SKY)
-    save_sky(out);
-
-
-  if (sections & G1_MAP_TICK)
-  {
-    out->mark_section(G1_SECTION_TICK);
-    out->write_32(get_tick());
-  }
-  //stat->update(0.3f);
-
-  if (sections & G1_MAP_CELLS)
-  {
-    // this so if the tiles get moved around after save, we can match them back up
-    out->mark_section(G1_SECTION_TILE_MATCHUP_V1);
-    out->write_32(g1_tile_man.total());
-
-    for (i=0; i<g1_tile_man.total(); i++)
-      out->write_32(g1_tile_man.get(i)->filename_checksum);
-
-    g1_save_map_cells(cells, width() * height(), out);
-  }
-  
-  if (sections & G1_MAP_VERTS)
-    g1_save_map_verts(verts, (w+1)*(h+1), out, i4_T);
-  //don't save the selected verts if we save all of them. 
-  else if (sections & G1_MAP_SELECTED_VERTS)
-  {
-    out->mark_section("golgotha selected verts");
-    
-    int l=(w+1)*(h+1);
-    g1_map_vertex_class *v=verts;
-
-    for (i=0; i<(w32)l; i++, v++)
-      if (v->need_undo())
-      {
-        out->write_16((w16)i);
-        g1_save_map_verts(v, 1, out, i4_F);
-      }
-
-    out->write_16(0xffff);
-  }
-        
-  //if (sections & G1_MAP_PLAYERS)
-  //{
-  //  out->mark_section(G1_SECTION_PLAYER_INFO);
-  //  g1_player_man.save(out);
-  //}
-  if (sections & G1_MAP_PLAYERS)
-	  {
-	  out->mark_section(G1_SECTION_PLAYER_INFO_V2);
-	  for (int n=0;n<G1_MAX_PLAYERS;n++)
-		  {
-		  out->write_counted_str(*(g1_player_man.get(n)->get_ai()->ai_name()));
-		  }
-	  g1_player_man.save(out);
-	  }
-
-  if (sections & G1_MAP_OBJECTS)
-    save_objects(out);
+	//The status probably gives problems because things might
+	//happen between the two calls of this function
+	//i4_status_class *stat=i4_create_status(i4gets("saving_level",i4_F),0);
+	//stat->update(0);
+	out->mark_section("li_type_info");
+	li_save_type_info(out,0);
+	//stat->update(0.1f);
+	// need to save the width and height of the map if saves cells or verts
+	if (sections & (G1_MAP_CELLS | G1_MAP_VERTS))
+	{
+		out->mark_section(G1_SECTION_MAP_DIMENSIONS_V1);
+		out->write_16(width());
+		out->write_16(height());
+	}
+	//stat->update(0.2f);
+	if (sections & G1_MAP_SKY)
+	{
+		save_sky(out);
+	}
 
 
-  if (sections & G1_MAP_LIGHTS)
-    g1_lights.save(out);
-  //stat->update(0.6f);
+	if (sections & G1_MAP_TICK)
+	{
+		out->mark_section(G1_SECTION_TICK);
+		out->write_32(get_tick());
+	}
+	//stat->update(0.3f);
 
-  if ((sections & G1_MAP_MOVIE) && current_movie)
-  {
-    out->mark_section(G1_SECTION_MOVIE);
-    current_movie->save(out);    
-  }
+	if (sections & G1_MAP_CELLS)
+	{
+		// this so if the tiles get moved around after save, we can match them back up
+		out->mark_section(G1_SECTION_TILE_MATCHUP_V1);
+		out->write_32(g1_tile_man.total());
+
+		for (i=0; i<g1_tile_man.total(); i++)
+		{
+			out->write_32(g1_tile_man.get(i)->filename_checksum);
+		}
+
+		g1_save_map_cells(cells, width() * height(), out);
+	}
+
+	if (sections & G1_MAP_VERTS)
+	{
+		g1_save_map_verts(verts, (w+1)*(h+1), out, i4_T);
+	}
+	//don't save the selected verts if we save all of them.
+	else if (sections & G1_MAP_SELECTED_VERTS)
+	{
+		out->mark_section("golgotha selected verts");
+
+		int l=(w+1)*(h+1);
+		g1_map_vertex_class *v=verts;
+
+		for (i=0; i<(w32)l; i++, v++)
+		{
+			if (v->need_undo())
+			{
+				out->write_16((w16)i);
+				g1_save_map_verts(v, 1, out, i4_F);
+			}
+		}
+
+		out->write_16(0xffff);
+	}
+
+	//if (sections & G1_MAP_PLAYERS)
+	//{
+	//  out->mark_section(G1_SECTION_PLAYER_INFO);
+	//  g1_player_man.save(out);
+	//}
+	if (sections & G1_MAP_PLAYERS)
+	{
+		out->mark_section(G1_SECTION_PLAYER_INFO_V2);
+		for (int n=0; n<G1_MAX_PLAYERS; n++)
+		{
+			out->write_counted_str(*(g1_player_man.get(n)->get_ai()->ai_name()));
+		}
+		g1_player_man.save(out);
+	}
+
+	if (sections & G1_MAP_OBJECTS)
+	{
+		save_objects(out);
+	}
+
+
+	if (sections & G1_MAP_LIGHTS)
+	{
+		g1_lights.save(out);
+	}
+	//stat->update(0.6f);
+
+	if ((sections & G1_MAP_MOVIE) && current_movie)
+	{
+		out->mark_section(G1_SECTION_MOVIE);
+		current_movie->save(out);
+	}
 //Save Critical Map Sections (if available, depends on level)
 //this is old code
-   if ((sections & G1_MAP_CRITICAL_POINTS) && critical_graph)
-   {
-     out->mark_section(G1_SECTION_CRITICAL_POINTS_V1);
-     critical_graph->save_points(out);
-   }
+	if ((sections & G1_MAP_CRITICAL_POINTS) && critical_graph)
+	{
+		out->mark_section(G1_SECTION_CRITICAL_POINTS_V1);
+		critical_graph->save_points(out);
+	}
 
-   if ((sections & G1_MAP_CRITICAL_DATA) && critical_graph)
-   {
-     out->mark_section(G1_SECTION_CRITICAL_GRAPH_V1);
-     critical_graph->save_graph(out);
+	if ((sections & G1_MAP_CRITICAL_DATA) && critical_graph)
+	{
+		out->mark_section(G1_SECTION_CRITICAL_GRAPH_V1);
+		critical_graph->save_graph(out);
 
-     out->mark_section(G1_SECTION_CRITICAL_MAP_V1);
-     save_critical_map(out);
-   }
+		out->mark_section(G1_SECTION_CRITICAL_MAP_V1);
+		save_critical_map(out);
+	}
 //end of old code
-  //stat->update(0.9f);
-  if (sections & G1_MAP_VIEW_POSITIONS)
-    g1_cwin_man->save_views(out);
+//stat->update(0.9f);
+	if (sections & G1_MAP_VIEW_POSITIONS)
+	{
+		g1_cwin_man->save_views(out);
+	}
 
-  for (g1_map_data_class *md=g1_map_data_class::first; md; md=md->next)
-    md->save(out, sections);
+	for (g1_map_data_class *md=g1_map_data_class::first; md; md=md->next)
+	{
+		md->save(out, sections);
+	}
 
-  if ((sections & G1_MAP_TRANSPORT ) && g2_act_man())
-	  g2_act_man()->save(out);
-  //delete stat;
+	if ((sections & G1_MAP_TRANSPORT ) && g2_act_man())
+	{
+		g2_act_man()->save(out);
+	}
+	//delete stat;
 }
 
 
 struct tile_matchup
 {
-  w16 old_tile_number;
-  w32 old_checksum;
+	w16 old_tile_number;
+	w32 old_checksum;
 };
 
 int tile_matchup_compare(const void *a, const void *b)
 {
-  if ( ((tile_matchup *)a)->old_checksum<((tile_matchup *)b)->old_checksum)
-    return -1;
-  else if ( ((tile_matchup *)a)->old_checksum>((tile_matchup *)b)->old_checksum)
-    return 1;
-  else
-    return 0;
+	if ( ((tile_matchup *)a)->old_checksum<((tile_matchup *)b)->old_checksum)
+	{
+		return -1;
+	}
+	else if ( ((tile_matchup *)a)->old_checksum>((tile_matchup *)b)->old_checksum)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 // this will create a remap array which maps the tiles saved previously into the
@@ -260,120 +293,130 @@ int tile_matchup_compare(const void *a, const void *b)
 // up previously saved maps
 static w16 *g1_map_get_tile_remap(g1_loader_class *fp)   // returns 0 on failure
 {
-  if (!fp->goto_section(G1_SECTION_TILE_MATCHUP_V1))
-    return 0;
-  w32 i,t=fp->read_32();    // how many tile types there were when sved
+	if (!fp->goto_section(G1_SECTION_TILE_MATCHUP_V1))
+	{
+		return 0;
+	}
+	w32 i,t=fp->read_32();  // how many tile types there were when sved
 
-  tile_matchup *tl=(tile_matchup *)I4_MALLOC(t*sizeof(tile_matchup), "tile matchup");
-  for (i=0; i<t; i++)
-  {
-    tl[i].old_tile_number=(w16)i;
-    tl[i].old_checksum=fp->read_32();
-  }
+	tile_matchup *tl=(tile_matchup *)I4_MALLOC(t*sizeof(tile_matchup), "tile matchup");
+	for (i=0; i<t; i++)
+	{
+		tl[i].old_tile_number=(w16)i;
+		tl[i].old_checksum=fp->read_32();
+	}
 
-  // sort so we can do a binary search for faster matchup
-  qsort(tl,  t, sizeof(tile_matchup), tile_matchup_compare);
+	// sort so we can do a binary search for faster matchup
+	qsort(tl,  t, sizeof(tile_matchup), tile_matchup_compare);
 
-  w16 *remap=(w16 *)I4_MALLOC(t*sizeof(w16), "tile remap");
-  memset(remap, 0, t*sizeof(w16));
-  for (i=0; i< t; i++)
-  {
-	  w32 find_id=tl[i].old_checksum;
-	  /*i4_const_str *n=r1_get_texture_name(find_id);
-	  if (n)
-	  {
-		  char buf[300];
-		  i4_os_string(*n,buf,300);
-		  delete n;
-		  i4_warning("Using Texture %s.",buf);
-	  }
-	  else
-	  {
-		  i4_warning("Unknown texture id: %x ",find_id);
-	  }*/
-	  int new_id=g1_tile_man.get_tile_from_checksum(find_id);
-	  if (new_id==0)
-		  i4_warning("Tile 0x%x not found in tile manager",find_id);
-	  remap[tl[i].old_tile_number]=new_id;
-  }
-
-  /*for (i=0; i< g1_tile_man.total(); i++)
-  {
-    w32 find_id=g1_tile_man.get(i)->filename_checksum,cur;
-	i4_const_str *n=r1_get_texture_name(find_id);
-	if (n)
+	w16 *remap=(w16 *)I4_MALLOC(t*sizeof(w16), "tile remap");
+	memset(remap, 0, t*sizeof(w16));
+	for (i=0; i< t; i++)
+	{
+		w32 find_id=tl[i].old_checksum;
+		/*i4_const_str *n=r1_get_texture_name(find_id);
+		   if (n)
+		   {
+		   	char buf[300];
+		   	i4_os_string(*n,buf,300);
+		   	delete n;
+		   	i4_warning("Using Texture %s.",buf);
+		   }
+		   else
+		   {
+		   	i4_warning("Unknown texture id: %x ",find_id);
+		   }*/
+		int new_id=g1_tile_man.get_tile_from_checksum(find_id);
+		if (new_id==0)
 		{
-		char buf[300];
-		i4_os_string(*n,buf,300);
-		delete n;
-		i4_warning("Using Texture %s.",buf);
+			i4_warning("Tile 0x%x not found in tile manager",find_id);
 		}
-	else
-		{
-		i4_warning("Unknown texture id: %x ",find_id);
-		}
-    w32 lo=0,hi=t,mid;
-    i4_bool done=i4_F;
-    mid=(hi+lo+1)/2;
+		remap[tl[i].old_tile_number]=new_id;
+	}
 
-    do
-    {
-      cur=tl[mid].old_checksum;
-      if (cur==find_id)
-      {
-        done=i4_T;
-        remap[tl[mid].old_tile_number]=(w16)i;
-      }
-      else
-      {
-        if (cur<find_id)
-          lo=mid;
-        else hi=mid;
+	/*for (i=0; i< g1_tile_man.total(); i++)
+	   {
+	   w32 find_id=g1_tile_man.get(i)->filename_checksum,cur;
+	   i4_const_str *n=r1_get_texture_name(find_id);
+	   if (n)
+	   	  {
+	   	  char buf[300];
+	   	  i4_os_string(*n,buf,300);
+	   	  delete n;
+	   	  i4_warning("Using Texture %s.",buf);
+	   	  }
+	   else
+	   	  {
+	   	  i4_warning("Unknown texture id: %x ",find_id);
+	   	  }
+	   w32 lo=0,hi=t,mid;
+	   i4_bool done=i4_F;
+	   mid=(hi+lo+1)/2;
 
-        w32 last_mid=mid;
-        mid=(hi+lo)/2;
-        if (last_mid==mid)
-		{
-			i4_warning("Warn: Texture not available in tile manager");
-			done=i4_T;
-		}
-      }
-        
-    } while (!done);
-  }*/
-  i4_free(tl);
-  return remap;
+	   do
+	   {
+	   	cur=tl[mid].old_checksum;
+	   	if (cur==find_id)
+	   	{
+	   	  done=i4_T;
+	   	  remap[tl[mid].old_tile_number]=(w16)i;
+	   	}
+	   	else
+	   	{
+	   	  if (cur<find_id)
+	   		lo=mid;
+	   	  else hi=mid;
+
+	   	  w32 last_mid=mid;
+	   	  mid=(hi+lo)/2;
+	   	  if (last_mid==mid)
+	   	  {
+	   		  i4_warning("Warn: Texture not available in tile manager");
+	   		  done=i4_T;
+	   	  }
+	   	}
+
+	   } while (!done);
+	   }*/
+	i4_free(tl);
+	return remap;
 }
 
 i4_bool g1_map_class::load_sky(g1_loader_class *fp)
-{  
-  if (sky_name)
-    delete sky_name;
+{
+	if (sky_name)
+	{
+		delete sky_name;
+	}
 
-  if (fp->goto_section(G1_SECTION_SKY_V1))
-    sky_name=fp->read_counted_str();    
+	if (fp->goto_section(G1_SECTION_SKY_V1))
+	{
+		sky_name=fp->read_counted_str();
+	}
 
-  return i4_T;
+	return i4_T;
 }
 
 void g1_map_class::save_sky(g1_saver_class *fp)
 {
-  fp->mark_section(G1_SECTION_SKY_V1); 
+	fp->mark_section(G1_SECTION_SKY_V1);
 
-  if (sky_name)    
-    fp->write_counted_str(*sky_name);
+	if (sky_name)
+	{
+		fp->write_counted_str(*sky_name);
+	}
 }
 
 
 struct g1_sorted_obj_struct
 {
-  const char *name;
-  w16 type;
+	const char *name;
+	w16 type;
 };
 
 int g1_sorted_obj_struct_compare(const g1_sorted_obj_struct *a, const g1_sorted_obj_struct *b)
 {
-  return strcmp(a->name, b->name);
+	return strcmp(a->name, b->name);
 }
 
 
@@ -382,527 +425,595 @@ extern w32 g1_num_objs_in_view; // from map_fast
 //returns a list of objects
 g1_object_class **g1_map_class::load_objects(g1_loader_class *fp, w32 &tobjs)
 {
-  int i;
-  tobjs=0;
-  g1_object_class **obj_list=0;
+	int i;
+	tobjs=0;
+	g1_object_class **obj_list=0;
 
-  g1_object_type *o_remap=0;
+	g1_object_type *o_remap=0;
 
-  for (i=0; i<G1_MAX_PLAYERS; i++)
-      g1_player_man.get(i)->clear_owned_objects();
-
-  if (fp->goto_section(G1_SECTION_OBJECT_TYPES_V1))
-  {
-    i4_array<g1_sorted_obj_struct> sorted_objs(g1_last_object_type+1, 0);
-    for (i=0; i<=g1_last_object_type; i++)
+	for (i=0; i<G1_MAX_PLAYERS; i++)
 	{
-      if (g1_object_type_array[i])
-      {
-        g1_sorted_obj_struct o;
-        o.name=g1_object_type_array[i]->name();
-        o.type=i;
-        sorted_objs.add(o);
-      }
+		g1_player_man.get(i)->clear_owned_objects();
 	}
-      
-    sorted_objs.sort(g1_sorted_obj_struct_compare);
 
-    int old_total=fp->read_32();
-    o_remap=(g1_object_type *)I4_MALLOC(sizeof(g1_object_type) * old_total, "obj remap");
+	if (fp->goto_section(G1_SECTION_OBJECT_TYPES_V1))
+	{
+		i4_array<g1_sorted_obj_struct> sorted_objs(g1_last_object_type+1, 0);
+		for (i=0; i<=g1_last_object_type; i++)
+		{
+			if (g1_object_type_array[i])
+			{
+				g1_sorted_obj_struct o;
+				o.name=g1_object_type_array[i]->name();
+				o.type=i;
+				sorted_objs.add(o);
+			}
+		}
 
-    char name[512];
-    for (i=0; i<old_total; i++) 
-    {
-      int nlen=fp->read_16();
+		sorted_objs.sort(g1_sorted_obj_struct_compare);
 
-      if (nlen)
-      {
-        fp->read(name, nlen);
+		int old_total=fp->read_32();
+		o_remap=(g1_object_type *)I4_MALLOC(sizeof(g1_object_type) * old_total, "obj remap");
 
-        g1_sorted_obj_struct o;
-        o.name=name;
-        
-        int find=sorted_objs.binary_search(&o, g1_sorted_obj_struct_compare);
-        if (find==-1)
-        {
-          i4_warning("No match for old object type %s", name);
-          o_remap[i]=-1;
-        }
-        else
-          o_remap[i]=sorted_objs[find].type;
-      } 
-      else 
-        o_remap[i]=-1;
-    }
+		char name[512];
+		for (i=0; i<old_total; i++)
+		{
+			int nlen=fp->read_16();
 
-    if (fp->goto_section("golgotha object type info"))
-    {
-      for (i=0; i<old_total; i++)
-      {
-        w32 size=fp->read_32();
-        if (o_remap[i]==-1)             // skip over types we don't know about
-          fp->seek(fp->tell()+size);
-        else
-          g1_object_type_array[o_remap[i]]->load(fp);
-      }
-    }
-  }
-  
+			if (nlen)
+			{
+				fp->read(name, nlen);
 
-  if (fp->goto_section(G1_SECTION_OBJECTS_V1))
-  {
-    think_head=think_tail=0;
+				g1_sorted_obj_struct o;
+				o.name=name;
 
-    // reset the global id list
-    g1_global_id.init();
-    g1_global_id.claim_freespace();
+				int find=sorted_objs.binary_search(&o, g1_sorted_obj_struct_compare);
+				if (find==-1)
+				{
+					i4_warning("No match for old object type %s", name);
+					o_remap[i]=-1;
+				}
+				else
+				{
+					o_remap[i]=sorted_objs[find].type;
+				}
+			}
+			else
+			{
+				o_remap[i]=-1;
+			}
+		}
 
-  
+		if (fp->goto_section("golgotha object type info"))
+		{
+			for (i=0; i<old_total; i++)
+			{
+				w32 size=fp->read_32();
+				if (o_remap[i]==-1)
+				{
+					// skip over types we don't know about
+					fp->seek(fp->tell()+size);
+				}
+				else
+				{
+					g1_object_type_array[o_remap[i]]->load(fp);
+				}
+			}
+		}
+	}
 
-    if (!o_remap)
-      o_remap=g1_get_old_object_type_remap();
 
-    tobjs=fp->read_32();
-    //tobjs=0;
-    if (tobjs)
-    {
-      //w16 bomber_type = g1_get_object_type("bomber"); //(OLI) bomber hack for demo
+	if (fp->goto_section(G1_SECTION_OBJECTS_V1))
+	{
+		think_head=think_tail=0;
 
-      obj_list=(g1_object_class **)I4_MALLOC(sizeof(g1_object_class *) * tobjs, "tmp object list");
-    
-      fp->set_remap(tobjs);
-      if (fp->goto_section(G1_SECTION_OBJECT_BASE_V1))
-      {
-        for (i=0; i<(sw32)tobjs; i++)
-        {        
-          fp->goto_section(G1_SECTION_OBJECT_LIST + i);
-          sw16 obj_type=o_remap[fp->read_16()];
-      
-          //if (obj_type==bomber_type)    //(OLI) bomber hack for demo. Does this disallow bombers?
-          //  obj_type=-1;//What about enabling?
+		// reset the global id list
+		g1_global_id.init();
+		g1_global_id.claim_freespace();
 
-          if (obj_type>=0 && obj_type<=g1_last_object_type && g1_object_type_array[obj_type])
-          {
-            g1_object_class *o=g1_object_type_array[obj_type]->create_object(obj_type,fp);
 
-            g1_map_piece_class *mp = g1_map_piece_class::cast(o);            
 
-            if (o->global_id==g1_global_id.invalid_id())
-            {
-              i4_warning("object has invalid id for itself");
-              delete o;
-              o=0;
-            }
+		if (!o_remap)
+		{
+			o_remap=g1_get_old_object_type_remap();
+		}
+
+		tobjs=fp->read_32();
+		//tobjs=0;
+		if (tobjs)
+		{
+			//w16 bomber_type = g1_get_object_type("bomber"); //(OLI) bomber hack for demo
+
+			obj_list=(g1_object_class **)I4_MALLOC(sizeof(g1_object_class *) * tobjs, "tmp object list");
+
+			fp->set_remap(tobjs);
+			if (fp->goto_section(G1_SECTION_OBJECT_BASE_V1))
+			{
+				for (i=0; i<(sw32)tobjs; i++)
+				{
+					fp->goto_section(G1_SECTION_OBJECT_LIST + i);
+					sw16 obj_type=o_remap[fp->read_16()];
+
+					//if (obj_type==bomber_type)    //(OLI) bomber hack for demo. Does this disallow bombers?
+					//  obj_type=-1;//What about enabling?
+
+					if (obj_type>=0 && obj_type<=g1_last_object_type && g1_object_type_array[obj_type])
+					{
+						g1_object_class *o=g1_object_type_array[obj_type]->create_object(obj_type,fp);
+
+						g1_map_piece_class *mp = g1_map_piece_class::cast(o);
+
+						if (o->global_id==g1_global_id.invalid_id())
+						{
+							i4_warning("object has invalid id for itself");
+							delete o;
+							o=0;
+						}
 //             else if (mp)
 //             {
 //               delete o;
 //               o=0;
 //             }
-            else
-            if (o->player_num>=G1_MAX_PLAYERS)
-            {
-              i4_warning("map load : object '%s' deleted, bad player number",
-                         g1_object_type_array[obj_type]->name());
-              delete o;
-              o=0;
-            } else if (o->x<0 || o->y<0 || o->x>=width() || o->y>=height() || o->id!=obj_type)
-            {
-              i4_warning("map load : object '%s' deleted, off map or loaded wrong",
-                         g1_object_type_array[obj_type]->name());
-              delete o;
-              o=0;
-            }
-            
-            obj_list[i]=o;
-          }
-          else 
-          {
-            obj_list[i]=0;
-          }
-        }
-      }
-      fp->end_remap();
-      // now the object will convert all of there refernces to other objects from w16 to
-      // pointers
-      
-      fp->set_helpers(obj_list, tobjs);
-  
-      fp->convert_references();
-    }
- 
-  }
-    
-  if (o_remap) 
-    i4_free(o_remap);
-  
-  return obj_list;
+						else
+						if (o->player_num>=G1_MAX_PLAYERS)
+						{
+							i4_warning("map load : object '%s' deleted, bad player number",
+									   g1_object_type_array[obj_type]->name());
+							delete o;
+							o=0;
+						}
+						else if (o->x<0 || o->y<0 || o->x>=width() || o->y>=height() || o->id!=obj_type)
+						{
+							i4_warning("map load : object '%s' deleted, off map or loaded wrong",
+									   g1_object_type_array[obj_type]->name());
+							delete o;
+							o=0;
+						}
+
+						obj_list[i]=o;
+					}
+					else
+					{
+						obj_list[i]=0;
+					}
+				}
+			}
+			fp->end_remap();
+			// now the object will convert all of there refernces to other objects from w16 to
+			// pointers
+
+			fp->set_helpers(obj_list, tobjs);
+
+			fp->convert_references();
+		}
+
+	}
+
+	if (o_remap)
+	{
+		i4_free(o_remap);
+	}
+
+	return obj_list;
 
 }
 
 // returns the sections that were actually read
 w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 {
-  sw32 i, ret=0;
-  g1_object_class **obj_list=0;
-  
-  g1_map_class *old_current=g1_current_map_PRIVATE;
-  g1_set_map(this);
+	sw32 i, ret=0;
+	g1_object_class **obj_list=0;
 
-  w32 tobjs=0;
-  sw32 lw=0,lh=0;
-  i4_bool load_cells=(sections & G1_MAP_CELLS)!=0;
-  i4_bool load_verts=(sections & G1_MAP_VERTS)!=0;
+	g1_map_class *old_current=g1_current_map_PRIVATE;
+	g1_set_map(this);
 
-  if (sections & G1_MAP_RES_FILENAME && fp->goto_section("golgotha map res filename"))
-  {
-    i4_str *res = fp->read_counted_str();
-    //(OLI) what do we do with this string?
-    delete res;
-  }
+	w32 tobjs=0;
+	sw32 lw=0,lh=0;
+	i4_bool load_cells=(sections & G1_MAP_CELLS)!=0;
+	i4_bool load_verts=(sections & G1_MAP_VERTS)!=0;
 
-  if (fp->goto_section("li_type_info"))
-    fp->li_remap=li_load_type_info(fp,0);
+	if (sections & G1_MAP_RES_FILENAME && fp->goto_section("golgotha map res filename"))
+	{
+		i4_str *res = fp->read_counted_str();
+		//(OLI) what do we do with this string?
+		delete res;
+	}
 
-  if (sections & (G1_MAP_CELLS | G1_MAP_VERTS))
-  {
-    if (!fp->goto_section(G1_SECTION_MAP_DIMENSIONS_V1))
-      return 0;
- 
-    lw=fp->read_16();
-    lh=fp->read_16();  
+	if (fp->goto_section("li_type_info"))
+	{
+		fp->li_remap=li_load_type_info(fp,0);
+	}
 
-    // must load cells and verts together if new load    
-    if (load_cells != load_verts &&
-        (cells!=0 || verts!=0) &&
-        (lw!=(sw32)w  || lh!=(sw32)h))
-    {
-      i4_warning("trying to merge in cells or verts of differnt map size");
-      sections &= ~(G1_MAP_CELLS | G1_MAP_VERTS);   // don't try to load these
-    }
-  }
+	if (sections & (G1_MAP_CELLS | G1_MAP_VERTS))
+	{
+		if (!fp->goto_section(G1_SECTION_MAP_DIMENSIONS_V1))
+		{
+			return 0;
+		}
 
+		lw=fp->read_16();
+		lh=fp->read_16();
 
-  if (sections & G1_MAP_SKY)
-  {
-    if (load_sky(fp))
-      ret|=G1_MAP_SKY; 
-  }
-
-  if ((sections & G1_MAP_TICK) && (fp->goto_section(G1_SECTION_TICK)))
-  {
-    g1_tick_counter=fp->read_32();
-    ret|=G1_MAP_TICK;
-  }
- 
-
-  g1_object_class *olist[G1_MAX_OBJECTS];
-  sw32 t_old_objects=0;
-
-  if (cells)  // if old cells in map get all the objects off the map before proceeding
-  {
-    t_old_objects=make_object_list(olist, G1_MAX_OBJECTS);
-    for (i=0; i<t_old_objects; i++)
-      olist[i]->unoccupy_location();
-  }
-  
-  if (sections & G1_MAP_CELLS)    
-  {
-    if (cells)
-    {
-      i4_free(cells);
-      cells=0;
-    }
-    
-    if (load_cells == load_verts)
-    {
-      w=lw;
-      h=lh;
-      g1_map_width=w;
-      g1_map_height=h;
-    }
-
-    int a_size=w * h *sizeof(g1_map_cell_class);
-    cells=(g1_map_cell_class *)malloc(a_size);
-	memset(cells,0,a_size);
-    g1_cells=cells;
-
-    w16 *tile_remap=g1_map_get_tile_remap(fp);
-    if (!tile_remap)
-      return i4_F;
-
-    if (g1_load_map_cells(cells, w*h, tile_remap, fp))
-      ret|=G1_MAP_CELLS;
+		// must load cells and verts together if new load
+		if (load_cells != load_verts &&
+			(cells!=0 || verts!=0) &&
+			(lw!=(sw32)w  || lh!=(sw32)h))
+		{
+			i4_warning("trying to merge in cells or verts of differnt map size");
+			sections &= ~(G1_MAP_CELLS | G1_MAP_VERTS); // don't try to load these
+		}
+	}
 
 
-    i4_free(tile_remap);
-    
-    recalc|=G1_RECALC_PAD_LIST;
-  }
+	if (sections & G1_MAP_SKY)
+	{
+		if (load_sky(fp))
+		{
+			ret|=G1_MAP_SKY;
+		}
+	}
+
+	if ((sections & G1_MAP_TICK) && (fp->goto_section(G1_SECTION_TICK)))
+	{
+		g1_tick_counter=fp->read_32();
+		ret|=G1_MAP_TICK;
+	}
+
+
+	g1_object_class *olist[G1_MAX_OBJECTS];
+	sw32 t_old_objects=0;
+
+	if (cells) // if old cells in map get all the objects off the map before proceeding
+	{
+		t_old_objects=make_object_list(olist, G1_MAX_OBJECTS);
+		for (i=0; i<t_old_objects; i++)
+		{
+			olist[i]->unoccupy_location();
+		}
+	}
+
+	if (sections & G1_MAP_CELLS)
+	{
+		if (cells)
+		{
+			i4_free(cells);
+			cells=0;
+		}
+
+		if (load_cells == load_verts)
+		{
+			w=lw;
+			h=lh;
+			g1_map_width=w;
+			g1_map_height=h;
+		}
+
+		int a_size=w * h *sizeof(g1_map_cell_class);
+		cells=(g1_map_cell_class *)malloc(a_size);
+		memset(cells,0,a_size);
+		g1_cells=cells;
+
+		w16 *tile_remap=g1_map_get_tile_remap(fp);
+		if (!tile_remap)
+		{
+			return i4_F;
+		}
+
+		if (g1_load_map_cells(cells, w*h, tile_remap, fp))
+		{
+			ret|=G1_MAP_CELLS;
+		}
+
+
+		i4_free(tile_remap);
+
+		recalc|=G1_RECALC_PAD_LIST;
+	}
 
 
 
-  if (sections & G1_MAP_VERTS)
-  {
-    if (verts)
-      i4_free(verts);
+	if (sections & G1_MAP_VERTS)
+	{
+		if (verts)
+		{
+			i4_free(verts);
+		}
 
-    int size=(lw+1)*(lh+1)*sizeof(g1_map_vertex_class);
-    verts=(g1_map_vertex_class *)malloc(size);
-    g1_verts=verts;
+		int size=(lw+1)*(lh+1)*sizeof(g1_map_vertex_class);
+		verts=(g1_map_vertex_class *)malloc(size);
+		g1_verts=verts;
 
-    g1_load_map_verts(verts, (lw+1)*(lh+1), fp, 1);
-    ret|=G1_MAP_VERTS;
-  }
-  else if (sections & G1_MAP_SELECTED_VERTS)
-  {  
-    if (fp->goto_section("golgotha selected verts"))
-    {
-      i=fp->read_16();
-      while (i!=0xffff)
-      {
-        g1_load_map_verts(verts+i, 1, fp, 0);
-        i=fp->read_16();
-      }
+		g1_load_map_verts(verts, (lw+1)*(lh+1), fp, 1);
+		ret|=G1_MAP_VERTS;
+	}
+	else if (sections & G1_MAP_SELECTED_VERTS)
+	{
+		if (fp->goto_section("golgotha selected verts"))
+		{
+			i=fp->read_16();
+			while (i!=0xffff)
+			{
+				g1_load_map_verts(verts+i, 1, fp, 0);
+				i=fp->read_16();
+			}
 
-      ret|=G1_MAP_SELECTED_VERTS;
-    }
-  }
-   
-  if ((sections & G1_MAP_PLAYERS) && fp->goto_section(G1_SECTION_PLAYER_INFO))
-  {
-    if (g1_player_man.load(fp)) 
-      ret|=G1_MAP_PLAYERS;
-	
-  }
-  else if ((sections & G1_MAP_PLAYERS) && fp->goto_section(G1_SECTION_PLAYER_INFO_V2))
-	  {
-	  int n;
-	  for (n=0;n<G1_MAX_PLAYERS;n++)
-		  {
-		  i4_str *ai_name=fp->read_counted_str();
-		  char buf[200];
-		  i4_os_string(*ai_name,buf,200);
-		  g1_player_man.set_ai(n,buf);
-		  delete ai_name;
-		  }
-	  if (g1_player_man.load(fp))
-		ret|=G1_MAP_PLAYERS;
-	  }
+			ret|=G1_MAP_SELECTED_VERTS;
+		}
+	}
 
-  if (sections & G1_MAP_OBJECTS)  
-  {
-    for (i=0; i<t_old_objects; i++)
-    {
-      request_remove(olist[i]);
-           
-    }
-    //This can now be safely placed after the loop. 
-    //Might even prevent some bugs when dependent objects get deleted.
-    g1_remove_man.process_requests();   
-    t_old_objects=0;
+	if ((sections & G1_MAP_PLAYERS) && fp->goto_section(G1_SECTION_PLAYER_INFO))
+	{
+		if (g1_player_man.load(fp))
+		{
+			ret|=G1_MAP_PLAYERS;
+		}
 
+	}
+	else if ((sections & G1_MAP_PLAYERS) && fp->goto_section(G1_SECTION_PLAYER_INFO_V2))
+	{
+		int n;
+		for (n=0; n<G1_MAX_PLAYERS; n++)
+		{
+			i4_str *ai_name=fp->read_counted_str();
+			char buf[200];
+			i4_os_string(*ai_name,buf,200);
+			g1_player_man.set_ai(n,buf);
+			delete ai_name;
+		}
+		if (g1_player_man.load(fp))
+		{
+			ret|=G1_MAP_PLAYERS;
+		}
+	}
 
-    obj_list=load_objects(fp, tobjs);
-    ret|=G1_MAP_OBJECTS;    
-  }
+	if (sections & G1_MAP_OBJECTS)
+	{
+		for (i=0; i<t_old_objects; i++)
+		{
+			request_remove(olist[i]);
 
-  if (sections & G1_MAP_LIGHTS)
-  {
-    if (g1_lights.load(fp))
-      ret|=G1_MAP_LIGHTS;
-  }
-
-  if ((sections & G1_MAP_MOVIE) && (fp->goto_section(G1_SECTION_MOVIE)))
-  {
-    if (current_movie)
-      delete current_movie;
-
-    current_movie=g1_load_movie_flow(fp);
+		}
+		//This can now be safely placed after the loop.
+		//Might even prevent some bugs when dependent objects get deleted.
+		g1_remove_man.process_requests();
+		t_old_objects=0;
 
 
-    ret|=G1_MAP_MOVIE;
-  }
+		obj_list=load_objects(fp, tobjs);
+		ret|=G1_MAP_OBJECTS;
+	}
 
-  if ((sections & G1_MAP_CRITICAL_POINTS) && critical_graph)
-   {
-     if(fp->goto_section(G1_SECTION_CRITICAL_POINTS_V1))
-		 {
+	if (sections & G1_MAP_LIGHTS)
+	{
+		if (g1_lights.load(fp))
+		{
+			ret|=G1_MAP_LIGHTS;
+		}
+	}
+
+	if ((sections & G1_MAP_MOVIE) && (fp->goto_section(G1_SECTION_MOVIE)))
+	{
+		if (current_movie)
+		{
+			delete current_movie;
+		}
+
+		current_movie=g1_load_movie_flow(fp);
+
+
+		ret|=G1_MAP_MOVIE;
+	}
+
+	if ((sections & G1_MAP_CRITICAL_POINTS) && critical_graph)
+	{
+		if(fp->goto_section(G1_SECTION_CRITICAL_POINTS_V1))
+		{
 			critical_graph->load_points(fp);
 			ret|=G1_MAP_CRITICAL_POINTS;
-		 }
-   }
+		}
+	}
 
-   if ((sections & G1_MAP_CRITICAL_DATA) && critical_graph)
-   {
-     if (fp->goto_section(G1_SECTION_CRITICAL_GRAPH_V1))
-		 {
+	if ((sections & G1_MAP_CRITICAL_DATA) && critical_graph)
+	{
+		if (fp->goto_section(G1_SECTION_CRITICAL_GRAPH_V1))
+		{
 			critical_graph->load_graph(fp);
 			if(fp->goto_section(G1_SECTION_CRITICAL_MAP_V1))
 			{
 				load_critical_map(fp);
 				ret|=G1_MAP_CRITICAL_DATA;
-				
+
 			}
-		 }
-   }
+		}
+	}
 
-  recalc|=G1_MAP_VARS;
+	recalc|=G1_MAP_VARS;
 
-  if (sections & G1_MAP_VIEW_POSITIONS)
-    g1_cwin_man->load_views(fp);
-  else if (sections & G1_MAP_OBJECTS)
-    g1_cwin_man->load_views(0);
+	if (sections & G1_MAP_VIEW_POSITIONS)
+	{
+		g1_cwin_man->load_views(fp);
+	}
+	else if (sections & G1_MAP_OBJECTS)
+	{
+		g1_cwin_man->load_views(0);
+	}
 
-  if (obj_list)
-  {
-    for (i=0; i<(sw32)tobjs; i++)
-      if (obj_list[i])
-      {
-        g1_object_class *o=obj_list[i];
+	if (obj_list)
+	{
+		for (i=0; i<(sw32)tobjs; i++)
+		{
+			if (obj_list[i])
+			{
+				g1_object_class *o=obj_list[i];
 
-        o->occupy_location();
-        o->grab_old();          // is this ok?  currently, this is needed to get all ground
-                                //   rolls and pitches correct in the level
-        
-        if (o->get_flag(g1_object_class::THINKING))
-          request_think(o);
+				o->occupy_location();
+				o->grab_old();  // is this ok?  currently, this is needed to get all ground
+								//   rolls and pitches correct in the level
 
-        g1_player_man.get(o->player_num)->add_object(o->global_id);
-      }
- 
-    fp->convert_references();    
-    fp->set_helpers(0,0);   // make sure no one tries to use this later  
+				if (o->get_flag(g1_object_class::THINKING))
+				{
+					request_think(o);
+				}
 
-    // validate everyone's data, especially if other objects have been deleted
-    for (i=0; i<(int)tobjs; i++)
-      if (obj_list[i])
-        obj_list[i]->validate();
+				g1_player_man.get(o->player_num)->add_object(o->global_id);
+			}
+		}
 
-    i4_free(obj_list);
-  }
-  else if (fp->references_were_loaded())
-    i4_error("could not convert references because objects not loaded");
+		fp->convert_references();
+		fp->set_helpers(0,0); // make sure no one tries to use this later
 
-  // add previously removed object into the map if we aren't loading them later
-  if (t_old_objects)
-  {
-    if (sections & G1_MAP_OBJECTS)  // delete these object, they were supposedly loaded
-    {
-      for (i=0; i<t_old_objects; i++)
-      {
-        request_remove(olist[i]);
-      }
-      g1_remove_man.process_requests();    
-    }
-    else  // otherwise add them back into the map
-    {
+		// validate everyone's data, especially if other objects have been deleted
+		for (i=0; i<(int)tobjs; i++)
+		{
+			if (obj_list[i])
+			{
+				obj_list[i]->validate();
+			}
+		}
 
-      for (i=0; i<t_old_objects; i++)
-        olist[i]->occupy_location();
-    }
-  }
+		i4_free(obj_list);
+	}
+	else if (fp->references_were_loaded())
+	{
+		i4_error("could not convert references because objects not loaded");
+	}
 
-  for (g1_map_data_class *md=g1_map_data_class::first; md; md=md->next)
-    md->load(fp, sections);
+	// add previously removed object into the map if we aren't loading them later
+	if (t_old_objects)
+	{
+		if (sections & G1_MAP_OBJECTS) // delete these object, they were supposedly loaded
+		{
+			for (i=0; i<t_old_objects; i++)
+			{
+				request_remove(olist[i]);
+			}
+			g1_remove_man.process_requests();
+		}
+		else // otherwise add them back into the map
+		{
 
-  if (sections & G1_MAP_TRANSPORT)
-	  {
-	  if (fp->goto_section(TRANSIMS_DATA_STRING))
-		  {
-		  g2_new_act_man()->load(fp);
-		  }
-	  }
+			for (i=0; i<t_old_objects; i++)
+			{
+				olist[i]->occupy_location();
+			}
+		}
+	}
 
-  g1_map_vertex_class *v[4];
-  i4_3d_vector v0,v1,v2,v3,vec1,vec2,vec3;
-  sw32 cx,cy;
+	for (g1_map_data_class *md=g1_map_data_class::first; md; md=md->next)
+	{
+		md->load(fp, sections);
+	}
 
-  for (cy=0; cy<height(); cy++)
-  for (cx=0; cx<width();  cx++)
-  {    
-    g1_map_cell_class *cell = cells+cx+cy*width();
+	if (sections & G1_MAP_TRANSPORT)
+	{
+		if (fp->goto_section(TRANSIMS_DATA_STRING))
+		{
+			g2_new_act_man()->load(fp);
+		}
+	}
 
-    v[0] = verts + cx + cy * (width()+1);       //v[0]   v[1]
-    v[1] = v[0]+1;                             //v[3]   v[2] 
-    v[2] = v[1]+width()+1;
-    v[3] = v[2]-1;
+	g1_map_vertex_class *v[4];
+	i4_3d_vector v0,v1,v2,v3,vec1,vec2,vec3;
+	sw32 cx,cy;
 
-    v0.x = (float)cx;
-    v0.y = (float)cy;
-    v0.z = v[0]->get_height();
+	for (cy=0; cy<height(); cy++)
+	{
+		for (cx=0; cx<width();  cx++)
+		{
+			g1_map_cell_class *cell = cells+cx+cy *width();
 
-    v1.x = (float)cx+1;
-    v1.y = (float)cx;
-    v1.z = v[1]->get_height();
+			v[0] = verts + cx + cy * (width()+1); //v[0]   v[1]
+			v[1] = v[0]+1;                     //v[3]   v[2]
+			v[2] = v[1]+width()+1;
+			v[3] = v[2]-1;
 
-    v2.x = (float)cx+1;
-    v2.y = (float)cy+1;
-    v2.z = v[2]->get_height();
+			v0.x = (float)cx;
+			v0.y = (float)cy;
+			v0.z = v[0]->get_height();
 
-    v3.x = (float)cx;
-    v3.y = (float)cy+1;
-    v3.z = v[3]->get_height();
+			v1.x = (float)cx+1;
+			v1.y = (float)cx;
+			v1.z = v[1]->get_height();
 
-    vec1.x = v1.x - v0.x;
-    vec1.y = v1.y - v0.y;
-    vec1.z = v1.z - v0.z;
+			v2.x = (float)cx+1;
+			v2.y = (float)cy+1;
+			v2.z = v[2]->get_height();
 
-    vec2.x = v2.x - v0.x;
-    vec2.y = v2.y - v0.y;
-    vec2.z = v2.z - v0.z;
+			v3.x = (float)cx;
+			v3.y = (float)cy+1;
+			v3.z = v[3]->get_height();
 
-    vec3.cross(vec1,vec2);
+			vec1.x = v1.x - v0.x;
+			vec1.y = v1.y - v0.y;
+			vec1.z = v1.z - v0.z;
 
-    i4_float dist = vec3.dot(v0);
+			vec2.x = v2.x - v0.x;
+			vec2.y = v2.y - v0.y;
+			vec2.z = v2.z - v0.z;
 
-    if (fabs(vec3.dot(v3) - dist) < 0.00000001) cell->flags |= g1_map_cell_class::PLANAR;
-  }
+			vec3.cross(vec1,vec2);
 
-  recalc_static_stuff();
-  tick_time.get();
+			i4_float dist = vec3.dot(v0);
 
-  g1_set_map(old_current);
+			if (fabs(vec3.dot(v3) - dist) < 0.00000001)
+			{
+				cell->flags |= g1_map_cell_class::PLANAR;
+			}
+		}
+	}
 
-  if (fp->li_remap)
-  {
-    li_free_type_info(fp->li_remap);
-    fp->li_remap=0;
-  }
+	recalc_static_stuff();
+	tick_time.get();
+
+	g1_set_map(old_current);
+
+	if (fp->li_remap)
+	{
+		li_free_type_info(fp->li_remap);
+		fp->li_remap=0;
+	}
 
 
-  return i4_T;
+	return i4_T;
 }
 
 void g1_map_class::reload()
 {
-  i4_file_class *in=i4_open(*filename);
-  if (in)
-  {
-    g1_loader_class *l=g1_open_save_file(in);
-    if (l)
-    {
-      load(l, G1_MAP_ALL);
-      delete l;
-    }
-  }
+	i4_file_class *in=i4_open(*filename);
+	if (in)
+	{
+		g1_loader_class *l=g1_open_save_file(in);
+		if (l)
+		{
+			load(l, G1_MAP_ALL);
+			delete l;
+		}
+	}
 }
 
 void g1_map_class::save_critical_map(g1_saver_class *f)
 {
-   int i,j;
-   g1_map_cell_class *c=cell(0,0);
+	int i,j;
+	g1_map_cell_class *c=cell(0,0);
 
-   for (j=0; j<height(); j++)
-     for (i=0; i<width(); i++, c++)
-       f->write(c->nearest_critical, sizeof(c->nearest_critical));
+	for (j=0; j<height(); j++)
+	{
+		for (i=0; i<width(); i++, c++)
+		{
+			f->write(c->nearest_critical, sizeof(c->nearest_critical));
+		}
+	}
 }
 
 void g1_map_class::load_critical_map(g1_loader_class *f)
 {
-   int i,j;
-   g1_map_cell_class *c=cell(0,0);
-   for (j=0; j<height(); j++)
-     for (i=0; i<width(); i++, c++)
-       f->read(c->nearest_critical, sizeof(c->nearest_critical));
+	int i,j;
+	g1_map_cell_class *c=cell(0,0);
+	for (j=0; j<height(); j++)
+	{
+		for (i=0; i<width(); i++, c++)
+		{
+			f->read(c->nearest_critical, sizeof(c->nearest_critical));
+		}
+	}
 }
-

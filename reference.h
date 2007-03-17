@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef REF_MAN_HH
 #define REF_MAN_HH
@@ -30,60 +30,90 @@ class g1_loader_class;
 class g1_reference_class
 {
 protected:
-  friend class g1_remove_manager_class;
-  friend class g1_saver_class;
-  friend class g1_realtime_saver_class;
-  friend class g1_loader_class;
-  friend class g1_realtime_loader_class;
-  g1_object_class *ref;
+	friend class g1_remove_manager_class;
+	friend class g1_saver_class;
+	friend class g1_realtime_saver_class;
+	friend class g1_loader_class;
+	friend class g1_realtime_loader_class;
+	g1_object_class *ref;
 
-  void remove_ref();
+	void remove_ref();
 
-  g1_reference_class() : ref(0), next(0) {}
-  g1_reference_class(g1_object_class *object_being_referenced):ref(0),next(0)
-  { reference_object(object_being_referenced); }
+	g1_reference_class() :
+		ref(0),
+		next(0)
+	{
+	}
+	g1_reference_class(g1_object_class *object_being_referenced) :
+		ref(0),
+		next(0)
+	{
+		reference_object(object_being_referenced);
+	}
 
-  void reference_object(g1_object_class *object_being_referenced);
+	void reference_object(g1_object_class *object_being_referenced);
 public:
-  g1_reference_class *next;
-  
-  void save(g1_saver_class *fp);
-  void load(g1_loader_class *fp);
+	g1_reference_class *next;
 
-  i4_bool valid() const { return ref!=0; }
+	void save(g1_saver_class *fp);
+	void load(g1_loader_class *fp);
 
-  i4_bool operator==(const g1_reference_class &a) const { return ref == a.ref; }
-  i4_bool operator!=(const g1_reference_class &a) const { return ref != a.ref; }
+	i4_bool valid() const
+	{
+		return ref!=0;
+	}
 
-  ~g1_reference_class();
+	i4_bool operator==(const g1_reference_class &a) const
+	{
+		return ref == a.ref;
+	}
+	i4_bool operator!=(const g1_reference_class &a) const
+	{
+		return ref != a.ref;
+	}
+
+	~g1_reference_class();
 };
 
 template <class T>
-class g1_typed_reference_class : public g1_reference_class
+class g1_typed_reference_class :
+	public g1_reference_class
 {
 public:
-  T *get() const { return (T *)ref; }
-  T& operator*() const { return *((T *)ref); }
-  T* operator->() const { return (T *)ref; }
+	T *get() const
+	{
+		return (T *)ref;
+	}
+	T& operator*() const
+	{
+		return *((T *)ref);
+	}
+	T *operator->() const
+	{
+		return (T *)ref;
+	}
 
-  g1_typed_reference_class<T>() : g1_reference_class() {}
-  g1_typed_reference_class<T>(const g1_typed_reference_class<T> &r) : g1_reference_class(r.ref) {}
-  g1_typed_reference_class<T>(T *ref): g1_reference_class(ref){};
+	g1_typed_reference_class<T>() :
+		g1_reference_class() {
+	}
+	g1_typed_reference_class<T>(const g1_typed_reference_class<T> &r) :
+		g1_reference_class(r.ref) {
+	}
+	g1_typed_reference_class<T>(T *ref) :
+		g1_reference_class(ref) {
+	};
 
-  g1_typed_reference_class<T>& operator=(const g1_typed_reference_class<T> &r) 
-  { 
-    g1_reference_class::reference_object(r.ref); 
-    return *this; 
-  }
+	g1_typed_reference_class<T>& operator=(const g1_typed_reference_class<T> &r)
+	{
+		g1_reference_class::reference_object(r.ref);
+		return *this;
+	}
 
-  g1_typed_reference_class<T>& operator=(const T *ref) 
-  { 
-    g1_reference_class::reference_object((g1_object_class *)ref); 
-    return *this; 
-  }
+	g1_typed_reference_class<T>& operator=(const T *ref)
+	{
+		g1_reference_class::reference_object((g1_object_class *)ref);
+		return *this;
+	}
 };
 
 #endif
-
-
-
