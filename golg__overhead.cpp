@@ -198,7 +198,7 @@ void g1_object_controller_class::draw_overhead(g1_draw_context_class *context)
 		g1_render.draw_rectangle(begin_dragx,begin_dragy,last_mouse_x,
 								 last_mouse_y,0xffffffff,*context->context);
 	}
-	if (g1_human&&g1_human->selected_object.valid())
+	if (g1_human)
 	{
 		g1_human->show_selection(this, transform, context);
 		//might also request events through this object

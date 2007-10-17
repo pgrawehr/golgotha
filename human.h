@@ -25,11 +25,16 @@ class g1_human_class :
 	public g1_team_api_class
 {
 
-public:
+private:
 	i4_float dragstartx,dragstarty,dragdestx,dragdesty;
-	enum {
-		MAX_COMMANDS = 30
-	};
+	i4_float mouse_look_increment_x, mouse_look_increment_y;
+
+	//The object that is selected on the map
+	g1_typed_reference_class<g1_object_class> selected_object;
+
+	//Building about to be built
+	g1_object_class* prepared_building;
+public:
 	enum {
 		DEFAULT,
 		GOTO,
@@ -62,10 +67,7 @@ public:
 	g1_human_class(g1_loader_class *f);
 	~g1_human_class();
 
-	i4_float mouse_look_increment_x, mouse_look_increment_y;
 
-	g1_typed_reference_class<g1_object_class> selected_object;
-	g1_typed_reference_class<g1_object_class> preassigned[10];
 
 	void send_selected_units(i4_float x, i4_float y);
 	void attack_unit(g1_object_class *o, i4_float x, i4_float y);
@@ -78,6 +80,9 @@ public:
 	w8 determine_cursor(g1_object_class *object_mouse_is_on);
 	void player_clicked(g1_object_class *o, float gx, float gy,w32 command);
 	int build_unit(g1_object_type type);
+	bool prepare_to_build_building(g1_object_type type);
+	bool is_building_prepared();
+	void chancel_prepared_building();
 	i4_bool select_path(float gx,float gy);
 	void clear_selected();
 	virtual void think();

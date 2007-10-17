@@ -264,8 +264,17 @@ public:
 	// ******************** COMMANDS (sent to server) *******************
 	i4_bool deploy_unit(w32 global_id, i4_float x, i4_float y); // send object to location
 
+	//! Try to build an unit.
+	//! This method will add an unit of the given type to the build list of the first factory
+	//! that is able to build such units. Success of this method doesn't necessarily mean the
+	//! unit was built, because it may come out only later that there's not enough money etc.
 	int build_unit(g1_object_type type);
-	// try to build unit
+	//! Try to build an unit at the specified factory.
+	//! Special case of the above function: Specify the factory to use for building.
+	//! Hint: Can also be used to build at an enemy's site.
+	int build_unit(g1_object_type type, g1_object_class* factory);
+	//int build_building(g1_object_type type);
+	
 
 	i4_bool set_current_target(w32 global_id); // should be a path_object!
 

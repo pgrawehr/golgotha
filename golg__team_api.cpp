@@ -572,6 +572,30 @@ int g1_team_api_class::build_unit(g1_object_type type)
 	return ret;
 }
 
+int g1_team_api_class::build_unit(g1_object_type type, g1_object_class* factory)
+{
+	g1_factory_class* f=g1_factory_class::cast(factory);
+	if (f==NULL)
+		return G1_BUILD_INVALID_OBJECT;
+	if (record)
+	{
+		write_playback_checker(record);
+		record->write_8(G1_COMMAND_BUILD_AT_FACTORY);
+		record->write_16(type);
+		//Since the global id may have changed uppon load,
+		//the only thing we can really do is lookup based on the factory position.
+		//(Actually, record and playback isn't tested and most probably doesn't work anyway)
+		record->write_32(factory->global_id);
+		record->write_float(factory->x);
+		record->write_float(factory->y);
+	}
+	int ret=G1_BUILD_INVALID_OBJECT;
+	if (factory!=NULL)
+		ret=factory->build(type);
+
+	return ret;
+}
+
 i4_bool g1_team_api_class::record_start(char *name)
 {
 	record = i4_open(name, I4_WRITE);

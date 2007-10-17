@@ -61,12 +61,15 @@ g1_human_class::g1_human_class(g1_loader_class *f)
 	mouse_look_increment_x = 0;
 	mouse_look_increment_y = 0;
 	dragstartx=dragstarty=dragdestx=dragdesty=-1;
+	prepared_building=NULL;
 	g1_human = this;
 }
 
 g1_human_class::~g1_human_class()
 {
 	g1_human = 0;
+	if (prepared_building)
+		delete prepared_building;
 }
 
 void g1_human_class::send_selected_units(i4_float x, i4_float y)
@@ -556,6 +559,30 @@ void g1_human_class::player_clicked(g1_object_class *obj, float gx, float gy,w32
 		default:
 			break;
 	}
+}
+
+bool g1_human_class::prepare_to_build_building(g1_object_type type)
+{
+	if (prepared_building)
+		delete prepared_building;
+	prepared_building=NULL;
+	g1_object_class *o=g1_object_type_array[type]->create_object(type,0);
+	if (o)
+	{
+		//call o->set_flag(NEES_SYNC,1); and o->request_think(); when the object is actually 
+		//going to be used. 
+		prepared_building=o;
+	}
+	return false;
+}
+bool g1_human_class::is_building_prepared()
+{
+	return prepared_building!=NULL;
+}
+void g1_human_class::chancel_prepared_building()
+{
+	delete prepared_building;
+	prepared_building=NULL;
 }
 
 int g1_human_class::build_unit(g1_object_type type)
