@@ -8,7 +8,7 @@
 
 
 
-r1_texture_handle *r1_handles;
+r1_texture_handle * r1_handles;
 
 struct cell
 {

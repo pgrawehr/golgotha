@@ -22,11 +22,11 @@ class g1_bank_class :
 protected:
 	i4_3d_vector crate_pos;
 public:
-	g1_bank_class *next;
+	g1_bank_class * next;
 	g1_moneycrate_class *crate();
-	void set_crate(g1_moneycrate_class *cr);
+	void set_crate(g1_moneycrate_class * cr);
 
-	g1_bank_class(g1_object_type id, g1_loader_class *fp);
+	g1_bank_class(g1_object_type id, g1_loader_class * fp);
 
 	void crate_location(i4_3d_vector &pos);
 	void create_crate();

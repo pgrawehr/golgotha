@@ -38,26 +38,26 @@
 #include "status/gui_stat.h"
 #include "gui/deco_win.h"
 
-static i4_window_manager_class *wm;
-static i4_graphical_style_class *style;
-static i4_list_box_class *display_picker, *size_picker;
-static i4_text_scroll_window_class *error_win;
+static i4_window_manager_class * wm;
+static i4_graphical_style_class * style;
+static i4_list_box_class * display_picker, * size_picker;
+static i4_text_scroll_window_class * error_win;
 static char inst_path[200];
 int inst_sizes[3]={
 	20,40,60
 };
 
-char *reg_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
-char *i4_display_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
-char *sfx_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
+char * reg_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
+char * i4_display_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
+char * sfx_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
 
-i4_file_class *uninstall_script=0;
+i4_file_class * uninstall_script=0;
 
 int installed=0;
 int col2=120;
 int size_needed_to_install=0;
 
-i4_text_input_class *path=0;
+i4_text_input_class * path=0;
 
 
 enum {
@@ -76,7 +76,7 @@ enum {
 
 
 
-void fix_path(char *f)
+void fix_path(char * f)
 {
 	for (; *f; f++)
 #ifdef __linux
@@ -99,7 +99,7 @@ void fix_path(char *f)
 
 
 #ifdef __linux
-int free_space(char *path)
+int free_space(char * path)
 {
 	reutn 100*1024*1024;
 }
@@ -120,7 +120,7 @@ class setup_options :
 	public i4_color_window_class
 {
 public:
-	setup_options(w16 w, w16 h, i4_graphical_style_class *style)
+	setup_options(w16 w, w16 h, i4_graphical_style_class * style)
 		: i4_color_window_class(w,h, style->color_hint->neutral(),style)
 	{
 	}
@@ -131,13 +131,13 @@ public:
 
 		i4_color_window_class::parent_draw(context);
 
-		i4_font_class *f=style->font_hint->normal_font;
+		i4_font_class * f=style->font_hint->normal_font;
 
 		char p[200];
 		i4_os_string(*(path->get_edit_string()), p, 200);
 
 		char display[200];
-		i4_text_item_class *ti=(i4_text_item_class *)display_picker->get_current_item();
+		i4_text_item_class * ti=(i4_text_item_class *)display_picker->get_current_item();
 		i4_os_string(ti->get_text(), display, 200);
 
 		char size[200];
@@ -186,7 +186,7 @@ public:
 	}
 };
 
-setup_options *setup_window=0;
+setup_options * setup_window=0;
 
 
 #ifdef _WINDOWS
@@ -239,7 +239,7 @@ void setup_changed()
 static i4_bool no_space=i4_F;
 
 
-void write_header(i4_file_class *fp, i4_sound_info &fmt)
+void write_header(i4_file_class * fp, i4_sound_info &fmt)
 {
 	fp->write("RIFF",4);
 	fp->write_32(36+fmt.size);     // 36 + snd->size
@@ -264,9 +264,10 @@ void write_header(i4_file_class *fp, i4_sound_info &fmt)
 
 
 
-char *forward_slash(char *f)
+char *forward_slash(char * f)
 {
-	char *r=f;
+	char * r=f;
+
 	for (; *f; f++)
 	{
 		if (*f=='\\')
@@ -280,11 +281,11 @@ char *forward_slash(char *f)
 
 
 
-li_object *li_uninstall_cmd(li_object *o, li_environment *env)
+li_object *li_uninstall_cmd(li_object * o, li_environment * env)
 {
 	if (uninstall_script)
 	{
-		li_object *c=li_eval(li_car(o,env),env);
+		li_object * c=li_eval(li_car(o,env),env);
 		li_get_type(c->type())->print(c, uninstall_script);
 		return li_true_sym;
 	}
@@ -292,9 +293,10 @@ li_object *li_uninstall_cmd(li_object *o, li_environment *env)
 }
 
 
-li_object *li_delete(li_object *o, li_environment *env)
+li_object *li_delete(li_object * o, li_environment * env)
 {
 	char p[200];
+
 	strcpy(p,li_get_string(li_eval(li_car(o,env), env),env));
 	fix_path(p);
 
@@ -309,10 +311,11 @@ li_object *li_delete(li_object *o, li_environment *env)
 	}
 }
 
-li_object *li_mkdir(li_object *o, li_environment *env)
+li_object *li_mkdir(li_object * o, li_environment * env)
 {
-	char *fn=li_get_string(li_eval(li_car(o,env),env),env);
+	char * fn=li_get_string(li_eval(li_car(o,env),env),env);
 	char p[200];
+
 	sprintf(p, "%s/%s", inst_path, fn);
 	fix_path(p);
 
@@ -332,9 +335,10 @@ li_object *li_mkdir(li_object *o, li_environment *env)
 }
 
 
-li_object *li_rmdir(li_object *o, li_environment *env)
+li_object *li_rmdir(li_object * o, li_environment * env)
 {
-	char *fn=li_get_string(li_eval(li_car(o,env),env),env);
+	char * fn=li_get_string(li_eval(li_car(o,env),env),env);
+
 	fix_path(fn);
 
 	i4_directory_struct ds;
@@ -375,15 +379,16 @@ li_object *li_rmdir(li_object *o, li_environment *env)
 }
 
 
-void down_sample_wav(char *in_file, char *out_file, int rate)
+void down_sample_wav(char * in_file, char * out_file, int rate)
 {
 	i4_sound_info s;
-	i4_file_class *in=i4_open(in_file);
+	i4_file_class * in=i4_open(in_file);
+
 	if (!in)
 	{
 		return;
 	}
-	i4_file_class *out=i4_open(out_file, I4_WRITE);
+	i4_file_class * out=i4_open(out_file, I4_WRITE);
 	if (!out)
 	{
 		delete in;
@@ -393,7 +398,7 @@ void down_sample_wav(char *in_file, char *out_file, int rate)
 
 	if (i4_load_wav_info(in, s))
 	{
-		w16 *inm=(w16 *)I4_MALLOC(s.size,"");
+		w16 * inm=(w16 *)I4_MALLOC(s.size,"");
 		in->read(inm, s.size);
 
 		float x_end=s.size/2;
@@ -402,7 +407,7 @@ void down_sample_wav(char *in_file, char *out_file, int rate)
 		int out_samples=out_size/2;
 
 
-		w16 *outm=(w16 *)I4_MALLOC(out_size,"");
+		w16 * outm=(w16 *)I4_MALLOC(out_size,"");
 
 
 		while (outc<out_samples)
@@ -426,12 +431,13 @@ void down_sample_wav(char *in_file, char *out_file, int rate)
 	delete out;
 }
 
-li_object *mp3_2_wav(li_object *o, li_environment *env)
+li_object *mp3_2_wav(li_object * o, li_environment * env)
 {
-	char *fn=li_get_string(li_eval(li_car(o,env),env),env);
+	char * fn=li_get_string(li_eval(li_car(o,env),env),env);
 	i4_filename_struct split;
 
 	int resample_rate=-1;
+
 	if (li_cdr(o,env))
 	{
 		resample_rate=li_get_int(li_eval(li_second(o,env),env),env);
@@ -449,7 +455,7 @@ li_object *mp3_2_wav(li_object *o, li_environment *env)
 	fix_path(tmp_name);
 
 
-	i4_file_class *out=i4_open(resample_rate==-1 ? out_name : tmp_name, I4_WRITE);
+	i4_file_class * out=i4_open(resample_rate==-1 ? out_name : tmp_name, I4_WRITE);
 	if (!out)
 	{
 		return 0;
@@ -462,7 +468,7 @@ li_object *mp3_2_wav(li_object *o, li_environment *env)
 
 
 	fix_path(fn);
-	i4_file_class *in=i4_open(fn);
+	i4_file_class * in=i4_open(fn);
 	if (!in)
 	{
 		delete out;
@@ -474,7 +480,7 @@ li_object *mp3_2_wav(li_object *o, li_environment *env)
 
 	char stat[200];
 	sprintf(stat, "Decoding MP3 : %s", fn);
-	i4_status_class *status=i4_create_status(stat);
+	i4_status_class * status=i4_create_status(stat);
 
 	i4_bool ret=i4_load_mp3(in, out, fmt, status);
 	out->seek(0);
@@ -502,15 +508,16 @@ li_object *mp3_2_wav(li_object *o, li_environment *env)
 
 
 
-li_object *copy_file(li_object *o, li_environment *env)
+li_object *copy_file(li_object * o, li_environment * env)
 {
-	char *f1=li_get_string(li_eval(li_first(o,env),env),env);
-	char *f2=li_get_string(li_eval(li_second(o,env),env),env);
+	char * f1=li_get_string(li_eval(li_first(o,env),env),env);
+	char * f2=li_get_string(li_eval(li_second(o,env),env),env);
 	char full_f2[256];
+
 	sprintf(full_f2, "%s/%s", inst_path, f2);
 
 	fix_path(full_f2);
-	i4_file_class *out=i4_open(full_f2, I4_WRITE | I4_NO_BUFFER);
+	i4_file_class * out=i4_open(full_f2, I4_WRITE | I4_NO_BUFFER);
 	if (!out)
 	{
 		error_win->printf("Could not open output file %s\n", f2);
@@ -523,7 +530,7 @@ li_object *copy_file(li_object *o, li_environment *env)
 	}
 
 	fix_path(f1);
-	i4_file_class *in=i4_open(f1, I4_NO_BUFFER | I4_READ);
+	i4_file_class * in=i4_open(f1, I4_NO_BUFFER | I4_READ);
 	if (!in)
 	{
 		error_win->printf("Could not open %s\nAre you running setup from the correct directory?", f1);
@@ -532,7 +539,7 @@ li_object *copy_file(li_object *o, li_environment *env)
 
 	char s[200];
 	sprintf(s, "Copying to %s", f2);
-	i4_status_class *status=i4_create_status(s);
+	i4_status_class * status=i4_create_status(s);
 
 
 	char buf[4096];
@@ -562,7 +569,8 @@ li_object *copy_file(li_object *o, li_environment *env)
 i4_bool install(int install_type)
 {
 	char display[200];
-	i4_text_item_class *ti=(i4_text_item_class *)display_picker->get_current_item();
+	i4_text_item_class * ti=(i4_text_item_class *)display_picker->get_current_item();
+
 	i4_os_string(ti->get_text(), display, 200);
 
 #ifdef _WINDOWS
@@ -628,7 +636,7 @@ i4_bool install(int install_type)
 
 
 
-		i4_status_class *s=i4_create_status("Decompressing Files");
+		i4_status_class * s=i4_create_status("Decompressing Files");
 		li_load("install.scm", 0, s);
 		delete s;
 
@@ -698,15 +706,16 @@ public:
 
 
 
-	void add_display_picker(int x, int y, i4_parent_window_class *p)
+	void add_display_picker(int x, int y, i4_parent_window_class * p)
 	{
-		i4_text_window_class *ti=new i4_text_window_class("Rendering Method", style);
+		i4_text_window_class * ti=new i4_text_window_class("Rendering Method", style);
+
 		p->add_child(x,y, ti);
 
 
 		x+=col2;
 
-		i4_list_box_class *lbox=new i4_list_box_class(250, style, wm);
+		i4_list_box_class * lbox=new i4_list_box_class(250, style, wm);
 
 		char old_name[256];
 		if (!i4_get_registry(I4_REGISTRY_USER, i4_display_key, "display", old_name, 256))
@@ -715,7 +724,7 @@ public:
 		}
 
 		int i=0, use=0;
-		for (i4_display_list_struct *f=i4_display_list; f; f=f->next)
+		for (i4_display_list_struct * f=i4_display_list; f; f=f->next)
 		{
 
 			if (strcmp(f->name, "Windowed GDI") && // these displays don't work with render/
@@ -726,7 +735,7 @@ public:
 					use=i;
 				}
 
-				i4_str *s=new i4_str(f->name);
+				i4_str * s=new i4_str(f->name);
 				lbox->add_item(new i4_text_item_class(*s, style, 0,0,
 													  new i4_event_reaction_class(this,DISPLAY_SELECT + i)));
 				i++;
@@ -748,7 +757,7 @@ public:
 	}
 
 
-	void add_install_path(int x, int y, i4_parent_window_class *p)
+	void add_install_path(int x, int y, i4_parent_window_class * p)
 	{
 		p->add_child(x,y, new i4_text_window_class("Install Path", style));
 		x+=col2;
@@ -768,13 +777,14 @@ public:
 	}
 
 
-	void add_texture_size_picker(int x, int y, i4_parent_window_class *p)
+	void add_texture_size_picker(int x, int y, i4_parent_window_class * p)
 	{
-		i4_text_window_class *ti=new i4_text_window_class("Install size", style);
+		i4_text_window_class * ti=new i4_text_window_class("Install size", style);
+
 		p->add_child(x,y, ti);
 		x+=col2;
 
-		i4_list_box_class *lbox=new i4_list_box_class(250, style, wm);
+		i4_list_box_class * lbox=new i4_list_box_class(250, style, wm);
 		lbox->add_item(new i4_text_item_class("75MB (Compact)", style, 0,0,
 											  new i4_event_reaction_class(this, COMPACT)));
 
@@ -790,9 +800,10 @@ public:
 
 	}
 
-	void add_buttons(int x, int y, i4_parent_window_class *p)
+	void add_buttons(int x, int y, i4_parent_window_class * p)
 	{
-		i4_button_class *b;
+		i4_button_class * b;
+
 		if (installed)
 		{
 			b=new i4_button_class(0, new i4_text_window_class("Save & Quit", style), style,
@@ -891,19 +902,19 @@ public:
 		style->color_hint->text_foreground=0xffffff;
 		style->color_hint->text_background=0;
 
-		i4_image_window_class *im=new i4_image_window_class(style->icon_hint->background_bitmap,
-															i4_T, i4_F);
+		i4_image_window_class * im=new i4_image_window_class(style->icon_hint->background_bitmap,
+															 i4_T, i4_F);
 
 
 		wm->add_child(0,0, im);
 
-		i4_deco_window_class *deco=new i4_deco_window_class(400, 100, i4_F, style);
+		i4_deco_window_class * deco=new i4_deco_window_class(400, 100, i4_F, style);
 		int x=120, y=110;
 
 		im->add_child(x, y, deco);
 		y+=deco->height()+20;
 
-		i4_graphical_style_class *style=wm->get_style();
+		i4_graphical_style_class * style=wm->get_style();
 
 
 		add_display_picker(10,10, deco);
@@ -930,7 +941,7 @@ public:
 
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::OBJECT_MESSAGE)
 		{
@@ -950,7 +961,7 @@ public:
 					{
 						char uscript[256];
 						sprintf(uscript, "%s/uninstall.scm", inst_path);
-						i4_status_class *stat=i4_create_status("Uninstalling");
+						i4_status_class * stat=i4_create_status("Uninstalling");
 						li_load(uscript,0,stat);
 						delete stat;
 						quit();
@@ -971,8 +982,8 @@ public:
 				case SAVE_AND_RUN:
 				case INSTALL:
 					{
-						i4_image_class *im=i4_load_image("thanks.jpg");
-						i4_image_window_class *iwin=new i4_image_window_class(im, i4_T, i4_F);
+						i4_image_class * im=i4_load_image("thanks.jpg");
+						i4_image_window_class * iwin=new i4_image_window_class(im, i4_T, i4_F);
 						wm->add_child(0,0,iwin);
 
 						if (install(uev->sub_type))
@@ -1026,7 +1037,7 @@ public:
 	}
 
 
-	i4_bool get_display_name(char *name, int max_len)
+	i4_bool get_display_name(char * name, int max_len)
 	{
 		strcpy(name, "Windowed GDI");
 		return i4_T;
@@ -1038,8 +1049,9 @@ public:
 	}
 };
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	setup_app test;
+
 	test.run();
 }

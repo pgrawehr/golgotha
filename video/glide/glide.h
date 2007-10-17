@@ -634,7 +634,7 @@ typedef FxI32 GrOriginLocation_t;
 
 typedef struct {
 	int size;
-	void *lfbPtr;
+	void * lfbPtr;
 	FxU32 strideInBytes;
 	GrLfbWriteMode_t writeMode;
 	GrOriginLocation_t origin;
@@ -763,7 +763,7 @@ typedef struct
 {
 	Gu3dfHeader header;
 	GuTexTable table;
-	void *data;
+	void * data;
 	FxU32 mem_required;         /* memory required for mip map in bytes. */
 } Gu3dfInfo;
 
@@ -772,7 +772,7 @@ typedef struct {
 	GrLOD_t largeLod;
 	GrAspectRatio_t aspectRatio;
 	GrTextureFormat_t format;
-	void *data;
+	void * data;
 } GrTexInfo;
 
 typedef struct
@@ -781,7 +781,7 @@ typedef struct
 	FxBool valid;                       /* set when this table entry is allocated*/
 	int width, height;
 	GrAspectRatio_t aspect_ratio;       /* aspect ratio of the mip map.  */
-	void *data;                         /* actual texture data  */
+	void * data;                         /* actual texture data  */
 
 	GrTextureFormat_t format;                   /* format of the texture table */
 	GrMipMapMode_t mipmap_mode;                 /* mip map mode for this texture */
@@ -949,10 +949,10 @@ typedef FxU32 GrControl_t;
 ** rendering functions
 */
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grDrawLine_fpt )( const GrVertex *v1, const GrVertex *v2 );
+typedef void ( FX_CALL *grDrawLine_fpt )( const GrVertex * v1, const GrVertex * v2 );
 #else
 
-FX_ENTRY void FX_CALL grDrawLine( const GrVertex *v1, const GrVertex *v2 );
+FX_ENTRY void FX_CALL grDrawLine( const GrVertex * v1, const GrVertex * v2 );
 
 #endif /* DYNAHEADER */
 
@@ -973,10 +973,10 @@ FX_ENTRY void FX_CALL grDrawPlanarPolygonVertexList( int nverts, const GrVertex 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grDrawPoint_fpt )( const GrVertex *pt );
+typedef void ( FX_CALL *grDrawPoint_fpt )( const GrVertex * pt );
 #else
 
-FX_ENTRY void FX_CALL grDrawPoint( const GrVertex *pt );
+FX_ENTRY void FX_CALL grDrawPoint( const GrVertex * pt );
 
 #endif /* DYNAHEADER */
 
@@ -997,10 +997,10 @@ FX_ENTRY void FX_CALL grDrawPolygonVertexList( int nverts, const GrVertex vlist[
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grDrawTriangle_fpt )( const GrVertex *a, const GrVertex *b, const GrVertex *c );
+typedef void ( FX_CALL *grDrawTriangle_fpt )( const GrVertex * a, const GrVertex * b, const GrVertex * c );
 #else
 
-FX_ENTRY void FX_CALL grDrawTriangle( const GrVertex *a, const GrVertex *b, const GrVertex *c );
+FX_ENTRY void FX_CALL grDrawTriangle( const GrVertex * a, const GrVertex * b, const GrVertex * c );
 
 #endif /* DYNAHEADER */
 
@@ -1042,7 +1042,7 @@ FX_ENTRY void FX_CALL grRenderBuffer( GrBuffer_t buffer );
 /*
 ** error management
 */
-typedef void (*GrErrorCallbackFnc_t)( const char *string, FxBool fatal );
+typedef void (*GrErrorCallbackFnc_t)( const char * string, FxBool fatal );
 
 #ifdef DYNAHEADER
 typedef void ( FX_CALL *grErrorSetCallback_fpt )( GrErrorCallbackFnc_t fnc );
@@ -1119,18 +1119,18 @@ FX_ENTRY FxBool FX_CALL grSstControl( FxU32 code );
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef FxBool ( FX_CALL *grSstQueryHardware_fpt )( GrHwConfiguration *hwconfig );
+typedef FxBool ( FX_CALL *grSstQueryHardware_fpt )( GrHwConfiguration * hwconfig );
 #else
 
-FX_ENTRY FxBool FX_CALL grSstQueryHardware( GrHwConfiguration *hwconfig );
+FX_ENTRY FxBool FX_CALL grSstQueryHardware( GrHwConfiguration * hwconfig );
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef FxBool ( FX_CALL *grSstQueryBoards_fpt )( GrHwConfiguration *hwconfig );
+typedef FxBool ( FX_CALL *grSstQueryBoards_fpt )( GrHwConfiguration * hwconfig );
 #else
 
-FX_ENTRY FxBool FX_CALL grSstQueryBoards( GrHwConfiguration *hwconfig );
+FX_ENTRY FxBool FX_CALL grSstQueryBoards( GrHwConfiguration * hwconfig );
 
 #endif /* DYNAHEADER */
 
@@ -1178,10 +1178,10 @@ FX_ENTRY FxU32 FX_CALL grSstStatus( void );
 **  Drawing Statistics
 */
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grSstPerfStats_fpt )(GrSstPerfStats_t *pStats );
+typedef void ( FX_CALL *grSstPerfStats_fpt )(GrSstPerfStats_t * pStats );
 #else
 
-FX_ENTRY void FX_CALL grSstPerfStats(GrSstPerfStats_t *pStats);
+FX_ENTRY void FX_CALL grSstPerfStats(GrSstPerfStats_t * pStats);
 
 #endif /* DYNAHEADER */
 
@@ -1203,10 +1203,10 @@ grResetTriStats();
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grTriStats_fpt )(FxU32 *trisProcessed, FxU32 *trisDrawn );
+typedef void ( FX_CALL *grTriStats_fpt )(FxU32 * trisProcessed, FxU32 * trisDrawn );
 #else
 
-FX_ENTRY void FX_CALL grTriStats(FxU32 *trisProcessed, FxU32 *trisDrawn);
+FX_ENTRY void FX_CALL grTriStats(FxU32 * trisProcessed, FxU32 * trisDrawn);
 
 #endif /* DYNAHEADER */
 
@@ -1429,11 +1429,11 @@ FX_ENTRY FxU32 FX_CALL grTexCalcMemRequired(
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef FxU32 ( FX_CALL *grTexTextureMemRequired_fpt )( FxU32 evenOdd, GrTexInfo *info );
+typedef FxU32 ( FX_CALL *grTexTextureMemRequired_fpt )( FxU32 evenOdd, GrTexInfo * info );
 #else
 
 FX_ENTRY FxU32 FX_CALL grTexTextureMemRequired( FxU32 evenOdd,
-											   GrTexInfo *info   );
+											   GrTexInfo * info   );
 
 #endif /* DYNAHEADER */
 
@@ -1464,13 +1464,13 @@ FX_ENTRY void FX_CALL grTexNCCTable( GrChipID_t tmu, GrNCCTable_t table );
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grTexSource_fpt )( GrChipID_t tmu, FxU32 startAddress, FxU32 evenOdd, GrTexInfo *info );
+typedef void ( FX_CALL *grTexSource_fpt )( GrChipID_t tmu, FxU32 startAddress, FxU32 evenOdd, GrTexInfo * info );
 #else
 
 FX_ENTRY void FX_CALL grTexSource( GrChipID_t tmu,
 								  FxU32 startAddress,
 								  FxU32 evenOdd,
-								  GrTexInfo *info );
+								  GrTexInfo * info );
 
 #endif /* DYNAHEADER */
 
@@ -1548,18 +1548,18 @@ FX_ENTRY void FX_CALL grTexLodBiasValue(GrChipID_t tmu, float bias );
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grTexDownloadMipMap_fpt )( GrChipID_t tmu, FxU32 startAddress, FxU32 evenOdd, GrTexInfo *info );
+typedef void ( FX_CALL *grTexDownloadMipMap_fpt )( GrChipID_t tmu, FxU32 startAddress, FxU32 evenOdd, GrTexInfo * info );
 #else
 
 FX_ENTRY void FX_CALL grTexDownloadMipMap( GrChipID_t tmu,
 										  FxU32 startAddress,
 										  FxU32 evenOdd,
-										  GrTexInfo *info );
+										  GrTexInfo * info );
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grTexDownloadMipMapLevel_fpt )( GrChipID_t tmu, FxU32 startAddress, GrLOD_t thisLod, GrLOD_t largeLod, GrAspectRatio_t aspectRatio, GrTextureFormat_t format, FxU32 evenOdd, void *data );
+typedef void ( FX_CALL *grTexDownloadMipMapLevel_fpt )( GrChipID_t tmu, FxU32 startAddress, GrLOD_t thisLod, GrLOD_t largeLod, GrAspectRatio_t aspectRatio, GrTextureFormat_t format, FxU32 evenOdd, void * data );
 #else
 
 FX_ENTRY void FX_CALL grTexDownloadMipMapLevel( GrChipID_t tmu,
@@ -1569,12 +1569,12 @@ FX_ENTRY void FX_CALL grTexDownloadMipMapLevel( GrChipID_t tmu,
 											   GrAspectRatio_t aspectRatio,
 											   GrTextureFormat_t format,
 											   FxU32 evenOdd,
-											   void *data );
+											   void * data );
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grTexDownloadMipMapLevelPartial_fpt )( GrChipID_t tmu, FxU32 startAddress, GrLOD_t thisLod, GrLOD_t largeLod, GrAspectRatio_t aspectRatio, GrTextureFormat_t format, FxU32 evenOdd, void *data, int start, int end );
+typedef void ( FX_CALL *grTexDownloadMipMapLevelPartial_fpt )( GrChipID_t tmu, FxU32 startAddress, GrLOD_t thisLod, GrLOD_t largeLod, GrAspectRatio_t aspectRatio, GrTextureFormat_t format, FxU32 evenOdd, void * data, int start, int end );
 #else
 
 FX_ENTRY void FX_CALL grTexDownloadMipMapLevelPartial( GrChipID_t tmu,
@@ -1584,7 +1584,7 @@ FX_ENTRY void FX_CALL grTexDownloadMipMapLevelPartial( GrChipID_t tmu,
 													  GrAspectRatio_t aspectRatio,
 													  GrTextureFormat_t format,
 													  FxU32 evenOdd,
-													  void *data,
+													  void * data,
 													  int start,
 													  int end );
 
@@ -1592,7 +1592,7 @@ FX_ENTRY void FX_CALL grTexDownloadMipMapLevelPartial( GrChipID_t tmu,
 
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *ConvertAndDownloadRle_fpt )( GrChipID_t tmu, FxU32 startAddress, GrLOD_t thisLod, GrLOD_t largeLod, GrAspectRatio_t aspectRatio, GrTextureFormat_t format, FxU32 evenOdd, FxU8 *bm_data, long bm_h, FxU32 u0, FxU32 v0, FxU32 width, FxU32 height, FxU32 dest_width, FxU32 dest_height, FxU16 *tlut );
+typedef void ( FX_CALL *ConvertAndDownloadRle_fpt )( GrChipID_t tmu, FxU32 startAddress, GrLOD_t thisLod, GrLOD_t largeLod, GrAspectRatio_t aspectRatio, GrTextureFormat_t format, FxU32 evenOdd, FxU8 * bm_data, long bm_h, FxU32 u0, FxU32 v0, FxU32 width, FxU32 height, FxU32 dest_width, FxU32 dest_height, FxU16 * tlut );
 #else
 
 FX_ENTRY void FX_CALL ConvertAndDownloadRle( GrChipID_t tmu,
@@ -1602,7 +1602,7 @@ FX_ENTRY void FX_CALL ConvertAndDownloadRle( GrChipID_t tmu,
 											GrAspectRatio_t aspectRatio,
 											GrTextureFormat_t format,
 											FxU32 evenOdd,
-											FxU8 *bm_data,
+											FxU8 * bm_data,
 											long bm_h,
 											FxU32 u0,
 											FxU32 v0,
@@ -1610,7 +1610,7 @@ FX_ENTRY void FX_CALL ConvertAndDownloadRle( GrChipID_t tmu,
 											FxU32 height,
 											FxU32 dest_width,
 											FxU32 dest_height,
-											FxU16 *tlut);
+											FxU16 * tlut);
 
 #endif /* DYNAHEADER */
 
@@ -1623,22 +1623,22 @@ FX_ENTRY void FX_CALL grCheckForRoom(FxI32 n);
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grTexDownloadTable_fpt )( GrChipID_t tmu, GrTexTable_t type, void *data );
+typedef void ( FX_CALL *grTexDownloadTable_fpt )( GrChipID_t tmu, GrTexTable_t type, void * data );
 #else
 
 FX_ENTRY void FX_CALL grTexDownloadTable( GrChipID_t tmu,
 										 GrTexTable_t type,
-										 void *data );
+										 void * data );
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grTexDownloadTablePartial_fpt )( GrChipID_t tmu, GrTexTable_t type, void *data, int start, int end );
+typedef void ( FX_CALL *grTexDownloadTablePartial_fpt )( GrChipID_t tmu, GrTexTable_t type, void * data, int start, int end );
 #else
 
 FX_ENTRY void FX_CALL grTexDownloadTablePartial( GrChipID_t tmu,
 												GrTexTable_t type,
-												void *data,
+												void * data,
 												int start,
 												int end );
 
@@ -1664,14 +1664,14 @@ FX_ENTRY void FX_CALL grTexMultibase( GrChipID_t tmu,
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grTexMultibaseAddress_fpt )( GrChipID_t tmu, GrTexBaseRange_t range, FxU32 startAddress, FxU32 evenOdd, GrTexInfo *info );
+typedef void ( FX_CALL *grTexMultibaseAddress_fpt )( GrChipID_t tmu, GrTexBaseRange_t range, FxU32 startAddress, FxU32 evenOdd, GrTexInfo * info );
 #else
 
 FX_ENTRY void FX_CALL grTexMultibaseAddress( GrChipID_t tmu,
 											GrTexBaseRange_t range,
 											FxU32 startAddress,
 											FxU32 evenOdd,
-											GrTexInfo *info );
+											GrTexInfo * info );
 
 #endif /* DYNAHEADER */
 
@@ -1739,10 +1739,10 @@ FX_ENTRY GrMipMapId_t FX_CALL guTexGetCurrentMipMap( GrChipID_t tmu );
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef GrMipMapInfo *( FX_CALL *guTexGetMipMapInfo_fpt )( GrMipMapId_t mmid );
+typedef GrMipMapInfo * ( FX_CALL *guTexGetMipMapInfo_fpt )( GrMipMapId_t mmid );
 #else
 
-FX_ENTRY GrMipMapInfo *FX_CALL guTexGetMipMapInfo( GrMipMapId_t mmid );
+FX_ENTRY GrMipMapInfo * FX_CALL guTexGetMipMapInfo( GrMipMapId_t mmid );
 
 #endif /* DYNAHEADER */
 
@@ -1763,25 +1763,25 @@ FX_ENTRY void FX_CALL guTexMemReset( void );
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *guTexDownloadMipMap_fpt )( GrMipMapId_t mmid, const void *src, const GuNccTable *table );
+typedef void ( FX_CALL *guTexDownloadMipMap_fpt )( GrMipMapId_t mmid, const void * src, const GuNccTable * table );
 #else
 
 FX_ENTRY void FX_CALL guTexDownloadMipMap(
 	GrMipMapId_t mmid,
-	const void *src,
-	const GuNccTable *table
+	const void * src,
+	const GuNccTable * table
 );
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *guTexDownloadMipMapLevel_fpt )( GrMipMapId_t mmid, GrLOD_t lod, const void **src );
+typedef void ( FX_CALL *guTexDownloadMipMapLevel_fpt )( GrMipMapId_t mmid, GrLOD_t lod, const void * * src );
 #else
 
 FX_ENTRY void FX_CALL guTexDownloadMipMapLevel(
 	GrMipMapId_t mmid,
 	GrLOD_t lod,
-	const void **src
+	const void * * src
 );
 
 #endif /* DYNAHEADER */
@@ -1798,12 +1798,12 @@ FX_ENTRY void FX_CALL guTexSource( GrMipMapId_t id );
 */
 
 #ifdef DYNAHEADER
-typedef FxBool ( FX_CALL *grLfbLock_fpt )( GrLock_t type, GrBuffer_t buffer, GrLfbWriteMode_t writeMode, GrOriginLocation_t origin, FxBool pixelPipeline, GrLfbInfo_t *info );
+typedef FxBool ( FX_CALL *grLfbLock_fpt )( GrLock_t type, GrBuffer_t buffer, GrLfbWriteMode_t writeMode, GrOriginLocation_t origin, FxBool pixelPipeline, GrLfbInfo_t * info );
 #else
 
 FX_ENTRY FxBool FX_CALL grLfbLock( GrLock_t type, GrBuffer_t buffer, GrLfbWriteMode_t writeMode,
 								  GrOriginLocation_t origin, FxBool pixelPipeline,
-								  GrLfbInfo_t *info );
+								  GrLfbInfo_t * info );
 
 #endif /* DYNAHEADER */
 
@@ -1849,25 +1849,25 @@ FX_ENTRY void FX_CALL grLfbWriteColorFormat(GrColorFormat_t colorFormat);
 
 
 #ifdef DYNAHEADER
-typedef FxBool ( FX_CALL *grLfbWriteRegion_fpt )( GrBuffer_t dst_buffer, FxU32 dst_x, FxU32 dst_y, GrLfbSrcFmt_t src_format, FxU32 src_width, FxU32 src_height, FxI32 src_stride, void *src_data );
+typedef FxBool ( FX_CALL *grLfbWriteRegion_fpt )( GrBuffer_t dst_buffer, FxU32 dst_x, FxU32 dst_y, GrLfbSrcFmt_t src_format, FxU32 src_width, FxU32 src_height, FxI32 src_stride, void * src_data );
 #else
 
 FX_ENTRY FxBool FX_CALL grLfbWriteRegion( GrBuffer_t dst_buffer,
 										 FxU32 dst_x, FxU32 dst_y,
 										 GrLfbSrcFmt_t src_format,
 										 FxU32 src_width, FxU32 src_height,
-										 FxI32 src_stride, void *src_data );
+										 FxI32 src_stride, void * src_data );
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef FxBool ( FX_CALL *grLfbReadRegion_fpt )( GrBuffer_t src_buffer, FxU32 src_x, FxU32 src_y, FxU32 src_width, FxU32 src_height, FxU32 dst_stride, void *dst_data );
+typedef FxBool ( FX_CALL *grLfbReadRegion_fpt )( GrBuffer_t src_buffer, FxU32 src_x, FxU32 src_y, FxU32 src_width, FxU32 src_height, FxU32 dst_stride, void * dst_data );
 #else
 
 FX_ENTRY FxBool FX_CALL grLfbReadRegion( GrBuffer_t src_buffer,
 										FxU32 src_x, FxU32 src_y,
 										FxU32 src_width, FxU32 src_height,
-										FxU32 dst_stride, void *dst_data );
+										FxU32 dst_stride, void * dst_data );
 
 #endif /* DYNAHEADER */
 
@@ -1876,18 +1876,18 @@ FX_ENTRY FxBool FX_CALL grLfbReadRegion( GrBuffer_t src_buffer,
 **  Antialiasing Functions
 */
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grAADrawLine_fpt )(const GrVertex *v1, const GrVertex *v2 );
+typedef void ( FX_CALL *grAADrawLine_fpt )(const GrVertex * v1, const GrVertex * v2 );
 #else
 
-FX_ENTRY void FX_CALL grAADrawLine(const GrVertex *v1, const GrVertex *v2);
+FX_ENTRY void FX_CALL grAADrawLine(const GrVertex * v1, const GrVertex * v2);
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grAADrawPoint_fpt )(const GrVertex *pt );
+typedef void ( FX_CALL *grAADrawPoint_fpt )(const GrVertex * pt );
 #else
 
-FX_ENTRY void FX_CALL grAADrawPoint(const GrVertex *pt );
+FX_ENTRY void FX_CALL grAADrawPoint(const GrVertex * pt );
 
 #endif /* DYNAHEADER */
 
@@ -1908,11 +1908,11 @@ FX_ENTRY void FX_CALL grAADrawPolygonVertexList(const int nverts, const GrVertex
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grAADrawTriangle_fpt )( const GrVertex *a, const GrVertex *b, const GrVertex *c, FxBool ab_antialias, FxBool bc_antialias, FxBool ca_antialias );
+typedef void ( FX_CALL *grAADrawTriangle_fpt )( const GrVertex * a, const GrVertex * b, const GrVertex * c, FxBool ab_antialias, FxBool bc_antialias, FxBool ca_antialias );
 #else
 
 FX_ENTRY void FX_CALL grAADrawTriangle(
-	const GrVertex *a, const GrVertex *b, const GrVertex *c,
+	const GrVertex * a, const GrVertex * b, const GrVertex * c,
 	FxBool ab_antialias, FxBool bc_antialias, FxBool ca_antialias
 );
 
@@ -1946,18 +1946,18 @@ FX_ENTRY void FX_CALL grGlideGetVersion( char version[80] );
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grGlideGetState_fpt )( GrState *state );
+typedef void ( FX_CALL *grGlideGetState_fpt )( GrState * state );
 #else
 
-FX_ENTRY void FX_CALL grGlideGetState( GrState *state );
+FX_ENTRY void FX_CALL grGlideGetState( GrState * state );
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *grGlideSetState_fpt )( const GrState *state );
+typedef void ( FX_CALL *grGlideSetState_fpt )( const GrState * state );
 #else
 
-FX_ENTRY void FX_CALL grGlideSetState( const GrState *state );
+FX_ENTRY void FX_CALL grGlideSetState( const GrState * state );
 
 #endif /* DYNAHEADER */
 
@@ -2036,22 +2036,22 @@ extern "C" {
 ** rendering functions
 */
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *guAADrawTriangleWithClip_fpt )( const GrVertex *a, const GrVertex *b, const GrVertex *c );
+typedef void ( FX_CALL *guAADrawTriangleWithClip_fpt )( const GrVertex * a, const GrVertex * b, const GrVertex * c );
 #else
 
-FX_ENTRY void FX_CALL guAADrawTriangleWithClip( const GrVertex *a, const GrVertex
-											   *b, const GrVertex *c);
+FX_ENTRY void FX_CALL guAADrawTriangleWithClip( const GrVertex * a, const GrVertex
+											   * b, const GrVertex * c);
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *guDrawTriangleWithClip_fpt )( const GrVertex *a, const GrVertex *b, const GrVertex *c );
+typedef void ( FX_CALL *guDrawTriangleWithClip_fpt )( const GrVertex * a, const GrVertex * b, const GrVertex * c );
 #else
 
 FX_ENTRY void FX_CALL guDrawTriangleWithClip(
-	const GrVertex *a,
-	const GrVertex *b,
-	const GrVertex *c
+	const GrVertex * a,
+	const GrVertex * b,
+	const GrVertex * c
 );
 
 #endif /* DYNAHEADER */
@@ -2084,21 +2084,21 @@ FX_ENTRY void FX_CALL guColorCombineFunction( GrColorCombineFnc_t fnc );
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef int ( FX_CALL *guEncodeRLE16_fpt )( void *dst, void *src, FxU32 width, FxU32 height );
+typedef int ( FX_CALL *guEncodeRLE16_fpt )( void * dst, void * src, FxU32 width, FxU32 height );
 #else
 
-FX_ENTRY int FX_CALL guEncodeRLE16( void *dst,
-								   void *src,
+FX_ENTRY int FX_CALL guEncodeRLE16( void * dst,
+								   void * src,
 								   FxU32 width,
 								   FxU32 height );
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef FxU16 *( FX_CALL *guTexCreateColorMipMap_fpt )( void );
+typedef FxU16 * ( FX_CALL *guTexCreateColorMipMap_fpt )( void );
 #else
 
-FX_ENTRY FxU16 *FX_CALL guTexCreateColorMipMap( void );
+FX_ENTRY FxU16 * FX_CALL guTexCreateColorMipMap( void );
 
 #endif /* DYNAHEADER */
 
@@ -2125,11 +2125,11 @@ FX_CALL guMovieStop( void );
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef void ( FX_CALL *guMovieSetName_fpt )( const char *name );
+typedef void ( FX_CALL *guMovieSetName_fpt )( const char * name );
 #else
 
 FX_ENTRY void
-FX_CALL guMovieSetName( const char *name );
+FX_CALL guMovieSetName( const char * name );
 
 #endif /* DYNAHEADER */
 #endif
@@ -2194,18 +2194,18 @@ FX_ENTRY FxU16 FX_CALL guEndianSwapBytes( FxU16 value );
 ** hi-level texture manipulation tools.
 */
 #ifdef DYNAHEADER
-typedef FxBool ( FX_CALL *gu3dfGetInfo_fpt )( const char *filename, Gu3dfInfo *info );
+typedef FxBool ( FX_CALL *gu3dfGetInfo_fpt )( const char * filename, Gu3dfInfo * info );
 #else
 
-FX_ENTRY FxBool FX_CALL gu3dfGetInfo( const char *filename, Gu3dfInfo *info );
+FX_ENTRY FxBool FX_CALL gu3dfGetInfo( const char * filename, Gu3dfInfo * info );
 
 #endif /* DYNAHEADER */
 
 #ifdef DYNAHEADER
-typedef FxBool ( FX_CALL *gu3dfLoad_fpt )( const char *filename, Gu3dfInfo *data );
+typedef FxBool ( FX_CALL *gu3dfLoad_fpt )( const char * filename, Gu3dfInfo * data );
 #else
 
-FX_ENTRY FxBool FX_CALL gu3dfLoad( const char *filename, Gu3dfInfo *data );
+FX_ENTRY FxBool FX_CALL gu3dfLoad( const char * filename, Gu3dfInfo * data );
 
 #endif /* DYNAHEADER */
 

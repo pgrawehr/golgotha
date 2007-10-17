@@ -23,7 +23,7 @@ enum {
 
 static inline int i4_clip_get_side_on(i4_float x1, i4_float y1, i4_float z1,
 									  i4_float x2, i4_float y2, i4_float z2,
-									  i4_vertex_class *v,
+									  i4_vertex_class * v,
 									  int plane)
 {
 	switch (plane)
@@ -58,7 +58,8 @@ void i4_poly_clip(class_with_intersect_and_project_functions &cwipf,
 				  i4_float x1, i4_float y1, i4_float z1,
 				  i4_float x2, i4_float y2, i4_float z2)
 {
-	i4_polygon_class other, *p1, *p2; //, *swap;
+	i4_polygon_class other, * p1, * p2; //, *swap;
+
 	p1=&poly;
 	p2=&other;
 
@@ -73,8 +74,8 @@ void i4_poly_clip(class_with_intersect_and_project_functions &cwipf,
 
 		for (cur=0; cur<p1->t_verts; cur++)
 		{
-			i4_vertex_class *v2=p1->vert+cur, *o;
-			i4_vertex_class *v1=p1->vert+prev;
+			i4_vertex_class * v2=p1->vert+cur, * o;
+			i4_vertex_class * v1=p1->vert+prev;
 
 			cur_side_on=i4_clip_get_side_on(x1, y1, z1, x2, y2, z2, p1->vert+cur, plane);
 

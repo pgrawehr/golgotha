@@ -27,9 +27,9 @@
 #include "tick_count.h"
 #include "controller.h"
 
-void g1_model_draw_parameters::setup(g1_quad_object_class *_model,
-									 g1_quad_object_class *_shadow_model,
-									 g1_quad_object_class *_lod_model)
+void g1_model_draw_parameters::setup(g1_quad_object_class * _model,
+									 g1_quad_object_class * _shadow_model,
+									 g1_quad_object_class * _lod_model)
 {
 	model=_model;
 	shadow_model=_shadow_model;
@@ -72,11 +72,12 @@ void g1_model_draw_parameters::setup(w16 _model_id, w16 _shadow_model, w16 _lod_
 	}
 }
 
-void g1_model_draw_parameters::setup(char *model_name, char *shadow_model_name,
-									 char *lod_model_name)
+void g1_model_draw_parameters::setup(char * model_name, char * shadow_model_name,
+									 char * lod_model_name)
 {
 	//char *m=model_name;
 	int id=g1_model_list_man.find_handle(model_name);
+
 	model = g1_model_list_man.get_model(id);
 
 	if (shadow_model_name)
@@ -128,9 +129,9 @@ static li_symbol_ref team_icons("team_icons");
 //if model.bsp is !=0. What's the difference between these two functions?
 //I don't know, check yourself...
 
-void g1_model_draw(g1_object_class *_this,
+void g1_model_draw(g1_object_class * _this,
 				   g1_model_draw_parameters &params,
-				   g1_draw_context_class *context,
+				   g1_draw_context_class * context,
 				   i4_3d_vector& viewer_position)
 {
 
@@ -138,6 +139,7 @@ void g1_model_draw(g1_object_class *_this,
 	//this needs fixing, as it is not what we want if multiple viewports are available.
 	//set this to a very small value if forcedraw, so that we always use the default model
 	float dist_sqrd=1.0f;
+
 	if (!(params.flags&g1_model_draw_parameters::FORCEDRAW))
 	{
 		dist_sqrd=(viewer_position.x-_this->x)*(viewer_position.x-_this->x)+
@@ -156,11 +158,11 @@ void g1_model_draw(g1_object_class *_this,
 		}
 	}
 
-	g1_screen_box *bbox=0;
+	g1_screen_box * bbox=0;
 
 	i4_transform_class view_transform;
 
-	i4_transform_class *old = context->transform;
+	i4_transform_class * old = context->transform;
 	context->transform = &view_transform;
 
 	view_transform.multiply(*old,*(_this->world_transform));
@@ -209,7 +211,7 @@ void g1_model_draw(g1_object_class *_this,
 	{
 		if (params.shadow_model)
 		{
-			g1_quad_object_class *model = params.shadow_model;
+			g1_quad_object_class * model = params.shadow_model;
 
 			g1_render.r_api->disable_texture();
 			g1_render.r_api->set_shading_mode(R1_CONSTANT_SHADING);
@@ -235,7 +237,7 @@ void g1_model_draw(g1_object_class *_this,
 			g1_render.r_api->set_write_mode(R1_WRITE_W | R1_COMPARE_W | R1_WRITE_COLOR);
 		}
 
-		g1_quad_object_class *model = params.model;
+		g1_quad_object_class * model = params.model;
 		if (model)
 		{
 			if (!(params.flags & g1_model_draw_parameters::SUPPRESS_SPECIALS) && model->num_special>0)
@@ -266,7 +268,7 @@ void g1_model_draw(g1_object_class *_this,
 	{
 		g1_render.r_api->set_filter_mode(R1_NO_FILTERING);
 
-		g1_quad_object_class *mod=params.lod_model;
+		g1_quad_object_class * mod=params.lod_model;
 		if (mod==NULL)
 		{
 			mod=params.model;
@@ -303,9 +305,9 @@ void g1_model_draw(g1_object_class *_this,
 	}
 }
 
-void g1_editor_model_draw(g1_object_class *_this,
+void g1_editor_model_draw(g1_object_class * _this,
 						  g1_model_draw_parameters &params,
-						  g1_draw_context_class *context,
+						  g1_draw_context_class * context,
 						  i4_3d_vector& viewer_position)
 {
 	if (context->draw_editor_stuff)

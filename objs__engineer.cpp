@@ -71,7 +71,7 @@ g1_engineer_def("engineer",
 				g1_engineer_init);
 
 
-g1_engineer_class::g1_engineer_class(g1_object_type id, g1_loader_class *fp)
+g1_engineer_class::g1_engineer_class(g1_object_type id, g1_loader_class * fp)
 	: g1_map_piece_class(id,fp)
 {
 	draw_params.setup(model_ref.id(),shadow_ref.id(), lod_ref.id());
@@ -170,7 +170,7 @@ g1_engineer_class::g1_engineer_class(g1_object_type id, g1_loader_class *fp)
 
 }
 
-void g1_engineer_class::save(g1_saver_class *fp)
+void g1_engineer_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -180,7 +180,7 @@ void g1_engineer_class::save(g1_saver_class *fp)
 
 	fp->end_version();
 }
-void g1_engineer_class::load(g1_loader_class *fp)
+void g1_engineer_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -188,7 +188,7 @@ void g1_engineer_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-void g1_engineer_class::skipload(g1_loader_class *fp)
+void g1_engineer_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->check_version(DATA_VERSION);
@@ -197,7 +197,7 @@ void g1_engineer_class::skipload(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-i4_bool g1_engineer_class::can_attack(g1_object_class *who)
+i4_bool g1_engineer_class::can_attack(g1_object_class * who)
 {
 	if ((who->id==takeover_pad)&&in_range(who))
 	{
@@ -235,7 +235,7 @@ void g1_engineer_class::think()
 		//find_target(i4_F);
 		if (attack_target.valid())
 		{
-			g1_object_class *o=attack_target.get();
+			g1_object_class * o=attack_target.get();
 			if (o->id==takeover_pad)
 			{
 				o->change_player_num(player_num);
@@ -251,16 +251,16 @@ void g1_engineer_class::think()
 
 static li_symbol_ref reached("reached");
 
-li_object *g1_engineer_class::message(li_symbol *message_name,
-									  li_object *message_params,
-									  li_environment *env)
+li_object * g1_engineer_class::message(li_symbol * message_name,
+									   li_object * message_params,
+									   li_environment * env)
 {
 	if (message_name==reached.get())
 	{
-		g1_object_class *who=li_g1_ref::get(message_params,env)->value();
+		g1_object_class * who=li_g1_ref::get(message_params,env)->value();
 		if (who)
 		{
-			g1_path_object_class *po=g1_path_object_class::cast(who);
+			g1_path_object_class * po=g1_path_object_class::cast(who);
 			if (po)
 			{
 				who->change_player_num(player_num);

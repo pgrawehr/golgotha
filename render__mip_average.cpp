@@ -61,7 +61,7 @@ void setup_pixel_formats(i4_pixel_format &reg_fmt,
 }
 
 
-void r1_dos_paths(char *src)
+void r1_dos_paths(char * src)
 {
 	while (*src)
 	{
@@ -74,7 +74,7 @@ void r1_dos_paths(char *src)
 	}
 }
 
-void r1_unix_paths(char *src)
+void r1_unix_paths(char * src)
 {
 	while (*src)
 	{
@@ -87,9 +87,9 @@ void r1_unix_paths(char *src)
 	}
 }
 
-char *r1_remove_paths(char *src)
+char *r1_remove_paths(char * src)
 {
-	char *ret = src;
+	char * ret = src;
 
 	while (*src)
 	{
@@ -104,7 +104,7 @@ char *r1_remove_paths(char *src)
 	return ret;
 }
 
-void r1_remove_extention(char *src)
+void r1_remove_extention(char * src)
 {
 	while (*src)
 	{
@@ -117,11 +117,12 @@ void r1_remove_extention(char *src)
 	}
 }
 
-void concatenate_path(char *src, char *path)
+void concatenate_path(char * src, char * path)
 {
 	char temp[256];
 
-	char *last_path = r1_remove_paths(src);
+	char * last_path = r1_remove_paths(src);
+
 	strcpy(temp,last_path);
 
 	*last_path=0;
@@ -148,7 +149,7 @@ void chroma_process(w8 *&p, float &r, float &g, float &b, sw8 &num_regular, sw8 
 	}
 }
 
-void average_4x4_chroma(w16 *&dst, w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3)
+void average_4x4_chroma(w16 *&dst, w8 * dst_24, w8 *&p0, w8 * p1, w8 * p2, w8 * p3)
 {
 	sw8 num_chroma  = 0;
 	sw8 num_regular = 0;
@@ -215,7 +216,7 @@ void average_4x4_chroma(w16 *&dst, w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3)
 				 (( 0xFFFFFFFF << mip_c_a_shift) & mip_c_a_and) );
 }
 
-void average_4x4_chroma(w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3)
+void average_4x4_chroma(w8 * dst_24, w8 *&p0, w8 * p1, w8 * p2, w8 * p3)
 {
 	sw8 num_chroma  = 0;
 	sw8 num_regular = 0;
@@ -274,7 +275,7 @@ void average_4x4_chroma(w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3)
 	dst_24[2] = (w8)b;
 }
 
-void average_4x4_alpha(w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3)
+void average_4x4_alpha(w8 * dst_24, w8 *&p0, w8 * p1, w8 * p2, w8 * p3)
 {
 	sw32 ia,ir,ig,ib;
 
@@ -309,7 +310,7 @@ void average_4x4_alpha(w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3)
 	dst_24[3] = (w8)ib;
 }
 
-void average_4x4_alpha(w16 *dst, w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3)
+void average_4x4_alpha(w16 * dst, w8 * dst_24, w8 *&p0, w8 * p1, w8 * p2, w8 * p3)
 {
 	sw32 ia,ir,ig,ib;
 
@@ -350,7 +351,7 @@ void average_4x4_alpha(w16 *dst, w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3)
 }
 
 
-void average_4x4_normal(w16 *dst, w8 *dst_24, w8 *p0, w32 bpl)
+void average_4x4_normal(w16 * dst, w8 * dst_24, w8 * p0, w32 bpl)
 {
 #ifndef WIN32
 
@@ -449,7 +450,7 @@ void average_4x4_normal(w16 *dst, w8 *dst_24, w8 *p0, w32 bpl)
 #endif
 }
 
-void average_4x4_normal(w8 *dst_24, w8 *p0, w32 bpl)
+void average_4x4_normal(w8 * dst_24, w8 * p0, w32 bpl)
 {
 #ifndef WIN32
 	sw32 ir,ig,ib;
@@ -548,14 +549,14 @@ void average_4x4_normal(w8 *dst_24, w8 *p0, w32 bpl)
 }
 
 
-void mip_24_to_16(w8 *mip24, w16 *mip16, sw32 &width, sw32 &height, sw32 &base_width, w8 &flags)
+void mip_24_to_16(w8 * mip24, w16 * mip16, sw32 &width, sw32 &height, sw32 &base_width, w8 &flags)
 {
 	pf_mip_24_to_16.start();
 
 	sw32 i,j; //,total_pixels;
 
-	w8 *src = mip24;
-	w16 *dst = mip16;
+	w8 * src = mip24;
+	w16 * dst = mip16;
 
 	sw32 base_bpl = base_width*3;
 	sw32 src_add  = (base_width - width)*3;
@@ -617,15 +618,15 @@ void mip_24_to_16(w8 *mip24, w16 *mip16, sw32 &width, sw32 &height, sw32 &base_w
 	pf_mip_24_to_16.stop();
 }
 
-void make_next_mip(w8 *mip24, w16 *mip16, sw32 &width, sw32 &height, sw32 &base_width, w8 &flags)
+void make_next_mip(w8 * mip24, w16 * mip16, sw32 &width, sw32 &height, sw32 &base_width, w8 &flags)
 {
 	pf_make_next_mip.start();
 
 	sw32 i,j;
 
-	w8 *src    = mip24;
-	w16 *dst    = mip16;
-	w8 *dst_24 = mip24;
+	w8 * src    = mip24;
+	w16 * dst    = mip16;
+	w8 * dst_24 = mip24;
 
 	sw32 base_bpl   = base_width*3;
 	sw32 dst_24_add = (base_width - width)*3;
@@ -749,7 +750,7 @@ void make_next_mip(w8 *mip24, w16 *mip16, sw32 &width, sw32 &height, sw32 &base_
 	pf_make_next_mip.stop();
 }
 
-void make_square(w8 *mip24, w8 *square_mip24, w8 base_pixel_size, sw32 base_width,
+void make_square(w8 * mip24, w8 * square_mip24, w8 base_pixel_size, sw32 base_width,
 				 sw32 base_height, sw32 new_dimention)
 {
 	double width_ratio  = (double)base_width  / (double)new_dimention;
@@ -758,14 +759,14 @@ void make_square(w8 *mip24, w8 *square_mip24, w8 base_pixel_size, sw32 base_widt
 	//now scale the old to fit the new
 	sw32 i,j,k;
 
-	w8 *dst = square_mip24;
+	w8 * dst = square_mip24;
 
 	for (j=0; j<new_dimention; j++)
 	{
 		for (i=0; i<new_dimention; i++)
 		{
-			w8 *src = &mip24[(int)((i4_f_to_i( ((float)j * (float)height_ratio)*base_width ) +
-									i4_f_to_i( ((float)i * (float)width_ratio))) * base_pixel_size) ];
+			w8 * src = &mip24[(int)((i4_f_to_i( ((float)j * (float)height_ratio)*base_width ) +
+									 i4_f_to_i( ((float)i * (float)width_ratio))) * base_pixel_size) ];
 
 			for (k=0; k<base_pixel_size; k++)
 			{
@@ -781,12 +782,13 @@ void make_square(w8 *mip24, w8 *square_mip24, w8 base_pixel_size, sw32 base_widt
 
 void generate_mip_offsets(sw32 base_width,sw32 base_height,
 						  sw32 num_to_copy,
-						  sw32 *offsets, sw32 pixel_size)
+						  sw32 * offsets, sw32 pixel_size)
 {
 	sw32 cur_offset = r1_mip_header_disk_size();
 
 	//start copying w/this mip
 	sw32 i;
+
 	for (i=0; i<num_to_copy; i++)
 	{
 		offsets[i] = cur_offset;

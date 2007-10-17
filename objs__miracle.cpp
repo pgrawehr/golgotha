@@ -51,7 +51,7 @@ g1_object_definer<g1_miracle_class>
 g1_miracle_def("miracle", g1_object_definition_class::EDITOR_SELECTABLE);
 
 g1_miracle_class::g1_miracle_class(g1_object_type id,
-								   g1_loader_class *fp)
+								   g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 
@@ -60,7 +60,7 @@ g1_miracle_class::g1_miracle_class(g1_object_type id,
 	set_flag(USES_POSTTHINK,1);
 }
 
-void g1_miracle_class::save(g1_saver_class *fp)
+void g1_miracle_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 
@@ -79,7 +79,7 @@ g1_miracle_class::~g1_miracle_class()
 	//}
 }
 
-void g1_miracle_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_miracle_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	sw32 i,j;
 
@@ -90,7 +90,7 @@ void g1_miracle_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer
 
 	for (i=0; i<electric_arcs->size(); i++)
 	{
-		arc_point_struct *points = (*electric_arcs)[i].arc_points;
+		arc_point_struct * points = (*electric_arcs)[i].arc_points;
 
 		i4_3d_point_class pts[NUM_ARC_POINTS];
 
@@ -113,7 +113,7 @@ void g1_miracle_class::think()
 {
 }
 
-void g1_miracle_class::setup(g1_map_piece_class *convoy_to_attack, w32 _miracle_type, i4_3d_vector pos)
+void g1_miracle_class::setup(g1_map_piece_class * convoy_to_attack, w32 _miracle_type, i4_3d_vector pos)
 {
 	x = pos.x;
 	y = pos.y;
@@ -155,12 +155,12 @@ void g1_miracle_class::post_think()
 	sw32 num_needed = 0;
 	//for (i=0; i<g1_convoy_class::CONVOY_SIZE; i++)
 	//{
-	g1_map_piece_class *mp = convoy.get();
+	g1_map_piece_class * mp = convoy.get();
 	if (mp)
 	{
 		num_needed++;
 
-		arc_point_list_struct *points;
+		arc_point_list_struct * points;
 
 		if (electric_arcs->size() < num_needed)
 		{
@@ -183,7 +183,7 @@ void g1_miracle_class::post_think()
 	//}
 }
 
-void g1_miracle_class::copy_old_points(arc_point_struct *points)
+void g1_miracle_class::copy_old_points(arc_point_struct * points)
 {
 	sw32 j;
 
@@ -193,7 +193,7 @@ void g1_miracle_class::copy_old_points(arc_point_struct *points)
 	}
 }
 
-void g1_miracle_class::new_arc_points(i4_3d_vector src, i4_3d_vector dest, arc_point_struct *points)
+void g1_miracle_class::new_arc_points(i4_3d_vector src, i4_3d_vector dest, arc_point_struct * points)
 {
 	i4_float rx,ry,rz,px,py,pz;
 	//i4_float map_point_height;

@@ -10,7 +10,7 @@
 #include "app/registry.h"
 
 
-int i4_disk_free_space(char *path)
+int i4_disk_free_space(char * path)
 {
 	return 80*1024*1024;
 }
@@ -35,9 +35,9 @@ int i4_disk_free_space(char *path)
 
 
 i4_bool i4_get_registry(i4_registry_type type,
-						char *path,
-						char *key_name,
-						char *buffer, int buf_length)
+						char * path,
+						char * key_name,
+						char * buffer, int buf_length)
 {
 	HKEY key;
 
@@ -78,9 +78,9 @@ i4_bool i4_get_registry(i4_registry_type type,
 
 
 i4_bool i4_set_registry(i4_registry_type type,
-						char *path,
-						char *key_name,
-						char *buffer)
+						char * path,
+						char * key_name,
+						char * buffer)
 {
 	HKEY key;
 

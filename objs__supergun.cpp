@@ -42,7 +42,7 @@ enum
 static li_symbol_ref super_mortar("super_mortar");
 static g1_team_icon_ref radar_ims("bitmaps/radar/supergun.tga");
 static li_symbol_class_member li_selectable("user_selectable");
-static li_symbol *li_yes_cache;
+static li_symbol * li_yes_cache;
 
 g1_object_definer<g1_supergun_class>
 g1_supergun_def("supergun", g1_object_definition_class::EDITOR_SELECTABLE|
@@ -51,7 +51,7 @@ g1_supergun_def("supergun", g1_object_definition_class::EDITOR_SELECTABLE|
 
 
 
-void g1_supergun_class::setup(i4_float _x, i4_float _y, g1_object_class *creator)
+void g1_supergun_class::setup(i4_float _x, i4_float _y, g1_object_class * creator)
 {
 	x = x;
 	y = y;
@@ -62,7 +62,7 @@ void g1_supergun_class::setup(i4_float _x, i4_float _y, g1_object_class *creator
 }
 
 g1_supergun_class::g1_supergun_class(g1_object_type id,
-									 g1_loader_class *fp)
+									 g1_loader_class * fp)
 	: g1_map_piece_class(id,fp)
 {
 	defaults = g1_supergun_def.defaults;
@@ -130,7 +130,7 @@ g1_supergun_class::g1_supergun_class(g1_object_type id,
 	}
 }
 
-void g1_supergun_class::save(g1_saver_class *fp)
+void g1_supergun_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -147,7 +147,7 @@ void g1_supergun_class::save(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_supergun_class::load(g1_loader_class *fp)
+void g1_supergun_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(SUPERGUN_DATA_VERSION);
@@ -163,14 +163,14 @@ void g1_supergun_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 }
 
-void g1_supergun_class::skipload(g1_loader_class *fp)
+void g1_supergun_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->seek(fp->tell()+36);
 	fp->end_version(I4_LF);
 }
 
-i4_bool g1_supergun_class::suggest_new_attack_target(g1_object_class *new_target,
+i4_bool g1_supergun_class::suggest_new_attack_target(g1_object_class * new_target,
 													 g1_fire_range_type range)
 {
 	attack_target = new_target;

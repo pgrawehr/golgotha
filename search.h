@@ -18,15 +18,15 @@
 //  if not found, returns i4_F and location of insertion point in loc
 //
 
-typedef int (*i4_bsearch_compare_function_type)(const void *key, const void *member);
+typedef int (*i4_bsearch_compare_function_type)(const void * key, const void * member);
 
-i4_bool i4_base_bsearch(const void *member, w32 &loc,
-						const void *array, w32 member_size, w32 size,
+i4_bool i4_base_bsearch(const void * member, w32 &loc,
+						const void * array, w32 member_size, w32 size,
 						i4_bsearch_compare_function_type compare);
 
 template <class Key, class T>
-i4_bool i4_bsearch(const Key *member, w32 &loc,
-				   const T *array, w32 size, int (*compare)(const Key *, const T *))
+i4_bool i4_bsearch(const Key * member, w32 &loc,
+				   const T * array, w32 size, int (* compare)(const Key *, const T *))
 {
 	return i4_base_bsearch(member, loc, array, sizeof(T), size,
 						   (i4_bsearch_compare_function_type)compare);

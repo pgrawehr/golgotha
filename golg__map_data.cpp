@@ -9,9 +9,9 @@
 #include "map_data.h"
 //#include <string.h>
 
-g1_map_data_class *g1_map_data_class::first=0;
+g1_map_data_class * g1_map_data_class::first=0;
 
-g1_map_data_class::g1_map_data_class(char *name)
+g1_map_data_class::g1_map_data_class(char * name)
 	: name(name)
 {
 	if (!first)
@@ -21,8 +21,8 @@ g1_map_data_class::g1_map_data_class(char *name)
 	}
 	else
 	{
-		g1_map_data_class *last=0;
-		g1_map_data_class *p;
+		g1_map_data_class * last=0;
+		g1_map_data_class * p;
 		for (p=first; p && strcmp(p->name,name)>0;)
 		{
 			last=p;
@@ -51,7 +51,7 @@ g1_map_data_class::~g1_map_data_class()
 	}
 	else
 	{
-		g1_map_data_class *p;
+		g1_map_data_class * p;
 		for (p=first; p->next!=this; p=p->next)
 		{
 			;

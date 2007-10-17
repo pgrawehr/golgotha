@@ -20,15 +20,15 @@ class i4_saver_class;
 class m1_poly_object_class :
 	public g1_quad_object_class
 {
-	void save_quads(i4_saver_class *fp);
-	void save_texture_names(i4_saver_class *fp);
-	void save_vert_animations(i4_saver_class *fp);
-	void save_mount_points(i4_saver_class *fp);
-	void save_specials(i4_saver_class *fp);
-	void save_octree(i4_saver_class *fp);
+	void save_quads(i4_saver_class * fp);
+	void save_texture_names(i4_saver_class * fp);
+	void save_vert_animations(i4_saver_class * fp);
+	void save_mount_points(i4_saver_class * fp);
+	void save_specials(i4_saver_class * fp);
+	void save_octree(i4_saver_class * fp);
 
 
-	g1_vert_class *vert_backup;
+	g1_vert_class * vert_backup;
 	i4_array<w32> vert_offsets;
 
 public:
@@ -66,6 +66,7 @@ public:
 	//{{{
 	{
 		sw32 i;
+
 		for (i=0; i<texture_names.size(); i++)
 		{
 			delete texture_names[i];
@@ -107,6 +108,7 @@ public:
 	{
 		while (vert_flags.size()<=poly_num) vert_flags.add();
 
+
 		if (value)
 		{
 			vert_flags[poly_num] |= flag;
@@ -140,7 +142,7 @@ public:
 	w32 add_special(w32 quad_number);
 	void remove_special(w32 num);
 
-	void save(i4_saver_class *fp);
+	void save(i4_saver_class * fp);
 	void change_animation_name(w32 animation_number, const i4_const_str &st);
 	void change_mount_name(w32 mount_number, const i4_const_str &st);
 	void change_mount(w32 mount_number, i4_3d_vector v);

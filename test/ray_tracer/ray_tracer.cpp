@@ -27,7 +27,7 @@
 #include "gui/button.h"
 #include "gui/text.h"
 
-r1_render_api_class *api=0;
+r1_render_api_class * api=0;
 
 inline float frand()
 {
@@ -66,7 +66,7 @@ struct camera_info
 
 
 
-void render_thread_start(void *context);
+void render_thread_start(void * context);
 
 #define S 2.2
 enum {
@@ -104,6 +104,7 @@ float ray_sphere_intersect(i4_3d_vector ray0,
 
 
 	float descriminant = b*b - 4*a*c;
+
 	if (descriminant<0)
 	{
 		return -1;
@@ -137,7 +138,7 @@ float ray_sphere_intersect(i4_3d_vector ray0,
 	}
 }
 
-float spline(float x, int nknots, float *knot)
+float spline(float x, int nknots, float * knot)
 {
 	const float cr[16]={
 		-0.5,  1.5, -1.5, 0.5,
@@ -193,7 +194,7 @@ struct path_info
 };
 
 class trace_view;
-trace_view *trace=0;
+trace_view * trace=0;
 
 class trace_view :
 	public i4_window_class
@@ -206,7 +207,7 @@ public:
 	i4_3d_vector light;
 	int mouse_x, mouse_y;
 	float theta;
-	r1_render_window_class *rwin_parent;
+	r1_render_window_class * rwin_parent;
 	int rendering, abort_render, reset_render;
 	i4_critical_section_class reset_lock;
 	i4_bool mouse_look_grab;
@@ -225,6 +226,7 @@ public:
 			abort_render=1;
 			while (rendering)
 				i4_thread_yield();
+
 
 		}
 	}
@@ -249,6 +251,7 @@ public:
 		{
 			float t1=(p2-p1)*xr+p1;
 			float t2=(p4-p3)*xr+p3;
+
 			return (t2-t1)*yr+t1;
 		}
 
@@ -308,6 +311,7 @@ public:
 	float turbulance1d(float v)
 	{
 		float r=0, f=1.0;
+
 		for (int t=0; t<4; t++)
 		{
 			r+=(noise.get1d(v)-0.5)/f;
@@ -331,6 +335,7 @@ public:
 	float turbulance(i4_3d_vector v, int octaves=4)
 	{
 		float r=0, f=1.0;
+
 		for (int t=0; t<octaves; t++)
 		{
 			r+=(noise.get(v)-0.5)/f;
@@ -401,6 +406,7 @@ public:
 	void shade_point(i4_3d_vector eye, path_info &p)
 	{
 		i4_3d_vector bump_pos=p.pos, bpa, bpb;
+
 		bump_pos.x+=100;
 		bump_pos.y+=100;
 		bump_pos.z+=100;
@@ -536,6 +542,7 @@ public:
 	{
 		i4_3d_vector i,j,k;
 		i4_3d_vector c;
+
 		t.inverse_transform(i4_3d_vector(0,0,0), c);
 		t.inverse_transform(i4_3d_vector(1,0,0), i);
 		i-=c;
@@ -780,7 +787,8 @@ public:
 			}
 
 			reset_lock.lock();
-		} while (reset_render);
+		}
+		while (reset_render);
 
 
 		rwin()->end_render();
@@ -807,9 +815,10 @@ public:
 		reset_lock.unlock();
 	}
 
-	void draw_vector(i4_3d_vector pos, i4_3d_vector dir, w32 color, i4_draw_context_class *context=0)
+	void draw_vector(i4_3d_vector pos, i4_3d_vector dir, w32 color, i4_draw_context_class * context=0)
 	{
 		i4_3d_vector end=pos;
+
 		end+=dir;
 		draw_3d_line(pos, end, color, context);
 
@@ -861,7 +870,7 @@ public:
 		draw_3d_line(p4,end, color, context);
 	}
 
-	void draw_wire_3d_sphere(i4_3d_vector pos, float r, i4_draw_context_class *context)
+	void draw_wire_3d_sphere(i4_3d_vector pos, float r, i4_draw_context_class * context)
 	{
 		draw_3d_line(i4_3d_vector(pos.x-r, pos.y, pos.z),
 					 i4_3d_vector(pos.x+r, pos.y, pos.z), 0xffffff, context);
@@ -872,7 +881,7 @@ public:
 
 	}
 
-	void draw_3d_line(i4_3d_vector p1, i4_3d_vector p2, w32 color, i4_draw_context_class *context)
+	void draw_3d_line(i4_3d_vector p1, i4_3d_vector p2, w32 color, i4_draw_context_class * context)
 	{
 		if (!context)
 		{
@@ -953,7 +962,7 @@ public:
 	{
 		return "trace_view";
 	}
-	trace_view(int w, int h, r1_render_window_class *rwin_parent)
+	trace_view(int w, int h, r1_render_window_class * rwin_parent)
 		: i4_window_class(w,h),
 		  rwin_parent(rwin_parent)
 	{
@@ -980,6 +989,7 @@ public:
 	void get_mouse_ray(int mx, int my, i4_3d_vector &ray)
 	{
 		float w2=width()/2.0, h2=height()/2.0;
+
 		i4_3d_vector eye_space_ray((mx-w2)/w2,  (my-h2)/h2, 1);
 		eye_space_ray.normalize();
 
@@ -996,8 +1006,8 @@ public:
 		if (q.v.z>0)
 		{
 			float ooz=1.0/q.v.z;
-			q.px=q.v.x *ooz *width()/2.0 + width()/2.0;
-			q.py=q.v.y *ooz *height()/2.0 + height()/2.0;
+			q.px=q.v.x * ooz *width()/2.0 + width()/2.0;
+			q.py=q.v.y * ooz *height()/2.0 + height()/2.0;
 			return i4_T;
 		}
 		return i4_F;
@@ -1009,17 +1019,17 @@ public:
 	{
 		i4_draw_context_class context(0,0, width()-1, height()-1);
 
-		i4_image_class *im=i4_create_image(width(), height(), local_image->pal);
+		i4_image_class * im=i4_create_image(width(), height(), local_image->pal);
 		local_image->put_part(im, 0,0, x(), y(), x()+width()-1, y()+height()-1, context);
 
 
-		i4_file_class *fp=i4_open("im.jpg", I4_WRITE);
+		i4_file_class * fp=i4_open("im.jpg", I4_WRITE);
 		i4_write_jpeg(im, fp, 100);
 		delete fp;
 		delete im;
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 
 		switch (ev->type())
@@ -1138,7 +1148,7 @@ public:
 };
 
 
-void render_thread_start(void *context)
+void render_thread_start(void * context)
 {
 	((trace_view *)context)->thread_render();
 }
@@ -1148,7 +1158,8 @@ void render_thread_start(void *context)
 
 i4_window_class *create_view(int w, int h)
 {
-	r1_render_window_class *win=api->create_render_window(w,h);
+	r1_render_window_class * win=api->create_render_window(w,h);
+
 	trace=new trace_view(w,h, win);
 	win->add_child(0,0, trace);
 	return win;
@@ -1159,7 +1170,7 @@ class ray_tracer_app :
 	public i4_application_class
 {
 public:
-	i4_bool get_display_name(char *name, int max_len)
+	i4_bool get_display_name(char * name, int max_len)
 	{
 		strcpy(name, "Windowed GDI");
 		return i4_T;
@@ -1169,7 +1180,7 @@ public:
 	{
 		i4_application_class::init();
 
-		i4_pull_menu_class *menu=li_create_pull_menu("menu.scm");
+		i4_pull_menu_class * menu=li_create_pull_menu("menu.scm");
 		menu->show(wm, 0,0);
 
 		api=r1_create_api(get_display(), "Software Z Buffer");
@@ -1178,16 +1189,16 @@ public:
 			i4_error("no render api");
 		}
 
-		i4_graphical_style_class *style=get_style();
-		i4_window_class *w=create_view(400, 400);
+		i4_graphical_style_class * style=get_style();
+		i4_window_class * w=create_view(400, 400);
 
-		i4_parent_window_class *p;
+		i4_parent_window_class * p;
 		p=style->create_mp_window(0, menu->height(), w->width(), w->height(), "Render");
 		p->add_child(0,0, w);
 
 
-		i4_button_class *b=new i4_button_class(0, new i4_text_window_class("Save", style), style,
-											   new i4_event_reaction_class(trace, SAVE));
+		i4_button_class * b=new i4_button_class(0, new i4_text_window_class("Save", style), style,
+												new i4_event_reaction_class(trace, SAVE));
 		wm->add_child(wm->width()-b->width(), wm->height()-b->height(), b);
 	}
 
@@ -1220,8 +1231,9 @@ public:
 };
 
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	ray_tracer_app test;
+
 	test.run();
 }

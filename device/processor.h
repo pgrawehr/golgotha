@@ -32,6 +32,6 @@ struct i4_cpu_info_struct
 	w32 cpu_flags;
 };
 
-void i4_get_cpu_info(i4_cpu_info_struct *s);
+void i4_get_cpu_info(i4_cpu_info_struct * s);
 
 #endif

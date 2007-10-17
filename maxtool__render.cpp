@@ -45,7 +45,7 @@
 #include "maxtool/id.h"
 #include "g1_tint.h"
 
-i4_image_class *background_bitmap=0;
+i4_image_class * background_bitmap=0;
 
 i4_event_handler_reference_class<m1_utility_window_class> m1_render_window;
 
@@ -134,8 +134,8 @@ void m1_utility_window_class::set_object(const i4_const_str &filename)
 
 m1_utility_window_class::m1_utility_window_class(w16 window_width,
 												 w16 window_height,
-												 r1_render_api_class *api,
-												 i4_window_manager_class *wm,
+												 r1_render_api_class * api,
+												 i4_window_manager_class * wm,
 												 i4_float theta,
 												 i4_float phi,
 												 i4_float dist)
@@ -174,6 +174,7 @@ void m1_utility_window_class::recenter()
 void m1_utility_window_class::recalc_view()
 {
 	i4_transform_class tmp,tmp2,tmptmp;
+
 	//i4_float greaterdimension;
 
 	transform.identity();
@@ -213,7 +214,7 @@ void m1_utility_window_class::select_poly(int poly_num)
 		return;
 	}
 
-	g1_quad_class *q = &m1_info.obj->quad[poly_num];
+	g1_quad_class * q = &m1_info.obj->quad[poly_num];
 	q->set_flags(g1_quad_class::SELECTED, ~q->get_flags(g1_quad_class::SELECTED));
 	m1_st_edit->edit_poly_changed();
 
@@ -221,9 +222,10 @@ void m1_utility_window_class::select_poly(int poly_num)
 }
 
 
-void m1_utility_window_class::drop_files(int t_files, i4_str **filenames)
+void m1_utility_window_class::drop_files(int t_files, i4_str * * filenames)
 {
 	int i;
+
 	i4_array<i4_str *> gmods(0,32);
 
 	// check to see if any of the files dropped are gmods
@@ -256,7 +258,7 @@ void m1_utility_window_class::drop_files(int t_files, i4_str **filenames)
 
 }
 
-void m1_utility_window_class::receive_event(i4_event *ev)
+void m1_utility_window_class::receive_event(i4_event * ev)
 //{{{
 {
 	int pre_grab = grab;
@@ -450,7 +452,7 @@ i4_bool m1_utility_window_class::project_point(const i4_3d_point_class &p, r1_ve
 }
 //}}}
 
-m1_utility_window_class *m1_utility_window_class::get_this()
+m1_utility_window_class * m1_utility_window_class::get_this()
 {
 	return m1_render_window.get();
 }
@@ -704,11 +706,12 @@ void m1_utility_window_class::update_object(i4_float time)
 void m1_utility_window_class::render_object(i4_draw_context_class &context)
 //{{{
 {
-	r1_vert *t_vertices=0;
+	r1_vert * t_vertices=0;
+
 	g1_stat_counter.increment(g1_statistics_counter_class::FRAMES);
 	g1_stat_counter.t_frames++;
-	g1_quad_object_class *obj = get_obj();
-	g1_quad_class *q=0;
+	g1_quad_object_class * obj = get_obj();
+	g1_quad_class * q=0;
 	g1_draw_context_class gc;
 	gc.window_setup(0,0, width(), height(),
 					g1_render.center_x, g1_render.center_y,
@@ -725,7 +728,7 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
 
 	num_vertices            = obj->num_vertex;
 	//int max_t_vertices		  = 0;
-	g1_quad_class *qprep=obj->quad;
+	g1_quad_class * qprep=obj->quad;
 	//int ii;
 	/*for (ii=0; ii<obj->num_quad; ii++, qprep++)
 	   {    //calculate the maximum size of the vertices buffer
@@ -744,8 +747,8 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
 	g1_render.ensure_capacity(num_vertices+1);
 	t_vertices=g1_render.t_vertices;
 
-	g1_vert_class *src_vert = obj->get_verts(m1_info.current_animation,
-											 m1_info.current_frame);
+	g1_vert_class * src_vert = obj->get_verts(m1_info.current_animation,
+											  m1_info.current_frame);
 
 	w8 ANDCODE = 0xFF;
 	w8 ORCODE  = 0;
@@ -773,7 +776,7 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
 	g1_stat_counter.add(g1_statistics_counter_class::OBJECT_POLYS,obj->num_quad);
 	g1_stat_counter.add(g1_statistics_counter_class::TERRAIN_POLYS,obj->num_vertex);
 	g1_stat_counter.add(g1_statistics_counter_class::OBJECTS,1);
-	r1_vert *v              = t_vertices;
+	r1_vert * v              = t_vertices;
 	int all_num_quads=0;
 	api->disable_texture();
 	//api->set_shading_mode(R1_CONSTANT_SHADING);
@@ -906,7 +909,7 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
 
 					for (j=0; j<num_poly_verts; j++)
 					{
-						r1_vert *temp_vert = &t_vertices[q->vertex_ref[j]];
+						r1_vert * temp_vert = &t_vertices[q->vertex_ref[j]];
 
 						float ooz = r1_ooz(temp_vert->v.z);
 
@@ -930,12 +933,12 @@ void m1_utility_window_class::render_object(i4_draw_context_class &context)
 				{
 					r1_vert temp_buf_1[64];
 					r1_vert temp_buf_2[64];
-					r1_vert *clipped_poly = api->clip_poly(&num_poly_verts,
-														   t_vertices,
-														   q->vertex_ref,
-														   temp_buf_1,
-														   temp_buf_2,
-														   R1_CLIP_NO_CALC_OUTCODE);
+					r1_vert * clipped_poly = api->clip_poly(&num_poly_verts,
+															t_vertices,
+															q->vertex_ref,
+															temp_buf_1,
+															temp_buf_2,
+															R1_CLIP_NO_CALC_OUTCODE);
 
 					if (clipped_poly && num_poly_verts>=3)
 					{
@@ -1256,12 +1259,12 @@ void m1_utility_window_class::parent_draw(i4_draw_context_class &context)
 	//overlapping windows by setting their z-depth to minimum
 
 
-	m1_poly_object_class *obj=get_obj();
+	m1_poly_object_class * obj=get_obj();
 
 	if (obj)
 	{
 		i4_rect_list_class::area_iter cl;
-		i4_rect_list_class *clip=&context.clip;
+		i4_rect_list_class * clip=&context.clip;
 		//obj->calc_vert_normals();
 
 
@@ -1322,12 +1325,12 @@ i4_bool m1_utility_window_class::find_hit(int mx, int my)
 {
 	i4_bool ret=i4_F;
 
-	g1_quad_object_class *obj=get_obj();
+	g1_quad_object_class * obj=get_obj();
 
 	// select point
 	if (obj)
 	{
-		g1_vert_class *src_vert = obj->get_verts(m1_info.current_animation, m1_info.current_frame);
+		g1_vert_class * src_vert = obj->get_verts(m1_info.current_animation, m1_info.current_frame);
 		r1_vert tmp_v;
 		i4_float left = mx-3,right = mx+3, top=my-3, bottom=my+3;
 		int p=-1, np=m1_info.preselect_point,j;
@@ -1410,7 +1413,7 @@ i4_bool m1_utility_window_class::find_hit(int mx, int my)
 }
 //}}}
 
-extern m1_utility_state_class *m1_default_state;
+extern m1_utility_state_class * m1_default_state;
 void m1_utility_window_class::restore_state()
 //{{{
 {

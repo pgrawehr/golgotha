@@ -21,9 +21,9 @@ class g1_field_camera_object_class :
 	public g1_object_class
 {
 public:
-	g1_field_camera_object_class *next;
+	g1_field_camera_object_class * next;
 
-	g1_field_camera_object_class(g1_object_type id, g1_loader_class *fp)
+	g1_field_camera_object_class(g1_object_type id, g1_loader_class * fp)
 		: g1_object_class(id, fp)
 	{
 		draw_params.setup("camera");
@@ -31,7 +31,7 @@ public:
 
 	}
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 	{
 		g1_editor_model_draw(this, draw_params, context,viewer_position);
 	}
@@ -55,7 +55,8 @@ i4_bool g1_field_camera_object_class::occupy_location()
 {
 	static w32 currentno=1;
 	//li_class_context context(vars);//context is always correct here
-	char *n=vars->get(li_name);
+	char * n=vars->get(li_name);
+
 	if (strcmp(n,"unknown_camera")==0)
 	{
 		char buf[50];
@@ -77,7 +78,7 @@ g1_object_class *g1_find_closest_field_camera(const i4_3d_vector &pos)
 {
 	i4_isl_list<g1_field_camera_object_class>::iterator i=g1_camera_list.begin();
 
-	g1_field_camera_object_class *closest=0;
+	g1_field_camera_object_class * closest=0;
 	float closest_dist=100000000;
 
 	i4_transform_class t;
@@ -111,9 +112,9 @@ g1_object_class *g1_find_closest_field_camera(const i4_3d_vector &pos)
 }
 
 
-g1_object_class *g1_find_named_camera(char *name)
+g1_object_class *g1_find_named_camera(char * name)
 {
-	for (g1_field_camera_object_class *f=g1_camera_list.first(); f; f=f->next)
+	for (g1_field_camera_object_class * f=g1_camera_list.first(); f; f=f->next)
 	{
 		li_class_context context(f->vars);
 		i4_warning("Looking for Camera %s, having %s",name,li_name());
@@ -127,15 +128,15 @@ g1_object_class *g1_find_named_camera(char *name)
 }
 
 
-static li_object *place_camera(li_object *o, li_environment *env)
+static li_object *place_camera(li_object * o, li_environment * env)
 {
 	if (g1_current_controller.get())
 	{
 		li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-		g1_camera_info_struct *c=g1_current_controller->view.get_camera();
-		g1_field_camera_object_class *fc=(g1_field_camera_object_class *)
-										  g1_create_object(g1_field_camera_object_def.type);
+		g1_camera_info_struct * c=g1_current_controller->view.get_camera();
+		g1_field_camera_object_class * fc=(g1_field_camera_object_class *)
+										   g1_create_object(g1_field_camera_object_def.type);
 		if (fc)
 		{
 			fc->theta=c->ground_rotate;

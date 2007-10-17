@@ -11,7 +11,7 @@
 
 #include "arch.h"
 
-int i4_disk_free_space(char *path);
+int i4_disk_free_space(char * path);
 
 
 #endif

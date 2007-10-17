@@ -30,6 +30,7 @@
 i4_float m1_st_edit_window_class::twidth() const
 {
 	i4_float retval=255.9999f;
+
 	if (texture)
 	{
 		retval=texture->width()-0.0001f;
@@ -46,6 +47,7 @@ i4_float m1_st_edit_window_class::theight() const
 {
 	//return (texture)? texture->height()-0.0001 : 255.9999;
 	i4_float retval=(texture) ? texture->height()-0.0001f : 255.9999f;
+
 	if (retval>255.9999)
 	{
 		retval=255.9999f;
@@ -57,7 +59,7 @@ void m1_st_edit_window_class::get_point(int poly, int num, int &x, int &y)
 {
 	if (m1_info.obj)
 	{
-		g1_quad_class *q=m1_info.obj->quad+poly;
+		g1_quad_class * q=m1_info.obj->quad+poly;
 		float tw=twidth(), th=theight();
 
 		x=(int)(q->u[num] * tw);
@@ -85,7 +87,7 @@ void m1_st_edit_window_class::draw(i4_draw_context_class &context)
 			{
 				int i; //do NOT change to unsigned!
 
-				g1_quad_class *q=&m1_info.obj->quad[j];
+				g1_quad_class * q=&m1_info.obj->quad[j];
 
 				get_point(j,0,x2,y2);
 				for (i=q->num_verts()-1; i>=0; i--)
@@ -120,7 +122,8 @@ void m1_st_edit_window_class::draw(i4_draw_context_class &context)
 
 void m1_st_edit_window_class::drag_points(int xc, int yc)
 {
-	m1_poly_object_class *obj=m1_info.obj;
+	m1_poly_object_class * obj=m1_info.obj;
+
 	if (!obj)
 	{
 		return;
@@ -210,7 +213,7 @@ void m1_st_edit_window_class::select_point(int point)
 		return;
 	}
 
-	m1_poly_object_class *obj=m1_info.obj;
+	m1_poly_object_class * obj=m1_info.obj;
 
 	if (!i4_current_app->get_window_manager()->shift_pressed())
 	{
@@ -225,7 +228,7 @@ void m1_st_edit_window_class::select_point(int point)
 
 	for (int j=0; j<obj->num_quad; j++)
 	{
-		g1_quad_class *q=obj->quad+j;
+		g1_quad_class * q=obj->quad+j;
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			for (w32 i=0; i<q->num_verts(); i++)
@@ -280,7 +283,7 @@ void m1_st_edit_window_class::change_current_texture(i4_const_str new_name)
 {
 	if (m1_info.obj)
 	{
-		i4_file_class *fp=i4_open(new_name);
+		i4_file_class * fp=i4_open(new_name);
 		if (!fp)
 		{
 			i4_message_box("File not found","Could not find the specified file. Nothing will happen.",MSG_OK);
@@ -289,7 +292,7 @@ void m1_st_edit_window_class::change_current_texture(i4_const_str new_name)
 		delete fp;
 		//Hint: We currently assume the textures directory is
 		//at the same location as the exe file (not on a cdrom or something)
-		i4_str *relpath=i4_relative_path(new_name);
+		i4_str * relpath=i4_relative_path(new_name);
 		if (relpath->strstr("textures")!=relpath->begin()) //we aren't already in the textures folder
 		{
 			i4_filename_struct fn;
@@ -325,11 +328,12 @@ void m1_st_edit_window_class::change_current_texture(i4_const_str new_name)
 }
 
 
-void m1_st_edit_window_class::receive_event(i4_event *ev)
+void m1_st_edit_window_class::receive_event(i4_event * ev)
 {
 	int pre_grab = grab;
 
-	m1_poly_object_class *obj=m1_info.obj;
+	m1_poly_object_class * obj=m1_info.obj;
+
 	if (!obj)
 	{
 		return ;
@@ -351,7 +355,7 @@ void m1_st_edit_window_class::receive_event(i4_event *ev)
 				CAST_PTR(tc, i4_text_change_notify_event, ev);
 				if (tc->object==tname_edit && tc->new_text && m1_info.obj)
 				{
-					i4_file_class *fp=i4_open(*tc->new_text);
+					i4_file_class * fp=i4_open(*tc->new_text);
 					if (!fp)
 					{
 						return;
@@ -400,7 +404,7 @@ void m1_st_edit_window_class::receive_event(i4_event *ev)
 				{
 					for (int j=0; j<obj->num_quad; j++)
 					{
-						g1_quad_class *q=obj->quad+j;
+						g1_quad_class * q=obj->quad+j;
 						if (q->get_flags(g1_quad_class::SELECTED))
 						{
 							for (w32 i=0; i<q->num_verts(); i++)
@@ -479,7 +483,7 @@ void m1_st_edit_window_class::receive_event(i4_event *ev)
 
 						for (int j=0; j<m1_info.obj->num_quad; j++)
 						{
-							g1_quad_class *q=m1_info.obj->quad+j;
+							g1_quad_class * q=m1_info.obj->quad+j;
 							if (q->get_flags(g1_quad_class::SELECTED))
 							{
 								for (w32 i=0; i<q->num_verts(); i++)
@@ -507,7 +511,7 @@ void m1_st_edit_window_class::receive_event(i4_event *ev)
 					{
 						for (int j=0; j<m1_info.obj->num_quad; j++)
 						{
-							g1_quad_class *q=m1_info.obj->quad+j;
+							g1_quad_class * q=m1_info.obj->quad+j;
 							if (q->get_flags(g1_quad_class::SELECTED))
 							{
 								for (w32 i=0; i<q->num_verts(); i++)
@@ -559,7 +563,7 @@ void m1_st_edit_window_class::edit_poly_changed()
 
 	if (m1_info.obj)
 	{
-		m1_poly_object_class *obj=m1_info.obj;
+		m1_poly_object_class * obj=m1_info.obj;
 
 		int sel_poly=-1;
 		for (int j=0; j<obj->num_quad; j++)
@@ -591,7 +595,7 @@ void m1_st_edit_window_class::edit_poly_changed()
 		else
 		{
 
-			i4_image_class *im[10];
+			i4_image_class * im[10];
 			w32 imid;
 			//int t=r1_load_gtext(imid=r1_get_texture_id(*obj->texture_names[sel_poly]), im);
 			imid=r1_get_texture_id(*obj->texture_names[sel_poly]);
@@ -614,7 +618,7 @@ void m1_st_edit_window_class::edit_poly_changed()
 			else
 			{
 				tname_edit->change_text("<Texture not found>");
-				i4_const_str *n=NULL;
+				i4_const_str * n=NULL;
 				n=r1_get_texture_name(imid);
 				char buf[250],buf2[250];
 				i4_os_string(*n,buf,100);
@@ -665,7 +669,7 @@ void m1_st_edit_window_class::edit_poly_changed()
 
 
 m1_st_edit_window_class::m1_st_edit_window_class(w16 w, w16 h,
-												 i4_text_input_class *tname_edit)
+												 i4_text_input_class * tname_edit)
 	: i4_window_class(w,h),
 	  tname_edit(tname_edit)
 {

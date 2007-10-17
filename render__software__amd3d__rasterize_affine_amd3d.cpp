@@ -17,16 +17,16 @@
 
 #ifndef USE_AMD3D
 
-void span_draw_affine_lit_amd3d(span_tri_info *tri)
+void span_draw_affine_lit_amd3d(span_tri_info * tri)
 {
 }
-void span_draw_affine_unlit_amd3d(span_tri_info *tri)
+void span_draw_affine_unlit_amd3d(span_tri_info * tri)
 {
 }
 
 #else
 
-void span_draw_affine_unlit_amd3d(span_tri_info *tri)
+void span_draw_affine_unlit_amd3d(span_tri_info * tri)
 {
 	//setup some of the global variables
 	r1_software_class_instance.set_color_tint(tri->color_tint);
@@ -56,7 +56,7 @@ void span_draw_affine_unlit_amd3d(span_tri_info *tri)
 	s_t_carry[1] = (temp_dsdx>>16) + ((temp_dtdx>>16)<<r1_software_twidth_log2); //integral add when t doesnt carry
 	s_t_carry[0] = s_t_carry[1] + r1_software_texture_width;         //integral add when t carrys
 
-	span_entry *s = &global_span_list[tri->span_list_head];
+	span_entry * s = &global_span_list[tri->span_list_head];
 
 	affine_span left;
 	while (s!=global_span_list)
@@ -96,7 +96,7 @@ void span_draw_affine_unlit_amd3d(span_tri_info *tri)
 	}
 }
 
-void span_draw_affine_lit_amd3d(span_tri_info *tri)
+void span_draw_affine_lit_amd3d(span_tri_info * tri)
 {
 	//setup some of the global variables
 	r1_software_class_instance.set_color_tint(tri->color_tint);
@@ -125,7 +125,7 @@ void span_draw_affine_lit_amd3d(span_tri_info *tri)
 	s_t_carry[1] = (temp_dsdx>>16) + ((temp_dtdx>>16)<<r1_software_twidth_log2); //integral add when t doesnt carry
 	s_t_carry[0] = s_t_carry[1] + r1_software_texture_width;         //integral add when t carrys
 
-	span_entry *s = &global_span_list[tri->span_list_head];
+	span_entry * s = &global_span_list[tri->span_list_head];
 
 	affine_span left;
 	while (s!=global_span_list)

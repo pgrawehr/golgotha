@@ -53,7 +53,7 @@ li_string_class_member li_cloudname("texture_name");
 i4_profile_class pf_draw_sky("g1_draw_sky");
 
 i4_array<i4_str *> g1_sky_list(0,16);
-li_object *g1_def_skys(li_object *o, li_environment *env);
+li_object *g1_def_skys(li_object * o, li_environment * env);
 static r1_texture_ref sky_texture("cloud2");
 
 li_type_number li_g1_sky_type=0;
@@ -63,12 +63,13 @@ class li_g1_sky_function :
 	public li_type_function_table
 {
 public:
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
-		li_g1_sky *s=li_g1_sky::get(o,0);
+		li_g1_sky * s=li_g1_sky::get(o,0);
+
 		li_get_type(s->value()->type())->print(s->value(),stream);
 	};
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		if (o1->type()!=o2->type())
 		{
@@ -82,31 +83,35 @@ public:
 	{
 		return "sky";
 	}
-	virtual li_object *create(li_object *params, li_environment *env)
+	virtual li_object *create(li_object * params, li_environment * env)
 	{
-		li_object *o=li_eval(li_first(params,env),env);
-		li_string *s=li_string::get(o,env);
+		li_object * o=li_eval(li_first(params,env),env);
+		li_string * s=li_string::get(o,env);
+
 		if (((li_object *)s==li_nil)||(s==0))
 		{
 			s=new li_string("");
 		}
 		return new li_g1_sky(s);
 	}
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
-		li_g1_sky *t=li_g1_sky::get(o,env);
+		li_g1_sky * t=li_g1_sky::get(o,env);
+
 		li_save_object(fp,t->value(),env);
 	}
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap,li_environment * env)
 	{
-		li_string *s=0;
+		li_string * s=0;
+
 		s=li_string::get(li_load_object(fp,type_remap,env),env);
 		return new li_g1_sky(s);
 	}
-	virtual void mark(li_object *o,int set)
+	virtual void mark(li_object * o,int set)
 	{
-		li_g1_sky *t=(li_g1_sky *)o;    //must do a force-cast
-										//because o might be marked
+		li_g1_sky * t=(li_g1_sky *)o;    //must do a force-cast
+
+		//because o might be marked
 		o->mark(set);
 		li_get_type(t->value()->type())->mark(t->value(),set);
 	}
@@ -116,6 +121,7 @@ g1_sky_view::~g1_sky_view()
 {
 	//i4_kernel.delete_handler(eh);
 	eh=0;
+
 }
 
 void g1_sky_view::draw(i4_draw_context_class &context)
@@ -127,7 +133,7 @@ void g1_sky_view::draw(i4_draw_context_class &context)
 		valid=i4_T;
 	}
 
-	r1_render_api_class *api=g1_render.r_api;
+	r1_render_api_class * api=g1_render.r_api;
 	api->flush_vert_buffer();
 	r1_texture_handle han;
 	char tname[256], tname1[256];
@@ -201,7 +207,7 @@ void g1_sky_view::draw(i4_draw_context_class &context)
 	request_redraw(); //keep drawing, otherwise the display will lose sync with the scrollbar
 };
 
-void g1_sky_view::receive_event(i4_event *ev)
+void g1_sky_view::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::WINDOW_MESSAGE)
 	{
@@ -251,8 +257,8 @@ void g1_sky_view::receive_event(i4_event *ev)
 };
 
 
-g1_sky_picker_class::g1_sky_picker_class(i4_graphical_style_class *style,
-										 i4_event_handler_class *handler)
+g1_sky_picker_class::g1_sky_picker_class(i4_graphical_style_class * style,
+										 i4_event_handler_class * handler)
 	: i4_color_window_class(0,0, style->color_hint->neutral(), style),
 	  render_windows(0,32),
 	  eh(handler)
@@ -269,14 +275,14 @@ g1_sky_picker_class::g1_sky_picker_class(i4_graphical_style_class *style,
 	}
 	y+=obj_h;
 
-	i4_scroll_bar *sb=new i4_scroll_bar(i4_F, t_vis * obj_w, t_vis, t_obj, 0, this, style);
+	i4_scroll_bar * sb=new i4_scroll_bar(i4_F, t_vis * obj_w, t_vis, t_obj, 0, this, style);
 	add_child(x,y, sb);
 
 	resize_to_fit_children();
 }
 int g1_sky_view::sky_scroll_offset=0;
 
-void g1_sky_picker_class::receive_event(i4_event *ev)
+void g1_sky_picker_class::receive_event(i4_event * ev)
 {
 	i4_color_window_class::receive_event(ev);
 	if (ev->type()==i4_event::USER_MESSAGE)
@@ -297,6 +303,7 @@ g1_sky_picker_class::~g1_sky_picker_class()
 {
 	//i4_kernel.delete_handler(eh);
 	eh=0;
+
 }
 
 
@@ -304,9 +311,9 @@ class li_sky_change_button_class :
 	public i4_button_class
 {
 public:
-	i4_text_window_class *show_name;
+	i4_text_window_class * show_name;
 	i4_const_str current_name;
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"sky_change_button");
 	}
@@ -329,9 +336,9 @@ public:
 
 
 	li_sky_change_button_class(const i4_const_str &help,
-							   i4_window_class *child,
-							   i4_graphical_style_class *style,
-							   i4_text_window_class *show_name,
+							   i4_window_class * child,
+							   i4_graphical_style_class * style,
+							   i4_text_window_class * show_name,
 							   const i4_const_str &_current_name)
 		: i4_button_class(&help, child, style),
 		  show_name(show_name),
@@ -345,7 +352,7 @@ public:
 	void do_press()
 	{
 		g1_sky_view::sky_scroll_offset=0;
-		g1_sky_picker_class *sp=new g1_sky_picker_class(i4_current_app->get_style(),this);
+		g1_sky_picker_class * sp=new g1_sky_picker_class(i4_current_app->get_style(),this);
 
 		g1_editor_instance.create_modal(sp->width(), sp->height(), "set_sky_title");
 		g1_editor_instance.modal_window.get()->add_child(0,0,sp);
@@ -354,7 +361,7 @@ public:
 		update_name();
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		//A new sky was choosen
 		if (ev->type()==i4_event::DO_COMMAND)
@@ -383,25 +390,25 @@ class li_sky_editor :
 {
 public:
 	virtual int create_edit_controls(i4_str name,
-									 li_object *o,
-									 li_object *property_list,
-									 i4_window_class **windows,
+									 li_object * o,
+									 li_object * property_list,
+									 i4_window_class * * windows,
 									 int max_windows,
-									 li_environment *env)
+									 li_environment * env)
 	{
 		if (max_windows<3)
 		{
 			return 0;
 		}
-		i4_graphical_style_class *style=i4_current_app->get_style();
+		i4_graphical_style_class * style=i4_current_app->get_style();
 		windows[0]=new i4_text_window_class(name, style);
-		li_string *str=li_g1_sky::get(o,env)->value();
+		li_string * str=li_g1_sky::get(o,env)->value();
 		//char buf[300];
 		//i4_ram_file_class rf(buf, 260);
 		//li_get_type(str->type())->print(str, &rf);
 		//buf[rf.tell()]=0;
 		//buf[rf.tell()-1]=0;
-		i4_text_window_class *ti=new i4_text_window_class(str->value(),style);
+		i4_text_window_class * ti=new i4_text_window_class(str->value(),style);
 		if (ti->width()<200)
 		{
 			ti->resize(200,ti->height());
@@ -416,10 +423,10 @@ public:
 		return 3;
 
 	};
-	virtual li_object *apply_edit_controls(li_object *o,
-										   li_object *property_list,
-										   i4_window_class **windows,
-										   li_environment *env)
+	virtual li_object *apply_edit_controls(li_object * o,
+										   li_object * property_list,
+										   i4_window_class * * windows,
+										   li_environment * env)
 	{
 		return new li_g1_sky(((i4_text_window_class *)windows[1])->get_text()->c_str());
 	}
@@ -435,13 +442,14 @@ public:
 	}
 	void init()
 	{
-		li_type_function_table *ty=new li_g1_sky_function;
+		li_type_function_table * ty=new li_g1_sky_function;
+
 		li_g1_sky_type=li_add_type(ty);
 		li_get_type(li_find_type("sky"))->set_editor(&li_sky_edit_instance);
 	};
 } li_g1_sky_initer_instance;
 
-void scale_copy(i4_image_class *src, i4_image_class *dst, int sx1, int sy1, int sx2, int sy2)
+void scale_copy(i4_image_class * src, i4_image_class * dst, int sx1, int sy1, int sx2, int sy2)
 {
 
 	int dest_x, dest_y;
@@ -469,9 +477,9 @@ class g1_sky_class :
 	public i4_init_class
 {
 public:
-	i4_str *current_sky_name;
-	i4_image_class *sky_im;
-	g1_quad_object_class *sky_model;
+	i4_str * current_sky_name;
+	i4_image_class * sky_im;
+	g1_quad_object_class * sky_model;
 	i4_time_class sky_time, start_time;
 
 	void init()
@@ -538,7 +546,7 @@ public:
 		// try the skys directory first
 		char aname[256];
 		sprintf(aname, "textures/%s.jpg", fn.filename);
-		i4_file_class *fp=i4_open(aname);
+		i4_file_class * fp=i4_open(aname);
 
 		if (fp)
 		{
@@ -564,9 +572,9 @@ public:
 	}
 
 
-	i4_bool update(i4_const_str &sky_name, i4_window_class *w, int use_blits)
+	i4_bool update(i4_const_str &sky_name, i4_window_class * w, int use_blits)
 	{
-		r1_render_api_class *api=g1_render.r_api;
+		r1_render_api_class * api=g1_render.r_api;
 
 		if (use_blits && sky_im && (sky_im->width()!=w->width() || sky_im->height()!=w->height()*2))
 		{
@@ -606,12 +614,12 @@ public:
 
 		if (use_blits)
 		{
-			i4_file_class *fp=find_sky_file(*current_sky_name);
-			i4_image_class *im=0;
+			i4_file_class * fp=find_sky_file(*current_sky_name);
+			i4_image_class * im=0;
 
 			if (!fp)
 			{
-				i4_image_class *images[10];
+				i4_image_class * images[10];
 				w32 id=r1_get_texture_id(*current_sky_name);
 
 				int t=r1_load_gtext(id, images);
@@ -747,13 +755,13 @@ public:
 } g1_sky;
 
 
-li_object *g1_def_skys(li_object *o, li_environment *env)
+li_object *g1_def_skys(li_object * o, li_environment * env)
 {
 	g1_sky.reset();
 
 	for (o=li_cdr(o,env); o; o=li_cdr(o,env))
 	{
-		char *name=li_string::get(li_eval(li_car(o,env), env),env)->value();
+		char * name=li_string::get(li_eval(li_car(o,env), env),env)->value();
 		g1_render.r_api->get_tmanager()->register_texture(name, "sky name");
 		g1_sky_list.add(new i4_str(name));
 	}
@@ -765,10 +773,10 @@ li_object *g1_def_skys(li_object *o, li_environment *env)
 int force_blits=0;
 
 
-void generate_poly(i4_3d_vector *points, w16 *indexes,
+void generate_poly(i4_3d_vector * points, w16 * indexes,
 				   i4_transform_class &transform,
 				   float s, float t,
-				   r1_vert *v,
+				   r1_vert * v,
 				   float r, float g, float b, float a)
 {
 	for (int i=0; i<4; i++)
@@ -800,14 +808,14 @@ void generate_poly(i4_3d_vector *points, w16 *indexes,
 static float cam_z=8;
 void draw_clouds(g1_camera_info_struct &current_camera,
 				 i4_transform_class &transform,
-				 g1_draw_context_class *context)
+				 g1_draw_context_class * context)
 
 {
 	int i,j;
 	r1_vert v[2*2+20]; //, *p;
 
 
-	i4_3d_vector pts[4*4], *pt;
+	i4_3d_vector pts[4*4], * pt;
 
 	float cloud_scale=15;
 
@@ -817,20 +825,20 @@ void draw_clouds(g1_camera_info_struct &current_camera,
 
 	float r[2],g[2],b[2],a[2];
 
-	li_class *bottom_layer=(li_class *)g1_map_vars.vars()->get(bottom_cloud_layer);
+	li_class * bottom_layer=(li_class *)g1_map_vars.vars()->get(bottom_cloud_layer);
 
 	r[0]=bottom_layer->get(li_red);
 	g[0]=bottom_layer->get(li_green);
 	b[0]=bottom_layer->get(li_blue);
 	a[0]=bottom_layer->get(li_alpha);
-	char *bottom_layer_name=bottom_layer->get(li_cloudname);
+	char * bottom_layer_name=bottom_layer->get(li_cloudname);
 
-	li_class *top_layer=(li_class *)g1_map_vars.vars()->get(top_cloud_layer);
+	li_class * top_layer=(li_class *)g1_map_vars.vars()->get(top_cloud_layer);
 	r[1]=top_layer->get(li_red);
 	g[1]=top_layer->get(li_green);
 	b[1]=top_layer->get(li_blue);
 	a[1]=top_layer->get(li_alpha);
-	char *top_layer_name=top_layer->get(li_cloudname);
+	char * top_layer_name=top_layer->get(li_cloudname);
 
 	for (int k=1; k>=0; k--)
 	{
@@ -897,7 +905,7 @@ void draw_clouds(g1_camera_info_struct &current_camera,
 
 
 
-				r1_vert buf1[20], buf2[20], *pv;
+				r1_vert buf1[20], buf2[20], * pv;
 				sw32 t_verts=4;
 				w16 v_index[4]={
 					0,1,2,3
@@ -909,7 +917,7 @@ void draw_clouds(g1_camera_info_struct &current_camera,
 
 					for (int j=0; j<t_verts; j++)
 					{
-						r1_vert *v = &pv[j];
+						r1_vert * v = &pv[j];
 
 						float ooz = r1_ooz(v->v.z);
 
@@ -929,15 +937,15 @@ void draw_clouds(g1_camera_info_struct &current_camera,
 
 
 
-void g1_draw_sky(i4_window_class *window,
+void g1_draw_sky(i4_window_class * window,
 				 g1_camera_info_struct &current_camera,
 				 i4_transform_class &transform,
-				 g1_draw_context_class *context)
+				 g1_draw_context_class * context)
 
 {
 	pf_draw_sky.start();
 
-	r1_render_api_class *api=g1_render.r_api;
+	r1_render_api_class * api=g1_render.r_api;
 
 	int use_blits=(api->get_render_device_flags() & R1_SOFTWARE) ? 1 : 0;
 	if (force_blits)
@@ -959,7 +967,7 @@ void g1_draw_sky(i4_window_class *window,
 		{
 			int window_xoff=context->context->xoff, window_yoff=context->context->yoff;
 
-			i4_image_class *sky_im = g1_sky.sky_im;
+			i4_image_class * sky_im = g1_sky.sky_im;
 
 			i4_normalize_angle(current_camera.ground_rotate);
 			i4_float horz_cap = -current_camera.horizon_rotate;

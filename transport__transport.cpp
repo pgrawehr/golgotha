@@ -15,9 +15,9 @@
 #include "remove_man.h"
 #include "resources.h"
 
-node_manager *node_man;
-link_manager *link_man;
-act_manager *act_man;
+node_manager * node_man;
+link_manager * link_man;
+act_manager * act_man;
 //i4_array<float> quality_values(0,100);
 
 node_manager *g2_node_man()
@@ -201,7 +201,8 @@ LI_HEADER(unload_transims) {
  */
 
 LI_HEADER(adjust_lod_dist) {
-	li_object *ob=li_car(o,env);
+	li_object * ob=li_car(o,env);
+
 	if (ob)
 	{
 		g1_resources.lod_disappear_dist=li_get_float(li_eval(ob,env),env);

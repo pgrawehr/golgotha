@@ -32,13 +32,13 @@ public:
 	class timed_event
 	{
 public:
-		i4_event_handler_class *send_to;
-		i4_event *event;
+		i4_event_handler_class * send_to;
+		i4_event * event;
 		i4_time_class start_time;
 		w32 milli_wait;
 		w32 win32_timer_id;
-		timed_event *next;
-		timed_event(i4_event_handler_class *send_to, i4_event *event, w32 milli_wait);
+		timed_event * next;
+		timed_event(i4_event_handler_class * send_to, i4_event * event, w32 milli_wait);
 		~timed_event();
 	} ;
 
@@ -46,8 +46,8 @@ public:
 	class id
 	{
 public:
-		timed_event *reference;
-		id(timed_event *reference) :
+		timed_event * reference;
+		id(timed_event * reference) :
 			reference(reference)
 		{
 		}
@@ -58,14 +58,14 @@ public:
 	} ;
 
 
-	id request_event(i4_event_handler_class *send_to, // who to send the event to
-					 i4_event *event,                 // what event to send
+	id request_event(i4_event_handler_class * send_to, // who to send the event to
+					 i4_event * event,                 // what event to send
 					 w32 milli_wait);    // how much time to wait until sending (in milli-seconds)
 
 	i4_bool cancel_event(const id &handle);
 
 	virtual i4_bool process_events();     // returns true if an event was dispatched
-	virtual void name(char *buffer)
+	virtual void name(char * buffer)
 	{
 		static_name(buffer,"Time Device");
 	}

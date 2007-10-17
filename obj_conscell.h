@@ -21,8 +21,8 @@ class g1_obj_conscell_class;
 class g1_obj_conscell_class
 {
 public:
-	g1_object_class *data;
-	g1_obj_conscell_class *next;
+	g1_object_class * data;
+	g1_obj_conscell_class * next;
 
 };
 
@@ -42,6 +42,6 @@ public:
 	}
 };
 
-extern g1_obj_conscell_manager_class *g1_obj_conscell_manager;
+extern g1_obj_conscell_manager_class * g1_obj_conscell_manager;
 
 #endif

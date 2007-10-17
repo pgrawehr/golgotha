@@ -61,7 +61,7 @@ static sw16 i4_direct_sound_volume_table[I4_SOUND_VOLUME_LEVELS] =
 
 //}}}
 
-dsound_buffer_class::dsound_buffer_class(IDirectSoundBuffer *_pDSB,
+dsound_buffer_class::dsound_buffer_class(IDirectSoundBuffer * _pDSB,
 										 DWORD _flags, w32 _buffer_size)
 {
 	pDSB         = _pDSB;
@@ -208,8 +208,8 @@ void dsound_buffer_class::lock(w32 start_position, w32 size,
 	block2_size=b2s;
 }
 
-void dsound_buffer_class::unlock(void *block1, w32 block1_size,
-								 void *block2, w32 block2_size)
+void dsound_buffer_class::unlock(void * block1, w32 block1_size,
+								 void * block2, w32 block2_size)
 {
 	if (!pDSB)
 	{
@@ -409,21 +409,21 @@ i4_bool dsound_buffer_class::is_playing()
 	return i4_F;
 }
 
-i4_voice_class *direct_sound_class::duplicate_2d(i4_voice_class *voice)
+i4_voice_class * direct_sound_class::duplicate_2d(i4_voice_class * voice)
 {
 	if (!voice)
 	{
 		return 0;
 	}
 
-	dsound_buffer_class *v = (dsound_buffer_class *)voice;
+	dsound_buffer_class * v = (dsound_buffer_class *)voice;
 
 	if (!v->pDSB)
 	{
 		return 0;
 	}
 
-	IDirectSoundBuffer *new_pDSB=0;
+	IDirectSoundBuffer * new_pDSB=0;
 
 	HRESULT res = lpDirectSound->DuplicateSoundBuffer(v->pDSB, &new_pDSB);
 
@@ -432,14 +432,14 @@ i4_voice_class *direct_sound_class::duplicate_2d(i4_voice_class *voice)
 		return 0;
 	}
 
-	dsound_buffer_class *new_voice = new dsound_buffer_class(new_pDSB, v->flags, v->sound_length);
+	dsound_buffer_class * new_voice = new dsound_buffer_class(new_pDSB, v->flags, v->sound_length);
 
 	return new_voice;
 }
 
-i4_voice_class *direct_sound_class::duplicate_3d(i4_voice_class *voice)
+i4_voice_class * direct_sound_class::duplicate_3d(i4_voice_class * voice)
 {
-	i4_voice_class *new_voice = duplicate_2d(voice);
+	i4_voice_class * new_voice = duplicate_2d(voice);
 
 	//if 3d sound is not active just return a new 2d buffer
 	if (!use_3d_sound || !new_voice)
@@ -447,9 +447,9 @@ i4_voice_class *direct_sound_class::duplicate_3d(i4_voice_class *voice)
 		return new_voice;
 	}
 
-	dsound_buffer_class *v = (dsound_buffer_class *)new_voice;
+	dsound_buffer_class * v = (dsound_buffer_class *)new_voice;
 
-	HRESULT res = v->pDSB->QueryInterface(IID_IDirectSound3DBuffer,(void **)&v->p3DSB);
+	HRESULT res = v->pDSB->QueryInterface(IID_IDirectSound3DBuffer,(void * *)&v->p3DSB);
 
 	if (!i4_dsound_check(res))
 	{
@@ -470,7 +470,7 @@ i4_voice_class *direct_sound_class::duplicate_3d(i4_voice_class *voice)
 	return v;
 }
 
-void direct_sound_class::free_voice(i4_voice_class *voice)
+void direct_sound_class::free_voice(i4_voice_class * voice)
 {
 	if (!voice)
 	{
@@ -553,7 +553,7 @@ i4_bool direct_sound_class::setup()
 	if (i4_win32_startup_options.use2dsound ==TRUE)
 	{
 		res = CoCreateInstance(CLSID_DirectSound, NULL, CLSCTX_INPROC_SERVER,
-							   IID_IDirectSound, (VOID **)&lpDirectSound);
+							   IID_IDirectSound, (VOID * *)&lpDirectSound);
 
 		if (i4_dsound_check(res))
 		{
@@ -664,7 +664,7 @@ i4_bool direct_sound_class::setup()
 	//create a listener object
 	if (use_3d_sound)
 	{
-		if (!i4_dsound_check(lpPrimary->QueryInterface(IID_IDirectSound3DListener,(void **)&lpListener)))
+		if (!i4_dsound_check(lpPrimary->QueryInterface(IID_IDirectSound3DListener,(void * *)&lpListener)))
 		{
 			i4_warning("listener create failed");
 			enabled=i4_F;
@@ -707,6 +707,7 @@ i4_bool direct_sound_class::setup()
 void direct_sound_class::commit_3d_changes()
 {
 	w32 primarylost=0;
+
 	if (!lpPrimary)
 	{
 		return;
@@ -790,7 +791,7 @@ void dsound_buffer_class::set_3d_position(i4_float x, i4_float y, i4_float z, i4
 	else
 	{
 		i4_3d_vector cam = i4_direct_sound_class_instance.listener_position;
-		i4_transform_class *trans = &(i4_direct_sound_class_instance.listener_transform);
+		i4_transform_class * trans = &(i4_direct_sound_class_instance.listener_transform);
 
 		i4_3d_vector delta = i4_3d_vector(x - cam.x, y - cam.y, z - cam.z);
 
@@ -904,7 +905,7 @@ void direct_sound_class::set_listener_orientation(i4_float f_x,i4_float f_y,i4_f
 	}
 }
 
-i4_voice_class *direct_sound_class::alloc(w32 buffer_size, sound_parameters &desc)
+i4_voice_class * direct_sound_class::alloc(w32 buffer_size, sound_parameters &desc)
 {
 	if (!initialized)
 	{
@@ -915,8 +916,8 @@ i4_voice_class *direct_sound_class::alloc(w32 buffer_size, sound_parameters &des
 		}
 	}
 
-	IDirectSoundBuffer *pDSB=NULL;
-	LPDIRECTSOUND3DBUFFER *p3DSB=NULL;
+	IDirectSoundBuffer * pDSB=NULL;
+	LPDIRECTSOUND3DBUFFER * p3DSB=NULL;
 
 	DSBUFFERDESC dsBD;
 	WAVEFORMATEX wfx;
@@ -972,11 +973,11 @@ i4_voice_class *direct_sound_class::alloc(w32 buffer_size, sound_parameters &des
 		play_flags |= DSBPLAY_LOOPING;
 	}
 
-	dsound_buffer_class *new_voice = new dsound_buffer_class(pDSB, play_flags, buffer_size);
+	dsound_buffer_class * new_voice = new dsound_buffer_class(pDSB, play_flags, buffer_size);
 
 	if (use_3d_sound && desc.capable_3d && desc.streaming)
 	{
-		HRESULT res = pDSB->QueryInterface(IID_IDirectSound3DBuffer,(void **)&new_voice->p3DSB);
+		HRESULT res = pDSB->QueryInterface(IID_IDirectSound3DBuffer,(void * *)&new_voice->p3DSB);
 
 		res = new_voice->p3DSB->SetMode(DS3DMODE_NORMAL,DS3D_DEFERRED);
 	}
@@ -984,26 +985,26 @@ i4_voice_class *direct_sound_class::alloc(w32 buffer_size, sound_parameters &des
 	return new_voice;
 }
 
-li_object *enablesound(li_object *o, li_environment *env)
+li_object *enablesound(li_object * o, li_environment * env)
 {
 	i4_sound_man->enable_sound();
 	return 0;
 }
 
 
-li_object *disablesound(li_object *o, li_environment *env)
+li_object *disablesound(li_object * o, li_environment * env)
 {
 	i4_sound_man->disable_sound();
 	return 0;
 }
 
-li_object *togglesound(li_object *o, li_environment *env)
+li_object *togglesound(li_object * o, li_environment * env)
 {
 	i4_sound_man->toggle_sound();
 	return 0;
 }
 
-li_object *setsound(li_object *o, li_environment *env)
+li_object *setsound(li_object * o, li_environment * env)
 {
 	// (setsound x) will enable sound if x>=1, else it is disabled
 	if (!o)

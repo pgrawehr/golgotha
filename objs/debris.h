@@ -39,14 +39,14 @@ public:
 		return 0.7f;
 	}
 
-	g1_debris_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	void load(g1_loader_class *fp);
-	void skipload(g1_loader_class *fp);
+	g1_debris_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	void load(g1_loader_class * fp);
+	void skipload(g1_loader_class * fp);
 
 	virtual void setup(i4_float sx, i4_float sy, i4_float sz, int type);
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	virtual void think();
 };
 

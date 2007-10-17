@@ -22,8 +22,8 @@ public:
 		return I4_INIT_TYPE_FILE_MANAGER;
 	}
 
-	static i4_file_manager_class *first;
-	i4_file_manager_class *next;
+	static i4_file_manager_class * first;
+	i4_file_manager_class * next;
 
 	virtual i4_file_class *open(const i4_const_str &name, w32 flags=I4_READ)
 	{
@@ -48,7 +48,7 @@ public:
 	virtual i4_bool get_directory(const i4_const_str &path,
 								  i4_directory_struct &dir_struct,
 								  i4_bool get_status=i4_F,
-								  i4_status_class *status=0)
+								  i4_status_class * status=0)
 	{
 		return i4_F;
 	}
@@ -63,7 +63,7 @@ public:
 };
 
 
-void i4_add_file_manager(i4_file_manager_class *fman, i4_bool add_front);
-void i4_remove_file_manger(i4_file_manager_class *fman);
+void i4_add_file_manager(i4_file_manager_class * fman, i4_bool add_front);
+void i4_remove_file_manger(i4_file_manager_class * fman);
 
 #endif

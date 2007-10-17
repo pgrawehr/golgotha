@@ -13,7 +13,7 @@
 
 // these routines calculate the accumulative checksum on a buffer
 
-w32 i4_check_sum32(const void *buf, w32 buf_len);
-w16 i4_check_sum16(const void *buf, w32 buf_len);
+w32 i4_check_sum32(const void * buf, w32 buf_len);
+w16 i4_check_sum16(const void * buf, w32 buf_len);
 
 #endif

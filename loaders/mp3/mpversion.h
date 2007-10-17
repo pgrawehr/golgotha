@@ -6,6 +6,6 @@
    golgotha_source@usa.net (Subject should have "GOLG" in it)
  ***********************************************************************/
 
-char *prgVersion = "1.0";
-char *prgDate = "9/30/97";
-char *prgName;
+char * prgVersion = "1.0";
+char * prgDate = "9/30/97";
+char * prgName;

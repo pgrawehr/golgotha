@@ -43,10 +43,11 @@
    	else return 0;
    	}
  */
-static int filename_sorter(i4_str *const *a, i4_str *const *b)
+static int filename_sorter(i4_str * const * a, i4_str * const * b)
 {
-	i4_str *itema=*a;
-	i4_str *itemb=*b;
+	i4_str * itema=*a;
+	i4_str * itemb=*b;
+
 	if (*itema<*itemb)
 	{
 		return -1;
@@ -65,21 +66,21 @@ static int filename_sorter(i4_str *const *a, i4_str *const *b)
 class i4_get_save_load_dialog :
 	public i4_color_window_class
 {
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	w32 ok_id, cancel_id;
-	i4_event_handler_class *tell_who;
+	i4_event_handler_class * tell_who;
 	i4_const_str title_name,start_dir,file_mask,mask_name;
-	i4_list_pick *filepick,*dirpick;
-	i4_deco_window_class *deco1,*deco2;
+	i4_list_pick * filepick,* dirpick;
+	i4_deco_window_class * deco1,* deco2;
 	i4_str cur_dir;
 	w32 sel_elem;
-	i4_text_window_class *text_win;
-	i4_text_input_class *text_input_win;
-	i4_list_box_class *listbox;
+	i4_text_window_class * text_win;
+	i4_text_input_class * text_input_win;
+	i4_list_box_class * listbox;
 	w32 flags;
 public:
-	typedef int (*compare_type)(const void *x, const void *y);
-	i4_parent_window_class *mp_window;
+	typedef int (*compare_type)(const void * x, const void * y);
+	i4_parent_window_class * mp_window;
 
 	enum {
 		OK   =0x80000000,
@@ -103,9 +104,9 @@ public:
 							const i4_const_str _start_dir,
 							const i4_const_str _file_mask,
 							const i4_const_str _mask_name,
-							i4_graphical_style_class *style,
+							i4_graphical_style_class * style,
 							w32 ok_id, w32 cancel_id,
-							i4_event_handler_class *tell_who,
+							i4_event_handler_class * tell_who,
 							w32 _flags)
 		: i4_color_window_class(0,0, style->color_hint->neutral(), style),
 		  style(style),
@@ -188,7 +189,7 @@ public:
 		add_child(deco1->width(),0,deco2);
 		sel_elem=0;
 
-		i4_window_class *ok, *cancel;
+		i4_window_class * ok, * cancel;
 
 		if (style->icon_hint->ok_icon && style->icon_hint->cancel_icon)
 		{
@@ -204,10 +205,10 @@ public:
 		resize_to_fit_children();
 
 		int x=0,maxh=filepick->height();
-		i4_button_class *okb=new i4_button_class(0, ok, style,
-												 new i4_event_reaction_class(this, OK));
-		i4_button_class *cancelb=new i4_button_class(0, cancel, style,
-													 new i4_event_reaction_class(this, CANCEL));
+		i4_button_class * okb=new i4_button_class(0, ok, style,
+												  new i4_event_reaction_class(this, OK));
+		i4_button_class * cancelb=new i4_button_class(0, cancel, style,
+													  new i4_event_reaction_class(this, CANCEL));
 		x=width()/2-okb->width()/2-cancelb->width()/2;
 		if (x<0)
 		{
@@ -252,7 +253,7 @@ public:
 		resize_to_fit_children();
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		CAST_PTR(uev, i4_user_message_event_class, ev);
 
@@ -279,7 +280,7 @@ public:
 					sf.insert(sf.begin(),cur_dir);
 					if (flags&CONFIRMOVERWRITE)
 					{
-						i4_file_class *openfile=i4_open(sf,I4_READ);
+						i4_file_class * openfile=i4_open(sf,I4_READ);
 						if (openfile)
 						{
 							if (i4_message_box("File exists.",
@@ -307,7 +308,7 @@ public:
 			}
 			else if (uev->sub_type==LISTBOX)
 			{
-				i4_text_item_class *tex=(i4_text_item_class *)listbox->get_current_item();
+				i4_text_item_class * tex=(i4_text_item_class *)listbox->get_current_item();
 				i4_str fil=tex->get_text();
 				fil.erase(0,fil.find_first_of("(")+1);
 				fil.erase(fil.find_last_of(")"),1);
@@ -414,12 +415,13 @@ public:
 	void simplify_dir(i4_str &dir)
 	{
 		int k=dir.find_last_of(":");
+
 		if (k!=-1)
 		{
 			dir.erase(0,k-1);
 			//return;
 		}
-		i4_str *newdir=i4_full_path(dir);
+		i4_str * newdir=i4_full_path(dir);
 		dir=*newdir;
 		delete newdir;
 
@@ -429,6 +431,7 @@ protected:
 	i4_str get_filter(const i4_str &filter, int n) const
 	{
 		char str[250];
+
 		memset(str,0,250);
 		strncpy(str,filter.c_str(),248);
 		int k=0;
@@ -438,7 +441,7 @@ protected:
 			return k<1 ? filter : i4_str(str,k);
 		}
 		int i=0;
-		char *pstr=str;
+		char * pstr=str;
 		while (strlen(pstr)>0)
 		{
 			if (pstr[i]==';')
@@ -522,31 +525,32 @@ protected:
 #endif
 	}
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"load dialog");
 	}
 };
 
 
-void i4_create_file_open_dialog(i4_graphical_style_class *style,
+void i4_create_file_open_dialog(i4_graphical_style_class * style,
 								const i4_const_str &title_name,
 								const i4_const_str &start_dir,
 								const i4_const_str &file_mask,
 								const i4_const_str &mask_name,
-								i4_event_handler_class *tell_who,
+								i4_event_handler_class * tell_who,
 								w32 ok_id, w32 cancel_id)
 {
-	i4_get_save_load_dialog *dlg=new i4_get_save_load_dialog(
+	i4_get_save_load_dialog * dlg=new i4_get_save_load_dialog(
 		title_name,start_dir,file_mask,mask_name,style,
 		ok_id, cancel_id, tell_who,0 );
 
-	i4_event_reaction_class *re;
+	i4_event_reaction_class * re;
+
 	re=new i4_event_reaction_class(dlg,
 								   new i4_user_message_event_class(i4_get_save_load_dialog::CLOSE));
 
 
-	i4_parent_window_class *p;
+	i4_parent_window_class * p;
 
 	p=style->create_mp_window(-1, -1, dlg->width(), dlg->height(),
 							  title_name,
@@ -557,27 +561,28 @@ void i4_create_file_open_dialog(i4_graphical_style_class *style,
 }
 
 
-void i4_create_file_save_dialog(i4_graphical_style_class *style,
+void i4_create_file_save_dialog(i4_graphical_style_class * style,
 								const i4_const_str &default_name,
 								const i4_const_str &title_name,
 								const i4_const_str &start_dir,
 								const i4_const_str &file_mask,
 								const i4_const_str &mask_name,
-								i4_event_handler_class *tell_who,
+								i4_event_handler_class * tell_who,
 								w32 ok_id, w32 cancel_id)
 {
-	i4_get_save_load_dialog *dlg=new i4_get_save_load_dialog(
+	i4_get_save_load_dialog * dlg=new i4_get_save_load_dialog(
 		title_name,start_dir,file_mask,mask_name,style,
 		ok_id, cancel_id, tell_who,
 		i4_get_save_load_dialog::SAVE
 		|i4_get_save_load_dialog::CONFIRMOVERWRITE);
 
-	i4_event_reaction_class *re;
+	i4_event_reaction_class * re;
+
 	re=new i4_event_reaction_class(dlg,
 								   new i4_user_message_event_class(i4_get_save_load_dialog::CLOSE));
 
 
-	i4_parent_window_class *p;
+	i4_parent_window_class * p;
 
 	p=style->create_mp_window(-1, -1, dlg->width(), dlg->height(),
 							  title_name,

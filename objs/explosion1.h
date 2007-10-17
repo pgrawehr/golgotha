@@ -37,7 +37,7 @@ public:
 		return 0.4f;
 	}
 
-	g1_explosion1_class(g1_object_type id, g1_loader_class *fp);
+	g1_explosion1_class(g1_object_type id, g1_loader_class * fp);
 	~g1_explosion1_class();
 
 	enum
@@ -49,7 +49,7 @@ public:
 
 	virtual void setup(i4_float sx, i4_float sy, i4_float sh, w32 type=HIT_OBJECT);
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	virtual void think();
 };
 
@@ -62,12 +62,12 @@ public:
 		unoccupy_location();
 		request_remove();
 	};
-	g1_inv_explosion_class(g1_object_type id,g1_loader_class *fp)
+	g1_inv_explosion_class(g1_object_type id,g1_loader_class * fp)
 		: g1_object_class(id,fp)
 	{
 		//no flags
 	}
-	void draw(g1_draw_context_class *context)
+	void draw(g1_draw_context_class * context)
 	{
 	};
 	void setup()

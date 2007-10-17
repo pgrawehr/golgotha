@@ -45,8 +45,8 @@ struct g1_particle_class
 	int ticks_left;
 	i4_bool in_use;
 
-	void load(i4_file_class *fp);
-	void save(i4_file_class *fp);
+	void load(i4_file_class * fp);
+	void save(i4_file_class * fp);
 };
 
 class g1_particle_emitter_class :
@@ -69,8 +69,8 @@ public:
 
 	int t_in_use;
 
-	g1_particle_emitter_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
+	g1_particle_emitter_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
 
 
 	virtual i4_float occupancy_radius() const
@@ -81,7 +81,7 @@ public:
 	void occupy_bounds();
 
 	void setup(float x, float y, float h, g1_particle_emitter_params &params);
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	virtual void think();
 
 	void stop()

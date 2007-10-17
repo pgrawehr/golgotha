@@ -15,7 +15,7 @@ void r1_software_class::draw_line(sw32 _x0, sw32 _y0, sw32 _x1, sw32 _y1, w16 co
 {
 	sw32 x0,y0,x1,y1,dx,dy;
 
-	register w16 *sp;
+	register w16 * sp;
 	register sw32 error,count;
 	register sw32 change;
 
@@ -137,7 +137,7 @@ void r1_software_class::draw_line(sw32 _x0, sw32 _y0, sw32 _x1, sw32 _y1, w16 s_
 	sw32 r_int_add = 0, g_int_add = 0, b_int_add = 0;
 	sw32 r_error   = 0, g_error   = 0, b_error   = 0;
 
-	register w16 *sp;
+	register w16 * sp;
 	register w16 color=0;
 	register sw32 error,count;
 	register sw32 change;

@@ -25,7 +25,7 @@ static void g1_target_init()
 	g1_target_type = g1_target_def.type;
 }
 
-g1_target_class::g1_target_class(g1_object_type id, g1_loader_class *fp)
+g1_target_class::g1_target_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	draw_params.setup("target");
@@ -44,7 +44,7 @@ i4_bool g1_target_class::occupy_location()
 	return g1_object_class::occupy_location();
 }
 
-void g1_target_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_target_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	g1_model_draw(this, draw_params, context, viewer_position);
 }

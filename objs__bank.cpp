@@ -54,7 +54,7 @@ static void g1_bank_init()
 g1_object_definer<g1_bank_class>
 g1_bank_def("bank", g1_object_definition_class::EDITOR_SELECTABLE, g1_bank_init);
 
-g1_bank_class::g1_bank_class(g1_object_type id, g1_loader_class *fp)
+g1_bank_class::g1_bank_class(g1_object_type id, g1_loader_class * fp)
 	: g1_factory_class(id,fp)
 {
 	radar_type=G1_RADAR_BUILDING;
@@ -67,14 +67,14 @@ g1_bank_class::g1_bank_class(g1_object_type id, g1_loader_class *fp)
 			 SELECTABLE, 1);
 }
 
-g1_moneycrate_class *g1_bank_class::crate()
+g1_moneycrate_class * g1_bank_class::crate()
 {
 	li_class_context context(vars);
-	g1_moneycrate_class *c=(g1_moneycrate_class *)li_crate()->value();
+	g1_moneycrate_class * c=(g1_moneycrate_class *)li_crate()->value();
 	return c;
 }
 
-void g1_bank_class::set_crate(g1_moneycrate_class *cr)
+void g1_bank_class::set_crate(g1_moneycrate_class * cr)
 {
 	vars->set(li_crate, new li_g1_ref(cr));
 }
@@ -169,7 +169,7 @@ void g1_bank_class::think()
 	{
 		if (li_moneyplanes()>0 && player_num!=0)
 		{
-			g1_object_class *o=g1_create_object(g1_get_object_type(moneyplane.get()));
+			g1_object_class * o=g1_create_object(g1_get_object_type(moneyplane.get()));
 
 			if (o)
 			{

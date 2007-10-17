@@ -61,7 +61,7 @@ g1_trike_def("trike",
 //think and draw functions
 
 g1_trike_class::g1_trike_class(g1_object_type id,
-							   g1_loader_class *fp)
+							   g1_loader_class * fp)
 	: g1_map_piece_class(id, fp)
 {
 	radar_type=G1_RADAR_VEHICLE;
@@ -113,7 +113,7 @@ g1_trike_class::g1_trike_class(g1_object_type id,
 	init_rumble_sound(G1_RUMBLE_GROUND);
 }
 
-void g1_trike_class::save(g1_saver_class *fp)
+void g1_trike_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -130,7 +130,7 @@ void g1_trike_class::save(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_trike_class::load(g1_loader_class *fp)
+void g1_trike_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -144,7 +144,7 @@ void g1_trike_class::load(g1_loader_class *fp)
 
 }
 
-void g1_trike_class::skipload(g1_loader_class *fp)
+void g1_trike_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->seek(fp->tell()+6*4);
@@ -186,7 +186,7 @@ void g1_trike_class::think()
 		i4_float dist=0, dtheta=0, dx=0, dy=0,dz=0;
 		speed*=1.3f;
 		suggest_move(dist, dtheta, dx, dy, 0);
-		g1_object_class *blocking=0;
+		g1_object_class * blocking=0;
 		check_move(dx,dy,dz,blocking);
 		move(dx,dy,dz);
 
@@ -202,7 +202,7 @@ void g1_trike_class::think()
 			attack_target->damage(this,damage,i4_3d_vector(dx,dy,0));
 
 			//throw some gibs
-			g1_shrapnel_class *shrapnel = NULL;
+			g1_shrapnel_class * shrapnel = NULL;
 			shrapnel = (g1_shrapnel_class *)g1_create_object(shrapnel_type);
 			if (shrapnel)
 			{
@@ -227,7 +227,7 @@ void g1_trike_class::think()
 		{
 			speed-=defaults->accel;
 		}                           //slow down again.
-		g1_path_object_class *next=(g1_path_object_class *)next_path.get();
+		g1_path_object_class * next=(g1_path_object_class *)next_path.get();
 		if (dest_x!=next->x || dest_y != next->y)
 		{
 			return_to_path(); //Maybe called a bit too often, but shoudn't hurt.

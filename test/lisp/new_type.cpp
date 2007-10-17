@@ -27,7 +27,7 @@ li_type_number li_vector_type;
 class li_vector :
 	public li_object
 {
-	i4_3d_vector *vector;
+	i4_3d_vector * vector;
 public:
 	li_vector(const i4_3d_vector &v)
 		: li_object(li_vector_type)
@@ -36,12 +36,13 @@ public:
 	}
 
 	// used by load_object
-	li_vector(i4_file_class *fp)
+	li_vector(i4_file_class * fp)
 		: li_object(li_vector_type)
 	{
 		float x=fp->read_float();
 		float y=fp->read_float();
 		float z=fp->read_float();
+
 		vector=new i4_3d_vector(x,y,z);
 	}
 
@@ -52,13 +53,13 @@ public:
 	}
 
 	// print the object in a english form
-	void print(i4_file_class *fp)
+	void print(i4_file_class * fp)
 	{
 		fp->printf("<vector %f %f %f>", vector->x, vector->y, vector->z);
 	}
 
 	// write to disk
-	void save(i4_file_class *fp, li_environment *env)
+	void save(i4_file_class * fp, li_environment * env)
 	{
 		fp->write_float(vector->x);
 		fp->write_float(vector->y);
@@ -70,7 +71,7 @@ public:
 	{
 		return *vector;
 	}
-	static li_vector *get(li_object *o, li_environment *env)
+	static li_vector *get(li_object * o, li_environment * env)
 	{
 		check_type(o, li_vector_type, env);
 		return ((li_vector *)o);
@@ -84,13 +85,13 @@ class li_vector_function_table :
 {
 public:
 	// free data associated with an instance of this type
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
 		li_vector::get(o,0)->free();
 	}
 
 	// compare 2 objects
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		i4_3d_vector v1=li_vector::get(o1,0)->value();
 		i4_3d_vector v2=li_vector::get(o2,0)->value();
@@ -99,7 +100,7 @@ public:
 	}
 
 	// print the object
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		li_vector::get(o,0)->print(stream);
 	}
@@ -110,7 +111,7 @@ public:
 	}
 
 	// create a new object
-	virtual li_object *create(li_object *params, li_environment *env)
+	virtual li_object *create(li_object * params, li_environment * env)
 	{
 		if (params) // with parameters?
 		{
@@ -127,13 +128,13 @@ public:
 	}
 
 	// write to disk
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		li_vector::get(o,env)->save(fp,env);
 	}
 
 	// load from disk
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap, li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap, li_environment * env)
 	{
 		return new li_vector(fp);
 	}
@@ -141,7 +142,7 @@ public:
 
 
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	i4_init();
 

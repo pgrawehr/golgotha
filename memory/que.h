@@ -42,6 +42,7 @@ public:
 	i4_bool que(const T &object)
 	{
 		w32 next_head=(head+1);
+
 		if (next_head==SIZE)
 		{
 			next_head=0;

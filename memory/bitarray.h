@@ -34,7 +34,7 @@ public:
 	};
 
 	//deserializes object. Warning: size is here in bytes, not bits
-	explicit BitArray(unsigned int size, store_type single_word, char *data)
+	explicit BitArray(unsigned int size, store_type single_word, char * data)
 	{
 		Init(size*bits_per_byte);
 		Trim();
@@ -233,6 +233,7 @@ public:
 	int countbits()
 	{
 		unsigned int n=0;
+
 		for (unsigned i=0; i<mNumBits; i++)
 		{
 			if (IsBitSet(i))
@@ -304,7 +305,7 @@ private:
 		cell_size     = sizeof(store_type) * bits_per_byte
 	};
 
-	store_type *mpStore;
+	store_type * mpStore;
 	store_type mSingleWord;        // Use this buffer when mLength is 1
 	unsigned mLength;              // Length of mpStore in units of store_type
 	unsigned mNumBits;
@@ -359,6 +360,7 @@ protected:
 	inline void Trim()
 	{
 		unsigned extra_bits = mNumBits % cell_size;
+
 		if (mLength > 0 && extra_bits != 0)
 		{
 			mpStore[mLength - 1] &= ~((~(store_type) 0) << extra_bits);

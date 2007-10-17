@@ -16,7 +16,7 @@ i4_grow_heap_class::i4_grow_heap_class(w32 initial_size, w32 grow_increment)
 
 	if (initial_size)
 	{
-		heap *h=new heap(initial_size,"initial grow heap");
+		heap * h=new heap(initial_size,"initial grow heap");
 		list.insert(*h);
 		current_size=initial_size;
 		current_offset=0;
@@ -30,7 +30,7 @@ i4_grow_heap_class::i4_grow_heap_class(w32 initial_size, w32 grow_increment)
 //}}}
 
 
-void *i4_grow_heap_class::malloc(w32 size, char *description)
+void * i4_grow_heap_class::malloc(w32 size, char * description)
 //{{{
 // description not used right now
 {
@@ -41,7 +41,7 @@ void *i4_grow_heap_class::malloc(w32 size, char *description)
 
 	if (current_offset+size<current_size)
 	{
-		void *ret=(void *)(((w8 *)list.begin()->data)+current_offset);
+		void * ret=(void *)(((w8 *)list.begin()->data)+current_offset);
 		current_offset+=size;
 		return ret;
 	}
@@ -52,7 +52,7 @@ void *i4_grow_heap_class::malloc(w32 size, char *description)
 			i4_error("grow heap param problem");
 		}
 
-		heap *h=new heap(increment,"grow heap");
+		heap * h=new heap(increment,"grow heap");
 		list.insert(*h);
 		current_size=increment;
 		current_offset=0;
@@ -66,6 +66,7 @@ void i4_grow_heap_class::clear()
 //{{{
 {
 	heap_iter p = list.begin();
+
 	heap_iter q(p);
 
 	current_offset=0;

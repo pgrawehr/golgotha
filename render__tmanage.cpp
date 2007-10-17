@@ -49,7 +49,7 @@ i4_profile_class pf_size_texture("size image to texture");
 
 i4_profile_class pf_get_texture("tmanage get texture");
 
-r1_texture_manager_class *r1_texture_manager=0;
+r1_texture_manager_class * r1_texture_manager=0;
 
 i4_pixel_format r1_texture_manager_class::regular_format;
 i4_pixel_format r1_texture_manager_class::alpha_format;
@@ -58,7 +58,7 @@ i4_pixel_format r1_texture_manager_class::reg24_format;
 i4_pixel_format r1_texture_manager_class::reg32_format;
 i4_pixel_format r1_texture_manager_class::alpha32_format;
 
-r1_texture_manager_class::r1_texture_manager_class(const i4_pal *pal)
+r1_texture_manager_class::r1_texture_manager_class(const i4_pal * pal)
 	: pal(pal),
 	  registered_tnames(0,128),
 	  image_list(16,64),
@@ -94,7 +94,7 @@ void r1_texture_manager_class::init()
 
 }
 
-char *r1_texture_manager_class::get_texture_name(r1_texture_handle handle)
+char * r1_texture_manager_class::get_texture_name(r1_texture_handle handle)
 {
 	if (handle<registered_tnames.size())
 	{
@@ -114,6 +114,7 @@ r1_texture_manager_class::~r1_texture_manager_class()
 void r1_texture_manager_class::reopen()
 {
 	sw32 i,j;
+
 	while (!i4_async_reader::is_idle())
 	{
 		i4_thread_sleep(1); //wait until nothing left in queue
@@ -125,7 +126,7 @@ void r1_texture_manager_class::reopen()
 	{
 		for (j=0; j<R1_MAX_MIP_LEVELS; ++j)
 		{
-			r1_miplevel_t *m = (*entries)[i].mipmaps[j];
+			r1_miplevel_t * m = (*entries)[i].mipmaps[j];
 			if (m)
 			{
 				if(m->vram_handle)
@@ -162,6 +163,7 @@ void r1_texture_manager_class::reopen()
 void r1_texture_manager_class::uninit()
 {
 	sw32 i,j;
+
 	//before freing memory, we must be sure that no requests are pending
 	while (!i4_async_reader::is_idle())
 	{
@@ -176,7 +178,7 @@ void r1_texture_manager_class::uninit()
 	{
 		for (j=0; j<R1_MAX_MIP_LEVELS; ++j)
 		{
-			r1_miplevel_t *m = (*entries)[i].mipmaps[j];
+			r1_miplevel_t * m = (*entries)[i].mipmaps[j];
 			if (m)
 			{
 				if(m->vram_handle)
@@ -240,7 +242,7 @@ void r1_texture_manager_class::reset()
    	}
  */
 
-inline void write_to_image(w8 *dst,w32 col,w32 tex_by)
+inline void write_to_image(w8 * dst,w32 col,w32 tex_by)
 {
 	if (tex_by==2)
 	{
@@ -277,12 +279,12 @@ inline void write_to_image(w8 *dst,w32 col,w32 tex_by)
    @param alpha True if the destination image uses alpha, i.e. it is an ARGB image.
    @return Always true
  */
-i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_class *image, w32 width, w32 height, w32 target_depth, i4_bool chroma, i4_bool alpha)
+i4_bool r1_texture_manager_class::size_image_to_texture(void * dest, i4_image_class * image, w32 width, w32 height, w32 target_depth, i4_bool chroma, i4_bool alpha)
 {
 	pf_size_texture.start();
 	i4_bool extend_chroma=i4_F; //used if chroma needs to be converted to alpha (32 bit only)
 
-	i4_pixel_format *convfor=&regular_format;
+	i4_pixel_format * convfor=&regular_format;
 
 	const i4_pixel_depth format=image->get_pal()->source.pixel_depth;
 	int convert_depth=0;
@@ -350,7 +352,7 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 		//now scale the old to fit the new, convert from source format to target
 		w32 i,j;
 
-		w8 *dst=(w8 *)dest;
+		w8 * dst=(w8 *)dest;
 
 		for (j=0; j<height; ++j)
 		{
@@ -409,7 +411,7 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 	else if (convert_depth==1)
 	{
 
-		w8 *textu=(w8 *)dest;
+		w8 * textu=(w8 *)dest;
 
 		for(w16 apy=0; apy<height; ++apy)
 		{
@@ -464,14 +466,14 @@ i4_bool r1_texture_manager_class::size_image_to_texture(void *dest, i4_image_cla
 	return i4_T;
 }
 
-i4_bool r1_texture_manager_class::load_texture_from_file(const i4_const_str &n,w32 id,void *data,
+i4_bool r1_texture_manager_class::load_texture_from_file(const i4_const_str &n,w32 id,void * data,
 														 w32 width,w32 height,
 														 w32 pitch, w32 tex_by,
 														 i4_bool chroma, i4_bool alpha)
 {
 	//ZeroMemory(data,width*height*2);
 	pf_loading_texture.start();
-	i4_image_class *im=NULL;
+	i4_image_class * im=NULL;
 	if (!id)
 	{
 		char buf[100],buf2[150];
@@ -543,7 +545,7 @@ i4_bool r1_texture_manager_class::load_texture_from_file(const i4_const_str &n,w
 			}
 			pf_jpg_texture_load.stop();
 
-			r1_image_list_struct *ils=image_list.add();
+			r1_image_list_struct * ils=image_list.add();
 			ils->init();
 			ils->image=im;
 			ils->id=id;
@@ -569,7 +571,7 @@ i4_bool r1_texture_manager_class::load_texture_from_file(const i4_const_str &n,w
    	return load_texture_from_file(n,id,data,width,height,pitch);
    	}
  */
-int entry_compare(const r1_texture_entry_struct *a, const r1_texture_entry_struct *b)
+int entry_compare(const r1_texture_entry_struct * a, const r1_texture_entry_struct * b)
 {
 	if (a->id<b->id)
 	{
@@ -611,6 +613,7 @@ r1_texture_handle r1_texture_manager_class::find_texture(w32 id)
 void r1_texture_manager_class::matchup_textures()
 {
 	sw32 i;
+
 	for (i=0; i<registered_tnames.size(); ++i)
 	{
 		r1_texture_handle h = find_texture(registered_tnames[i].id);
@@ -630,18 +633,19 @@ void r1_texture_manager_class::matchup_textures()
 
 }
 
-int name_compare(const r1_texture_matchup_struct *a, const r1_texture_matchup_struct *b)
+int name_compare(const r1_texture_matchup_struct * a, const r1_texture_matchup_struct * b)
 {
 	return strcmp(a->name, b->name);
 }
 
-r1_texture_handle r1_texture_manager_class::query_texture(const i4_const_str &tname, i4_bool *has_been_loaded)
+r1_texture_handle r1_texture_manager_class::query_texture(const i4_const_str &tname, i4_bool * has_been_loaded)
 {
 	int found = -1;
 
 
 	r1_texture_matchup_struct t;
 	i4_filename_struct fns;
+
 	i4_split_path(tname,fns);
 	i4_os_string(fns.filename, t.name, 128);
 	t.id     = r1_get_texture_id(tname);
@@ -696,7 +700,7 @@ r1_texture_handle r1_texture_manager_class::query_texture(const i4_const_str &tn
 
 r1_texture_handle r1_texture_manager_class::register_texture(const i4_const_str &tname,
 															 const i4_const_str &error_string,
-															 i4_bool *has_been_loaded)
+															 i4_bool * has_been_loaded)
 {
 	//The handle returned by this function is persistent over reloads
 	pf_register_texture.start();
@@ -771,7 +775,7 @@ r1_texture_handle r1_texture_manager_class::register_texture(const i4_const_str 
 	return found;
 }
 
-int w32_compare(const w32 *a, const w32 *b)
+int w32_compare(const w32 * a, const w32 * b)
 {
 	if (*a < *b)
 	{
@@ -804,7 +808,7 @@ void r1_texture_manager_class::release_higher_miplevels()
 	{
 		for (j=0; j<(R1_MAX_MIP_LEVELS-1); ++j)
 		{
-			r1_miplevel_t *m = (*entries)[i].mipmaps[j];
+			r1_miplevel_t * m = (*entries)[i].mipmaps[j];
 			if (m&& (*entries)[i].mipmaps[j+1]) //delete if there is one more miplevel left
 			{
 				if(m->vram_handle)
@@ -818,11 +822,12 @@ void r1_texture_manager_class::release_higher_miplevels()
 	has_higher_mipmaps_loaded=i4_F;
 }
 
-i4_bool r1_texture_manager_class::release_higher_miplevels(r1_texture_manager_class *this_tman)
+i4_bool r1_texture_manager_class::release_higher_miplevels(r1_texture_manager_class * this_tman)
 {
-	r1_render_api_class *api=g1_render.r_api;
+	r1_render_api_class * api=g1_render.r_api;
 	i4_bool ret=i4_F;
-	r1_texture_manager_class *m=0;
+	r1_texture_manager_class * m=0;
+
 	if (!this_tman->is_master_tman)
 	{
 		m=api->get_tmanager();
@@ -850,10 +855,10 @@ i4_bool r1_texture_manager_class::release_higher_miplevels(r1_texture_manager_cl
 	return ret;
 }
 
-r1_miplevel_t *r1_texture_manager_class::get_texture(r1_texture_handle _handle,
-													 w32 frame_counter,
-													 sw32 desired_width,
-													 sw32 &ret_w, sw32 &ret_h)
+r1_miplevel_t * r1_texture_manager_class::get_texture(r1_texture_handle _handle,
+													  w32 frame_counter,
+													  sw32 desired_width,
+													  sw32 &ret_w, sw32 &ret_h)
 {
 	pf_get_texture.start();
 
@@ -870,7 +875,7 @@ r1_miplevel_t *r1_texture_manager_class::get_texture(r1_texture_handle _handle,
 		has_higher_mipmaps_loaded=i4_T;
 	}
 
-	r1_texture_entry_struct *e;
+	r1_texture_entry_struct * e;
 
 	r1_texture_handle handle = registered_tnames[_handle].handle;
 	if (handle==0)
@@ -885,7 +890,7 @@ r1_miplevel_t *r1_texture_manager_class::get_texture(r1_texture_handle _handle,
 
 	if (handle<0) // this is an animation
 	{
-		r1_texture_animation_entry_struct *ta=tanims+(-handle-1);
+		r1_texture_animation_entry_struct * ta=tanims+(-handle-1);
 		handle=ta->frames[frame_counter%ta->total_frames];
 		if (!handle)
 		{
@@ -900,7 +905,7 @@ r1_miplevel_t *r1_texture_manager_class::get_texture(r1_texture_handle _handle,
 	sw32 highest_resident = -1;
 	sw32 need_to_use = 0;
 
-	r1_miplevel_t *t = 0;
+	r1_miplevel_t * t = 0;
 
 	//find the highest resident mip. can be precalculated and updated ?
 	for (i=0; i<R1_MAX_MIP_LEVELS; ++i)
@@ -944,7 +949,7 @@ r1_miplevel_t *r1_texture_manager_class::get_texture(r1_texture_handle _handle,
 		return 0;
 	}
 
-	r1_miplevel_t *return_mip = e->mipmaps[highest_resident];
+	r1_miplevel_t * return_mip = e->mipmaps[highest_resident];
 
 	if (!return_mip)
 	{
@@ -1019,7 +1024,7 @@ w32 r1_texture_manager_class::average_texture_color(r1_texture_handle _handle, w
 {
 	r1_texture_handle handle = registered_tnames[_handle].handle;
 
-	r1_texture_entry_struct *e;
+	r1_texture_entry_struct * e;
 
 	if (handle>=total_textures)
 	{
@@ -1028,7 +1033,7 @@ w32 r1_texture_manager_class::average_texture_color(r1_texture_handle _handle, w
 
 	if (handle<0) // this is an animation
 	{
-		r1_texture_animation_entry_struct *ta=tanims+(-handle-1);
+		r1_texture_animation_entry_struct * ta=tanims+(-handle-1);
 		handle=ta->frames[frame_num%ta->total_frames];
 		if (!handle)
 		{
@@ -1054,7 +1059,7 @@ void r1_texture_manager_class::next_frame()
 	}
 }
 
-int tex_entry_compare(const tex_cache_entry_t *a, const tex_cache_entry_t *b)
+int tex_entry_compare(const tex_cache_entry_t * a, const tex_cache_entry_t * b)
 {
 	if (a->id > b->id)
 	{
@@ -1071,7 +1076,7 @@ int tex_entry_compare(const tex_cache_entry_t *a, const tex_cache_entry_t *b)
 	}
 }
 
-tex_cache_entry_t *find_id_in_tex_cache(tex_cache_entry_t *entries, w32 num_entries, w32 search_id)
+tex_cache_entry_t *find_id_in_tex_cache(tex_cache_entry_t * entries, w32 num_entries, w32 search_id)
 {
 	if (!entries || num_entries==0)
 	{
@@ -1094,12 +1099,12 @@ tex_cache_entry_t *find_id_in_tex_cache(tex_cache_entry_t *entries, w32 num_entr
 	return entries+res;
 }
 
-i4_bool palettes_are_same(i4_pixel_format *a, i4_pixel_format *b)
+i4_bool palettes_are_same(i4_pixel_format * a, i4_pixel_format * b)
 {
 	sw32 i;
 
-	w8 *compare_a = (w8 *)a;
-	w8 *compare_b = (w8 *)b;
+	w8 * compare_a = (w8 *)a;
+	w8 * compare_b = (w8 *)b;
 
 	for (i=0; i<sizeof(i4_pixel_format); ++i)
 	{
@@ -1135,11 +1140,11 @@ i4_bool palettes_are_same(i4_pixel_format *a, i4_pixel_format *b)
 #include "error/error.h"
 #include "render/r1_res.h"
 
-void do_single_file(i4_file_class *dst_file,
+void do_single_file(i4_file_class * dst_file,
 					w32 id,
 					sw32 max_texture_dimention,
 					w32 network_file_date,
-					tex_cache_entry_t *t);
+					tex_cache_entry_t * t);
 
 struct file_status_sort_struct
 {
@@ -1147,7 +1152,7 @@ struct file_status_sort_struct
 	w32 file_status_index;
 };
 
-int file_status_struct_compare(const file_status_sort_struct *a, const file_status_sort_struct *b)
+int file_status_struct_compare(const file_status_sort_struct * a, const file_status_sort_struct * b)
 {
 	if (a->id<b->id)
 	{
@@ -1164,7 +1169,7 @@ int file_status_struct_compare(const file_status_sort_struct *a, const file_stat
 }
 
 
-void tex_cache_entry_t::write(i4_file_class *f)
+void tex_cache_entry_t::write(i4_file_class * f)
 {
 	if (!f)
 	{
@@ -1185,7 +1190,7 @@ void tex_cache_entry_t::write(i4_file_class *f)
 	f->write_8(num_mip_levels);
 }
 
-void tex_cache_entry_t::read(i4_file_class *f)
+void tex_cache_entry_t::read(i4_file_class * f)
 {
 	if (!f)
 	{
@@ -1208,7 +1213,7 @@ void tex_cache_entry_t::read(i4_file_class *f)
 
 
 
-void tex_cache_header_t::write(i4_file_class *f)
+void tex_cache_header_t::write(i4_file_class * f)
 {
 	if (!f)
 	{
@@ -1226,7 +1231,7 @@ void tex_cache_header_t::write(i4_file_class *f)
 	f->write_32(flags);
 }
 
-void tex_cache_header_t::read(i4_file_class *f)
+void tex_cache_header_t::read(i4_file_class * f)
 {
 	if (!f)
 	{
@@ -1328,11 +1333,11 @@ i4_bool r1_texture_manager_class::update_cache_file(i4_array<w32> &update_ids,
 		texture_file_ids.add(r1_get_texture_id(*ds.files[i]));
 	}
 
-	i4_file_class *old_cache_file = i4_open(r1_get_cache_file(), I4_READ | I4_NO_BUFFER);
+	i4_file_class * old_cache_file = i4_open(r1_get_cache_file(), I4_READ | I4_NO_BUFFER);
 
 	w32 csize = old_cache_file->size();
 
-	void *old_cache_file_data = I4_MALLOC(csize,"old cache file data");
+	void * old_cache_file_data = I4_MALLOC(csize,"old cache file data");
 	old_cache_file->read(old_cache_file_data,csize);
 
 	delete old_cache_file;
@@ -1349,7 +1354,7 @@ i4_bool r1_texture_manager_class::update_cache_file(i4_array<w32> &update_ids,
 
 	for (i=0; i < update_ids.size();)
 	{
-		tex_cache_entry_t *t = find_id_in_tex_cache(old_cache_header.entries,old_cache_header.num_entries,update_ids[i]);
+		tex_cache_entry_t * t = find_id_in_tex_cache(old_cache_header.entries,old_cache_header.num_entries,update_ids[i]);
 
 		if (t)
 		{
@@ -1364,7 +1369,7 @@ i4_bool r1_texture_manager_class::update_cache_file(i4_array<w32> &update_ids,
 		}
 	}
 
-	i4_file_class *new_cache_file = i4_open(r1_get_cache_file(), I4_WRITE | I4_NO_BUFFER);
+	i4_file_class * new_cache_file = i4_open(r1_get_cache_file(), I4_WRITE | I4_NO_BUFFER);
 
 	old_cache_header.num_entries = total_cache_entries;
 	old_cache_header.write(new_cache_file);
@@ -1380,7 +1385,7 @@ i4_bool r1_texture_manager_class::update_cache_file(i4_array<w32> &update_ids,
 	i4_bool j_done = i4_F;
 	//delete stat;
 
-	i4_status_class *stat = i4_create_status(i4gets("updating_texture_cache"));
+	i4_status_class * stat = i4_create_status(i4gets("updating_texture_cache"));
 
 	for(;;)
 	{
@@ -1403,7 +1408,7 @@ i4_bool r1_texture_manager_class::update_cache_file(i4_array<w32> &update_ids,
 
 		if ((j_done && !i_done) || (!i_done && old_cache_header.entries[i].id < update_ids[j]))
 		{
-			tex_cache_entry_t *t = &old_cache_header.entries[i];
+			tex_cache_entry_t * t = &old_cache_header.entries[i];
 
 			if (!(t->flags & R1_MIP_EXTRA_FLAG))
 			{
@@ -1543,7 +1548,7 @@ i4_bool r1_texture_manager_class::build_cache_file(i4_array<w32> &texture_file_i
 
 	r1_setup_decompression(&regular_format,&chroma_format,&alpha_format,G1_CHROMA_COLOR,square_textures);
 
-	i4_file_class *dst_file = i4_open(r1_get_cache_file(),I4_WRITE | I4_NO_BUFFER);
+	i4_file_class * dst_file = i4_open(r1_get_cache_file(),I4_WRITE | I4_NO_BUFFER);
 
 	tex_cache_header_t tex_cache_header;
 
@@ -1558,7 +1563,7 @@ i4_bool r1_texture_manager_class::build_cache_file(i4_array<w32> &texture_file_i
 
 	tex_cache_header.write(dst_file);
 
-	tex_cache_entry_t *tex_cache_entries = 0;
+	tex_cache_entry_t * tex_cache_entries = 0;
 
 	if (texture_file_ids.size())
 	{
@@ -1572,7 +1577,7 @@ i4_bool r1_texture_manager_class::build_cache_file(i4_array<w32> &texture_file_i
 
 
 
-	i4_status_class *stat=i4_create_status(i4gets("checking_times"), I4_STATUS_UNKNOWN_TOTAL);
+	i4_status_class * stat=i4_create_status(i4gets("checking_times"), I4_STATUS_UNKNOWN_TOTAL);
 
 	i4_directory_struct ds;
 	i4_get_directory("textures", ds, i4_T, stat);
@@ -1623,7 +1628,7 @@ i4_bool r1_texture_manager_class::build_cache_file(i4_array<w32> &texture_file_i
 		delete stat;
 	}
 
-	typedef int (*qs_compare_type)(const void *x, const void *y);
+	typedef int (*qs_compare_type)(const void * x, const void * y);
 	if (tex_cache_entries)
 	{
 		qsort(tex_cache_entries,tex_cache_header.num_entries,
@@ -1647,22 +1652,23 @@ i4_bool r1_texture_manager_class::build_cache_file(i4_array<w32> &texture_file_i
 }
 
 
-i4_bool r1_write_tga_mips(i4_image_class *src_texture,
-						  char *dst_file,i4_file_class *dst_f,
-						  char *texture_name, w32 chroma_color);
+i4_bool r1_write_tga_mips(i4_image_class * src_texture,
+						  char * dst_file,i4_file_class * dst_f,
+						  char * texture_name, w32 chroma_color);
 
-void do_single_file(i4_file_class *dst_file, //The tex_cache.dat file
+void do_single_file(i4_file_class * dst_file, //The tex_cache.dat file
 					w32 id,                    //the id of the file to decompress
 					sw32 max_texture_dimention, //the maximum texture dimention (1024)
 					w32 network_file_date,  //A timestamp
-					tex_cache_entry_t *t)   //The cache entry
+					tex_cache_entry_t * t)   //The cache entry
 {
 	//Decompresses a single file from g_compressed to
 	//g_decompressed_xBit.
-	i4_str *local_fname   = r1_texture_id_to_filename(id, r1_get_decompressed_dir());
+	i4_str * local_fname   = r1_texture_id_to_filename(id, r1_get_decompressed_dir());
 	//i4_str *network_fname = r1_texture_id_to_filename(id, r1_get_compressed_dir());
 
 	char local_tex_file[256];
+
 	i4_os_string(*local_fname,local_tex_file,256);
 	delete local_fname;
 
@@ -1676,7 +1682,7 @@ void do_single_file(i4_file_class *dst_file, //The tex_cache.dat file
 
 	//open the mip file from the network to get information on the mip levels
 	mipheader_t mipheader;
-	i4_image_class *src_im=0;
+	i4_image_class * src_im=0;
 
 	//doesn't exist anymore, per definition
 	//i4_file_class *src_file = i4_open(i4_const_str(network_tex_file),I4_READ | I4_NO_BUFFER);
@@ -1709,7 +1715,7 @@ void do_single_file(i4_file_class *dst_file, //The tex_cache.dat file
 	else
 	{
 #endif
-	i4_const_str *n=r1_get_texture_name(id);
+	i4_const_str * n=r1_get_texture_name(id);
 	char sbuf[256];
 	if (n)
 	{
@@ -1760,7 +1766,7 @@ void do_single_file(i4_file_class *dst_file, //The tex_cache.dat file
 		//width*height*2 - 16 bit texture data
 		//width*height*4 - 32 bit texture data (alpha is padded if src is 24 bit only)
 		//mipheader.flags &=~R1_MIP_IS_JPG_COMPRESSED; //don't use this any more
-		w8 *texbuf;
+		w8 * texbuf;
 		sw32 mipw=0,miph=0;
 		get_mip_size(mipheader.num_mip_levels-1,mipheader.base_height,
 					 mipheader.base_width,miph,mipw);
@@ -1830,11 +1836,11 @@ void do_single_file(i4_file_class *dst_file, //The tex_cache.dat file
 
 void reset_decompressed_cache(void);
 
-void r1_texture_manager_class::keep_cache_current(i4_array<w32> *file_ids)
+void r1_texture_manager_class::keep_cache_current(i4_array<w32> * file_ids)
 {
 	tex_cache_header_t tex_cache_header;
 
-	i4_file_class *cache_file = i4_open(r1_get_cache_file(),I4_READ | I4_NO_BUFFER);
+	i4_file_class * cache_file = i4_open(r1_get_cache_file(),I4_READ | I4_NO_BUFFER);
 
 	//does the cache file exist?
 	if (!cache_file)
@@ -1970,8 +1976,8 @@ void r1_texture_manager_class::keep_cache_current(i4_array<w32> *file_ids)
 				//(*file_ids)[i] (neu);
 				//r1_get_file_id(*ds.files[i]);(alt)
 				//Hm, ich denke, die alte Version war besser.
-				tex_cache_entry_t *t = find_id_in_tex_cache(tex_cache_header.entries,
-															tex_cache_header.num_entries,id);
+				tex_cache_entry_t * t = find_id_in_tex_cache(tex_cache_header.entries,
+															 tex_cache_header.num_entries,id);
 
 				if (!t || (t->lowmipoffset==0xFFFFFFFF))
 				{
@@ -2084,7 +2090,7 @@ i4_profile_class pf_tex_no_heap_cleanup("tex_heap::cleanup()");
 r1_texture_heap_class::~r1_texture_heap_class()
 {
 	//kill the free list
-	r1_tex_heap_free_node *next_free,*last_free;
+	r1_tex_heap_free_node * next_free,* last_free;
 
 	next_free = first_free;
 	while (next_free)
@@ -2101,7 +2107,7 @@ r1_texture_heap_class::~r1_texture_heap_class()
 	first_free = 0;
 
 	//kill the used list
-	r1_tex_heap_used_node *next_used,*last_used;
+	r1_tex_heap_used_node * next_used,* last_used;
 
 	next_used = first_used;
 	while (next_used)
@@ -2128,7 +2134,7 @@ r1_texture_heap_class::~r1_texture_heap_class()
 	used_node_alloc=0;
 }
 
-r1_texture_heap_class::r1_texture_heap_class(w32 heap_size, w32 heap_start, w32 free_node_size, w32 used_node_size, sw32 *frame_count)
+r1_texture_heap_class::r1_texture_heap_class(w32 heap_size, w32 heap_start, w32 free_node_size, w32 used_node_size, sw32 * frame_count)
 {
 	num_ram_misses  = 0;
 	needs_cleanup   = i4_F;
@@ -2163,8 +2169,8 @@ void r1_texture_heap_class::free_really_old()
 
 	w32 total_freed = 0;
 
-	r1_tex_heap_used_node *u = oldest_used;
-	r1_tex_heap_used_node *last;
+	r1_tex_heap_used_node * u = oldest_used;
+	r1_tex_heap_used_node * last;
 
 	while (u && total_freed < (w32)max_fail_size)
 	{
@@ -2196,13 +2202,13 @@ void r1_texture_heap_class::free_really_old()
 
 
 
-r1_tex_heap_used_node *r1_texture_heap_class::alloc(w32 need_size, w8 flags)
+r1_tex_heap_used_node * r1_texture_heap_class::alloc(w32 need_size, w8 flags)
 {
 	pf_tex_heap_alloc.start();
 
 	//ok. we know how much memory we need, now try to find a free area of memory
-	r1_tex_heap_free_node *f    = first_free;
-	r1_tex_heap_free_node *last = 0;
+	r1_tex_heap_free_node * f    = first_free;
+	r1_tex_heap_free_node * last = 0;
 
 	while (f && f->size<need_size)
 	{
@@ -2210,18 +2216,18 @@ r1_tex_heap_used_node *r1_texture_heap_class::alloc(w32 need_size, w8 flags)
 		f=f->next;
 	}
 
-	r1_tex_heap_used_node *new_used = 0;
+	r1_tex_heap_used_node * new_used = 0;
 
 	if (!f)
 	{
 		//no memory large enough. dig through and see if there is a used chunk that we can free
-		r1_tex_heap_used_node *u = oldest_used;
+		r1_tex_heap_used_node * u = oldest_used;
 
 		while (u)
 		{
 			if (u->node->size >= need_size)
 			{
-				r1_miplevel_t *m = u->node->mip;
+				r1_miplevel_t * m = u->node->mip;
 				if (m->last_frame_used!=-1 && m->last_frame_used < (*frame_count_ptr - 2))
 				{
 					if (m->flags & R1_MIPLEVEL_IS_LOADING)
@@ -2312,7 +2318,7 @@ r1_tex_heap_used_node *r1_texture_heap_class::alloc(w32 need_size, w8 flags)
 		//if we dont match the size exactly, need to create a new free node to fill in the space
 		if (f->size != need_size)
 		{
-			r1_tex_heap_free_node *new_free = (r1_tex_heap_free_node *)free_node_alloc->alloc();
+			r1_tex_heap_free_node * new_free = (r1_tex_heap_free_node *)free_node_alloc->alloc();
 
 			if (!new_free)
 			{
@@ -2378,7 +2384,7 @@ r1_tex_heap_used_node *r1_texture_heap_class::alloc(w32 need_size, w8 flags)
 
 void r1_texture_heap_class::merge_into_free_list(w32 _start, w32 _size)
 {
-	r1_tex_heap_free_node *next, *last;
+	r1_tex_heap_free_node * next, * last;
 
 	// find proper spot to add into free list
 	next = first_free;
@@ -2412,7 +2418,7 @@ void r1_texture_heap_class::merge_into_free_list(w32 _start, w32 _size)
 	else
 	if (last)   // put after the last proper node
 	{
-		r1_tex_heap_free_node *f = (r1_tex_heap_free_node *)free_node_alloc->alloc();
+		r1_tex_heap_free_node * f = (r1_tex_heap_free_node *)free_node_alloc->alloc();
 
 		f->size  = _size;
 		f->start = _start;
@@ -2423,7 +2429,7 @@ void r1_texture_heap_class::merge_into_free_list(w32 _start, w32 _size)
 	}
 	else   // put it at the begining of the list
 	{
-		r1_tex_heap_free_node *f = (r1_tex_heap_free_node *)free_node_alloc->alloc();
+		r1_tex_heap_free_node * f = (r1_tex_heap_free_node *)free_node_alloc->alloc();
 
 		f->size  = _size;
 		f->start = _start;
@@ -2433,7 +2439,7 @@ void r1_texture_heap_class::merge_into_free_list(w32 _start, w32 _size)
 	}
 }
 
-void r1_texture_heap_class::update_usage(r1_tex_heap_used_node *u)
+void r1_texture_heap_class::update_usage(r1_tex_heap_used_node * u)
 {
 	if (u->node->mip->last_frame_used==-1)
 	{
@@ -2490,7 +2496,7 @@ void r1_texture_heap_class::update_usage(r1_tex_heap_used_node *u)
 	}
 }
 
-void r1_texture_heap_class::free(r1_tex_heap_used_node *u)
+void r1_texture_heap_class::free(r1_tex_heap_used_node * u)
 {
 	if (!u || !u->node)
 	{
@@ -2505,7 +2511,7 @@ void r1_texture_heap_class::free(r1_tex_heap_used_node *u)
 
 	pf_tex_heap_free.start();
 
-	r1_tex_heap_free_node *f = u->node, *next, *last;
+	r1_tex_heap_free_node * f = u->node, * next, * last;
 
 	//give its r1_miplevel_t an invalid vram handle
 	f->mip->vram_handle = 0;
@@ -2590,12 +2596,13 @@ void r1_texture_manager_class::keep_resident(const i4_const_str &tname, sw32 des
 {
 	w32 id = r1_get_texture_id(tname);
 	sw16 handle = find_texture(id);
+
 	if (!handle)
 	{
 		return;
 	}
 
-	r1_texture_entry_struct *t = &(*entries)[handle];
+	r1_texture_entry_struct * t = &(*entries)[handle];
 
 	r1_mip_load_info load_info;
 	load_info.flags=default_texture_flags;
@@ -2606,7 +2613,7 @@ void r1_texture_manager_class::keep_resident(const i4_const_str &tname, sw32 des
 	sw32 j;
 	for (j=0; j<R1_MAX_MIP_LEVELS; ++j)
 	{
-		r1_miplevel_t *mip = t->mipmaps[j];
+		r1_miplevel_t * mip = t->mipmaps[j];
 
 		if (mip && (mip->width <= desired_width))
 		{
@@ -2637,6 +2644,7 @@ i4_bool r1_texture_manager_class::load_textures()
 {
 	sw32 i,j;
 	static w8 active=i4_F; //used as prevention for recursion
+
 	if (textures_loaded||entries||active)
 	{
 		//The textures flag has no assured semantics at all
@@ -2651,7 +2659,7 @@ i4_bool r1_texture_manager_class::load_textures()
 	//and in global context, the textures get screwed up.
 	if (this->is_master_tman)
 	{
-		r1_texture_ref *p=r1_texture_ref::first;
+		r1_texture_ref * p=r1_texture_ref::first;
 		for (; p; p=p->next)
 		{
 			p->texture_handle=register_texture(p->name, "code reference");
@@ -2664,7 +2672,7 @@ i4_bool r1_texture_manager_class::load_textures()
 	//create an array of texture id's from names[] and sort it
 	i4_array<w32> texture_file_ids(6000,6000); //We currently start out with 2000!
 	i4_directory_struct texts;
-	i4_status_class *stat = 0;
+	i4_status_class * stat = 0;
 
 	//Usually the following line is really helpfull for the user.
 	//But we must implement a way to suppress the stat window if we are
@@ -2686,7 +2694,7 @@ i4_bool r1_texture_manager_class::load_textures()
 		//Very important step:
 		//As a sideeffect, the texture ids are registered for
 		//backward-lookup.
-		i4_const_str tstr(*(texts.files[kk]));
+		i4_const_str tstr(* (texts.files[kk]));
 		w32 thisid=r1_get_texture_id(tstr);
 		texture_file_ids.add(thisid);
 	}
@@ -2727,7 +2735,7 @@ i4_bool r1_texture_manager_class::load_textures()
 	   		}
 	   	}
 	 */
-	i4_file_class *cache_file = i4_open(r1_get_cache_file(), I4_READ | I4_NO_BUFFER);
+	i4_file_class * cache_file = i4_open(r1_get_cache_file(), I4_READ | I4_NO_BUFFER);
 
 	tex_cache_header_t tex_cache_header;
 
@@ -2766,8 +2774,8 @@ i4_bool r1_texture_manager_class::load_textures()
 	{
 		w32 id = texture_file_ids[i];
 
-		tex_cache_entry_t *t = find_id_in_tex_cache(tex_cache_header.entries,
-													tex_cache_header.num_entries,id);
+		tex_cache_entry_t * t = find_id_in_tex_cache(tex_cache_header.entries,
+													 tex_cache_header.num_entries,id);
 
 //#ifdef __linux
 //	i4_warning("Attempting to load low mip level of texture %i of %i.",i,texture_file_ids.size());
@@ -2787,8 +2795,8 @@ i4_bool r1_texture_manager_class::load_textures()
 			{
 				//we need to restore a memory_image
 				//fortunatelly, we saved them ;-)
-				r1_image_list_struct *pres=&memory_images[en];
-				i4_image_class *texture_image=pres->image;
+				r1_image_list_struct * pres=&memory_images[en];
+				i4_image_class * texture_image=pres->image;
 				w32 textby=2;
 				if (texture_image->pal->source.pixel_depth==I4_24BIT)
 				{
@@ -2798,18 +2806,18 @@ i4_bool r1_texture_manager_class::load_textures()
 				{
 					textby=4;
 				}
-				i4_ram_file_class *fake_file = new i4_ram_file_class(texture_image->data,
-																	 texture_image->width() *
-																	 texture_image->height() * textby);
+				i4_ram_file_class * fake_file = new i4_ram_file_class(texture_image->data,
+																	  texture_image->width() *
+																	  texture_image->height() * textby);
 
-				r1_texture_entry_struct *new_entry=new_texture_entries.add();
+				r1_texture_entry_struct * new_entry=new_texture_entries.add();
 				memset(new_entry,0,sizeof(r1_texture_entry_struct));
 				new_entry->id            =pres->id;
 
 				new_entry->average_color = pres->average_color;
 
 				new_entry->mipmaps[0]    = new r1_miplevel_t;
-				r1_miplevel_t *mip = new_entry->mipmaps[0];
+				r1_miplevel_t * mip = new_entry->mipmaps[0];
 
 				mip->level  = 0;
 				mip->width  = texture_image->width();
@@ -2848,7 +2856,7 @@ i4_bool r1_texture_manager_class::load_textures()
 			}
 			if (!found)
 			{
-				i4_const_str *n=r1_get_texture_name(id);
+				i4_const_str * n=r1_get_texture_name(id);
 				if (n)
 				{
 					char buf[300];
@@ -2866,7 +2874,7 @@ i4_bool r1_texture_manager_class::load_textures()
 		{
 			//texture is in the cache. need to load up some info, load the lowest mip, etc
 			//add it to the list of valid textures
-			r1_texture_entry_struct *new_entry = new_texture_entries.add();
+			r1_texture_entry_struct * new_entry = new_texture_entries.add();
 
 			//the last one should always be null, hence the R1_MAX_MIP_LEVELS+1
 			memset(new_entry->mipmaps,0,sizeof(r1_miplevel_t *) * (R1_MAX_MIP_LEVELS+1));
@@ -2884,7 +2892,7 @@ i4_bool r1_texture_manager_class::load_textures()
 			{
 				new_entry->mipmaps[j] = new r1_miplevel_t;
 
-				r1_miplevel_t *mip = new_entry->mipmaps[j];
+				r1_miplevel_t * mip = new_entry->mipmaps[j];
 
 				mip->level  = (w8)j;
 				mip->width  = t->base_width /(1<<j);
@@ -3089,9 +3097,10 @@ i4_bool r1_texture_manager_class::load_textures()
 	return i4_T;
 }
 
-w32 r1_pal_to_flags(const i4_pal *pal,w32 allowed_formats)
+w32 r1_pal_to_flags(const i4_pal * pal,w32 allowed_formats)
 {
 	w32 retval=0,retval2;
+
 	allowed_formats &= R1_MIPFLAGS_USEFLAGS;
 	switch (pal->source.pixel_depth)
 	{
@@ -3141,7 +3150,7 @@ w32 r1_pal_to_flags(const i4_pal *pal,w32 allowed_formats)
 	return retval;
 }
 
-r1_texture_handle r1_texture_manager_class::register_image(i4_image_class *image)
+r1_texture_handle r1_texture_manager_class::register_image(i4_image_class * image)
 {
 	if (!entries || !entries->size())
 	{
@@ -3200,8 +3209,8 @@ r1_texture_handle r1_texture_manager_class::register_image(i4_image_class *image
 	   }*/
 
 
-	i4_image_class *temp_image    = i4_create_image(image->width(),image->height(), image->pal);
-	i4_image_class *texture_image = temp_image;
+	i4_image_class * temp_image    = i4_create_image(image->width(),image->height(), image->pal);
+	i4_image_class * texture_image = temp_image;
 
 	image->put_image(temp_image,0,0,context);
 
@@ -3212,9 +3221,9 @@ r1_texture_handle r1_texture_manager_class::register_image(i4_image_class *image
 		sw32 old_width  = temp_image->width();
 		sw32 old_height = temp_image->height();
 
-		w16 *old_tex = (w16 *)temp_image->data;
-		w16 *new_tex = (w16 *)texture_image->data;
-		w16 *dst     = new_tex;
+		w16 * old_tex = (w16 *)temp_image->data;
+		w16 * new_tex = (w16 *)texture_image->data;
+		w16 * dst     = new_tex;
 
 		float width_ratio  = (float)old_width  / (float)new_width;
 		float height_ratio = (float)old_height / (float)new_height;
@@ -3232,7 +3241,7 @@ r1_texture_handle r1_texture_manager_class::register_image(i4_image_class *image
 		delete temp_image;
 	}
 	temp_image=0; //do not use beyond this point.
-	r1_image_list_struct *pres=memory_images.add(); //preserve texture image data
+	r1_image_list_struct * pres=memory_images.add(); //preserve texture image data
 	//we need it for reloading textures
 	pres->image=texture_image;
 	w32 tex_by=2;
@@ -3248,9 +3257,9 @@ r1_texture_handle r1_texture_manager_class::register_image(i4_image_class *image
 		}
 	}
 
-	i4_ram_file_class *fake_file = new i4_ram_file_class(texture_image->data,
-														 texture_image->width() *
-														 texture_image->height() * tex_by);
+	i4_ram_file_class * fake_file = new i4_ram_file_class(texture_image->data,
+														  texture_image->width() *
+														  texture_image->height() * tex_by);
 
 
 	new_entry.id            = (*entries)[entries->size()-1].id + 1; //maintains the sorted order of the array
@@ -3265,7 +3274,7 @@ r1_texture_handle r1_texture_manager_class::register_image(i4_image_class *image
 
 	if (texture_image->get_pal()->source.pixel_depth==I4_32BIT)
 	{
-		w32 *base_mip = (w32 *)texture_image->data;
+		w32 * base_mip = (w32 *)texture_image->data;
 
 		sw32 im_size = width * height;
 
@@ -3328,7 +3337,7 @@ r1_texture_handle r1_texture_manager_class::register_image(i4_image_class *image
 	pres->average_color=new_entry.average_color;
 	new_entry.mipmaps[0]    = new r1_miplevel_t;
 
-	r1_miplevel_t *mip = new_entry.mipmaps[0];
+	r1_miplevel_t * mip = new_entry.mipmaps[0];
 
 	mip->level  = 0;
 	mip->width  = texture_image->width();

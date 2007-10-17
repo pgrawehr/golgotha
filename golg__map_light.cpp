@@ -20,7 +20,7 @@ void g1_calc_static_lighting()
 		return ;
 	}
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 	int i;
 	for (i=0; i<t; i++)
@@ -28,7 +28,7 @@ void g1_calc_static_lighting()
 		olist[i]->unoccupy_location();
 	}
 
-	g1_map_vertex_class *v=g1_get_map()->vertex(0,0);
+	g1_map_vertex_class * v=g1_get_map()->vertex(0,0);
 	int mw=g1_get_map()->width(), mh=g1_get_map()->height();
 
 	int x,y;
@@ -40,7 +40,7 @@ void g1_calc_static_lighting()
 		}
 	}
 
-	g1_map_cell_class *c=g1_get_map()->cell(0,0);
+	g1_map_cell_class * c=g1_get_map()->cell(0,0);
 	for (y=0; y<mh; y++)
 	{
 		for (x=0; x<mw; x++, c++)

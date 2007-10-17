@@ -21,7 +21,7 @@ class g1_object_definer :
 	public g1_object_definition_class
 {
 public:
-	g1_object_definer<T>(char *name,
+	g1_object_definer<T>(char * name,
 						 w32 type_flags=0,
 						 function_type _init = 0,
 						 function_type _uninit = 0)
@@ -29,9 +29,10 @@ public:
 	}
 
 	virtual g1_object_class *create_object(g1_object_type id,
-										   g1_loader_class *fp)
+										   g1_loader_class * fp)
 	{
-		T *o=new T(id, fp);
+		T * o=new T(id, fp);
+
 		o->init();
 		return o;
 	}
@@ -41,6 +42,6 @@ class li_object;
 class li_environment;
 
 // called from g1_load_level (level_load.cc) : creates and objects type from lisp token
-void g1_define_object(li_object *o, li_environment *env);
+void g1_define_object(li_object * o, li_environment * env);
 
 #endif

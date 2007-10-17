@@ -53,7 +53,7 @@ public:
 	sw32 clip_x1, clip_y1, clip_x2, clip_y2;
 
 
-	win32_input_class *input;
+	win32_input_class * input;
 
 	sw32 current_mouse_x,
 		 current_mouse_y;
@@ -85,7 +85,7 @@ public:
 	virtual void display()
 	{
 	}
-	virtual void set_cursor(i4_cursor_class *cursor)
+	virtual void set_cursor(i4_cursor_class * cursor)
 	{
 	};
 	virtual void use_backbuffer(i4_bool use_bbuf) = 0;
@@ -96,7 +96,7 @@ public:
 	}
 
 
-	dx_threaded_mouse_class(const i4_pal *screen_pal,
+	dx_threaded_mouse_class(const i4_pal * screen_pal,
 							HWND window_handle,
 							sw32 clip_x1, sw32 clip_y1,
 							sw32 clip_x2, sw32 clip_y2);

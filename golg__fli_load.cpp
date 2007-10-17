@@ -37,10 +37,10 @@
 //#include <memory.h>
 
 
-i4_bool fli_read_rle(w8 *im, w32 w, w32 h, i4_file_class *fp)
+i4_bool fli_read_rle(w8 * im, w32 w, w32 h, i4_file_class * fp)
 //{{{
 {
-	w8 *line,c;
+	w8 * line,c;
 	sw8 size;
 
 	for (w32 y=0; y<h; y++)
@@ -79,13 +79,13 @@ i4_bool fli_read_rle(w8 *im, w32 w, w32 h, i4_file_class *fp)
 //}}}
 
 
-i4_bool fli_read_lc(w8 *prev, w8 *im, w32 w, w32 h, i4_file_class *fp)
+i4_bool fli_read_lc(w8 * prev, w8 * im, w32 w, w32 h, i4_file_class * fp)
 //{{{
 {
 	w32 x,y;
 	w16 skip_lines,change_lines;
 
-	w8 *line,*prev_line,tpackets,c;
+	w8 * line,* prev_line,tpackets,c;
 	sw8 size;
 
 
@@ -148,13 +148,13 @@ i4_bool fli_read_lc(w8 *prev, w8 *im, w32 w, w32 h, i4_file_class *fp)
 //}}}
 
 
-i4_bool fli_read_ss2(w8 *prev, w8 *im, w32 w, w32 h, i4_file_class *fp)
+i4_bool fli_read_ss2(w8 * prev, w8 * im, w32 w, w32 h, i4_file_class * fp)
 //{{{
 {
 	w32 x,y;
 	w16 skip_lines,change_lines;
 
-	w16 *line,*prev_line,code_word,c;
+	w16 * line,* prev_line,code_word,c;
 	sw8 size;
 
 	change_lines=fp->read_16();
@@ -181,7 +181,8 @@ i4_bool fli_read_ss2(w8 *prev, w8 *im, w32 w, w32 h, i4_file_class *fp)
 					prev += w*skip_lines;
 					break;
 			}
-		} while (code_word & 0x8000);
+		}
+		while (code_word & 0x8000);
 
 		line=(w16 *)im;
 		prev_line=(w16 *)prev;
@@ -241,7 +242,7 @@ i4_bool fli_read_ss2(w8 *prev, w8 *im, w32 w, w32 h, i4_file_class *fp)
    }
  */
 
-i4_image_class **i4_load_fli(i4_file_class *fp, w32 &frames)
+i4_image_class * *i4_load_fli(i4_file_class * fp, w32 &frames)
 //{{{
 {
 	//{{{ FLI chunk signatures
@@ -317,8 +318,8 @@ i4_image_class **i4_load_fli(i4_file_class *fp, w32 &frames)
 	}
 	i4_lookup_pal pal(&f);
 
-	i4_image8 **im;
-	im=(i4_image8 **) new w32[frames]; //(i4_unmatched_image8 **)i4_malloc(sizeof(i4_unmatched_image8 *)*frames,"fli frame pointers");
+	i4_image8 * * im;
+	im=(i4_image8 * *) new w32[frames]; //(i4_unmatched_image8 **)i4_malloc(sizeof(i4_unmatched_image8 *)*frames,"fli frame pointers");
 
 	for (frame_on=0; frame_on<frames && !error; frame_on++)
 	{
@@ -373,7 +374,7 @@ i4_image_class **i4_load_fli(i4_file_class *fp, w32 &frames)
 					case FLI_COLOR_MAP256:
 						//{{{
 						{
-							w32 pald[256],*p;
+							w32 pald[256],* p;
 
 							p=pald;
 							memset(pald,0,sizeof(pald));
@@ -454,7 +455,7 @@ i4_image_class **i4_load_fli(i4_file_class *fp, w32 &frames)
 		im[k]->set_pal(&pal);
 	}
 	delete f.lookup;
-	return (i4_image_class **)im;
+	return (i4_image_class * *)im;
 }
 //}}}
 

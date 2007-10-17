@@ -17,7 +17,7 @@ class g1_repairer_class :
 	public g1_map_piece_class
 {
 protected:
-	g1_mini_object *turret,*boom,*tip;
+	g1_mini_object * turret,* boom,* tip;
 	i4_float repair_angle, repair_length;
 	i4_float length;
 
@@ -42,7 +42,7 @@ protected:
 
 
 
-	void setup_flare(g1_object_class *target);
+	void setup_flare(g1_object_class * target);
 
 
 
@@ -54,11 +54,11 @@ protected:
 	void create_light();
 	void destroy_light();
 public:
-	g1_repairer_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	virtual void load(g1_loader_class *fp);
-	virtual void skipload(g1_loader_class *fp);
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	g1_repairer_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	virtual void load(g1_loader_class * fp);
+	virtual void skipload(g1_loader_class * fp);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 
 	virtual void setup_flare_look(i4_float _size,
 								  i4_float start_width,     i4_float end_width,
@@ -76,7 +76,7 @@ public:
 		lit = _lit;
 	}
 
-	virtual i4_bool can_attack(g1_object_class *who);
+	virtual i4_bool can_attack(g1_object_class * who);
 	virtual void think();
 	virtual void request_remove();
 };

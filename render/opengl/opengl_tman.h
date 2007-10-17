@@ -51,14 +51,14 @@ public:
 		GLuint gltexname;
 		w8 texformatflags;
 		// use for async loading
-		w8 *data;
-		i4_file_class *async_fp;
-		r1_opengl_texture_manager_class *self_tman; //for back-reference
+		w8 * data;
+		i4_file_class * async_fp;
+		r1_opengl_texture_manager_class * self_tman; //for back-reference
 	};
 
-	r1_texture_no_heap_class *tex_no_heap;
+	r1_texture_no_heap_class * tex_no_heap;
 
-	r1_opengl_texture_manager_class(const i4_pal *pal);
+	r1_opengl_texture_manager_class(const i4_pal * pal);
 
 	~r1_opengl_texture_manager_class()
 	{
@@ -74,7 +74,7 @@ public:
 											  int frame_counter, int desired_width);
 
 	//!Changes the given texture to the new image
-	virtual int set_texture_image(r1_texture_handle handle, i4_image_class *im);
+	virtual int set_texture_image(r1_texture_handle handle, i4_image_class * im);
 
 
 	void select_texture(r1_local_texture_handle_type handle, float &smul, float &tmul);
@@ -84,16 +84,16 @@ public:
 							   sw32 desired_width,
 							   sw32 &w, sw32 &h);
 
-	i4_bool immediate_mip_load(r1_mip_load_info *load_info);
-	i4_bool async_mip_load(r1_mip_load_info *load_info);
+	i4_bool immediate_mip_load(r1_mip_load_info * load_info);
+	i4_bool async_mip_load(r1_mip_load_info * load_info);
 
 	i4_critical_section_class array_lock;
 
 	i4_array<used_node *> finished_array;
 
-	void async_load_finished(used_node *u);
+	void async_load_finished(used_node * u);
 
-	void free_mip(void *vram_handle);
+	void free_mip(void * vram_handle);
 
 	void next_frame();
 
@@ -102,13 +102,13 @@ public:
 
 private:
 
-	GLvoid *scratch; // currently used for gluScaleImage()
+	GLvoid * scratch; // currently used for gluScaleImage()
 
-	void teximage2d(used_node *u);
+	void teximage2d(used_node * u);
 
 	used_node *make_new_used_node(r1_mip_load_info *&load_info, w8 node_alloc_flags = 0);
 
 };
-extern r1_opengl_texture_manager_class *r1_opengl_texture_manager_class_instance;
+extern r1_opengl_texture_manager_class * r1_opengl_texture_manager_class_instance;
 
 #endif

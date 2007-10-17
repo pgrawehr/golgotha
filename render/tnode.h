@@ -14,13 +14,13 @@
 
 class r1_texture_entry_struct;
 
-typedef void *r1_local_texture_handle_type;
+typedef void * r1_local_texture_handle_type;
 
 //#define R1_CHECK_TEXTURE_MEMORY
 
 struct r1_texture_node_struct
 {
-	r1_texture_node_struct *lower; // 0 if texture is lowest level mip, otherwise next lowest mip
+	r1_texture_node_struct * lower; // 0 if texture is lowest level mip, otherwise next lowest mip
 	sw32 signed_size;
 
 	sw32 size()
@@ -32,8 +32,8 @@ struct r1_texture_node_struct
 		signed_size=-size;
 	}
 
-	r1_texture_entry_struct *entry; // pointer to entry in entry table
-	r1_texture_node_struct *higher; // higher mip level, or 0 if this is the highest loaded
+	r1_texture_entry_struct * entry; // pointer to entry in entry table
+	r1_texture_node_struct * higher; // higher mip level, or 0 if this is the highest loaded
 
 
 #ifdef R1_CHECK_TEXTURE_MEMORY

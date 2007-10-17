@@ -19,24 +19,24 @@ class i4_graphical_style_class;
 class g1_main_menu_class :
 	public i4_parent_window_class
 {
-	i4_event_handler_class *notify;
-	i4_image_class *deco;
-	i4_graphical_style_class *style;
+	i4_event_handler_class * notify;
+	i4_image_class * deco;
+	i4_graphical_style_class * style;
 	int num_paintings;
 
 public:
 
 	g1_main_menu_class(w16 w, w16 h,
-					   i4_event_handler_class *notify,
-					   sw32 *ids,
-					   i4_graphical_style_class *style);
+					   i4_event_handler_class * notify,
+					   sw32 * ids,
+					   i4_graphical_style_class * style);
 
 	virtual void parent_draw(i4_draw_context_class &context);
 
 
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 	~g1_main_menu_class();
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"g1_main_menu");
 	}

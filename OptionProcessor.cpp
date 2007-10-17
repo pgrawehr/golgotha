@@ -1,4 +1,4 @@
-#include"pch.h"
+#include "pch.h"
 
 // Filename: Processor.cpp
 // =======================
@@ -325,6 +325,7 @@ unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
 		while (tms>timeGetTime()) ;
 
 
+
 		// We ask for the end time
 		QueryPerformanceCounter((LARGE_INTEGER *) &endtime);
 
@@ -349,6 +350,7 @@ unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
 		//use timeGetTime instead of the performance counter
 		starttime=timeGetTime();
 		while(timeGetTime()==starttime) ;
+
 		//start when timer flips
 
 		// Then we get the current cpu clock and store it
@@ -364,6 +366,7 @@ unsigned __int64 CProcessor::GetCPUFrequency(unsigned int uiMeasureMSecs)
 		tm=timeGetTime();
 		tms=uiMeasureMSecs+tm;
 		while (tms>timeGetTime()) ;
+
 
 
 		// We ask for the end time
@@ -1606,7 +1609,7 @@ void CProcessor::DecodeProcessorConfiguration(unsigned int cfg)
 	}
 }
 
-__forceinline static char *TranslateAssociativeWays(unsigned int uiWays, char *buf)
+__forceinline static char *TranslateAssociativeWays(unsigned int uiWays, char * buf)
 {
 	// We define 0xFFFFFFFF (= -1) as fully associative
 	if (uiWays == ((unsigned int) -1))
@@ -1634,7 +1637,7 @@ __forceinline static char *TranslateAssociativeWays(unsigned int uiWays, char *b
 	// To ease the function use we return the buffer
 	return buf;
 }
-__forceinline static void TranslateTLB(ProcessorTLB *tlb)
+__forceinline static void TranslateTLB(ProcessorTLB * tlb)
 {
 	char buf[64];
 
@@ -1648,7 +1651,7 @@ __forceinline static void TranslateTLB(ProcessorTLB *tlb)
 		strcpy(tlb->strTLB, "Not present");
 	}
 }
-__forceinline static void TranslateCache(ProcessorCache *cache)
+__forceinline static void TranslateCache(ProcessorCache * cache)
 {
 	char buf[64];
 
@@ -1818,7 +1821,7 @@ void CProcessor::GetStandardProcessorExtensions()
 // Calls all the other detection function to create an detailed
 // processor information
 ///////////////////////////////////////////////////////////////
-const ProcessorInfo *CProcessor::GetCPUInfo()
+const ProcessorInfo * CProcessor::GetCPUInfo()
 {
 	unsigned long eaxreg, ebxreg, ecxreg, edxreg;
 
@@ -1882,7 +1885,7 @@ const ProcessorInfo *CProcessor::GetCPUInfo()
 // ======================================================================
 // Gets the frequency and processor information and writes it to a string
 /////////////////////////////////////////////////////////////////////////
-bool CProcessor::CPUInfoToText(char *strBuffer, unsigned int uiMaxLen)
+bool CProcessor::CPUInfoToText(char * strBuffer, unsigned int uiMaxLen)
 {
 #define LENCHECK                len = (unsigned int) strlen(buf); if (len >= uiMaxLen){return false;} strcpy(strBuffer, buf); strBuffer += len;
 #define COPYADD(str)            strcpy(buf, str); LENCHECK;
@@ -1984,7 +1987,7 @@ bool CProcessor::CPUInfoToText(char *strBuffer, unsigned int uiMaxLen)
 // Takes use of CProcessor::CPUInfoToText and saves the string to a
 // file
 ///////////////////////////////////////////////////////////////////
-bool CProcessor::WriteInfoTextFile(const char *strFilename)
+bool CProcessor::WriteInfoTextFile(const char * strFilename)
 {
 	char buf[16384];
 
@@ -1995,7 +1998,7 @@ bool CProcessor::WriteInfoTextFile(const char *strFilename)
 	}
 
 	// Then we create a new file (CREATE_ALWAYS)
-	FILE *file = fopen(strFilename, "wb");
+	FILE * file = fopen(strFilename, "wb");
 	if (!file)
 	{
 		return false;

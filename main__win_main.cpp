@@ -51,22 +51,22 @@
 
 
 w32 i4_global_argc;
-i4_const_str *i4_global_argv;
+i4_const_str * i4_global_argv;
 
 
 HINSTANCE i4_win32_instance;
 int i4_win32_nCmdShow;
 HWND i4_win32_window_handle=0;
 i4_win32_startup_options_struct i4_win32_startup_options;
-void *i4_stack_base=0;
+void * i4_stack_base=0;
 
 #ifndef _WINDOWS
-void OutputDebugString(char *lpOutputString)
+void OutputDebugString(char * lpOutputString)
 {
 	printf(lpOutputString);
 	//printf("\n");
 };
-int i4_win32_error(const char *st)
+int i4_win32_error(const char * st)
 {
 	//todo: ask user.
 	printf(st);
@@ -115,7 +115,8 @@ int i4_win32_error(const char *st)
 #endif
 int i4_win32_alert(const i4_const_str &ret)
 {
-	char tmp[1024], *st;
+	char tmp[1024], * st;
+
 	strcpy(tmp, "Alert : ");
 	st=tmp+8;
 
@@ -192,7 +193,7 @@ i4_win32_startup_options_struct::~i4_win32_startup_options_struct()
    }
  */
 
-void i4_win32_startup_options_struct::check_option(w32 argc,i4_const_str *argv)
+void i4_win32_startup_options_struct::check_option(w32 argc,i4_const_str * argv)
 {
 #ifndef _CONSOLE
 	//render=R1_RENDER_DIRECTX5;//These options are not saved at the moment
@@ -378,7 +379,7 @@ int i4_win32_startup_options_struct::save_option(void)
 	return true;
 }
 
-DWORD FormatErrorMessage(char *input, char *buf, long bufsize)
+DWORD FormatErrorMessage(char * input, char * buf, long bufsize)
 {
 	long actsize=strlen(input);
 
@@ -402,7 +403,7 @@ DWORD FormatErrorMessage(char *input, char *buf, long bufsize)
 	}
 
 	//second part: identify special info
-	char *first=strchr(buf,':');
+	char * first=strchr(buf,':');
 	char severity[30];
 	//char severitydescription[300];
 	w32 dwResId=IDS_ERROR_UNKNOWN;
@@ -501,6 +502,7 @@ INT_PTR CALLBACK ErrorDlg(
 )
 {
 	static char stv[2000]; //to load the help information
+
 	switch (uMsg)
 	{
 		case WM_INITDIALOG:
@@ -510,7 +512,7 @@ INT_PTR CALLBACK ErrorDlg(
 				SetWindowText(GetDlgItem(hwndDlg,IDC_ERRORHELP),stv);
 				long size=strlen((LPCSTR)lParam)+500;
 				DWORD dwSeverity=0;
-				char *buf=new char[size];
+				char * buf=new char[size];
 				dwSeverity=FormatErrorMessage((char *)lParam,buf,size);
 				if (dwSeverity)
 				{
@@ -562,11 +564,12 @@ INT_PTR CALLBACK ErrorDlg(
 
 int died=0;
 
-int i4_win32_error(const char *st)
+int i4_win32_error(const char * st)
 {
 
 
 	char stv[1000];
+
 	if (died)
 	{
 		//i4_debug->printf("recursive error : %s", st);
@@ -661,7 +664,7 @@ class g1_debug_output_writer :
 	{
 		i4_kernel.unrequest_events(this,i4_device_class::FLAG_USER_MESSAGE);
 	}
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		CAST_PTR(deev,g1_send_debug_message_class,ev);
 		if (deev->sub_type==G1_DEBUG_SEND_EVENT)
@@ -673,7 +676,7 @@ class g1_debug_output_writer :
 #endif
 		}
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"debug_output_writer");
 	};
@@ -681,7 +684,7 @@ class g1_debug_output_writer :
 
 //#ifdef _WINDOWS
 
-int i4_windows_warning_function(const char *st)
+int i4_windows_warning_function(const char * st)
 {
 	//g1_debug_printf(st);
 	i4_debug->write(st,strlen(st));
@@ -707,7 +710,7 @@ class i4_win32_debug_stream_class :
 	public i4_file_class
 {
 public:
-	virtual w32 read(void *buffer, w32 size)
+	virtual w32 read(void * buffer, w32 size)
 	{
 		return 0;
 	}
@@ -715,8 +718,8 @@ public:
 //  enum {CONST_BUF_SIZE=1024};
 //  char c[CONST_BUF_SIZE];
 	w32 i;
-	char *b;
-	virtual w32 write(const void *buffer, w32 size)
+	char * b;
+	virtual w32 write(const void * buffer, w32 size)
 	{
 //    if (size>=CONST_BUF_SIZE)
 //        {
@@ -744,7 +747,7 @@ public:
 			//fwrite(buffer, 1, size, debug_file);
 			//fflush(debug_file);
 			//_write(debug_file,buffer,size);
-			i4_file_class *fp=i4_open(i4_global_argv[debug_file],I4_APPEND|I4_NO_BUFFER);
+			i4_file_class * fp=i4_open(i4_global_argv[debug_file],I4_APPEND|I4_NO_BUFFER);
 			fp->write(buffer,size);
 			fp->write_str("\r\n");
 			delete fp;
@@ -835,7 +838,7 @@ class tmp_main_str :
 {
 public:
 	tmp_main_str();
-	void set_ptr(char *_ptr)
+	void set_ptr(char * _ptr)
 	{
 		ptr=_ptr;
 		len=strlen(ptr);
@@ -846,12 +849,13 @@ public:
 
 #ifndef _WINDOWS
 //Everything but windows starts here
-int main(int argc, char **argv)
+int main(int argc, char * * argv)
 {
 	long t;
+
 	i4_stack_base=(void *)(&t);
 
-	tmp_main_str *tmp=(tmp_main_str *)malloc(sizeof(tmp_main_str)*(argc+1));
+	tmp_main_str * tmp=(tmp_main_str *)malloc(sizeof(tmp_main_str)*(argc+1));
 	w32 i;
 	for (i=0; i<(w32)argc; i++)
 	{
@@ -883,6 +887,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 {
 	long t=0xBAADFEED;
+
 	i4_stack_base=(void *)(&t);
 
 
@@ -891,7 +896,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	   strcpy(hacked_args,"x:\\jc\\gdata\\obj\\test_text.gmod -no_full");
 	 */
 	w32 count, white;
-	char *s=0,*p=0,*st = strdup(lpCmdLine);
+	char * s=0,* p=0,* st = strdup(lpCmdLine);
 
 	s = st;
 	count = 1;
@@ -917,7 +922,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 	}
 
-	tmp_main_str *tmp=(tmp_main_str *)malloc(sizeof(tmp_main_str)*(count+1));
+	tmp_main_str * tmp=(tmp_main_str *)malloc(sizeof(tmp_main_str)*(count+1));
 
 	s = st;
 	tmp[0].set_ptr("name");

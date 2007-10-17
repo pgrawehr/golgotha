@@ -60,9 +60,10 @@ Load3ds::~Load3ds()
 }
 
 
-void *Load3ds::Create(char *aFilename)
+void * Load3ds::Create(char * aFilename)
 {
 	int lBytesRead = 0;
+
 	mCurrentChunk = new Chunk;
 
 	mFile = fopen(aFilename, "rb");
@@ -104,7 +105,7 @@ int Load3ds::CleanUp()
 }
 
 
-int Load3ds::ProcessNextChunk(Chunk *aPreviousChunk)
+int Load3ds::ProcessNextChunk(Chunk * aPreviousChunk)
 {
 	mCurrentChunk = new Chunk;
 
@@ -166,7 +167,7 @@ int Load3ds::ProcessNextChunk(Chunk *aPreviousChunk)
 }
 
 
-int Load3ds::ProcessNextObjectChunk(Chunk *aPreviousChunk)
+int Load3ds::ProcessNextObjectChunk(Chunk * aPreviousChunk)
 {
 	mCurrentChunk = new Chunk;
 
@@ -215,7 +216,7 @@ int Load3ds::ProcessNextObjectChunk(Chunk *aPreviousChunk)
 }
 
 
-int Load3ds::ProcessNextMaterialChunk(Chunk *aPreviousChunk)
+int Load3ds::ProcessNextMaterialChunk(Chunk * aPreviousChunk)
 {
 	mCurrentChunk = new Chunk;
 
@@ -270,7 +271,7 @@ int Load3ds::ProcessNextMaterialChunk(Chunk *aPreviousChunk)
 }
 
 
-int Load3ds::ProcessNextKeyFrameChunk(Chunk *aPreviousChunk)
+int Load3ds::ProcessNextKeyFrameChunk(Chunk * aPreviousChunk)
 {
 	mCurrentChunk = new Chunk;
 
@@ -318,7 +319,7 @@ int Load3ds::ProcessNextKeyFrameChunk(Chunk *aPreviousChunk)
 }
 
 
-int Load3ds::GetString(char *aBuffer)
+int Load3ds::GetString(char * aBuffer)
 {
 	unsigned int lBytesRead = 0;
 	int index = 0;
@@ -329,11 +330,12 @@ int Load3ds::GetString(char *aBuffer)
 		fread(aBuffer + ++ index, 1, 1, mFile);
 
 
+
 	return strlen(aBuffer) + 1;
 }
 
 
-int Load3ds::ReadChunk(Chunk *aChunk)
+int Load3ds::ReadChunk(Chunk * aChunk)
 {
 	aChunk->mBytesRead = fread(&aChunk->mID, 1, 2, mFile);
 	aChunk->mBytesRead += fread(&aChunk->mLength, 1, 4, mFile);
@@ -342,7 +344,7 @@ int Load3ds::ReadChunk(Chunk *aChunk)
 }
 
 
-int Load3ds::ReadColorChunk(Chunk *aChunk, float *aVector)
+int Load3ds::ReadColorChunk(Chunk * aChunk, float * aVector)
 {
 	ReadChunk(mTempChunk);
 	mTempChunk->mBytesRead += fread(mBuffer, 1, mTempChunk->mLength - mTempChunk->mBytesRead, mFile);
@@ -352,7 +354,7 @@ int Load3ds::ReadColorChunk(Chunk *aChunk, float *aVector)
 }
 
 
-int Load3ds::ReadPercentChunk(Chunk *aChunk, float *aPercent)
+int Load3ds::ReadPercentChunk(Chunk * aChunk, float * aPercent)
 {
 	ReadChunk(mTempChunk);
 	mTempChunk->mBytesRead += fread(mBuffer, 1, mTempChunk->mLength - mTempChunk->mBytesRead, mFile);
@@ -363,9 +365,10 @@ int Load3ds::ReadPercentChunk(Chunk *aChunk, float *aPercent)
 }
 
 
-int Load3ds::FillIndexBuffer(Chunk *aPreviousChunk)
+int Load3ds::FillIndexBuffer(Chunk * aPreviousChunk)
 {
 	short int lNumFaces;
+
 	aPreviousChunk->mBytesRead += fread(&lNumFaces, 1, 2, mFile);
 	aPreviousChunk->mBytesRead += fread(mBuffer, 1, aPreviousChunk->mLength - aPreviousChunk->mBytesRead, mFile);
 	// mBuffer now contains an array of indices (unsigned short ints)
@@ -377,9 +380,10 @@ int Load3ds::FillIndexBuffer(Chunk *aPreviousChunk)
 }
 
 
-int Load3ds::SortIndicesByMaterial(Chunk *aPreviousChunk)
+int Load3ds::SortIndicesByMaterial(Chunk * aPreviousChunk)
 {
 	unsigned short int lNumFaces;
+
 	aPreviousChunk->mBytesRead += GetString((char *) mBuffer);
 	// mBuffer contains the name of the material that is associated
 	//  with the following triangles (set of 3 indices which index into the vertex list
@@ -394,9 +398,10 @@ int Load3ds::SortIndicesByMaterial(Chunk *aPreviousChunk)
 }
 
 
-int Load3ds::FillTexCoordBuffer(Chunk *aPreviousChunk)
+int Load3ds::FillTexCoordBuffer(Chunk * aPreviousChunk)
 {
 	int lNumTexCoords;
+
 	aPreviousChunk->mBytesRead += fread(&lNumTexCoords, 1, 2, mFile);
 	aPreviousChunk->mBytesRead += fread(mBuffer, 1, aPreviousChunk->mLength - aPreviousChunk->mBytesRead, mFile);
 	// mBuffer now contains a list of UV coordinates (2 floats)
@@ -405,9 +410,10 @@ int Load3ds::FillTexCoordBuffer(Chunk *aPreviousChunk)
 }
 
 
-int Load3ds::FillVertexBuffer(Chunk *aPreviousChunk)
+int Load3ds::FillVertexBuffer(Chunk * aPreviousChunk)
 {
 	int lNumVertices;
+
 	aPreviousChunk->mBytesRead += fread(&lNumVertices, 1, 2, mFile);
 	aPreviousChunk->mBytesRead += fread(mBuffer, 1, aPreviousChunk->mLength - aPreviousChunk->mBytesRead, mFile);
 	// mBuffer now contains a list of vertex coordinates (3 floats)

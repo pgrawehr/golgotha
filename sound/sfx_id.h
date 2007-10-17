@@ -29,7 +29,7 @@ class s1_sound_handle;
 // the sound manager will call a callback when a looping 3d sound
 // enters hearing distance and is to be played.  The callback should
 // return it's current velocity.
-typedef void (*s1_3d_sound_callback)(s1_sound_handle *handle,
+typedef void (*s1_3d_sound_callback)(s1_sound_handle * handle,
 									 float &xv, float &yv, float &zv,
 									 float &frequency_scale);
 
@@ -55,10 +55,10 @@ public:
 
 
 	// don't change these directly!
-	s1_sfx_ref *originator;
+	s1_sfx_ref * originator;
 	float dist_sqrd;
-	s1_sound_handle *next;
-	static s1_sound_handle *first;
+	s1_sound_handle * next;
+	static s1_sound_handle * first;
 	sw16 channel_on;
 	i4_bool playing;
 
@@ -70,18 +70,18 @@ public:
 class s1_sfx_ref
 {
 public:
-	static s1_sfx_ref *first;
-	s1_sfx_ref *next;
+	static s1_sfx_ref * first;
+	s1_sfx_ref * next;
 	w8 flags;
 	w16 id;
 	w8 priority;
-	char *name;
-	char *file_defined_in;
+	char * name;
+	char * file_defined_in;
 	int line_defined_on;
-	i4_voice_class *base_sfx;
+	i4_voice_class * base_sfx;
 	float hearable_distance_sqrd;
 
-	s1_sfx_ref(char *filename, w8 flags, w8 priority, float dist, char *file, int line);
+	s1_sfx_ref(char * filename, w8 flags, w8 priority, float dist, char * file, int line);
 	~s1_sfx_ref();
 
 	// for playing static (non-looping/moving) 3d sound
@@ -98,7 +98,7 @@ void s1_unload();
 void s1_get_camera_pos(i4_3d_vector &pos);
 void s1_set_camera_pos(i4_transform_class &new_cam_transform);
 char *s1_get_sfx_path();
-void s1_save_sfx_list(i4_file_class *fp);
+void s1_save_sfx_list(i4_file_class * fp);
 
 
 #define S1_SFX(name, filename, type, priority) \

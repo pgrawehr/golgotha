@@ -18,7 +18,7 @@ class g1_light_mode :
 {
 public:
 	virtual state current_state();
-	g1_light_mode(g1_controller_edit_class *c) :
+	g1_light_mode(g1_controller_edit_class * c) :
 		g1_mode_handler(c)
 	{
 	}
@@ -29,7 +29,7 @@ class g1_light_params :
 	public g1_mode_creator
 {
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"LIGHT");
 	}
@@ -50,15 +50,15 @@ public:
 		DBRIGHTEN_REP,
 	} ;
 
-	void create_buttons(i4_parent_window_class *container);
+	void create_buttons(i4_parent_window_class * container);
 
-	g1_mode_handler *create_mode_handler(g1_controller_edit_class *c)
+	g1_mode_handler *create_mode_handler(g1_controller_edit_class * c)
 	{
 		return new g1_light_mode(c);
 	}
 
 
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 } ;
 
 extern g1_light_params g1_e_light;

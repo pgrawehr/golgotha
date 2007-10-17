@@ -33,19 +33,19 @@ typedef struct _DXFILELOADRESOURCE {
 	HMODULE hModule;
 	LPCTSTR lpName;
 	LPCTSTR lpType;
-} DXFILELOADRESOURCE, *LPDXFILELOADRESOURCE;
+} DXFILELOADRESOURCE, * LPDXFILELOADRESOURCE;
 
 typedef struct _DXFILELOADMEMORY {
 	LPVOID lpMemory;
 	DWORD dSize;
-} DXFILELOADMEMORY, *LPDXFILELOADMEMORY;
+} DXFILELOADMEMORY, * LPDXFILELOADMEMORY;
 
 /*
  * DirectX File object types.
  */
 
 #ifndef WIN_TYPES
-#define WIN_TYPES(itype, ptype) typedef interface itype *LP ## ptype, **LPLP ## ptype
+#define WIN_TYPES(itype, ptype) typedef interface itype * LP ## ptype, * * LPLP ## ptype
 #endif
 
 WIN_TYPES(IDirectXFile,                 DIRECTXFILE);
@@ -60,7 +60,7 @@ WIN_TYPES(IDirectXFileBinary,           DIRECTXFILEBINARY);
  * API for creating IDirectXFile interface.
  */
 
-STDAPI DirectXFileCreate(LPDIRECTXFILE *lplpDirectXFile);
+STDAPI DirectXFileCreate(LPDIRECTXFILE * lplpDirectXFile);
 
 /*
  * The methods for IUnknown
@@ -132,7 +132,7 @@ DECLARE_INTERFACE_(IDirectXFileData, IDirectXFileObject) {
 	IUNKNOWN_METHODS(PURE);
 	IDIRECTXFILEOBJECT_METHODS(PURE);
 
-	STDMETHOD(GetData)          (THIS_ LPCSTR, DWORD *, void **) PURE;
+	STDMETHOD(GetData)          (THIS_ LPCSTR, DWORD *, void * *) PURE;
 	STDMETHOD(GetType)          (THIS_ const GUID **) PURE;
 	STDMETHOD(GetNextObject)    (THIS_ LPDIRECTXFILEOBJECT *) PURE;
 	STDMETHOD(AddDataObject)    (THIS_ LPDIRECTXFILEDATA) PURE;

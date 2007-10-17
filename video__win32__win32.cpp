@@ -92,8 +92,8 @@ class win32_display_class :
 public:
 	gdi_input input;
 
-	i4_draw_context_class *context;
-	i4_image_class *backbuf;
+	i4_draw_context_class * context;
+	i4_image_class * backbuf;
 	HBITMAP bitmap;
 
 	i4_image_class *get_screen()
@@ -105,7 +105,7 @@ public:
 		return context;
 	}
 
-	virtual i4_image_class *create_image(int w, int h, i4_bool in_vram, const i4_pal *pal)
+	virtual i4_image_class *create_image(int w, int h, i4_bool in_vram, const i4_pal * pal)
 	{
 		return i4_create_image(w,h,pal);
 	}
@@ -115,6 +115,7 @@ public:
 	{
 		//PAINTSTRUCT paint_s;
 		HDC dc;
+
 		dc=GetDC(input.get_window_handle());
 
 
@@ -247,7 +248,7 @@ public:
 		BITMAPINFO bmp_info;
 		memcpy(&bmp_info, &bmp, sizeof(bmp));
 
-		void *data_address;
+		void * data_address;
 
 		bitmap=CreateDIBSection(dc,
 								&bmp_info, DIB_RGB_COLORS,
@@ -335,7 +336,7 @@ public:
 
 
 
-	virtual i4_bool set_mouse_shape(i4_cursor_class *cursor)
+	virtual i4_bool set_mouse_shape(i4_cursor_class * cursor)
 	{
 		return i4_F;
 	}
@@ -354,7 +355,8 @@ public:
 
 	void init()
 	{
-		i4_display_list_struct *s=new i4_display_list_struct;
+		i4_display_list_struct * s=new i4_display_list_struct;
+
 		//the second parameter must not set the highest bit
 		//Clearly, this here is software rendering and
 		//very slow.
@@ -384,7 +386,7 @@ public:
 };
 
 win32_display_class win32_display_instance;
-win32_display_class *win32_display_ptr=0;
+win32_display_class * win32_display_ptr=0;
 
 
 void gdi_input::redraw(int x1, int y1, int x2, int y2)
@@ -400,7 +402,7 @@ void gdi_input::resize(sw32 w, sw32 h)
 	if (win32_display_instance.backbuf)
 	{
 		w=(w+3)&(~3);
-		win32_display_class *wi=&win32_display_instance;
+		win32_display_class * wi=&win32_display_instance;
 		DeleteObject(wi->bitmap);
 		wi->create_bmp(w,h);
 	}

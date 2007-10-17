@@ -22,16 +22,16 @@ class i4_list_pull_down_class;
 class i4_list_box_class :
 	public i4_menu_class
 {
-	i4_button_class *down;
+	i4_button_class * down;
 	i4_array<i4_menu_item_class *> entries;
-	i4_menu_item_class *top;
-	i4_list_pull_down_class *pull_down;
-	i4_graphical_style_class *style;
+	i4_menu_item_class * top;
+	i4_list_pull_down_class * pull_down;
+	i4_graphical_style_class * style;
 	int current;
-	i4_parent_window_class *root_window;
+	i4_parent_window_class * root_window;
 	w32 l,r,t,b;
-	i4_event_reaction_class *reaction;
-	void set_top(i4_menu_item_class *item);
+	i4_event_reaction_class * reaction;
+	void set_top(i4_menu_item_class * item);
 
 public:
 	int get_current()
@@ -43,24 +43,24 @@ public:
 		return entries[current];
 	}
 	i4_list_box_class(w16 width,                             // height is determined by first item
-					  i4_graphical_style_class *style,       // uses normal font if none specified
-					  i4_parent_window_class *root_window,
-					  i4_event_reaction_class *react=0);
+					  i4_graphical_style_class * style,       // uses normal font if none specified
+					  i4_parent_window_class * root_window,
+					  i4_event_reaction_class * react=0);
 	~i4_list_box_class();
 
-	void add_item(i4_menu_item_class *item);
+	void add_item(i4_menu_item_class * item);
 	void set_current_item(int entry_num);
 
-	void show(i4_parent_window_class *show_on, i4_coord x, i4_coord y);
+	void show(i4_parent_window_class * show_on, i4_coord x, i4_coord y);
 	void hide();
-	void receive_event(i4_event *ev);
-	void note_reaction_sent(i4_menu_item_class *who,     // this is who sent it
-							i4_event_reaction_class *ev, // who it was to
+	void receive_event(i4_event * ev);
+	void note_reaction_sent(i4_menu_item_class * who,     // this is who sent it
+							i4_event_reaction_class * ev, // who it was to
 							i4_menu_item_class::reaction_type type);
 
 	void parent_draw(i4_draw_context_class &context);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"list_box");
 	}

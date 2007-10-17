@@ -14,8 +14,8 @@ class i4_parent_window_class;
 class g1_object_class;
 class i4_graphical_style_class;
 
-i4_parent_window_class *g1_create_bulb_edit(i4_graphical_style_class *style,
-											g1_object_class *def);
+i4_parent_window_class *g1_create_bulb_edit(i4_graphical_style_class * style,
+											g1_object_class * def);
 
 
 #endif

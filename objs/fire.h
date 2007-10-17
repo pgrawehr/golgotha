@@ -15,11 +15,11 @@
 class g1_object_class;      // golg/g1_object.hh
 class li_symbol;            // lisp/li_types.hh
 
-g1_object_class *g1_fire(li_symbol *fire_type,
-						 g1_object_class *who_is_firing,
-						 g1_object_class *who_firing_at,
+g1_object_class *g1_fire(li_symbol * fire_type,
+						 g1_object_class * who_is_firing,
+						 g1_object_class * who_firing_at,
 						 const i4_3d_vector &starting_position,
 						 const i4_3d_vector &initial_direction_of_projectile,
-						 g1_object_class *last_object_fired=0);  // for continous stream type
+						 g1_object_class * last_object_fired=0);  // for continous stream type
 
 #endif

@@ -23,7 +23,7 @@ static i4_event_handler_reference_class<i4_parent_window_class> g1_stat_win;
 const int g1_statistics_counter_class::perframe[LAST] = {
 	1, 1, 1, 1, 1, 1, 1, 0, 0
 };
-const char *g1_statistics_counter_class::strs[LAST]=
+const char * g1_statistics_counter_class::strs[LAST]=
 {
 	"Polys",
 	"Object polys",
@@ -39,7 +39,7 @@ const char *g1_statistics_counter_class::strs[LAST]=
 const int g1_statistics_counter_class::max_perframe[LAST]={
 	1,1,1,1,1,1,1,0,0
 };
-const char *g1_statistics_counter_class::max_strs[LAST]=
+const char * g1_statistics_counter_class::max_strs[LAST]=
 {
 	"Drawn Quads",
 	"Object total quads",
@@ -57,7 +57,7 @@ class g1_stat_win_class :
 	public i4_window_class
 {
 	int t_strings;
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	i4_time_device_class::id poll_id;
 
 public:
@@ -65,14 +65,15 @@ public:
 	{
 		return 50;
 	}
-	g1_stat_win_class(i4_graphical_style_class *style)
+	g1_stat_win_class(i4_graphical_style_class * style)
 		: i4_window_class(0,0),
 		  style(style)
 
 	{
 		int min_w=0, min_h=0;
+
 		t_strings=0;
-		i4_font_class *fnt=style->font_hint->small_font;
+		i4_font_class * fnt=style->font_hint->small_font;
 
 		min_w=fnt->width("Object polygons");
 		min_h=fnt->largest_height() * g1_statistics_counter_class::LAST;
@@ -86,18 +87,19 @@ public:
 		poll_id=i4_time_dev.request_event(this, &poll, 2000); // update once every 2 secs
 	}
 
-	void draw_float(int x, int y, float v, i4_font_class *fnt, i4_draw_context_class &context)
+	void draw_float(int x, int y, float v, i4_font_class * fnt, i4_draw_context_class &context)
 	{
 		char buf[30];
 		int ipart, fpart;
+
 		ipart=(int)v;
 		fpart=(int)(v * 10) - ipart*10;
 
 		sprintf(buf, "%d.%d", ipart, fpart);
 
-		for (char *c=buf; *c; c++)
+		for (char * c=buf; *c; c++)
 		{
-			i4_char ch(*c);
+			i4_char ch(* c);
 			fnt->put_character(local_image, x,y, ch, context);
 			x+=fnt->width(ch);
 		}
@@ -109,7 +111,7 @@ public:
 
 		//if (g1_stat_counter.t_frames)
 		//{
-		i4_font_class *fnt=style->font_hint->small_font;
+		i4_font_class * fnt=style->font_hint->small_font;
 		fnt->set_color(0xffff00);
 
 		float oo_tframes = 1.0f/(float)g1_stat_counter.t_frames;
@@ -167,7 +169,7 @@ public:
 
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::USER_MESSAGE) // update statics
 		{
@@ -182,7 +184,7 @@ public:
 		i4_time_dev.cancel_event(poll_id);
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"stat_win");
 	}
@@ -192,8 +194,8 @@ void g1_statistics_counter_class::show()
 {
 	if (!g1_stat_win.get())
 	{
-		i4_graphical_style_class *style=i4_current_app->get_style();
-		i4_window_class *swin = new g1_stat_win_class(style);
+		i4_graphical_style_class * style=i4_current_app->get_style();
+		i4_window_class * swin = new g1_stat_win_class(style);
 
 		int wpos=i4_current_app->get_root_window()->width() - swin->width()-20;
 		g1_stat_win = style->create_mp_window(wpos, 20, swin->width(), swin->height(),

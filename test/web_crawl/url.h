@@ -24,15 +24,15 @@ enum fb_url_type {
 struct fb_url
 {
 
-	char *full_name;
-	i4_net_socket *connect_to_server(i4_net_protocol *prot);
+	char * full_name;
+	i4_net_socket *connect_to_server(i4_net_protocol * prot);
 
 	w32 checksum()
 	{
 		return i4_check_sum32(full_name, strlen(full_name));
 	}
 
-	fb_url(char *name, fb_url *server_from=0);
+	fb_url(char * name, fb_url *server_from=0);
 
 	~fb_url() {
 		if (full_name)
@@ -45,14 +45,14 @@ struct fb_url
 	char *get_filename();
 };
 
-void fb_split_url(char *url,
+void fb_split_url(char * url,
 				  fb_url_type &type,
-				  char *server,
+				  char * server,
 				  int &port,
-				  char *page);
+				  char * page);
 
 // compares (not case sensitive) the first t bytes of 2 string and return 1 if they
 // are equal, and 0 if the are not equal
-int fb_strneq(char *n1, char *n2, int t);
+int fb_strneq(char * n1, char * n2, int t);
 
 #endif

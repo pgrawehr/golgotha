@@ -19,12 +19,12 @@ protected:
 		DATA_VERSION=1
 	};
 
-	g1_mini_object *wheels;
+	g1_mini_object * wheels;
 public:
-	g1_trike_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	virtual void load(g1_loader_class *fp);
-	virtual void skipload(g1_loader_class *fp);
+	g1_trike_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	virtual void load(g1_loader_class * fp);
+	virtual void skipload(g1_loader_class * fp);
 
 	virtual void think();
 };

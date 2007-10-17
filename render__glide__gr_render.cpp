@@ -52,7 +52,7 @@ static i4_profile_class pf_vram_select_texture("glide select texture");
 static i4_profile_class pf_setup_vert("glide setup vert");
 
 
-typedef i4_bool (*gr_copy_vert_function_type)(GrVertex *dst, r1_vert *src, int t_verts);
+typedef i4_bool (*gr_copy_vert_function_type)(GrVertex * dst, r1_vert * src, int t_verts);
 gr_copy_vert_function_type gr_copy_vert_function=0;
 
 w32 gr_old_flags;
@@ -84,7 +84,7 @@ inline void grestore_flags(w32 old_value) // returns old flags
 	}
 }
 
-inline void gsnap_vert(GrVertex *dst)
+inline void gsnap_vert(GrVertex * dst)
 {
 	dst->x += gr_static_info.VTX_SNAP_1;
 	dst->x -= gr_static_info.VTX_SNAP_1;
@@ -105,7 +105,7 @@ inline void grestore_flags(w32 old)
 }
 
 
-inline void gsnap_vert(GrVertex *dst)
+inline void gsnap_vert(GrVertex * dst)
 {
 	dst->x = float (int (dst->x * 16.0))/16.;
 	dst->y = float (int (dst->y * 16.0))/16.;
@@ -116,13 +116,13 @@ inline void gsnap_vert(GrVertex *dst)
 
 #if 1
 
-inline i4_bool gr_check_vert(GrVertex *dst)
+inline i4_bool gr_check_vert(GrVertex * dst)
 {
 	return i4_T;
 }
 
 #else
-inline i4_bool gr_check_vert(GrVertex *dst)
+inline i4_bool gr_check_vert(GrVertex * dst)
 {
 	if (dst->x<gr_xoff || dst->y<gr_yoff || dst->x>gr_x2 || dst->y>gr_y2)
 	{
@@ -135,9 +135,9 @@ inline i4_bool gr_check_vert(GrVertex *dst)
 }
 #endif
 
-i4_bool gr_copy_all_amd3d(GrVertex *dst, r1_vert *src, int t_verts);
+i4_bool gr_copy_all_amd3d(GrVertex * dst, r1_vert * src, int t_verts);
 
-i4_bool gr_copy_all(GrVertex *dst, r1_vert *src, int t_verts)
+i4_bool gr_copy_all(GrVertex * dst, r1_vert * src, int t_verts)
 {
 	while (t_verts--)
 	{
@@ -174,7 +174,7 @@ i4_bool gr_copy_all(GrVertex *dst, r1_vert *src, int t_verts)
 
 
 // this is used if R1_ALPHA_DISABLED & R1_WHITE_SHADING
-i4_bool gr_copy_white_shade(GrVertex *dst, r1_vert *src, int t_verts)
+i4_bool gr_copy_white_shade(GrVertex * dst, r1_vert * src, int t_verts)
 {
 	while (t_verts--)
 	{
@@ -211,7 +211,7 @@ i4_bool gr_copy_white_shade(GrVertex *dst, r1_vert *src, int t_verts)
 	return i4_T;
 }
 
-i4_bool gr_copy_fullbright_shade(GrVertex *dst, r1_vert *src, int t_verts)
+i4_bool gr_copy_fullbright_shade(GrVertex * dst, r1_vert * src, int t_verts)
 {
 	while (t_verts--)
 	{
@@ -247,7 +247,7 @@ i4_bool gr_copy_fullbright_shade(GrVertex *dst, r1_vert *src, int t_verts)
 
 
 
-i4_bool gr_copy_no_shade(GrVertex *dst, r1_vert *src, int t_verts)
+i4_bool gr_copy_no_shade(GrVertex * dst, r1_vert * src, int t_verts)
 {
 	while (t_verts--)
 	{
@@ -287,13 +287,13 @@ class r1_glide_render_window_class :
 	public r1_render_window_class
 {
 public:
-	r1_glide_render_window_class *next_rw;
+	r1_glide_render_window_class * next_rw;
 
 	i4_bool need_flip_update;
 
 	r1_glide_render_window_class(w16 w, w16 h,
 								 r1_expand_type expand_type,
-								 r1_render_api_class *api);
+								 r1_render_api_class * api);
 
 	~r1_glide_render_window_class();
 
@@ -321,12 +321,12 @@ public:
 };
 
 
-r1_glide_render_window_class *r1_render_window_list=0;
+r1_glide_render_window_class * r1_render_window_list=0;
 
 
 r1_glide_render_window_class::r1_glide_render_window_class(w16 w, w16 h,
 														   r1_expand_type expand_type,
-														   r1_render_api_class *api)
+														   r1_render_api_class * api)
 	: r1_render_window_class(w,h, expand_type, api)
 {
 	need_flip_update=i4_T;
@@ -342,8 +342,8 @@ r1_glide_render_window_class::~r1_glide_render_window_class()
 	}
 	else
 	{
-		r1_glide_render_window_class *last=0;
-		for (r1_glide_render_window_class *p=r1_render_window_list; p && p!=this;)
+		r1_glide_render_window_class * last=0;
+		for (r1_glide_render_window_class * p=r1_render_window_list; p && p!=this;)
 		{
 			last=p;
 			p=p->next_rw;
@@ -356,7 +356,7 @@ r1_glide_render_window_class::~r1_glide_render_window_class()
 class r1_glide_render_class :
 	public r1_render_api_class
 {
-	static i4_display_class *display;
+	static i4_display_class * display;
 
 	r1_write_mask_type pre_holy_write_mask;
 	r1_alpha_type pre_holy_alpha_mode;
@@ -366,7 +366,7 @@ class r1_glide_render_class :
 	i4_bool holy_mode_lock;
 
 public:
-	r1_glide_render_class *next_rw;
+	r1_glide_render_class * next_rw;
 
 	enum {
 		MAX_VERTS=32
@@ -376,14 +376,14 @@ public:
 		return "glide";
 	}
 
-	virtual void copy_part(i4_image_class *im,
+	virtual void copy_part(i4_image_class * im,
 						   int x, int y,           // position on screen
 						   int x1, int y1,         // area of image to copy
 						   int x2, int y2)
 	{
 		if (i4_glide_display)
 		{
-			i4_image_class *bbuf;
+			i4_image_class * bbuf;
 			bbuf=i4_glide_display->lock_frame_buffer(I4_BACK_FRAME_BUFFER, I4_FRAME_BUFFER_WRITE);
 			if (bbuf)
 			{
@@ -588,7 +588,7 @@ public:
 	 *
 	 * \param _display The display we are using
 	 */
-	virtual i4_bool init(i4_display_class *_display)
+	virtual i4_bool init(i4_display_class * _display)
 	{
 		//GetProcAddresses();
 		if (_display==i4_glide_display)
@@ -645,7 +645,7 @@ public:
 
 		sw32 width,height;
 
-		r1_miplevel_t *mip = tmanager->get_texture(material_ref, frame, desired_width, width, height);
+		r1_miplevel_t * mip = tmanager->get_texture(material_ref, frame, desired_width, width, height);
 
 		// don't select the texture again if it's the same one we used last time
 		if (mip)
@@ -837,7 +837,7 @@ public:
 	   }
 	 */
 
-	virtual void render_poly(int t_verts, r1_vert *verts)
+	virtual void render_poly(int t_verts, r1_vert * verts)
 	{
 		pf_setup_vert.start();
 
@@ -854,18 +854,20 @@ public:
 		pf_glide_single_poly.stop();
 	}
 
-	virtual void render_pixel(r1_vert *pixel)
+	virtual void render_pixel(r1_vert * pixel)
 	{
 		GrVertex p;
+
 		if (gr_copy_vert_function(&p, pixel, 1))
 		{
 			grDrawPoint(&p);
 		}
 	}
 
-	virtual void render_lines(int t_lines, r1_vert *verts)
+	virtual void render_lines(int t_lines, r1_vert * verts)
 	{
 		GrVertex g_vert_buf[MAX_VERTS];
+
 		if (gr_copy_vert_function(g_vert_buf, verts, t_lines+1))
 		{
 			for (int i=0; i<t_lines; i++)
@@ -894,6 +896,7 @@ public:
 	void clear_area(int x1, int y1, int x2, int y2, w32 color, float z)
 	{
 		w32 old_const_color=get_constant_color();
+
 		set_constant_color(color);
 
 		r1_shading_type old_shade_mode=get_shade_mode();
@@ -954,7 +957,7 @@ public:
 
 r1_glide_render_class r1_glide_render;
 
-i4_display_class *r1_glide_render_class::display=0;
+i4_display_class * r1_glide_render_class::display=0;
 
 
 
@@ -995,7 +998,7 @@ void r1_glide_render_window_class::draw(i4_draw_context_class &_context)
 	//if (r1_glide_render.get_tmanager()->texture_resolution_change())
 	if (r1_glide_render.get_tmanager()->texture_resolution_change())
 	{
-		for (r1_glide_render_window_class *w=r1_render_window_list; w; w=w->next_rw)
+		for (r1_glide_render_window_class * w=r1_render_window_list; w; w=w->next_rw)
 		{
 			w->request_redraw(i4_F);
 		}
@@ -1008,7 +1011,7 @@ void r1_glide_render_window_class::draw(i4_draw_context_class &_context)
 w32 r1vtxsize = sizeof(r1_vert);
 w32 grvtxsize = sizeof(GrVertex);
 
-i4_bool gr_copy_all_amd3d(GrVertex *dst, r1_vert *src, int t_verts)
+i4_bool gr_copy_all_amd3d(GrVertex * dst, r1_vert * src, int t_verts)
 {
 	_asm
 	{
@@ -1112,7 +1115,7 @@ looper:
 
 #else
 
-i4_bool gr_copy_all_amd3d(GrVertex *dst, r1_vert *src, int t_verts)
+i4_bool gr_copy_all_amd3d(GrVertex * dst, r1_vert * src, int t_verts)
 {
 }
 #endif

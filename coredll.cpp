@@ -32,11 +32,11 @@ CoreExport BOOL AcceleratorsEnabled()
 	return true;
 };
 
-CoreExport void TempStore::PutBytes(int n, void *data, void *ptr)
+CoreExport void TempStore::PutBytes(int n, void * data, void * ptr)
 {
 };
 
-CoreExport void TempStore::GetBytes(int n, void *data, void *ptr)
+CoreExport void TempStore::GetBytes(int n, void * data, void * ptr)
 {
 };
 

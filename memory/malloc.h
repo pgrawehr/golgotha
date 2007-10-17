@@ -17,8 +17,8 @@
 #endif
 
 
-void *i4_malloc(w32 size, char *file, int line);
-void *i4_realloc(void *old_memory, w32 new_size, char *file, int line);
+void *i4_malloc(w32 size, char * file, int line);
+void *i4_realloc(void * old_memory, w32 new_size, char * file, int line);
 
 // if new checking, all news are logged by file and line number
 // these logs can be obtained by calling i4_mem_report
@@ -43,25 +43,25 @@ void *i4_realloc(void *old_memory, w32 new_size, char *file, int line);
 void i4_set_max_memory_used(int bytes);
 void i4_set_min_memory_required(int bytes);
 
-void i4_free(void *ptr);
+void i4_free(void * ptr);
 
 inline void *i4_malloc(w32 size)
 {
 	return i4_malloc(size,0,0);
 }
 
-inline void *i4_realloc(void *ptr,w32 size)
+inline void *i4_realloc(void * ptr,w32 size)
 {
 	return i4_realloc(ptr,size,0,0);
 }
 
-void i4_mem_report(char *filename);
+void i4_mem_report(char * filename);
 long i4_allocated();
 long i4_available();
 long i4_largest_free_block();
 
 // for debugging purposes only...
-int valid_ptr(void *ptr);        // returns 1 if is an address returned by i4_malloc
-int valid_memory(void *ptr);     // returns 1 if address is in memory space managed by i4
+int valid_ptr(void * ptr);        // returns 1 if is an address returned by i4_malloc
+int valid_memory(void * ptr);     // returns 1 if address is in memory space managed by i4
 #include "memory/new.h"
 #endif

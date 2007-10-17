@@ -21,7 +21,7 @@ class COptionInfo :
 public:
 	COptionInfo();
 	~COptionInfo();
-	CProcessor *cpu;
+	CProcessor * cpu;
 // Dialogfelddaten
 	//{{AFX_DATA(COptionInfo)
 	enum {
@@ -35,7 +35,7 @@ public:
 	// Der Klassen-Assistent generiert virtuelle Funktionsüberschreibungen
 	//{{AFX_VIRTUAL(COptionInfo)
 protected:
-	virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV-Unterstützung
+	virtual void DoDataExchange(CDataExchange * pDX);    // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
 
 // Implementierung

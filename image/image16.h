@@ -25,23 +25,23 @@ public:
 		return (w16 *)data;
 	}
 
-	i4_image16(w16 w, w16 h, const i4_pal *pal);
-	i4_image16(w16 w, w16 h, const i4_pal *pal, void *data, int bpl);
+	i4_image16(w16 w, w16 h, const i4_pal * pal);
+	i4_image16(w16 w, w16 h, const i4_pal * pal, void * data, int bpl);
 
 	i4_color get_pixel(i4_coord x, i4_coord y);
 	void put_pixel(i4_coord x, i4_coord y, w32 color);
 
-	void put_part_one_pixel_at_a_time(i4_image_class *to,
+	void put_part_one_pixel_at_a_time(i4_image_class * to,
 									  i4_coord _x,  i4_coord _y,
 									  i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 									  i4_draw_context_class &context);
 
-	void put_part(i4_image_class *to,
+	void put_part(i4_image_class * to,
 				  i4_coord _x,  i4_coord _y,
 				  i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 				  i4_draw_context_class &context);
 
-	void put_part_trans(i4_image_class *to,
+	void put_part_trans(i4_image_class * to,
 						i4_coord _x,  i4_coord _y,
 						i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 						i4_color trans_color,

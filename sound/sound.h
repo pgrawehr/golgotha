@@ -39,8 +39,8 @@ public:
 					  void *&block1, w32 &block1_size,
 					  void *&block2, w32 &block2_size) = 0;
 
-	virtual void unlock(void *block1, w32 block1_size,
-						void *block2, w32 block2_size) = 0;
+	virtual void unlock(void * block1, w32 block1_size,
+						void * block2, w32 block2_size) = 0;
 
 	virtual w32 get_sound_position() = 0; // current play position in bytes
 	virtual void set_sound_position(w32 pos) = 0;
@@ -59,7 +59,7 @@ public:
 };
 
 class i4_sound_manager_class;
-extern i4_sound_manager_class *i4_sound_man;
+extern i4_sound_manager_class * i4_sound_man;
 extern i4_sound_manager_class i4_null_sound;
 
 class i4_sound_manager_class :
@@ -95,11 +95,11 @@ public:
 	// if you want to play a sound twice (mix with self) you have to duplicate it
 	// and play the duplicate and the oruginal,  the duplicate will not duplicate the
 	// actual data in the sound buffer, but rather the position, frequency, etc.
-	virtual i4_voice_class *duplicate_2d(i4_voice_class *voice)
+	virtual i4_voice_class *duplicate_2d(i4_voice_class * voice)
 	{
 		return 0;
 	}
-	virtual i4_voice_class *duplicate_3d(i4_voice_class *voice)
+	virtual i4_voice_class *duplicate_3d(i4_voice_class * voice)
 	{
 		return 0;
 	}
@@ -125,7 +125,7 @@ public:
 	{
 	}
 
-	virtual void free_voice(i4_voice_class *voice)
+	virtual void free_voice(i4_voice_class * voice)
 	{
 		delete voice;
 	}

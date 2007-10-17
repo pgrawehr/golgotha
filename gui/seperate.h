@@ -15,10 +15,10 @@ class i4_seperator_line_class :
 	public i4_menu_item_class
 {
 	w16 lr,ud;
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	i4_color bg;
 public:
-	i4_seperator_line_class(i4_graphical_style_class *style,
+	i4_seperator_line_class(i4_graphical_style_class * style,
 							i4_color background,
 							w16 left_right_space,
 							w16 up_down_space)
@@ -29,11 +29,12 @@ public:
 		  bg(background)
 	{
 		w32 l,r,t,b;
+
 		style->get_in_deco_size(l,t,r,b);
 		resize(lr*2, (w16)(t+b+ud*2));
 	}
 
-	void reparent(i4_image_class *draw_area, i4_parent_window_class *parent)
+	void reparent(i4_image_class * draw_area, i4_parent_window_class * parent)
 	{
 		i4_menu_item_class::reparent(draw_area, parent);
 		if (parent && draw_area)
@@ -57,7 +58,7 @@ public:
 		return new i4_seperator_line_class(style, bg, lr, ud);
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"seperator_line");
 	}

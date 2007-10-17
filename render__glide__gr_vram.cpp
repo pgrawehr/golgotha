@@ -13,12 +13,12 @@
 #include "time/profile.h"
 #include "render/r1_res.h"
 
-r1_glide_vram_class *r1_glide_vram_class_instance=0;
+r1_glide_vram_class * r1_glide_vram_class_instance=0;
 
 i4_profile_class pf_glide_install_vram("glide install vram texture");
 i4_profile_class pf_glide_free_vram("glide free vram texture");
 
-r1_glide_vram_class::r1_glide_vram_class(const i4_pal *pal)
+r1_glide_vram_class::r1_glide_vram_class(const i4_pal * pal)
 
 	: r1_texture_manager_class(pal),
 	  finished_array(16,16)
@@ -119,7 +119,7 @@ void r1_glide_vram_class::uninit()
 	r1_texture_manager_class::uninit();
 }
 
-i4_bool r1_glide_vram_class::immediate_mip_load(r1_mip_load_info *load_info)
+i4_bool r1_glide_vram_class::immediate_mip_load(r1_mip_load_info * load_info)
 {
 	if (textures_loaded > 0)
 	{
@@ -131,7 +131,7 @@ i4_bool r1_glide_vram_class::immediate_mip_load(r1_mip_load_info *load_info)
 	}
 	pf_glide_install_vram.start();
 
-	r1_miplevel_t *mip = load_info->dest_mip;
+	r1_miplevel_t * mip = load_info->dest_mip;
 
 	sw32 actual_w,actual_h;
 
@@ -150,7 +150,7 @@ i4_bool r1_glide_vram_class::immediate_mip_load(r1_mip_load_info *load_info)
 
 	w32 need_size = ((actual_w * actual_h * 2) + 7) & (~7); // sizes must be 8 byte alligned
 
-	used_node *new_used = (used_node *)tex_heap_man->alloc(need_size);
+	used_node * new_used = (used_node *)tex_heap_man->alloc(need_size);
 	if (!new_used && tex_heap_man_2)
 	{
 		new_used = (used_node *)tex_heap_man_2->alloc(need_size);
@@ -163,7 +163,7 @@ i4_bool r1_glide_vram_class::immediate_mip_load(r1_mip_load_info *load_info)
 		return i4_F;
 	}
 
-	free_node *f = (free_node *)new_used->node;
+	free_node * f = (free_node *)new_used->node;
 
 	//f is the node we'll use
 
@@ -174,8 +174,8 @@ i4_bool r1_glide_vram_class::immediate_mip_load(r1_mip_load_info *load_info)
 	else
 	{
 
-		i4_str *fn = r1_texture_id_to_filename(mip->entry->id, r1_get_decompressed_dir());
-		i4_file_class *fp = i4_open(*fn);
+		i4_str * fn = r1_texture_id_to_filename(mip->entry->id, r1_get_decompressed_dir());
+		i4_file_class * fp = i4_open(*fn);
 		delete fn;
 
 		fp->seek(mip->entry->file_offsets[mip->level]+8);
@@ -238,10 +238,10 @@ i4_bool r1_glide_vram_class::immediate_mip_load(r1_mip_load_info *load_info)
 
 //typedef void (*async_callback)(w32 count, void *context);
 
-void glide_async_callback(w32 count, void *context)
+void glide_async_callback(w32 count, void * context)
 {
-	r1_glide_vram_class::used_node *u = (r1_glide_vram_class::used_node *)context;
-	r1_glide_vram_class::free_node *f = (r1_glide_vram_class::free_node *)u->node;
+	r1_glide_vram_class::used_node * u = (r1_glide_vram_class::used_node *)context;
+	r1_glide_vram_class::free_node * f = (r1_glide_vram_class::free_node *)u->node;
 
 	if (f->async_fp)
 	{
@@ -253,7 +253,7 @@ void glide_async_callback(w32 count, void *context)
 	r1_glide_vram_class_instance->async_load_finished(u);
 }
 
-void r1_glide_vram_class::async_load_finished(used_node *u)
+void r1_glide_vram_class::async_load_finished(used_node * u)
 {
 	array_lock.lock();
 
@@ -262,7 +262,7 @@ void r1_glide_vram_class::async_load_finished(used_node *u)
 	array_lock.unlock();
 }
 
-i4_bool r1_glide_vram_class::async_mip_load(r1_mip_load_info *load_info)
+i4_bool r1_glide_vram_class::async_mip_load(r1_mip_load_info * load_info)
 {
 	//return immediate_mip_load(load_info);
 
@@ -277,7 +277,7 @@ i4_bool r1_glide_vram_class::async_mip_load(r1_mip_load_info *load_info)
 
 	pf_glide_install_vram.start();
 
-	r1_miplevel_t *mip = load_info->dest_mip;
+	r1_miplevel_t * mip = load_info->dest_mip;
 
 	sw32 actual_w,actual_h;
 
@@ -296,7 +296,7 @@ i4_bool r1_glide_vram_class::async_mip_load(r1_mip_load_info *load_info)
 
 	w32 need_size = ((actual_w * actual_h * 2) + 7) & (~7); // sizes must be 8 byte alligned
 
-	used_node *new_used = (used_node *)tex_heap_man->alloc(need_size,R1_TEX_HEAP_DONT_LIST);
+	used_node * new_used = (used_node *)tex_heap_man->alloc(need_size,R1_TEX_HEAP_DONT_LIST);
 	if (!new_used && tex_heap_man_2)
 	{
 		new_used = (used_node *)tex_heap_man_2->alloc(need_size,R1_TEX_HEAP_DONT_LIST);
@@ -310,7 +310,7 @@ i4_bool r1_glide_vram_class::async_mip_load(r1_mip_load_info *load_info)
 	}
 
 	//f is the node we'll use
-	free_node *f = (free_node *)new_used->node;
+	free_node * f = (free_node *)new_used->node;
 
 	//fill these data fields w/the appropriate data
 	f->mip      = mip;
@@ -345,9 +345,9 @@ i4_bool r1_glide_vram_class::async_mip_load(r1_mip_load_info *load_info)
 	}
 	else
 	{
-		i4_str *fn = r1_texture_id_to_filename(mip->entry->id, r1_get_decompressed_dir());
+		i4_str * fn = r1_texture_id_to_filename(mip->entry->id, r1_get_decompressed_dir());
 
-		i4_file_class *fp = i4_open(*fn,I4_READ | I4_NO_BUFFER | I4_SUPPORT_ASYNC);
+		i4_file_class * fp = i4_open(*fn,I4_READ | I4_NO_BUFFER | I4_SUPPORT_ASYNC);
 
 		delete fn;
 
@@ -411,8 +411,8 @@ void r1_glide_vram_class::next_frame()
 
 	for (i=0; i<finished_array.size(); i++)
 	{
-		used_node *u = finished_array[i];
-		free_node *f = (free_node *)u->node;
+		used_node * u = finished_array[i];
+		free_node * f = (free_node *)u->node;
 
 		//this officially puts it in vram
 		f->mip->vram_handle      = u;
@@ -476,7 +476,7 @@ void r1_glide_vram_class::next_frame()
 void r1_glide_vram_class::free_mip(r1_vram_handle_type vram_handle)
 {
 	pf_glide_free_vram.start();
-	r1_tex_heap_used_node *n=(r1_tex_heap_used_node *)vram_handle;
+	r1_tex_heap_used_node * n=(r1_tex_heap_used_node *)vram_handle;
 
 	if (n->node->start>=heap2_address)
 	{
@@ -494,7 +494,7 @@ void r1_glide_vram_class::select_texture(r1_vram_handle_type handle,
 										 float &smul, float &tmul,
 										 i4_bool holy, i4_bool alpha)
 {
-	free_node *n = (free_node *)((used_node *)handle)->node;
+	free_node * n = (free_node *)((used_node *)handle)->node;
 
 	GrTexInfo tex_source_info;
 
@@ -525,16 +525,16 @@ void r1_glide_vram_class::select_texture(r1_vram_handle_type handle,
 				&tex_source_info);
 }
 
-r1_miplevel_t *r1_glide_vram_class::get_texture(r1_texture_handle handle,
-												w32 frame_counter,
-												sw32 desired_width,
-												sw32 &w, sw32 &h)
+r1_miplevel_t * r1_glide_vram_class::get_texture(r1_texture_handle handle,
+												 w32 frame_counter,
+												 sw32 desired_width,
+												 sw32 &w, sw32 &h)
 {
-	r1_miplevel_t *mip = r1_texture_manager_class::get_texture(handle,frame_counter,desired_width,w,h);
+	r1_miplevel_t * mip = r1_texture_manager_class::get_texture(handle,frame_counter,desired_width,w,h);
 
 	if (mip)
 	{
-		r1_tex_heap_used_node *u = (r1_tex_heap_used_node *)mip->vram_handle;
+		r1_tex_heap_used_node * u = (r1_tex_heap_used_node *)mip->vram_handle;
 
 		if (u)
 		{

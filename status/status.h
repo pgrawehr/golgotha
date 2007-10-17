@@ -32,15 +32,15 @@ enum {
 i4_status_class *i4_create_status(const i4_const_str &description, int flags=0);
 
 
-typedef i4_status_class *(*i4_status_create_function_type)(const i4_const_str &description,
-														   int flags);
+typedef i4_status_class * (*i4_status_create_function_type)(const i4_const_str &description,
+															int flags);
 void i4_set_status_create_function(i4_status_create_function_type fun);
 
 class i4_idle_class
 {
 public:
-	static i4_idle_class *first;
-	i4_idle_class *next;
+	static i4_idle_class * first;
+	i4_idle_class * next;
 
 	virtual void idle() = 0;
 

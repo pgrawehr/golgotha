@@ -22,7 +22,7 @@ i4_bool g1_map_class::start_movie()
 	current_movie->start();
 	movie_in_progress=i4_T;
 
-	g1_object_class *o[G1_MAX_OBJECTS];
+	g1_object_class * o[G1_MAX_OBJECTS];
 	int t=make_object_list(o,G1_MAX_OBJECTS);
 
 	for (int i=0; i<t; i++)
@@ -59,7 +59,7 @@ i4_bool g1_map_class::advance_movie_with_time()
 
 		if (stat==g1_movie_flow_class::NEXT_SCENE)
 		{
-			g1_object_class *o[G1_MAX_OBJECTS];
+			g1_object_class * o[G1_MAX_OBJECTS];
 			int t=make_object_list(o,G1_MAX_OBJECTS);
 
 			for (int i=0; i<t; i++)

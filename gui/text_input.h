@@ -18,10 +18,10 @@ class i4_text_change_notify_event :
 	public i4_object_message_event_class
 {
 public:
-	i4_str *new_text;
+	i4_str * new_text;
 
-	i4_text_change_notify_event(void *object,
-								i4_str *str)
+	i4_text_change_notify_event(void * object,
+								i4_str * str)
 		: i4_object_message_event_class(object),
 		  new_text(new i4_str(*str))
 	{
@@ -47,7 +47,7 @@ class i4_query_text_input_class :
 {
 public:
 
-	i4_str *copy_of_data;
+	i4_str * copy_of_data;
 
 	i4_query_text_input_class()
 	{
@@ -56,7 +56,8 @@ public:
 
 	virtual i4_event *copy()
 	{
-		i4_query_text_input_class *t=new i4_query_text_input_class;
+		i4_query_text_input_class * t=new i4_query_text_input_class;
+
 		if (copy_of_data)
 		{
 			t->copy_of_data=new i4_str(*copy_of_data,(w16)copy_of_data->length()+1);
@@ -78,9 +79,9 @@ class i4_text_input_class :
 	public i4_window_class
 {
 protected:
-	i4_event_handler_class *change_notify;
-	i4_str *st;
-	i4_font_class *font;
+	i4_event_handler_class * change_notify;
+	i4_str * st;
+	i4_font_class * font;
 	int max_width;
 	int lastcontext;
 
@@ -96,7 +97,7 @@ protected:
 
 
 	sw32 hi_x1, hi_x2; // hilight start and end
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	i4_bool selected;
 
 	// this will find the character the mouse is on, this should work for non-constantly spaced
@@ -122,27 +123,27 @@ protected:
 	char textbuf[512]; //longer texts cannot be handled by getValue()
 
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"text_input");
 	}
 
-	void send_to_parent(i4_event *ev)
+	void send_to_parent(i4_event * ev)
 	{
 		parent->receive_event(ev);
 	}
 
-	i4_text_input_class(i4_graphical_style_class *style,
+	i4_text_input_class(i4_graphical_style_class * style,
 						const i4_const_str &default_string,
 						w32 width,                       // width in pixels of window
 						w32 max_width,
-						i4_event_handler_class *change_notify=0,
-						i4_font_class *font=0);          // uses style->normal_font by default
+						i4_event_handler_class * change_notify=0,
+						i4_font_class * font=0);          // uses style->normal_font by default
 
 
 
 	virtual void draw(i4_draw_context_class &context);
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	void change_text(const i4_const_str &new_st, i4_bool just_post=i4_F);
 	i4_str *get_edit_string()
@@ -162,7 +163,7 @@ public:
 } ;
 
 
-i4_window_class *i4_create_text_input(i4_graphical_style_class *style,
+i4_window_class *i4_create_text_input(i4_graphical_style_class * style,
 									  const i4_const_str &default_string,
 									  w32 width,            // width in pixels of window
 									  w32 max_width);

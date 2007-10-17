@@ -123,9 +123,10 @@ void g1_tile_class::init()
    }
  */
 
-int g1_tile_man_class::get_tile_from_name(char *name)
+int g1_tile_man_class::get_tile_from_name(char * name)
 {
 	sw32 len = strlen(name);
+
 	return get_tile_from_checksum(i4_check_sum32(name,len));
 }
 
@@ -135,7 +136,7 @@ int g1_tile_man_class::get_tile_from_name(i4_const_str &name)
 }
 
 
-int g1_tile_compare(const g1_tile_class *a, const g1_tile_class *b)
+int g1_tile_compare(const g1_tile_class * a, const g1_tile_class * b)
 {
 	if (a->filename_checksum<b->filename_checksum)
 	{
@@ -191,14 +192,14 @@ void g1_tile_man_class::finished_load()
 	}
 }
 
-i4_const_str *g1_tile_man_class::get_name_from_tile(w32 tileno)
+i4_const_str * g1_tile_man_class::get_name_from_tile(w32 tileno)
 {
 	if (tileno>=(w32)array.size())
 	{
 		return 0;
 	}
 	w32 checksum=array[tileno].filename_checksum;
-	i4_const_str *nm=r1_get_texture_name(checksum);
+	i4_const_str * nm=r1_get_texture_name(checksum);
 	if (!nm) //not found?
 	{
 		//then try using the hash-table to find overwritten
@@ -218,6 +219,7 @@ i4_const_str *g1_tile_man_class::get_name_from_tile(w32 tileno)
 int g1_tile_man_class::get_tile_from_alternate_checksum(w32 checksum)
 {
 	w32 alt_chk=get_original_checksum(checksum);
+
 	if (alt_chk!=0)
 	{
 		return get_tile_from_checksum(alt_chk);
@@ -280,14 +282,15 @@ int g1_tile_man_class::get_tile_from_checksum(w32 checksum)
 }
 
 
-bool g1_tile_man_class::add(li_object *o, li_environment *env)
+bool g1_tile_man_class::add(li_object * o, li_environment * env)
 {
 	//if (t_tiles==max_tiles)
 	//  i4_error("WARNING: Too many tile textures in level.");
 
-	li_object *prop=0;
+	li_object * prop=0;
 
-	li_string *tname=0;
+	li_string * tname=0;
+
 	if (o->type()==LI_STRING)
 	{
 		tname=li_string::get(o,env);
@@ -299,7 +302,7 @@ bool g1_tile_man_class::add(li_object *o, li_environment *env)
 	}
 
 
-	r1_texture_manager_class *tman=g1_render.r_api->get_tmanager();
+	r1_texture_manager_class * tman=g1_render.r_api->get_tmanager();
 
 
 	i4_const_str i4_tname=i4_const_str(tname->value());
@@ -316,7 +319,7 @@ bool g1_tile_man_class::add(li_object *o, li_environment *env)
 	}
 	if (!found)
 	{
-		g1_tile_class *newtile=array.add();
+		g1_tile_class * newtile=array.add();
 		newtile->init();
 		newtile->texture=tman->register_texture(i4_tname, i4_tname);
 		newtile->filename_checksum=curr_checksum;
@@ -327,11 +330,12 @@ bool g1_tile_man_class::add(li_object *o, li_environment *env)
 	return false;
 }
 
-bool g1_tile_man_class::add_new(li_object *o, li_environment *env)
+bool g1_tile_man_class::add_new(li_object * o, li_environment * env)
 {
-	li_object *prop=0;
+	li_object * prop=0;
 
-	li_string *tname=0;
+	li_string * tname=0;
+
 	if (o->type()==LI_STRING)
 	{
 		tname=li_string::get(o,env);
@@ -343,7 +347,7 @@ bool g1_tile_man_class::add_new(li_object *o, li_environment *env)
 	}
 
 
-	r1_texture_manager_class *tman=g1_render.r_api->get_tmanager();
+	r1_texture_manager_class * tman=g1_render.r_api->get_tmanager();
 
 
 	i4_const_str i4_tname=i4_const_str(tname->value());
@@ -368,7 +372,7 @@ bool g1_tile_man_class::add_new(li_object *o, li_environment *env)
 	}
 	if (!found)
 	{
-		g1_tile_class *newtile=array.add();
+		g1_tile_class * newtile=array.add();
 		newtile->init();
 		newtile->texture=tman->register_texture(i4_tname, i4_tname);
 		newtile->filename_checksum=curr_checksum;
@@ -386,21 +390,21 @@ bool g1_tile_man_class::add_new(li_object *o, li_environment *env)
 }
 
 
-static li_symbol *g1_block=0, *g1_wave=0, *g1_selectable=0, *g1_friction=0, *g1_save_name=0,
-*g1_damage=0,*g1_alternate_checksum=0;
+static li_symbol * g1_block=0, * g1_wave=0, * g1_selectable=0, * g1_friction=0, * g1_save_name=0,
+* g1_damage=0,* g1_alternate_checksum=0;
 
 // format of ("texture_name" (property_name prop_value)..)
-void g1_tile_class::get_properties(li_object *properties, li_environment *env)
+void g1_tile_class::get_properties(li_object * properties, li_environment * env)
 {
 	while (properties)
 	{
-		li_symbol *sym=li_symbol::get(li_car(li_car(properties,env),env),env);
-		li_object *temp=li_cdr(li_car(properties,env),env);
+		li_symbol * sym=li_symbol::get(li_car(li_car(properties,env),env),env);
+		li_object * temp=li_cdr(li_car(properties,env),env);
 		if (!temp)
 		{
 			li_error(env,"USER: Missing texture property argument");
 		}
-		li_object *value=li_car(temp,env);
+		li_object * value=li_car(temp,env);
 
 		if (sym==li_get_symbol("block", g1_block))
 		{
@@ -481,7 +485,8 @@ void g1_tile_man_class::store_alternate_checksum(w32 nchk, w32 oldchk)
 
 w32 g1_tile_man_class::get_original_checksum(w32 newchecksum)
 {
-	w32 *c=original_checksums.get(newchecksum);
+	w32 * c=original_checksums.get(newchecksum);
+
 	return (w32)c;
 }
 

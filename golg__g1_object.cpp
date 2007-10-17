@@ -66,13 +66,13 @@ li_symbol_ref g1_crate("crate");
 i4_profile_class   pf_unoccupy_location("unoccupy_location");
 
 g1_object_type g1_last_object_type=-1;  // largest object number assigned
-g1_object_definition_class *g1_object_type_array[G1_MAX_OBJECT_TYPES];
+g1_object_definition_class * g1_object_type_array[G1_MAX_OBJECT_TYPES];
 // registered object definitions (starts at 1, since 0 is used for invalid entries)
 
 
 
 
-void g1_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_object_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	g1_model_draw(this, draw_params, context, viewer_position);
 }
@@ -90,14 +90,14 @@ i4_float g1_object_class::occupancy_radius() const
 	}
 }
 
-i4_window_class *g1_object_definition_class::create_edit_dialog()
+i4_window_class * g1_object_definition_class::create_edit_dialog()
 {
 	w32 selected_objects[G1_MAX_OBJECTS];
 	int t_sel=g1_get_map()->make_selected_objects_list(selected_objects, G1_MAX_OBJECTS);
 
 	if (t_sel==1)
 	{
-		g1_object_class *go=g1_global_id.get(selected_objects[0]);
+		g1_object_class * go=g1_global_id.get(selected_objects[0]);
 
 		if (go->vars && li_get_type(go->vars->type())->has_editor())
 		{
@@ -112,7 +112,7 @@ i4_window_class *g1_object_definition_class::create_edit_dialog()
 	return 0;
 }
 
-g1_damage_map_struct *g1_object_definition_class::get_damage_map()
+g1_damage_map_struct * g1_object_definition_class::get_damage_map()
 {
 	if (!damage)
 	{
@@ -131,12 +131,12 @@ g1_damage_map_struct *g1_object_definition_class::get_damage_map()
 	return damage;
 }
 
-int g1_object_class::get_damage_for(g1_object_class *target) const
+int g1_object_class::get_damage_for(g1_object_class * target) const
 {
 	return get_type()->get_damage_map()->get_damage_for(target->id);
 }
 
-g1_object_definition_class::g1_object_definition_class(char *_name,
+g1_object_definition_class::g1_object_definition_class(char * _name,
 													   w32 type_flags,
 													   function_type _init,
 													   function_type _uninit)
@@ -156,6 +156,7 @@ g1_object_definition_class::g1_object_definition_class(char *_name,
 void g1_object_definition_class::init()
 {
 	char buf[200];
+
 	sprintf(buf,"%s_vars", _name);
 	if (li_find_symbol(buf))
 	{
@@ -201,7 +202,7 @@ void g1_object_definition_class::init()
 
 }
 
-char *g1_object_class::name()
+char * g1_object_class::name()
 {
 	return (char *) g1_object_type_array[id]->name();
 }
@@ -261,7 +262,7 @@ void g1_object_class::grab_old()     // grab info about the current tick for int
 }
 
 
-void g1_object_class::save(g1_saver_class *fp)
+void g1_object_class::save(g1_saver_class * fp)
 {
 	fp->start_version(DATA_VERSION);
 
@@ -286,7 +287,7 @@ void g1_object_class::save(g1_saver_class *fp)
 }
 
 
-void g1_object_class::load_v9(g1_loader_class *fp)
+void g1_object_class::load_v9(g1_loader_class * fp)
 {
 	vars=(li_class *)li_load_typed_object(get_type()->var_class, fp, fp->li_remap,0);
 	global_id = fp->read_global_id();
@@ -312,13 +313,13 @@ void g1_object_class::load_v9(g1_loader_class *fp)
 }
 
 
-void g1_object_class::load_v8(g1_loader_class *fp)
+void g1_object_class::load_v8(g1_loader_class * fp)
 {
 	vars=(li_class *)li_load_typed_object(get_type()->var_class, fp, fp->li_remap,0);
 	load_v7(fp);
 }
 
-void g1_object_class::load_v7(g1_loader_class *fp)
+void g1_object_class::load_v7(g1_loader_class * fp)
 {
 	global_id = fp->read_global_id();
 	g1_global_id.assign(global_id, this);
@@ -335,7 +336,7 @@ void g1_object_class::load_v7(g1_loader_class *fp)
 }
 
 
-void g1_object_class::load_v6(g1_loader_class *fp)
+void g1_object_class::load_v6(g1_loader_class * fp)
 {
 	global_id=g1_global_id.alloc(this);
 	x=lx=fp->read_float();
@@ -350,7 +351,7 @@ void g1_object_class::load_v6(g1_loader_class *fp)
 }
 
 
-void g1_object_class::load_v5(g1_loader_class *fp)
+void g1_object_class::load_v5(g1_loader_class * fp)
 {
 	global_id=g1_global_id.alloc(this);
 	fp->read_16();  // id - load removed... why was it there? -jc
@@ -398,7 +399,7 @@ void g1_object_class::load_v5(g1_loader_class *fp)
 	}
 }
 
-void g1_object_class::load_v4(g1_loader_class *fp)
+void g1_object_class::load_v4(g1_loader_class * fp)
 {
 	load_v3(fp);
 	w8 t_scene_refs=fp->read_8();
@@ -412,7 +413,7 @@ void g1_object_class::load_v4(g1_loader_class *fp)
 	}
 }
 
-void g1_object_class::load_v3(g1_loader_class *fp)
+void g1_object_class::load_v3(g1_loader_class * fp)
 {
 	global_id=g1_global_id.alloc(this);
 	id=fp->read_16();
@@ -452,7 +453,7 @@ void g1_object_class::load_v3(g1_loader_class *fp)
 
 }
 
-void g1_object_class::load_v2(g1_loader_class *fp)
+void g1_object_class::load_v2(g1_loader_class * fp)
 {
 	global_id=g1_global_id.alloc(this);
 	id=fp->read_16();
@@ -499,7 +500,7 @@ void g1_object_class::load_v2(g1_loader_class *fp)
 
 
 g1_object_class::g1_object_class(g1_object_type id,
-								 g1_loader_class *fp)
+								 g1_loader_class * fp)
 	: id(id),
 	  occupied_squares(4,0),
 	  vars(0),
@@ -560,7 +561,7 @@ g1_object_class::g1_object_class(g1_object_type id,
 			{
 				fp->seek(fp->tell() + data_size);
 			}
-			g1_object_definition_class *this_objs_type=get_type();
+			g1_object_definition_class * this_objs_type=get_type();
 			health=this_objs_type->defaults->health;
 			global_id=g1_global_id.alloc(this);
 			lx=x=(float)g1_get_map()->width()/2;
@@ -605,22 +606,24 @@ g1_object_class::g1_object_class(g1_object_type id,
 
 //more complicated than it must be, but its saver not to assume anything
 //about how big a global id or something is.
-void g1_object_class::skipload(g1_loader_class *fp)
+void g1_object_class::skipload(g1_loader_class * fp)
 {
 	w16 version=0,data_size=0;
+
 	fp->get_version(version,data_size);
-	li_class *newvars=0;
+	li_class * newvars=0;
 	newvars=(li_class *)li_load_typed_object(get_type()->var_class,fp,fp->li_remap,0);
 	fp->read_global_id(); //and dump it
 	fp->seek(fp->tell()+31);
 	fp->end_version(I4_LF);
 }
 
-void g1_object_class::load(g1_loader_class *fp)
+void g1_object_class::load(g1_loader_class * fp)
 {
 	w16 version=0,data_size=0;
+
 	fp->get_version(version,data_size);
-	li_class *newvars=0;
+	li_class * newvars=0;
 	newvars=(li_class *)li_load_typed_object(get_type()->var_class, fp, fp->li_remap,0);
 	if (newvars!=0)
 	{
@@ -702,7 +705,7 @@ i4_bool g1_object_class::occupy_location()
 
 i4_bool g1_object_class::occupy_location_center()
 {
-	g1_map_class *map = g1_get_map();
+	g1_map_class * map = g1_get_map();
 	int width=map->width();
 
 	if (!(x>=0 && x<width && y>=0 && y<map->height()))
@@ -720,7 +723,7 @@ i4_bool g1_object_class::occupy_location_center()
 
 i4_bool g1_object_class::occupy_location_corners()
 {
-	g1_map_class *map = g1_get_map();
+	g1_map_class * map = g1_get_map();
 	int width=map->width();
 
 	// standard occupy location (4 corners)
@@ -781,23 +784,24 @@ i4_bool g1_object_class::occupy_location_corners()
 
 i4_bool g1_object_class::occupy_location_model(const g1_model_draw_parameters &draw_params)
 {
-	g1_map_class *map = g1_get_map();
+	g1_map_class * map = g1_get_map();
 	int width=map->width();
 
 	i4_transform_class trans;
+
 	calc_world_transform(1.0, &trans);
 	i4_3d_point_class p;
 	int ix,iy; //, offset;
 	int i; //,j;
 
-	g1_quad_object_class *model = draw_params.model;
+	g1_quad_object_class * model = draw_params.model;
 	if (!model)
 	{
 		return g1_object_class::occupy_location_center();
 	}
 
 
-	g1_vert_class *vert = model->get_verts(draw_params.animation, draw_params.frame);
+	g1_vert_class * vert = model->get_verts(draw_params.animation, draw_params.frame);
 
 	// large object occupy - occupy multiple points
 	enum {
@@ -819,7 +823,7 @@ i4_bool g1_object_class::occupy_location_model(const g1_model_draw_parameters &d
 		}
 
 		// check for repeats
-		g1_map_cell_class *cell = map->cell(ix,iy);
+		g1_map_cell_class * cell = map->cell(ix,iy);
 		if ((cell->flags & g1_map_cell_class::SCRATCH1)==0)
 		{
 			// nonrepeating square, add it
@@ -844,7 +848,7 @@ i4_bool g1_object_class::occupy_location_model(const g1_model_draw_parameters &d
 
 	for (i=0; i<num_squares; i++)
 	{
-		g1_object_chain_class *chn = new_occupied_square();
+		g1_object_chain_class * chn = new_occupied_square();
 		map->add_object(*chn, sx[i], sy[i]);
 		map->cell(chn->offset)->flags &= ~g1_map_cell_class::SCRATCH1;
 		if ((num_squares>4)&&get_flag(BLOCKING))
@@ -866,21 +870,22 @@ i4_bool g1_object_class::occupy_location_model(const g1_model_draw_parameters &d
 
 i4_bool g1_object_class::occupy_location_model_extents(const g1_model_draw_parameters &draw_params)
 {
-	g1_map_class *map = g1_get_map();
+	g1_map_class * map = g1_get_map();
 	int width=map->width();
 
 	i4_transform_class trans;
+
 	calc_world_transform(1.0, &trans);
 	i4_3d_point_class p;
 
-	g1_quad_object_class *model = draw_params.model;
+	g1_quad_object_class * model = draw_params.model;
 	if (!model)
 	{
 		return g1_object_class::occupy_location_center();
 	}
 
 
-	g1_vert_class *vert = model->get_verts(draw_params.animation, draw_params.frame);
+	g1_vert_class * vert = model->get_verts(draw_params.animation, draw_params.frame);
 	float x1=10000,y1=10000,x2=-1,y2=-1;
 
 	// build list of occupied squares
@@ -946,7 +951,7 @@ i4_bool g1_object_class::occupy_location_model_extents(const g1_model_draw_param
 	{
 		for (int x=ix1; x<=ix2; x++)
 		{
-			g1_object_chain_class *chn = new_occupied_square();
+			g1_object_chain_class * chn = new_occupied_square();
 			map->add_object(*chn, x,y);
 		}
 	}
@@ -963,7 +968,7 @@ void g1_object_class::unoccupy_location()
 {
 	pf_unoccupy_location.start();
 
-	g1_map_class *map = g1_get_map();
+	g1_map_class * map = g1_get_map();
 
 	if (!get_flag(MAP_OCCUPIED))
 	{
@@ -1002,7 +1007,7 @@ void g1_object_class::unoccupy_location()
 }
 
 //g1_mini_object stuff
-void g1_mini_object::calc_transform(i4_float ratio, i4_transform_class *transform)
+void g1_mini_object::calc_transform(i4_float ratio, i4_transform_class * transform)
 {
 	i4_3d_vector rot, t;
 
@@ -1025,16 +1030,16 @@ void g1_mini_object::calc_transform(i4_float ratio, i4_transform_class *transfor
 	transform->mult_translate(t);
 }
 
-inline void msvc50_hack(i4_transform_class &m1, i4_transform_class *m2, i4_transform_class *m3)
+inline void msvc50_hack(i4_transform_class &m1, i4_transform_class * m2, i4_transform_class * m3)
 {
 	m1.multiply((*m2),(*m3));
 }
 
-void g1_mini_object::draw(g1_draw_context_class *context,
-						  i4_transform_class *parent_transform,
-						  g1_screen_box *bound_box,
+void g1_mini_object::draw(g1_draw_context_class * context,
+						  i4_transform_class * parent_transform,
+						  g1_screen_box * bound_box,
 						  g1_player_type player_num,
-						  i4_transform_class *use_this_transform,
+						  i4_transform_class * use_this_transform,
 						  i4_bool pass_world_space_transform,
 						  i4_bool use_lod_model)
 {
@@ -1043,7 +1048,7 @@ void g1_mini_object::draw(g1_draw_context_class *context,
 		return;
 	}
 
-	g1_quad_object_class *model;
+	g1_quad_object_class * model;
 	if (use_lod_model)
 	{
 		model=g1_model_list_man.get_model(lod_model);
@@ -1190,7 +1195,7 @@ float g1_object_class::height_above_ground()
 	return h-g1_get_map()->terrain_height(x,y);
 }
 
-void g1_object_class::calc_world_transform(i4_float ratio, i4_transform_class *transform)
+void g1_object_class::calc_world_transform(i4_float ratio, i4_transform_class * transform)
 {
 	if (!transform)
 	{
@@ -1226,7 +1231,7 @@ g1_object_class::~g1_object_class()
 }
 
 // this is the call to add a new object_type to the game.
-g1_object_type g1_add_object_type(g1_object_definition_class *def)
+g1_object_type g1_add_object_type(g1_object_definition_class * def)
 {
 	for (int i=1; i<G1_MAX_OBJECT_TYPES; i++)
 	{
@@ -1246,14 +1251,15 @@ g1_object_type g1_add_object_type(g1_object_definition_class *def)
 	return 0;
 }
 
-g1_object_type g1_get_object_type(const char *name)
+g1_object_type g1_get_object_type(const char * name)
 {
 	return g1_get_object_type(li_get_symbol(name));
 }
 
-g1_object_type g1_get_object_type(li_symbol *name)
+g1_object_type g1_get_object_type(li_symbol * name)
 {
-	li_object *o=li_get_value(name);
+	li_object * o=li_get_value(name);
+
 	if (o)
 	{
 		return li_int::get(o,0)->value();
@@ -1270,7 +1276,7 @@ void g1_remove_object_type(g1_object_type type)
 
 	if (g1_map_is_loaded())
 	{
-		g1_map_class *map=g1_get_map();
+		g1_map_class * map=g1_get_map();
 		map->remove_object_type(type);
 	}
 
@@ -1278,12 +1284,14 @@ void g1_remove_object_type(g1_object_type type)
 	while (g1_last_object_type>=0 && g1_object_type_array[g1_last_object_type]==0)
 		g1_last_object_type--;
 
+
 }
 
 static void exchange_obj(int i, int j)
 {
-	g1_object_definition_class *ic=g1_object_type_array[i];
-	g1_object_definition_class *jc=g1_object_type_array[j];
+	g1_object_definition_class * ic=g1_object_type_array[i];
+	g1_object_definition_class * jc=g1_object_type_array[j];
+
 	if (ic)
 	{
 		//may be NULL (see bellow)
@@ -1297,6 +1305,7 @@ static void exchange_obj(int i, int j)
 void g1_initialize_loaded_objects()
 {
 	int i,j;
+
 	for (i=1; i<G1_MAX_OBJECT_TYPES; i++)
 	{
 		for (j=i+1; j<G1_MAX_OBJECT_TYPES; j++)
@@ -1349,9 +1358,10 @@ void g1_uninitialize_loaded_objects()
 	}
 }
 
-i4_str *g1_object_class::get_context_string()
+i4_str * g1_object_class::get_context_string()
 {
 	char buf[101];
+
 	i4_ram_file_class rf(buf,100);
 	rf.printf("%s (%f,%f,%f)", name(),x,y,h);
 	if (vars)
@@ -1391,7 +1401,7 @@ public:
 		{
 			if (g1_object_type_array[i])
 			{
-				li_class *v=g1_object_type_array[i]->vars;
+				li_class * v=g1_object_type_array[i]->vars;
 				if (v)
 				{
 					if (v->is_marked()!=set)
@@ -1406,10 +1416,10 @@ public:
 		w32 j;
 		for (j=0; j<g1_global_id.num_reserved; j++)
 		{
-			g1_object_class *o=g1_global_id.get(j);
+			g1_object_class * o=g1_global_id.get(j);
 			if (!g1_global_id.preassigned(j) && ((w32)o>G1_MAX_OBJECTS))
 			{
-				li_class *c=o->vars;
+				li_class * c=o->vars;
 
 				if (c && c->is_marked()!=set)
 				{
@@ -1422,7 +1432,7 @@ public:
 } g1_object_marker;
 
 
-void g1_object_class::editor_draw(g1_draw_context_class *context)
+void g1_object_class::editor_draw(g1_draw_context_class * context)
 {
 	if (vars)
 	{
@@ -1435,7 +1445,7 @@ void g1_object_class::editor_draw(g1_draw_context_class *context)
 
 		for (int j=0; j<tvars; j++)
 		{
-			li_object *v=li_class_get_default(type, li_class_get_symbol(type,j));
+			li_object * v=li_class_get_default(type, li_class_get_symbol(type,j));
 			if (v && v->type()==li_g1_ref_type_number)
 			{
 				li_g1_ref::get(vars->value(j),0)->draw(this, colors[color_on], context);
@@ -1446,7 +1456,7 @@ void g1_object_class::editor_draw(g1_draw_context_class *context)
 			}
 			else if (v && v->type()==li_g1_ref_list_type_number)
 			{
-				li_g1_ref_list *r=li_g1_ref_list::get(vars->value(j),0);
+				li_g1_ref_list * r=li_g1_ref_list::get(vars->value(j),0);
 				r->draw(this, colors[color_on], context);
 				if (color_on<6)
 				{
@@ -1461,11 +1471,12 @@ void g1_object_class::editor_draw(g1_draw_context_class *context)
 
 static li_symbol_ref acid("acid");
 
-i4_bool g1_object_class::check_collision(g1_object_class *source,
+i4_bool g1_object_class::check_collision(g1_object_class * source,
 										 const i4_3d_vector &start,
 										 i4_3d_vector &ray)
 {
 	i4_3d_vector normal;
+
 	if (occupancy_radius()>=0.5f||this->draw_params.model->octree)
 	{
 		return g1_model_collide_polygonal_ex(this,source,ray,normal);
@@ -1477,9 +1488,9 @@ i4_bool g1_object_class::check_collision(g1_object_class *source,
 }
 
 
-void g1_apply_damage(g1_object_class *used,
-					 g1_object_class *fired,
-					 g1_object_class *hit,
+void g1_apply_damage(g1_object_class * used,
+					 g1_object_class * fired,
+					 g1_object_class * hit,
 					 const i4_3d_vector &dir)
 {
 	if (!used)
@@ -1487,7 +1498,7 @@ void g1_apply_damage(g1_object_class *used,
 		return;
 	}
 
-	g1_damage_map_struct *dmap=used->get_type()->get_damage_map();
+	g1_damage_map_struct * dmap=used->get_type()->get_damage_map();
 
 	if (dmap->hurt_type==g1_damage_map_struct::HURT_SINGLE_GUY)
 	{
@@ -1528,7 +1539,7 @@ void g1_apply_damage(g1_object_class *used,
 		}
 
 		// damage things in the radius
-		g1_object_class *list[G1_MAX_OBJECTS];
+		g1_object_class * list[G1_MAX_OBJECTS];
 
 		float radius=(float)dmap->special_damage;
 		float oo_radius=1.0f/radius;
@@ -1539,7 +1550,7 @@ void g1_apply_damage(g1_object_class *used,
 
 		for (int i=0; i<t; i++)
 		{
-			g1_object_class *o=list[i];
+			g1_object_class * o=list[i];
 			//      if (o->player_num!=used->player_num && o!=hit)  // hit only enemies
 			if (o!=hit)    // smack up everyone
 			{
@@ -1564,7 +1575,7 @@ void g1_apply_damage(g1_object_class *used,
 	}
 }
 
-void g1_object_class::damage(g1_object_class *who_is_hurting,
+void g1_object_class::damage(g1_object_class * who_is_hurting,
 							 int how_much_hurt, i4_3d_vector damage_dir)
 {
 	if (!valid())
@@ -1585,7 +1596,7 @@ void g1_object_class::damage(g1_object_class *who_is_hurting,
 
 			if ((g1_rand((int)x) & 7)==0)
 			{
-				g1_crate_class *c=(g1_crate_class *)g1_create_object(g1_get_object_type(g1_crate.get()));
+				g1_crate_class * c=(g1_crate_class *)g1_create_object(g1_get_object_type(g1_crate.get()));
 
 				c->setup(i4_3d_vector(x,y,h),
 						 (g1_crate_class::ctype)(g1_rand((int)y) % g1_crate_class::MAX_TYPES),
@@ -1605,7 +1616,7 @@ void g1_object_class::damage(g1_object_class *who_is_hurting,
 			if (who_is_hurting && who_is_hurting->id==g1_get_object_type(vortex.get()))
 			{
 
-				g1_explode_model_class *e;
+				g1_explode_model_class * e;
 				e=(g1_explode_model_class *)g1_create_object(g1_get_object_type(explode_model.get()));
 				g1_explode_params params;
 				i4_3d_vector e_pos=i4_3d_vector(who_is_hurting->x, who_is_hurting->y, who_is_hurting->h);
@@ -1622,9 +1633,9 @@ void g1_object_class::damage(g1_object_class *who_is_hurting,
 			}
 			else
 			{
-				g1_chunk_explosion_class *ce=0;
+				g1_chunk_explosion_class * ce=0;
 
-				char **chunk_names;
+				char * * chunk_names;
 				int t_chunks=get_chunk_names(chunk_names);
 				if (!t_chunks)
 				{
@@ -1654,7 +1665,7 @@ void g1_object_class::damage(g1_object_class *who_is_hurting,
 
 			explosion_ground_vehicle.play(x,y,h);
 		}
-		g1_inv_explosion_class *iexp=(g1_inv_explosion_class *)g1_create_object(g1_get_object_type(invisible_explosion.get()));
+		g1_inv_explosion_class * iexp=(g1_inv_explosion_class *)g1_create_object(g1_get_object_type(invisible_explosion.get()));
 		iexp->setup();
 		g1_apply_damage(iexp,0,0,i4_3d_vector(0,0,1));
 		unoccupy_location();
@@ -1671,7 +1682,7 @@ void g1_object_class::damage(g1_object_class *who_is_hurting,
 	}
 }
 
-i4_bool g1_map_is_floorpad(g1_object_class *who)
+i4_bool g1_map_is_floorpad(g1_object_class * who)
 {
 	if (who&&who->id==g1_get_object_type("floorpad"))
 	{
@@ -1680,12 +1691,13 @@ i4_bool g1_map_is_floorpad(g1_object_class *who)
 	return i4_F;
 }
 
-i4_bool g1_object_class::enter_formation(int formationcode, g1_object_class *where)
+i4_bool g1_object_class::enter_formation(int formationcode, g1_object_class * where)
 {
-	g1_object_class *objs[50];
+	g1_object_class * objs[50];
 	int numobjs=0;
 	float dist,sum;
 	float nearest=1E20f; //a very large number
+
 	if (where==0)
 	{
 		numobjs=g1_get_map()->get_objects_in_range_fn(x,y,20,objs,50,
@@ -1726,9 +1738,10 @@ i4_bool g1_object_class::enter_formation(int formationcode, g1_object_class *whe
 }
 
 
-li_object *g1_setup_stages(li_object *o, li_environment *env)
+li_object *g1_setup_stages(li_object * o, li_environment * env)
 {
 	int t=0;
+
 	while (o)
 	{
 		def_params.stages[t].setup(li_get_int(li_eval(li_first(o,env), env),env),
@@ -1747,12 +1760,13 @@ li_object *g1_setup_stages(li_object *o, li_environment *env)
 
 li_automatic_add_function(g1_setup_stages, "stages");
 
-li_object *g1_print_installed_objects(li_object *o, li_environment *env)
+li_object *g1_print_installed_objects(li_object * o, li_environment * env)
 {
 	int k=0;
+
 	for (k=0; k<=g1_last_object_type; k++)
 	{
-		g1_object_definition_class *c=g1_object_type_array[k];
+		g1_object_definition_class * c=g1_object_type_array[k];
 		if (c)
 		{
 			i4_warning("Type number %d is \"%s\" ",k,c->name());

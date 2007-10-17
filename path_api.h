@@ -22,7 +22,7 @@ enum g1_compass_direction {
 class g1_block_map_class
 {
 protected:
-	w8 *block_map;
+	w8 * block_map;
 	w16 wx,wy;
 	w16 bwx;
 
@@ -120,19 +120,20 @@ public:
 			dir <<= 4;
 		}
 		x /= 2;
-		return (block_map[y *bwx+x] & dir)!=0;
+		return (block_map[y * bwx+x] & dir)!=0;
 	}
 
 	template<typename T>
 	i4_bool is_full_blocked(T x, T y) const
 	{
 		w8 dir=0xf;
+
 		if (x&1)
 		{
 			dir<<=4;
 		}
 		x/=2;
-		return (block_map[y *bwx+x] & dir)==dir;
+		return (block_map[y * bwx+x] & dir)==dir;
 	}
 
 	i4_bool ready()

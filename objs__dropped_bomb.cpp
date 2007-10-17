@@ -42,7 +42,7 @@ g1_dropped_bomb_def("dropped_bomb",
 
 S1_SFX(mo_money, "explosion/ariplane_bomb_explosion_one_22khz.wav", S1_STREAMED | S1_3D, 70);
 
-void g1_dropped_bomb_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_dropped_bomb_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	g1_model_draw(this, draw_params, context, viewer_position);
 	if (smoke_trail.valid())
@@ -52,7 +52,7 @@ void g1_dropped_bomb_class::draw(g1_draw_context_class *context, i4_3d_vector& v
 }
 
 g1_dropped_bomb_class::g1_dropped_bomb_class(g1_object_type id,
-											 g1_loader_class *fp)
+											 g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	draw_params.setup("jetbomb");
@@ -73,7 +73,7 @@ g1_dropped_bomb_class::g1_dropped_bomb_class(g1_object_type id,
 			 SHADOWED, 1);
 }
 
-void g1_dropped_bomb_class::save(g1_saver_class *fp)
+void g1_dropped_bomb_class::save(g1_saver_class * fp)
 {
 	// save data associated with base classes
 	g1_object_class::save(fp);
@@ -87,7 +87,7 @@ void g1_dropped_bomb_class::save(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_dropped_bomb_class::load(g1_loader_class *fp)
+void g1_dropped_bomb_class::load(g1_loader_class * fp)
 {
 	g1_object_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -97,7 +97,7 @@ void g1_dropped_bomb_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-void g1_dropped_bomb_class::skipload(g1_loader_class *fp)
+void g1_dropped_bomb_class::skipload(g1_loader_class * fp)
 {
 	g1_object_class::skipload(fp);
 	fp->check_version(DATA_VERSION);
@@ -120,7 +120,7 @@ void g1_dropped_bomb_class::think()
 }
 
 void g1_dropped_bomb_class::setup(const i4_3d_vector &pos,
-								  g1_object_class *this_guy_fired_me)
+								  g1_object_class * this_guy_fired_me)
 {
 //  w32 i;
 
@@ -142,7 +142,7 @@ void g1_dropped_bomb_class::delete_smoke()
 {
 	if (smoke_trail.valid())
 	{
-		g1_object_class *s=smoke_trail.get();
+		g1_object_class * s=smoke_trail.get();
 		s->unoccupy_location();
 		s->request_remove();
 		smoke_trail=0;
@@ -169,14 +169,14 @@ i4_bool g1_dropped_bomb_class::move(const i4_3d_vector &vel)
 	unoccupy_location();
 
 	i4_3d_vector pos(x,y,h),ray(vel);
-	g1_object_class *tmphit;
+	g1_object_class * tmphit;
 	int hit = g1_get_map()->check_non_player_collision(this,player_num,pos,ray,tmphit);
 	pos += ray;
 	if (hit)
 	{
 		if (hit>0)
 		{
-			g1_explosion1_class *exp = (g1_explosion1_class *)g1_create_object(explosion_type);
+			g1_explosion1_class * exp = (g1_explosion1_class *)g1_create_object(explosion_type);
 			if (exp)
 			{
 				exp->setup(pos.x,pos.y,pos.z);

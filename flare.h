@@ -12,12 +12,12 @@
 #include "math/vector.h"
 class g1_draw_context_class;
 
-void g1_draw_flare(i4_3d_point_class world_pos, g1_draw_context_class *context,
+void g1_draw_flare(i4_3d_point_class world_pos, g1_draw_context_class * context,
 				   float flare_scale=1.0,
 				   int flare_type=0);
 
 
-void g1_draw_exhaust(i4_3d_point_class world_pos, g1_draw_context_class *context,
+void g1_draw_exhaust(i4_3d_point_class world_pos, g1_draw_context_class * context,
 					 float flare_scale=1.0,
 					 int flare_type=0,
 					 float alpha=1.0);

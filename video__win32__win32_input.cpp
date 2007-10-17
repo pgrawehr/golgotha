@@ -25,12 +25,12 @@
 
 i4_bool win32_input_class::class_registered=i4_F;
 
-static win32_input_class *win32_current_input=0;
+static win32_input_class * win32_current_input=0;
 HWND current_window_handle;
 HANDLE myPid;
 
-int i4_default_warning(const char *st);
-int i4_default_error(const char *st);
+int i4_default_warning(const char * st);
+int i4_default_error(const char * st);
 
 
 // int i4_win32_error(const char *st)
@@ -154,6 +154,7 @@ long FAR PASCAL WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 void win32_input_class::get_window_area(int &x, int &y, int &w, int &h)
 {
 	RECT r;
+
 	GetClientRect(whandle, &r);
 
 	w=r.right-r.left;
@@ -174,7 +175,7 @@ void win32_input_class::get_window_area(int &x, int &y, int &w, int &h)
 }
 
 i4_bool win32_input_class::create_window(sw32 x, sw32 y, w32 w, w32 h,
-										 i4_display_class *display_responsible_for_close,
+										 i4_display_class * display_responsible_for_close,
 										 i4_bool takeup_fullscreen)
 {
 	if (!class_registered)
@@ -348,7 +349,7 @@ long FAR PASCAL WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 }
 
-win32_input_class::win32_input_class(char *extra_message)
+win32_input_class::win32_input_class(char * extra_message)
 {
 	mouse_locked   = i4_F;
 	async_mouse    = 0;
@@ -367,7 +368,7 @@ win32_input_class::win32_input_class(char *extra_message)
 }
 
 
-void win32_input_class::set_async_mouse(dx_threaded_mouse_class *m)
+void win32_input_class::set_async_mouse(dx_threaded_mouse_class * m)
 {
 	//if (async_mouse)
 	//{
@@ -387,6 +388,7 @@ void win32_input_class::set_async_mouse(dx_threaded_mouse_class *m)
 w16 win32_input_class::translate_windows_key(w16 wkey, w32 &m)
 {
 	w16 key;
+
 	m=0;
 
 	switch (wkey)
@@ -718,7 +720,7 @@ void win32_input_class::update_mouse_buttons(i4_mouse_button_event_class::btype 
 	else
 	if (state==DOWN)
 	{
-		i4_window_class *m=i4_kernel.modal();
+		i4_window_class * m=i4_kernel.modal();
 		if (m)
 		{
 			//ignore down-events outside the modal window.
@@ -745,6 +747,7 @@ sw32 win32_input_class::process(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 	PAINTSTRUCT ps;
 	HDC hdc;
 	static i4_bool initbitmapdrawn=i4_F;
+
 	if (!have_window)
 	{
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -762,7 +765,7 @@ sw32 win32_input_class::process(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
 				int t=DragQueryFile((HDROP)drop, 0xffffffff, 0,0);
 				de.drag_info.t_filenames=t;
-				de.drag_info.filenames=(i4_str **)I4_MALLOC(sizeof(i4_str *) * t, "");
+				de.drag_info.filenames=(i4_str * *)I4_MALLOC(sizeof(i4_str *) * t, "");
 				de.drag_info.drag_object_type=i4_drag_info_struct::FILENAMES;
 				de.drag_info.x=(short)point.x;
 				de.drag_info.y=(short)point.y;

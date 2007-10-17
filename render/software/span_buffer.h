@@ -26,9 +26,9 @@ union span_entry //needs to be 8 byte aligned
 		w32 next_tri_span; //index into the global span list of the next span
 
 		float ooz; //this ooz will be the ooz at the spans start
-				  //since this is non-intersecting span sorting,
-				  //this is all we need
-		w16 *scanline_ptr;
+				   //since this is non-intersecting span sorting,
+				   //this is all we need
+		w16 * scanline_ptr;
 	} s;
 #ifdef USE_ASM
 	//otherwise, the compiler knows how to save mem.
@@ -40,7 +40,7 @@ struct span_tri_info //needs to be 8 byte aligned
 {
 	tri_gradients grads;
 
-	w16 *texture;
+	w16 * texture;
 
 	union
 	{
@@ -52,8 +52,8 @@ struct span_tri_info //needs to be 8 byte aligned
 
 	float cur_span_start_ooz;
 
-	span_tri_info *next_stack;
-	span_tri_info *last_stack;
+	span_tri_info * next_stack;
+	span_tri_info * last_stack;
 
 	sw16 cur_span_start_x;         //used when creating spans
 	w16 span_list_head;
@@ -77,9 +77,9 @@ enum {
 	MAX_NUM_EDGES           = 40000
 };
 
-extern span_entry *global_span_list; //sized to max_spans
+extern span_entry * global_span_list; //sized to max_spans
 extern int num_global_spans;
-extern span_tri_info *global_tri_list; //sized of max_tris
+extern span_tri_info * global_tri_list; //sized of max_tris
 extern int num_global_tris;
 
 inline span_tri_info *new_span_tri()
@@ -87,7 +87,7 @@ inline span_tri_info *new_span_tri()
 	if (num_global_tris < MAX_TRIS)
 	{
 		num_global_tris++;
-		span_tri_info *t = &global_tri_list[num_global_tris-1];
+		span_tri_info * t = &global_tri_list[num_global_tris-1];
 		t->span_list_head=0;
 		t->next_stack=0;
 		t->last_stack=0;
@@ -106,14 +106,14 @@ struct span_edge //needs to be 4 byte aligned
 	sw32 x;
 	sw32 dxdy;
 
-	span_tri_info *tri_1;
+	span_tri_info * tri_1;
 
-	span_edge *next_remove; //in setup and when generating spans, this is the next remove edge (ends on the same scanline as this)
-	span_edge *next_active; //when generating the spans, this is the next active span in the active span list
+	span_edge * next_remove; //in setup and when generating spans, this is the next remove edge (ends on the same scanline as this)
+	span_edge * next_active; //when generating the spans, this is the next active span in the active span list
 	union
 	{
-		span_edge *last_active; //when generating the spans, this is the previous active span in the active span list
-		span_edge *next; //in setup, this is the next new edge (starts on the same scanline as this)
+		span_edge * last_active; //when generating the spans, this is the previous active span in the active span list
+		span_edge * next; //in setup, this is the next new edge (starts on the same scanline as this)
 	};
 
 	w8 flags;
@@ -125,10 +125,10 @@ struct span_edge //needs to be 4 byte aligned
 	w8 pad3; //pad it to 28 bytes
 };
 
-extern span_edge *new_edges[];
-extern span_edge *remove_edges[];
-extern span_edge *global_edges;
-extern span_edge *active_list;
+extern span_edge * new_edges[];
+extern span_edge * remove_edges[];
+extern span_edge * global_edges;
+extern span_edge * active_list;
 
 extern int num_global_edges;
 
@@ -137,7 +137,7 @@ inline span_edge *new_span_edge()
 	if (num_global_edges < MAX_NUM_EDGES)
 	{
 		num_global_edges++;
-		span_edge *e = &global_edges[num_global_edges-1];
+		span_edge * e = &global_edges[num_global_edges-1];
 		e->next_active = 0;
 		e->last_active = 0;
 		return e;
@@ -152,12 +152,12 @@ extern i4_profile_class pf_software_add_start_edge;
 extern sw32 shared_edges;
 extern sw32 total_edges;
 
-inline void add_start_edge(span_edge *e,sw32 scanline)
+inline void add_start_edge(span_edge * e,sw32 scanline)
 {
 	pf_software_add_start_edge.start();
 
-	span_edge *compare_here = new_edges[scanline];
-	span_edge *last_compare = 0;
+	span_edge * compare_here = new_edges[scanline];
+	span_edge * last_compare = 0;
 
 	while (compare_here && e->x > compare_here->x)
 	{
@@ -187,7 +187,7 @@ inline void add_start_edge(span_edge *e,sw32 scanline)
 	pf_software_add_start_edge.stop();
 }
 
-inline void add_remove_edge(span_edge *e,sw32 scanline)
+inline void add_remove_edge(span_edge * e,sw32 scanline)
 {
 	e->next_remove = remove_edges[scanline];
 	remove_edges[scanline] = e;

@@ -23,17 +23,17 @@
 i4_profile_class pf_load_models("load_models");
 g1_model_list_class g1_model_list_man;
 
-g1_model_ref *model_references=0;
+g1_model_ref * model_references=0;
 
 
-g1_model_ref::g1_model_ref(char *name)
+g1_model_ref::g1_model_ref(char * name)
 {
 	next = model_references;
 	model_references = this;
 	set_name(name);
 }
 
-void g1_model_ref::set_name(char *_name)
+void g1_model_ref::set_name(char * _name)
 {
 	name=_name;
 	value=g1_model_list_man.find_handle(name);
@@ -54,7 +54,7 @@ g1_model_ref::~g1_model_ref()
 	}
 	else
 	{
-		g1_model_ref *p;
+		g1_model_ref * p;
 
 		for (p = model_references; p->next && p->next!=this; p=p->next)
 		{
@@ -73,10 +73,10 @@ g1_model_ref::~g1_model_ref()
 }
 
 
-i4_grow_heap_class *g1_object_heap=0;
+i4_grow_heap_class * g1_object_heap=0;
 
 
-int g1_model_info_compare(const void *a, const void *b)
+int g1_model_info_compare(const void * a, const void * b)
 {
 	return strcmp(((g1_model_list_class::model_info *)a)->name_start,
 				  ((g1_model_list_class::model_info *)b)->name_start);
@@ -123,7 +123,7 @@ void g1_model_list_class::scale_models(i4_float to)
 	model_scaling=to;
 }
 
-void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_manager_class *tmap)
+void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_manager_class * tmap)
 {
 	free_array();
 	if (g1_object_heap)
@@ -145,7 +145,7 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 	pf_load_models.start();
 
 	//"Loading models..."
-	i4_status_class *stat=i4_create_status(i4gets("loading_models"));
+	i4_status_class * stat=i4_create_status(i4gets("loading_models"));
 
 	total_models=model_names.size();
 	array=(model_info *)I4_MALLOC(total_models * sizeof(model_info), "model list");
@@ -165,14 +165,14 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 
 		pf_model_load_open.start();
 		//A string of the form "objects/%s.gmod"
-		li_object *fmt=li_get_value("object_format", 0);
-		char *n=li_string::get(fmt,0)->value();
+		li_object * fmt=li_get_value("object_format", 0);
+		char * n=li_string::get(fmt,0)->value();
 		sprintf(nbuf,n,model_names[i]->c_str());
 
-		i4_file_class *in_file=i4_open(nbuf);
+		i4_file_class * in_file=i4_open(nbuf);
 		if (in_file)
 		{
-			g1_loader_class *fp=g1_open_save_file(in_file);
+			g1_loader_class * fp=g1_open_save_file(in_file);
 			pf_model_load_open.stop();
 			if (fp)
 			{
@@ -188,7 +188,7 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 
 					// copy the name into the name buffer
 					int len=strlen(fn.filename)+1;
-					char *c=(char *)name_buffer->malloc(len, "name");
+					char * c=(char *)name_buffer->malloc(len, "name");
 					strcpy(c, fn.filename);
 
 					array[actual_total].name_start=c;
@@ -218,7 +218,7 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 
 
 	// reset the model_reference values
-	for (g1_model_ref *mi=model_references; mi; mi=mi->next)
+	for (g1_model_ref * mi=model_references; mi; mi=mi->next)
 	{
 		mi->value=find_handle(mi->name);
 	}
@@ -227,7 +227,7 @@ void g1_model_list_class::reset(i4_array<i4_str *> &model_names, r1_texture_mana
 
 }
 
-void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager_class *tmap)
+void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager_class * tmap)
 {
 	//Ensure we're running.
 	if (total_models==0 || array==NULL)
@@ -244,14 +244,14 @@ void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager
 
 
 	//A string of the form "objects/%s.gmod"
-	li_object *fmt=li_get_value("object_format", 0);
-	char *n=li_string::get(fmt,0)->value();
+	li_object * fmt=li_get_value("object_format", 0);
+	char * n=li_string::get(fmt,0)->value();
 	sprintf(nbuf,n,model_name.c_str());
 
-	i4_file_class *in_file=i4_open(nbuf);
+	i4_file_class * in_file=i4_open(nbuf);
 	if (in_file)
 	{
-		g1_loader_class *fp=g1_open_save_file(in_file);
+		g1_loader_class * fp=g1_open_save_file(in_file);
 		pf_model_load_open.stop();
 		if (fp)
 		{
@@ -267,7 +267,7 @@ void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager
 
 				// copy the name into the name buffer
 				int len=strlen(fn.filename)+1;
-				char *c=(char *)name_buffer->malloc(len, "name");
+				char * c=(char *)name_buffer->malloc(len, "name");
 				strcpy(c, fn.filename);
 
 				array[actual_total].name_start=c;
@@ -294,13 +294,13 @@ void g1_model_list_class::add_model(const i4_str& model_name, r1_texture_manager
 
 
 	// reset the model_reference values
-	for (g1_model_ref *mi=model_references; mi; mi=mi->next)
+	for (g1_model_ref * mi=model_references; mi; mi=mi->next)
 	{
 		mi->value=find_handle(mi->name);
 	}
 }
 
-w16 g1_model_list_class::find_handle(char *name) const
+w16 g1_model_list_class::find_handle(char * name) const
 {
 	if (!name || !total_models)
 	{

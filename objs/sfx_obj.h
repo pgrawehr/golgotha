@@ -24,7 +24,7 @@ class g1_sfx_obj_class :
 		DATA_VERSION=1
 	};
 public:
-	static g1_sfx_obj_class *cast(g1_object_class *obj)
+	static g1_sfx_obj_class *cast(g1_object_class * obj)
 	{
 		if (!obj || obj->id != g1_sfx_obj_type)
 		{
@@ -37,8 +37,8 @@ public:
 		return (g1_sfx_obj_class *)obj;
 	}
 
-	i4_stream_wav_player *stream;
-	i4_str *filename;
+	i4_stream_wav_player * stream;
+	i4_str * filename;
 	w16 max_volume;
 	w32 max_hearable_distance;
 	w32 restart_delay;
@@ -46,11 +46,11 @@ public:
 	w32 current_delay;       // time to count down until next sound is played
 	float dist_from_camera_sqrd;  // calculated by g1_sound_man
 
-	g1_sfx_obj_class *next_sfx;
+	g1_sfx_obj_class * next_sfx;
 
-	g1_sfx_obj_class(g1_object_type id, g1_loader_class *fp);
+	g1_sfx_obj_class(g1_object_type id, g1_loader_class * fp);
 	~g1_sfx_obj_class();
-	virtual void save(g1_saver_class *fp);
+	virtual void save(g1_saver_class * fp);
 
 	i4_str *get_context_string();
 
@@ -61,7 +61,7 @@ public:
 
 	// remove self from sound_manager
 	void unoccupy_location();
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	virtual void think();
 };
 

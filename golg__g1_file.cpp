@@ -17,7 +17,7 @@
 
 
 i4_critical_section_class cd_file_lock;
-static char *cd_image="golgotha.cd";
+static char * cd_image="golgotha.cd";
 
 
 struct g1_dir_entry
@@ -28,7 +28,7 @@ struct g1_dir_entry
 };
 
 
-int g1_dir_entry_compare(const g1_dir_entry *a, const g1_dir_entry *b)
+int g1_dir_entry_compare(const g1_dir_entry * a, const g1_dir_entry * b)
 {
 	if (a->checksum<b->checksum)
 	{
@@ -46,10 +46,10 @@ int g1_dir_entry_compare(const g1_dir_entry *a, const g1_dir_entry *b)
 
 
 // this is the only file that is actually used by the game, the rest is just seeking
-i4_file_class *g1_single_file=0;
+i4_file_class * g1_single_file=0;
 
 
-void g1_cd_file_callback(w32 count, void *context);
+void g1_cd_file_callback(w32 count, void * context);
 
 class g1_cd_file :
 	public i4_file_class
@@ -59,11 +59,11 @@ public:
 	w32 end_offset;
 	w32 start_offset;
 	i4_file_class::async_callback callback;
-	void *context;
-	i4_file_class *use_file;
+	void * context;
+	i4_file_class * use_file;
 
 
-	virtual w32 read(void *buffer, w32 size)
+	virtual w32 read(void * buffer, w32 size)
 	{
 		cd_file_lock.lock();
 
@@ -83,7 +83,7 @@ public:
 		return ret;
 	}
 
-	virtual w32 write(const void *buffer, w32 size)
+	virtual w32 write(const void * buffer, w32 size)
 	{
 		return 0;
 	}
@@ -117,7 +117,7 @@ public:
 		}
 	}
 
-	g1_cd_file(w32 start, w32 length, i4_file_class *fp)
+	g1_cd_file(w32 start, w32 length, i4_file_class * fp)
 	{
 		use_file=fp;
 		start_offset=start;
@@ -127,7 +127,7 @@ public:
 
 };
 
-void g1_cd_file_callback(w32 count, void *context)
+void g1_cd_file_callback(w32 count, void * context)
 
 {
 	cd_file_lock.unlock();
@@ -146,6 +146,7 @@ public:
 	int g1_file_manager_class::find_checksum(w32 id)
 	{
 		g1_dir_entry find;
+
 		find.checksum=id;
 		return entries.binary_search(&find, g1_dir_entry_compare);
 	}
@@ -213,7 +214,7 @@ public:
 		{
 			if (flags & I4_SUPPORT_ASYNC)
 			{
-				i4_file_class *fp=i4_open(current_cd_file, flags);
+				i4_file_class * fp=i4_open(current_cd_file, flags);
 				return new g1_cd_file(entries[handle].offset, entries[handle].length, fp);
 			}
 
@@ -242,7 +243,7 @@ public:
 
 				for (int i=0; i<tfiles; i++)
 				{
-					g1_dir_entry *e=entries.add();
+					g1_dir_entry * e=entries.add();
 					e->offset=g1_single_file->read_32();
 					e->checksum=g1_single_file->read_32();
 					e->length=g1_single_file->read_32();
@@ -301,7 +302,7 @@ public:
 
 
 
-void g1_set_cd_image(char *filename)
+void g1_set_cd_image(char * filename)
 {
 	cd_image=filename;
 	g1_file_manager_class_instance.set_cd_file();

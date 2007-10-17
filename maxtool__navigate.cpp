@@ -107,9 +107,9 @@ public:
 };
 
 m1_navigate_state_class navigate;
-m1_utility_state_class *m1_default_state = &navigate;
+m1_utility_state_class * m1_default_state = &navigate;
 
-li_object *m1_navigate(li_object *o, li_environment *env)
+li_object *m1_navigate(li_object * o, li_environment * env)
 //{{{
 {
 	m1_render_window->set_state(&navigate);

@@ -42,7 +42,7 @@ g1_rocket_def("rocket",
 			  g1_rocket_init);
 
 g1_rocket_class::g1_rocket_class(g1_object_type id,
-								 g1_loader_class *fp)
+								 g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 	draw_params.setup("missile");
@@ -71,7 +71,7 @@ g1_rocket_class::g1_rocket_class(g1_object_type id,
 			 SHADOWED, 1);
 }
 
-void g1_rocket_class::save(g1_saver_class *fp)
+void g1_rocket_class::save(g1_saver_class * fp)
 {
 	// save data associated with base classes
 	g1_object_class::save(fp);
@@ -86,7 +86,7 @@ void g1_rocket_class::save(g1_saver_class *fp)
 
 	fp->end_version();
 }
-void g1_rocket_class::load(g1_loader_class *fp)
+void g1_rocket_class::load(g1_loader_class * fp)
 {
 	g1_object_class::load(fp);
 	fp->check_version(G1_ROCKET_DATA_VERSION);
@@ -100,7 +100,7 @@ void g1_rocket_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-void g1_rocket_class::skipload(g1_loader_class *fp)
+void g1_rocket_class::skipload(g1_loader_class * fp)
 {
 	g1_object_class::skipload(fp);
 	fp->check_version(G1_ROCKET_DATA_VERSION);
@@ -113,8 +113,8 @@ void g1_rocket_class::skipload(g1_loader_class *fp)
 
 void g1_rocket_class::fire_at(i4_float sx, i4_float sy, i4_float sz,
 							  i4_float angle,
-							  g1_map_piece_class *kill_target,
-							  g1_map_piece_class *owner,
+							  g1_map_piece_class * kill_target,
+							  g1_map_piece_class * owner,
 							  w32 _damage)
 {
 	damage = _damage;
@@ -152,7 +152,7 @@ void g1_rocket_class::fire_at(i4_float sx, i4_float sy, i4_float sz,
 
 void g1_rocket_class::fire(i4_float sx, i4_float sy, i4_float sz,
 						   i4_angle angle,
-						   g1_map_piece_class *owner,
+						   g1_map_piece_class * owner,
 						   w32 _damage)
 {
 	damage = _damage;
@@ -183,7 +183,7 @@ void g1_rocket_class::think()
 	move((float)cos(theta) * speed, (float)sin(theta) * speed, zv);
 }
 
-void g1_rocket_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_rocket_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	g1_model_draw(this, draw_params, context, viewer_position);
 
@@ -198,7 +198,8 @@ i4_bool g1_rocket_class::move(i4_float x_amount,
 							  i4_float z_amount)
 {
 
-	g1_smoke_trail_class *s;
+	g1_smoke_trail_class * s;
+
 	if (!smoke_trail.valid())
 	{
 		s=(g1_smoke_trail_class *)g1_create_object(smoke_trail_type);
@@ -215,7 +216,7 @@ i4_bool g1_rocket_class::move(i4_float x_amount,
 	}
 
 
-	g1_object_class *hit = NULL;
+	g1_object_class * hit = NULL;
 
 	unoccupy_location();
 
@@ -255,7 +256,7 @@ i4_bool g1_rocket_class::move(i4_float x_amount,
 			if (fabs(hit->h - h)<0.2)
 			{
 				hit->damage(this, damage, i4_3d_vector(x_amount,y_amount,z_amount));
-				g1_explosion1_class *explosion;
+				g1_explosion1_class * explosion;
 				explosion=(g1_explosion1_class *)g1_create_object(explosion_type);
 
 				i4_float rx,ry,rh;
@@ -269,6 +270,7 @@ i4_bool g1_rocket_class::move(i4_float x_amount,
 				h = hit->h + rh;
 				request_remove();
 				return i4_F;
+
 				;
 			}
 
@@ -282,7 +284,7 @@ i4_bool g1_rocket_class::move(i4_float x_amount,
 		}
 		else if (who_fired_me.valid())
 		{
-			g1_explosion1_class *explosion=(g1_explosion1_class *)g1_create_object(explosion_type);
+			g1_explosion1_class * explosion=(g1_explosion1_class *)g1_create_object(explosion_type);
 
 			i4_float rx,ry,rh;
 

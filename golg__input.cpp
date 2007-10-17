@@ -60,7 +60,7 @@ void g1_input_class::init()
 
 	matchup=new i4_key_matchup_class;
 
-	char *cmds[]={
+	char * cmds[]={
 		"Move Left",                   // LEFT =0,
 		"Move Right",                  // RIGHT,
 		"Move Forward",                // UP,
@@ -137,6 +137,7 @@ void g1_input_class::que_keys(i4_time_class cur_time)
 w32 g1_input_class::deque_time(in_type t)
 {
 	w32 ret = time_qued[t];
+
 	if (ret>(w32)(1000/G1_HZ))
 	{
 		ret=1000/G1_HZ;
@@ -145,14 +146,15 @@ w32 g1_input_class::deque_time(in_type t)
 	return ret;
 }
 LI_HEADER(build_unit) {
-	li_symbol *s=li_symbol::get(li_eval(li_first(o,env),env),env);
+	li_symbol * s=li_symbol::get(li_eval(li_first(o,env),env),env);
+
 	g1_human->build_unit(g1_get_object_type(s));
 	return s;
 }
 
 li_automatic_add_function(li_build_unit,"Build");
 
-void g1_input_class::receive_event(i4_event *ev)
+void g1_input_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::DO_COMMAND)
 	{

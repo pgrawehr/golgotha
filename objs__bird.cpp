@@ -85,7 +85,7 @@ enum bird_mode
 	WAITING,
 	TURNING
 };
-static li_symbol *sym_yes=0, *sym_no=0;    // cache the pointer to the "yes" symbol
+static li_symbol * sym_yes=0, * sym_no=0;    // cache the pointer to the "yes" symbol
 
 void g1_bird_init()
 {
@@ -102,11 +102,11 @@ protected:
 	w8 mode;                                      //internal modes
 	i4_float dest_x,dest_y,xy_v,zv;
 	i4_bool first_time;
-	g1_mini_object *wingl,*wingr;   // = &mini_objects[0];
-	s1_sfx_ref *my_sfx;
+	g1_mini_object * wingl,* wingr;   // = &mini_objects[0];
+	s1_sfx_ref * my_sfx;
 public:
-	g1_bird_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
+	g1_bird_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
 
 	//virtual void fire();
 	virtual void think();
@@ -122,7 +122,7 @@ class g1_bird_eagle_class :
 	public g1_bird_class
 {
 public:
-	g1_bird_eagle_class(g1_object_type id, g1_loader_class *fp);
+	g1_bird_eagle_class(g1_object_type id, g1_loader_class * fp);
 };
 
 g1_object_definer<g1_bird_class>
@@ -139,7 +139,7 @@ g1_bird_eagle_def("bird_eagle",
 				  g1_object_definition_class::MOVABLE,
 				  g1_bird_init);
 
-g1_bird_eagle_class::g1_bird_eagle_class(g1_object_type id,g1_loader_class *fp)
+g1_bird_eagle_class::g1_bird_eagle_class(g1_object_type id,g1_loader_class * fp)
 	: g1_bird_class(id,fp)
 {
 	draw_params.setup("bird_body","bird_shadow");
@@ -154,7 +154,7 @@ g1_bird_eagle_class::g1_bird_eagle_class(g1_object_type id,g1_loader_class *fp)
 	my_sfx=&bird_eagle_sfx;
 }
 
-g1_bird_class::g1_bird_class(g1_object_type id, g1_loader_class *fp)
+g1_bird_class::g1_bird_class(g1_object_type id, g1_loader_class * fp)
 	: g1_map_piece_class(id,fp)
 {
 	radar_type=G1_RADAR_NONE; //Cannot see a bird on the radar
@@ -209,7 +209,7 @@ g1_bird_class::g1_bird_class(g1_object_type id, g1_loader_class *fp)
 
 }
 
-void g1_bird_class::save(g1_saver_class *fp)
+void g1_bird_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 	fp->start_version(DATA_VERSION);

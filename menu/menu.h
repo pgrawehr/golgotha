@@ -21,31 +21,31 @@ class i4_menu_class :
 	i4_bool hide_on_pick;
 	i4_bool deleted;                     // debugging tool so we can see if we already got events
 
-	i4_event_handler_class *focus_inform;
+	i4_event_handler_class * focus_inform;
 public:
 
-	virtual void notify_focus_change(i4_event_handler_class *who)
+	virtual void notify_focus_change(i4_event_handler_class * who)
 	{
 		focus_inform=who;
 	}
 
 	// show should make the menu visible on the screen
-	virtual void show(i4_parent_window_class *show_on, i4_coord x, i4_coord y) = 0;
+	virtual void show(i4_parent_window_class * show_on, i4_coord x, i4_coord y) = 0;
 
 	virtual void hide() = 0;
 
 	// apps should call hide() before add_item()
-	virtual void add_item(i4_menu_item_class *item);
+	virtual void add_item(i4_menu_item_class * item);
 
 	/** Returns an array of pointers that match the given command name (not display name)
 	 * @param cmd_name The internal name of the command to be found
 	 * @param items A pointer to an array
 	 * @param maxitems The maximum number of elements that can be placed in the array
 	 */
-	virtual int get_sub_menu(const i4_const_str &cmd_name, i4_menu_item_class **items, int maxitems);
+	virtual int get_sub_menu(const i4_const_str &cmd_name, i4_menu_item_class * * items, int maxitems);
 
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	i4_menu_class(i4_bool hide_on_pick)
 		: hide_on_pick(hide_on_pick)
@@ -54,18 +54,18 @@ public:
 		deleted=i4_F;
 	}
 	virtual ~i4_menu_class();
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"menu class");
 	}
 
-	virtual void add_child(i4_coord x, i4_coord y, i4_window_class *child)
+	virtual void add_child(i4_coord x, i4_coord y, i4_window_class * child)
 	{
 		i4_error("use add_item");
 	}
 
-	virtual void note_reaction_sent(i4_menu_item_class *who,     // this is who sent it
-									i4_event_reaction_class *ev, // who it was to
+	virtual void note_reaction_sent(i4_menu_item_class * who,     // this is who sent it
+									i4_event_reaction_class * ev, // who it was to
 									i4_menu_item_class::reaction_type type);
 } ;
 
@@ -76,11 +76,11 @@ public:
 	enum focus_state_type {
 		got_focus, lost_focus
 	} focus_state;
-	i4_window_class *lost_to;
+	i4_window_class * lost_to;
 
-	i4_menu_focus_event_class(i4_menu_class *menu,
+	i4_menu_focus_event_class(i4_menu_class * menu,
 							  focus_state_type state,
-							  i4_window_class *lost_to)
+							  i4_window_class * lost_to)
 		:  i4_object_message_event_class(menu),
 		  focus_state(state),
 		  lost_to(lost_to)
@@ -94,7 +94,7 @@ public:
 											 lost_to);
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"menu lost focus");
 	}

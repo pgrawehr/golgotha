@@ -8,9 +8,9 @@
 
 /* This is a new file from the revival project*/
 
-void i4_lisp_interaction_window(i4_graphical_style_class *style,
-								i4_parent_window_class *parent,
+void i4_lisp_interaction_window(i4_graphical_style_class * style,
+								i4_parent_window_class * parent,
 								sw32 &win_x, sw32 &win_y,
 								w32 w, w32 h,
 								int open_type, // 0==close, 1==open, 2==toggle window
-								i4_event_reaction_class *on_close);
+								i4_event_reaction_class * on_close);

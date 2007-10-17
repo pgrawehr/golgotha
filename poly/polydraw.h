@@ -139,6 +139,7 @@ class i4_poly_draw_gradient_class
 	{
 		sw32 ReturnValue;
 		sw32 Numerator = Value - 1 + 16;
+
 		if(Numerator >= 0)
 		{
 			ReturnValue = Numerator/16;
@@ -258,8 +259,8 @@ class i4_poly_draw_gradient_class
 
 	void setup_edge(i4_polygon_class &poly, struct edge &edge, int end, class_with_needed_functions &c)
 	{
-		i4_vertex_class *top_v=poly.vert+top;
-		i4_vertex_class *end_v=poly.vert+end;
+		i4_vertex_class * top_v=poly.vert+top;
+		i4_vertex_class * end_v=poly.vert+end;
 
 		edge.Y=Ceil28_4(fixedY[top]);
 		sw32 YEnd=Ceil28_4(fixedY[end]);
@@ -464,7 +465,7 @@ public:
 		}
 	}
 
-	void draw_scanline_default(class_with_needed_functions &c, typename class_with_needed_functions::screen_pointer *pon)
+	void draw_scanline_default(class_with_needed_functions &c, typename class_with_needed_functions::screen_pointer * pon)
 	{
 		int XStart=left.X;
 		int Width=right.X-XStart;
@@ -716,6 +717,7 @@ class i4_poly_draw_class
 	{
 		sw32 ReturnValue;
 		sw32 Numerator = Value - 1 + 16;
+
 		if(Numerator >= 0)
 		{
 			ReturnValue = Numerator/16;
@@ -832,8 +834,8 @@ class i4_poly_draw_class
 
 	void setup_edge(i4_polygon_class &poly, struct edge &edge, int end, class_with_needed_functions &c)
 	{
-		i4_vertex_class *top_v=poly.vert+top;
-		i4_vertex_class *end_v=poly.vert+end;
+		i4_vertex_class * top_v=poly.vert+top;
+		i4_vertex_class * end_v=poly.vert+end;
 
 		edge.Y=Ceil28_4(fixedY[top]);
 		sw32 YEnd=Ceil28_4(fixedY[end]);
@@ -946,13 +948,14 @@ public:
 		}
 	}
 
-	void draw_scanline_default(class_with_needed_functions &c, typename class_with_needed_functions::screen_pointer *pon)
+	void draw_scanline_default(class_with_needed_functions &c, typename class_with_needed_functions::screen_pointer * pon)
 	{
 		int XStart=left.X;
 		int Width=right.X-XStart;
 
 		float wd=1.0f/(float)Width;
 		float r,g,b,a,w,s,t, rstep,gstep,bstep,astep,wstep,sstep,tstep;
+
 		r=g=b=a=w=s=t=rstep=gstep=bstep=astep=wstep=sstep=tstep=0.0f;
 		if(c.feature(I4_DO_WHITE_LIGHT))
 		{

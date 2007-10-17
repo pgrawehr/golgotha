@@ -24,12 +24,12 @@
 	} li_add_function_ ## fun_name
 
 
-#define li_automatic_add_type(type, var)                                                              \
-	class li_add_ ## type ## _class :                                                                 \
-		public i4_init_class                                                                          \
-	{                                                                                                 \
-		int init_type() { return I4_INIT_TYPE_LISP_FUNCTIONS; }                                       \
-		void init()  { li_type_function_table *v=new type; var=li_add_type(v);  }                     \
+#define li_automatic_add_type(type, var)                                                               \
+	class li_add_ ## type ## _class :                                                                  \
+		public i4_init_class                                                                           \
+	{                                                                                                  \
+		int init_type() { return I4_INIT_TYPE_LISP_FUNCTIONS; }                                        \
+		void init()  { li_type_function_table * v=new type; var=li_add_type(v);  }                     \
 	} li_add_type_ ## type ## _instance
 
 

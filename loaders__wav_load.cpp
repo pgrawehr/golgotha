@@ -17,7 +17,7 @@ inline w32 CtoID(char a, char b, char c, char d)
 }
 
 
-i4_bool i4_load_wav_info(i4_file_class *f, i4_sound_info &info)
+i4_bool i4_load_wav_info(i4_file_class * f, i4_sound_info &info)
 {
 	w32 end_pos, chunk_type, len;
 

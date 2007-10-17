@@ -13,9 +13,10 @@
 
 
 
-w32 i4_buffered_file_class::read(void *buffer, w32 size)
+w32 i4_buffered_file_class::read(void * buffer, w32 size)
 {
 	w32 total_read=0;
+
 	while (size)
 	{
 		if (offset>=buf_start && offset<buf_end)
@@ -54,7 +55,7 @@ w32 i4_buffered_file_class::read(void *buffer, w32 size)
 }
 
 
-w32 i4_buffered_file_class::write(const void *buffer, w32 size)
+w32 i4_buffered_file_class::write(const void * buffer, w32 size)
 {
 	w32 total_write=0;
 
@@ -110,6 +111,7 @@ w32 i4_buffered_file_class::write(const void *buffer, w32 size)
 w32 i4_buffered_file_class::seek(w32 offset)
 {
 	i4_buffered_file_class::offset=offset;
+
 	return offset;
 }
 
@@ -138,7 +140,7 @@ i4_buffered_file_class::~i4_buffered_file_class()
 }
 
 
-i4_buffered_file_class::i4_buffered_file_class(i4_file_class *from,
+i4_buffered_file_class::i4_buffered_file_class(i4_file_class * from,
 											   w32 buffer_size,
 											   w32 current_offset)
 	: from(from),
@@ -154,9 +156,9 @@ struct callback_context
 {
 	i4_bool in_use;
 	w32 prev_read;
-	void *prev_context;
+	void * prev_context;
 	i4_file_class::async_callback prev_callback;
-	i4_buffered_file_class *bfile;
+	i4_buffered_file_class * bfile;
 } ;
 
 
@@ -167,14 +169,15 @@ enum {
 static callback_context contexts[MAX_ASYNC_READS];
 static w32 t_callbacks_used=0;
 
-void i4_async_buf_read_callback(w32 count, void *context)
+void i4_async_buf_read_callback(w32 count, void * context)
 {
-	callback_context *c=(callback_context *)context;
+	callback_context * c=(callback_context *)context;
+
 	c->bfile->offset+=count;
 
 	i4_file_class::async_callback call=c->prev_callback;
 	count += c->prev_read;
-	void *ctext=c->prev_context;
+	void * ctext=c->prev_context;
 	c->in_use=i4_F;
 
 	t_callbacks_used--;
@@ -184,9 +187,9 @@ void i4_async_buf_read_callback(w32 count, void *context)
 
 
 
-i4_bool i4_buffered_file_class::async_read(void *buffer, w32 size,
+i4_bool i4_buffered_file_class::async_read(void * buffer, w32 size,
 										   async_callback call,
-										   void *context)
+										   void * context)
 {
 	if (!(offset>=buf_start && offset<buf_end))
 	{
@@ -214,7 +217,7 @@ i4_bool i4_buffered_file_class::async_read(void *buffer, w32 size,
 
 		if (avail_size < size)
 		{
-			callback_context *c=0;
+			callback_context * c=0;
 			for (w32 i=0; !c && i<MAX_ASYNC_READS; i++)
 			{
 				if (!contexts[i].in_use)

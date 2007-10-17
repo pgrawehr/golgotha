@@ -28,7 +28,7 @@ static inline int i4_is_black(w32 c)
 	}
 }
 
-static inline int i4_scanline_empty(i4_image_class *im, int y)
+static inline int i4_scanline_empty(i4_image_class * im, int y)
 {
 	for (int x=0; x<im->width(); x++)
 	{
@@ -42,7 +42,7 @@ static inline int i4_scanline_empty(i4_image_class *im, int y)
 }
 
 
-static inline int i4_colum_empty(i4_image_class *im, int x)
+static inline int i4_colum_empty(i4_image_class * im, int x)
 {
 	for (int y=0; y<im->height(); y++)
 	{
@@ -56,7 +56,7 @@ static inline int i4_colum_empty(i4_image_class *im, int x)
 }
 
 
-static inline int i4_image_has_alpha(i4_image_class *im)
+static inline int i4_image_has_alpha(i4_image_class * im)
 {
 	for (int y=0; y<im->height(); y++)
 	{
@@ -81,8 +81,8 @@ void r1_font_class::set_color(i4_color color)
 	col=color;
 }
 
-i4_bool r1_font_class::expand(i4_image_class *from,
-							  i4_image_class *to,
+i4_bool r1_font_class::expand(i4_image_class * from,
+							  i4_image_class * to,
 							  int start_ch)
 {
 	//obsolete, don't use.
@@ -94,6 +94,7 @@ i4_bool r1_font_class::expand(i4_image_class *from,
 		y_top++;
 
 
+
 	if (y_top==y_bottom-1)
 	{
 		i4_error("Font-image is empty");
@@ -101,6 +102,7 @@ i4_bool r1_font_class::expand(i4_image_class *from,
 
 	while (i4_scanline_empty(from, y_bottom))
 		y_bottom--;
+
 
 
 
@@ -121,10 +123,12 @@ i4_bool r1_font_class::expand(i4_image_class *from,
 	{
 		while (x1!=from->width() && i4_colum_empty(from, x1)) x1++;
 
+
 		if (x1<from->width())
 		{
 			x2=x1+1;
 			while (x2!=from->width() && !(i4_colum_empty(from, x2))) x2++;
+
 
 			int w=x2-x1+1;
 			if (w>longest_w)
@@ -153,7 +157,8 @@ i4_bool r1_font_class::expand(i4_image_class *from,
 			x1=x2+1;
 		}
 		char_on++;
-	} while (x1<from->width() && char_on<255);
+	}
+	while (x1<from->width() && char_on<255);
 
 
 	//warning: image will be lost upon reloading the textures!
@@ -178,7 +183,7 @@ r1_font_class::~r1_font_class()
 	fontimage=0;
 }
 
-void r1_font_class::calculatefontdata(i4_image_class *im, int start_ch)
+void r1_font_class::calculatefontdata(i4_image_class * im, int start_ch)
 {
 	int x=1;
 	int y=0;
@@ -199,11 +204,13 @@ void r1_font_class::calculatefontdata(i4_image_class *im, int start_ch)
 	{
 		while(i4_colum_empty(im,x)) x++;
 
+
 		startx=x;
 		do
 		{
 			x++;
-		} while (!i4_colum_empty(im,x));
+		}
+		while (!i4_colum_empty(im,x));
 		posneu[i].x=startx-1;
 		if (posneu[i].x>lw)
 		{
@@ -216,7 +223,7 @@ void r1_font_class::calculatefontdata(i4_image_class *im, int start_ch)
 }
 
 
-r1_font_class::r1_font_class(r1_render_api_class *api, i4_image_class *im, int start_ch)
+r1_font_class::r1_font_class(r1_render_api_class * api, i4_image_class * im, int start_ch)
 	: api(api)
 {
 	memset(pos,0, sizeof(pos));
@@ -251,7 +258,7 @@ r1_font_class::r1_font_class(r1_render_api_class *api, i4_image_class *im, int s
 }
 
 
-void r1_font_class::put_character(i4_image_class *screen,
+void r1_font_class::put_character(i4_image_class * screen,
 								  sw16 x, sw16 y,
 								  const i4_char &c,
 								  i4_draw_context_class &context)
@@ -326,7 +333,7 @@ void r1_font_class::put_character(i4_image_class *screen,
 
 
 
-void r1_font_class::put_string(i4_image_class *screen,
+void r1_font_class::put_string(i4_image_class * screen,
 							   sw16 x, sw16 y,
 							   const i4_const_str &string,
 							   i4_draw_context_class &context)
@@ -334,6 +341,7 @@ void r1_font_class::put_string(i4_image_class *screen,
 	//this routine needs speed improvements
 	//ASSERT(screen);
 	char_def_neu chd;
+
 	h=font->height();
 	int xinit=x;
 	for (i4_const_str::iterator p=string.begin(); p!=string.end(); ++p)

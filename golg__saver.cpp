@@ -14,7 +14,7 @@
 
 // Saver methods
 
-g1_saver_class::g1_saver_class(i4_file_class *out, i4_bool close_on_delete)
+g1_saver_class::g1_saver_class(i4_file_class * out, i4_bool close_on_delete)
 	: i4_saver_class(out, close_on_delete),
 	  remap(0)
 {
@@ -26,9 +26,10 @@ g1_saver_class::g1_saver_class(i4_file_class *out, i4_bool close_on_delete)
 g1_saver_class::~g1_saver_class()
 {
 	g1_global_id.free_remapping(remap);
+
 }
 
-void g1_saver_class::set_helpers(g1_object_class **reference_list, w32 total_references)
+void g1_saver_class::set_helpers(g1_object_class * * reference_list, w32 total_references)
 {
 	ref_list=reference_list;
 	t_refs=total_references;
@@ -107,14 +108,14 @@ i4_bool g1_saver_class::write_reference(const g1_reference_class &ref)
 
 // Realtime saver methods
 
-g1_realtime_saver_class::g1_realtime_saver_class(i4_file_class *Out, i4_bool Close_on_delete)
+g1_realtime_saver_class::g1_realtime_saver_class(i4_file_class * Out, i4_bool Close_on_delete)
 	: g1_saver_class(Out, Close_on_delete)
 {
 	state=RAW_WRITE; //directly write raw data
 	Out->write_32(i4_check_sum32("GOLGRAWDATA",11)); //hint for the loader
 };
 
-void g1_realtime_saver_class::set_helpers(g1_object_class **reference_list, w32 tot)
+void g1_realtime_saver_class::set_helpers(g1_object_class * * reference_list, w32 tot)
 {    //ignore
 };
 
@@ -149,7 +150,7 @@ g1_realtime_saver_class::~g1_realtime_saver_class()
 
 // Loader methods
 
-g1_loader_class::g1_loader_class(i4_file_class *in, i4_bool close_on_delete, i4_bool use_buffer)
+g1_loader_class::g1_loader_class(i4_file_class * in, i4_bool close_on_delete, i4_bool use_buffer)
 	: i4_loader_class(in, close_on_delete,use_buffer),
 	  id_remap(0)
 {
@@ -197,7 +198,7 @@ void g1_loader_class::end_remap()
 	}
 }
 
-void g1_loader_class::set_helpers(g1_object_class **reference_list, w32 total_references)
+void g1_loader_class::set_helpers(g1_object_class * * reference_list, w32 total_references)
 {
 	ref_list=reference_list;
 	t_refs=total_references;
@@ -206,6 +207,7 @@ void g1_loader_class::set_helpers(g1_object_class **reference_list, w32 total_re
 w32 g1_loader_class::read_global_id()
 {
 	w32 i=in->read_16();
+
 	if (i==0xffff || !id_remap)
 	{
 		return g1_global_id.invalid_id();
@@ -219,6 +221,7 @@ w32 g1_loader_class::read_global_id()
 void g1_loader_class::read_reference(g1_reference_class &ref)
 {
 	w16 index=in->read_16();
+
 	ref.ref=0;                          // clear out hi bits
 	ref.ref=(g1_object_class *)index;
 
@@ -245,12 +248,12 @@ void g1_loader_class::skip_reference()
 
 void g1_loader_class::convert_references()
 {
-	g1_reference_class *f,*next;
+	g1_reference_class * f,* next;
 
 	for (f=first_ref; f;)
 	{
 		next=f->next;
-		g1_object_class *r;
+		g1_object_class * r;
 
 		//PG: Bugfix: The following line doesn't work as exspected on a big
 		//endian architecture. Should include an endianess test in the
@@ -288,7 +291,7 @@ void g1_loader_class::convert_references()
 
 //Realtime loader class methods
 
-g1_realtime_loader_class::g1_realtime_loader_class(i4_file_class *In, i4_bool Close_on_delete, i4_bool use_buffer)
+g1_realtime_loader_class::g1_realtime_loader_class(i4_file_class * In, i4_bool Close_on_delete, i4_bool use_buffer)
 	: g1_loader_class(In,Close_on_delete,use_buffer)
 {
 
@@ -303,7 +306,7 @@ void g1_realtime_loader_class::convert_references()
 {
 };
 
-void g1_realtime_loader_class::set_helpers(g1_object_class **reflist,w32 tot)
+void g1_realtime_loader_class::set_helpers(g1_object_class * * reflist,w32 tot)
 {
 };
 
@@ -323,6 +326,7 @@ w32 g1_realtime_loader_class::read_global_id()
 void g1_realtime_loader_class::skip_reference()
 {
 	w32 gid=in->read_32();
+
 	if (gid)
 	{
 		in->read_16();
@@ -333,9 +337,10 @@ void g1_realtime_loader_class::read_reference(g1_reference_class &ref)
 {
 	w32 gid=in->read_32(); //read in global id
 	w16 typeofref=0;
+
 	if (gid)
 	{
-		g1_object_class *o=g1_global_id.checked_get(gid);
+		g1_object_class * o=g1_global_id.checked_get(gid);
 		typeofref=in->read_16();
 		if (o)
 		{
@@ -368,9 +373,9 @@ void g1_realtime_loader_class::read_reference(g1_reference_class &ref)
 
 
 
-g1_loader_class *g1_open_save_file(i4_file_class *in, i4_bool close_on_delete_or_fail)
+g1_loader_class *g1_open_save_file(i4_file_class * in, i4_bool close_on_delete_or_fail)
 {
-	g1_loader_class *l=new g1_loader_class(in, close_on_delete_or_fail);
+	g1_loader_class * l=new g1_loader_class(in, close_on_delete_or_fail);
 
 	if (l->error())
 	{

@@ -45,14 +45,15 @@ public:
 
 	void save_shot()
 	{
-		i4_display_class *display=i4_current_app->get_display();
+		i4_display_class * display=i4_current_app->get_display();
+
 		if (display)
 		{
 			char outname[200];
 			sprintf(outname, "shot%03d.tga", num_shots++);
 
-			i4_file_class *fp=i4_open(outname, I4_WRITE);
-			i4_image_class *screen=display->lock_frame_buffer(I4_BACK_FRAME_BUFFER, I4_FRAME_BUFFER_READ);
+			i4_file_class * fp=i4_open(outname, I4_WRITE);
+			i4_image_class * screen=display->lock_frame_buffer(I4_BACK_FRAME_BUFFER, I4_FRAME_BUFFER_READ);
 			if (screen)
 			{
 				i4_write_tga(screen, fp);
@@ -63,7 +64,7 @@ public:
 		}
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::KEY_PRESS)
 		{
@@ -75,13 +76,13 @@ public:
 		}
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"screen_shot watcher");
 	}
 };
 
-static g1_screen_shot_watcher_class *g1_screen_shot_instance=0;
+static g1_screen_shot_watcher_class * g1_screen_shot_instance=0;
 
 class g1_screen_shot_adder :
 	public i4_init_class

@@ -16,10 +16,10 @@ class i4_net_protocol;
 class i4_net_address
 {
 public:
-	i4_net_protocol *protocol;
+	i4_net_protocol * protocol;
 	virtual i4_net_address *copy() = 0;
 	virtual void set_port(int port) = 0;
-	virtual i4_bool equals(i4_net_address *other) = 0;
+	virtual i4_bool equals(i4_net_address * other) = 0;
 };
 
 #endif

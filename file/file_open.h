@@ -20,9 +20,9 @@ class i4_file_open_message_class :
 	public i4_user_message_event_class
 {
 public:
-	i4_str *filename;
+	i4_str * filename;
 
-	i4_file_open_message_class(w32 id, i4_str *filename)
+	i4_file_open_message_class(w32 id, i4_str * filename)
 		: i4_user_message_event_class(id),
 		  filename(filename)
 	{
@@ -36,12 +36,12 @@ public:
 
 };
 
-void i4_create_file_open_dialog(i4_graphical_style_class *style,
+void i4_create_file_open_dialog(i4_graphical_style_class * style,
 								const i4_const_str &title_name,
 								const i4_const_str &start_dir,
 								const i4_const_str &file_mask,
 								const i4_const_str &mask_name,
-								i4_event_handler_class *tell_who,
+								i4_event_handler_class * tell_who,
 								w32 ok_id, w32 cancel_id);
 
 #endif

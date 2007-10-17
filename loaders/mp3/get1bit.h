@@ -12,7 +12,7 @@
 static inline int get1bit(void)
 {
 	extern int bitindex;
-	extern unsigned char *wordpointer;
+	extern unsigned char * wordpointer;
 	int ret;
 
 	asm ("\n\t"

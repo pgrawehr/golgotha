@@ -102,7 +102,7 @@ class g1_get_root_image_event :
 	public i4_user_message_event_class
 {
 public:
-	i4_image_class *result;
+	i4_image_class * result;
 	g1_get_root_image_event() :
 		i4_user_message_event_class(G1_GET_ROOT_IMAGE)
 	{
@@ -116,7 +116,7 @@ public:
 	{
 		return NOW;
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"get_root_image");
 	}
@@ -128,7 +128,7 @@ class g1_get_current_movie_event :
 	public i4_user_message_event_class
 {
 public:
-	g1_movie_flow_class *mflow;
+	g1_movie_flow_class * mflow;
 	g1_get_current_movie_event() :
 		i4_user_message_event_class(G1_GET_CURRENT_MOVIE),
 		mflow(0)

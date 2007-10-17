@@ -38,7 +38,7 @@ S1_SFX_DISTANCE(explode_sfx, "explosion/super_mortar.wav", S1_3D | S1_STREAMED, 
 //S1_SFX(wave_sfx,"ambient/water_wave.wav",S1_3D,80,60);
 
 g1_shockwave_class::g1_shockwave_class(g1_object_type id,
-									   g1_loader_class *fp)
+									   g1_loader_class * fp)
 	: g1_object_class(id, fp),
 	  vert_map(0)
 {
@@ -59,7 +59,7 @@ g1_shockwave_class::g1_shockwave_class(g1_object_type id,
 	draw_params.setup("shockwave");
 }
 
-void g1_shockwave_class::save(g1_saver_class *fp)
+void g1_shockwave_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 	fp->start_version(DATA_VERSION);
@@ -91,7 +91,7 @@ void g1_shockwave_class::setup(const i4_3d_vector &pos,  // starting position (c
 							   w16 _radius)               // maximum radius in game units
 
 {
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	x=lx=pos.x;
 	y=ly=pos.y;
@@ -109,7 +109,7 @@ void g1_shockwave_class::setup(const i4_3d_vector &pos,  // starting position (c
 	if (occupy_location())
 	{
 		request_think();
-		g1_explosion1_class *explosion = NULL;
+		g1_explosion1_class * explosion = NULL;
 
 		explosion = (g1_explosion1_class *)g1_create_object(g1_get_object_type("explosion1"));
 		if (explosion)
@@ -117,7 +117,7 @@ void g1_shockwave_class::setup(const i4_3d_vector &pos,  // starting position (c
 			explosion->setup(x,y,h, g1_explosion1_class::MAKE_SPHERE);
 		}
 
-		g1_debris_class *debris = NULL;
+		g1_debris_class * debris = NULL;
 		debris = (g1_debris_class *)g1_create_object(g1_get_object_type("debris"));
 		if (debris)
 		{
@@ -156,7 +156,7 @@ i4_bool g1_shockwave_class::occupy_location()
 
 		float oor = 1.f/(float)radius;
 
-		vert_offset *vo = vert_map;
+		vert_offset * vo = vert_map;
 
 		sw32 x_left,x_right,y_top,y_bottom;
 
@@ -188,7 +188,7 @@ i4_bool g1_shockwave_class::occupy_location()
 
 		for (iy=y_top; iy<=y_bottom; iy++)
 		{
-			g1_map_vertex_class *v = g1_get_map()->vertex(x_left, iy);
+			g1_map_vertex_class * v = g1_get_map()->vertex(x_left, iy);
 
 			for (ix=x_left; ix<=x_right; ix++, vo++, v++)
 			{
@@ -269,7 +269,7 @@ void g1_shockwave_class::unoccupy_location()
 		sw32 _ix = i4_f_to_i(x),
 			 _iy = i4_f_to_i(y);
 
-		vert_offset *vo=vert_map;
+		vert_offset * vo=vert_map;
 
 		sw32 x_left,x_right,y_top,y_bottom;
 		sw32 w = g1_get_map()->width();
@@ -300,7 +300,7 @@ void g1_shockwave_class::unoccupy_location()
 
 		for (iy=y_top; iy<=y_bottom; iy++)
 		{
-			g1_map_vertex_class *v=g1_get_map()->vertex(x_left, iy);
+			g1_map_vertex_class * v=g1_get_map()->vertex(x_left, iy);
 
 			for (ix=x_left; ix<=x_right; ix++, vo++, v++)
 			{
@@ -334,7 +334,7 @@ void g1_shockwave_class::think()
 
 //void fast_transform(i4_transform_class *t,const i4_3d_vector &src, r1_3d_point_class &dst);
 
-void g1_shockwave_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_shockwave_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	//g1_model_draw(this, draw_params, context);
 #if 0
@@ -437,13 +437,13 @@ void g1_shockwave_class::draw(g1_draw_context_class *context, i4_3d_vector& view
 /* Water Wave class definitions */
 
 g2_water_wave_class::g2_water_wave_class(g1_object_type id,
-										 g1_loader_class *fp)
+										 g1_loader_class * fp)
 	: g1_shockwave_class(id, fp)
 {
 
 }
 
-void g2_water_wave_class::save(g1_saver_class *fp)
+void g2_water_wave_class::save(g1_saver_class * fp)
 {
 	g1_shockwave_class::save(fp);
 	//fp->start_version(DATA_VERSION);
@@ -457,7 +457,7 @@ void g2_water_wave_class::setup_wave(const i4_3d_vector &pos,  // starting posit
 									 w16 _radius)         // maximum radius in game units
 
 {
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	x=lx=pos.x;
 	y=ly=pos.y;
@@ -496,7 +496,7 @@ i4_bool g2_water_wave_class::occupy_location()
 
 		float oor = 1.f/(float)radius;
 
-		vert_offset *vo = vert_map;
+		vert_offset * vo = vert_map;
 
 		sw32 x_left,x_right,y_top,y_bottom;
 
@@ -528,7 +528,7 @@ i4_bool g2_water_wave_class::occupy_location()
 
 		for (iy=y_top; iy<=y_bottom; iy++)
 		{
-			g1_map_vertex_class *v = g1_get_map()->vertex(x_left, iy);
+			g1_map_vertex_class * v = g1_get_map()->vertex(x_left, iy);
 
 			for (ix=x_left; ix<=x_right; ix++, vo++, v++)
 			{
@@ -587,7 +587,7 @@ void g2_water_wave_class::unoccupy_location()
 		sw32 _ix = i4_f_to_i(x),
 			 _iy = i4_f_to_i(y);
 
-		vert_offset *vo=vert_map;
+		vert_offset * vo=vert_map;
 
 		sw32 x_left,x_right,y_top,y_bottom;
 		sw32 w = g1_get_map()->width();
@@ -618,7 +618,7 @@ void g2_water_wave_class::unoccupy_location()
 
 		for (iy=y_top; iy<=y_bottom; iy++)
 		{
-			g1_map_vertex_class *v=g1_get_map()->vertex(x_left, iy);
+			g1_map_vertex_class * v=g1_get_map()->vertex(x_left, iy);
 
 			for (ix=x_left; ix<=x_right; ix++, vo++, v++)
 			{

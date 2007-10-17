@@ -44,7 +44,7 @@ public:
 
 	void set_friction(float uB);
 
-	void get_properties(li_object *properties, li_environment *env);
+	void get_properties(li_object * properties, li_environment * env);
 
 	void apply_to_cell(g1_map_cell_class &cell);
 } ;
@@ -63,7 +63,7 @@ private:
 
 public:
 	int get_tile_from_name(i4_const_str &name);
-	int get_tile_from_name(char *name);
+	int get_tile_from_name(char * name);
 	int get_tile_from_checksum(w32 checksum);
 	i4_const_str *get_name_from_tile(w32 tilehandle); //you must delete the return string yourself!
 	w32 get_original_checksum(w32 newchecksum); //used if save_name used in tile definition
@@ -76,8 +76,8 @@ public:
 	void init();
 
 	void reset(int _max_tiles);
-	bool add(li_object *o, li_environment *env);
-	bool add_new(li_object *o, li_environment *env);
+	bool add(li_object * o, li_environment * env);
+	bool add_new(li_object * o, li_environment * env);
 	//This function is not used (doesn't even have a body)
 	//void get_tile_texture(li_object *o, li_object *&texture_name, li_object *&save_name);
 

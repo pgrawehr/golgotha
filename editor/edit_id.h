@@ -15,7 +15,7 @@ class g1_create_object_message_class :
 {
 public:
 	w16 object_type;
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"create_object_message");
 	};

@@ -18,11 +18,11 @@ struct NODE {
 
 	//CPoint NodeElement;
 
-	struct NODE *Parent;
+	struct NODE * Parent;
 
-	struct NODE *Child[8];       /* a node may have upto 8+(NULL) children. */
+	struct NODE * Child[8];       /* a node may have upto 8+(NULL) children. */
 
-	struct NODE *NextNode;       /* for filing purposes */
+	struct NODE * NextNode;       /* for filing purposes */
 
 };
 
@@ -30,9 +30,9 @@ struct NODE {
 
 struct FASTMAP {
 
-	struct NODE *on_open;
+	struct NODE * on_open;
 
-	struct NODE *on_closed;
+	struct NODE * on_closed;
 
 };
 
@@ -40,9 +40,9 @@ struct FASTMAP {
 
 struct STACK {
 
-	struct NODE *NodePtr;
+	struct NODE * NodePtr;
 
-	struct STACK *NextStackPtr;
+	struct STACK * NextStackPtr;
 
 };
 
@@ -93,9 +93,9 @@ class Path :
 
 protected:
 
-	g1_block_map_class *block;
+	g1_block_map_class * block;
 
-	g1_map_class *m_pMap;
+	g1_map_class * m_pMap;
 
 	long mapxsize,mapysize;
 
@@ -107,11 +107,11 @@ protected:
 
 
 
-	struct NODE *OPEN,*CLOSED;
+	struct NODE * OPEN,* CLOSED;
 
-	struct STACK *Stack;
+	struct STACK * Stack;
 
-	FASTMAP *fastmap;
+	FASTMAP * fastmap;
 
 public:
 
@@ -121,7 +121,7 @@ public:
 
 	~Path();
 
-	void set_block_map(g1_block_map_class *_block)
+	void set_block_map(g1_block_map_class * _block)
 
 	{
 
@@ -135,25 +135,25 @@ public:
 
 					   i4_float destx, i4_float desty,
 
-					   w8 sizex, w8 sizey, w8 grade, i4_float *point, w16 &points);
+					   w8 sizex, w8 sizey, w8 grade, i4_float * point, w16 &points);
 
 	struct NODE *ReturnBestNode();
 
 	i4_bool FreeTile(int x, int y, w8 dir);
 
-	void GenerateSuccessors(struct NODE *Bestnode, int dx, int dy);
+	void GenerateSuccessors(struct NODE * Bestnode, int dx, int dy);
 
-	void GenerateSucc(struct NODE *BestNode, int x, int y, int dx, int dy);
+	void GenerateSucc(struct NODE * BestNode, int x, int y, int dx, int dy);
 
 	struct NODE *CheckOPEN(int x, int y);
 
 	struct NODE *CheckCLOSED(int x, int y);
 
-	void Insert(struct NODE *Successor);
+	void Insert(struct NODE * Successor);
 
-	void PropagateDown(struct NODE *Old);
+	void PropagateDown(struct NODE * Old);
 
-	void Push(struct NODE *Node);
+	void Push(struct NODE * Node);
 
 	struct NODE *Pop(void);
 

@@ -18,7 +18,7 @@ class dx5_mouse_class
 {
 	struct save_struct
 	{
-		i4_dx5_image_class *save_buffer;
+		i4_dx5_image_class * save_buffer;
 		int x,y;
 		save_struct() {
 			save_buffer=0;
@@ -44,7 +44,7 @@ public:
 	static i4_bool primary_is_gdi();
 	virtual void save_and_draw(int x, int y);
 	virtual void restore();
-	virtual void set_cursor(i4_cursor_class *cursor);
+	virtual void set_cursor(i4_cursor_class * cursor);
 
 	virtual ~dx5_mouse_class();
 } ;

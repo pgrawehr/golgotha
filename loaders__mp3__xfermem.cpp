@@ -42,7 +42,7 @@ extern int errno;
 #define MAP_ANON MAP_ANONYMOUS
 #endif
 
-void xfermem_init(txfermem **xf, int bufsize, int msize)
+void xfermem_init(txfermem * * xf, int bufsize, int msize)
 {
 	int regsize = bufsize + msize + sizeof(txfermem);
 
@@ -104,7 +104,7 @@ void xfermem_init(txfermem **xf, int bufsize, int msize)
 	(*xf)->metasize = msize;
 }
 
-void xfermem_done(txfermem *xf)
+void xfermem_done(txfermem * xf)
 {
 #ifdef USE_MMAP
 	munmap((caddr_t) xf, xf->size + xf->metasize + sizeof(txfermem));
@@ -117,17 +117,17 @@ void xfermem_done(txfermem *xf)
 #endif
 }
 
-void xfermem_init_writer(txfermem *xf)
+void xfermem_init_writer(txfermem * xf)
 {
 	close(xf->fd[XF_READER]);
 }
 
-void xfermem_init_reader(txfermem *xf)
+void xfermem_init_reader(txfermem * xf)
 {
 	close(xf->fd[XF_WRITER]);
 }
 
-int xfermem_get_freespace(txfermem *xf)
+int xfermem_get_freespace(txfermem * xf)
 {
 	int freeindex, readindex;
 
@@ -146,7 +146,7 @@ int xfermem_get_freespace(txfermem *xf)
 	}
 }
 
-int xfermem_get_usedspace(txfermem *xf)
+int xfermem_get_usedspace(txfermem * xf)
 {
 	int freeindex, readindex;
 
@@ -165,7 +165,7 @@ int xfermem_get_usedspace(txfermem *xf)
 	}
 }
 
-int xfermem_write(txfermem *xf, byte *data, int count)
+int xfermem_write(txfermem * xf, byte * data, int count)
 {
 	int nbytes;
 
@@ -190,7 +190,7 @@ int xfermem_write(txfermem *xf, byte *data, int count)
 	return (nbytes);
 }
 
-int xfermem_read(txfermem *xf, byte *data, int count)
+int xfermem_read(txfermem * xf, byte * data, int count)
 {
 	int nbytes;
 
@@ -293,7 +293,7 @@ int xfermem_putcmd(int fd, byte cmd)
 	}
 }
 
-int xfermem_block(int readwrite, txfermem *xf)
+int xfermem_block(int readwrite, txfermem * xf)
 {
 	int myfd = xf->fd[readwrite];
 	int result;

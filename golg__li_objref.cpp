@@ -20,7 +20,7 @@
 li_type_number li_g1_ref_type_number;
 li_object_pointer g1_null_ref;
 
-li_g1_ref::li_g1_ref(g1_object_class *o)
+li_g1_ref::li_g1_ref(g1_object_class * o)
 	: li_object(li_g1_ref_type_number)
 {
 	if (o)
@@ -42,10 +42,10 @@ class li_g1_ref_function :
 	public li_type_function_table
 {
 public:
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
-		li_g1_ref *r=li_g1_ref::get(o,0);
-		g1_object_class *v=r->value();
+		li_g1_ref * r=li_g1_ref::get(o,0);
+		g1_object_class * v=r->value();
 
 		stream->printf("(g1_object_class ");
 		if (v)
@@ -58,7 +58,7 @@ public:
 		}
 	}
 
-	int equal(li_object *o1, li_object *o2)
+	int equal(li_object * o1, li_object * o2)
 	{
 		return li_g1_ref::get(o1,0)->value()==li_g1_ref::get(o2,0)->value();
 	}
@@ -68,9 +68,10 @@ public:
 		return "object_ref";
 	}
 
-	virtual li_object *create(li_object *params, li_environment *env)
+	virtual li_object *create(li_object * params, li_environment * env)
 	{
-		g1_object_class *o=0;
+		g1_object_class * o=0;
+
 		if (params)
 		{
 			o=li_g1_ref::get(li_eval(li_car(params,env), env),env)->value();
@@ -86,13 +87,13 @@ public:
 		}
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		((g1_saver_class *)fp)->write_global_id(li_g1_ref::get(o, env)->_global_id);
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp,  li_type_number *type_remap,
-								   li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp,  li_type_number * type_remap,
+								   li_environment * env)
 	{
 		return new li_g1_ref(((g1_loader_class *)fp)->read_global_id());
 	}
@@ -107,6 +108,7 @@ static w32 half_bright(w32 color)
 	w32 r=((color&0xff0000)>>16)/4;
 	w32 g=((color&0xff00)>>8)/4;
 	w32 b=((color&0xff)/4);
+
 	return (r<<16)|(g<<8)|b;
 }
 
@@ -115,9 +117,10 @@ inline float raise_dist()
 	return 0.05f;
 }
 
-void li_g1_ref::draw(g1_object_class *start, w32 color, g1_draw_context_class *context)
+void li_g1_ref::draw(g1_object_class * start, w32 color, g1_draw_context_class * context)
 {
-	g1_object_class *o=value();
+	g1_object_class * o=value();
+
 	if (o)
 	{
 		g1_render.render_3d_line(i4_3d_point_class(start->x, start->y, start->h+raise_dist()),
@@ -131,12 +134,13 @@ void li_g1_ref::draw(g1_object_class *start, w32 color, g1_draw_context_class *c
 // ******************************** li_g1_ref_list ******************************
 
 
-void li_g1_ref_list::draw(g1_object_class *start, w32 color, g1_draw_context_class *context)
+void li_g1_ref_list::draw(g1_object_class * start, w32 color, g1_draw_context_class * context)
 {
 	int t=size();
+
 	for (int i=0; i<t; i++)
 	{
-		g1_object_class *o=value(i);
+		g1_object_class * o=value(i);
 		if (o)
 		{
 			g1_render.render_3d_line(i4_3d_point_class(start->x, start->y, start->h+raise_dist()),
@@ -153,9 +157,10 @@ w32 li_g1_ref_list::get_id(int list_num)
 	return list[list_num+1];
 }
 
-g1_object_class *li_g1_ref_list::value(int list_num)
+g1_object_class * li_g1_ref_list::value(int list_num)
 {
 	w32 id=get_id(list_num);
+
 	if (g1_global_id.check_id(id))
 	{
 		return g1_global_id.get(id);
@@ -170,6 +175,7 @@ g1_object_class *li_g1_ref_list::value(int list_num)
 int li_g1_ref_list::find(w32 id)
 {
 	int t=size()+1;
+
 	for (int i=1; i<t; i++)
 	{
 		// object is already in list
@@ -182,7 +188,7 @@ int li_g1_ref_list::find(w32 id)
 	return -1;
 }
 
-int li_g1_ref_list::find(g1_object_class *o)
+int li_g1_ref_list::find(g1_object_class * o)
 {
 	return find(o->global_id);
 }
@@ -199,19 +205,20 @@ void li_g1_ref_list::add(w32 id)
 	}
 }
 
-void li_g1_ref_list::add(g1_object_class *obj)
+void li_g1_ref_list::add(g1_object_class * obj)
 {
 	add(obj->global_id);
 }
 
-li_g1_ref_list *li_g1_ref_list::clone()
+li_g1_ref_list * li_g1_ref_list::clone()
 {
-	li_g1_ref_list *c=new li_g1_ref_list;
+	li_g1_ref_list * c=new li_g1_ref_list;
 
 	int t=size();
+
 	for (int i=0; i<t; i++)
 	{
-		g1_object_class *o=value(i);
+		g1_object_class * o=value(i);
 		if (o)
 		{
 			c->add(o);
@@ -238,7 +245,7 @@ void li_g1_ref_list::remove(w32 id)
 	list[0]--;
 }
 
-void li_g1_ref_list::remove(g1_object_class *o)
+void li_g1_ref_list::remove(g1_object_class * o)
 {
 	remove(o->global_id);
 }
@@ -255,6 +262,7 @@ void li_g1_ref_list::free()
 void li_g1_ref_list::compact()
 {
 	int t=size();
+
 	for (int i=0; i<t; i++)
 	{
 		w32 id=get_id(i);
@@ -276,21 +284,22 @@ li_type_number li_g1_ref_list_type_number;
 class li_g1_ref_list_function :
 	public li_type_function_table
 {
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
-		li_g1_ref_list *p=li_g1_ref_list::get(o,0);
+		li_g1_ref_list * p=li_g1_ref_list::get(o,0);
+
 		p->free();
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
-		li_g1_ref_list *r=li_g1_ref_list::get(o,0);
+		li_g1_ref_list * r=li_g1_ref_list::get(o,0);
 
 		stream->printf("(g1_object_list ");
 
 		for (int i=0; i<r->size(); i++)
 		{
-			g1_object_class *v=r->value(i);
+			g1_object_class * v=r->value(i);
 
 			if (v)
 			{
@@ -309,23 +318,24 @@ class li_g1_ref_list_function :
 		return "object_ref_list";
 	}
 
-	virtual li_object *create(li_object *params, li_environment *env)
+	virtual li_object *create(li_object * params, li_environment * env)
 	{
-		li_g1_ref_list *r=new li_g1_ref_list;
+		li_g1_ref_list * r=new li_g1_ref_list;
 
 		while (params)
 		{
-			g1_object_class *o=li_g1_ref::get(li_eval(li_car(params,env), env),env)->value();
+			g1_object_class * o=li_g1_ref::get(li_eval(li_car(params,env), env),env)->value();
 			r->add(o);
 		}
 
 		return r;
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 
-		li_g1_ref_list *r=li_g1_ref_list::get(o,env);
+		li_g1_ref_list * r=li_g1_ref_list::get(o,env);
+
 		r->compact();
 
 		int t=r->size();
@@ -336,11 +346,12 @@ class li_g1_ref_list_function :
 		}
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp,  li_type_number *type_remap,
-								   li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp,  li_type_number * type_remap,
+								   li_environment * env)
 	{
-		li_g1_ref_list *r=new li_g1_ref_list;
+		li_g1_ref_list * r=new li_g1_ref_list;
 		int t=fp->read_16();
+
 		for (int i=0; i<t; i++)
 		{
 			r->add(((g1_loader_class *)fp)->read_global_id());
@@ -362,7 +373,8 @@ public:
 	}
 	void init()
 	{
-		li_type_function_table *t=new li_g1_ref_function;
+		li_type_function_table * t=new li_g1_ref_function;
+
 		li_g1_ref_type_number=li_add_type(t);
 		g1_null_ref=new li_g1_ref(g1_global_id.invalid_id());
 		t=new li_g1_ref_list_function;

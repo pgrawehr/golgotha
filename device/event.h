@@ -117,11 +117,11 @@ public:
 
 	//! Returns a descriptive name of the event and its parameters.
 	//! This is used for debugging only.
-	virtual void name(char *buffer) = 0;
+	virtual void name(char * buffer) = 0;
 	static const int MAX_NAME_BUFFER_SIZE=128;
 protected:
 
-	void static_name(char *buffer, const char *str)
+	void static_name(char * buffer, const char * str)
 	{
 		strncpy(buffer,str,MAX_NAME_BUFFER_SIZE);
 		buffer[MAX_NAME_BUFFER_SIZE-1]=0;
@@ -151,7 +151,7 @@ public:
 		  y(y)
 	{
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"mouse_move");
 	}
@@ -236,7 +236,7 @@ public:
 		return new i4_mouse_button_down_event_class(but,x,y,time,last_time, double_click);
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		sprintf(buffer,"mouse_button_down at %d,%d with button %d",x,y,but);
 	}
@@ -263,7 +263,7 @@ public:
 		return new i4_mouse_button_up_event_class(but,x,y,time,last_time, double_click);
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		sprintf(buffer,"mouse_button_up at %d,%d with button %d",x,y,but);
 	}
@@ -278,14 +278,14 @@ public:
 	char command[128];
 	int command_id;
 
-	i4_do_command_event_class(char *_command, int command_id);
-	i4_do_command_event_class(char *_command, int command_id, i4_time_class &time);
+	i4_do_command_event_class(char * _command, int command_id);
+	i4_do_command_event_class(char * _command, int command_id, i4_time_class &time);
 	virtual event_type type()
 	{
 		return DO_COMMAND;
 	}
 	virtual i4_event *copy();
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		snprintf(buffer,MAX_NAME_BUFFER_SIZE-1,"do_command_event_class %s",command);
 		buffer[MAX_NAME_BUFFER_SIZE-1]=0;
@@ -301,8 +301,8 @@ public:
 	char command[128];
 	int command_id;
 
-	i4_end_command_event_class(char *command, int command_id, i4_time_class &time);
-	i4_end_command_event_class(char *command, int command_id);
+	i4_end_command_event_class(char * command, int command_id, i4_time_class &time);
+	i4_end_command_event_class(char * command, int command_id);
 
 
 	virtual event_type type()
@@ -313,7 +313,7 @@ public:
 	{
 		return new i4_end_command_event_class(command, command_id, time);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		snprintf(buffer,MAX_NAME_BUFFER_SIZE-1,"end_command_event_class %s",command);
 		buffer[MAX_NAME_BUFFER_SIZE-1]=0;
@@ -346,7 +346,7 @@ public:
 	{
 		return new i4_key_press_event_class(key,key_code,modifiers,time);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		sprintf(buffer,"key_press %d,%d",(w32)key,(w32)key_code);
 	}
@@ -371,7 +371,7 @@ public:
 	{
 		return new i4_char_send_event_class(character,time);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		sprintf(buffer,"char_send %c",character);
 	}
@@ -402,7 +402,7 @@ public:
 	{
 		return new i4_key_release_event_class(key,key_code,modifiers,time);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		sprintf(buffer,"key_release %d,%d",(w32)key,(w32)key_code);
 	}
@@ -413,7 +413,7 @@ class i4_display_change_event_class     :
 	public i4_event
 {
 public:
-	i4_display_class *display;
+	i4_display_class * display;
 	enum change_type
 	{
 		SIZE_CHANGE,  // resolution change
@@ -422,7 +422,7 @@ public:
 	};
 	change_type change;
 
-	i4_display_change_event_class(i4_display_class *display, change_type change)
+	i4_display_change_event_class(i4_display_class * display, change_type change)
 		: display(display),
 		  change(change)
 	{
@@ -440,7 +440,7 @@ public:
 	{
 		return new i4_display_change_event_class(display,change);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"display_change");
 	}
@@ -450,9 +450,9 @@ class i4_display_close_event_class      :
 	public i4_event
 {
 public:
-	i4_display_class *display;
+	i4_display_class * display;
 
-	i4_display_close_event_class(i4_display_class *display) :
+	i4_display_close_event_class(i4_display_class * display) :
 		display(display)
 	{
 	}
@@ -468,7 +468,7 @@ public:
 	{
 		return new i4_display_close_event_class(display);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"display_close");
 	}
@@ -492,7 +492,7 @@ public:
 	{
 		return new i4_user_message_event_class(sub_type);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"user_message");
 	}
@@ -511,7 +511,7 @@ public:
 	{
 		return NOW;
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"query_message");
 	}
@@ -522,7 +522,7 @@ class i4_object_message_event_class     :
 {
 public:
 	dispatch_time dtime;
-	void *object;
+	void * object;
 	w32 sub_type;
 
 	virtual dispatch_time when()
@@ -533,7 +533,7 @@ public:
 	{
 		return OBJECT_MESSAGE;
 	}
-	i4_object_message_event_class(void *object, w32 sub_type=0, dispatch_time when=ANYTIME)
+	i4_object_message_event_class(void * object, w32 sub_type=0, dispatch_time when=ANYTIME)
 		: object(object),
 		  sub_type(sub_type),
 		  dtime(when)
@@ -543,7 +543,7 @@ public:
 	{
 		return new i4_object_message_event_class(object, sub_type);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"object_message");
 	}
@@ -575,7 +575,7 @@ public:
 		signal_number(sig)
 	{
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		sprintf(buffer,"system_signal %d",(w32)signal_number);
 	}
@@ -595,7 +595,7 @@ public:
 	{
 		return new i4_user_idle_event_class;
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"idle_event");
 	}

@@ -18,14 +18,14 @@
 
 extern int loptind; /* index in argv[] */
 extern int loptchr; /* index in argv[loptind] */
-extern char *loptarg;   /* points to argument if present, else to option */
+extern char * loptarg;   /* points to argument if present, else to option */
 
 typedef struct {
 	char sname; /* short option name, can be 0 */
-	char *lname;    /* long option name, can be 0 */
+	char * lname;    /* long option name, can be 0 */
 	int flags;  /* see below */
 	void (*func)(char *);   /* called if != 0 (after setting of var) */
-	void *var;  /* type is *int, *char or **char, see below */
+	void * var;  /* type is *int, *char or **char, see below */
 	int value;
 } topt;
 
@@ -60,7 +60,7 @@ typedef struct {
 #define GLO_NOARG   -2
 #define GLO_CONTINUE    -3
 
-int getlopt(int argc, char *argv[], topt *opts);
+int getlopt(int argc, char * argv[], topt * opts);
 
 /* return values:
  *	GLO_END		(0)	end of options

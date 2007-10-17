@@ -45,10 +45,10 @@ public:
 public:
 		typedef i4_linear_allocator area_allocator;
 
-		static area_allocator *area_alloc;
+		static area_allocator * area_alloc;
 
 		i4_coord x1,y1,x2,y2;
-		area *next;
+		area * next;
 
 #ifndef __MAC__
 		area(i4_coord X1, i4_coord Y1,i4_coord X2,i4_coord Y2)
@@ -60,12 +60,12 @@ public:
 		}
 
 #ifndef i4_NEW_CHECK
-		void *operator new(size_t size)
+		void * operator new(size_t size)
 		{
 			return area_alloc->alloc();
 		}
 
-		void operator delete(void *ptr)
+		void operator delete(void * ptr)
 		{
 			area_alloc->free((area *)ptr);
 		}
@@ -76,7 +76,7 @@ public:
 #ifdef __MAC__
 	area *new_area(i4_coord X1, i4_coord Y1, i4_coord X2, i4_coord Y2)
 	{
-		area *r = (area *)area::area_alloc->alloc();
+		area * r = (area *)area::area_alloc->alloc();
 
 		r->x1=X1;
 		r->y1=Y1;
@@ -86,16 +86,17 @@ public:
 		return r;
 	}
 
-	void delete_area(area *ptr)
+	void delete_area(area * ptr)
 	{
 		area::area_alloc->free(ptr);
+
 	}
   #else
 	area *new_area(i4_coord X1, i4_coord Y1, i4_coord X2, i4_coord Y2)
 	{
 		return new area(X1,Y1,X2,Y2);
 	}
-	void delete_area(area *ptr)
+	void delete_area(area * ptr)
 	{
 		delete ptr;
 	}
@@ -110,7 +111,7 @@ public:
 	i4_rect_list_class()
 	{
 	}
-	i4_rect_list_class(i4_rect_list_class *copy_from, i4_coord xoff, i4_coord yoff);
+	i4_rect_list_class(i4_rect_list_class * copy_from, i4_coord xoff, i4_coord yoff);
 
 	//! Initial size of rect area
 	i4_rect_list_class(i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2)
@@ -120,7 +121,7 @@ public:
 
 	//! Exchanges the contents of two rect_list.
 	//! Used to replace the display's clip list
-	void swap(i4_rect_list_class *other);
+	void swap(i4_rect_list_class * other);
 
 	i4_bool empty()
 	{
@@ -128,7 +129,7 @@ public:
 	}
 	void delete_list()
 	{
-		area *a;
+		area * a;
 
 		while (!empty())
 		{
@@ -149,7 +150,7 @@ public:
 	void intersect_area(i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2);
 
 	//! Reduces area list to that which intersects this area list.
-	void intersect_list(i4_rect_list_class *other);
+	void intersect_list(i4_rect_list_class * other);
 
 	//! Return i4_T if area is totally clipped away.
 	//! This can be used to skip expensive drawing operations

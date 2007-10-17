@@ -10,6 +10,6 @@ class g1_object_class;
 
 g1_object_class *g1_create_damager_object(const i4_3d_vector &pos,
 										  int damage_per_tick, int _ticks,
-										  g1_object_class *person_giving_damage,
-										  g1_object_class *person_being_damaged,
-										  li_symbol *smoke_type);
+										  g1_object_class * person_giving_damage,
+										  g1_object_class * person_being_damaged,
+										  li_symbol * smoke_type);

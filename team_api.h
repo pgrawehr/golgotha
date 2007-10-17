@@ -23,13 +23,13 @@ private:
 	friend class g1_player_info_class;
 	friend class g1_team_api_definition_class;
 
-	const g1_team_api_definition_class *def;
+	const g1_team_api_definition_class * def;
 
 protected:
-	i4_file_class *record, *playback;
-	i4_str *name;
+	i4_file_class * record, * playback;
+	i4_str * name;
 public:
-	g1_player_info_class *player;
+	g1_player_info_class * player;
 	int reload;
 	sw32 lastnewpos;
 public:
@@ -71,17 +71,17 @@ public:
 	// These are used by the human player to directly control an unit.
 	// if the last parameter passed is 0 (or ommited), the stank is used.
 	// Turn supertank clockwise
-	void turn(i4_float angle, g1_map_piece_class *p);
+	void turn(i4_float angle, g1_map_piece_class * p);
 	// accelerate ratio of maximum acceleration
-	void accelerate(i4_float ratio, g1_map_piece_class *p);
+	void accelerate(i4_float ratio, g1_map_piece_class * p);
 	// slide right ratio of maximum acceleration
 	void strafe(i4_float strafe_right,
-				i4_float strafe_up, g1_map_piece_class *p);
+				i4_float strafe_up, g1_map_piece_class * p);
 	// set turret direction relative to heading
-	void look(i4_float dax, i4_float day, g1_map_piece_class *p);
-	i4_bool fire0(g1_map_piece_class *p);         // fire first weapon
-	i4_bool fire1(g1_map_piece_class *p);         // fire second weapon
-	i4_bool fire2(g1_map_piece_class *p);         // fire third weapon
+	void look(i4_float dax, i4_float day, g1_map_piece_class * p);
+	i4_bool fire0(g1_map_piece_class * p);         // fire first weapon
+	i4_bool fire1(g1_map_piece_class * p);         // fire second weapon
+	i4_bool fire2(g1_map_piece_class * p);         // fire third weapon
 
 	i4_bool continue_game();                      // when dead/game over etc, this indicates game continues
 
@@ -118,7 +118,8 @@ public:
 
 		i4_bool moving() const
 		{
-			g1_map_piece_class *p=cast();
+			g1_map_piece_class * p=cast();
+
 			return (p->x==p->lx && p->y==p->ly);
 		}
 
@@ -259,7 +260,7 @@ public:
 
 	i4_bool is_building() const;                  // still building objects?
 
-	w16 object_type(const char *name) const;
+	w16 object_type(const char * name) const;
 
 	// ******************** COMMANDS (sent to server) *******************
 	i4_bool deploy_unit(w32 global_id, i4_float x, i4_float y); // send object to location
@@ -272,9 +273,9 @@ public:
 	//! Try to build an unit at the specified factory.
 	//! Special case of the above function: Specify the factory to use for building.
 	//! Hint: Can also be used to build at an enemy's site.
-	int build_unit(g1_object_type type, g1_object_class* factory);
+	int build_unit(g1_object_type type, g1_object_class * factory);
 	//int build_building(g1_object_type type);
-	
+
 
 	i4_bool set_current_target(w32 global_id); // should be a path_object!
 
@@ -289,7 +290,7 @@ public:
 	//! Called if an object is added to a group.
 	//! toobj points to the group object. (This may be a convoy class or
 	//! some location where units group or something else)
-	virtual void object_added(g1_object_class *which, g1_object_class *toobj)
+	virtual void object_added(g1_object_class * which, g1_object_class * toobj)
 	{
 	}
 
@@ -300,18 +301,18 @@ public:
 	}
 
 	//! Save anything valuable of the ai's internal knowledge.
-	virtual void save(g1_saver_class *fp)
+	virtual void save(g1_saver_class * fp)
 	{
 	}
 	//! Get the saved knowledge back.
-	virtual void load(g1_loader_class *fp)
+	virtual void load(g1_loader_class * fp)
 	{
 	}
 
 	// playback handling
-	i4_bool record_start(char *name);
+	i4_bool record_start(char * name);
 	void record_end();
-	i4_bool playback_start(i4_file_class *fp);   // this file pointer will be closed when teamapi is done with it
+	i4_bool playback_start(i4_file_class * fp);   // this file pointer will be closed when teamapi is done with it
 	void playback_end();
 	i4_bool playback_think();                     // think function to implement playbacks
 	void post_think();                            // stuff to do after thinking (recording)
@@ -324,29 +325,29 @@ public:
 class g1_team_api_definition_class
 {
 protected:
-	static g1_team_api_definition_class *first;
-	g1_team_api_definition_class *next;
+	static g1_team_api_definition_class * first;
+	g1_team_api_definition_class * next;
 
-	virtual g1_team_api_class *create(g1_loader_class *f)=0;
-	const char *_name;
-	g1_team_api_class *own_team_api(g1_team_api_class *ai)
+	virtual g1_team_api_class *create(g1_loader_class * f)=0;
+	const char * _name;
+	g1_team_api_class *own_team_api(g1_team_api_class * ai)
 	{
 		ai->def = this;
 		return ai;
 	}
 public:
-	g1_team_api_definition_class(const char *name);
+	g1_team_api_definition_class(const char * name);
 	~g1_team_api_definition_class();
 
 	const char *name() const
 	{
 		return _name;
 	}
-	static g1_team_api_class *create(const char *name, g1_loader_class *f=0);
+	static g1_team_api_class *create(const char * name, g1_loader_class * f=0);
 };
 
 // give a simpler alias to the create mechanism
-inline g1_team_api_class *g1_create_ai(const char *name, g1_loader_class *f=0)
+inline g1_team_api_class *g1_create_ai(const char * name, g1_loader_class * f=0)
 {
 	return g1_team_api_definition_class::create(name,f);
 }
@@ -357,11 +358,11 @@ class g1_team_api_definer :
 	public g1_team_api_definition_class
 {
 public:
-	g1_team_api_definer<T>(const char *name)
+	g1_team_api_definer<T>(const char * name)
 		: g1_team_api_definition_class(name) {
 	}
 
-	virtual g1_team_api_class *create(g1_loader_class *f)
+	virtual g1_team_api_class *create(g1_loader_class * f)
 	{
 		return own_team_api(new T(f));
 	}

@@ -23,7 +23,7 @@ public:
 	g1_critical_graph_class *get_graph();
 	virtual state current_state();
 	virtual void post_draw(i4_draw_context_class &context);
-	g1_ai_mode(g1_controller_edit_class *c);
+	g1_ai_mode(g1_controller_edit_class * c);
 
 	void select_objects_in_area(sw32 x1, sw32 y1, sw32 x2, sw32 y2, select_modifier mod);
 	i4_bool select_object(sw32 mx, sw32 my, i4_float &ox, i4_float &oy, i4_float &oz,
@@ -43,7 +43,7 @@ class g1_ai_params :
 	public g1_mode_creator
 {
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"AI");
 	}
@@ -64,9 +64,9 @@ public:
 
 	i4_bool set_minor_mode(w32 m);
 
-	void create_buttons(i4_parent_window_class *containter);
+	void create_buttons(i4_parent_window_class * containter);
 
-	g1_mode_handler *create_mode_handler(g1_controller_edit_class *c)
+	g1_mode_handler *create_mode_handler(g1_controller_edit_class * c)
 	{
 		return new g1_ai_mode(c);
 	}

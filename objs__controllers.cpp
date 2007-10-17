@@ -67,7 +67,7 @@ enemy("enemy");
 //static g1_object_type stank_type;
 
 
-g1_trigger_class::g1_trigger_class(g1_object_type id, g1_loader_class *fp)
+g1_trigger_class::g1_trigger_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 	get_trigger_type();
@@ -76,17 +76,18 @@ g1_trigger_class::g1_trigger_class(g1_object_type id, g1_loader_class *fp)
 
 void g1_trigger_class::get_trigger_type()
 {
-	li_symbol *s=li_symbol::get(vars->get(team_can_trigger),0);
+	li_symbol * s=li_symbol::get(vars->get(team_can_trigger),0);
 
-	char *sym[]={
+	char * sym[]={
 		"everybody", "friend", "enemy",0
-	}, **a;
+	}, * * a;
+
 	for (a=sym, team_type=0; *a && li_get_symbol(*a)!=s; a++, team_type++)
 	{
 		;
 	}
 }
-void g1_trigger_class::object_changed_by_editor(g1_object_class *who, li_class *old_vars)
+void g1_trigger_class::object_changed_by_editor(g1_object_class * who, li_class * old_vars)
 {
 	if (who==this)
 	{
@@ -96,7 +97,7 @@ void g1_trigger_class::object_changed_by_editor(g1_object_class *who, li_class *
 
 
 // is the object in question one we should be triggered by?
-i4_bool g1_trigger_class::triggable_object(g1_object_class *o)
+i4_bool g1_trigger_class::triggable_object(g1_object_class * o)
 {
 	switch (team_type)
 	{
@@ -113,7 +114,7 @@ i4_bool g1_trigger_class::triggable_object(g1_object_class *o)
 				return i4_F;
 			}
 	}
-	li_symbol *s=li_symbol::get(vars->get_member(units_can_trigger),0);
+	li_symbol * s=li_symbol::get(vars->get_member(units_can_trigger),0);
 	if (strcmp(s->name()->value(),"anyone")==0)
 	{
 		return i4_T;
@@ -126,7 +127,7 @@ i4_bool g1_trigger_class::triggable_object(g1_object_class *o)
 }
 
 // send our trigger message to all the objects in our list
-void g1_trigger_class::send_to_trigger_objects(li_object *sym,g1_object_class *who)
+void g1_trigger_class::send_to_trigger_objects(li_object * sym,g1_object_class * who)
 {
 	if (sym->type()==LI_SYMBOL)
 	{
@@ -135,11 +136,11 @@ void g1_trigger_class::send_to_trigger_objects(li_object *sym,g1_object_class *w
 			return;
 		}                            // don't send none, it means "no message"
 
-		li_g1_ref_list *l=li_g1_ref_list::get(objects_to_trigger(),0);
+		li_g1_ref_list * l=li_g1_ref_list::get(objects_to_trigger(),0);
 		int t=l->size();
 		for (int i=0; i<t; i++)
 		{
-			g1_object_class *o=l->value(i);
+			g1_object_class * o=l->value(i);
 			if (o)
 			{
 				o->message((li_symbol *)sym, new li_g1_ref(who),0);
@@ -148,14 +149,14 @@ void g1_trigger_class::send_to_trigger_objects(li_object *sym,g1_object_class *w
 	}
 	else
 	{
-		li_environment *locenv=new li_environment(0,i4_F);
+		li_environment * locenv=new li_environment(0,i4_F);
 		li_define_value("triggered_obj",new li_g1_ref(who),locenv);
 		li_define_value("trigger_obj",new li_g1_ref(this),locenv);
 		li_eval(sym,locenv);
 	}
 }
 
-void g1_trigger_class::note_enter_range(g1_object_class *who)
+void g1_trigger_class::note_enter_range(g1_object_class * who)
 {
 	li_class_context context(vars);
 
@@ -165,7 +166,7 @@ void g1_trigger_class::note_enter_range(g1_object_class *who)
 	}
 }
 
-void g1_trigger_class::note_leave_range(g1_object_class *who)
+void g1_trigger_class::note_leave_range(g1_object_class * who)
 {
 	li_class_context context(vars);
 
@@ -182,14 +183,14 @@ void g1_trigger_class::think()
 	{
 		cur_time()=check_time();
 		float maxrange=range_when_activated();
-		g1_object_class *dest_array[30];
+		g1_object_class * dest_array[30];
 
-		li_g1_ref_list *in_range=li_g1_ref_list::get(objects_in_range(),0);
+		li_g1_ref_list * in_range=li_g1_ref_list::get(objects_in_range(),0);
 		int num=g1_get_map()->get_objects_in_range(x,y,maxrange,
 												   dest_array,30,0xffffffff,
 												   g1_object_definition_class::MOVABLE|
 												   g1_object_definition_class::TO_MAP_PIECE);
-		g1_object_class *o;
+		g1_object_class * o;
 		int i;
 		for (i=0; i<num; i++)
 		{
@@ -249,7 +250,7 @@ class g1_director_class :
 {
 public:
 	g1_model_draw_parameters draw_params;
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 	{
 		g1_model_draw(this, draw_params, context, viewer_position);
 	}
@@ -258,7 +259,7 @@ public:
 		return draw_params.extent();
 	}
 
-	g1_director_class(g1_object_type id, g1_loader_class *fp)
+	g1_director_class(g1_object_type id, g1_loader_class * fp)
 		: g1_object_class(id,fp)
 	{
 		draw_params.setup("trigger");
@@ -266,18 +267,20 @@ public:
 
 	void think()
 	{
-		li_g1_ref_list *list=li_g1_ref_list::get(objects_to_send_next_tick(),0);
+		li_g1_ref_list * list=li_g1_ref_list::get(objects_to_send_next_tick(),0);
+
 		while (list->size())
 		{
-			g1_object_class *o=list->value(0);
+			g1_object_class * o=list->value(0);
 			list->remove(o->global_id);
 			send_object(o);
 		}
 	}
 
-	void add_to_send_list(g1_object_class *o)
+	void add_to_send_list(g1_object_class * o)
 	{
-		li_g1_ref_list *list=li_g1_ref_list::get(objects_to_send_next_tick(),0);
+		li_g1_ref_list * list=li_g1_ref_list::get(objects_to_send_next_tick(),0);
+
 		if (list->find(o)==-1)
 		{
 			list->add(o);
@@ -286,20 +289,20 @@ public:
 		request_think();
 	}
 
-	void send_object(g1_object_class *o)
+	void send_object(g1_object_class * o)
 	{
 		if (!o)
 		{
 			return ;
 		}
 
-		li_g1_ref_list *list=li_g1_ref_list::get(li_deploy_to(),0);
+		li_g1_ref_list * list=li_g1_ref_list::get(li_deploy_to(),0);
 		int list_size=list->size(), total=0;
 
 		// count how many valid objects we point to
 		for (int i=0; i<list_size; i++)
 		{
-			g1_object_class *to=list->value(i);
+			g1_object_class * to=list->value(i);
 			if (to)
 			{
 				total++;
@@ -313,7 +316,7 @@ public:
 			total=0;
 			for (int j=0; j<list_size; j++)
 			{
-				g1_object_class *to=list->value(j);
+				g1_object_class * to=list->value(j);
 				if (to)
 				{
 					if (total==dest)
@@ -360,7 +363,7 @@ public:
 //       r->remove(who);
 //   }
 
-	li_object *message(li_symbol *message_name, li_object *message_params, li_environment *env)
+	li_object *message(li_symbol * message_name, li_object * message_params, li_environment * env)
 	{
 		li_class_context context(vars);
 
@@ -370,7 +373,7 @@ public:
 
 			// we just turned on, see if there are any nearby object we should send
 			// to there destinations
-			li_g1_ref_list *r=li_g1_ref_list::get(nearby_objects(),0);
+			li_g1_ref_list * r=li_g1_ref_list::get(nearby_objects(),0);
 			int t=r->size();
 			for (int i=0; i<t; i++)
 			{
@@ -391,17 +394,18 @@ public:
 	{
 		li_class_context context(vars);
 
-		g1_object_class *olist[G1_MAX_OBJECTS];
+		g1_object_class * olist[G1_MAX_OBJECTS];
 		int t=g1_get_map()->get_objects_in_range(x,y, range_when_deployed(), olist, G1_MAX_OBJECTS,
 												 0xffffffff,  g1_object_definition_class::MOVABLE);
 
 
-		li_object *o=nearby_objects();
+		li_object * o=nearby_objects();
 
-		li_g1_ref_list *r=li_g1_ref_list::get(o,0);
+		li_g1_ref_list * r=li_g1_ref_list::get(o,0);
 
 		while (r->size())
 			r->remove(r->get_id(0));
+
 
 
 		for (int i=0; i<t; i++)
@@ -427,10 +431,11 @@ director_def("director", g1_object_definition_class::EDITOR_SELECTABLE);
  *   This class implements an on-off switch for scripting purposes
  */
 #define SWITCH_DATA_VERSION 1
-g1_switch_class::g1_switch_class(g1_object_type id, g1_loader_class *fp)
+g1_switch_class::g1_switch_class(g1_object_type id, g1_loader_class * fp)
 	: g1_trigger_class(id,fp)
 {
 	w16 ver=0,data_size=0;
+
 	//The read/write mechanism here is just preparative.
 	//This class has no data to write except lisp vars.
 	if (fp)
@@ -452,14 +457,14 @@ g1_switch_class::g1_switch_class(g1_object_type id, g1_loader_class *fp)
 	set_flag(SELECTABLE,1);
 };
 
-void g1_switch_class::save(g1_saver_class *fp)
+void g1_switch_class::save(g1_saver_class * fp)
 {
 	g1_trigger_class::save(fp);
 	fp->start_version(SWITCH_DATA_VERSION);
 	fp->end_version();
 };
 
-void g1_switch_class::load(g1_loader_class *fp)
+void g1_switch_class::load(g1_loader_class * fp)
 {
 	g1_trigger_class::load(fp);
 	w16 ver=0,data_size=0;
@@ -467,7 +472,7 @@ void g1_switch_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-void g1_switch_class::skipload(g1_loader_class *fp)
+void g1_switch_class::skipload(g1_loader_class * fp)
 {
 	g1_trigger_class::skipload(fp);
 	w16 ver=0,data_size=0;
@@ -475,7 +480,7 @@ void g1_switch_class::skipload(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-void g1_switch_class::note_enter_range(g1_object_class *who)
+void g1_switch_class::note_enter_range(g1_object_class * who)
 {
 	li_class_context ctx(vars);
 	if (triggable_object(who))
@@ -488,7 +493,7 @@ void g1_switch_class::note_enter_range(g1_object_class *who)
 	}
 };
 
-void g1_switch_class::note_leave_range(g1_object_class *who)
+void g1_switch_class::note_leave_range(g1_object_class * who)
 {
 	li_class_context ctx(vars);
 	if (triggable_object(who))
@@ -496,7 +501,7 @@ void g1_switch_class::note_leave_range(g1_object_class *who)
 		if (current_state()==on.get())
 		{
 			//check that there's no triggable_object in the range any more
-			li_g1_ref_list *in_range=li_g1_ref_list::get(objects_in_range(),0);
+			li_g1_ref_list * in_range=li_g1_ref_list::get(objects_in_range(),0);
 
 			for (int i=0; i<in_range->size(); i++)
 			{
@@ -520,7 +525,7 @@ g1_switch_def("switch",
 //objects whose owner is not the current player.
 //We should probably allow selecting a single non-player object.
 g1_toggable_switch_class::g1_toggable_switch_class(g1_object_type id,
-												   g1_loader_class *fp)
+												   g1_loader_class * fp)
 	: g1_switch_class(id,fp)
 {
 	set_flag(SELECTABLE,1);
@@ -532,7 +537,7 @@ static li_symbol_ref commands_exec("commands-exec");
 static li_symbol_ref command_toggle_switch("command-toggle_switch");
 static li_symbol_ref command_to_far_switch("command-to_far_switch");
 
-void g1_toggable_switch_class::note_enter_range(g1_object_class *who)
+void g1_toggable_switch_class::note_enter_range(g1_object_class * who)
 {
 	li_class_context ctx(vars);
 	if (triggable_object(who))
@@ -541,7 +546,7 @@ void g1_toggable_switch_class::note_enter_range(g1_object_class *who)
 	}
 };
 
-void g1_toggable_switch_class::note_leave_range(g1_object_class *who)
+void g1_toggable_switch_class::note_leave_range(g1_object_class * who)
 {
 	li_class_context ctx(vars);
 	if (triggable_object(who))
@@ -549,7 +554,7 @@ void g1_toggable_switch_class::note_leave_range(g1_object_class *who)
 		if (current_state()==on.get())
 		{
 			//check that there's no triggable_object in the range any more
-			li_g1_ref_list *in_range=li_g1_ref_list::get(objects_in_range(),0);
+			li_g1_ref_list * in_range=li_g1_ref_list::get(objects_in_range(),0);
 
 			for (int i=0; i<in_range->size(); i++)
 			{
@@ -563,9 +568,9 @@ void g1_toggable_switch_class::note_leave_range(g1_object_class *who)
 	}
 }
 
-li_object *g1_toggable_switch_class::message(li_symbol *message_name,
-											 li_object *message_params,
-											 li_environment *env)
+li_object * g1_toggable_switch_class::message(li_symbol * message_name,
+											  li_object * message_params,
+											  li_environment * env)
 {
 	li_class_context ctx(vars);
 	if (message_name==commands_ask.get())
@@ -625,7 +630,7 @@ g1_toggable_switch_def("toggable_switch",
 					   g1_object_definition_class::TO_TRIGGER);
 
 g1_extended_trigger_class::g1_extended_trigger_class(g1_object_type id,
-													 g1_loader_class *fp)
+													 g1_loader_class * fp)
 	: g1_trigger_class(id,fp)
 {
 };

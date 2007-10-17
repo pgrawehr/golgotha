@@ -24,12 +24,12 @@
 #include "image_man.h"
 #include "player.h"
 
-static li_symbol *s_model_name=0, *s_mini_object=0,
-*s_offset=0, *s_position=0, *s_rotation=0,
-*s_object_flags=0, *s_type_flags=0;
+static li_symbol * s_model_name=0, * s_mini_object=0,
+* s_offset=0, * s_position=0, * s_rotation=0,
+* s_object_flags=0, * s_type_flags=0;
 
 
-static li_symbol *s_ofun[G1_F_TOTAL];
+static li_symbol * s_ofun[G1_F_TOTAL];
 
 
 ////////////////////  li_def_object setup code ///////////////////////////////////////
@@ -60,7 +60,7 @@ static w32 g1_decoflag_values[]={
 };
 
 
-static char *g1_oflag_names[]={
+static char * g1_oflag_names[]={
 	"thinking",
 	"selectable",
 	"targetable",
@@ -77,7 +77,7 @@ static char *g1_oflag_names[]={
 	0
 };
 
-static char *g1_decoflag_names[]={
+static char * g1_decoflag_names[]={
 	"deco_none",
 	"deco_invulnerable",
 	"deco_usepolycoldet",
@@ -87,7 +87,7 @@ static char *g1_decoflag_names[]={
 };
 
 
-static char *g1_ofun_names[G1_F_TOTAL]={
+static char * g1_ofun_names[G1_F_TOTAL]={
 	"think",
 	"damage",
 	"notify_damage",
@@ -101,14 +101,14 @@ static char *g1_ofun_names[G1_F_TOTAL]={
 	"can_attack"     //only sensefull for map-pieces
 };
 
-li_object *li_def_object(li_object *o, li_environment *env);
-li_object *li_def_movable_object(li_object *o, li_environment *env);
-li_object *li_def_buildings(li_object *o, li_environment *env)
+li_object *li_def_object(li_object * o, li_environment * env);
+li_object *li_def_movable_object(li_object * o, li_environment * env);
+li_object *li_def_buildings(li_object * o, li_environment * env)
 {
 	for (; o; o=li_cdr(o,env))
 	{
-		li_object *obj=li_car(o,env);
-		char *name=0;
+		li_object * obj=li_car(o,env);
+		char * name=0;
 		w32 deco_flags=0;
 		if (obj->type()==LI_STRING)
 		{
@@ -117,7 +117,7 @@ li_object *li_def_buildings(li_object *o, li_environment *env)
 		else
 		{
 			name=li_string::get(li_car(obj,env),env)->value();
-			li_object *next=li_cdr(obj,env);
+			li_object * next=li_cdr(obj,env);
 			while (next&&next!=li_nil)
 			{
 				deco_flags|=li_int::get(li_eval(li_car(next,env),env),env)->value();
@@ -136,13 +136,14 @@ public:
 	void init()
 	{
 		int i=0;
-		for (char **a=g1_oflag_names; *a; a++)
+
+		for (char * * a=g1_oflag_names; *a; a++)
 		{
 			li_set_value(*a, new li_int(g1_oflag_values[i++]));
 		}
 
 		i=0;
-		for (char **b=g1_decoflag_names; *b; b++)
+		for (char * * b=g1_decoflag_names; *b; b++)
 		{
 			li_set_value(*b,new li_int(g1_decoflag_values[i++]));
 		}
@@ -174,9 +175,9 @@ public:
 
 struct g1_object_def_struct
 {
-	char *name;
-	char *model_name;
-	i4_array<g1_mini_object_def> *minis;
+	char * name;
+	char * model_name;
+	i4_array<g1_mini_object_def> * minis;
 	li_type_number var_class;
 	w32 flags;
 
@@ -192,7 +193,7 @@ struct g1_object_def_struct
 
 /////////////////////////////  Dynamic object code ///////////////////////////////
 
-void g1_mini_object_def::assign_to(g1_mini_object *m)
+void g1_mini_object_def::assign_to(g1_mini_object * m)
 {
 	m->offset=offset;
 	m->x=m->lx=position.x;
@@ -205,7 +206,7 @@ void g1_mini_object_def::assign_to(g1_mini_object *m)
 	m->animation=0;
 }
 
-g1_movable_dynamic_object_type_class::g1_movable_dynamic_object_type_class(li_symbol *sym)
+g1_movable_dynamic_object_type_class::g1_movable_dynamic_object_type_class(li_symbol * sym)
 	: g1_dynamic_object_type_class(sym)
 {
 	obj_flags=g1_object_class::CAN_DRIVE_ON;
@@ -214,7 +215,7 @@ g1_movable_dynamic_object_type_class::g1_movable_dynamic_object_type_class(li_sy
 	flags &= ~TO_DYNAMIC_OBJECT; //the type class inherits from there
 	//but the object class does not.
 }
-g1_dynamic_object_type_class::g1_dynamic_object_type_class(li_symbol *sym)
+g1_dynamic_object_type_class::g1_dynamic_object_type_class(li_symbol * sym)
 	: g1_object_definition_class(sym->name()->value()),
 	  minis(0,1)
 
@@ -228,15 +229,16 @@ g1_dynamic_object_type_class::g1_dynamic_object_type_class(li_symbol *sym)
 }
 
 
-li_object *g1_dynamic_object_class::message(li_symbol *name, li_object *params, li_environment *env)
+li_object * g1_dynamic_object_class::message(li_symbol * name, li_object * params, li_environment * env)
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_MESSAGE])
 	{
 		li_ext_class_context context(vars,env,this);
 		li_g1_ref _me(global_id);
 
-		li_list *p=(li_list *)params;
+		li_list * p=(li_list *)params;
 		li_push(p, name);
 		li_push(p, &_me);
 
@@ -246,15 +248,16 @@ li_object *g1_dynamic_object_class::message(li_symbol *name, li_object *params, 
 	return g1_object_class::message(name,params,env);
 }
 
-li_object *g1_movable_dynamic_object_class::message(li_symbol *name, li_object *params, li_environment *env)
+li_object * g1_movable_dynamic_object_class::message(li_symbol * name, li_object * params, li_environment * env)
 {
-	g1_movable_dynamic_object_type_class *t=get_type();
+	g1_movable_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_MESSAGE])
 	{
 		li_ext_class_context context(vars,env,this);
 		li_g1_ref _me(global_id);
 
-		li_list *p=(li_list *)params;
+		li_list * p=(li_list *)params;
 		li_push(p, name);
 		li_push(p, &_me);
 
@@ -264,16 +267,17 @@ li_object *g1_movable_dynamic_object_class::message(li_symbol *name, li_object *
 	return g1_map_piece_class::message(name,params,env);
 }
 
-g1_draw_context_class *g1_draw_context;
+g1_draw_context_class * g1_draw_context;
 
 // called when the object is on a map cell that is drawn
-void g1_dynamic_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_dynamic_object_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_DRAW])
 	{
 		g1_draw_context=context;
-		li_environment *myenv=0;
+		li_environment * myenv=0;
 		li_ext_class_context context(vars,myenv,this);
 		li_g1_ref _me(global_id);
 		//t->funs[G1_F_DRAW](li_make_list(&_me,0),0);
@@ -287,13 +291,14 @@ void g1_dynamic_object_class::draw(g1_draw_context_class *context, i4_3d_vector&
 	}
 }
 
-void g1_movable_dynamic_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_movable_dynamic_object_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
-	g1_movable_dynamic_object_type_class *t=get_type();
+	g1_movable_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_DRAW])
 	{
 		g1_draw_context=context;
-		li_environment *env=0;
+		li_environment * env=0;
 		li_ext_class_context context(vars,env,this);
 		li_g1_ref _me(global_id);
 		//t->funs[G1_F_DRAW](li_make_list(&_me,0),0);
@@ -321,12 +326,13 @@ void g1_movable_dynamic_object_class::draw(g1_draw_context_class *context, i4_3d
 //   }
 // }
 
-void g1_dynamic_object_class::damage(g1_object_class *obj, int hp, i4_3d_vector damage_dir)
+void g1_dynamic_object_class::damage(g1_object_class * obj, int hp, i4_3d_vector damage_dir)
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_DAMAGE])
 	{
-		li_environment *env=0;
+		li_environment * env=0;
 		li_ext_class_context context(vars,env,this);
 		(*t->funs[G1_F_DAMAGE])(li_make_list(new li_g1_ref(global_id),
 											 new li_g1_ref(obj->global_id),
@@ -339,12 +345,13 @@ void g1_dynamic_object_class::damage(g1_object_class *obj, int hp, i4_3d_vector 
 	};
 }
 
-void g1_movable_dynamic_object_class::damage(g1_object_class *obj, int hp, i4_3d_vector damage_dir)
+void g1_movable_dynamic_object_class::damage(g1_object_class * obj, int hp, i4_3d_vector damage_dir)
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_DAMAGE])
 	{
-		li_environment *env=0;
+		li_environment * env=0;
 		li_ext_class_context context(vars,env,this);
 		(*t->funs[G1_F_DAMAGE])(li_make_list(new li_g1_ref(global_id),
 											 new li_g1_ref(obj->global_id),
@@ -358,12 +365,13 @@ void g1_movable_dynamic_object_class::damage(g1_object_class *obj, int hp, i4_3d
 	};
 }
 
-void g1_dynamic_object_class::notify_damage(g1_object_class *obj, sw32 hp)
+void g1_dynamic_object_class::notify_damage(g1_object_class * obj, sw32 hp)
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_NOTIFY_DAMAGE])
 	{
-		li_environment *env=0;
+		li_environment * env=0;
 		li_ext_class_context context(vars,env,this);
 		//li_symbol has an overwritten operator()
 		(*t->funs[G1_F_NOTIFY_DAMAGE])(li_make_list(new li_g1_ref(global_id),
@@ -377,12 +385,13 @@ void g1_dynamic_object_class::notify_damage(g1_object_class *obj, sw32 hp)
 	}
 }
 
-void g1_movable_dynamic_object_class::notify_damage(g1_object_class *obj, sw32 hp)
+void g1_movable_dynamic_object_class::notify_damage(g1_object_class * obj, sw32 hp)
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_NOTIFY_DAMAGE])
 	{
-		li_environment *env=0;
+		li_environment * env=0;
 		li_ext_class_context context(vars,env,this);
 		//li_symbol has an overwritten operator()
 		(*t->funs[G1_F_NOTIFY_DAMAGE])(li_make_list(new li_g1_ref(global_id),
@@ -398,10 +407,11 @@ void g1_movable_dynamic_object_class::notify_damage(g1_object_class *obj, sw32 h
 
 void g1_dynamic_object_class::think()
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_THINK])
 	{
-		li_environment *myenv=0;
+		li_environment * myenv=0;
 		li_ext_class_context context(vars,myenv,this,i4_T);
 		(*t->funs[G1_F_THINK])(li_make_list(new li_g1_ref(global_id), 0), myenv);
 	}
@@ -409,10 +419,11 @@ void g1_dynamic_object_class::think()
 
 void g1_movable_dynamic_object_class::think()
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_THINK])
 	{
-		li_environment *myenv=0;
+		li_environment * myenv=0;
 		li_ext_class_context context(vars,myenv,this,i4_T);
 
 
@@ -427,8 +438,9 @@ static li_float_class_member dest_x("dest_x"), dest_y("dest_y");
 
 i4_bool g1_dynamic_object_class::deploy_to(float x, float y, g1_path_handle ph)
 {
-	g1_dynamic_object_type_class *t=get_type();
-	li_environment *env=0;
+	g1_dynamic_object_type_class * t=get_type();
+	li_environment * env=0;
+
 	li_ext_class_context context(vars,env,this);
 
 	if (t->funs[G1_F_DEPLOY_TO])
@@ -453,8 +465,9 @@ i4_bool g1_dynamic_object_class::deploy_to(float x, float y, g1_path_handle ph)
 
 i4_bool g1_movable_dynamic_object_class::deploy_to(float x, float y, g1_path_handle ph)
 {
-	g1_dynamic_object_type_class *t=get_type();
-	li_environment *env=0;
+	g1_dynamic_object_type_class * t=get_type();
+	li_environment * env=0;
+
 	li_ext_class_context context(vars,env,this);
 
 	if (t->funs[G1_F_DEPLOY_TO])
@@ -472,14 +485,15 @@ i4_bool g1_movable_dynamic_object_class::deploy_to(float x, float y, g1_path_han
 	return 0;
 }
 
-i4_bool g1_movable_dynamic_object_class::can_attack(g1_object_class *who)
+i4_bool g1_movable_dynamic_object_class::can_attack(g1_object_class * who)
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_CAN_ATTACK])
 	{
-		li_environment *env=0;
+		li_environment * env=0;
 		li_ext_class_context context(vars,env,this);
-		li_object *ret=0;
+		li_object * ret=0;
 		ret=(*t->funs[G1_F_CAN_ATTACK])(li_make_list(new li_g1_ref(global_id),
 													 new li_int(flags),new li_int(player_num),
 													 new li_g1_ref(who),new li_int(who->flags),
@@ -501,7 +515,8 @@ i4_bool g1_movable_dynamic_object_class::can_attack(g1_object_class *who)
 
 void g1_dynamic_object_class::change_player_num(int new_player_num)
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_CHANGE_TEAMS])
 	{
 		li_class_context context(vars);
@@ -516,7 +531,8 @@ void g1_dynamic_object_class::change_player_num(int new_player_num)
 
 void g1_movable_dynamic_object_class::change_player_num(int new_player_num)
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_CHANGE_TEAMS])
 	{
 		li_class_context context(vars);
@@ -531,10 +547,11 @@ void g1_movable_dynamic_object_class::change_player_num(int new_player_num)
 
 i4_bool g1_dynamic_object_class::occupy_location()
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_OCCUPY_LOCATION])
 	{
-		li_environment *env=0;
+		li_environment * env=0;
 		li_ext_class_context context(vars,env,this);
 
 		if ((*t->funs[G1_F_OCCUPY_LOCATION])(li_make_list(new li_g1_ref(global_id),0), env))
@@ -557,8 +574,9 @@ i4_bool g1_movable_dynamic_object_class::occupy_location()
 	//not yet sure wheter everything is ok here.
 	//Is there a case where we would need the environment here
 	//because a lisp function is in the call stack?
-	g1_dynamic_object_type_class *t=get_type();
-	li_environment *env=0;
+	g1_dynamic_object_type_class * t=get_type();
+	li_environment * env=0;
+
 	li_ext_class_context context(vars,env,this);
 	if (t->funs[G1_F_OCCUPY_LOCATION])
 	{
@@ -589,10 +607,11 @@ i4_bool g1_movable_dynamic_object_class::occupy_location()
 
 void g1_dynamic_object_class::unoccupy_location()
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_UNOCCUPY_LOCATION])
 	{
-		li_environment *env=0;
+		li_environment * env=0;
 		li_ext_class_context context(vars,env,this);
 		(*t->funs[G1_F_UNOCCUPY_LOCATION])(li_make_list(new li_g1_ref(global_id), 0), env);
 	}
@@ -604,10 +623,11 @@ void g1_dynamic_object_class::unoccupy_location()
 
 void g1_movable_dynamic_object_class::unoccupy_location()
 {
-	g1_dynamic_object_type_class *t=get_type();
+	g1_dynamic_object_type_class * t=get_type();
+
 	if (t->funs[G1_F_UNOCCUPY_LOCATION])
 	{
-		li_environment *env=0;
+		li_environment * env=0;
 		li_ext_class_context context(vars,env,this);
 		(*t->funs[G1_F_UNOCCUPY_LOCATION])(li_make_list(new li_g1_ref(global_id), 0), env);
 	}
@@ -617,11 +637,11 @@ void g1_movable_dynamic_object_class::unoccupy_location()
 	}
 }
 
-g1_dynamic_object_class::g1_dynamic_object_class(g1_object_type type, g1_loader_class *fp)
+g1_dynamic_object_class::g1_dynamic_object_class(g1_object_type type, g1_loader_class * fp)
 	: g1_object_class(type, fp)
 
 {
-	g1_dynamic_object_type_class *dtype=get_type();
+	g1_dynamic_object_type_class * dtype=get_type();
 
 	if (dtype->minis.size())
 	{
@@ -640,7 +660,7 @@ g1_dynamic_object_class::g1_dynamic_object_class(g1_object_type type, g1_loader_
 
 		if (old_minis==dtype->minis.size())
 		{
-			g1_mini_object *m=mini_objects;
+			g1_mini_object * m=mini_objects;
 
 			for (i=0; i<dtype->minis.size(); i++)
 			{
@@ -662,14 +682,15 @@ g1_dynamic_object_class::g1_dynamic_object_class(g1_object_type type, g1_loader_
 	grab_old();
 }
 
-g1_movable_dynamic_object_class::g1_movable_dynamic_object_class(g1_object_type type, g1_loader_class *fp)
+g1_movable_dynamic_object_class::g1_movable_dynamic_object_class(g1_object_type type, g1_loader_class * fp)
 	: g1_map_piece_class(type, fp)
 {
-	g1_movable_dynamic_object_type_class *dtype=get_type();
+	g1_movable_dynamic_object_type_class * dtype=get_type();
+
 	radar_type=G1_RADAR_VEHICLE;
 	i4_str rname(dtype->name());
 	rname="bitmaps/radar/"+rname+".tga";
-	g1_team_icon_ref *ref=new g1_team_icon_ref(rname.c_str());
+	g1_team_icon_ref * ref=new g1_team_icon_ref(rname.c_str());
 	ref->load(); //will be the default image if load fails.
 	radar_image=ref;
 	if (dtype->minis.size())
@@ -688,7 +709,7 @@ g1_movable_dynamic_object_class::g1_movable_dynamic_object_class(g1_object_type 
 
 		if (old_minis==dtype->minis.size())
 		{
-			g1_mini_object *m=mini_objects;
+			g1_mini_object * m=mini_objects;
 
 			for (i=0; i<dtype->minis.size(); i++)
 			{
@@ -715,7 +736,7 @@ g1_movable_dynamic_object_class::~g1_movable_dynamic_object_class()
 	radar_image=0;
 }
 
-void g1_dynamic_object_class::save(g1_saver_class *fp)
+void g1_dynamic_object_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 
@@ -724,7 +745,7 @@ void g1_dynamic_object_class::save(g1_saver_class *fp)
 	fp->write_8((w8)num_mini_objects);
 	int han=fp->mark_size();
 
-	g1_mini_object *m=mini_objects;
+	g1_mini_object * m=mini_objects;
 	for (int i=0; i<num_mini_objects; i++)
 	{
 		fp->write_format("fffffffff",
@@ -737,7 +758,7 @@ void g1_dynamic_object_class::save(g1_saver_class *fp)
 	fp->end_mark_size(han);
 }
 
-void g1_movable_dynamic_object_class::save(g1_saver_class *fp)
+void g1_movable_dynamic_object_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -746,7 +767,7 @@ void g1_movable_dynamic_object_class::save(g1_saver_class *fp)
 	fp->write_8((w8)num_mini_objects);
 	int han=fp->mark_size();
 
-	g1_mini_object *m=mini_objects;
+	g1_mini_object * m=mini_objects;
 	for (int i=0; i<num_mini_objects; i++)
 	{
 		fp->write_format("fffffffff",
@@ -759,7 +780,7 @@ void g1_movable_dynamic_object_class::save(g1_saver_class *fp)
 	fp->end_mark_size(han);
 }
 
-void g1_dynamic_object_class::load(g1_loader_class *fp)
+void g1_dynamic_object_class::load(g1_loader_class * fp)
 {
 	g1_object_class::load(fp);
 	fp->read_16();
@@ -771,7 +792,7 @@ void g1_dynamic_object_class::load(g1_loader_class *fp)
 		return;
 	}
 	fp->read_32();
-	g1_mini_object *m=mini_objects;
+	g1_mini_object * m=mini_objects;
 	for (int i=0; i<num_mini_objects; i++)
 	{
 		fp->read_format("fffffffff",
@@ -782,7 +803,7 @@ void g1_dynamic_object_class::load(g1_loader_class *fp)
 	}
 }
 
-void g1_movable_dynamic_object_class::load(g1_loader_class *fp)
+void g1_movable_dynamic_object_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->read_16();
@@ -794,7 +815,7 @@ void g1_movable_dynamic_object_class::load(g1_loader_class *fp)
 		return;
 	}
 	fp->read_32();
-	g1_mini_object *m=mini_objects;
+	g1_mini_object * m=mini_objects;
 	for (int i=0; i<num_mini_objects; i++)
 	{
 		fp->read_format("fffffffff",
@@ -805,7 +826,7 @@ void g1_movable_dynamic_object_class::load(g1_loader_class *fp)
 	}
 }
 
-void g1_movable_dynamic_object_class::skipload(g1_loader_class *fp)
+void g1_movable_dynamic_object_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->read_16();
@@ -813,7 +834,7 @@ void g1_movable_dynamic_object_class::skipload(g1_loader_class *fp)
 	fp->seek(fp->tell()+s);
 }
 
-void g1_dynamic_object_class::skipload(g1_loader_class *fp)
+void g1_dynamic_object_class::skipload(g1_loader_class * fp)
 {
 	g1_object_class::skipload(fp);
 	fp->read_16();
@@ -824,23 +845,25 @@ void g1_dynamic_object_class::skipload(g1_loader_class *fp)
 
 //////////////////  dynamic object type functions ///////////////////////////////
 
-g1_object_class *g1_dynamic_object_type_class::create_object(g1_object_type type,
-															 g1_loader_class *fp)
+g1_object_class * g1_dynamic_object_type_class::create_object(g1_object_type type,
+															  g1_loader_class * fp)
 {
-	g1_object_class *o=new g1_dynamic_object_class(type, fp);
+	g1_object_class * o=new g1_dynamic_object_class(type, fp);
+
 	o->init();
 	return o;
 }
 
-g1_object_class *g1_movable_dynamic_object_type_class::create_object(
-	g1_object_type type, g1_loader_class *fp)
+g1_object_class * g1_movable_dynamic_object_type_class::create_object(
+	g1_object_type type, g1_loader_class * fp)
 {
-	g1_object_class *o=new g1_movable_dynamic_object_class(type, fp);
+	g1_object_class * o=new g1_movable_dynamic_object_class(type, fp);
+
 	o->init();
 	return o;
 }
 
-static void read_vect(i4_3d_vector &v, li_object *o, li_environment *env)
+static void read_vect(i4_3d_vector &v, li_object * o, li_environment * env)
 {
 	v.x=(float)li_get_float(li_eval(li_car(o,env), env),env);
 	o=li_cdr(o,env);
@@ -861,18 +884,18 @@ static void read_vect(i4_3d_vector &v, li_object *o, li_environment *env)
    }
  */
 
-li_object *li_def_object(li_object *o, li_environment *env)
+li_object *li_def_object(li_object * o, li_environment * env)
 {
-	li_symbol *sym=li_symbol::get(li_car(o,env),env);
+	li_symbol * sym=li_symbol::get(li_car(o,env),env);
 
 
-	g1_dynamic_object_type_class *type=new g1_dynamic_object_type_class(sym);
+	g1_dynamic_object_type_class * type=new g1_dynamic_object_type_class(sym);
 
 
-	for (li_object *l=li_cdr(o,env); l; l=li_cdr(l,env))
+	for (li_object * l=li_cdr(o,env); l; l=li_cdr(l,env))
 	{
-		li_object *prop=li_car(l,env);
-		li_symbol *sym=li_symbol::get(li_car(prop,env),env);
+		li_object * prop=li_car(l,env);
+		li_symbol * sym=li_symbol::get(li_car(prop,env),env);
 		prop=li_cdr(prop,env);
 
 		if (sym==li_get_symbol("model_name", s_model_name))
@@ -885,10 +908,10 @@ li_object *li_def_object(li_object *o, li_environment *env)
 			g1_mini_object_def mo;
 			mo.init();
 
-			char *name=0;
+			char * name=0;
 			for (; prop; prop=li_cdr(prop,env)) // prop = ((offset 0 0 0.1) (position 0 0 0) (model_name "gunport_barrel"))
 			{
-				li_object *sub=li_car(prop,env);
+				li_object * sub=li_car(prop,env);
 				sym=li_symbol::get(li_car(sub,env),env);
 				sub=li_cdr(sub,env);
 
@@ -907,7 +930,7 @@ li_object *li_def_object(li_object *o, li_environment *env)
 				}
 				else if (sym==li_get_symbol("model_name", s_model_name))
 				{
-					char *n=li_string::get(li_eval(li_car(sub,env), env),env)->value();
+					char * n=li_string::get(li_eval(li_car(sub,env), env),env)->value();
 					mo.defmodeltype=g1_model_list_man.find_handle(n);
 				}
 				else
@@ -962,7 +985,7 @@ li_object *li_def_object(li_object *o, li_environment *env)
 			char buf[200];
 			sprintf(buf, "%s_%s", type->name(), g1_ofun_names[i]);
 
-			li_symbol *sym=li_find_symbol(buf);
+			li_symbol * sym=li_find_symbol(buf);
 			if (sym)
 			{
 				type->funs[i]=sym;
@@ -981,8 +1004,9 @@ li_object *li_def_object(li_object *o, li_environment *env)
 }
 
 LI_HEADER(decrease_fire_delay) {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp&&mp->fire_delay>0)
 	{
 		mp->fire_delay--;
@@ -991,33 +1015,39 @@ LI_HEADER(decrease_fire_delay) {
 }
 
 LI_HEADER(object_flags) {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
+
 	return new li_int(c->flags);
 }
 
 LI_HEADER(object_owner) {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
+
 	return new li_int(c->player_num);
 }
 
 LI_HEADER(player_variables) {
 	int x=li_get_int(li_eval(li_first(o,env),env),env);
+
 	return g1_player_man.get(x)->vars.get();
 };
 
 LI_HEADER(object_pos) {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
+
 	return new li_vect(i4_3d_vector(c->x,c->y,c->h));
 }
 
 LI_HEADER(object_orientation) {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
+
 	return new li_vect(i4_3d_vector(c->theta,c->pitch,c->roll));
 }
 
 LI_HEADER(vector_element) {
 	i4_3d_vector v=li_vect::get(li_eval(li_second(o,env),env),env)->value();
-	li_object *elem=li_eval(li_first(o,env),env);
+	li_object * elem=li_eval(li_first(o,env),env);
+
 	if (elem->type()==LI_INT)
 	{
 		int i=li_int::get(elem,env)->value();
@@ -1061,14 +1091,15 @@ LI_HEADER(vector_element) {
 }
 
 LI_HEADER(get_object_of_player) {
-	li_string *object_type=li_string::get(li_eval(li_first(o,env),env),env);
+	li_string * object_type=li_string::get(li_eval(li_first(o,env),env),env);
+
 	if (!g1_get_map())
 	{
 		return li_nil;
 	}
 	int player_num=li_int::get(li_eval(li_second(o,env),env),env)->value();
-	g1_object_class *obj=g1_get_map()->find_player_object(g1_get_object_type(object_type->value()),
-														  player_num);
+	g1_object_class * obj=g1_get_map()->find_player_object(g1_get_object_type(object_type->value()),
+														   player_num);
 	if (obj)
 	{
 		return new li_g1_ref(obj->global_id);
@@ -1082,7 +1113,8 @@ LI_HEADER(get_object_of_player) {
 
 LI_HEADER(player_has_no_units) {
 	int player_num=li_int::get(li_eval(li_first(o,env),env),env)->value();
-	g1_player_info_class *p=g1_player_man.get(player_num);
+	g1_player_info_class * p=g1_player_man.get(player_num);
+
 	if (p->num_valid_objects()==0)
 	{
 		return li_true_sym;
@@ -1091,12 +1123,13 @@ LI_HEADER(player_has_no_units) {
 }
 
 LI_HEADER(objects_in_range) {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
 	float range=li_float::get(li_eval(li_second(o,env),env),env)->value();
 	const int arrsize=1024;
 	w32 object_mask_flags=0xffffffff;
 	w32 type_mask_flags=0xffffffff;
-	g1_object_class *array[arrsize];
+	g1_object_class * array[arrsize];
+
 	if (li_third(o,env))
 	{
 		object_mask_flags=li_int::get(li_eval(li_third(o,env),env),env)->value();
@@ -1108,7 +1141,7 @@ LI_HEADER(objects_in_range) {
 	int num=g1_get_map()->get_objects_in_range(c->x,c->y,range,array,arrsize,
 											   object_mask_flags,type_mask_flags);
 
-	li_object *list=0;
+	li_object * list=0;
 	for (int i=0; i<num; i++)
 	{
 		list=new li_list(new li_g1_ref(array[i]),list);
@@ -1117,8 +1150,9 @@ LI_HEADER(objects_in_range) {
 }
 //todo: the can_attack function should be overridable.
 LI_HEADER(find_targets) {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
 		if (mp->attack_target.valid())
@@ -1134,23 +1168,24 @@ LI_HEADER(find_targets) {
 	return li_nil;
 }
 
-li_object *li_g1_fire(li_object *o, li_environment *env)
+li_object *li_g1_fire(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
 		if (mp->fire_delay>0)
 		{
 			return li_nil;
 		}
-		g1_object_class *target=li_g1_ref::get(li_eval(li_second(o,env),env),env)->value();
+		g1_object_class * target=li_g1_ref::get(li_eval(li_second(o,env),env),env)->value();
 		if (target==0)
 		{
 			target=mp->attack_target.get();
 		}
-		li_vect *pos=li_vect::get(li_eval(li_third(o,env),env),env);
-		li_vect *dir=li_vect::get(li_eval(li_fourth(o,env),env),env);
+		li_vect * pos=li_vect::get(li_eval(li_third(o,env),env),env);
+		li_vect * dir=li_vect::get(li_eval(li_fourth(o,env),env),env);
 
 		mp->fire_delay = mp->defaults->fire_delay;
 
@@ -1165,7 +1200,7 @@ li_object *li_g1_fire(li_object *o, li_environment *env)
 		//glob_dir=dir->value();
 		main.transform_3x3(dir->value(),glob_dir);
 
-		li_symbol *weapon=li_symbol::get(li_eval(li_fifth(o,env),env),env);
+		li_symbol * weapon=li_symbol::get(li_eval(li_fifth(o,env),env),env);
 		if (weapon==0 || weapon==li_nil)
 		{
 			weapon=mp->defaults->fire_type;
@@ -1177,11 +1212,12 @@ li_object *li_g1_fire(li_object *o, li_environment *env)
 }
 
 LI_HEADER(create_object) {
-	li_symbol *name=li_symbol::get(li_eval(li_first(o,env),env),env);
-	char *objname=name->name()->value();
-	li_vect *pos=li_vect::get(li_eval(li_second(o,env),env),env);
-	li_vect *orientation=li_vect::get(li_eval(li_third(o,env),env),env);
-	g1_object_class *newobj;
+	li_symbol * name=li_symbol::get(li_eval(li_first(o,env),env),env);
+	char * objname=name->name()->value();
+	li_vect * pos=li_vect::get(li_eval(li_second(o,env),env),env);
+	li_vect * orientation=li_vect::get(li_eval(li_third(o,env),env),env);
+	g1_object_class * newobj;
+
 	newobj=g1_create_object(g1_get_object_type(objname));
 	newobj->x=pos->value().x;
 	newobj->y=pos->value().y;
@@ -1194,7 +1230,7 @@ LI_HEADER(create_object) {
 	return new li_g1_ref(newobj);
 }
 
-void update_local_values(g1_map_piece_class *for_obj, li_environment *n_env)
+void update_local_values(g1_map_piece_class * for_obj, li_environment * n_env)
 {
 	li_set_value("xpos",new li_float(for_obj->x),n_env);
 	li_set_value("ypos",new li_float(for_obj->y),n_env);
@@ -1207,11 +1243,12 @@ void update_local_values(g1_map_piece_class *for_obj, li_environment *n_env)
 	li_set_value("attack_target",new li_g1_ref(for_obj->attack_target.get()),n_env);
 };
 
-li_object *li_g1_map_piece_think(li_object *o, li_environment *env)
+li_object *li_g1_map_piece_think(li_object * o, li_environment * env)
 {
 	//g1_object_class *c=li_g1_ref::get(li_first(o,env),env)->value();
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
 		mp->g1_map_piece_class::think(); //not the current one, since
@@ -1223,15 +1260,16 @@ li_object *li_g1_map_piece_think(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *li_g1_map_piece_damage(li_object *o, li_environment *env)
+li_object *li_g1_map_piece_damage(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
-		g1_object_class *other=li_g1_ref::get(li_eval(li_second(o,env),env),env)->value();
+		g1_object_class * other=li_g1_ref::get(li_eval(li_second(o,env),env),env)->value();
 		int hp=li_int::get(li_eval(li_third(o,env),env),env)->value();
-		li_vect *damage_dir=li_vect::get(li_eval(li_fourth(o,env),env),env);
+		li_vect * damage_dir=li_vect::get(li_eval(li_fourth(o,env),env),env);
 		mp->g1_map_piece_class::damage(other,hp,damage_dir->value()); //not the current one, since
 		update_local_values(mp,env); //this can change the values we
 		//are calculating with (and we don't want to write back the old
@@ -1240,13 +1278,14 @@ li_object *li_g1_map_piece_damage(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *li_g1_map_piece_notify_damage(li_object *o, li_environment *env)
+li_object *li_g1_map_piece_notify_damage(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
-		g1_object_class *other=li_g1_ref::get(li_eval(li_second(o,env),env),env)->value();
+		g1_object_class * other=li_g1_ref::get(li_eval(li_second(o,env),env),env)->value();
 		int hp=li_int::get(li_eval(li_third(o,env),env),env)->value();
 		mp->g1_map_piece_class::notify_damage(other,hp); //not the current one, since
 		update_local_values(mp,env);
@@ -1254,24 +1293,26 @@ li_object *li_g1_map_piece_notify_damage(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *li_g1_map_piece_message(li_object *o, li_environment *env)
+li_object *li_g1_map_piece_message(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
-		li_symbol *msg=li_symbol::get(li_eval(li_second(o,env),env),env);
-		li_object *msg_param=li_eval(li_third(o,env),env);
+		li_symbol * msg=li_symbol::get(li_eval(li_second(o,env),env),env);
+		li_object * msg_param=li_eval(li_third(o,env),env);
 		mp->g1_map_piece_class::message(msg,msg_param,env); //not the current one, since
 		update_local_values(mp,env);
 	}
 	return 0;
 }
 
-li_object *li_g1_map_piece_deploy_to(li_object *o, li_environment *env)
+li_object *li_g1_map_piece_deploy_to(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
 		float x=li_float::get(li_eval(li_second(o,env),env),env)->value();
@@ -1282,10 +1323,11 @@ li_object *li_g1_map_piece_deploy_to(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *li_g1_map_piece_change_player_num(li_object *o, li_environment *env)
+li_object *li_g1_map_piece_change_player_num(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
 		int np=li_int::get(li_eval(li_second(o,env),env),env)->value();
@@ -1295,23 +1337,25 @@ li_object *li_g1_map_piece_change_player_num(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *li_g1_map_piece_can_attack(li_object *o, li_environment *env)
+li_object *li_g1_map_piece_can_attack(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
-		g1_object_class *who=li_g1_ref::get(li_eval(li_fourth(o,env),env),env)->value();
+		g1_object_class * who=li_g1_ref::get(li_eval(li_fourth(o,env),env),env)->value();
 		mp->g1_map_piece_class::can_attack(who); //not the current one, since
 		update_local_values(mp,env);
 	}
 	return 0;
 }
 
-li_object *li_g1_map_piece_occupy(li_object *o, li_environment *env)
+li_object *li_g1_map_piece_occupy(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
 		double xp=li_float::get(li_get_value("xpos",env),env)->value();
@@ -1330,10 +1374,11 @@ li_object *li_g1_map_piece_occupy(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *li_g1_map_piece_unoccupy(li_object *o, li_environment *env)
+li_object *li_g1_map_piece_unoccupy(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(c);
+	g1_object_class * c=get_object_param(o,env);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(c);
+
 	if (mp)
 	{
 		mp->g1_map_piece_class::unoccupy_location();
@@ -1342,12 +1387,13 @@ li_object *li_g1_map_piece_unoccupy(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *li_g1_sync(li_object *o, li_environment *env)
+li_object *li_g1_sync(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
 	float xp=(float)li_float::get(li_get_value("xpos",env),env)->value();
 	float yp=(float)li_float::get(li_get_value("ypos",env),env)->value();
 	float hp=(float)li_float::get(li_get_value("hpos",env),env)->value();
+
 	c->x=xp;
 	c->y=yp;
 	c->h=hp;
@@ -1355,19 +1401,22 @@ li_object *li_g1_sync(li_object *o, li_environment *env)
 }
 
 LI_HEADER(request_think) {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
+
 	c->request_think();
 	return 0;
 }
 
 LI_HEADER(request_remove) {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
+
 	c->request_remove();
 	return 0;
 }
 
 LI_HEADER(max_health) {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
+
 	return new li_int(c->get_max_health());
 }
 
@@ -1376,14 +1425,15 @@ LI_HEADER(local_player) {
 };
 
 
-void init_vars_function(g1_object_definition_class *obj)
+void init_vars_function(g1_object_definition_class * obj)
 {
-	g1_movable_dynamic_object_type_class *type=(g1_movable_dynamic_object_type_class *)obj;
+	g1_movable_dynamic_object_type_class * type=(g1_movable_dynamic_object_type_class *)obj;
+
 	if (type->vars)
 	{
-		li_class *cl=type->vars;
+		li_class * cl=type->vars;
 		//this solution does not update the functions of objects which are not redefined
-		li_object *fn=new li_function(li_g1_map_piece_think);
+		li_object * fn=new li_function(li_g1_map_piece_think);
 		cl->set_value(cl->member_offset("think"),fn);
 		cl->set_value(cl->member_offset("think_parent"),fn);
 		fn=new li_function(li_g1_map_piece_occupy);
@@ -1415,7 +1465,7 @@ void init_vars_function(g1_object_definition_class *obj)
 		{
 			if (type->funs[f])
 			{
-				li_symbol *forsymbol=s_ofun[f];
+				li_symbol * forsymbol=s_ofun[f];
 				cl->set_value(cl->member_offset(forsymbol),type->funs[f]);
 			}
 		}
@@ -1423,14 +1473,15 @@ void init_vars_function(g1_object_definition_class *obj)
 }
 //methods to handle mini-objects.
 
-li_object *li_get_mini_object_pos(li_object *o, li_environment *env)
+li_object *li_get_mini_object_pos(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
 	int num_mini_obj=li_int::get(li_eval(li_second(o,env),env),env)->value();
+
 	if (num_mini_obj<c->num_mini_objects)
 	{
-		li_object *rl=0;
-		g1_mini_object *mi=&c->mini_objects[num_mini_obj];
+		li_object * rl=0;
+		g1_mini_object * mi=&c->mini_objects[num_mini_obj];
 		rl=li_make_list(new li_float(mi->x),
 						new li_float(mi->y),
 						new li_float(mi->h),
@@ -1444,14 +1495,15 @@ li_object *li_get_mini_object_pos(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *li_set_mini_object_pos(li_object *o, li_environment *env)
+li_object *li_set_mini_object_pos(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
 	int num_mini_obj=li_int::get(li_eval(li_second(o,env),env),env)->value();
+
 	if (num_mini_obj<c->num_mini_objects)
 	{
-		li_object *rl=li_eval(li_third(o,env),env),*ri;
-		g1_mini_object *mi=&c->mini_objects[num_mini_obj];
+		li_object * rl=li_eval(li_third(o,env),env),* ri;
+		g1_mini_object * mi=&c->mini_objects[num_mini_obj];
 		//rl should be a list of exactly 5 elements
 		ri=li_car(rl,env);
 		mi->x=li_float::get(li_eval(ri,env),env)->value();
@@ -1475,14 +1527,15 @@ li_object *li_set_mini_object_pos(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *li_set_mini_object_model(li_object *o, li_environment *env)
+li_object *li_set_mini_object_model(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
 	int num_mini_obj=li_int::get(li_eval(li_second(o,env),env),env)->value();
+
 	if (num_mini_obj<c->num_mini_objects)
 	{
-		li_object *rl=li_eval(li_third(o,env),env),*ri;
-		g1_mini_object *mi=&c->mini_objects[num_mini_obj];
+		li_object * rl=li_eval(li_third(o,env),env),* ri;
+		g1_mini_object * mi=&c->mini_objects[num_mini_obj];
 		//rl should be a list of exactly 4 elements
 		ri=li_car(rl,env);
 		mi->animation=li_int::get(li_eval(ri,env),env)->value();
@@ -1503,14 +1556,15 @@ li_object *li_set_mini_object_model(li_object *o, li_environment *env)
 			 c->name(),num_mini_obj);
 	return 0;
 }
-li_object *li_get_mini_object_model(li_object *o, li_environment *env)
+li_object *li_get_mini_object_model(li_object * o, li_environment * env)
 {
-	g1_object_class *c=get_object_param(o,env);
+	g1_object_class * c=get_object_param(o,env);
 	int num_mini_obj=li_int::get(li_eval(li_second(o,env),env),env)->value();
+
 	if (num_mini_obj<c->num_mini_objects)
 	{
-		li_object *rl=0;
-		g1_mini_object *mi=&c->mini_objects[num_mini_obj];
+		li_object * rl=0;
+		g1_mini_object * mi=&c->mini_objects[num_mini_obj];
 		rl=li_make_list(new li_int(mi->animation), //should always be 0 at the moment
 						new li_int(mi->frame),
 						new li_int(mi->defmodeltype),
@@ -1525,15 +1579,15 @@ li_object *li_get_mini_object_model(li_object *o, li_environment *env)
 
 
 
-li_object *li_def_movable_object(li_object *o, li_environment *env)
+li_object *li_def_movable_object(li_object * o, li_environment * env)
 {
-	li_symbol *sym=li_symbol::get(li_car(o,env),env);
+	li_symbol * sym=li_symbol::get(li_car(o,env),env);
 	//todo: create symbols for parent calls.
 	//we could do this by just adding several functions to the
 	//classes type vars. Hmm... then we need to have a possiblity
 	//to get the type var instance for a class object
 
-	g1_movable_dynamic_object_type_class *type=0;
+	g1_movable_dynamic_object_type_class * type=0;
 
 	if (g1_get_object_type(sym)!=0)
 	{
@@ -1566,10 +1620,10 @@ li_object *li_def_movable_object(li_object *o, li_environment *env)
 		type->minis.clear(); //they should be redefined
 	}
 
-	for (li_object *l=li_cdr(o,env); l; l=li_cdr(l,env))
+	for (li_object * l=li_cdr(o,env); l; l=li_cdr(l,env))
 	{
-		li_object *prop=li_car(l,env);
-		li_symbol *sym=li_symbol::get(li_car(prop,env),env);
+		li_object * prop=li_car(l,env);
+		li_symbol * sym=li_symbol::get(li_car(prop,env),env);
 		prop=li_cdr(prop,env);
 
 		if (sym==li_get_symbol("model_name", s_model_name))
@@ -1582,10 +1636,10 @@ li_object *li_def_movable_object(li_object *o, li_environment *env)
 			g1_mini_object_def mo;
 			mo.init();
 
-			char *name=0;
+			char * name=0;
 			for (; prop; prop=li_cdr(prop,env)) // prop = ((offset 0 0 0.1) (position 0 0 0) (model_name "gunport_barrel"))
 			{
-				li_object *sub=li_car(prop,env);
+				li_object * sub=li_car(prop,env);
 				sym=li_symbol::get(li_car(sub,env),env);
 				sub=li_cdr(sub,env);
 
@@ -1604,7 +1658,7 @@ li_object *li_def_movable_object(li_object *o, li_environment *env)
 				}
 				else if (sym==li_get_symbol("model_name", s_model_name))
 				{
-					char *n=li_string::get(li_eval(li_car(sub,env), env),env)->value();
+					char * n=li_string::get(li_eval(li_car(sub,env), env),env)->value();
 					mo.defmodeltype=g1_model_list_man.find_handle(n);
 				}
 				else
@@ -1658,7 +1712,7 @@ li_object *li_def_movable_object(li_object *o, li_environment *env)
 			char buf[200];
 			sprintf(buf, "%s_%s", type->name(), g1_ofun_names[i]);
 
-			li_symbol *sym=li_find_symbol(buf);
+			li_symbol * sym=li_find_symbol(buf);
 			if (sym)
 			{
 				type->funs[i]=sym;
@@ -1676,13 +1730,14 @@ li_object *li_def_movable_object(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_ext_class_context::li_ext_class_context(li_class *current_context,
+li_ext_class_context::li_ext_class_context(li_class * current_context,
 										   li_environment *&env,
-										   g1_object_class *for_obj,
+										   g1_object_class * for_obj,
 										   i4_bool pos_ch)
 	: li_class_context(current_context)
 {
-	g1_object_class *onstack=li_g1_ref::get(li_get_value("_object_on_stack",env),env)->value();
+	g1_object_class * onstack=li_g1_ref::get(li_get_value("_object_on_stack",env),env)->value();
+
 	if (onstack==for_obj) //don't regenerate everything if already there
 	{
 		n_env=env;
@@ -1714,7 +1769,7 @@ li_ext_class_context::li_ext_class_context(li_class *current_context,
 	li_define_value("pitch",new li_float(for_obj->pitch),n_env);
 	li_define_value("roll",new li_float(for_obj->roll),n_env);
 	li_define_value("health",new li_int(for_obj->health),n_env);
-	g1_map_piece_class *mp=g1_map_piece_class::cast(for_obj);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(for_obj);
 	if (mp)
 	{
 		li_define_value("speed",new li_float(mp->speed),n_env);
@@ -1723,14 +1778,14 @@ li_ext_class_context::li_ext_class_context(li_class *current_context,
 	env=n_env;
 }
 
-void li_ext_class_context::write_back(li_environment *env,
-									  g1_object_class *to_obj)
+void li_ext_class_context::write_back(li_environment * env,
+									  g1_object_class * to_obj)
 {
 	to_obj->theta=(float)li_float::get(li_get_value("theta",env),env)->value();
 	to_obj->pitch=(float)li_float::get(li_get_value("pitch",env),env)->value();
 	to_obj->roll=(float)li_float::get(li_get_value("roll",env),env)->value();
 	to_obj->health=(short)li_int::get(li_get_value("health",env),env)->value();
-	g1_map_piece_class *mp=g1_map_piece_class::cast(to_obj);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(to_obj);
 	if (mp)
 	{
 		mp->speed=(float)li_float::get(li_get_value("speed",env),env)->value();

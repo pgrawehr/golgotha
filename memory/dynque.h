@@ -36,7 +36,7 @@ template <class T, w32 SIZE=50, w32 GROW=50>
 class i4_dynamic_que
 {
 public:
-	typedef int (*compare_type)(const T *a, const T *b);
+	typedef int (*compare_type)(const T * a, const T * b);
 protected:
 	i4_array<T> data;
 	w32 head, tail;
@@ -104,6 +104,7 @@ public:
 	i4_bool que(const T &object) //inserts at the end of the list
 	{
 		w32 next_head=(head+1);
+
 		if (data.size()==0) //because we cannot set the size in the constructor
 		{
 			data.grow_bigger();
@@ -142,6 +143,7 @@ public:
 	i4_bool insert(const T &object) //inserts in order
 	{
 		w32 i;
+
 		que(object);
 		T tempobj;
 		i=size()-1;

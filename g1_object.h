@@ -57,11 +57,11 @@ class g1_amount_display_class;         // border_frame.h
 class g1_mini_object
 {
 public:
-	void draw(g1_draw_context_class *context,
-			  i4_transform_class *transform,
-			  g1_screen_box *bound_box,
+	void draw(g1_draw_context_class * context,
+			  i4_transform_class * transform,
+			  g1_screen_box * bound_box,
 			  g1_player_type player,
-			  i4_transform_class *use_this_transform=0, //if you want to supply a local space transform
+			  i4_transform_class * use_this_transform=0, //if you want to supply a local space transform
 			  i4_bool pass_world_space_transform=i4_T, // if you don't want lighting pass i4_F
 			  i4_bool use_lod_model=i4_F);
 
@@ -83,7 +83,7 @@ public:
 	w16 frame;        // current animation frame
 	w16 animation;    // current animation number in model
 
-	void calc_transform(i4_float ratio, i4_transform_class *trans);
+	void calc_transform(i4_float ratio, i4_transform_class * trans);
 	// calculates transform to parent system
 
 	void position(const i4_3d_vector &pos)
@@ -109,8 +109,8 @@ public:
 class g1_object_chain_class
 {
 public:
-	g1_object_class *object;
-	g1_object_chain_class *next;
+	g1_object_class * object;
+	g1_object_chain_class * next;
 	w32 offset; //should be expanded to 32 bit to support larger maps
 	//but could give problems. No, it seems there was another bug.
 	inline g1_object_chain_class *next_solid(); // defined after g1_object_class
@@ -150,14 +150,14 @@ protected:
 	friend class g1_remove_manager_class;
 
 	/** several aged load functions to load old maps */
-	void load_v2(g1_loader_class *fp);
-	void load_v3(g1_loader_class *fp);
-	void load_v4(g1_loader_class *fp);
-	void load_v5(g1_loader_class *fp);
-	void load_v6(g1_loader_class *fp);
-	void load_v7(g1_loader_class *fp);
-	void load_v8(g1_loader_class *fp);
-	void load_v9(g1_loader_class *fp);
+	void load_v2(g1_loader_class * fp);
+	void load_v3(g1_loader_class * fp);
+	void load_v4(g1_loader_class * fp);
+	void load_v5(g1_loader_class * fp);
+	void load_v6(g1_loader_class * fp);
+	void load_v7(g1_loader_class * fp);
+	void load_v8(g1_loader_class * fp);
+	void load_v9(g1_loader_class * fp);
 
 	//! a list of all objects that reference us, so we can remove the reference when we delete ourself.
 	//! Don't modify this unless you know really what you're doing.
@@ -173,7 +173,8 @@ protected:
 	//! This is for internal use only.
 	g1_object_chain_class *new_occupied_square()
 	{
-		g1_object_chain_class *ret = occupied_squares.add();
+		g1_object_chain_class * ret = occupied_squares.add();
+
 		ret->object = this;
 		return ret;
 	}
@@ -227,11 +228,11 @@ public:
 
 	sw16 health;                ///< the health its got left
 
-	li_class *vars;             ///< lisp variables used for dialog's.  These load and save automatically.
+	li_class * vars;             ///< lisp variables used for dialog's.  These load and save automatically.
 
 	g1_player_type player_num;  ///< The player this object belongs to.
 	g1_radar_type radar_type;   ///< The type of radar image for this unit. Used if radar_image is 0;
-	g1_team_icon_ref *radar_image; ///< An image to show in the radar for this unit.
+	g1_team_icon_ref * radar_image; ///< An image to show in the radar for this unit.
 
 	/** Changes the owner of an unit. */
 	virtual void change_player_num(int new_player_num); // don't change player_num directly
@@ -280,7 +281,7 @@ public:
 
 		//the following flags are particularly important in networking mode
 		NEEDS_SYNC    =1<<25, ///< Nonzero if the object has thought something that cannot be guessed
-						   ///< on the remote machine
+							  ///< on the remote machine
 		LAST_SYNC     =1<<26, ///< Has synced last frame (perhaps requires resending)
 		LOST_SYNC     =1<<27, ///< Is known to have lost sync.
 		NEWER_SYNC    =1<<28 ///< This object cannot get syncronized as the remote has different id.
@@ -360,13 +361,13 @@ public:
 	//! should not change the internal state of the object.
 	//! The \a viewer_position argument is used to decide which lod level is used in drawing.
 	//! If the object is to far away from the viewer, nothing might happen at all.
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 
 	//! called for each object after everything else has been drawn and in editor mode
-	virtual void editor_draw(g1_draw_context_class *context);
+	virtual void editor_draw(g1_draw_context_class * context);
 
 	//! Really seldomly used function
-	virtual void note_stank_near(g1_player_piece_class *s)
+	virtual void note_stank_near(g1_player_piece_class * s)
 	{
 		;
 	}
@@ -390,26 +391,26 @@ public:
 	   There must not be any other constructors for any of the derived classes.
 	   The constructor should not call occupy_location().
 	 */
-	g1_object_class(g1_object_type id, g1_loader_class *fp);
+	g1_object_class(g1_object_type id, g1_loader_class * fp);
 
 	//!a mostly empty function
 	virtual void validate()
 	{
 	}
 	//!saves this object to the given file. Can safely assume fp!=0
-	virtual void save(g1_saver_class *fp);
+	virtual void save(g1_saver_class * fp);
 
 	//! Synchronization function.
 	//! Does the same as the constructor, but doesn't reset the other data
 	//! Can safely assume fp!=0 and data_version==latest.
 	//! An object that doesn't have a save() doesn't need this either.
-	virtual void load(g1_loader_class *fp);
+	virtual void load(g1_loader_class * fp);
 
 	//! Skips the corresponding amount of data in the file stream.
 	//! Used if the given object does not need to be synced
 	//! i.e if we received a packet that contains older data than the last
 	//! one for a particular object.
-	virtual void skipload(g1_loader_class *fp);
+	virtual void skipload(g1_loader_class * fp);
 
 	//! Request that your think() method is called the next tick.
 	//! Can safely be called more than once in sequence, even without a
@@ -445,11 +446,11 @@ public:
 
 	//! Called if this unit should take damage.
 	//! Can be overriden, ie if your object should be invulnerable.
-	virtual void damage(g1_object_class *who_is_hurting, //we got some damage
+	virtual void damage(g1_object_class * who_is_hurting, //we got some damage
 						int how_much_hurt, i4_3d_vector damage_dir);
 
 	//! This method is a shortcut to get the damage to be done to a specific unit.
-	int get_damage_for(g1_object_class *target) const;
+	int get_damage_for(g1_object_class * target) const;
 
 	//! Check for collisions.
 	//! The method checks wheter moving from \a start by a distance of \a ray
@@ -464,7 +465,7 @@ public:
 	//! @param start (x,y,h) pos of position vector
 	//! @param ray Direction vector. Might have been slightly modified when returning.
 	//! @return i4_T if the ray starting from start intersects us.
-	i4_bool check_collision(g1_object_class *source,
+	i4_bool check_collision(g1_object_class * source,
 							const i4_3d_vector &start,
 							i4_3d_vector &ray);
 
@@ -474,22 +475,22 @@ public:
 
 	//! Notifies us that we just applied damage to another unit.
 	//! Only usefull for weapons that support this kind of info.
-	virtual void notify_damage(g1_object_class *obj, sw32 hp) //informs firing object that the target was hit
+	virtual void notify_damage(g1_object_class * obj, sw32 hp) //informs firing object that the target was hit
 	{
 	};
 
 	//! Calculate some transformations.
 	//! calculates the transform from object coordinates to the world and stores it in
 	//! 'transform'.  if transform is null, it stores it into the object's internal storage.
-	virtual void calc_world_transform(i4_float ratio, i4_transform_class *transform=0);
+	virtual void calc_world_transform(i4_float ratio, i4_transform_class * transform=0);
 
-	i4_transform_class *world_transform; ///<calculated and linearly allocated at draw time
+	i4_transform_class * world_transform; ///<calculated and linearly allocated at draw time
 
 	//! Contains information about the geometry of the object.
 	g1_model_draw_parameters draw_params;
 	//! The mini-objects.
 	//! Mini objects are "parts" of another object that can move independently
-	g1_mini_object *mini_objects;
+	g1_mini_object * mini_objects;
 	//! The number of mini_objects.
 	w16 num_mini_objects;
 
@@ -498,7 +499,7 @@ public:
 	//! the blade of a chopper.
 	//! @param num Number of mini-objects to allocate
 	//! @param reason String used to identify allocation reason on debugging heap.
-	void allocate_mini_objects(int num,char *reason)
+	void allocate_mini_objects(int num,char * reason)
 	{
 		mini_objects = (g1_mini_object *)I4_MALLOC(sizeof(g1_mini_object)*num,reason);
 		memset(mini_objects,0,sizeof(g1_mini_object) * num);
@@ -540,7 +541,7 @@ public:
 	virtual ~g1_object_class();
 
 	//! Return true if you can attack the object pointed to.
-	virtual i4_bool can_attack(g1_object_class *who)
+	virtual i4_bool can_attack(g1_object_class * who)
 	{
 		return i4_F;
 	}
@@ -560,9 +561,9 @@ public:
 	char *name();
 
 	//! Passes some messages around.
-	virtual li_object *message(li_symbol *message_name,
-							   li_object *message_params,
-							   li_environment *env)
+	virtual li_object *message(li_symbol * message_name,
+							   li_object * message_params,
+							   li_environment * env)
 	{
 		return 0;
 	}
@@ -571,10 +572,10 @@ public:
 	//! Carefully read what this means! This method is called for EVERY object
 	//! when the user clicks on ok in the edit dialog of ANY object.
 	//! Therefore, you usually do something like if (who==this) in here.
-	virtual void object_changed_by_editor(g1_object_class *who, li_class *old_values)
+	virtual void object_changed_by_editor(g1_object_class * who, li_class * old_values)
 	{
 	}
-	virtual int get_chunk_names(char **&list)
+	virtual int get_chunk_names(char * *&list)
 	{
 		return 0;
 	}
@@ -596,7 +597,7 @@ public:
 	//! @param formationcode Some FO_XXX constant.
 	//! @param where The spot where a formation should be built.
 	//! @return i4_T if the unit could be added to the formation.
-	virtual i4_bool enter_formation(int formationcode, g1_object_class *where);
+	virtual i4_bool enter_formation(int formationcode, g1_object_class * where);
 
 	//moved these here to allow any object to be a factory under some
 	//circumstances (needed i.e for road_object)
@@ -604,7 +605,7 @@ public:
 	{
 		return 0;
 	};
-	virtual void set_start(g1_path_object_class *start)
+	virtual void set_start(g1_path_object_class * start)
 	{
 	};
 	//! Returns i4_T if this object can build objects of the given type.
@@ -638,7 +639,7 @@ public:
 	virtual void frame_amount(int entry_number,
 							  int &current_amount,
 							  int &max_amount,
-							  g1_amount_display_class *window)
+							  g1_amount_display_class * window)
 	{
 		current_amount=0;
 		max_amount=-1;
@@ -646,7 +647,7 @@ public:
 };
 
 
-inline g1_object_chain_class *g1_object_chain_class::next_solid()
+inline g1_object_chain_class * g1_object_chain_class::next_solid()
 {
 	if (!next || !next->object->get_flag(g1_object_class::BLOCKING))
 	{
@@ -678,11 +679,11 @@ enum eBuildError
 class g1_object_definition_class;
 
 //! This is the call to add a new object_type to the game.
-g1_object_type g1_add_object_type(g1_object_definition_class *def);
+g1_object_type g1_add_object_type(g1_object_definition_class * def);
 
 //! This is the call to find the object_type of a specified object
-g1_object_type g1_get_object_type(const char *name);
-g1_object_type g1_get_object_type(li_symbol *name);
+g1_object_type g1_get_object_type(const char * name);
+g1_object_type g1_get_object_type(li_symbol * name);
 
 //! Remove an object from the list.
 //! Remove probably doesn't need to be used during a normal game, but can be useful for
@@ -702,11 +703,11 @@ class g1_object_definition_class
 {
 protected:
 	typedef void (*function_type)(void);
-	typedef void (*special_function_type)(g1_object_definition_class *type);
-	char *_name;
+	typedef void (*special_function_type)(g1_object_definition_class * type);
+	char * _name;
 	function_type init_function, uninit_function;
 
-	g1_damage_map_struct *damage;            // loaded from scheme/balance.scm
+	g1_damage_map_struct * damage;            // loaded from scheme/balance.scm
 
 public:
 	//! Object type flags.
@@ -738,8 +739,8 @@ public:
 
 	special_function_type special_init_function; //used for dynamically created objects
 	w32 var_class;                        // class type to create for object's vars
-	li_class *vars;                       // variables specific to the type
-	g1_object_defaults_struct *defaults;  // loaded from scheme/balance.scm
+	li_class * vars;                       // variables specific to the type
+	g1_object_defaults_struct * defaults;  // loaded from scheme/balance.scm
 
 	//! Gets the damage map for this unit type.
 	g1_damage_map_struct *get_damage_map();
@@ -765,7 +766,7 @@ public:
 
 	g1_object_type type;
 
-	g1_object_definition_class(char *_name,
+	g1_object_definition_class(char * _name,
 							   w32 type_flags = EDITOR_SELECTABLE,
 							   function_type _init = 0,
 							   function_type _uninit = 0);
@@ -778,7 +779,7 @@ public:
 	// create_object should return a new initialized instance of an object, if fp is null then
 	// default values should be supplied, otherwise the object should load itself from the file
 	virtual g1_object_class *create_object(g1_object_type id,
-										   g1_loader_class *fp) = 0;
+										   g1_loader_class * fp) = 0;
 
 	// the name on an object should be unique, so you might want to be creative,  the name
 	// is used to match up the object types in save files since object type id's are dynamically
@@ -802,11 +803,11 @@ public:
 		}
 	}
 
-	virtual void save(g1_saver_class *fp)
+	virtual void save(g1_saver_class * fp)
 	{
 		;
 	}                                          // save info about type
-	virtual void load(g1_loader_class *fp)
+	virtual void load(g1_loader_class * fp)
 	{
 		;
 	}                                          // load info about type
@@ -816,9 +817,9 @@ public:
 
 };
 
-void g1_apply_damage(g1_object_class *kinda_gun_being_used,
-					 g1_object_class *who_pulled_the_trigger,
-					 g1_object_class *whos_on_the_wrong_side_of_the_gun,
+void g1_apply_damage(g1_object_class * kinda_gun_being_used,
+					 g1_object_class * who_pulled_the_trigger,
+					 g1_object_class * whos_on_the_wrong_side_of_the_gun,
 					 const i4_3d_vector &direction_hurten_is_commin_from);
 
 // increase this number if you change the load/save structure of g1_object_class
@@ -828,7 +829,7 @@ void g1_apply_damage(g1_object_class *kinda_gun_being_used,
 // this table has an array of pointers to object definitions
 // this is used by the border frame to find object with build info so it
 // can add buttons for them
-extern g1_object_definition_class *g1_object_type_array[G1_MAX_OBJECT_TYPES];
+extern g1_object_definition_class * g1_object_type_array[G1_MAX_OBJECT_TYPES];
 extern g1_object_type g1_last_object_type;  // largest object number assigned
 
 // this is prefered way to create new object in the game
@@ -836,7 +837,7 @@ inline g1_object_class *g1_create_object(g1_object_type type)
 {
 	if (g1_object_type_array[type])
 	{
-		g1_object_class *o=g1_object_type_array[type]->create_object(type, 0);
+		g1_object_class * o=g1_object_type_array[type]->create_object(type, 0);
 		o->request_think();
 		//cannot do this from here as we don't want to sync _every_ object.
 		//This particularly applies to explosion objects which will be
@@ -854,7 +855,7 @@ inline g1_object_class *g1_create_object(g1_object_type type)
 	}
 }
 
-inline g1_object_definition_class *g1_object_class::get_type() const
+inline g1_object_definition_class * g1_object_class::get_type() const
 {
 	return g1_object_type_array[id];
 }

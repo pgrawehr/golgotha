@@ -15,7 +15,7 @@ class g1_object_class;
 
 class g1_selection_list
 {
-	g1_object_class **list;
+	g1_object_class * * list;
 	w32 t, list_size;
 
 public:
@@ -27,8 +27,8 @@ public:
 		return t;
 	}
 
-	void add(g1_object_class *o);
-	void remove(g1_object_class *o);
+	void add(g1_object_class * o);
+	void remove(g1_object_class * o);
 
 	void clear(); // removes all objects from list
 };

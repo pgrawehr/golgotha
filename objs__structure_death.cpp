@@ -133,7 +133,7 @@ i4_bool g1_structure_death_class::think()
 	return i4_T;
 }
 
-void g1_structure_death_class::damage(g1_object_class *obj, int hp, i4_3d_vector damage_dir)
+void g1_structure_death_class::damage(g1_object_class * obj, int hp, i4_3d_vector damage_dir)
 {
 	if (me->health<=0)
 	{
@@ -146,7 +146,7 @@ void g1_structure_death_class::damage(g1_object_class *obj, int hp, i4_3d_vector
 	{
 		me->health=0;
 
-		g1_explode_model_class *e;
+		g1_explode_model_class * e;
 		e=(g1_explode_model_class *)g1_create_object(g1_get_object_type(explode_model.get()));
 		g1_explode_params params;
 		params.stages[0].setup(0,  0.0008f, G1_APPLY_SING);
@@ -176,7 +176,7 @@ void g1_structure_death_class::damage(g1_object_class *obj, int hp, i4_3d_vector
 			params.emitter_lifetime += i4_rand()&0x15;
 
 			params.texture=explosion2.get();
-			g1_particle_emitter_class *emitter =
+			g1_particle_emitter_class * emitter =
 				(g1_particle_emitter_class *)g1_create_object(g1_get_object_type(particles.get()));
 
 			i4_float

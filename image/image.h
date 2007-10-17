@@ -20,10 +20,10 @@ class i4_draw_context_class;
 class i4_image_class
 {
 public:
-	const i4_pal *pal;
+	const i4_pal * pal;
 	// raw data,
 	// depends on pal.pal->source.pixel_depth==(I4_32BIT,I4_16BIT,I4_8BIT,I4_4BIT,I4_2BIT)
-	w8 *data;
+	w8 * data;
 	int w, h, bpl;
 	i4_bool dont_free_data;
 
@@ -31,7 +31,7 @@ public:
 	{
 		return pal;
 	}
-	void set_pal(const i4_pal *which)
+	void set_pal(const i4_pal * which)
 	{
 		pal=which;
 	}
@@ -84,12 +84,12 @@ public:
 	//! \param x2 Lower right corner of source rectangle
 	//! \param y2 Lower right corner of source rectangle
 	//! \param context The context to use (for clipping purposes)
-	virtual void put_part(i4_image_class *to,
+	virtual void put_part(i4_image_class * to,
 						  i4_coord _x,  i4_coord _y,
 						  i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 						  i4_draw_context_class &context);
 
-	virtual void put_part_trans(i4_image_class *to,
+	virtual void put_part_trans(i4_image_class * to,
 								i4_coord x,  i4_coord y,
 								i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 								i4_color trans_color, i4_draw_context_class &context);
@@ -104,14 +104,14 @@ public:
 	//! \param x Where to put the image relative to the target upper left corner, x coordinate
 	//! \param y y coordinate
 	//! \param context The context to use
-	void put_image(i4_image_class *to, i4_coord x, i4_coord y, i4_draw_context_class &context)
+	void put_image(i4_image_class * to, i4_coord x, i4_coord y, i4_draw_context_class &context)
 	{
 		put_part(to,x,y,0,0,width()-1,height()-1,context);
 	}
 
-	void put_image(i4_image_class *to, i4_coord x, i4_coord y);
+	void put_image(i4_image_class * to, i4_coord x, i4_coord y);
 
-	void put_image_trans(i4_image_class *to,
+	void put_image_trans(i4_image_class * to,
 						 i4_coord x, i4_coord y, i4_color trans_color,
 						 i4_draw_context_class &context)
 	{
@@ -133,8 +133,8 @@ public:
 	//! If to==0 and pal==0, the destination pal is same as source.
 	//! If to==0 and pal!=0, the new pal is pal.
 	//! If to!=0 pal is ignored
-	i4_image_class *scale_image(i4_image_class *to,i4_coord newx, i4_coord newy,
-								const i4_pal *pal);
+	i4_image_class *scale_image(i4_image_class * to,i4_coord newx, i4_coord newy,
+								const i4_pal * pal);
 
 	//! Rotates and mirrors the given image.
 	//! This rotates the given image by 90, 180 or 270 degress and/or mirrors it about the
@@ -142,7 +142,7 @@ public:
 	i4_image_class *rotate_image(g1_rotation_type rotation, i4_bool mirror);
 
 	//! Copies this image to a specific location in image to, with a new size and possibly a new orientation.
-	void copy_image_to(i4_image_class *to, i4_coord new_xpos, i4_coord new_ypos,
+	void copy_image_to(i4_image_class * to, i4_coord new_xpos, i4_coord new_ypos,
 					   sw32 xsize, sw32 ysize, g1_rotation_type rotation, i4_bool mirror);
 
 	i4_image_class()
@@ -155,11 +155,11 @@ public:
 	}
 };
 
-i4_image_class *i4_create_image(int width, int height, const i4_pal *pal);
+i4_image_class *i4_create_image(int width, int height, const i4_pal * pal);
 
 i4_image_class *i4_create_image(int width, int height,
-								const i4_pal *pal,
-								void *data,
+								const i4_pal * pal,
+								void * data,
 								int bytes_per_line);
 
 #endif

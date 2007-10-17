@@ -17,7 +17,8 @@
 w32 r1_get_file_id(const i4_const_str &fname) //retrieves the integer from an integer-form filename
 {
 	int x;
-	char st[30], *s;
+	char st[30], * s;
+
 	s=st;
 
 	i4_const_str::iterator l=fname.begin();
@@ -39,7 +40,7 @@ w32 r1_get_file_id(const i4_const_str &fname) //retrieves the integer from an in
 	}
 }
 
-r1_texture_ref *r1_texture_ref::first=0;
+r1_texture_ref * r1_texture_ref::first=0;
 
 i4_str *r1_texture_id_to_filename(w32 id,
 								  const i4_const_str &out_dir)
@@ -53,8 +54,8 @@ i4_str *r1_texture_id_to_filename(w32 id,
 typedef struct _id_hash_table_entry {
 	w32 id;
 	char name[100];
-	struct _id_hash_table_entry *next;
-} ID_HASH_TABLE_ENTRY,*LPID_HASH_TABLE_ENTRY;
+	struct _id_hash_table_entry * next;
+} ID_HASH_TABLE_ENTRY,* LPID_HASH_TABLE_ENTRY;
 
 #define hash_table_size 512 /*must be power of 2*/
 #define table_and_value (hash_table_size-1)
@@ -81,6 +82,7 @@ void r1_truncate_texture_file(void)
 void r1_cleanup_texture_lookup_table(void)
 {
 	LPID_HASH_TABLE_ENTRY h,h2;
+
 	for (int i=0; i<hash_table_size; i++)
 	{
 		h=id_hash_table[i];
@@ -101,6 +103,7 @@ void r1_register_texture_name(const i4_const_str &full_filename,w32 id)
 	i4_filename_struct fn;
 	w32 index=id&table_and_value;
 	LPID_HASH_TABLE_ENTRY h2=id_hash_table[index],h3=NULL;
+
 	while(h2)
 	{
 		if(h2->id==id) //already present->skip
@@ -164,6 +167,7 @@ i4_const_str *r1_get_texture_name(w32 id)
 	w32 index=id&table_and_value;
 
 	LPID_HASH_TABLE_ENTRY h2=id_hash_table[index];
+
 	while(h2)
 	{
 		if(h2->id==id)
@@ -227,7 +231,7 @@ r1_texture_ref::~r1_texture_ref()
 	}
 	else
 	{
-		r1_texture_ref *p, *last=0;
+		r1_texture_ref * p, * last=0;
 		for (p=first; p!=this;)
 		{
 			last=p;

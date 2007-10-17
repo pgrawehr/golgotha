@@ -20,7 +20,7 @@
 
 
 typedef HRESULT (WINAPI * DIRECTDRAWCREATE)( GUID *, LPDIRECTDRAW *, IUnknown * );
-typedef HRESULT (WINAPI * DIRECTDRAWCREATEEX)( GUID *, VOID **, REFIID, IUnknown * );
+typedef HRESULT (WINAPI * DIRECTDRAWCREATEEX)( GUID *, VOID * *, REFIID, IUnknown * );
 typedef HRESULT (WINAPI * DIRECTINPUTCREATE)( HINSTANCE, DWORD, LPDIRECTINPUT *,
 											 IUnknown * );
 
@@ -33,6 +33,7 @@ int GetOsVersion(LPSTR s)
 	int i=0;
 	OSVERSIONINFO vinfo;
 	char buffer[33];
+
 	vinfo.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
 	GetVersionEx(&vinfo);
 	switch (vinfo.dwPlatformId)
@@ -94,7 +95,7 @@ int GetOsVersion(LPSTR s)
 static DWORD g_dwDXVersion=0;
 static DWORD g_dwDXPlatform=0;
 
-void GetDXVersion(DWORD *pdwDXVersion, DWORD *pdwDXPlatform)
+void GetDXVersion(DWORD * pdwDXVersion, DWORD * pdwDXPlatform)
 {
 	(*pdwDXVersion)=g_dwDXVersion;
 	(*pdwDXPlatform)=g_dwDXPlatform;
@@ -115,8 +116,8 @@ VOID CheckDXVersion()
 	LPDIRECTDRAWSURFACE pSurf  = 0;
 	LPDIRECTDRAWSURFACE3 pSurf3 = 0;
 	LPDIRECTDRAWSURFACE4 pSurf4 = 0;
-	DWORD *pdwDXVersion=&g_dwDXVersion;
-	DWORD *pdwDXPlatform=&g_dwDXPlatform;
+	DWORD * pdwDXVersion=&g_dwDXVersion;
+	DWORD * pdwDXPlatform=&g_dwDXPlatform;
 
 	// First get the windows platform
 	osVer.dwOSVersionInfoSize = sizeof(osVer);
@@ -213,7 +214,7 @@ VOID CheckDXVersion()
 	(*pdwDXVersion) = 0x100;
 
 	// Let's see if IID_IDirectDraw2 exists.
-	hr = pDDraw->QueryInterface( IID_IDirectDraw2, (VOID **)&pDDraw2 );
+	hr = pDDraw->QueryInterface( IID_IDirectDraw2, (VOID * *)&pDDraw2 );
 	if( FAILED(hr) )
 	{
 		// No IDirectDraw2 exists... must be DX1
@@ -308,7 +309,7 @@ VOID CheckDXVersion()
 
 		// Query for the IDirectDrawSurface3 interface
 		if( FAILED( pSurf->QueryInterface( IID_IDirectDrawSurface3,
-										  (VOID **)&pSurf3 ) ) )
+										  (VOID * *)&pSurf3 ) ) )
 		{
 			pDDraw->Release();
 			FreeLibrary( DDHinst );
@@ -328,7 +329,7 @@ VOID CheckDXVersion()
 
 	// The IDirectDrawSurface4 interface was introduced with DX 6.0
 	if( FAILED( pSurf3->QueryInterface( IID_IDirectDrawSurface4,
-									   (VOID **)&pSurf4 ) ) )
+									   (VOID * *)&pSurf4 ) ) )
 	{
 		pDDraw->Release();
 		FreeLibrary( DDHinst );
@@ -354,7 +355,7 @@ VOID CheckDXVersion()
 	LPDIRECTMUSIC pDMusic = NULL;
 	CoInitialize( NULL );
 	hr = CoCreateInstance( CLSID_DirectMusic, NULL, CLSCTX_INPROC_SERVER,
-						  IID_IDirectMusic, (VOID **)&pDMusic );
+						  IID_IDirectMusic, (VOID * *)&pDMusic );
 	if( FAILED(hr) )
 	{
 		OutputDebugString( "Couldn't create CLSID_DirectMusic\r\n" );
@@ -382,7 +383,7 @@ VOID CheckDXVersion()
 		return;
 	}
 
-	if( FAILED( DirectDrawCreateEx( NULL, (VOID **)&pDD7, IID_IDirectDraw7,
+	if( FAILED( DirectDrawCreateEx( NULL, (VOID * *)&pDD7, IID_IDirectDraw7,
 								   NULL ) ) )
 	{
 		FreeLibrary( DDHinst );

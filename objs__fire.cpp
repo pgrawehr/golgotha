@@ -48,20 +48,21 @@ S1_SFX(stank_missile_sfx, "fire/supertank_fires_rocket_22khz.wav", S1_3D, 200);
 
 static r1_texture_ref chain_gun_texture("auto1");
 
-g1_object_class *g1_fire(li_symbol *fire_type,
-						 g1_object_class *who_is_firing,
-						 g1_object_class *who_firing_at,
+g1_object_class *g1_fire(li_symbol * fire_type,
+						 g1_object_class * who_is_firing,
+						 g1_object_class * who_firing_at,
 						 const i4_3d_vector &start_pos,
 						 const i4_3d_vector &direction,
-						 g1_object_class *last_object_fired)
+						 g1_object_class * last_object_fired)
 {
 	int otype=g1_get_object_type(fire_type);
+
 	if (!otype)
 	{
 		return 0;
 	}
 
-	g1_object_class *o=0;
+	g1_object_class * o=0;
 	if (fire_type==bolt.get() && last_object_fired)
 	{
 		o=last_object_fired;
@@ -81,7 +82,7 @@ g1_object_class *g1_fire(li_symbol *fire_type,
 		return 0;
 	}
 
-	g1_damage_map_struct *dmap=o->get_type()->get_damage_map();
+	g1_damage_map_struct * dmap=o->get_type()->get_damage_map();
 	float range=dmap->range;
 
 
@@ -138,14 +139,14 @@ g1_object_class *g1_fire(li_symbol *fire_type,
 
 
 
-		g1_light_object_class *light;
+		g1_light_object_class * light;
 		light = (g1_light_object_class *)g1_create_object(g1_get_object_type(light_type.get()));
 
 		light->setup(start_pos.x, start_pos.y, start_pos.z, r,g,bl, 1);
 		light->occupy_location();
 
 
-		g1_bullet_class *b=((g1_bullet_class *)o);
+		g1_bullet_class * b=((g1_bullet_class *)o);
 		b->setup(start_pos, vel, who_is_firing, range, g1_bullet_class::SPINS, 0, light);
 
 	}

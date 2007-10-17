@@ -35,29 +35,29 @@ long freqs[7] = {
 };
 
 static int bitindex;
-static unsigned char *wordpointer;
+static unsigned char * wordpointer;
 
 static int fsize=0,fsizeold=0,ssize;
 static unsigned char bsspace[2][MAXFRAMESIZE+512]; /* MAXFRAMESIZE */
-static unsigned char *bsbuf=bsspace[1],*bsbufold;
+static unsigned char * bsbuf=bsspace[1],* bsbufold;
 static int bsnum=0;
 
-extern i4_file_class *mp3_out, *mp3_in;
+extern i4_file_class * mp3_out, * mp3_in;
 
 struct ibuf {
-	struct ibuf *next;
-	struct ibuf *prev;
-	unsigned char *buf;
-	unsigned char *pnt;
+	struct ibuf * next;
+	struct ibuf * prev;
+	unsigned char * buf;
+	unsigned char * pnt;
 	int len;
 	/* skip,time stamp */
 };
 
 struct ibuf ibufs[2];
-struct ibuf *cibuf;
+struct ibuf * cibuf;
 int ibufnum=0;
 
-unsigned char *pcm_sample;
+unsigned char * pcm_sample;
 int pcm_point = 0;
 int audiobufsize = AUDIOBUFSIZE;
 
@@ -88,7 +88,7 @@ static unsigned long firsthead=0;
 
 static int halfphase = 0;
 
-static char *lastdir = NULL;
+static char * lastdir = NULL;
 
 void init_common(void)
 {
@@ -108,18 +108,18 @@ void init_common(void)
 	lastdir = NULL;
 }
 
-static void get_II_stuff(struct frame *fr)
+static void get_II_stuff(struct frame * fr)
 {
 	static int translate[3][2][16] =
 	{ { { 0,2,2,2,2,2,2,0,0,0,1,1,1,1,1,0 },
 		{ 0,2,2,0,0,0,1,1,1,1,1,1,1,1,1,0 } },
 	  { { 0,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0 },
-	  { 0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0 } },
+		{ 0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0 } },
 	  { { 0,3,3,3,3,3,3,0,0,0,1,1,1,1,1,0 },
-	  { 0,3,3,0,0,0,1,1,1,1,1,1,1,1,1,0 } } };
+		{ 0,3,3,0,0,0,1,1,1,1,1,1,1,1,1,0 } } };
 
 	int table,sblim;
-	static struct al_table *tables[5] =
+	static struct al_table * tables[5] =
 	{
 		alloc_0, alloc_1, alloc_2, alloc_3, alloc_4
 	};
@@ -141,7 +141,7 @@ static void get_II_stuff(struct frame *fr)
 	fr->II_sblimit = sblim;
 }
 
-void audio_flush(int outmode, struct audio_info_struct *ai)
+void audio_flush(int outmode, struct audio_info_struct * ai)
 {
 	if (pcm_point)
 	{
@@ -165,7 +165,7 @@ void read_frame_init(void)
  * HACK,HACK,HACK
  * step back <num> frames
  */
-int back_frame(struct frame *fr,int num)
+int back_frame(struct frame * fr,int num)
 {
 	long bytes;
 	unsigned char buf[4];
@@ -217,7 +217,7 @@ int back_frame(struct frame *fr,int num)
 	return 0;
 }
 
-int head_read(unsigned char *hbuf,unsigned long *newhead)
+int head_read(unsigned char * hbuf,unsigned long * newhead)
 {
 	if (mp3_in->read(hbuf, 4)!=4)
 	{
@@ -254,7 +254,7 @@ int head_check(unsigned long newhead)
 }
 
 
-int read_frame(struct frame *fr)
+int read_frame(struct frame * fr)
 {
 	static unsigned long newhead;
 
@@ -391,8 +391,9 @@ init_resync:
 						goto init_resync;
 					}               /* "considered harmful", eh? */
 
-				} while ((newhead & HDRCMPMASK) != (oldhead & HDRCMPMASK)
-						 && (newhead & HDRCMPMASK) != (firsthead & HDRCMPMASK));
+				}
+				while ((newhead & HDRCMPMASK) != (oldhead & HDRCMPMASK)
+					   && (newhead & HDRCMPMASK) != (firsthead & HDRCMPMASK));
 			}
 			else
 			{
@@ -558,9 +559,9 @@ init_resync:
  */
 
 #if 1
-char *strndup(const char *src, int num)
+char *strndup(const char * src, int num)
 {
-	char *dst;
+	char * dst;
 
 	if (!(dst = (char *) malloc(num+1)))
 	{
@@ -582,9 +583,9 @@ char *strndup(const char *src, int num)
  *   is different from the previous one (if any).
  */
 
-int split_dir_file(const char *path, char **dname, char **fname)
+int split_dir_file(const char * path, char * * dname, char * * fname)
 {
-	char *slashpos;
+	char * slashpos;
 
 	if ((slashpos = strrchr(path, '/')))
 	{

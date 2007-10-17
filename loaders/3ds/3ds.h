@@ -108,11 +108,11 @@ private:
 	int CompileObjects();
 	int CleanUp();
 
-	FILE *mFile;
-	void *mBuffer;
+	FILE * mFile;
+	void * mBuffer;
 
-	Chunk *mCurrentChunk;
-	Chunk *mTempChunk;
+	Chunk * mCurrentChunk;
+	Chunk * mTempChunk;
 
 };
 

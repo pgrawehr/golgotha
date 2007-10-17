@@ -33,7 +33,7 @@ private:
 	g1_typed_reference_class<g1_object_class> selected_object;
 
 	//Building about to be built
-	g1_object_class* prepared_building;
+	g1_object_class * prepared_building;
 public:
 	enum {
 		DEFAULT,
@@ -64,21 +64,21 @@ public:
 	};
 
 
-	g1_human_class(g1_loader_class *f);
+	g1_human_class(g1_loader_class * f);
 	~g1_human_class();
 
 
 
 	void send_selected_units(i4_float x, i4_float y);
-	void attack_unit(g1_object_class *o, i4_float x, i4_float y);
-	void clicked_on_object(g1_object_class *o);
+	void attack_unit(g1_object_class * o, i4_float x, i4_float y);
+	void clicked_on_object(g1_object_class * o);
 
-	w32 show_selection(g1_object_controller_class *for_who,
-					   i4_transform_class &transform, g1_draw_context_class *context);
+	w32 show_selection(g1_object_controller_class * for_who,
+					   i4_transform_class &transform, g1_draw_context_class * context);
 
-	void draw_button_model(char *buttoncmd, i4_float posx, i4_float posy, i4_float posz, g1_object_class *forobj);
-	w8 determine_cursor(g1_object_class *object_mouse_is_on);
-	void player_clicked(g1_object_class *o, float gx, float gy,w32 command);
+	void draw_button_model(char * buttoncmd, i4_float posx, i4_float posy, i4_float posz, g1_object_class * forobj);
+	w8 determine_cursor(g1_object_class * object_mouse_is_on);
+	void player_clicked(g1_object_class * o, float gx, float gy,w32 command);
 	int build_unit(g1_object_type type);
 	bool prepare_to_build_building(g1_object_type type);
 	bool is_building_prepared();
@@ -88,10 +88,10 @@ public:
 	virtual void think();
 	//char* ai_name() { return "Human"; }
 
-	virtual void load(g1_loader_class *fp);
+	virtual void load(g1_loader_class * fp);
 };
 
 
-extern g1_human_class *g1_human;
+extern g1_human_class * g1_human;
 
 #endif

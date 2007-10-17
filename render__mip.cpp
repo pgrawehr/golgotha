@@ -40,7 +40,7 @@ unsigned char tga_header[12] = {
 
 
 
-i4_image_class *adjust_to_power_of_two(i4_image_class *src_texture)
+i4_image_class *adjust_to_power_of_two(i4_image_class * src_texture)
 {
 	sw32 new_width,new_height;
 
@@ -90,13 +90,13 @@ i4_image_class *adjust_to_power_of_two(i4_image_class *src_texture)
 	i4_pixel_format fmt;
 	fmt.default_format();
 
-	const i4_pal *pal = i4_pal_man.register_pal(&fmt);
+	const i4_pal * pal = i4_pal_man.register_pal(&fmt);
 
-	i4_image_class *new_texture = i4_create_image(new_width,new_height,pal);
+	i4_image_class * new_texture = i4_create_image(new_width,new_height,pal);
 
-	w32 *old_tex = (w32 *)src_texture->data;
-	w32 *new_tex = (w32 *)new_texture->data;
-	w32 *dst     = new_tex;
+	w32 * old_tex = (w32 *)src_texture->data;
+	w32 * new_tex = (w32 *)new_texture->data;
+	w32 * dst     = new_tex;
 
 	double width_ratio  = (double)old_width  / (double)new_width;
 	double height_ratio = (double)old_height / (double)new_height;
@@ -152,8 +152,8 @@ sw32 num_mips(sw32 width, sw32 height)
 	return (num_mip_levels>0) ? num_mip_levels : 1; //always return at least 1
 }
 
-void get_header_info(mipheader_t &header, i4_image_class *src_texture,
-					 char *texture_name, w32 chroma_color)
+void get_header_info(mipheader_t &header, i4_image_class * src_texture,
+					 char * texture_name, w32 chroma_color)
 {
 	sw32 i /*,j*/;
 	sw32 width  = src_texture->width();
@@ -163,11 +163,12 @@ void get_header_info(mipheader_t &header, i4_image_class *src_texture,
 	i4_bool has_alpha  = i4_F;
 
 	w32 rt=0,gt=0,bt=0, t=0;
+
 	i4_draw_context_class context(0,0,width-1,height-1);
 
 	if (src_texture->get_pal()->source.pixel_depth==I4_32BIT)
 	{
-		w32 *base_mip = (w32 *)src_texture->data;
+		w32 * base_mip = (w32 *)src_texture->data;
 
 		sw32 im_size = width * height;
 
@@ -236,7 +237,7 @@ void get_header_info(mipheader_t &header, i4_image_class *src_texture,
 		header.average_color=src_texture->get_pixel(0,0,context);
 	}
 
-	char *tname = r1_remove_paths(texture_name);
+	char * tname = r1_remove_paths(texture_name);
 	if (strlen(tname)>255)
 	{
 		tname[255]=0;
@@ -304,14 +305,15 @@ void get_header_info(mipheader_t &header, i4_image_class *src_texture,
 	//  header.flags = R1_MIP_IS_JPG_COMPRESSED;
 }
 
-i4_bool r1_write_tga_mips(i4_image_class *src_texture, char *dst_file,
-						  i4_file_class *dst_f,
-						  char *texture_name, w32 chroma_color)
+i4_bool r1_write_tga_mips(i4_image_class * src_texture, char * dst_file,
+						  i4_file_class * dst_f,
+						  char * texture_name, w32 chroma_color)
 {
 	sw32 i,j;
 	mipheader_t header;
 
-	i4_file_class *f = 0;
+	i4_file_class * f = 0;
+
 	if (dst_f)
 	{
 		f=dst_f;
@@ -326,8 +328,8 @@ i4_bool r1_write_tga_mips(i4_image_class *src_texture, char *dst_file,
 		return i4_F;
 	}
 
-	i4_image_class *adjusted_texture = adjust_to_power_of_two(src_texture);
-	i4_image_class *use_texture = adjusted_texture ? adjusted_texture : src_texture;
+	i4_image_class * adjusted_texture = adjust_to_power_of_two(src_texture);
+	i4_image_class * use_texture = adjusted_texture ? adjusted_texture : src_texture;
 
 	get_header_info(header, use_texture, texture_name, chroma_color);
 	header.write(f);
@@ -382,8 +384,8 @@ i4_bool r1_write_tga_mips(i4_image_class *src_texture, char *dst_file,
 	}
 	else
 	{
-		i4_str *fmt=i4gets("encoding_jpg").sprintf(200, dst_file);
-		i4_status_class *status=i4_create_status(*fmt);
+		i4_str * fmt=i4gets("encoding_jpg").sprintf(200, dst_file);
+		i4_status_class * status=i4_create_status(*fmt);
 		delete fmt;
 		i4_write_jpeg(use_texture, f, 90, status);
 		if (status)
@@ -413,17 +415,17 @@ i4_bool r1_write_tga_mips(i4_image_class *src_texture, char *dst_file,
  */
 
 
-w8 *temp_mip_24=0;
-w16 *temp_mip_16=0;
+w8 * temp_mip_24=0;
+w16 * temp_mip_16=0;
 
 sw32 last_mip_24_size = 0;
 sw32 last_mip_16_size = 0;
 
 i4_bool decompress_to_square = i4_F;
 
-void r1_setup_decompression(i4_pixel_format *reg_fmt,
-							i4_pixel_format *chroma_fmt,
-							i4_pixel_format *alpha_fmt,
+void r1_setup_decompression(i4_pixel_format * reg_fmt,
+							i4_pixel_format * chroma_fmt,
+							i4_pixel_format * alpha_fmt,
 							w32 chroma_color, i4_bool square_textures)
 {
 	setup_pixel_formats(*reg_fmt,*chroma_fmt,*alpha_fmt,chroma_color);
@@ -452,16 +454,16 @@ void r1_end_decompression()
 	last_mip_16_size = 0;
 }
 
-void process_intern_jpg_decomp_dummy(i4_file_class *dst_file,
-									 i4_file_class *dst_lowmip_file,
-									 i4_file_class *src_file,
+void process_intern_jpg_decomp_dummy(i4_file_class * dst_file,
+									 i4_file_class * dst_lowmip_file,
+									 i4_file_class * src_file,
 									 mipheader_t &new_mipheader,
 									 mipheader_t *&old_mipheader,
 									 sw32 &start_here);
 
-void process_intern_raw_decomp(i4_file_class *dst_file,
-							   i4_file_class *dst_lowmip_file,
-							   i4_file_class *src_file,
+void process_intern_raw_decomp(i4_file_class * dst_file,
+							   i4_file_class * dst_lowmip_file,
+							   i4_file_class * src_file,
 							   mipheader_t &new_mipheader,
 							   mipheader_t *&old_mipheader,
 							   sw32 &start_here)
@@ -547,9 +549,9 @@ void process_intern_raw_decomp(i4_file_class *dst_file,
 	}
 }
 
-void process_intern_jpg_decomp(i4_file_class *dst_file,
-							   i4_file_class *dst_lowmip_file,
-							   i4_file_class *src_file,
+void process_intern_jpg_decomp(i4_file_class * dst_file,
+							   i4_file_class * dst_lowmip_file,
+							   i4_file_class * src_file,
 							   mipheader_t &new_mipheader,
 							   mipheader_t *&old_mipheader,
 							   sw32 &start_here)
@@ -627,9 +629,10 @@ void process_intern_jpg_decomp(i4_file_class *dst_file,
 	}
 }
 
-int r1_get_id_from_filename(char *file)
+int r1_get_id_from_filename(char * file)
 {
 	i4_filename_struct fn;
+
 	i4_split_path(i4_const_str(file),fn);
 	int i=0,id=0;
 	while (fn.filename[i])
@@ -693,11 +696,11 @@ int r1_get_id_from_filename(char *file)
 	return id;
 }
 
-i4_bool r1_decompress_to_local_mip(i4_file_class *orig_src_file,
-								   i4_file_class *dst_lowmip_file,
-								   char *network_file,
-								   char *local_file,
-								   mipheader_t *old_mipheader,
+i4_bool r1_decompress_to_local_mip(i4_file_class * orig_src_file,
+								   i4_file_class * dst_lowmip_file,
+								   char * network_file,
+								   char * local_file,
+								   mipheader_t * old_mipheader,
 								   sw32 max_mip_dimention)
 {
 	//In what circumstances is old_mipheader changed to something different?
@@ -705,10 +708,10 @@ i4_bool r1_decompress_to_local_mip(i4_file_class *orig_src_file,
 	sw32 num_to_copy=0;
 	sw32 width,height;
 	sw32 i /*,j,k*/;
-	w8 *ram_file_buffer = 0;
-	i4_ram_file_class *rf = 0;
+	w8 * ram_file_buffer = 0;
+	i4_ram_file_class * rf = 0;
 
-	i4_file_class *src_file = orig_src_file;
+	i4_file_class * src_file = orig_src_file;
 
 	//make sure there is space allocated
 	sw32 need_24_size = old_mipheader->base_width*old_mipheader->base_height*4;
@@ -839,7 +842,7 @@ i4_bool r1_decompress_to_local_mip(i4_file_class *orig_src_file,
 						 new_mipheader.offsets,
 						 new_mipheader.flags & R1_MIP_IS_ALPHATEXTURE ? 4 : 3);
 
-	i4_file_class *dst_file=0;
+	i4_file_class * dst_file=0;
 
 
 
@@ -1003,9 +1006,9 @@ i4_bool r1_decompress_to_local_mip(i4_file_class *orig_src_file,
    	}
  */
 
-void process_intern_jpg_decomp_dummy(i4_file_class *dst_file,
-									 i4_file_class *dst_lowmip_file,
-									 i4_file_class *src_file,
+void process_intern_jpg_decomp_dummy(i4_file_class * dst_file,
+									 i4_file_class * dst_lowmip_file,
+									 i4_file_class * src_file,
 									 mipheader_t &new_mipheader,
 									 mipheader_t *&old_mipheader,
 									 sw32 &start_here)

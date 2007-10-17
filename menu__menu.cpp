@@ -33,10 +33,10 @@ class i4_depress_menu_item :
 {
 public:
 
-	i4_menu_item_class *item;
+	i4_menu_item_class * item;
 
-	i4_depress_menu_item(i4_menu_class *menu,
-						 i4_menu_item_class *item)
+	i4_depress_menu_item(i4_menu_class * menu,
+						 i4_menu_item_class * item)
 		: i4_object_message_event_class(menu),
 		  item(item)
 	{
@@ -50,18 +50,19 @@ public:
 
 } ;
 
-void i4_menu_class::add_item(i4_menu_item_class *item)
+void i4_menu_class::add_item(i4_menu_item_class * item)
 {
 	item->set_menu_parent(this);
 	i4_parent_window_class::add_child(0,0,item);
 }
 
-int i4_menu_class::get_sub_menu(const i4_const_str &cmd_name, i4_menu_item_class **items, int maxitems)
+int i4_menu_class::get_sub_menu(const i4_const_str &cmd_name, i4_menu_item_class * * items, int maxitems)
 {
 	win_iter it=children.begin();
 	//we assume that all our children are of type i4_menu_item_class, otherwise BANG!!!
-	i4_menu_item_class *item;
+	i4_menu_item_class * item;
 	char buf[256];
+
 	i4_os_string(cmd_name,buf,256);
 	int ret=0;
 	for (; it!=children.end(); it++)
@@ -71,8 +72,8 @@ int i4_menu_class::get_sub_menu(const i4_const_str &cmd_name, i4_menu_item_class
 		{
 			if (i4_event::DO_COMMAND==item->send.press->event->type())
 			{
-				i4_do_command_event_class *cmd=(i4_do_command_event_class *)
-												item->send.press->event;
+				i4_do_command_event_class * cmd=(i4_do_command_event_class *)
+												 item->send.press->event;
 				if (strcmp(buf,cmd->command)==0 && ret<maxitems)
 				{
 					items[ret]=item;
@@ -90,8 +91,8 @@ int i4_menu_class::get_sub_menu(const i4_const_str &cmd_name, i4_menu_item_class
 
 
 
-void i4_menu_class::note_reaction_sent(i4_menu_item_class *who,       // this is who sent it
-									   i4_event_reaction_class *ev,   // who it was to
+void i4_menu_class::note_reaction_sent(i4_menu_item_class * who,       // this is who sent it
+									   i4_event_reaction_class * ev,   // who it was to
 									   i4_menu_item_class::reaction_type type)
 {
 	// if the item was pressed, send a delayed event to ourself to depress it
@@ -107,7 +108,7 @@ void i4_menu_class::note_reaction_sent(i4_menu_item_class *who,       // this is
 	}
 }
 
-void i4_menu_class::receive_event(i4_event *ev)
+void i4_menu_class::receive_event(i4_event * ev)
 {
 	if (deleted)
 	{
@@ -158,6 +159,7 @@ void i4_menu_class::receive_event(i4_event *ev)
 i4_menu_class::~i4_menu_class()
 {
 	deleted=i4_T;
+
 }
 
 // MENUITEM.CPP
@@ -170,13 +172,13 @@ i4_menu_class::~i4_menu_class()
  ***********************************************************************/
 
 
-i4_menu_item_class::i4_menu_item_class(const i4_const_str *idle_context_help,
-									   i4_graphical_style_class *_hint,
+i4_menu_item_class::i4_menu_item_class(const i4_const_str * idle_context_help,
+									   i4_graphical_style_class * _hint,
 									   w16 w, w16 h,
-									   i4_event_reaction_class *press,
-									   i4_event_reaction_class *depress,
-									   i4_event_reaction_class *activate,
-									   i4_event_reaction_class *deactivate
+									   i4_event_reaction_class * press,
+									   i4_event_reaction_class * depress,
+									   i4_event_reaction_class * activate,
+									   i4_event_reaction_class * deactivate
 ) :
 	i4_parent_window_class(w,h),
 	hint(_hint) //Warning: Compiler bug (or feature?) if object member
@@ -208,7 +210,7 @@ i4_menu_item_class::i4_menu_item_class(const i4_const_str *idle_context_help,
 	disabled=i4_F;
 }
 
-void i4_menu_item_class::send_event(i4_event_reaction_class *ev, reaction_type type)
+void i4_menu_item_class::send_event(i4_event_reaction_class * ev, reaction_type type)
 {
 	if (menu_parent)
 	{
@@ -221,7 +223,7 @@ void i4_menu_item_class::send_event(i4_event_reaction_class *ev, reaction_type t
 	}
 }
 
-void i4_menu_item_class::receive_event(i4_event *ev)
+void i4_menu_item_class::receive_event(i4_event * ev)
 {
 	i4_parent_window_class::receive_event(ev);
 
@@ -252,7 +254,7 @@ void i4_menu_item_class::receive_event(i4_event *ev)
 					{
 						if (context_help_window.get())
 						{
-							i4_window_class *w=context_help_window.get();
+							i4_window_class * w=context_help_window.get();
 							w->call_stack_counter++;
 							//The Context-Help-Window must not be removed
 							//here. (Causes GPF if Mouse is on top of it)
@@ -382,8 +384,8 @@ i4_menu_item_class::~i4_menu_item_class()
    golgotha_source@usa.net (Subject should have "GOLG" in it)
  ***********************************************************************/
 
-i4_pull_menu_class::i4_pull_menu_class(i4_graphical_style_class *style,
-									   i4_parent_window_class *root_window)
+i4_pull_menu_class::i4_pull_menu_class(i4_graphical_style_class * style,
+									   i4_parent_window_class * root_window)
 	: i4_menu_class(i4_F),
 	  menu_colors(*style->color_hint),
 	  root(root_window),
@@ -440,9 +442,10 @@ void i4_pull_menu_class::remove_all_menus()
 	sub_menus.destroy_all();
 }
 
-void i4_pull_menu_class::show_active(i4_menu_item_class *who)
+void i4_pull_menu_class::show_active(i4_menu_item_class * who)
 {
 	win_iter name=children.begin(), sub=sub_menus.begin(), last=sub_menus.end();
+
 	while (who!=&*name)
 	{
 		last=sub;
@@ -455,7 +458,7 @@ void i4_pull_menu_class::show_active(i4_menu_item_class *who)
 	py=who->y()+who->height();
 	px=who->x();
 
-	i4_menu_class *m=((i4_menu_class *)(&*sub));
+	i4_menu_class * m=((i4_menu_class *)(&*sub));
 
 	if (last==sub_menus.end())
 	{
@@ -489,8 +492,8 @@ void i4_pull_menu_class::show_active(i4_menu_item_class *who)
 	watch();
 }
 
-void i4_pull_menu_class::note_reaction_sent(i4_menu_item_class *who,       // this is who sent it
-											i4_event_reaction_class *ev,   // who it was to
+void i4_pull_menu_class::note_reaction_sent(i4_menu_item_class * who,       // this is who sent it
+											i4_event_reaction_class * ev,   // who it was to
 											i4_menu_item_class::reaction_type type)
 {
 	i4_menu_class::note_reaction_sent(who, ev, type);
@@ -555,7 +558,7 @@ void i4_pull_menu_class::hide_active()
 	active_sub=0;
 }
 
-void i4_pull_menu_class::receive_event(i4_event *ev)
+void i4_pull_menu_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::OBJECT_MESSAGE)
 	{
@@ -632,8 +635,8 @@ void i4_pull_menu_class::parent_draw(i4_draw_context_class &context)
 	i4_parent_window_class::parent_draw(context);
 }
 
-void i4_pull_menu_class::add_sub_menu(i4_menu_item_class *name,
-									  i4_menu_class *sub_menu)
+void i4_pull_menu_class::add_sub_menu(i4_menu_item_class * name,
+									  i4_menu_class * sub_menu)
 {
 	add_item(name);
 	name->set_menu_parent(this);
@@ -644,11 +647,11 @@ void i4_pull_menu_class::add_sub_menu(i4_menu_item_class *name,
 	reparent(local_image, parent);
 }
 
-int i4_pull_menu_class::get_sub_menu(const i4_const_str &cmd_name, i4_menu_item_class **items, int maxitems)
+int i4_pull_menu_class::get_sub_menu(const i4_const_str &cmd_name, i4_menu_item_class * * items, int maxitems)
 {
 	i4_isl_list<i4_window_class>::iterator it=sub_menus.begin();
-	i4_menu_item_class *current;
-	i4_menu_class *sub_menu;
+	i4_menu_item_class * current;
+	i4_menu_class * sub_menu;
 	int ret1=0,ret2=0;
 	for (; it!=sub_menus.end(); it++)
 	{
@@ -665,7 +668,7 @@ int i4_pull_menu_class::get_sub_menu(const i4_const_str &cmd_name, i4_menu_item_
 };
 
 
-void i4_pull_menu_class::reparent(i4_image_class *draw_area, i4_parent_window_class *parent)
+void i4_pull_menu_class::reparent(i4_image_class * draw_area, i4_parent_window_class * parent)
 {
 	i4_parent_window_class::reparent(draw_area, parent);
 	if (parent)
@@ -721,7 +724,7 @@ void i4_text_item_class::change_text(const i4_const_str &new_st)
 	request_redraw(i4_F);
 }
 
-i4_menu_item_class *i4_text_item_class::copy()
+i4_menu_item_class * i4_text_item_class::copy()
 {
 	return new i4_text_item_class(*text, hint, color, font,
 								  send.press ? send.press->copy() : 0,
@@ -732,16 +735,16 @@ i4_menu_item_class *i4_text_item_class::copy()
 
 
 i4_text_item_class::i4_text_item_class(const i4_const_str &_text,
-									   i4_graphical_style_class *style,
-									   i4_color_hint_class *_color,
-									   i4_font_class *_font,
-									   i4_event_reaction_class *press,
-									   i4_event_reaction_class *depress,
-									   i4_event_reaction_class *activate,
-									   i4_event_reaction_class *deactivate,
+									   i4_graphical_style_class * style,
+									   i4_color_hint_class * _color,
+									   i4_font_class * _font,
+									   i4_event_reaction_class * press,
+									   i4_event_reaction_class * depress,
+									   i4_event_reaction_class * activate,
+									   i4_event_reaction_class * deactivate,
 									   w16 pad_left_right,
 									   w16 pad_up_down,
-									   const char *_check_enable_fn)
+									   const char * _check_enable_fn)
 
 	: i4_menu_item_class(0, style, 0,0, press,depress,activate,deactivate),
 	  color(_color),
@@ -778,7 +781,7 @@ i4_text_item_class::i4_text_item_class(const i4_const_str &_text,
 
 		if (i4_key_man.get_key_for_command(dev->command_id, key, mod))
 		{
-			i4_str *key_name=i4_key_name(key, mod);
+			i4_str * key_name=i4_key_name(key, mod);
 			private_resize(width() + font->width(*key_name)+5, height());
 			delete key_name;
 		}
@@ -791,7 +794,7 @@ void i4_text_item_class::check_enable()
 {
 	if (check_enable_fn)
 	{
-		li_object *r=li_call(check_enable_fn->c_str());
+		li_object * r=li_call(check_enable_fn->c_str());
 		if (r==li_nil)
 		{
 			disabled=i4_T;
@@ -866,7 +869,7 @@ void i4_text_item_class::parent_draw(i4_draw_context_class &context)
 
 		if (i4_key_man.get_key_for_command(dev->command_id, key, mod))
 		{
-			i4_str *key_name=i4_key_name(key, mod);
+			i4_str * key_name=i4_key_name(key, mod);
 			font->put_string(local_image, width() - pad_lr -
 							 font->width(*key_name) + 1,
 							 dy, *key_name, context);
@@ -878,7 +881,7 @@ void i4_text_item_class::parent_draw(i4_draw_context_class &context)
 }
 
 
-void i4_text_item_class::receive_event(i4_event *ev)
+void i4_text_item_class::receive_event(i4_event * ev)
 {
 	//if this entry is disabled, NOTHING shall happen at all
 	//This also includes that the menu should not go away.
@@ -979,15 +982,15 @@ void i4_checkbox_images_class::uninit()
 i4_checkbox_class::i4_checkbox_class(
 	const i4_const_str &_text,
 	w32 _flags,
-	i4_graphical_style_class *style,
+	i4_graphical_style_class * style,
 
-	i4_color_hint_class *color_hint,
-	i4_font_class *font,
+	i4_color_hint_class * color_hint,
+	i4_font_class * font,
 
-	i4_event_reaction_class *press,
-	i4_event_reaction_class *depress,
-	i4_event_reaction_class *activate,
-	i4_event_reaction_class *deactivate,
+	i4_event_reaction_class * press,
+	i4_event_reaction_class * depress,
+	i4_event_reaction_class * activate,
+	i4_event_reaction_class * deactivate,
 	w16 pad_left_right,
 	w16 pad_up_down
 )
@@ -1095,7 +1098,7 @@ void i4_checkbox_class::parent_draw(i4_draw_context_class &context)
 
 		if (i4_key_man.get_key_for_command(dev->command_id, key, mod))
 		{
-			i4_str *key_name=i4_key_name(key, mod);
+			i4_str * key_name=i4_key_name(key, mod);
 			font->put_string(local_image, width() - pad_lr -
 							 font->width(*key_name) + 1,
 							 dy, *key_name, context);
@@ -1117,7 +1120,7 @@ void i4_checkbox_class::toggle_state()
 	request_redraw();
 }
 
-void i4_checkbox_class::receive_event(i4_event *ev)
+void i4_checkbox_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::MOUSE_BUTTON_DOWN)
 	{
@@ -1158,15 +1161,15 @@ void i4_checkbox_class::receive_event(i4_event *ev)
  ***********************************************************************/
 
 
-i4_image_item_class::i4_image_item_class(const i4_const_str *context_help,
-										 i4_image_class *normal_image,
-										 i4_graphical_style_class *style,
-										 i4_image_class *active_image,     // if 0, then image will brighten
+i4_image_item_class::i4_image_item_class(const i4_const_str * context_help,
+										 i4_image_class * normal_image,
+										 i4_graphical_style_class * style,
+										 i4_image_class * active_image,     // if 0, then image will brighten
 										 i4_bool delete_images_on_death,
-										 i4_event_reaction_class *press,
-										 i4_event_reaction_class *depress,
-										 i4_event_reaction_class *activate,
-										 i4_event_reaction_class *deactivate)
+										 i4_event_reaction_class * press,
+										 i4_event_reaction_class * depress,
+										 i4_event_reaction_class * activate,
+										 i4_event_reaction_class * deactivate)
 
 	: i4_menu_item_class(context_help, style, normal_image->width(),
 						 normal_image->height(), press,depress,activate,deactivate)
@@ -1251,7 +1254,7 @@ void i4_image_item_class::parent_draw(i4_draw_context_class &context)
 
 }
 
-void i4_image_item_class::receive_event(i4_event *ev)
+void i4_image_item_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::MOUSE_BUTTON_DOWN)
 	{
@@ -1277,7 +1280,7 @@ void i4_image_item_class::receive_event(i4_event *ev)
 }
 
 
-i4_menu_item_class *i4_image_item_class::copy()
+i4_menu_item_class * i4_image_item_class::copy()
 {
 	return new i4_image_item_class(context_help,
 								   im->copy(),
@@ -1315,9 +1318,9 @@ i4_key_item_class::~i4_key_item_class()
 }
 
 i4_key_item_class::i4_key_item_class(const i4_const_str &_text,
-									 i4_color_hint_class *color_hint,
-									 i4_font_hint_class *font_hint,
-									 i4_graphical_style_class *style,
+									 i4_color_hint_class * color_hint,
+									 i4_font_hint_class * font_hint,
+									 i4_graphical_style_class * style,
 									 w16 key,
 									 w16 key_modifiers,
 									 w16 pad_left_right,
@@ -1340,12 +1343,12 @@ i4_key_item_class::i4_key_item_class(const i4_const_str &_text,
 	valid=i4_T;
 
 	w32 add_width=0;
-	i4_font_class *fnt=font_hint->normal_font;
+	i4_font_class * fnt=font_hint->normal_font;
 
 	if (key!=I4_NO_KEY)
 	{
 		i4_key_accel_watcher_instance.watch_key(this, key, key_modifiers);
-		i4_str *key_name=i4_key_name(key, key_modifiers);
+		i4_str * key_name=i4_key_name(key, key_modifiers);
 		add_width=fnt->width(*key_name)+key_space;
 		delete key_name;
 	}
@@ -1354,7 +1357,7 @@ i4_key_item_class::i4_key_item_class(const i4_const_str &_text,
 		   (w16)(fnt->height(_text) + pad_up_down*2));
 }
 
-void i4_key_item_class::receive_event(i4_event *ev)
+void i4_key_item_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::MOUSE_BUTTON_DOWN)
 	{
@@ -1469,7 +1472,7 @@ i4_key_accel_watcher_class::i4_key_accel_watcher_class()
 }
 
 
-i4_key_item_class **i4_key_accel_watcher_class::
+i4_key_item_class * * i4_key_accel_watcher_class::
 	key_item_pointer_type::get_from_modifiers(w16 modifiers)
 {
 	int index=0;
@@ -1492,7 +1495,7 @@ i4_key_item_class **i4_key_accel_watcher_class::
 	return &modkey[index];
 }
 
-void i4_key_accel_watcher_class::watch_key(i4_key_item_class *who, w16 key, w16 modifiers)
+void i4_key_accel_watcher_class::watch_key(i4_key_item_class * who, w16 key, w16 modifiers)
 {
 	if (!initialized)
 	{
@@ -1516,7 +1519,7 @@ void i4_key_accel_watcher_class::watch_key(i4_key_item_class *who, w16 key, w16 
 	*user[key].get_from_modifiers(modifiers)=who;
 }
 
-void i4_key_accel_watcher_class::unwatch_key(i4_key_item_class *who, w16 key, w16 modifiers)
+void i4_key_accel_watcher_class::unwatch_key(i4_key_item_class * who, w16 key, w16 modifiers)
 {
 	if (*user[key].get_from_modifiers(modifiers)==who)
 	{
@@ -1534,7 +1537,7 @@ void i4_key_accel_watcher_class::unwatch_key(i4_key_item_class *who, w16 key, w1
 
 
 
-void i4_key_accel_watcher_class::receive_event(i4_event *ev)
+void i4_key_accel_watcher_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::KEY_PRESS)
 	{
@@ -1542,7 +1545,7 @@ void i4_key_accel_watcher_class::receive_event(i4_event *ev)
 
 		// if the object has the keyboard focus, then it will get the key through
 		// normal window channels
-		i4_key_item_class *i=*(user[kev->key_code].get_from_modifiers(kev->modifiers));
+		i4_key_item_class * i=*(user[kev->key_code].get_from_modifiers(kev->modifiers));
 		if (i && !i->has_keyboard_focus())
 		{
 			i4_kernel.send_event(i, ev);
@@ -1570,7 +1573,7 @@ void i4_key_item_class::parent_draw(i4_draw_context_class &context)
 		bg=color->text_background;
 	}
 
-	i4_str *key_name;
+	i4_str * key_name;
 
 	if (use_key!=I4_NO_KEY)
 	{
@@ -1590,7 +1593,7 @@ void i4_key_item_class::parent_draw(i4_draw_context_class &context)
 		local_image->clear(bg, context);
 	}
 
-	i4_font_class *fnt=font->normal_font;
+	i4_font_class * fnt=font->normal_font;
 
 	if (!valid)
 	{
@@ -1639,7 +1642,7 @@ void i4_key_item_class::parent_draw(i4_draw_context_class &context)
  ***********************************************************************/
 
 
-void i4_box_menu_class::show(i4_parent_window_class *show_on, i4_coord _x, i4_coord _y)
+void i4_box_menu_class::show(i4_parent_window_class * show_on, i4_coord _x, i4_coord _y)
 {
 	if (parent)
 	{
@@ -1689,7 +1692,7 @@ void i4_box_menu_class::parent_draw(i4_draw_context_class &context)
 {
 	local_image->add_dirty(0,0,width()-1,height()-1,context);
 
-	i4_color_hint_class::bevel *color;
+	i4_color_hint_class::bevel * color;
 
 	color=&style->color_hint->window.passive;
 

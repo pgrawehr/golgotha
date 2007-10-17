@@ -11,7 +11,7 @@
 #include "video/win32/dx5_error.h"
 #include "image/context.h"
 
-ddraw_thread_cursor_class::ddraw_thread_cursor_class(const i4_pal *screen_pal,
+ddraw_thread_cursor_class::ddraw_thread_cursor_class(const i4_pal * screen_pal,
 													 HWND window_handle,
 													 sw32 clip_x1, sw32 clip_y1,
 													 sw32 clip_x2, sw32 clip_y2)
@@ -31,7 +31,7 @@ ddraw_thread_cursor_class::ddraw_thread_cursor_class(const i4_pal *screen_pal,
 	use_back_buffer = i4_F;
 }
 
-void ddraw_thread_cursor_class::set_cursor(i4_cursor_class *c)
+void ddraw_thread_cursor_class::set_cursor(i4_cursor_class * c)
 {
 	draw_lock.lock();
 
@@ -55,7 +55,7 @@ void ddraw_thread_cursor_class::set_cursor(i4_cursor_class *c)
 
 		i4_draw_context_class context(0,0, cw-1, ch-1);
 
-		i4_dx5_image_class *dx5_image = new i4_dx5_image_class(cw, ch, DX5_VRAM);
+		i4_dx5_image_class * dx5_image = new i4_dx5_image_class(cw, ch, DX5_VRAM);
 		cursor_version=5;
 		//setup room for the mouse save
 		mouse_save = new i4_dx5_image_class(cw,ch,DX5_VRAM);
@@ -98,9 +98,9 @@ void ddraw_thread_cursor_class::save()
 
 
 
-	IDirectDrawSurface3 *framebuffer = (use_back_buffer) ? (dx5_common.back_surface) : (dx5_common.primary_surface);
+	IDirectDrawSurface3 * framebuffer = (use_back_buffer) ? (dx5_common.back_surface) : (dx5_common.primary_surface);
 
-	i4_dx5_image_class *im5=(i4_dx5_image_class *)mouse_save;
+	i4_dx5_image_class * im5=(i4_dx5_image_class *)mouse_save;
 	HRESULT res =
 		im5->surface->BltFast(0,
 							  0,
@@ -114,14 +114,15 @@ void ddraw_thread_cursor_class::save()
 
 void ddraw_thread_cursor_class::remove()
 {
-	i4_dx5_image_class *im5=(i4_dx5_image_class *) mouse_save;
+	i4_dx5_image_class * im5=(i4_dx5_image_class *) mouse_save;
+
 	if (!visible || !mouse_save || !im5->surface)
 	{
 		return;
 	}
 
 
-	IDirectDrawSurface3 *framebuffer = (use_back_buffer) ? (dx5_common.back_surface) : (dx5_common.primary_surface);
+	IDirectDrawSurface3 * framebuffer = (use_back_buffer) ? (dx5_common.back_surface) : (dx5_common.primary_surface);
 	HRESULT res =
 		framebuffer->BltFast(save_mouse_x,
 							 save_mouse_y,
@@ -137,7 +138,8 @@ void ddraw_thread_cursor_class::remove()
 
 void ddraw_thread_cursor_class::display()
 {
-	i4_dx5_image_class *im5=(i4_dx5_image_class *)mouse_save;
+	i4_dx5_image_class * im5=(i4_dx5_image_class *)mouse_save;
+
 	if (!cursor.pict || !mouse_save || !im5->surface)
 	{
 		return;
@@ -156,7 +158,7 @@ void ddraw_thread_cursor_class::display()
 	r.bottom = r.top + mouse_save->height();
 
 
-	IDirectDrawSurface3 *framebuffer = (use_back_buffer) ? (dx5_common.back_surface) : (dx5_common.primary_surface);
+	IDirectDrawSurface3 * framebuffer = (use_back_buffer) ? (dx5_common.back_surface) : (dx5_common.primary_surface);
 	HRESULT res =
 		im5->surface->BltFast(0,
 							  0,
@@ -166,7 +168,7 @@ void ddraw_thread_cursor_class::display()
 							  DDBLTFAST_WAIT);
 	i4_dx5_check(res);
 
-	IDirectDrawSurface3 *mouse_draw_surface = ((i4_dx5_image_class *)cursor.pict)->surface;
+	IDirectDrawSurface3 * mouse_draw_surface = ((i4_dx5_image_class *)cursor.pict)->surface;
 
 	res =
 		framebuffer->BltFast(save_mouse_x,

@@ -39,7 +39,7 @@ struct audio_info_struct
 	long rate;
 	int gain;
 	int output;
-	char *device;
+	char * device;
 	int channels;
 	int format;
 };
@@ -47,7 +47,7 @@ struct audio_info_struct
 extern int audio_play_samples(struct audio_info_struct *,unsigned char *,int);
 extern int audio_open(struct audio_info_struct *);
 extern int audio_reset_parameters(struct audio_info_struct *);
-extern int audio_rate_best_match(struct audio_info_struct *ai);
+extern int audio_rate_best_match(struct audio_info_struct * ai);
 extern int audio_set_rate(struct audio_info_struct *);
 extern int audio_set_format(struct audio_info_struct *);
 extern int audio_get_formats(struct audio_info_struct *);
@@ -56,5 +56,5 @@ extern int audio_write_sample(struct audio_info_struct *,short *,int);
 extern int audio_close(struct audio_info_struct *);
 extern void audio_info_struct_init(struct audio_info_struct *);
 #ifdef SOLARIS
-extern void audio_queueflush(struct audio_info_struct *ai);
+extern void audio_queueflush(struct audio_info_struct * ai);
 #endif

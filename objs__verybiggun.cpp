@@ -69,7 +69,7 @@ g1_fire_range_type g1_very_big_gun_class::range()
 }
 
 g1_very_big_gun_class::g1_very_big_gun_class(g1_object_type id,
-											 g1_loader_class *fp)
+											 g1_loader_class * fp)
 	: g1_map_piece_class(id,fp)
 {
 	draw_params.setup("turret");
@@ -116,7 +116,7 @@ g1_very_big_gun_class::g1_very_big_gun_class(g1_object_type id,
 
 }
 
-void g1_very_big_gun_class::save(g1_saver_class *fp)
+void g1_very_big_gun_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -127,14 +127,14 @@ void g1_very_big_gun_class::save(g1_saver_class *fp)
 
 }
 
-void g1_very_big_gun_class::load(g1_loader_class *fp)
+void g1_very_big_gun_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
 	fp->end_version(I4_LF);
 };
 
-void g1_very_big_gun_class::skipload(g1_loader_class *fp)
+void g1_very_big_gun_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->check_version(DATA_VERSION);

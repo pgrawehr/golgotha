@@ -16,10 +16,10 @@ class li_symbol;
 class li_object;
 
 void *li_cell_alloc(size_t size);
-void li_cell_free(void *ptr);
+void li_cell_free(void * ptr);
 
 int li_gc();
-i4_bool li_valid_object(li_object *o);
+i4_bool li_valid_object(li_object * o);
 extern int li_max_cells;               // set this before i4_init to change limits
 
 // if you have li_object's that are not referenced by the stack and by a symbol,
@@ -29,7 +29,7 @@ extern int li_max_cells;               // set this before i4_init to change limi
 class li_gc_object_marker_class
 {
 public:
-	li_gc_object_marker_class *next;
+	li_gc_object_marker_class * next;
 	virtual void mark_objects(int set)
 	{
 		;

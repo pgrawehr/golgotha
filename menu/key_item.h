@@ -20,10 +20,10 @@ class i4_key_item_class :
 {
 protected:
 
-	i4_color_hint_class *color;
-	i4_font_hint_class *font;
+	i4_color_hint_class * color;
+	i4_font_hint_class * font;
 
-	i4_str *text;
+	i4_str * text;
 	w16 pad_lr, pad_ud;
 	w16 use_key, key_modifiers;
 	i4_bool key_focused, valid;
@@ -36,9 +36,9 @@ public:
 
 	i4_key_item_class(
 		const i4_const_str &_text,
-		i4_color_hint_class *color_hint,
-		i4_font_hint_class *font_hint,
-		i4_graphical_style_class *style,
+		i4_color_hint_class * color_hint,
+		i4_font_hint_class * font_hint,
+		i4_graphical_style_class * style,
 		w16 key=I4_NO_KEY,
 		w16 key_modifiers=0,
 		w16 pad_left_right=0,
@@ -48,13 +48,13 @@ public:
 
 	~i4_key_item_class();
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"key_item");
 	}
 
 	virtual void parent_draw(i4_draw_context_class &context);
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	// called when selected or key is pressed
 	virtual void action() = 0;
@@ -92,8 +92,8 @@ class i4_key_accel_watcher_class :
 {
 	struct key_item_pointer_type
 	{
-		i4_key_item_class *modkey[8];
-		i4_key_item_class **get_from_modifiers(w16 modifiers);
+		i4_key_item_class * modkey[8];
+		i4_key_item_class * *get_from_modifiers(w16 modifiers);
 	}
 	user[I4_NUM_KEYS];
 
@@ -102,11 +102,11 @@ class i4_key_accel_watcher_class :
 	i4_bool initialized;
 public:
 	i4_key_accel_watcher_class();
-	void watch_key(i4_key_item_class *who, w16 key, w16 modifiers);
-	void unwatch_key(i4_key_item_class *who, w16 key, w16 modifiers);
-	void receive_event(i4_event *ev);
+	void watch_key(i4_key_item_class * who, w16 key, w16 modifiers);
+	void unwatch_key(i4_key_item_class * who, w16 key, w16 modifiers);
+	void receive_event(i4_event * ev);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"key accel watcher");
 	}

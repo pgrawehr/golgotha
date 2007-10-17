@@ -47,7 +47,7 @@ i4_device_class::i4_device_class()
 	next=NULL;
 }
 
-void i4_device_class::send_event_to_agents(i4_event *ev, device_flags receive_types)
+void i4_device_class::send_event_to_agents(i4_event * ev, device_flags receive_types)
 {
 	i4_kernel.broadcast_event_type(ev, receive_types);
 }
@@ -73,9 +73,9 @@ i4_event_handler_class::~i4_event_handler_class()
 }
 
 
-i4_event_reaction_class *i4_event_reaction_class::copy()
+i4_event_reaction_class * i4_event_reaction_class::copy()
 {
-	i4_event *ev=event ? event->copy() : 0;
+	i4_event * ev=event ? event->copy() : 0;
 
 	return new i4_event_reaction_class(handler_reference.get(), ev);
 }
@@ -97,15 +97,15 @@ i4_event_reaction_class::~i4_event_reaction_class()
 	}
 }
 
-i4_event_reaction_class::i4_event_reaction_class(i4_event_handler_class *hand,
-												 i4_event *event)
+i4_event_reaction_class::i4_event_reaction_class(i4_event_handler_class * hand,
+												 i4_event * event)
 	: event(event)
 {
 
 	handler_reference.reference(hand);
 }
 
-i4_event_reaction_class::i4_event_reaction_class(i4_event_handler_class *hand,
+i4_event_reaction_class::i4_event_reaction_class(i4_event_handler_class * hand,
 												 w32 user_message_id)
 {
 	event=new i4_user_message_event_class(user_message_id);
@@ -118,7 +118,7 @@ void i4_event_handler_private_reference_class::destroy_ref()
 	// see if we need to remove our reference from the object we were referencing
 	if (ref)
 	{
-		i4_event_handler_private_reference_class *p, *last=0;
+		i4_event_handler_private_reference_class * p, * last=0;
 		p=ref->first;
 		while (p && p!=this)
 		{
@@ -142,7 +142,7 @@ void i4_event_handler_private_reference_class::destroy_ref()
 }
 
 // if who is 0, then reference is destroyed
-void i4_event_handler_private_reference_class::reference(i4_event_handler_class *who)
+void i4_event_handler_private_reference_class::reference(i4_event_handler_class * who)
 {
 	destroy_ref();
 	if (who)
@@ -162,10 +162,11 @@ void i4_event_handler_private_reference_class::reference(i4_event_handler_class 
  ***********************************************************************/
 
 
-i4_do_command_event_class::i4_do_command_event_class(char *_command, int command_id)
+i4_do_command_event_class::i4_do_command_event_class(char * _command, int command_id)
 	: command_id(command_id)
 {
 	int len=strlen(_command);
+
 	if (len>=sizeof(command))
 	{
 		//Bail out with fatal error here, might be vulnerable to buffer-overruns otherwise.
@@ -174,11 +175,12 @@ i4_do_command_event_class::i4_do_command_event_class(char *_command, int command
 	strcpy(command, _command);
 }
 
-i4_do_command_event_class::i4_do_command_event_class(char *_command, int command_id, i4_time_class &time)
+i4_do_command_event_class::i4_do_command_event_class(char * _command, int command_id, i4_time_class &time)
 	: command_id(command_id),
 	  time(time)
 {
 	int len=strlen(_command);
+
 	if (len>=sizeof(command))
 	{
 		i4_error("FATAL: Command too long");
@@ -186,18 +188,19 @@ i4_do_command_event_class::i4_do_command_event_class(char *_command, int command
 	strcpy(command, _command);
 }
 
-i4_event *i4_do_command_event_class::copy()
+i4_event * i4_do_command_event_class::copy()
 {
 	return new i4_do_command_event_class(command, command_id);
 }
 
 
 
-i4_end_command_event_class::i4_end_command_event_class(char *_command, int command_id, i4_time_class &time)
+i4_end_command_event_class::i4_end_command_event_class(char * _command, int command_id, i4_time_class &time)
 	: command_id(command_id),
 	  time(time)
 {
 	int len=strlen(_command);
+
 	if (len>=sizeof(command))
 	{
 		i4_error("FATAL: Command too long");
@@ -205,10 +208,11 @@ i4_end_command_event_class::i4_end_command_event_class(char *_command, int comma
 	strcpy(command, _command);
 }
 
-i4_end_command_event_class::i4_end_command_event_class(char *_command, int command_id)
+i4_end_command_event_class::i4_end_command_event_class(char * _command, int command_id)
 	: command_id(command_id)
 {
 	int len=strlen(_command);
+
 	if (len>=sizeof(command))
 	{
 		i4_error("FATAL: Command too long");
@@ -239,10 +243,10 @@ i4_kernel_device_class i4_kernel;
 struct defered_event
 {
 	i4_event_handler_reference_class<i4_event_handler_class> send_to;
-	defered_event *next;
-	i4_event *ev_copy;
-	defered_event(i4_event_handler_class *_send_to,
-				  i4_event *ev) :
+	defered_event * next;
+	i4_event * ev_copy;
+	defered_event(i4_event_handler_class * _send_to,
+				  i4_event * ev) :
 		ev_copy(ev->copy()),
 		next(0) {
 		send_to.reference(_send_to);
@@ -257,15 +261,15 @@ struct defered_event
 
 struct event_handler_delete_node
 {
-	i4_event_handler_class *who;
-	event_handler_delete_node *next;
-	event_handler_delete_node(i4_event_handler_class *who)
+	i4_event_handler_class * who;
+	event_handler_delete_node * next;
+	event_handler_delete_node(i4_event_handler_class * who)
 		: who(who) {
 	}
 };
 
 
-static defered_event *defered_list;
+static defered_event * defered_list;
 
 
 
@@ -277,7 +281,7 @@ static i4_isl_list<event_handler_delete_node> eh_delete_list;
 static i4_time_class last_user_input;
 
 // r includes event and who to send to
-void i4_kernel_device_class::send(i4_event_reaction_class *r)
+void i4_kernel_device_class::send(i4_event_reaction_class * r)
 {
 	if (r && r->handler_reference.get())
 	{
@@ -306,7 +310,7 @@ void i4_kernel_device_class::show_pending()
 }
 #endif
 
-void i4_kernel_device_class::deque_events(i4_event_handler_class *for_who)
+void i4_kernel_device_class::deque_events(i4_event_handler_class * for_who)
 {
 	list_lock.lock();
 
@@ -343,7 +347,7 @@ void i4_kernel_device_class::deque_events(i4_event_handler_class *for_who)
 }
 
 
-void i4_kernel_device_class::send_event(i4_event_handler_class *send_to, i4_event *ev)
+void i4_kernel_device_class::send_event(i4_event_handler_class * send_to, i4_event * ev)
 {
 
 #ifndef I4_RETAIL
@@ -362,7 +366,7 @@ void i4_kernel_device_class::send_event(i4_event_handler_class *send_to, i4_even
 			i4_warning("queing : '%s' to '%s'",debug_buf, debug_buf2);
 		}
 #endif
-		defered_event *dv=new defered_event(send_to,ev);
+		defered_event * dv=new defered_event(send_to,ev);
 
 		list_lock.lock();
 		list.insert_end(*dv);
@@ -391,7 +395,8 @@ void i4_kernel_device_class::send_event(i4_event_handler_class *send_to, i4_even
 i4_bool i4_kernel_device_class::process_events()       // returns true if an event was dispatched
 {
 	i4_bool ret=i4_F;
-	for (i4_device_class *d=device_list; d; d=d->next)
+
+	for (i4_device_class * d=device_list; d; d=d->next)
 	{
 		if (d->process_events())
 		{
@@ -406,17 +411,17 @@ i4_bool i4_kernel_device_class::process_events()       // returns true if an eve
 	return ret;
 }
 
-void i4_kernel_device_class::set_modal(i4_window_class *ref)
+void i4_kernel_device_class::set_modal(i4_window_class * ref)
 {
 	modal_stack.push(ref);
 }
 
-i4_window_class *i4_kernel_device_class::modal()
+i4_window_class * i4_kernel_device_class::modal()
 {
 	return modal_stack.top();
 }
 
-void i4_kernel_device_class::end_modal(i4_window_class *ref)
+void i4_kernel_device_class::end_modal(i4_window_class * ref)
 {
 	if (modal_stack.pop()!=ref)
 	{
@@ -481,11 +486,11 @@ i4_bool i4_kernel_device_class::flush_events()
 		list_lock.unlock();
 
 		// make sure event handler is still around..
-		i4_event_handler_class *eh=old->send_to.get();
+		i4_event_handler_class * eh=old->send_to.get();
 		if (eh)
 		{
 #ifdef _DEBUG
-			i4_event *ev=old->ev_copy;
+			i4_event * ev=old->ev_copy;
 			char buf[i4_event::MAX_NAME_BUFFER_SIZE];
 			char buf2[i4_event::MAX_NAME_BUFFER_SIZE];
 			if (i4_show_events==I4_SHOW_ALL ||
@@ -515,9 +520,10 @@ i4_bool i4_kernel_device_class::flush_events()
 }
 
 
-void i4_kernel_device_class::request_events(i4_event_handler_class *for_who, w32 event_types)
+void i4_kernel_device_class::request_events(i4_event_handler_class * for_who, w32 event_types)
 {
 	int type=0;
+
 	while (event_types)
 	{
 		if (event_types&1)
@@ -531,14 +537,15 @@ void i4_kernel_device_class::request_events(i4_event_handler_class *for_who, w32
 }
 
 // unrequest_events tells any devices sending event_types events to you to stop
-void i4_kernel_device_class::unrequest_events(i4_event_handler_class *for_who, w32 event_types)
+void i4_kernel_device_class::unrequest_events(i4_event_handler_class * for_who, w32 event_types)
 {
 	int type=0;
+
 	while (event_types)
 	{
 		if (event_types&1)
 		{
-			response_type *last=0, *p;
+			response_type * last=0, * p;
 			for (p=response[type]; p && p->who!=for_who; p=p->next)
 			{
 				last=p;
@@ -573,15 +580,16 @@ void i4_kernel_device_class::unrequest_events(i4_event_handler_class *for_who, w
 	}
 }
 
-void i4_kernel_device_class::add_device(i4_device_class *device)       // returns 16 bits device id
+void i4_kernel_device_class::add_device(i4_device_class * device)       // returns 16 bits device id
 {
 	device->next=device_list;
 	device_list=device;
 }
 
-void i4_kernel_device_class::remove_device(i4_device_class *device)
+void i4_kernel_device_class::remove_device(i4_device_class * device)
 {
-	i4_device_class *last=0, *p;
+	i4_device_class * last=0, * p;
+
 	for (p=device_list; p && p!=device; p=p->next)
 	{
 		last=p;
@@ -651,7 +659,7 @@ i4_kernel_device_class::i4_kernel_device_class() :
 }
 
 
-void i4_kernel_device_class::broadcast_event_type(i4_event *ev, w32 event_type)
+void i4_kernel_device_class::broadcast_event_type(i4_event * ev, w32 event_type)
 {
 	if (event_type & (i4_device_class::FLAG_MOUSE_MOVE |
 					  i4_device_class::FLAG_MOUSE_BUTTON_DOWN |
@@ -670,7 +678,7 @@ void i4_kernel_device_class::broadcast_event_type(i4_event *ev, w32 event_type)
 		type++;
 	}
 
-	for (response_type *r=response[type]; r; r=r->next)
+	for (response_type * r=response[type]; r; r=r->next)
 	{
 		send_event(r->who, ev);
 	}
@@ -678,7 +686,7 @@ void i4_kernel_device_class::broadcast_event_type(i4_event *ev, w32 event_type)
 }
 
 
-void i4_kernel_device_class::delete_handler(i4_event_handler_class *handler)
+void i4_kernel_device_class::delete_handler(i4_event_handler_class * handler)
 {
 	if (handler->thinking())
 	{
@@ -746,9 +754,9 @@ void i4_kernel_device_class::delete_handler(i4_event_handler_class *handler)
  ***********************************************************************/
 
 
-void i4_win32_get_cpu_info(i4_cpu_info_struct *s);
+void i4_win32_get_cpu_info(i4_cpu_info_struct * s);
 
-void i4_get_cpu_info(i4_cpu_info_struct *s)
+void i4_get_cpu_info(i4_cpu_info_struct * s)
 {
 	if (!s)
 	{
@@ -934,7 +942,7 @@ w32 x86_get_cpu_flags(w32 cpu_type)
 	return flags;
 }
 
-void i4_win32_get_cpu_info(i4_cpu_info_struct *s)
+void i4_win32_get_cpu_info(i4_cpu_info_struct * s)
 {
 	_asm pusha
 
@@ -966,6 +974,7 @@ i4_key_man_class i4_key_man;
 i4_key_man_class::i4_key_man_class()
 {
 	loaded=0;
+
 	active_list=0;
 	context_list=0;
 	command_list=0;
@@ -977,12 +986,13 @@ i4_key_man_class::i4_key_man_class()
 // end commands no longer appropriate for for the current modifiers
 void i4_key_man_class::end_actives(int matches_key, i4_time_class &time)
 {
-	key_item *last=0;
-	for (key_item *j=active_list; j; )
+	key_item * last=0;
+
+	for (key_item * j=active_list; j; )
 	{
 		if (j->modifier_flags!=key_modifiers_pressed || j->key==matches_key)
 		{
-			key_item *q=j;
+			key_item * q=j;
 			j=j->next_active;
 
 			if (last)
@@ -994,7 +1004,7 @@ void i4_key_man_class::end_actives(int matches_key, i4_time_class &time)
 				active_list=active_list->next_active;
 			}
 
-			i4_end_command_event_class kcmd( (*command_list)[q->command_id], q->command_id, time);
+			i4_end_command_event_class kcmd( (* command_list)[q->command_id], q->command_id, time);
 			send_event_to_agents(&kcmd, FLAG_END_COMMAND);
 
 			q->command_active=0;
@@ -1038,7 +1048,7 @@ void i4_key_man_class::get_modifiers(int k_mod)
 }
 
 
-void i4_key_man_class::add_active(i4_key_man_class::key_item *i, i4_time_class &time)
+void i4_key_man_class::add_active(i4_key_man_class::key_item * i, i4_time_class &time)
 {
 	if (i4_kernel.modal())
 	{
@@ -1050,18 +1060,19 @@ void i4_key_man_class::add_active(i4_key_man_class::key_item *i, i4_time_class &
 		i->next_active=active_list;
 		active_list=i;
 
-		i4_do_command_event_class kcmd( (*command_list)[i->command_id], i->command_id, time);
+		i4_do_command_event_class kcmd( (* command_list)[i->command_id], i->command_id, time);
 		send_event_to_agents(&kcmd, FLAG_DO_COMMAND);
 	}
 }
 
 void i4_key_man_class::end_all_commands()
 {
-	key_item *last=0;
-	for (key_item *j=active_list; j; )
+	key_item * last=0;
+
+	for (key_item * j=active_list; j; )
 	{
 
-		key_item *q=j;
+		key_item * q=j;
 		j=j->next_active;
 
 		if (last)
@@ -1073,7 +1084,7 @@ void i4_key_man_class::end_all_commands()
 			active_list=active_list->next_active;
 		}
 		i4_time_class t(0);
-		i4_end_command_event_class kcmd( (*command_list)[q->command_id], q->command_id, t);
+		i4_end_command_event_class kcmd( (* command_list)[q->command_id], q->command_id, t);
 		send_event_to_agents(&kcmd, FLAG_END_COMMAND);
 
 		q->command_active=0;
@@ -1082,7 +1093,7 @@ void i4_key_man_class::end_all_commands()
 	key_modifiers_pressed=0;
 }
 
-void i4_key_man_class::receive_event(i4_event *ev)
+void i4_key_man_class::receive_event(i4_event * ev)
 {
 	if (!loaded)
 	{
@@ -1099,9 +1110,9 @@ void i4_key_man_class::receive_event(i4_event *ev)
 
 		if (old_modifiers!=key_modifiers_pressed)
 		{
-			for (key_item *i=active_list; i; i=i->next_active)
+			for (key_item * i=active_list; i; i=i->next_active)
 			{
-				for (key_item *j=keys[i->key]; j; j=j->next)
+				for (key_item * j=keys[i->key]; j; j=j->next)
 				{
 					if (j!=i && j->modifier_flags==key_modifiers_pressed &&
 						(j->context_mask&(1<<context_id)))
@@ -1115,7 +1126,7 @@ void i4_key_man_class::receive_event(i4_event *ev)
 			end_actives(-1, kev->time);
 		}
 
-		for (key_item *i=keys[kev->key_code]; i; i=i->next)
+		for (key_item * i=keys[kev->key_code]; i; i=i->next)
 		{
 			if ((key_modifiers_pressed == i->modifier_flags) && (i->context_mask& (1<<context_id)))
 			{
@@ -1138,9 +1149,9 @@ void i4_key_man_class::receive_event(i4_event *ev)
 
 		if (old_modifiers!=key_modifiers_pressed)
 		{
-			for (key_item *i=active_list; i; i=i->next_active)
+			for (key_item * i=active_list; i; i=i->next_active)
 			{
-				for (key_item *j=keys[i->key]; j; j=j->next)
+				for (key_item * j=keys[i->key]; j; j=j->next)
 				{
 					if (j!=i && j->modifier_flags==key_modifiers_pressed &&
 						(j->context_mask & (1<<context_id)))
@@ -1159,7 +1170,7 @@ void i4_key_man_class::receive_event(i4_event *ev)
 	}
 }
 
-static i4_bool is_white(char *s)
+static i4_bool is_white(char * s)
 {
 	if (*s==' ' || *s=='\n' || *s=='\r' || *s=='\t')
 	{
@@ -1175,6 +1186,7 @@ static void skip_white(char *&s)
 {
 	while (*s && is_white(s)) s++;
 
+
 }
 
 static i4_bool i4_go_key_start(char *&s)
@@ -1185,6 +1197,7 @@ static i4_bool i4_go_key_start(char *&s)
 		{
 			while (*s && (*s!='\n' && *s!='\r'))
 				s++;
+
 
 		}
 		else
@@ -1198,6 +1211,7 @@ static i4_bool i4_go_key_start(char *&s)
 		//This entirely skips the command, so the leading def_key
 		//is newer actually interpreted at all.
 		while (*s && *s!=' ') s++;
+
 
 		skip_white(s);
 		return i4_T;
@@ -1242,7 +1256,7 @@ static char get_char(char *&s)
 	return '\\';
 }
 
-static void i4_read_str(char *&s, char *buf)
+static void i4_read_str(char *&s, char * buf)
 {
 	skip_white(s);
 	if (s[0]=='"')
@@ -1250,6 +1264,7 @@ static void i4_read_str(char *&s, char *buf)
 		s++;
 		while (*s && *s!='"')
 			*(buf++)=get_char(s);
+
 
 		*buf=0;
 		s++;
@@ -1260,13 +1275,15 @@ static void i4_read_str(char *&s, char *buf)
 		while (*s && !is_white(s) && *s!=')')
 			*(buf++)=get_char(s);
 
+
 		*buf=0;
 	}
 }
 
-int i4_key_man_class::acquire_modifiers_for_contexts(int context_mask, int mod, char *key_name)
+int i4_key_man_class::acquire_modifiers_for_contexts(int context_mask, int mod, char * key_name)
 {
 	int c=context_mask, i=0, total=0, skip_this_key=0;
+
 	while (c)
 	{
 		if (c&1)
@@ -1290,7 +1307,7 @@ int i4_key_man_class::acquire_modifiers_for_contexts(int context_mask, int mod, 
 	return 1;
 }
 
-int i4_key_man_class::use_modifiers_for_contexts(int context_mask, int mod, char *key_name)
+int i4_key_man_class::use_modifiers_for_contexts(int context_mask, int mod, char * key_name)
 {
 	int c=context_mask, i=0;
 
@@ -1319,18 +1336,18 @@ int i4_key_man_class::use_modifiers_for_contexts(int context_mask, int mod, char
 i4_bool i4_key_man_class::load(const i4_const_str &filename)
 {
 	check_init();
-	i4_file_class *fp=i4_open(filename);
+	i4_file_class * fp=i4_open(filename);
 	if (!fp)
 	{
 		return i4_F;
 	}
 
 	int size=fp->size();
-	void *mem=I4_MALLOC(size+1,"");
+	void * mem=I4_MALLOC(size+1,"");
 	fp->read(mem,size);
 	delete fp;
 
-	char *c=(char *)mem;
+	char * c=(char *)mem;
 	c[size]=0;
 
 	char tmp[256];
@@ -1362,7 +1379,8 @@ i4_bool i4_key_man_class::load(const i4_const_str &filename)
 			{
 				context_mask|=(1<<get_context_id(tmp));
 			}
-		} while (tmp[0]!=')' && tmp[0]);
+		}
+		while (tmp[0]!=')' && tmp[0]);
 
 		if (key==0 && mod!=0 && !skip_key) // they want a CTRL-ALT-SHIFT type key
 		{
@@ -1408,7 +1426,7 @@ i4_bool i4_key_man_class::load(const i4_const_str &filename)
 			if (use_modifiers_for_contexts(context_mask, mod, key_name))
 			{
 				// make sure the key isn't already assigned
-				for (key_item *i=keys[key]; i; i=i->next)
+				for (key_item * i=keys[key]; i; i=i->next)
 				{
 					if (i->modifier_flags==mod && (i->context_mask & context_mask))
 					{
@@ -1441,12 +1459,13 @@ void i4_key_man_class::uninit()
 		end_actives(active_list->key, now);
 
 
+
 	int i;
 	for (i=0; i<I4_NUM_KEYS; i++)
 	{
 		while (keys[i])
 		{
-			key_item *ki=keys[i];
+			key_item * ki=keys[i];
 			keys[i]=keys[i]->next;
 			delete ki;
 		}
@@ -1463,10 +1482,11 @@ void i4_key_man_class::uninit()
 							   i4_device_class::FLAG_KEY_PRESS | i4_device_class::FLAG_KEY_RELEASE);
 }
 
-char *i4_key_man_class::alloc_str(char *s)
+char * i4_key_man_class::alloc_str(char * s)
 {
 	int l=strlen(s)+1;
-	char *t=(char *)char_heap->malloc(l,"");
+	char * t=(char *)char_heap->malloc(l,"");
+
 	memcpy(t,s,l);
 	return t;
 }
@@ -1484,7 +1504,7 @@ void i4_key_man_class::check_init()
 	}
 }
 
-int i4_key_man_class::get_context_id(char *context_name)
+int i4_key_man_class::get_context_id(char * context_name)
 {
 	check_init();
 	int s=context_list->size();
@@ -1501,7 +1521,7 @@ int i4_key_man_class::get_context_id(char *context_name)
 		i4_error("max contexts exceed with %s", context_name);
 	}
 
-	context *c=context_list->add();
+	context * c=context_list->add();
 	c->name=alloc_str(context_name);
 	c->modifiers_taken=0;
 	c->modifiers_used=0;
@@ -1509,7 +1529,7 @@ int i4_key_man_class::get_context_id(char *context_name)
 	return s;
 }
 
-int i4_key_man_class::get_command_id(char *command)
+int i4_key_man_class::get_command_id(char * command)
 {
 	check_init();
 	int s=command_list->size();
@@ -1530,7 +1550,7 @@ i4_bool i4_key_man_class::get_key_for_command(int command_id, i4_key &key, w16 &
 {
 	for (int i=0; i<I4_NUM_KEYS; i++)
 	{
-		for (key_item *k=keys[i]; k; k=k->next)
+		for (key_item * k=keys[i]; k; k=k->next)
 		{
 			if ((k->context_mask & (1<<context_id)) && (k->command_id == command_id))
 			{
@@ -1546,7 +1566,7 @@ i4_bool i4_key_man_class::get_key_for_command(int command_id, i4_key &key, w16 &
 
 
 
-void i4_key_matchup_class::add(char *command, int remap)
+void i4_key_matchup_class::add(char * command, int remap)
 {
 	matchup.insert(new command_matchup(i4_key_man.get_command_id(command), remap));
 }
@@ -1554,7 +1574,8 @@ void i4_key_matchup_class::add(char *command, int remap)
 int i4_key_matchup_class::remap(int command_id)
 {
 	command_matchup f=command_matchup(command_id,0);
-	command_matchup *m=matchup.find(&f);
+	command_matchup * m=matchup.find(&f);
+
 	if (m)
 	{
 		return m->remap_id;
@@ -1574,7 +1595,7 @@ int i4_key_matchup_class::remap(int command_id)
  ***********************************************************************/
 
 
-static char *i4_extended_key_names[]=
+static char * i4_extended_key_names[]=
 //{{{
 {
 	"Up",
@@ -1633,7 +1654,7 @@ static char *i4_extended_key_names[]=
 
 static struct i4_key_alias_struct {
 	i4_key key;
-	char *name;
+	char * name;
 }
 i4_key_alias[] =
 {
@@ -1647,7 +1668,7 @@ const int i4_key_aliases=sizeof(i4_key_alias)/sizeof(i4_key_alias_struct);
 
 static struct i4_modifier_map_struct {
 	w16 modifier;
-	char *name;
+	char * name;
 }
 i4_modifier_map[] =
 {
@@ -1658,10 +1679,10 @@ i4_modifier_map[] =
 const int i4_modifiers = sizeof(i4_modifier_map)/sizeof(i4_modifier_map_struct);
 
 
-char *i4_get_key_name(i4_key key, w16 modifiers, char *out)
+char *i4_get_key_name(i4_key key, w16 modifiers, char * out)
 //{{{
 {
-	char *buffer,*p;
+	char * buffer,* p;
 	char sing[2];
 	w32 i;
 
@@ -1676,6 +1697,7 @@ char *i4_get_key_name(i4_key key, w16 modifiers, char *out)
 		i=0;
 		while (i<i4_key_aliases && key!=i4_key_alias[i].key)
 			i++;
+
 
 
 		if (i<i4_key_aliases)
@@ -1781,6 +1803,7 @@ i4_bool i4_find_key(const i4_str& name, i4_key &key, w16 &mod)
 			i++;
 
 
+
 		if (i<i4_key_aliases)
 		{
 			key = i4_key_alias[i].key;
@@ -1791,6 +1814,7 @@ i4_bool i4_find_key(const i4_str& name, i4_key &key, w16 &mod)
 			i=256;
 			while (i<I4_NUM_KEYS && strcmp(buf,i4_extended_key_names[i-256]))
 				i++;
+
 
 
 			if (i<I4_NUM_KEYS)

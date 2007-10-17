@@ -29,7 +29,7 @@
 
 
 
-void m1_poly_object_class::save_quads(i4_saver_class *fp)
+void m1_poly_object_class::save_quads(i4_saver_class * fp)
 //{{{
 {
 	int i;
@@ -58,7 +58,7 @@ void m1_poly_object_class::save_quads(i4_saver_class *fp)
 }
 //}}}
 
-void m1_poly_object_class::save_texture_names(i4_saver_class *fp)
+void m1_poly_object_class::save_texture_names(i4_saver_class * fp)
 //{{{
 {
 	fp->mark_section(G1_SECTION_MODEL_TEXTURE_NAMES);
@@ -71,7 +71,7 @@ void m1_poly_object_class::save_texture_names(i4_saver_class *fp)
 }
 //}}}
 
-void m1_poly_object_class::save_vert_animations(i4_saver_class *fp)
+void m1_poly_object_class::save_vert_animations(i4_saver_class * fp)
 //{{{
 {
 	int i,j,k;
@@ -91,7 +91,7 @@ void m1_poly_object_class::save_vert_animations(i4_saver_class *fp)
 
 		for (j=0; j<nf; j++)
 		{
-			g1_vert_class *v=get_verts(i,j);
+			g1_vert_class * v=get_verts(i,j);
 
 			for (k=0; k<num_vertex; k++)
 			{
@@ -108,7 +108,7 @@ void m1_poly_object_class::save_vert_animations(i4_saver_class *fp)
 }
 //}}}
 
-void m1_poly_object_class::save_mount_points(i4_saver_class *fp)
+void m1_poly_object_class::save_mount_points(i4_saver_class * fp)
 //{{{
 {
 	int i;
@@ -132,7 +132,7 @@ void m1_poly_object_class::save_mount_points(i4_saver_class *fp)
 }
 //}}}
 
-void m1_poly_object_class::save_specials(i4_saver_class *fp)
+void m1_poly_object_class::save_specials(i4_saver_class * fp)
 //{{{
 {
 	int i;
@@ -173,7 +173,7 @@ void m1_poly_object_class::save_specials(i4_saver_class *fp)
    }
  */
 
-void m1_poly_object_class::save_octree(i4_saver_class *fp)
+void m1_poly_object_class::save_octree(i4_saver_class * fp)
 {
 	if (!octree)
 	{
@@ -185,7 +185,7 @@ void m1_poly_object_class::save_octree(i4_saver_class *fp)
 	fp->end_version();
 }
 
-void m1_poly_object_class::save(i4_saver_class *fp)
+void m1_poly_object_class::save(i4_saver_class * fp)
 //{{{
 {
 	//int i,j;
@@ -208,7 +208,7 @@ w32 m1_poly_object_class::add_anim(i4_str &name)
 	I4_ASSERT(num_animations>0,"Must always have at least one animation");
 
 	animation_class ani;
-	g1_vert_class *v;
+	g1_vert_class * v;
 	backup_references();
 	v=vert_store.add_many(num_vertex);
 	restore_references();
@@ -223,7 +223,7 @@ w32 m1_poly_object_class::add_anim(i4_str &name)
 	{
 		anim_store[anim_store.size()-1].vertex[i]=anim_store[0].vertex[i]; //copy first frame of first anim
 	}
-	i4_str *n=new i4_str(name); //this should get deleted on destroy
+	i4_str * n=new i4_str(name); //this should get deleted on destroy
 	animation_names.add(n);
 	i4_warning("Added a new animation");
 	return num_animations-1;
@@ -256,14 +256,14 @@ void m1_poly_object_class::remove_anim(w32 num)
 void m1_poly_object_class::change_animation_name(w32 animation_number, const i4_const_str &st)
 {
 	delete animation_names[animation_number];
-	i4_str *n=new i4_str(st);
+	i4_str * n=new i4_str(st);
 	animation_names[animation_number]=n;
 }
 
 void m1_poly_object_class::change_mount_name(w32 mount_number, const i4_const_str &st)
 {
 	delete mount_names[mount_number];
-	i4_str *n=new i4_str(st);
+	i4_str * n=new i4_str(st);
 	mount_names[mount_number]=n;
 	mount_id[mount_number]=i4_str_checksum(st);
 }
@@ -292,7 +292,8 @@ void m1_poly_object_class::backup_references()
 
 void m1_poly_object_class::restore_references()
 {
-	g1_vert_class *v= &vert_store[0];
+	g1_vert_class * v= &vert_store[0];
+
 	if (vert_backup&&v!=vert_backup) //has something changed?
 	{
 		for (int i=0; i<num_animations; i++)
@@ -374,7 +375,7 @@ w32 m1_poly_object_class::add_vertex()
 {
 	//i4_error("write me!");
 	backup_references();
-	g1_vert_class *v=vert_store.add(); //add one extra element for safety
+	g1_vert_class * v=vert_store.add(); //add one extra element for safety
 	restore_references();
 	//add_at will otherwise fail on adding something at the end
 	num_vertex++;
@@ -405,7 +406,7 @@ w32 m1_poly_object_class::add_vertex()
 	return num_vertex-1; //the index of the new vertex
 }
 //}}}
-int remover_inverse_sorter(const int *a,const int *b)
+int remover_inverse_sorter(const int * a,const int * b)
 {
 	if (*a==*b)
 	{
@@ -426,7 +427,8 @@ void m1_poly_object_class::remove_vertex(w32 num)
 //{{{
 {
 	//i4_error("write me!");
-	g1_quad_class *q=0;
+	g1_quad_class * q=0;
+
 	i4_array<int> quad_remover(10,10);
 	int i,k;
 	w32 j;
@@ -479,6 +481,7 @@ w32 m1_poly_object_class::add_quad()
 {
 	g1_quad_class tmp;
 	w32 ret=quad_store.add(tmp);
+
 	texture_names.add(new i4_str(""));
 
 	quad = &quad_store[0];
@@ -506,7 +509,7 @@ void m1_poly_object_class::remove_quad(w32 num)
 	}
 
 	quad_store.remove(num);
-	i4_str *texture_name=texture_names[num];
+	i4_str * texture_name=texture_names[num];
 	texture_names[num]=NULL;
 	delete texture_name;
 	texture_names.remove(num);
@@ -517,7 +520,8 @@ void m1_poly_object_class::remove_quad(w32 num)
 w32 m1_poly_object_class::add_mount(i4_const_str &name)
 {
 	w32 ret=mount_store.add(i4_3d_vector(0,0,0));
-	i4_str *n=new i4_str(name);
+	i4_str * n=new i4_str(name);
+
 	mount_id_store.add(i4_check_sum32(n, name.length()));
 	mount_names.add(n);
 
@@ -531,6 +535,7 @@ w32 m1_poly_object_class::add_mount()
 //{{{
 {
 	w32 ret=mount_store.add(i4_3d_vector(0,0,0));
+
 	mount_id_store.add(0);
 	mount_names.add(new i4_str(""));
 
@@ -612,12 +617,12 @@ void m1_poly_object_class::remove_special(w32 num)
 
 void m1_poly_object_class::calc_texture_scales()
 {
-	g1_vert_class *src_vert = get_verts(0,0);
+	g1_vert_class * src_vert = get_verts(0,0);
 
 	for (int i=0; i<num_quad; i++)
 	{
-		i4_3d_point_class *p1=&src_vert[quad[i].vertex_ref[0]].v;
-		i4_3d_point_class *p2=&src_vert[quad[i].vertex_ref[1]].v;
+		i4_3d_point_class * p1=&src_vert[quad[i].vertex_ref[0]].v;
+		i4_3d_point_class * p2=&src_vert[quad[i].vertex_ref[1]].v;
 
 
 		double edge_len=sqrt((p1->z-p2->z)*(p1->z-p2->z)+

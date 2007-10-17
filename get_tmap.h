@@ -13,6 +13,6 @@ class g1_texture_mapper_class;
 class i4_display_class;
 
 // creates a object rendering object
-g1_texture_mapper_class *g1_get_tmapper(i4_display_class *display);
+g1_texture_mapper_class *g1_get_tmapper(i4_display_class * display);
 
 #endif

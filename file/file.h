@@ -55,8 +55,8 @@ class i4_str;
 class i4_file_class
 {
 public:
-	virtual w32 read(void *buffer, w32 size)          = 0;
-	virtual w32 write(const void *buffer, w32 size)    = 0;
+	virtual w32 read(void * buffer, w32 size)          = 0;
+	virtual w32 write(const void * buffer, w32 size)    = 0;
 	virtual w32 seek(w32 offset)                      = 0;
 	virtual w32 size()                                = 0;
 	virtual w32 tell()                                = 0;
@@ -66,16 +66,16 @@ public:
 		return tell()==size();
 	}
 
-	typedef void (*async_callback)(w32 count, void *context);
+	typedef void (*async_callback)(w32 count, void * context);
 
 	// returns i4_F if an immediate error occured
-	virtual i4_bool async_read(void *buffer, w32 size,
+	virtual i4_bool async_read(void * buffer, w32 size,
 							   async_callback call,
-							   void *context, w32 priority, int caller_id);
+							   void * context, w32 priority, int caller_id);
 
-	virtual i4_bool async_write(const void *buffer, w32 size,
+	virtual i4_bool async_write(const void * buffer, w32 size,
 								async_callback call,
-								void *context);
+								void * context);
 
 	// abort current operation
 	virtual void abort()
@@ -86,6 +86,7 @@ public:
 	w8      read_8()
 	{
 		w8 buf;
+
 		if (read(&buf,1)!=1)
 		{
 			return 0xff;
@@ -99,6 +100,7 @@ public:
 	w16     read_16()   // loads and converts to LSB (intel-format)
 	{
 		w16 buf;
+
 		if (read(&buf,2)!=2)
 		{
 			return 0xffff;
@@ -112,6 +114,7 @@ public:
 	w32     read_32()   // loads and converts to LSB (intel-format)
 	{
 		w32 buf;
+
 		if (read(&buf,4)!=4)
 		{
 			return 0xffffffff;
@@ -125,6 +128,7 @@ public:
 	float   read_float() // loads and converts to LSB (intel-format)
 	{
 		w32 buf;
+
 		if (read(&buf,4)!=4)
 		{
 			return (float)0xffff;
@@ -196,6 +200,7 @@ public:
 	w32     write_float(float num) // loads and converts to LSB (intel-format)
 	{
 		w32 tmp = l_to_lsb( *((w32 *)&num) );
+
 		return (write(&tmp,4));
 	}
 
@@ -203,16 +208,16 @@ public:
 	w32 write_counted_str(const i4_const_str &str);
 
 	// same as fprintf, but with the addition %S is a i4_const_str *
-	int printf(char *format, ...);
+	int printf(char * format, ...);
 
 	// write_format takes a different set of % symbols than the typical printf to elimante
 	// confusion with sizes and be easily usuable with readf_binary
 	// writef_binary("124fS", &a_w8_var, &a_w16_var, &a_w32_var,
 	//                        &a_float_var, &a_i4_const_str_pointer);
-	int write_format(char *format, ...);
+	int write_format(char * format, ...);
 
 	// format is same as write_format
-	int read_format(char *format, ...);
+	int read_format(char * format, ...);
 
 
 
@@ -289,13 +294,13 @@ i4_bool i4_copy_file(const i4_const_str &source, const i4_const_str &dest);
 
 struct i4_directory_struct
 {
-	i4_str **files;
+	i4_str * * files;
 	w32 tfiles;
 
-	i4_str **dirs;
+	i4_str * * dirs;
 	w32 tdirs;
 
-	i4_file_status_struct *file_status; // array of file stats coresponding to above files
+	i4_file_status_struct * file_status; // array of file stats coresponding to above files
 
 	i4_directory_struct() {
 		tfiles=tdirs=0;
@@ -313,7 +318,7 @@ class i4_status_class;
 i4_bool i4_get_directory(const i4_const_str &path,
 						 i4_directory_struct &dir_struct,
 						 i4_bool get_status=i4_F,
-						 i4_status_class *status=0);
+						 i4_status_class * status=0);
 
 
 

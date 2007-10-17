@@ -81,7 +81,7 @@ extern HWND current_window_handle;
 #ifndef NETWORK_INCLUDED
 //These definitions are required even if the actual network code
 //is not linked.
-i4_net_protocol *i4_net_protocol::first=0;
+i4_net_protocol * i4_net_protocol::first=0;
 
 i4_str *i4_get_user_name()
 {
@@ -91,7 +91,7 @@ i4_str *i4_get_user_name()
 	DWORD s=sizeof(buf);
 	GetUserName(buf, &s);
 #else
-	char *gl=getlogin();
+	char * gl=getlogin();
 	if (gl)
 	{
 		strcpy(buf,gl);
@@ -104,7 +104,7 @@ i4_str *i4_get_user_name()
 
 	return i4_from_ascii(buf);
 }
-g1_network_time_manager_class *g1_network_time_man_ptr=0;
+g1_network_time_manager_class * g1_network_time_man_ptr=0;
 #endif
 
 i4_profile_class pf_calc_model("calc model");
@@ -119,7 +119,7 @@ i4_profile_class pf_calc_model_8("calc model 8");
 i4_profile_class pf_calc_model_9("calc model 9");
 
 
-extern i4_grow_heap_class *g1_object_heap;
+extern i4_grow_heap_class * g1_object_heap;
 
 static i4_event_handler_reference_class<i4_parent_window_class> loading_window;
 
@@ -130,8 +130,8 @@ static li_symbol_ref s_deterministic("deterministic");
 static char first_level[80];
 extern int last_draw_tick;
 extern int frame_locked_mode;
-extern i4_stream_wav_player *g1_music_stream;
-extern g1_cwin_man_class *m1_maxtool_man;
+extern i4_stream_wav_player * g1_music_stream;
+extern g1_cwin_man_class * m1_maxtool_man;
 #ifdef _WINDOWS
 //MFC Code
 CWnd cwnd;
@@ -141,16 +141,16 @@ class golgotha_app :
 //The one that controls it all
 {
 private:
-	i4_window_class *main_menu;
+	i4_window_class * main_menu;
 	i4_bool playing_movie;
 	w32 _max_memory;
 
 	w32 argc;
-	i4_const_str *argv;
+	i4_const_str * argv;
 	i4_bool need_post_play_load;
 	i4_bool start_in_editor;
 	i4_bool do_poll_sound_man;
-	friend int Thread_Sound_Man_Poller(void *arg); //Heute verwenden wir Spagetticode
+	friend int Thread_Sound_Man_Poller(void * arg); //Heute verwenden wir Spagetticode
 	//Thread_Sound_Man_Poller(void *arg);
 	struct redraw_later_struct
 	{
@@ -169,7 +169,7 @@ private:
 	}
 
 
-	i4_net_protocol *protocol;
+	i4_net_protocol * protocol;
 
 public:
 	i4_window_class *get_main_menu()
@@ -193,9 +193,9 @@ public:
 
 	void pre_play_save();
 	void post_play_load();
-	void start_saved_game(i4_user_message_event_class *e);
+	void start_saved_game(i4_user_message_event_class * e);
 
-	golgotha_app(w32 argc, i4_const_str *argv)
+	golgotha_app(w32 argc, i4_const_str * argv)
 		: argc(argc),
 		  argv(argv)
 	{
@@ -256,6 +256,7 @@ public:
 	void calc_model()
 	{
 		int fixed=li_get_value(s_deterministic.get())==li_true_sym;
+
 		//even if only maxtool is running, we need to call next_frame
 		//to finish loading textures
 		if (g1_render.r_api&&g1_render.r_api->get_tmanager())
@@ -296,7 +297,7 @@ public:
 						g1_player_man.think(); // thinks player/team type thoughts
 						pf_calc_model_1.stop();
 
-						g1_map_class *map=g1_get_map();
+						g1_map_class * map=g1_get_map();
 						map->think_objects();
 
 						g1_demo_tick();
@@ -325,7 +326,8 @@ public:
 					}
 
 				}
-			} while (!frame_locked_mode && !fixed && md>0 && ticks_simulated<10);
+			}
+			while (!frame_locked_mode && !fixed && md>0 && ticks_simulated<10);
 
 			if (ticks_simulated>=10)
 			{
@@ -382,8 +384,8 @@ public:
 	void start_new_game();
 	void network_menu();
 	void server_menu();
-	void help_screen(char *screen_name, int next_id);
-	void win_screen(char *screen_name, i4_str *filename);
+	void help_screen(char * screen_name, int next_id);
+	void win_screen(char * screen_name, i4_str * filename);
 	void plot_screen();
 	void client_wait_menu();
 	void do_main_menu();
@@ -391,8 +393,8 @@ public:
 	static void do_options(); //To be able to call it directly during init.
 	void open_savegame();
 	void save_savegame();
-	void save_savegame_ok(i4_user_message_event_class *ev);
-	void receive_event(i4_event *ev);
+	void save_savegame_ok(i4_user_message_event_class * ev);
+	void receive_event(i4_event * ev);
 	void uninit()
 	{
 		do_poll_sound_man=i4_F;
@@ -434,7 +436,7 @@ public:
 		i4_uninit_gui_status(); //shouldn't do this to early.
 		hide_main_menu();
 		main_menu=0;
-		r1_texture_manager_class *tman=0;
+		r1_texture_manager_class * tman=0;
 		if (g1_render.r_api)
 		{
 			tman=g1_render.r_api->get_tmanager();
@@ -465,15 +467,15 @@ public:
 
 	void choice_first_level();
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"golgotha_app");
 	}
 } ;
 
-golgotha_app *g1_app=0;
+golgotha_app * g1_app=0;
 
-li_object *g1_force_pause(li_object *o, li_environment *env)
+li_object *g1_force_pause(li_object * o, li_environment * env)
 {
 	//forces the system to pause, does nothing if already paused
 	g1_stop_sound_averages();
@@ -485,7 +487,7 @@ li_object *g1_force_pause(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_is_paused(li_object *o, li_environment *env)
+li_object *g1_is_paused(li_object * o, li_environment * env)
 {
 	if (g1_resources.paused)
 	{
@@ -494,7 +496,7 @@ li_object *g1_is_paused(li_object *o, li_environment *env)
 	return li_nil;
 }
 
-li_object *g1_pause(li_object *o, li_environment *env)
+li_object *g1_pause(li_object * o, li_environment * env)
 {
 	//toggles pause mode
 	g1_stop_sound_averages();
@@ -507,7 +509,7 @@ li_object *g1_pause(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_set_default_level(li_object *o, li_environment *env)
+li_object *g1_set_default_level(li_object * o, li_environment * env)
 {
 	strcpy(first_level, li_get_string(li_eval(li_car(o,env),env),env));
 	return 0;
@@ -516,10 +518,11 @@ li_object *g1_set_default_level(li_object *o, li_environment *env)
 
 void golgotha_app::pre_play_save()
 {
-	i4_file_class *out=i4_open(i4gets("play_savename"), I4_WRITE);
+	i4_file_class * out=i4_open(i4gets("play_savename"), I4_WRITE);
+
 	if (out)
 	{
-		g1_saver_class *save=new g1_saver_class(out);
+		g1_saver_class * save=new g1_saver_class(out);
 
 		g1_get_map()->save(save, G1_MAP_ALL);
 
@@ -536,7 +539,8 @@ void golgotha_app::pre_play_save()
 
 void golgotha_app::post_play_load()
 {
-	i4_str *old_name=new i4_str(g1_get_map()->get_filename());
+	i4_str * old_name=new i4_str(g1_get_map()->get_filename());
+
 	if (g1_load_level(i4gets("play_savename"), 0))
 	{
 		g1_get_map()->set_filename(*old_name);
@@ -594,7 +598,7 @@ void golgotha_app::network_menu()
 #endif
 }
 
-void golgotha_app::help_screen(char *screen_name, int next_id)
+void golgotha_app::help_screen(char * screen_name, int next_id)
 {
 	hide_main_menu();
 
@@ -604,7 +608,7 @@ void golgotha_app::help_screen(char *screen_name, int next_id)
 	wm->add_child(0,0,main_menu);
 }
 
-void golgotha_app::win_screen(char *screen_name, i4_str *filename)
+void golgotha_app::win_screen(char * screen_name, i4_str * filename)
 {
 	hide_main_menu();
 
@@ -711,7 +715,7 @@ void golgotha_app::save_savegame()
 
 void golgotha_app::open_savegame()
 {
-	i4_str *start_dir=0;
+	i4_str * start_dir=0;
 
 	start_dir=new i4_str(g1_editor_instance.get_editor_string("savegame_start_dir"));
 
@@ -728,7 +732,7 @@ void golgotha_app::open_savegame()
 }
 
 
-void golgotha_app::receive_event(i4_event *ev)
+void golgotha_app::receive_event(i4_event * ev)
 {
 	switch (ev->type())
 	{
@@ -746,8 +750,8 @@ void golgotha_app::receive_event(i4_event *ev)
 				fo_sym.get();
 
 				g1_cwin_man->receive_event(ev);
-				char *cmd=((i4_do_command_event_class *)ev)->command;
-				li_symbol *s=li_get_symbol(cmd);
+				char * cmd=((i4_do_command_event_class *)ev)->command;
+				li_symbol * s=li_get_symbol(cmd);
 				if (li_get_fun(s,0))
 				{
 					li_call(s);
@@ -761,7 +765,7 @@ void golgotha_app::receive_event(i4_event *ev)
 				g1_cwin_man->receive_event(ev);
 				char cmd[200];
 				sprintf(cmd, "-%s",((i4_do_command_event_class *)ev)->command);
-				li_symbol *s=li_get_symbol(cmd);
+				li_symbol * s=li_get_symbol(cmd);
 				if (li_get_fun(s,0))
 				{
 					li_call(cmd);
@@ -958,7 +962,7 @@ void golgotha_app::choice_first_level()
 			i++;
 			char buf[1000];
 			i4_os_string(argv[i], buf, 1000);
-			char *s=buf;
+			char * s=buf;
 			li_eval(li_get_expression(s,0), 0);
 		}
 		else if (argv[i]=="-frame_lock")
@@ -968,7 +972,7 @@ void golgotha_app::choice_first_level()
 	}
 }
 
-int Thread_Sound_Man_Poller(void *arg)
+int Thread_Sound_Man_Poller(void * arg)
 {
 	while (g1_app->do_poll_sound_man)
 	{
@@ -1009,11 +1013,11 @@ void golgotha_app::init()
 	printf("Starting initialisation sequence\n");
 	strcpy(buf,"Initialisation, please wait...");
 #endif
-	i4_status_class *status=i4_create_status(buf,0);
+	i4_status_class * status=i4_create_status(buf,0);
 	status->update(0.01f);
 
 	r1_truncate_texture_file();
-	i4_file_class *inittest=i4_open("resource.res",I4_READ|I4_NO_BUFFER);
+	i4_file_class * inittest=i4_open("resource.res",I4_READ|I4_NO_BUFFER);
 	if (!inittest)
 	{
 		//i4_error("_FATAL: resource.res not found in the current directory. "
@@ -1074,7 +1078,7 @@ void golgotha_app::init()
 
 	status->update(0.23f);
 	printf("Display initialisation ok.\n");
-	i4_image_class *im=i4_load_image("bitmaps/comic1.jpg");
+	i4_image_class * im=i4_load_image("bitmaps/comic1.jpg");
 	printf("If this line is drawn, the jpg loader is ok.\n");
 
 	status->update(0.25f);
@@ -1105,8 +1109,8 @@ void golgotha_app::init()
 	refresh();   // show something right away
 
 	status->update(0.3f);
-	char *font_fname=li_get_string(li_get_value("font"),0);
-	i4_image_class *fim=i4_load_image(font_fname);
+	char * font_fname=li_get_string(li_get_value("font"),0);
+	i4_image_class * fim=i4_load_image(font_fname);
 	if (!fim)
 	{
 		i4_error("image load failed : %s", font_fname);
@@ -1136,7 +1140,7 @@ void golgotha_app::init()
 		   "-Well, err...","DirectX initialisation failed",
 		   MB_OK+MB_ICONSTOP+MB_APPLMODAL);*/
 #ifdef _WINDOWS
-		char *s=(char *)malloc(1000);
+		char * s=(char *)malloc(1000);
 
 		LoadString(AfxGetResourceHandle(),IDS_RENDERINITFAILED,s,999);
 		MessageBox(NULL,s,"DirectX",MB_OK+MB_ICONSTOP+MB_APPLMODAL);
@@ -1205,7 +1209,7 @@ void golgotha_app::init()
 
 	protocol=i4_get_first_protocol();
 
-	i4_graphical_style_class *style=wm->get_style();
+	i4_graphical_style_class * style=wm->get_style();
 
 
 	/*
@@ -1286,7 +1290,7 @@ void golgotha_app::hide_main_menu()
 	main_menu=0;
 }
 
-void golgotha_app::save_savegame_ok(i4_user_message_event_class *ev)
+void golgotha_app::save_savegame_ok(i4_user_message_event_class * ev)
 {
 	if (g1_get_map())
 	{
@@ -1297,7 +1301,7 @@ void golgotha_app::save_savegame_ok(i4_user_message_event_class *ev)
 		//this (or other hack) is needed, as source may come from current dir
 		//(usually \golgotha). The sprintf then generates a "/filename.scm"
 		//source file, wich of course is incorrect.
-		i4_str *srcpath=i4_full_path(g1_editor_instance.get_map()->get_filename());
+		i4_str * srcpath=i4_full_path(g1_editor_instance.get_map()->get_filename());
 		i4_split_path(*srcpath,fsource);
 
 		i4_split_path(*f->filename,ftarget);
@@ -1306,8 +1310,8 @@ void golgotha_app::save_savegame_ok(i4_user_message_event_class *ev)
 			strcpy(ftarget.path,".");
 		}
 		i4_const_str fmt("%s/%s.scm");
-		i4_str *src=fmt.sprintf(300,fsource.path,fsource.filename);
-		i4_str *dst=fmt.sprintf(300,ftarget.path,ftarget.filename);
+		i4_str * src=fmt.sprintf(300,fsource.path,fsource.filename);
+		i4_str * dst=fmt.sprintf(300,ftarget.path,ftarget.filename);
 		if (!i4_copy_file(*src,*dst))
 		{
 			i4_error("ERROR: Could not copy SCM file. Source file corrupt? Permissions?");
@@ -1323,7 +1327,7 @@ void golgotha_app::save_savegame_ok(i4_user_message_event_class *ev)
 	}
 }
 
-void golgotha_app::start_saved_game(i4_user_message_event_class *e)
+void golgotha_app::start_saved_game(i4_user_message_event_class * e)
 {
 	//assumes file exists and is valid. Results are undefined if not.
 	if (main_menu)
@@ -1439,7 +1443,7 @@ void myUnexpectedExit()
 	i4_error("Quitting for unknown reason");
 }
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 #ifdef _WINDOWS
 	set_unexpected(myUnexpectedExit);
@@ -1454,9 +1458,10 @@ void i4_main(w32 argc, i4_const_str *argv)
 	g1_app=NULL;
 }
 
-li_object *run_ivcon(li_object *o, li_environment *env)
+li_object *run_ivcon(li_object * o, li_environment * env)
 {
 	w32 r=i4_message_box("Run IVCON","IVCON modal starten?",MSG_YESNOCANCEL);
+
 	if (r==MSG_CANCEL)
 	{
 		return 0;
@@ -1466,24 +1471,24 @@ li_object *run_ivcon(li_object *o, li_environment *env)
 	return 0;
 }
 
-static li_object *debug_windows(li_object *o, li_environment *env)
+static li_object *debug_windows(li_object * o, li_environment * env)
 {
 	g1_app->get_root_window()->debug_show();
 	return 0;
 }
 
-static li_object *main_menu(li_object *o, li_environment *env)
+static li_object *main_menu(li_object * o, li_environment * env)
 {
 	g1_app->do_main_menu();
 	return 0;
 }
-static li_object *g1app_global_options(li_object *o, li_environment *env)
+static li_object *g1app_global_options(li_object * o, li_environment * env)
 {
 	g1_app->do_options();
 	return 0;
 }
 
-static li_object *show_help(li_object *o, li_environment *env)
+static li_object *show_help(li_object * o, li_environment * env)
 {
 	if(!(g1_app->get_main_menu()))
 	{
@@ -1492,7 +1497,7 @@ static li_object *show_help(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *hide_main_menu(li_object *o, li_environment *env)
+li_object *hide_main_menu(li_object * o, li_environment * env)
 {
 	g1_app->hide_main_menu();
 	return 0;

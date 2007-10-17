@@ -23,7 +23,7 @@ w32 i4_saver_class::tell()
 	}
 }
 
-i4_saver_class::i4_saver_class(i4_file_class *out, i4_bool close_on_delete)
+i4_saver_class::i4_saver_class(i4_file_class * out, i4_bool close_on_delete)
 	: out(out),
 	  close_on_delete(close_on_delete),
 	  skips(0,256),
@@ -112,7 +112,7 @@ void i4_saver_class::mark_section(w32 section_id)
 }
 
 
-void i4_saver_class::mark_section(char *section_name)  // calls above with checksum of name
+void i4_saver_class::mark_section(char * section_name)  // calls above with checksum of name
 {
 	mark_section(i4_check_sum32(section_name, strlen(section_name)));
 }
@@ -151,13 +151,13 @@ i4_bool i4_saver_class::begin_data_write()
 	return i4_T;
 }
 
-w32 i4_saver_class::read(void *buffer, w32 size)
+w32 i4_saver_class::read(void * buffer, w32 size)
 {
 	i4_error("INTERNAL: Call to undeclared pure virtual function.");
 	return 0;
 }
 
-w32 i4_saver_class::write(const void *buffer, w32 size)
+w32 i4_saver_class::write(const void * buffer, w32 size)
 {
 	if (state==DIRECTORY_CREATE)
 	{

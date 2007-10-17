@@ -49,7 +49,7 @@ public:
 	~r1_software_class();
 
 
-	i4_bool init(i4_display_class *display);
+	i4_bool init(i4_display_class * display);
 
 	void uninit();
 
@@ -81,10 +81,10 @@ public:
 	void set_constant_color(w32 color);
 	void set_z_range(i4_float near_z, i4_float far_z);
 
-	void render_poly(int t_verts, r1_vert *verts);
-	void render_sprite(r1_vert *verts);
-	void render_pixel(int t_points,r1_vert *pixel);
-	void render_lines(int t_lines, r1_vert *verts);
+	void render_poly(int t_verts, r1_vert * verts);
+	void render_sprite(r1_vert * verts);
+	void render_pixel(int t_points,r1_vert * pixel);
+	void render_lines(int t_lines, r1_vert * verts);
 	//void clear_area(int x1, int y1, int x2, int y2, w32 color, float w);
 
 	void use_texture(r1_texture_handle material_ref,
@@ -106,7 +106,7 @@ public:
 	i4_bool allow_backfaces;
 	sw8 cur_color_tint;
 
-	void copy_part(i4_image_class *im,
+	void copy_part(i4_image_class * im,
 				   int x, int y,           // position on screen
 				   int x1, int y1,         // area of image to copy
 				   int x2, int y2)=0;
@@ -132,7 +132,7 @@ protected:
 	void draw_line(sw32 x0, sw32 y0, sw32 x1, sw32 y1, w16 start_color, w16 end_color);
 
 
-	void prepare_verts(s_vert *s_v, r1_vert *r1_v, sw32 num_verts);
+	void prepare_verts(s_vert * s_v, r1_vert * r1_v, sw32 num_verts);
 
 	i4_pixel_format fmt; //format of the primary display surface
 
@@ -173,13 +173,13 @@ class r1_software_render_window_class :
 public:
 	r1_software_render_window_class(w16 w, w16 h,
 									r1_expand_type expand_type,
-									r1_render_api_class *api);
+									r1_render_api_class * api);
 
 	~r1_software_render_window_class();
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 	//char *name()=0;//force class to be abstract;(even if member is inherited)
 };
 
-extern r1_software_class *r1_software_class_ptr;
+extern r1_software_class * r1_software_class_ptr;
 
 #endif

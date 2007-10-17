@@ -17,20 +17,20 @@ public:
 	class solve_node
 	{
 public:
-		g1_road_object_class *nref;
+		g1_road_object_class * nref;
 		i4_float length,weight;
 
 		solve_node()
 		{
 		}
 		//for dy
-		solve_node(g1_road_object_class *node, i4_float length) :
+		solve_node(g1_road_object_class * node, i4_float length) :
 			nref(node),
 			length(length)
 		{
 			weight=length;
 		}
-		solve_node(g1_road_object_class *node, i4_float length, i4_float weight) :
+		solve_node(g1_road_object_class * node, i4_float length, i4_float weight) :
 			nref(node),
 			length(length),
 			weight(weight)
@@ -68,7 +68,7 @@ protected:
 	{
 		heap.uninit();
 	};
-	i4_bool add_node(g1_road_object_class *node, g1_road_object_class *from, i4_float len);
+	i4_bool add_node(g1_road_object_class * node, g1_road_object_class * from, i4_float len);
 	i4_bool get_next_node(g1_road_object_class *&node, i4_float &len);
 
 	void clear_solve(); //reset rlen and ref of all road objects
@@ -83,19 +83,19 @@ public:
 	//  : heap(100,20), solve_graph(0) { set_graph(_graph); }
 	~g2_breadth_first_road_solver_class();
 
-	void set_graph(g1_critical_graph_class *_graph)
+	void set_graph(g1_critical_graph_class * _graph)
 	{
 	};
 	i4_bool path_solve_nodes(g1_graph_node start_node, g1_graph_node end_node,
 							 w8 group_size, w8 grade,
-							 i4_float *point, w16 &points)
+							 i4_float * point, w16 &points)
 	{
 		points=0;
 		return i4_F;
 	};                        //this solver is not applicable like this
 
-	virtual int path_solve(g1_team_type team, g1_road_object_class *start, g1_road_object_class *dest,
-						   g1_path_object_class **path, w32 stack_size);
+	virtual int path_solve(g1_team_type team, g1_road_object_class * start, g1_road_object_class * dest,
+						   g1_path_object_class * * path, w32 stack_size);
 
 };
 
@@ -127,10 +127,10 @@ public:
 	g2_astar_road_solver_class()
 	{
 	};
-	i4_bool add_weighted_node(g1_road_object_class *node, g1_road_object_class *from, i4_float len);
+	i4_bool add_weighted_node(g1_road_object_class * node, g1_road_object_class * from, i4_float len);
 	i4_bool get_next_weighted_node(g1_road_object_class *&node, i4_float &len);
-	virtual int path_solve(g1_team_type team, g1_road_object_class *start, g1_road_object_class *dest,
-						   g1_path_object_class **path, w32 stack_size);
+	virtual int path_solve(g1_team_type team, g1_road_object_class * start, g1_road_object_class * dest,
+						   g1_path_object_class * * path, w32 stack_size);
 };
 
 
@@ -144,20 +144,20 @@ public:
 	friend class node_manager;
 	friend class link_manager;
 	i4_float rlen; //for solver
-	g1_road_object_class *ref; //dito
+	g1_road_object_class * ref; //dito
 	//The path-finding is a bit different on these roads
 	//than on usual ones
-	int find_path(g1_team_type type, g1_path_object_class **stack, int stack_size);
-	int find_path(g1_team_type type, g1_path_object_class *dest,
-				  g1_path_object_class **stack, int stack_size); //from this to dest
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position); //with (outgoing) links
-	void calc_world_transform(i4_float ratio, i4_transform_class *transform=0)
+	int find_path(g1_team_type type, g1_path_object_class * * stack, int stack_size);
+	int find_path(g1_team_type type, g1_path_object_class * dest,
+				  g1_path_object_class * * stack, int stack_size); //from this to dest
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position); //with (outgoing) links
+	void calc_world_transform(i4_float ratio, i4_transform_class * transform=0)
 	{
 	};     //not needed for these objects
-	void editor_draw(g1_draw_context_class *context); //same
-	g1_road_object_class(g1_object_type id, g1_loader_class *fp);
+	void editor_draw(g1_draw_context_class * context); //same
+	g1_road_object_class(g1_object_type id, g1_loader_class * fp);
 	~g1_road_object_class();
-	void save(g1_saver_class *fp);
+	void save(g1_saver_class * fp);
 	//i4_float occupancy_radius() const;//with all neighbours
 	i4_bool occupy_location(); //such that the graphics fits.
 	void setup(node_id thisid, i4_float x, i4_float y, i4_float h);

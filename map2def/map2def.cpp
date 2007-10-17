@@ -8,14 +8,14 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-char *desc;
-char *infile;
+char * desc;
+char * infile;
 int inhandle;
-char *outfile;
+char * outfile;
 int outhandle;
-const char *head="LIBRARY i4_core\nEXPORTS\n";
+const char * head="LIBRARY i4_core\nEXPORTS\n";
 
-bool validexport(char *name,char *lib)
+bool validexport(char * name,char * lib)
 {
 	if (lib[0]=='<')
 	{
@@ -38,8 +38,8 @@ bool validexport(char *name,char *lib)
 
 void convert(void)
 {
-	char *buf;
-	char *index,*endofsection;
+	char * buf;
+	char * index,* endofsection;
 	long indofs;
 	char dummy[200],field[500],libmodule[500];
 	long size=0;
@@ -47,6 +47,7 @@ void convert(void)
 	long r;
 	//char usuallyanf;
 	char rvabase[30];
+
 	_lseek(inhandle,0,SEEK_END);
 	size=_tell(inhandle);
 	_lseek(inhandle,0,SEEK_SET);
@@ -65,6 +66,7 @@ void convert(void)
 	}
 	while ((*index)!='\n') index++;
 
+
 	index+=2; //we still point at the '\n'
 	endofsection=strstr(buf,"entry point")-2;
 	while (r&&(index<endofsection))
@@ -81,6 +83,7 @@ void convert(void)
 		//sscanf(index,"%d\t%d\t%d\t%f\t%f\t%f",
 		//	&from,&to,&lanes,&length,&cap,&freespd);
 		while ((*index)!='\n' && (*index!=0)) index++;
+
 
 		index++;
 
@@ -108,7 +111,7 @@ void convert(void)
 
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
 	printf("map2def MAP to DEF file converter.\n");
 	if (argc<3)

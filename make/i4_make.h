@@ -47,9 +47,9 @@ struct mk_options_struct
 	int no_syms;
 	int show_includes;
 
-	char *project_file;
-	char *target_name;
-	char *tmp_dir;
+	char * project_file;
+	char * target_name;
+	char * tmp_dir;
 	list targets_to_build;
 	list targets_built;
 	char slash_char;
@@ -85,7 +85,7 @@ struct mk_options_struct
 		show_includes=0;
 	}
 
-	void get(int argc, char **argv);
+	void get(int argc, char * * argv);
 };
 
 list mk_global_defines;
@@ -93,17 +93,17 @@ list mk_global_defines;
 // options dependant on each target
 struct mk_target_struct
 {
-	char *def_file;
+	char * def_file;
 
-	char *target;
-	char *target_type;
-	char *outdir;
+	char * target;
+	char * target_type;
+	char * outdir;
 
 	list dlls, libs, src, inc, defines;
 
 
 	int app_type;
-	char *cc_flags, *link_flags;
+	char * cc_flags, * link_flags;
 
 	void reset()
 	{

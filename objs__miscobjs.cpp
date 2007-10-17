@@ -25,7 +25,7 @@ g1_deco_type_manager_class g1_deco_type_manager;
 
 static g1_object_type shrapnel_type=0;
 
-g1_deco_object_class::g1_deco_object_class(g1_object_type id, g1_loader_class *fp)
+g1_deco_object_class::g1_deco_object_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id, fp) //, death(this)  // JJ modification not to issue MSVC warning
 {
 	death.SetG1_Object_Class(this); // JJ modification not to issue MSVC warning
@@ -73,7 +73,7 @@ g1_deco_object_class::g1_deco_object_class(g1_object_type id, g1_loader_class *f
 			 1);
 }
 
-void g1_deco_object_class::save(g1_saver_class *fp)
+void g1_deco_object_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 
@@ -94,9 +94,10 @@ void g1_deco_object_class::save(g1_saver_class *fp)
 	fp->end_version();
 }
 
-i4_bool g1_deco_object_class::check_collision(g1_object_class *source,const i4_3d_vector &start, i4_3d_vector &ray)
+i4_bool g1_deco_object_class::check_collision(g1_object_class * source,const i4_3d_vector &start, i4_3d_vector &ray)
 {
 	i4_3d_vector normal;
+
 	if (decoflags&DECO_USEPOLYCOLDET)
 	{
 		return g1_model_collide_polygonal_ex(this, source, ray, normal);
@@ -134,7 +135,7 @@ void g1_deco_object_class::think()
 
 	if (health<0)
 	{
-		g1_shrapnel_class *shrapnel = NULL;
+		g1_shrapnel_class * shrapnel = NULL;
 		if (!shrapnel_type)
 		{
 			shrapnel_type = g1_get_object_type("shrapnel");
@@ -151,7 +152,7 @@ void g1_deco_object_class::think()
 	}
 }
 
-void g1_deco_object_class::damage(g1_object_class *who_is_hurting,
+void g1_deco_object_class::damage(g1_object_class * who_is_hurting,
 								  int how_much_hurt, i4_3d_vector damage_dir)
 {
 	if (decoflags & DECO_INVULNERABLE)
@@ -176,9 +177,9 @@ public:
 	w32 decoflags;
 
 	g1_object_class *create_object(g1_object_type type,
-								   g1_loader_class *fp)
+								   g1_loader_class * fp)
 	{
-		g1_deco_object_class *o=new g1_deco_object_class(type, fp);
+		g1_deco_object_class * o=new g1_deco_object_class(type, fp);
 
 		if (!fp)
 		{
@@ -199,7 +200,7 @@ public:
 		return o;
 	}
 
-	g1_deco_definition_class(char *__name, w32 _decoflags)
+	g1_deco_definition_class(char * __name, w32 _decoflags)
 		: g1_object_definition_class(strcpy(deco_name, __name))
 	{
 		set_flag(MOVABLE,0);
@@ -213,10 +214,11 @@ public:
 
 };
 
-g1_object_type g1_create_deco_object(char *name, w32 decoflags)
+g1_object_type g1_create_deco_object(char * name, w32 decoflags)
 {
-	g1_deco_definition_class *def=new g1_deco_definition_class(name, decoflags);
+	g1_deco_definition_class * def=new g1_deco_definition_class(name, decoflags);
 	g1_object_type t=def->type;
+
 	def->flags|=g1_object_definition_class::TO_DECO_OBJECT |
 				 g1_object_definition_class::DELETE_WITH_LEVEL;
 
@@ -226,7 +228,7 @@ g1_object_type g1_create_deco_object(char *name, w32 decoflags)
 }
 
 
-char *g1_deco_type_manager_class::find_name(const char *name)
+char * g1_deco_type_manager_class::find_name(const char * name)
 {
 	for (int i=0; i<deco_objs.size(); i++)
 	{

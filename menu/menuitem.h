@@ -23,7 +23,7 @@ class i4_menu_item_class :
 	public i4_parent_window_class
 {
 protected:
-	i4_str *context_help;
+	i4_str * context_help;
 	i4_event_handler_reference_class<i4_window_class> context_help_window;
 
 	i4_bool active,  // if the mouse is on us, or we have the key focus
@@ -31,12 +31,12 @@ protected:
 			disabled; // if this button is not currently enabled right now
 
 	// if this is non null, the menu_parent will be notified of events sent
-	i4_menu_item_parent_class *menu_parent;
-	i4_graphical_style_class *hint;
+	i4_menu_item_parent_class * menu_parent;
+	i4_graphical_style_class * hint;
 
 public:
 
-	void set_menu_parent(i4_menu_item_parent_class *_menu_parent)
+	void set_menu_parent(i4_menu_item_parent_class * _menu_parent)
 	{
 		menu_parent=_menu_parent;
 	}
@@ -48,26 +48,26 @@ public:
 
 	struct // these event are only sent out, the are not noticed if sent in
 	{
-		i4_event_reaction_class *press,    *depress;
-		i4_event_reaction_class *activate, *deactivate;
+		i4_event_reaction_class * press,    * depress;
+		i4_event_reaction_class * activate, * deactivate;
 
 	} send;
 
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"menu item");
 	}
-	i4_menu_item_class(const i4_const_str *idle_context_help, // can be null
-					   i4_graphical_style_class *hint,       // can be null if idle_help is null
+	i4_menu_item_class(const i4_const_str * idle_context_help, // can be null
+					   i4_graphical_style_class * hint,       // can be null if idle_help is null
 					   w16 w, w16 h,
-					   i4_event_reaction_class *press=0,
-					   i4_event_reaction_class *depress=0,
-					   i4_event_reaction_class *activate=0,
-					   i4_event_reaction_class *deactivate=0
+					   i4_event_reaction_class * press=0,
+					   i4_event_reaction_class * depress=0,
+					   i4_event_reaction_class * activate=0,
+					   i4_event_reaction_class * deactivate=0
 	);
 
-	void set_context_help(const i4_const_str *help_string)
+	void set_context_help(const i4_const_str * help_string)
 	{
 		if (context_help)
 		{
@@ -83,9 +83,9 @@ public:
 		}
 	}
 
-	void send_event(i4_event_reaction_class *ev, reaction_type type);
+	void send_event(i4_event_reaction_class * ev, reaction_type type);
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	virtual void do_activate();
 	virtual void do_deactivate();
@@ -102,7 +102,7 @@ public:
 	{
 		return i4_F;
 	}
-	virtual void push_button(i4_menu_item_class *which, i4_bool send_event)
+	virtual void push_button(i4_menu_item_class * which, i4_bool send_event)
 	{
 	};
 
@@ -123,13 +123,13 @@ public:
 	{
 	}
 
-	virtual void note_reaction_sent(i4_menu_item_class *who,     // this is who sent it
-									i4_event_reaction_class *ev, // who it was to
+	virtual void note_reaction_sent(i4_menu_item_class * who,     // this is who sent it
+									i4_event_reaction_class * ev, // who it was to
 									i4_menu_item_class::reaction_type type)
 	{
 		;
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"menu item parent");
 	}

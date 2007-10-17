@@ -13,7 +13,7 @@
 class g1_collision_map_class
 {
 protected:
-	w8 *map;
+	w8 * map;
 	w16 wx,wy;
 	w16 bwx;
 public:
@@ -67,13 +67,15 @@ public:
 	i4_bool is_blocked(w16 x, w16 y) const
 	{
 		w8 mask = 1<<(x&7);
+
 		x /= 8;
-		return (map[y *bwx+x] & mask)!=0;
+		return (map[y * bwx+x] & mask)!=0;
 	}
 
 	void set_blocking(w16 x, w16 y, i4_bool flag)
 	{
 		w8 mask = 1<<(x&7), bit = flag<<(x&7);
+
 		x /= 8;
 		map[y*bwx+x] = (map[y*bwx+x]&~mask)|bit;
 	}

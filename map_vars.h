@@ -30,8 +30,8 @@ public:
 		var_ptr=0;
 	}
 
-	virtual void load(g1_loader_class *fp, w32 sections);
-	virtual void save(g1_saver_class *fp, w32 sections);
+	virtual void load(g1_loader_class * fp, w32 sections);
+	virtual void save(g1_saver_class * fp, w32 sections);
 };
 
 extern g1_map_vars_class g1_map_vars;

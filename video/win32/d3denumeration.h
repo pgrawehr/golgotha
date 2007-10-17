@@ -29,7 +29,7 @@ class CArrayList
 {
 protected:
 	ArrayListType m_ArrayListType;
-	void *m_pData;
+	void * m_pData;
 	UINT m_BytesPerEntry;
 	UINT m_NumEntries;
 	UINT m_NumEntriesAllocated;
@@ -37,14 +37,14 @@ protected:
 public:
 	CArrayList( ArrayListType Type, UINT BytesPerEntry = 0 );
 	~CArrayList( void );
-	HRESULT Add( void *pEntry );
+	HRESULT Add( void * pEntry );
 	void Remove( UINT Entry );
 	void *GetPtr( UINT Entry );
 	UINT Count( void )
 	{
 		return m_NumEntries;
 	}
-	bool Contains( void *pEntryData );
+	bool Contains( void * pEntryData );
 	void Clear( void )
 	{
 		m_NumEntries = 0;
@@ -71,8 +71,8 @@ struct D3DAdapterInfo
 {
 	int AdapterOrdinal;
 	D3DADAPTER_IDENTIFIER9 AdapterIdentifier;
-	CArrayList *pDisplayModeList; // List of D3DDISPLAYMODEs
-	CArrayList *pDeviceInfoList; // List of D3DDeviceInfo pointers
+	CArrayList * pDisplayModeList; // List of D3DDISPLAYMODEs
+	CArrayList * pDeviceInfoList; // List of D3DDeviceInfo pointers
 	~D3DAdapterInfo( void );
 };
 
@@ -87,7 +87,7 @@ struct D3DDeviceInfo
 	int AdapterOrdinal;
 	D3DDEVTYPE DevType;
 	D3DCAPS9 Caps;
-	CArrayList *pDeviceComboList; // List of D3DDeviceCombo pointers
+	CArrayList * pDeviceComboList; // List of D3DDeviceCombo pointers
 	~D3DDeviceInfo( void );
 };
 
@@ -116,19 +116,19 @@ struct D3DDeviceCombo
 	D3DFORMAT AdapterFormat;
 	D3DFORMAT BackBufferFormat;
 	bool IsWindowed;
-	CArrayList *pDepthStencilFormatList; // List of D3DFORMATs
-	CArrayList *pMultiSampleTypeList; // List of D3DMULTISAMPLE_TYPEs
-	CArrayList *pMultiSampleQualityList; // List of DWORDs (number of quality
-										 // levels for each multisample type)
-	CArrayList *pDSMSConflictList; // List of D3DDSMSConflicts
-	CArrayList *pVertexProcessingTypeList; // List of VertexProcessingTypes
-	CArrayList *pPresentIntervalList; // List of D3DPRESENT_INTERVALs
+	CArrayList * pDepthStencilFormatList; // List of D3DFORMATs
+	CArrayList * pMultiSampleTypeList; // List of D3DMULTISAMPLE_TYPEs
+	CArrayList * pMultiSampleQualityList; // List of DWORDs (number of quality
+										  // levels for each multisample type)
+	CArrayList * pDSMSConflictList; // List of D3DDSMSConflicts
+	CArrayList * pVertexProcessingTypeList; // List of VertexProcessingTypes
+	CArrayList * pPresentIntervalList; // List of D3DPRESENT_INTERVALs
 
 	~D3DDeviceCombo( void );
 };
 
 
-typedef bool (*CONFIRMDEVICECALLBACK)( D3DCAPS9 *pCaps, VertexProcessingType vertexProcessingType,
+typedef bool (*CONFIRMDEVICECALLBACK)( D3DCAPS9 * pCaps, VertexProcessingType vertexProcessingType,
 									  D3DFORMAT adapterFormat, D3DFORMAT backBufferFormat );
 
 
@@ -139,19 +139,19 @@ typedef bool (*CONFIRMDEVICECALLBACK)( D3DCAPS9 *pCaps, VertexProcessingType ver
 class CD3DEnumeration
 {
 private:
-	IDirect3D9 *m_pD3D;
+	IDirect3D9 * m_pD3D;
 
 private:
-	HRESULT EnumerateDevices( D3DAdapterInfo *pAdapterInfo, CArrayList *pAdapterFormatList );
-	HRESULT EnumerateDeviceCombos( D3DDeviceInfo *pDeviceInfo, CArrayList *pAdapterFormatList );
-	void BuildDepthStencilFormatList( D3DDeviceCombo *pDeviceCombo );
-	void BuildMultiSampleTypeList( D3DDeviceCombo *pDeviceCombo );
-	void BuildDSMSConflictList( D3DDeviceCombo *pDeviceCombo );
-	void BuildVertexProcessingTypeList( D3DDeviceInfo *pDeviceInfo, D3DDeviceCombo *pDeviceCombo );
-	void BuildPresentIntervalList( D3DDeviceInfo *pDeviceInfo, D3DDeviceCombo *pDeviceCombo );
+	HRESULT EnumerateDevices( D3DAdapterInfo * pAdapterInfo, CArrayList * pAdapterFormatList );
+	HRESULT EnumerateDeviceCombos( D3DDeviceInfo * pDeviceInfo, CArrayList * pAdapterFormatList );
+	void BuildDepthStencilFormatList( D3DDeviceCombo * pDeviceCombo );
+	void BuildMultiSampleTypeList( D3DDeviceCombo * pDeviceCombo );
+	void BuildDSMSConflictList( D3DDeviceCombo * pDeviceCombo );
+	void BuildVertexProcessingTypeList( D3DDeviceInfo * pDeviceInfo, D3DDeviceCombo * pDeviceCombo );
+	void BuildPresentIntervalList( D3DDeviceInfo * pDeviceInfo, D3DDeviceCombo * pDeviceCombo );
 
 public:
-	CArrayList *m_pAdapterInfoList;
+	CArrayList * m_pAdapterInfoList;
 	// The following variables can be used to limit what modes, formats,
 	// etc. are enumerated.  Set them to the values you want before calling
 	// Enumerate().
@@ -166,11 +166,11 @@ public:
 	bool AppUsesMixedVP; // whether app can take advantage of mixed vp mode
 	bool AppRequiresWindowed;
 	bool AppRequiresFullscreen;
-	CArrayList *m_pAllowedAdapterFormatList; // list of D3DFORMATs
+	CArrayList * m_pAllowedAdapterFormatList; // list of D3DFORMATs
 
 	CD3DEnumeration();
 	~CD3DEnumeration();
-	void SetD3D(IDirect3D9 *pD3D)
+	void SetD3D(IDirect3D9 * pD3D)
 	{
 		m_pD3D = pD3D;
 	}

@@ -16,11 +16,11 @@ UtilExport CStr::CStr()
 {
 };
 
-UtilExport CStr::CStr(const char *cs)
+UtilExport CStr::CStr(const char * cs)
 {
 };
 
-UtilExport CStr::CStr(const wchar_t *wcstr)
+UtilExport CStr::CStr(const wchar_t * wcstr)
 {
 };
 
@@ -37,7 +37,7 @@ UtilExport char CStr::*data()
 	return 0;
 };
 
-UtilExport CStr::operator char*(){};
+UtilExport CStr::operator char* (){};
 
 
 

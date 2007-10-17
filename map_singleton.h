@@ -9,8 +9,8 @@
 class g2_singleton
 {
 public:
-	static g2_singleton *first;
-	g2_singleton *next_sin;
+	static g2_singleton * first;
+	g2_singleton * next_sin;
 	g2_singleton()
 	{
 		next_sin=first;
@@ -18,7 +18,7 @@ public:
 	};
 	virtual ~g2_singleton()
 	{
-		g2_singleton *last=0, *i=first;
+		g2_singleton * last=0, * i=first;
 
 		for (; i && i!=this;)
 		{
@@ -38,7 +38,7 @@ public:
 		next_sin=0;
 	}
 	virtual void think()=0;
-	virtual i4_bool save(g1_saver_class *fp)=0;
-	virtual i4_bool load(g1_loader_class *fp)=0;
+	virtual i4_bool save(g1_saver_class * fp)=0;
+	virtual i4_bool load(g1_loader_class * fp)=0;
 };
 #endif

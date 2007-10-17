@@ -149,7 +149,7 @@ enum {
 	G1_RECALC_STATIC_LIGHT       = (1<<5) // determines how much directional light hits each cell
 };
 
-typedef i4_bool (*OBJ_FILTER_TYPE)(g1_object_class *obj);
+typedef i4_bool (*OBJ_FILTER_TYPE)(g1_object_class * obj);
 
 /*! This class contains the data for the current map.
    There should currently only be one instance of it active.
@@ -168,13 +168,13 @@ private:
 	friend class g1_critical_map_maker_class;
 	friend class g1_object_controller_class;
 
-	void save_objects(g1_saver_class *out);
+	void save_objects(g1_saver_class * out);
 
 	w32 recalc;     ///< bits telling what need recalculating set by add_undo in editor
 	w32 w,h;
 
-	g1_map_cell_class *cells;     ///< 2d array (w*h) of tile type, rotation, blocking status
-	g1_map_vertex_class *verts;  ///< 2d array ((w+1)*(h+1)) of height and lighting info of corners
+	g1_map_cell_class * cells;     ///< 2d array (w*h) of tile type, rotation, blocking status
+	g1_map_vertex_class * verts;  ///< 2d array ((w+1)*(h+1)) of height and lighting info of corners
 
 	i4_bool block_map_inited;
 	g1_block_map_class block[G1_GRADE_LEVELS];  ///< blockage maps for different slopes
@@ -184,33 +184,33 @@ private:
 
 	void delete_map_view();
 
-	g1_object_class **load_objects(g1_loader_class *fp, w32 &tobjs);
+	g1_object_class * *load_objects(g1_loader_class * fp, w32 &tobjs);
 
 	// returns sections actually loaded
-	w32 load(g1_loader_class *fp, w32 sections);
+	w32 load(g1_loader_class * fp, w32 sections);
 
-	i4_bool load_sky(g1_loader_class *fp);
-	void save_sky(g1_saver_class *fp);
+	i4_bool load_sky(g1_loader_class * fp);
+	void save_sky(g1_saver_class * fp);
 
-	void save_critical_map(g1_saver_class *f);
-	void load_critical_map(g1_loader_class *f);
+	void save_critical_map(g1_saver_class * f);
+	void load_critical_map(g1_loader_class * f);
 
-	g1_astar_map_solver_class *astar_solver;
-	g1_path_manager_class *path_manager;
-	g1_critical_graph_class *critical_graph;
+	g1_astar_map_solver_class * astar_solver;
+	g1_path_manager_class * path_manager;
+	g1_critical_graph_class * critical_graph;
 	g1_critical_map_maker_class map_maker;
-	g1_breadth_first_map_solver_class *solvemap[G1_GRADE_LEVELS];
-	g1_breadth_first_graph_solver_class *solvegraph;
+	g1_breadth_first_map_solver_class * solvemap[G1_GRADE_LEVELS];
+	g1_breadth_first_graph_solver_class * solvegraph;
 
 
 
 
 	//! this is a hook so the level editor can draw selected verts
-	typedef void (*cell_draw_function_type)(sw32 x, sw32 y, void *context);
+	typedef void (*cell_draw_function_type)(sw32 x, sw32 y, void * context);
 	cell_draw_function_type post_cell_draw;
-	void *post_cell_draw_context;
+	void * post_cell_draw_context;
 
-	i4_str *filename;
+	i4_str * filename;
 
 	void init_lod();
 	void calc_map_lod(g1_object_controller_class *);
@@ -219,7 +219,7 @@ private:
 
 public:
 	//! only use this if you know what you are doing
-	void change_map(int w, int h, g1_map_cell_class *cells, g1_map_vertex_class *vertex);
+	void change_map(int w, int h, g1_map_cell_class * cells, g1_map_vertex_class * vertex);
 
 
 	//! This is the queue of object that are thinking each tick.
@@ -227,7 +227,7 @@ public:
 	//! if you need to modify this.
 	i4_dynamic_que<g1_object_class *,8096,8096> think_que_dyn;
 	w32 think_head, think_tail;
-	i4_str *sky_name;
+	i4_str * sky_name;
 
 	//! Update the map data structures.
 	//! This method recomputes static map data, like ambient light vectors and block maps.
@@ -237,7 +237,7 @@ public:
 
 	//! Remove an object from the think list.
 	//! Calling this is necessary before the object is destroyed.
-	void remove_from_think_list(g1_object_class *o);
+	void remove_from_think_list(g1_object_class * o);
 
 	//! Recalc the given data set on next frame.
 	//! \param flags A bit combination from the G1_RECALC_ enumeration type.
@@ -300,7 +300,7 @@ public:
 	void set_filename(const i4_const_str &fname);
 
 
-	void set_post_cell_draw_function(cell_draw_function_type fun, void *context)
+	void set_post_cell_draw_function(cell_draw_function_type fun, void * context)
 	{
 		post_cell_draw=fun;
 		post_cell_draw_context=context;
@@ -311,7 +311,7 @@ public:
 	void stop_movie();
 	i4_bool advance_movie_with_time();
 
-	g1_movie_flow_class *current_movie;
+	g1_movie_flow_class * current_movie;
 
 	g1_movie_flow_class *get_current_movie()
 	{
@@ -334,8 +334,8 @@ public:
 	{
 protected:
 		sw32 left, right, top, bottom, ix, iy;
-		g1_map_cell_class *cell;
-		g1_object_chain_class *chain;
+		g1_map_cell_class * cell;
+		g1_object_chain_class * chain;
 		w32 object_mask_flags, type_mask_flags;
 public:
 		void begin(float x, float y, float range);
@@ -350,7 +350,7 @@ public:
 
 		g1_object_class *get() const;
 
-		g1_object_class *operator *()
+		g1_object_class * operator * ()
 		{
 			return get();
 		}
@@ -371,11 +371,11 @@ public:
 	//! Be aware that the function might return some objects that are farther
 	//! away than range specifies.
 	sw32 get_objects_in_range(float x, float y, float range,
-							  g1_object_class *dest_array[], w32 array_size,
+							  g1_object_class * dest_array[], w32 array_size,
 							  w32 object_mask_flags=0xffffffff, w32 type_mask_flags=0xffffffff) const;
 	//! Gets objects in range of the given location satisfying an user definable condition.
 	sw32 get_objects_in_range_fn(float x, float y, float range,
-								 g1_object_class *dest_array[], w32 array_size,
+								 g1_object_class * dest_array[], w32 array_size,
 								 OBJ_FILTER_TYPE fn) const;
 	//! Gets a pointer to the cell at a given location.
 	//! This method is templatized, such that you can use any type of numerical
@@ -403,6 +403,7 @@ public:
 	{
 		int x1=(int)x;
 		int y1=(int)y;
+
 		if (x1<0 || x1>=(int)w)
 		{
 			return i4_F;
@@ -426,13 +427,13 @@ public:
 	//! Usually, you will have to call the same method on the object,
 	//! not for the map.
 	//! @see g1_object_class::request_think()
-	void request_think(g1_object_class *obj)
+	void request_think(g1_object_class * obj)
 	{
 		think_que_dyn.que(obj);
 		think_head++;
 	}
 
-	void request_remove(g1_object_class *obj);
+	void request_remove(g1_object_class * obj);
 
 	void add_object(g1_object_chain_class &c, w32 x, w32 y);
 	void remove_object(g1_object_chain_class &c);
@@ -445,20 +446,20 @@ public:
 
 	void make_block_maps();
 
-	void update_block_maps(w16 x, w16 y,g1_object_class *changingobj, i4_bool added);
+	void update_block_maps(w16 x, w16 y,g1_object_class * changingobj, i4_bool added);
 
-	void draw(g1_draw_context_class *context,
+	void draw(g1_draw_context_class * context,
 			  i4_float player_x,
 			  i4_float player_y,
 			  i4_float player_z,
 			  i4_angle player_angle);
 
-	void draw_cells(g1_draw_context_class *context,
-					g1_visible_cell *cell_list,
+	void draw_cells(g1_draw_context_class * context,
+					g1_visible_cell * cell_list,
 					int t_visible_cells);
 
 
-	void fast_draw_cells(g1_draw_context_class *context);
+	void fast_draw_cells(g1_draw_context_class * context);
 //                        g1_visible_cell *cell_list,
 //                        int t_visible_cells);
 
@@ -475,7 +476,7 @@ public:
 	   against solids on the same team.
 	   returns 1 if hit object, -1 if hit building, and 0 if nothing
 	 */
-	int check_non_player_collision(g1_object_class *self,
+	int check_non_player_collision(g1_object_class * self,
 								   g1_player_type player_num,
 								   const i4_3d_vector &point,
 								   i4_3d_vector &ray,
@@ -504,7 +505,7 @@ public:
 	 * \return true if we hit an object (doesn't actually mean no movement
 	 * is possible).
 	 */
-	i4_bool check_collision(g1_object_class *obj,
+	i4_bool check_collision(g1_object_class * obj,
 							i4_float &dx, i4_float &dy, i4_float &dz,
 							g1_object_class *&hit) const;
 
@@ -516,7 +517,7 @@ public:
 	 \param out A g1_saver_class (a file pointer) where the data is written to. Must not be 0.
 	 \param sections The sections that should be written
 	 */
-	void save(g1_saver_class *out, w32 sections);
+	void save(g1_saver_class * out, w32 sections);
 
 	/*! This method is mainly used to check if the map contains still an object of the given type.
 	 \param object_id An objects type id.
@@ -536,7 +537,7 @@ public:
 	//                  i4_float *points, w16 &t_nodes);
 
 	//! all objects in this area will receive damage falling off with distance
-	void damage_range(g1_object_class *obj,
+	void damage_range(g1_object_class * obj,
 					  i4_float x, i4_float y, i4_float z,
 					  i4_float range, w16 damage, i4_float falloff=0);
 
@@ -556,17 +557,17 @@ public:
 	void calc_terrain_normal(i4_float x, i4_float y, i4_3d_vector &normal);
 	void calc_pitch_and_roll(i4_float x, i4_float y, i4_float z, i4_float &pitch, i4_float &roll);
 
-	void calc_height_pitch_roll(g1_object_class *for_obj, i4_float x, i4_float y, i4_float z,
+	void calc_height_pitch_roll(g1_object_class * for_obj, i4_float x, i4_float y, i4_float z,
 								i4_float &height, i4_float &pitch, i4_float &roll);
 
 
-	sw32 make_object_list(g1_object_class **buffer, sw32 buf_size); // returns total entries
+	sw32 make_object_list(g1_object_class * * buffer, sw32 buf_size); // returns total entries
 
 	//returns total added and a pointer to an array of pointers
 	//the buffer will be valid till the next call or some remove_man.process_requests()
 	//or similar functions
-	sw32 make_object_list(g1_object_class **&buffer, OBJ_FILTER_TYPE obj_filter);
-	sw32 make_selected_objects_list(w32 *buffer, sw32 buf_size); // return total added (saved id's)
+	sw32 make_object_list(g1_object_class * *&buffer, OBJ_FILTER_TYPE obj_filter);
+	sw32 make_selected_objects_list(w32 * buffer, sw32 buf_size); // return total added (saved id's)
 
 	void change_vert_height(sw32 x, sw32 y, w8 new_height);
 
@@ -579,8 +580,8 @@ public:
 
 	// returns the total number of cells that can be seen
 	int calc_visible(i4_transform_class &t,
-					 i4_polygon_class *area_poly,
-					 g1_visible_cell *buffer, w32 buf_elements,
+					 i4_polygon_class * area_poly,
+					 g1_visible_cell * buffer, w32 buf_elements,
 					 i4_float xscale, i4_float yscale);         // how much to scale x & y members of vertexes
 
 

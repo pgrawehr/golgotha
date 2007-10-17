@@ -36,12 +36,12 @@
 //but makes sbr - Files >1.3MB each!
 
 //the interface your threads should support
-typedef void (*i4_thread_func_type)(void *context);
+typedef void (*i4_thread_func_type)(void * context);
 
 i4_bool i4_threads_supported();
 
 // this will start the thread right away, regardless of how many threads are running
-void i4_add_thread(i4_thread_func_type fun, w32 stack_size=50 *1024, void *context=0);
+void i4_add_thread(i4_thread_func_type fun, w32 stack_size=50 * 1024, void * context=0);
 
 //give up your time slice
 void i4_thread_yield();
@@ -76,7 +76,7 @@ void i4_set_thread_priority(int thread_id, i4_thread_priority_type priority);
 class i4_critical_section_class
 {
 protected:
-	void *cs; // to store operating system depandant data, enlarge if needed
+	void * cs; // to store operating system depandant data, enlarge if needed
 #ifdef I4_UNIX
 	pthread_mutex_t m_mutex;
 	int recursive;
@@ -102,11 +102,11 @@ protected:
 public:
 
 	//Creates unsignaled object
-	i4_signal_object(char *name);
+	i4_signal_object(char * name);
 
 	//specify dwMaxCount=dwInitialCount=1 if you want to have a mutex that is
 	//initially free.
-	i4_signal_object(char *name, w32 dwMaxCount, w32 dwInitialCount);
+	i4_signal_object(char * name, w32 dwMaxCount, w32 dwInitialCount);
 
 	//WaitForSingleObject()
 	i4_bool wait_signal();

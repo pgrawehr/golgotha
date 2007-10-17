@@ -258,9 +258,9 @@ void r1_software_class::initialize_function_pointers(i4_bool amd3d)
    }
  */
 
-void texture_scanline_affine_lit(w16 *start_pixel,
+void texture_scanline_affine_lit(w16 * start_pixel,
 								 sw32 start_x,
-								 void *_left, //perspective_span *left,
+								 void * _left, //perspective_span *left,
 								 sw32 width)
 {
 	//temporary dwords for lighting calculations
@@ -270,7 +270,7 @@ void texture_scanline_affine_lit(w16 *start_pixel,
 
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	affine_span *left = (affine_span *)_left;
+	affine_span * left = (affine_span *)_left;
 
 	left_s = left->s + cur_grads.s_adjust;
 	left_t = left->t + cur_grads.t_adjust;
@@ -321,8 +321,8 @@ void texture_scanline_affine_lit(w16 *start_pixel,
    }
  */
 
-void insert_color_modify_address_low(w32 *address);
-void insert_color_modify_address_high(w32 *address);
+void insert_color_modify_address_low(w32 * address);
+void insert_color_modify_address_high(w32 * address);
 extern w32 color_modify_list[];
 extern sw32 num_color_modifies;
 
@@ -361,16 +361,16 @@ void setup_color_modify_affine_lit()
    golgotha_source@usa.net (Subject should have "GOLG" in it)
  ***********************************************************************/
 
-void texture_scanline_affine_unlit_alpha(w16 *start_pixel,
+void texture_scanline_affine_unlit_alpha(w16 * start_pixel,
 										 sw32 start_x,
-										 void *_left, //perspective_span *left,
+										 void * _left, //perspective_span *left,
 										 sw32 width)
 {
 	w32 accumulated_alpha = (1<<12);
 
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	affine_span *left = (affine_span *)_left;
+	affine_span * left = (affine_span *)_left;
 
 	left_s = left->s;
 	left_t = left->t;
@@ -409,14 +409,14 @@ void texture_scanline_affine_unlit_alpha(w16 *start_pixel,
  ***********************************************************************/
 
 
-void texture_scanline_affine_unlit(w16 *start_pixel,
+void texture_scanline_affine_unlit(w16 * start_pixel,
 								   sw32 start_x,
-								   void *_left, //perspective_span *left,
+								   void * _left, //perspective_span *left,
 								   sw32 width)
 {
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	affine_span *left = (affine_span *)_left;
+	affine_span * left = (affine_span *)_left;
 
 	left_s = left->s + cur_grads.s_adjust;
 	left_t = left->t + cur_grads.t_adjust;
@@ -449,14 +449,14 @@ void texture_scanline_affine_unlit(w16 *start_pixel,
  ***********************************************************************/
 
 
-void texture_scanline_affine_unlit_holy(w16 *start_pixel,
+void texture_scanline_affine_unlit_holy(w16 * start_pixel,
 										sw32 start_x,
-										void *_left, //perspective_span *left,
+										void * _left, //perspective_span *left,
 										sw32 width)
 {
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	affine_span *left = (affine_span *)_left;
+	affine_span * left = (affine_span *)_left;
 
 	left_s = left->s + cur_grads.s_adjust;
 	left_t = left->t + cur_grads.t_adjust;
@@ -497,16 +497,16 @@ void texture_scanline_affine_unlit_holy(w16 *start_pixel,
  ***********************************************************************/
 
 
-void texture_scanline_affine_unlit_true_alpha(w16 *start_pixel,
+void texture_scanline_affine_unlit_true_alpha(w16 * start_pixel,
 											  sw32 start_x,
-											  void *_left, //perspective_span *left,
+											  void * _left, //perspective_span *left,
 											  sw32 width)
 {
 	w32 accumulated_alpha = (1<<12);
 
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	affine_span *left = (affine_span *)_left;
+	affine_span * left = (affine_span *)_left;
 
 	left_s = left->s;
 	left_t = left->t;
@@ -563,14 +563,14 @@ void texture_scanline_affine_unlit_true_alpha(w16 *start_pixel,
  ***********************************************************************/
 
 
-void texture_scanline_affine_unlit_holy_blend(w16 *start_pixel,
+void texture_scanline_affine_unlit_holy_blend(w16 * start_pixel,
 											  sw32 start_x,
-											  void *_left, //perspective_span *left,
+											  void * _left, //perspective_span *left,
 											  sw32 width)
 {
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	affine_span *left = (affine_span *)_left;
+	affine_span * left = (affine_span *)_left;
 
 	left_s = left->s + cur_grads.s_adjust;
 	left_t = left->t + cur_grads.t_adjust;
@@ -621,9 +621,9 @@ void texture_scanline_affine_unlit_holy_blend(w16 *start_pixel,
    }
  */
 
-void texture_scanline_perspective_lit(w16 *start_pixel,
+void texture_scanline_perspective_lit(w16 * start_pixel,
 									  sw32 start_x,
-									  void *_left, //perspective_span *left,
+									  void * _left, //perspective_span *left,
 									  sw32 width)
 {
 	//temporary stuff for lighting calculations
@@ -633,7 +633,7 @@ void texture_scanline_perspective_lit(w16 *start_pixel,
 
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	perspective_span *left = (perspective_span *)_left;
+	perspective_span * left = (perspective_span *)_left;
 
 	left_z = 1.f / left->ooz;
 	left_s = qftoi(left->soz * left_z) + cur_grads.s_adjust;
@@ -828,8 +828,8 @@ void texture_scanline_perspective_lit(w16 *start_pixel,
    }
  */
 
-void insert_color_modify_address_low(w32 *address);
-void insert_color_modify_address_high(w32 *address);
+void insert_color_modify_address_low(w32 * address);
+void insert_color_modify_address_high(w32 * address);
 extern w32 color_modify_list[];
 extern sw32 num_color_modifies;
 
@@ -867,9 +867,9 @@ void setup_color_modify_perspective_lit()
  ***********************************************************************/
 
 
-void texture_scanline_perspective_unlit_alpha(w16 *start_pixel,
+void texture_scanline_perspective_unlit_alpha(w16 * start_pixel,
 											  sw32 start_x,
-											  void *_left, //perspective_span *left,
+											  void * _left, //perspective_span *left,
 											  sw32 width)
 {
 	//temporary stuff for lighting calculations
@@ -877,7 +877,7 @@ void texture_scanline_perspective_unlit_alpha(w16 *start_pixel,
 
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	perspective_span *left = (perspective_span *)_left;
+	perspective_span * left = (perspective_span *)_left;
 
 	left_z = 1.f / left->ooz;
 	left_s = qftoi(left->soz * left_z) + cur_grads.s_adjust;
@@ -1047,9 +1047,9 @@ void texture_scanline_perspective_unlit_alpha(w16 *start_pixel,
  ***********************************************************************/
 
 
-void texture_scanline_perspective_unlit(w16 *start_pixel,
+void texture_scanline_perspective_unlit(w16 * start_pixel,
 										sw32 start_x,
-										void *_left, //perspective_span *left,
+										void * _left, //perspective_span *left,
 										sw32 width)
 {
 	//temporary stuff for lighting calculations
@@ -1059,7 +1059,7 @@ void texture_scanline_perspective_unlit(w16 *start_pixel,
 
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	perspective_span *left = (perspective_span *)_left;
+	perspective_span * left = (perspective_span *)_left;
 
 	left_z = 1.f / left->ooz;
 	left_s = qftoi(left->soz * left_z) + cur_grads.s_adjust;
@@ -1209,19 +1209,20 @@ void texture_scanline_perspective_unlit(w16 *start_pixel,
    golgotha_source@usa.net (Subject should have "GOLG" in it)
  ***********************************************************************/
 
-void texture_scanline_perspective_unlit_holy(w16 *start_pixel,
+void texture_scanline_perspective_unlit_holy(w16 * start_pixel,
 											 sw32 start_x,
-											 void *_left, //perspective_span *left,
+											 void * _left, //perspective_span *left,
 											 sw32 width)
 {
 	//temporary stuff for lighting calculations
 	w16 texel;
+
 	//w32 t1,t2;
 	//w32 l_lookup;
 
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	perspective_span *left = (perspective_span *)_left;
+	perspective_span * left = (perspective_span *)_left;
 
 	left_z = 1.f / left->ooz;
 	left_s = qftoi(left->soz * left_z) + cur_grads.s_adjust;
@@ -1381,9 +1382,9 @@ void texture_scanline_perspective_unlit_holy(w16 *start_pixel,
    golgotha_source@usa.net (Subject should have "GOLG" in it)
  ***********************************************************************/
 
-void texture_scanline_perspective_unlit_true_alpha(w16 *start_pixel,
+void texture_scanline_perspective_unlit_true_alpha(w16 * start_pixel,
 												   sw32 start_x,
-												   void *_left, //perspective_span *left,
+												   void * _left, //perspective_span *left,
 												   sw32 width)
 {
 	//temporary stuff for lighting calculations
@@ -1391,7 +1392,7 @@ void texture_scanline_perspective_unlit_true_alpha(w16 *start_pixel,
 
 	start_pixel = (w16 *)((w8 *)start_pixel + start_x);
 
-	perspective_span *left = (perspective_span *)_left;
+	perspective_span * left = (perspective_span *)_left;
 
 	left_z = 1.f / left->ooz;
 	left_s = qftoi(left->soz * left_z) + cur_grads.s_adjust;
@@ -1619,9 +1620,9 @@ void texture_scanline_perspective_unlit_true_alpha(w16 *start_pixel,
  ***********************************************************************/
 
 
-void texture_scanline_solid_blend_half(w16 *start_pixel,
+void texture_scanline_solid_blend_half(w16 * start_pixel,
 									   sw32 start_x,
-									   void *left, //solid_blend_span *left,
+									   void * left, //solid_blend_span *left,
 									   sw32 width)
 {
 	w16 color = (((solid_blend_span *)left)->color & pre_blend_and)>>1;
@@ -1637,9 +1638,9 @@ void texture_scanline_solid_blend_half(w16 *start_pixel,
 	}
 }
 
-void texture_scanline_solid_true_alpha(w16 *start_pixel,
+void texture_scanline_solid_true_alpha(w16 * start_pixel,
 									   sw32 start_x,
-									   void *left, //solid_blend_span *left,
+									   void * left, //solid_blend_span *left,
 									   sw32 width)
 {
 	register w32 pixel;
@@ -1702,9 +1703,9 @@ void texture_scanline_solid_true_alpha(w16 *start_pixel,
  ***********************************************************************/
 
 
-void texture_scanline_solid_fill(w16 *start_pixel,
+void texture_scanline_solid_fill(w16 * start_pixel,
 								 sw32 start_x,
-								 void *left, //solid_blend_span *left,
+								 void * left, //solid_blend_span *left,
 								 sw32 width)
 {
 	w16 color = ((solid_blend_span *)left)->color;

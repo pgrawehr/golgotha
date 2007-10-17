@@ -15,7 +15,7 @@ real equalizer[2][32];
 real equalizer_sum[2][32];
 int equalizer_cnt;
 
-void do_equalizer(real *bandPtr,int channel)
+void do_equalizer(real * bandPtr,int channel)
 {
 	int i;
 

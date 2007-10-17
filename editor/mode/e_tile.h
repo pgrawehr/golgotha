@@ -19,7 +19,7 @@ class g1_tile_mode :
 	public g1_mode_handler
 {
 	float vert_exact_z;
-	g1_map_vertex_class *move_pivot;
+	g1_map_vertex_class * move_pivot;
 	i4_bool focus_visible;
 
 public:
@@ -40,9 +40,9 @@ public:
 	virtual void show_focus();
 
 	virtual state current_state();
-	virtual void key_press(i4_key_press_event_class *kev);
+	virtual void key_press(i4_key_press_event_class * kev);
 
-	g1_tile_mode(g1_controller_edit_class *c);
+	g1_tile_mode(g1_controller_edit_class * c);
 
 };
 
@@ -51,7 +51,7 @@ class g1_tile_params :
 	public g1_mode_creator
 {
 	void refresh_picker();
-	i4_parent_window_class *picker_mp_window;
+	i4_parent_window_class * picker_mp_window;
 	i4_event_handler_reference_class<g1_tile_picker_class> picker;
 	i4_event_handler_reference_class<i4_parent_window_class> mp_window;
 	g1_rotation_type current_cell_rotation;
@@ -63,7 +63,7 @@ class g1_tile_params :
 
 public:
 	g1_tile_params();
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"TILE");
 	}                                                   //Warning: Do not change this! Must match entries in res file.
@@ -114,9 +114,9 @@ public:
 		HEIGHT_ONLY=1
 	} modifer_flags;
 
-	void create_buttons(i4_parent_window_class *container);
+	void create_buttons(i4_parent_window_class * container);
 
-	g1_mode_handler *create_mode_handler(g1_controller_edit_class *c)
+	g1_mode_handler *create_mode_handler(g1_controller_edit_class * c)
 	{
 		return new g1_tile_mode(c);
 	}

@@ -17,7 +17,7 @@
 #include "resource.h"
 #include "memory/new.h"
 #include "app/cdatafile.h"
-CDataFile *inifile=0;
+CDataFile * inifile=0;
 //void *inifile=0;
 
 
@@ -28,14 +28,14 @@ i4_profile_class pf_app_refresh("app::refresh");
 i4_profile_class pf_app_get_input("app::get_input");
 
 
-i4_application_class *i4_current_app=0;
+i4_application_class * i4_current_app=0;
 
-i4_parent_window_class *i4_application_class::get_root_window()
+i4_parent_window_class * i4_application_class::get_root_window()
 {
 	return wm;
 }
 
-i4_graphical_style_class *i4_application_class::get_style()
+i4_graphical_style_class * i4_application_class::get_style()
 {
 	if (wm)
 	{
@@ -47,7 +47,7 @@ i4_graphical_style_class *i4_application_class::get_style()
 	}
 }
 
-void i4_application_class::receive_event(i4_event *ev)
+void i4_application_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::DISPLAY_CLOSE)
 	{
@@ -114,12 +114,14 @@ void i4_application_class::run()
 					i4_thread_yield();
 				}
 			}
-		} while (repeat);
+		}
+		while (repeat);
 		//i4_warning("Geting Input End...");
 		pf_app_get_input.stop();
 
 		//i4_warning("Main Loop End...");
-	} while (!finished);
+	}
+	while (!finished);
 	uninit();
 	i4_current_app=0;
 }
@@ -148,13 +150,13 @@ void i4_application_class::refresh()
 
 // if an exact match is not found the closest width and height are return
 // Returns only modes matching the desired bitdepth
-i4_display_class::mode *i4_application_class::find_mode(w16 &width, w16 &height, w16 bits, int driver_id)
+i4_display_class::mode * i4_application_class::find_mode(w16 &width, w16 &height, w16 bits, int driver_id)
 {
 	sw32 closest_dist=0xfffffff;
 	w16 closest_width=0,
 		closest_height=0;
 
-	i4_display_class::mode *use=display->get_first_mode(driver_id);
+	i4_display_class::mode * use=display->get_first_mode(driver_id);
 
 	if (!use)
 	{
@@ -206,7 +208,8 @@ i4_display_class::mode *i4_application_class::find_mode(w16 &width, w16 &height,
 		}
 
 		use=display->get_next_mode();
-	} while (use);
+	}
+	while (use);
 
 	width=closest_width;
 	height=closest_height;
@@ -229,8 +232,8 @@ void i4_application_class::memory_init()
 }
 
 
-void i4_application_class::resource_init(char *resource_file,
-										 void *resource_buffer)
+void i4_application_class::resource_init(char * resource_file,
+										 void * resource_buffer)
 {
 	i4_string_man.load("resource/i4.res"); //This one is not really sensefull to be in a subdir
 
@@ -252,9 +255,9 @@ void i4_application_class::handle_no_displays()
 }
 
 
-static char *i4_display_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
+static char * i4_display_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
 
-i4_bool i4_application_class::get_display_name(char *name, int max_len)
+i4_bool i4_application_class::get_display_name(char * name, int max_len)
 {
 	return i4_get_registry(I4_REGISTRY_USER, i4_display_key, "display", name, max_len);
 }
@@ -263,7 +266,7 @@ void i4_application_class::display_init()
 {
 	char name[256];
 
-	i4_display_list_struct *d, *found=0, *best=0;
+	i4_display_list_struct * d, * found=0, * best=0;
 
 	if (get_display_name(name, 256))
 	{
@@ -331,7 +334,7 @@ void i4_application_class::display_init()
 
 	display=found->display;
 
-	i4_display_class::mode *use=find_mode(found_width, found_height, found_bits, found->driver_id);
+	i4_display_class::mode * use=find_mode(found_width, found_height, found_bits, found->driver_id);
 	if (!use)
 	{
 		i4_warning("Unable to find an exact match for mode %dx%d, using %dx%d instead\n",
@@ -435,6 +438,7 @@ void i4_language_extend(i4_str &string, i4_str::iterator where)
 	int lang=0;
 	//if it fails, we will just use the default, which is english
 	char buf[10];
+
 	buf[0]='_';
 	buf[1]=0;
 #ifdef _WINDOWS
@@ -464,9 +468,9 @@ void i4_language_extend(i4_str &string, i4_str::iterator where)
 #ifdef _WINDOWS
 
 i4_bool i4_get_registry(i4_registry_type type,
-						char *path,
-						char *key_name,
-						char *buffer, int buf_length)
+						char * path,
+						char * key_name,
+						char * buffer, int buf_length)
 {
 	HKEY key;
 
@@ -509,9 +513,9 @@ i4_bool i4_get_registry(i4_registry_type type,
 
 
 i4_bool i4_set_registry(i4_registry_type type,
-						char *path,
-						char *key_name,
-						char *buffer)
+						char * path,
+						char * key_name,
+						char * buffer)
 {
 	HKEY key;
 
@@ -535,9 +539,10 @@ i4_bool i4_set_registry(i4_registry_type type,
 	return i4_F;
 }
 
-void i4_set_int(char *key_name,int i)
+void i4_set_int(char * key_name,int i)
 {
 	HKEY key;
+
 	if (RegCreateKey(HKEY_CURRENT_USER,GOLGOTHA_REG_PATH,&key)==ERROR_SUCCESS)
 	{
 		RegSetValueEx(key,key_name,0,REG_DWORD,(unsigned char *)&i,4);
@@ -546,10 +551,11 @@ void i4_set_int(char *key_name,int i)
 	return;
 }
 
-int i4_get_int(char *key_name, int *retval)
+int i4_get_int(char * key_name, int * retval)
 {
 	HKEY key;
 	ULONG len=4;
+
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, //Moved from HKEY_LOCAL_MACHINE
 					 GOLGOTHA_REG_PATH, //Because of security problems
 					 0, //accessing HKEY_LOCAL_MACHINE if the user
@@ -597,9 +603,9 @@ int i4_get_int(char *key_name, int *retval)
  */
 
 i4_bool i4_get_registry(i4_registry_type type,
-						char *path,
-						char *key_name,
-						char *buffer, int buf_length)
+						char * path,
+						char * key_name,
+						char * buffer, int buf_length)
 {
 	if (!inifile)
 	{
@@ -611,9 +617,9 @@ i4_bool i4_get_registry(i4_registry_type type,
 }
 
 i4_bool i4_set_registry(i4_registry_type type,
-						char *path,
-						char *key_name,
-						char *buffer)
+						char * path,
+						char * key_name,
+						char * buffer)
 {
 	if (!inifile)
 	{
@@ -625,7 +631,7 @@ i4_bool i4_set_registry(i4_registry_type type,
 	return i4_T;
 }
 
-void i4_set_int(char *key_name, int i)
+void i4_set_int(char * key_name, int i)
 {
 	if (!inifile)
 	{
@@ -636,7 +642,7 @@ void i4_set_int(char *key_name, int i)
 	inifile->Save();
 }
 
-int i4_get_int(char *key_name, int *i)
+int i4_get_int(char * key_name, int * i)
 {
 	if (!inifile)
 	{

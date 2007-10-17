@@ -104,15 +104,17 @@ g1_octree_debug::g1_octree_debug() :
 g1_octree_debug::~g1_octree_debug()
 {
 	m_vLines.uninit();
+
 	m_vSelectedLines.uninit();
 }
 
-void g1_octree_debug::RenderDebugLines(i4_transform_class *transform)
+void g1_octree_debug::RenderDebugLines(i4_transform_class * transform)
 {
 
 
-	r1_render_api_class *api=g1_render.r_api;
+	r1_render_api_class * api=g1_render.r_api;
 	r1_shading_type shade=api->get_shade_mode();
+
 	api->set_shading_mode(R1_SHADE_DISABLED);
 	api->set_constant_color(0xFFFF00);
 	int i;
@@ -313,7 +315,7 @@ g1_octree::g1_octree() :
 }
 
 
-g1_octree::g1_octree(g1_quad_object_class *pWorld, i4_loader_class *fp)
+g1_octree::g1_octree(g1_quad_object_class * pWorld, i4_loader_class * fp)
 	: m_pQuadList(0,200)
 {
 	m_pWorld=pWorld;
@@ -412,6 +414,7 @@ void g1_octree::calculate_location_codes()
 void g1_octree::internal_calc_loc_codes(int cur_level)
 {
 	int nextLevel=cur_level-1;
+
 	if (IsSubDivided())
 	{
 		for (int i=0; i<8; i++)
@@ -450,7 +453,7 @@ void g1_octree::internal_calc_loc_codes(int cur_level)
 	}
 }
 
-g1_octree *g1_octree::GetNeighbourLeft(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourLeft(g1_octree * root)
 {
 
 	// No left neighbour if this is the left side of the octree.
@@ -472,7 +475,7 @@ g1_octree *g1_octree::GetNeighbourLeft(g1_octree *root)
 		// smallest possible left neighbour.
 		unsigned int nodeLevel, nextLevel;
 		unsigned int diff = xLocCode ^ xLeftLocCode;
-		g1_octree *left = this;
+		g1_octree * left = this;
 		nodeLevel = nextLevel = m_level;
 		OT_GET_COMMON_ANCESTOR(left, nextLevel, diff);
 
@@ -486,10 +489,10 @@ g1_octree *g1_octree::GetNeighbourLeft(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourLeftSameLevel(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourLeftSameLevel(g1_octree * root)
 {
 
-	g1_octree *node = this->GetNeighbourLeft(root);
+	g1_octree * node = this->GetNeighbourLeft(root);
 
 	if (node != NULL && (node->m_level != m_level))
 	{
@@ -500,7 +503,7 @@ g1_octree *g1_octree::GetNeighbourLeftSameLevel(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourRight(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourRight(g1_octree * root)
 {
 
 	w32 binaryCellSize = 1 << this->m_level;
@@ -525,7 +528,7 @@ g1_octree *g1_octree::GetNeighbourRight(g1_octree *root)
 		// smallest possible right neighbour.
 		unsigned int nodeLevel, nextLevel;
 		unsigned int diff = xLocCode ^ xRightLocCode;
-		g1_octree *right = this;
+		g1_octree * right = this;
 		nodeLevel = nextLevel = this->m_level;
 		OT_GET_COMMON_ANCESTOR(right, nextLevel, diff);
 
@@ -539,10 +542,10 @@ g1_octree *g1_octree::GetNeighbourRight(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourRightSameLevel(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourRightSameLevel(g1_octree * root)
 {
 
-	g1_octree *node = this->GetNeighbourRight(root);
+	g1_octree * node = this->GetNeighbourRight(root);
 
 	if (node != NULL && (node->m_level != this->m_level))
 	{
@@ -553,7 +556,7 @@ g1_octree *g1_octree::GetNeighbourRightSameLevel(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourFront(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourFront(g1_octree * root)
 {
 
 	// No front neighbour if this is the front side of the octree.
@@ -575,7 +578,7 @@ g1_octree *g1_octree::GetNeighbourFront(g1_octree *root)
 		// smallest possible front neighbour.
 		unsigned int nodeLevel, nextLevel;
 		unsigned int diff = yLocCode ^ yFrontLocCode;
-		g1_octree *front = this;
+		g1_octree * front = this;
 		nodeLevel = nextLevel = this->m_level;
 		OT_GET_COMMON_ANCESTOR(front, nextLevel, diff);
 
@@ -589,10 +592,10 @@ g1_octree *g1_octree::GetNeighbourFront(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourFrontSameLevel(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourFrontSameLevel(g1_octree * root)
 {
 
-	g1_octree *node = this->GetNeighbourFront(root);
+	g1_octree * node = this->GetNeighbourFront(root);
 
 	if (node != NULL && (node->m_level != this->m_level))
 	{
@@ -603,7 +606,7 @@ g1_octree *g1_octree::GetNeighbourFrontSameLevel(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourBack(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourBack(g1_octree * root)
 {
 
 	w32 binaryCellSize = 1 << this->m_level;
@@ -628,7 +631,7 @@ g1_octree *g1_octree::GetNeighbourBack(g1_octree *root)
 		// smallest possible rear neighbour.
 		unsigned int nodeLevel, nextLevel;
 		unsigned int diff = yLocCode ^ yBackLocCode;
-		g1_octree *rear = this;
+		g1_octree * rear = this;
 		nodeLevel = nextLevel = this->m_level;
 		OT_GET_COMMON_ANCESTOR(rear, nextLevel, diff);
 
@@ -642,10 +645,10 @@ g1_octree *g1_octree::GetNeighbourBack(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourBackSameLevel(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourBackSameLevel(g1_octree * root)
 {
 
-	g1_octree *node = this->GetNeighbourBack(root);
+	g1_octree * node = this->GetNeighbourBack(root);
 
 	if (node != NULL && (node->m_level != this->m_level))
 	{
@@ -656,7 +659,7 @@ g1_octree *g1_octree::GetNeighbourBackSameLevel(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourBottom(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourBottom(g1_octree * root)
 {
 
 	// No bottom neighbour if this is the bottom side of the octree.
@@ -678,7 +681,7 @@ g1_octree *g1_octree::GetNeighbourBottom(g1_octree *root)
 		// smallest possible bottom neighbour.
 		unsigned int nodeLevel, nextLevel;
 		unsigned int diff = zLocCode ^ zBottomLocCode;
-		g1_octree *bottom = this;
+		g1_octree * bottom = this;
 		nodeLevel = nextLevel = this->m_level;
 		OT_GET_COMMON_ANCESTOR(bottom, nextLevel, diff);
 
@@ -692,10 +695,10 @@ g1_octree *g1_octree::GetNeighbourBottom(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourBottomSameLevel(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourBottomSameLevel(g1_octree * root)
 {
 
-	g1_octree *node = this->GetNeighbourBottom(root);
+	g1_octree * node = this->GetNeighbourBottom(root);
 
 	if (node != NULL && (node->m_level != this->m_level))
 	{
@@ -706,7 +709,7 @@ g1_octree *g1_octree::GetNeighbourBottomSameLevel(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourTop(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourTop(g1_octree * root)
 {
 
 	unsigned int binaryCellSize = 1 << this->m_level;
@@ -731,7 +734,7 @@ g1_octree *g1_octree::GetNeighbourTop(g1_octree *root)
 		// smallest possible top neighbour.
 		unsigned int nodeLevel, nextLevel;
 		unsigned int diff = zLocCode ^ zTopLocCode;
-		g1_octree *top = this;
+		g1_octree * top = this;
 		nodeLevel = nextLevel = this->m_level;
 		OT_GET_COMMON_ANCESTOR(top, nextLevel, diff);
 
@@ -745,10 +748,10 @@ g1_octree *g1_octree::GetNeighbourTop(g1_octree *root)
 }
 
 
-g1_octree *g1_octree::GetNeighbourTopSameLevel(g1_octree *root)
+g1_octree * g1_octree::GetNeighbourTopSameLevel(g1_octree * root)
 {
 
-	g1_octree *node = this->GetNeighbourTop(root);
+	g1_octree * node = this->GetNeighbourTop(root);
 
 	if (node != NULL && (node->m_level != this->m_level))
 	{
@@ -794,12 +797,12 @@ i4_array<g1_octree *> g1_octree::GetNeighbourCells(g1_octree *root) {
 	unsigned int diff;
 
 	// Pointer to store common ancestors.
-	g1_octree *commonLeft=0;
-	g1_octree *commonRight=0;
-	g1_octree *commonFront=0;
-	g1_octree *commonBack=0;
-	g1_octree *commonBottom=0;
-	g1_octree *commonTop=0;
+	g1_octree * commonLeft=0;
+	g1_octree * commonRight=0;
+	g1_octree * commonFront=0;
+	g1_octree * commonBack=0;
+	g1_octree * commonBottom=0;
+	g1_octree * commonTop=0;
 
 	// There are 26 possible neighbours to locate. If a corresponding neighbour does
 	// not exist then references are temporarily set to *this and at the end to NULL.
@@ -1354,7 +1357,7 @@ i4_array<g1_octree *> g1_octree::GetNeighbourCellsSameLevel(g1_octree *root) {
 
 
 
-void g1_octree::save(i4_saver_class *fp)
+void g1_octree::save(i4_saver_class * fp)
 {
 	fp->write_format("4ffffff44",&m_bSubDivided,
 					 &m_xWidth,&m_yWidth,&m_zWidth,&m_vCenter.x,&m_vCenter.y,
@@ -1442,10 +1445,10 @@ g1_octree::~g1_octree()
 
 }
 
-g1_octree *g1_octree::Build(g1_quad_object_class *pWorld)
+g1_octree * g1_octree::Build(g1_quad_object_class * pWorld)
 {
 	g_Debug.Clear();
-	g1_octree *newtree=new g1_octree;
+	g1_octree * newtree=new g1_octree;
 	newtree->m_pWorld=pWorld;
 	newtree->GetSceneDimensions(pWorld);
 	int totaltrianglecount=newtree->GetSceneTriangleCount(pWorld);
@@ -1483,7 +1486,7 @@ g1_octree *g1_octree::Build(g1_quad_object_class *pWorld)
 /////
 //////////////////////////// GET SCENE TRIANGLE COUNT \\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-int g1_octree::GetSceneTriangleCount(g1_quad_object_class *pWorld)
+int g1_octree::GetSceneTriangleCount(g1_quad_object_class * pWorld)
 {
 	// This function is only called once, right before we create our first root node.
 	// Basically, we just go through all of the objects in our scene and add up their triangles.
@@ -1499,7 +1502,7 @@ int g1_octree::GetSceneTriangleCount(g1_quad_object_class *pWorld)
 /////
 ///////////////////////////////// OCTREE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-void g1_octree::GetSceneDimensions(g1_quad_object_class *pWorld)
+void g1_octree::GetSceneDimensions(g1_quad_object_class * pWorld)
 {
 
 	// Return from this function if we passed in bad data.  This used to be a check
@@ -1539,7 +1542,7 @@ void g1_octree::GetSceneDimensions(g1_quad_object_class *pWorld)
 	 */
 	numberOfVerts=pWorld->num_vertex;
 	//we assume that objects wich have a quadtree don't have animations
-	g1_vert_class *verts=pWorld->get_verts(0,0);
+	g1_vert_class * verts=pWorld->get_verts(0,0);
 	i4_float minx,maxx,miny,maxy,minz,maxz;
 	minz=miny=minx=10E30f;
 	maxz=maxy=maxx=-10E30f;
@@ -1708,10 +1711,10 @@ i4_3d_vector g1_octree::GetNewNodeCenter(i4_3d_vector vCenter,
 // TESTING CODE
 
 
-bool g1_octree::GetNeighbourCellsTest(g1_octree *ocTree)
+bool g1_octree::GetNeighbourCellsTest(g1_octree * ocTree)
 {
 
-	g1_octree *node1, *node2;
+	g1_octree * node1, * node2;
 
 	// 1st test:
 	//
@@ -1914,9 +1917,9 @@ bool g1_octree::GetNeighbourCellsTest(g1_octree *ocTree)
 }
 
 
-bool g1_octree::GetNeighbourCellsSameLevelTest(g1_octree *ocTree)
+bool g1_octree::GetNeighbourCellsSameLevelTest(g1_octree * ocTree)
 {
-	g1_octree *node1, *node2;
+	g1_octree * node1, * node2;
 
 	// 1st test:
 	//
@@ -2077,7 +2080,7 @@ bool g1_octree::GetNeighbourCellsSameLevelTest(g1_octree *ocTree)
 ///////////////////////////////// CREATE NEW NODE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
 
-i4_bool g1_octree::CreateNewNode(g1_quad_object_class *pWorld, tFaceList &pList, int triangleCount,
+i4_bool g1_octree::CreateNewNode(g1_quad_object_class * pWorld, tFaceList &pList, int triangleCount,
 								 i4_3d_vector vCenter,
 								 float xwidth,
 								 float ywidth,
@@ -2166,7 +2169,8 @@ i4_bool g1_octree::CreateNewNode(g1_quad_object_class *pWorld, tFaceList &pList,
 	// GetNewNodeCenter() knows which center point to pass back (TOP_LEFT_FRONT, etc..)
 
 	// Allocate a new node for this octree
-	g1_octree *nextree=new g1_octree;
+	g1_octree * nextree=new g1_octree;
+
 	nextree->m_pWorld=pWorld;
 	m_pOctreeNodes[nodeID] = nextree;
 
@@ -2226,7 +2230,7 @@ i4_bool g1_octree::CreateNewNode(g1_quad_object_class *pWorld, tFaceList &pList,
 /////
 ///////////////////////////////// CREATE NODE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
+i4_bool g1_octree::CreateNode(g1_quad_object_class * pWorld, tFaceList * pList,
 							  int numberOfTriangles, i4_3d_vector vCenter,
 							  float xwidth,
 							  float ywidth,
@@ -2277,7 +2281,7 @@ i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
 		// Go through every object in the current partition of the world
 
 		// Store a point to the current object
-		g1_quad_object_class *pObject = pWorld;
+		g1_quad_object_class * pObject = pWorld;
 
 		// Now, we have a face list for each object, for every child node.
 		// We need to then check every triangle in this current object
@@ -2319,7 +2323,7 @@ i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
 				continue;
 			}
 			totalclassified++;
-			g1_quad_class *q=&pObject->quad[j];
+			g1_quad_class * q=&pObject->quad[j];
 			int nodeor=0;
 			// Check every vertice in the current triangle to see if it's inside a child node
 			for(int whichVertex = 0; whichVertex < 4; whichVertex++)
@@ -2327,7 +2331,7 @@ i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
 				// Store the current vertex to be checked against all the child nodes
 				//i4_3d_vector vPoint = pObject->pVerts[pObject->pFaces[j].vertIndex[whichVertex]];
 				i4_3d_vector vPoint;
-				g1_vert_class *vert=pObject->get_verts(0,0);
+				g1_vert_class * vert=pObject->get_verts(0,0);
 				w16 vertex=q->vertex_ref[whichVertex];
 				if (vertex==0xffff)
 				{
@@ -2699,7 +2703,7 @@ i4_bool g1_octree::CreateNode(g1_quad_object_class *pWorld, tFaceList *pList,
 /////
 //////////////////////////////// DRAW OCTREE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads, int depth)
+i4_bool g1_octree::DrawOctree(i4_transform_class * transform, g1_quadlist &quads, int depth)
 {
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
@@ -2784,7 +2788,7 @@ i4_bool g1_octree::DrawOctree(i4_transform_class *transform, g1_quadlist &quads,
 		for (int poly=0; poly<m_pQuadList.size(); poly++)
 		{
 			int rpoly=m_pQuadList[poly];
-			g1_quad_class *pq=&m_pWorld->quad[rpoly];
+			g1_quad_class * pq=&m_pWorld->quad[rpoly];
 			quads.add(pq);
 			//if (pq->get_flags(g1_quad_class::DRAWN))
 			//	continue;
@@ -2803,6 +2807,7 @@ i4_bool g1_octree::PointInCube(i4_3d_vector p) const
 {
 
 	i4_float xw=m_xWidth/2;
+
 	if ((p.x<m_vCenter.x-xw)||(p.x>m_vCenter.x+xw))
 	{
 		return false;
@@ -2823,17 +2828,18 @@ i4_bool g1_octree::PointInCube(i4_3d_vector p) const
 i4_bool g1_octree::RayShorterThanCubeSize(i4_3d_vector ray) const
 {
 	i4_bool ret;
+
 	ret=m_xWidth<ray.x && m_yWidth<ray.y && m_zWidth <ray.z;
 	return ret;
 }
 
-g1_octree *g1_octree::GetLeafAt(const i4_3d_vector &where) const
+g1_octree * g1_octree::GetLeafAt(const i4_3d_vector &where) const
 {
 	if (!this)
 	{
 		return 0;
 	}
-	g1_octree *node=NULL;
+	g1_octree * node=NULL;
 	i4_bool inside=i4_F;
 	inside=PointInCube(where);
 	if (!inside)
@@ -3026,6 +3032,7 @@ i4_bool g1_octree::CheckCollision(const i4_3d_vector &start, const i4_3d_vector 
 	i4_bool frontside=true;
 	i4_bool inside;
 	i4_bool hit=false;
+
 	side_in=-1;
 	side_out=-1;
 	int i,u,v,j;
@@ -3156,10 +3163,11 @@ i4_bool g1_octree::CheckCollision(const i4_3d_vector &start, const i4_3d_vector 
 	return hit;
 }
 
-g1_octree *g1_octree::GetIntersectedLeaf(const i4_3d_vector &start, const i4_3d_vector &ray)
+g1_octree * g1_octree::GetIntersectedLeaf(const i4_3d_vector &start, const i4_3d_vector &ray)
 {
-	g1_octree *ret=NULL;
+	g1_octree * ret=NULL;
 	int sidein=-1,sideout=-1;
+
 	if(CheckCollision(start,ray,sidein,sideout))
 	{
 		if (isLeaf())
@@ -3178,7 +3186,7 @@ g1_octree *g1_octree::GetIntersectedLeaf(const i4_3d_vector &start, const i4_3d_
 	return 0;
 }
 
-i4_bool g1_octree::ListContainsNode(i4_array<g1_octree *> &list, g1_octree *node)
+i4_bool g1_octree::ListContainsNode(i4_array<g1_octree *> &list, g1_octree * node)
 {
 	// This only looks like an stl-type iterator. It is an ordinary int
 	i4_array<g1_octree *>::iterator it=list.begin();
@@ -3195,9 +3203,9 @@ i4_bool g1_octree::ListContainsNode(i4_array<g1_octree *> &list, g1_octree *node
 i4_array<g1_octree *> g1_octree::GetIntersectedNodes(const i4_3d_vector &start, const i4_3d_vector &ray) {
 	i4_array<g1_octree *> nodes(30,30);
 	i4_stack<g1_octree *> stack(30);
-	g1_octree *node1=NULL;
-	g1_octree *node1a=NULL, *node2a=NULL;
-	g1_octree *newnode=NULL;
+	g1_octree * node1=NULL;
+	g1_octree * node1a=NULL, * node2a=NULL;
+	g1_octree * newnode=NULL;
 	int frontside=-1;
 	int backside=-1;
 	node1=GetIntersectedLeaf(start,ray);
@@ -3272,14 +3280,14 @@ i4_array<g1_octree *> g1_octree::GetIntersectedNodes(const i4_3d_vector &start, 
 	g_Debug.ClearSelected();
 	for (int i=0; i<nodes.size(); i++)
 	{
-		g1_octree *n=nodes[i];
+		g1_octree * n=nodes[i];
 		g_Debug.AddSelectedRectangle(n->m_vCenter,n->m_xWidth,
 									 n->m_yWidth,n->m_zWidth);
 	}
 	return nodes;
 }
 
-g1_octree *g1_octree::GetNeighbour(int side, g1_octree *root)
+g1_octree * g1_octree::GetNeighbour(int side, g1_octree * root)
 {
 	switch (side)
 	{

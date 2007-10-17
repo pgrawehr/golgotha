@@ -45,11 +45,11 @@ void init_layer2(void)
 		{ 21, 1, 22, 23, 0, 24, 25, 2, 26 }
 	};
 	int i,j,k,l,len;
-	real *table;
+	real * table;
 	static int tablen[3] = {
 		3, 5, 9
 	};
-	static int *itable,*tables[3] = {
+	static int * itable,* tables[3] = {
 		grp_3tab, grp_5tab, grp_9tab
 	};
 
@@ -89,15 +89,15 @@ void init_layer2(void)
 }
 
 
-void II_step_one(unsigned int *bit_alloc,int *scale,struct frame *fr)
+void II_step_one(unsigned int * bit_alloc,int * scale,struct frame * fr)
 {
 	int stereo = fr->stereo-1;
 	int sblimit = fr->II_sblimit;
 	int jsbound = fr->jsbound;
 	int sblimit2 = fr->II_sblimit<<stereo;
-	struct al_table *alloc1 = fr->alloc;
+	struct al_table * alloc1 = fr->alloc;
 	int i;
-	unsigned int *scfsi,*bita;
+	unsigned int * scfsi,* bita;
 	int sc,step;
 	static unsigned int scfsi_buf[64];
 
@@ -176,14 +176,14 @@ void II_step_one(unsigned int *bit_alloc,int *scale,struct frame *fr)
 
 }
 
-void II_step_two(unsigned int *bit_alloc,real fraction[2][4][SBLIMIT],int *scale,struct frame *fr,int x1)
+void II_step_two(unsigned int * bit_alloc,real fraction[2][4][SBLIMIT],int * scale,struct frame * fr,int x1)
 {
 	int i,j,k,ba;
 	int stereo = fr->stereo;
 	int sblimit = fr->II_sblimit;
 	int jsbound = fr->jsbound;
-	struct al_table *alloc2,*alloc1 = fr->alloc;
-	unsigned int *bita=bit_alloc;
+	struct al_table * alloc2,* alloc1 = fr->alloc;
+	unsigned int * bita=bit_alloc;
 	int d1,step;
 
 	for (i=0; i<jsbound; i++,alloc1+=(1<<step))
@@ -203,10 +203,10 @@ void II_step_two(unsigned int *bit_alloc,real fraction[2][4][SBLIMIT],int *scale
 				}
 				else
 				{
-					static int *table[] = {
+					static int * table[] = {
 						0,0,0,grp_3tab,0,grp_5tab,0,0,0,grp_9tab
 					};
-					unsigned int idx,*tab,m=scale[x1];
+					unsigned int idx,* tab,m=scale[x1];
 					idx = (unsigned int) getbits(k);
 					tab = (unsigned int *) (table[d1] + idx + idx + idx);
 					fraction[j][0][i] = muls[*tab++][m];
@@ -243,10 +243,10 @@ void II_step_two(unsigned int *bit_alloc,real fraction[2][4][SBLIMIT],int *scale
 			}
 			else
 			{
-				static int *table[] = {
+				static int * table[] = {
 					0,0,0,grp_3tab,0,grp_5tab,0,0,0,grp_9tab
 				};
-				unsigned int idx,*tab,m1,m2;
+				unsigned int idx,* tab,m1,m2;
 				m1 = scale[x1];
 				m2 = scale[x1+3];
 				idx = (unsigned int) getbits(k);
@@ -290,7 +290,7 @@ void II_step_two(unsigned int *bit_alloc,real fraction[2][4][SBLIMIT],int *scale
 
 }
 
-int do_layer2(struct frame *fr,int outmode,struct audio_info_struct *ai)
+int do_layer2(struct frame * fr,int outmode,struct audio_info_struct * ai)
 {
 	int clip=0;
 	int i,j;

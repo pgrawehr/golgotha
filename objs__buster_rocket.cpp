@@ -50,7 +50,7 @@ g1_nuke_def("nuke_missile");
 
 
 g1_buster_rocket_class::g1_buster_rocket_class(g1_object_type id,
-											   g1_loader_class *fp)
+											   g1_loader_class * fp)
 	: g1_guided_missile_class(id,fp)
 {
 }
@@ -60,7 +60,8 @@ static r1_texture_ref smoke_ref("smoke_particle");
 void g1_buster_rocket_class::add_smoke()
 {
 	g1_particle_emitter_params p;
-	g1_particle_emitter_class *emitter;
+	g1_particle_emitter_class * emitter;
+
 	p.defaults();
 	p.start_size=0.05f;
 	p.grow_speed=0.01f;
@@ -87,7 +88,7 @@ void g1_buster_rocket_class::update_smoke()
 		return;
 	}
 
-	g1_particle_emitter_class *st=(g1_particle_emitter_class *) smoke_trail()->value();
+	g1_particle_emitter_class * st=(g1_particle_emitter_class *) smoke_trail()->value();
 	if (st)
 	{
 		st->move(lx,ly,lh);
@@ -103,7 +104,7 @@ void g1_buster_rocket_class::delete_smoke()
 		return;
 	}
 
-	g1_particle_emitter_class *st=(g1_particle_emitter_class *) smoke_trail()->value();
+	g1_particle_emitter_class * st=(g1_particle_emitter_class *) smoke_trail()->value();
 	if (st)
 	{
 		st->unoccupy_location();

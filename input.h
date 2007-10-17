@@ -29,7 +29,7 @@ class i4_key_matchup_class;
 class g1_input_class :
 	public i4_event_handler_class
 {
-	i4_key_matchup_class *matchup;
+	i4_key_matchup_class * matchup;
 public:
 	enum in_type
 	{
@@ -89,7 +89,7 @@ public:
 	int mouse_scroll_flags;
 	i4_bool key_pressed;
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	void que_keys(i4_time_class cur_time);
 
@@ -99,7 +99,7 @@ public:
 	}
 
 	void acknowledge(); // called by game after it has examined all the key states
-					   // g1_input then changes all PRESSED_AND_RELEASED to NOT_PRESSED
+						// g1_input then changes all PRESSED_AND_RELEASED to NOT_PRESSED
 
 	void init();
 
@@ -191,7 +191,7 @@ public:
 	}
 
 	void uninit();
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"g1_input");
 	}

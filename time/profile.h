@@ -51,14 +51,14 @@ extern int i4_profile_on, i4_profile_stack_top;
 class i4_profile_class
 {
 public:
-	static i4_profile_class *list;
-	i4_profile_class *next;
+	static i4_profile_class * list;
+	i4_profile_class * next;
 
 	int active;
-	char *name;
+	char * name;
 	w64 total_time;
 
-	i4_profile_class(char *debug_name);
+	i4_profile_class(char * debug_name);
 
 	void called_start();   // not inlined to save program space
 	void called_stop();
@@ -91,7 +91,7 @@ void i4_profile_clear();
 void i4_profile_report_start();  // marks the start of a profile
 
 // print a report to about timing since the last clear or program start
-void i4_profile_report(char *filename);
+void i4_profile_report(char * filename);
 
 #else
 
@@ -103,7 +103,7 @@ void i4_profile_report_start()
 {
 	;
 }
-void i4_profile_report(char *filename)
+void i4_profile_report(char * filename)
 {
 	;
 }
@@ -111,7 +111,7 @@ void i4_profile_report(char *filename)
 class i4_profile_class
 {
 public:
-	i4_profile_class(char *debug_name)
+	i4_profile_class(char * debug_name)
 	{
 	}                                    // make these inline so they go away
 	void start()

@@ -16,24 +16,25 @@
 
 
 dx5_common_class dx5_common;
-IDirectDraw2 *dx5_common_class::ddraw;
-IDirectDrawSurface3 *dx5_common_class::primary_surface, *dx5_common_class::back_surface,
-*dx5_common_class::front_surface;
+IDirectDraw2 * dx5_common_class::ddraw;
+IDirectDrawSurface3 * dx5_common_class::primary_surface, * dx5_common_class::back_surface,
+* dx5_common_class::front_surface;
 DDPIXELFORMAT dx5_common_class::dd_fmt_565, dx5_common_class::dd_fmt_1555;
 i4_pixel_format dx5_common_class::i4_fmt_565, dx5_common_class::i4_fmt_1555;
 LPDIRECTDRAWCLIPPER dx5_common_class::lpddclipper;
 
 
 
-IDirectDrawSurface3 *dx5_common_class::create_surface(dx5_surface_type type,
-													  int width, int height,
-													  int flags,
-													  DDPIXELFORMAT *format)
+IDirectDrawSurface3 * dx5_common_class::create_surface(dx5_surface_type type,
+													   int width, int height,
+													   int flags,
+													   DDPIXELFORMAT * format)
 {
 	HRESULT result;
 	DDSURFACEDESC ddsd;
-	IDirectDrawSurface *surface=0;
-	IDirectDrawSurface3 *surface3=0;
+	IDirectDrawSurface * surface=0;
+	IDirectDrawSurface3 * surface3=0;
+
 	//if (width<30||height<30) flags=((flags&(~DX5_VRAM))|DX5_SYSTEM_RAM);
 	//Creates new texcache, fails to load textures
 	memset(&ddsd,0,sizeof(DDSURFACEDESC));
@@ -112,7 +113,7 @@ IDirectDrawSurface3 *dx5_common_class::create_surface(dx5_surface_type type,
 
 	if (surface)
 	{
-		surface->QueryInterface(IID_IDirectDrawSurface3,(void **)&surface3);
+		surface->QueryInterface(IID_IDirectDrawSurface3,(void * *)&surface3);
 		surface->Release();
 
 		if (flags & DX5_CLEAR)
@@ -310,21 +311,22 @@ dx5_common_class::dx5_common_class()
 
 
 //******************************* VIDEO MODE ENUMERATION ***************************
-static dx5_mode *dx_mode_list;
+static dx5_mode * dx_mode_list;
 
 HRESULT WINAPI dx5_vidmode_callback(LPDDSURFACEDESC lpDDSurfaceDesc,LPVOID lpContext)
 {
 	//Wir werden hier alle Modi bekommen. Filtere alle Modi raus,
 	//Die weniger als 16 Bit Farbtiefe liefern.
 	//Zur Zeit noch alle Modi dalassen, mal sehen wie das wird.
-	dx5_mode *m=new dx5_mode(dx_mode_list);
+	dx5_mode * m=new dx5_mode(dx_mode_list);
+
 	dx_mode_list=m;
 	m->desc=*lpDDSurfaceDesc;
 
 	return DDENUMRET_OK;
 }
 
-dx5_mode *dx5_common_class::get_mode_list(IDirectDraw2 *dd)
+dx5_mode * dx5_common_class::get_mode_list(IDirectDraw2 * dd)
 {
 	dx_mode_list=0;
 
@@ -351,11 +353,11 @@ dx5_mode *dx5_common_class::get_mode_list(IDirectDraw2 *dd)
 	return dx_mode_list;
 }
 
-void dx5_common_class::free_mode_list(dx5_mode *list)
+void dx5_common_class::free_mode_list(dx5_mode * list)
 {
 	while (list)
 	{
-		dx5_mode *p=list;
+		dx5_mode * p=list;
 		list=list->next;
 		delete p;
 	}
@@ -364,12 +366,13 @@ void dx5_common_class::free_mode_list(dx5_mode *list)
 
 
 //************************** DRIVER ENUMERATION AND CREATION ************************
-static dx5_driver *dx_driver_list=0;
+static dx5_driver * dx_driver_list=0;
 
 BOOL WINAPI dd_device_callback(LPGUID lpGuid, LPSTR lpDeviceDesc,
 							   LPSTR lpDriverName, LPVOID lpUserArg, HMONITOR hm)
 {
-	dx5_driver *d=new dx5_driver(dx_driver_list);
+	dx5_driver * d=new dx5_driver(dx_driver_list);
+
 	dx_driver_list=d;
 	d->lpGuid = lpGuid;
 	strcpy(d->DriverName, lpDriverName);
@@ -377,7 +380,7 @@ BOOL WINAPI dd_device_callback(LPGUID lpGuid, LPSTR lpDeviceDesc,
 	return DDENUMRET_OK;
 }
 
-dx5_driver *dx5_common_class::get_driver_list()
+dx5_driver * dx5_common_class::get_driver_list()
 {
 	//if (dx_driver_list) free_driver_list(dx_driver_list);//This function can be called more than once.
 //but its the callers responsability to delete the list after use.
@@ -393,22 +396,23 @@ dx5_driver *dx5_common_class::get_driver_list()
 	return dx_driver_list;
 }
 
-void dx5_common_class::free_driver_list(dx5_driver *list)
+void dx5_common_class::free_driver_list(dx5_driver * list)
 {
 	while (list)
 	{
-		dx5_driver *n=list;
+		dx5_driver * n=list;
 		list=list->next;
 		delete n;
 	}
 }
 
-static IDirectDraw *dx5_ddraw;
+static IDirectDraw * dx5_ddraw;
 
 BOOL WINAPI dd_create_callback(LPGUID lpGuid,   LPSTR lpDeviceDescription,
 							   LPSTR lpDriverName, LPVOID lpUserArg, HMONITOR hm)
 {
-	char *desired_driver = (char *)lpUserArg;
+	char * desired_driver = (char *)lpUserArg;
+
 	//PG: Changed this as I'm not shure wheter driver name is guaranteed to
 	//be unique even when using multiple displays.
 	//Using lpGuid instead, which certainly IS unique.
@@ -445,7 +449,7 @@ BOOL WINAPI dd_create_callback(LPGUID lpGuid,   LPSTR lpDeviceDescription,
 	return DDENUMRET_OK;
 }
 
-IDirectDraw2 *dx5_common_class::initialize_driver(dx5_driver *driver)
+IDirectDraw2 * dx5_common_class::initialize_driver(dx5_driver * driver)
 {
 	if (!driver)
 	{
@@ -472,8 +476,8 @@ IDirectDraw2 *dx5_common_class::initialize_driver(dx5_driver *driver)
 	}
 	;
 
-	IDirectDraw2 *dd=0;
-	if (!i4_dx5_check(dx5_ddraw->QueryInterface(IID_IDirectDraw2,(void **)&dd)))
+	IDirectDraw2 * dd=0;
+	if (!i4_dx5_check(dx5_ddraw->QueryInterface(IID_IDirectDraw2,(void * *)&dd)))
 	{
 		dx5_ddraw->Release();
 		return 0;
@@ -543,15 +547,15 @@ HRESULT __stdcall d3d_device_callback(LPGUID lpGuid,    LPSTR lpDeviceDescriptio
 }
 
 
-dx5_d3d_info *dx5_common_class::get_driver_hardware_info(IDirectDraw2 *dd, w32 mode)
+dx5_d3d_info * dx5_common_class::get_driver_hardware_info(IDirectDraw2 * dd, w32 mode)
 {
 	dx5_d3d.lpGuid=0;
 	dx5_d3d.lpSoftDeviceName=0;
 	dx5_d3d.lpSoftGuid=0;
 
 
-	IDirect3D2 *d3d;
-	if (!i4_dx5_check(dd->QueryInterface(IID_IDirect3D2,(void **)&d3d)))
+	IDirect3D2 * d3d;
+	if (!i4_dx5_check(dd->QueryInterface(IID_IDirect3D2,(void * *)&d3d)))
 	{
 		return 0;
 	}
@@ -593,8 +597,9 @@ dx5_d3d_info *dx5_common_class::get_driver_hardware_info(IDirectDraw2 *dd, w32 m
 void i4_dx5_image_class::put_pixel(i4_coord x, i4_coord y, w32 color)
 {
 	//char* a;
-	w16 *a16;
-	w8 *a8;
+	w16 * a16;
+	w8 * a8;
+
 	//w32 b;
 	//char *d;
 	switch(pal->source.pixel_depth)
@@ -715,7 +720,7 @@ i4_dx5_image_class::i4_dx5_image_class(w16 _w, w16 _h, w32 flags)
    	}
  */
 
-void i4_dx5_image_class::put_part(i4_image_class *to, i4_coord x, i4_coord y, i4_coord x1,
+void i4_dx5_image_class::put_part(i4_image_class * to, i4_coord x, i4_coord y, i4_coord x1,
 								  i4_coord y1, i4_coord x2, i4_coord y2, i4_draw_context_class &context)
 {
 	i4_image_class::put_part(to,x,y,x1,y1,x2,y2,context);
@@ -725,6 +730,7 @@ void i4_dx5_image_class::put_part(i4_image_class *to, i4_coord x, i4_coord y, i4
 void i4_dx5_image_class::lock()
 {
 	DDSURFACEDESC ddsd;
+
 	memset(&ddsd, 0, sizeof(ddsd));
 	ddsd.dwSize=sizeof(ddsd);
 
@@ -759,7 +765,7 @@ i4_dx5_image_class::~i4_dx5_image_class()
 	}
 }
 
-IDirectDrawSurface3 *dx5_common_class::get_surface(i4_image_class *im)
+IDirectDrawSurface3 * dx5_common_class::get_surface(i4_image_class * im)
 {
 	return ((i4_dx5_image_class *)im)->surface;
 
@@ -767,7 +773,7 @@ IDirectDrawSurface3 *dx5_common_class::get_surface(i4_image_class *im)
 
 
 
-i4_image_class *dx5_common_class::create_image(int w, int h, w32 surface_flags)
+i4_image_class * dx5_common_class::create_image(int w, int h, w32 surface_flags)
 {
 	return new i4_dx5_image_class(w,h,surface_flags);
 }

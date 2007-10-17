@@ -31,10 +31,10 @@ extern span_tri_info tri_stack;
 extern span_edge active_list_head;
 extern span_edge active_list_tail;
 
-extern span_edge *compare_here;
-extern span_edge *temp_edge,*t1;
+extern span_edge * compare_here;
+extern span_edge * temp_edge,* t1;
 
-inline void amd3d_sort_in_new_edges(span_edge *first)
+inline void amd3d_sort_in_new_edges(span_edge * first)
 {
 	compare_here = &active_list_head;
 
@@ -70,16 +70,16 @@ inline void amd3d_sort_in_new_edges(span_edge *first)
 	}
 }
 
-extern span_entry *next_new_span;
-extern span_tri_info *cur_stack;
-extern span_tri_info *temp_stack;
-extern span_tri_info *e_tri;
+extern span_entry * next_new_span;
+extern span_tri_info * cur_stack;
+extern span_tri_info * temp_stack;
+extern span_tri_info * e_tri;
 extern i4_bool everything_transparent;
 extern sw32 span_buff_x, span_buff_y,span_length;
-extern w16 *cur_scanline;
+extern w16 * cur_scanline;
 
-extern span_edge **new_edge_list;
-extern span_edge **remove_edge_list;
+extern span_edge * * new_edge_list;
+extern span_edge * * remove_edge_list;
 
 extern float fx_fy[2];
 
@@ -92,7 +92,7 @@ extern i4_bool on_top;
 #pragma warning(disable : 4035)
 #endif
 
-inline w32 greater_than_compare(float *arg1, float *arg2)
+inline w32 greater_than_compare(float * arg1, float * arg2)
 {
 	_asm
 	{
@@ -112,7 +112,7 @@ inline w32 greater_than_compare(float *arg1, float *arg2)
 #pragma warning(default : 4035)
 #endif
 
-inline void amd3d_depth_at_pixel(tri_gradients *grads, float *result)
+inline void amd3d_depth_at_pixel(tri_gradients * grads, float * result)
 {
 	_asm
 	{
@@ -166,7 +166,7 @@ inline void fx_float(sw32 x)
 
 i4_bool amd3d_build_triangle_span_lists()
 {
-	register span_edge *e;
+	register span_edge * e;
 
 	new_edge_list    = new_edges;
 	remove_edge_list = remove_edges;
@@ -356,7 +356,8 @@ i4_bool amd3d_build_triangle_span_lists()
 							amd3d_depth_at_pixel(&cur_stack->grads, &cur_stack->cur_span_start_ooz);
 							// = cur_stack->grads.oozat00 + (cur_stack->grads.doozdy * fy) + (cur_stack->grads.doozdx * fx);
 
-						} while (cur_stack->type > SPAN_TRI_SEE_THRU);
+						}
+						while (cur_stack->type > SPAN_TRI_SEE_THRU);
 					}
 				}
 				else
@@ -367,6 +368,7 @@ i4_bool amd3d_build_triangle_span_lists()
 
 					while (temp_stack->type>SPAN_TRI_SEE_THRU)
 						temp_stack = temp_stack->last_stack;
+
 
 
 					//did we make it past everything in the stack?
@@ -423,7 +425,8 @@ i4_bool amd3d_build_triangle_span_lists()
 
 								amd3d_depth_at_pixel(&temp_stack->grads, &temp_stack->cur_span_start_ooz);
 
-							} while (temp_stack->type > SPAN_TRI_SEE_THRU);
+							}
+							while (temp_stack->type > SPAN_TRI_SEE_THRU);
 						}
 					}
 				}
@@ -462,6 +465,7 @@ i4_bool amd3d_build_triangle_span_lists()
 
 				while (temp_edge->x < compare_here->last_active->x)
 					compare_here = compare_here->last_active;
+
 
 
 				//get temp_edge out of its current spot

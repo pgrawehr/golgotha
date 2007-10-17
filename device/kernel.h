@@ -60,15 +60,15 @@ protected:
 
 	struct response_type
 	{
-		i4_event_handler_class *who;
-		response_type *next;
-		response_type(i4_event_handler_class *who, response_type *next) :
+		i4_event_handler_class * who;
+		response_type * next;
+		response_type(i4_event_handler_class * who, response_type * next) :
 			who(who),
 			next(next) {
 		}
-	} *response[LAST_TYPE];
+	} * response[LAST_TYPE];
 
-	i4_device_class *device_list;
+	i4_device_class * device_list;
 	i4_stack<i4_window_class *> modal_stack;
 	i4_bool can_send_idle;
 	w32 milliseconds_before_idle_events_sent;
@@ -81,9 +81,9 @@ public:
 	{
 		return I4_INIT_TYPE_PRIORITY;
 	};                                                    //init just after memory manager
-	virtual void set_modal(i4_window_class *ref); //usually called with this as arg
+	virtual void set_modal(i4_window_class * ref); //usually called with this as arg
 	virtual i4_window_class *modal(); //returns top of modal stack (0 if no modal window active)
-	virtual void end_modal(i4_window_class *ref); //removes current modal reference from top of stack
+	virtual void end_modal(i4_window_class * ref); //removes current modal reference from top of stack
 	//ref is needed for stack management purposes only
 
 	int events_sent;  // app uses this. if no events are sent and app is idle, then app sleeps
@@ -92,13 +92,13 @@ public:
 
 	virtual i4_bool process_events();            // returns true if an event was dispatched
 
-	void send_event(i4_event_handler_class *send_to, i4_event *ev);
+	void send_event(i4_event_handler_class * send_to, i4_event * ev);
 
-	void send(i4_event_reaction_class *r); // r includes event and who to send to
+	void send(i4_event_reaction_class * r); // r includes event and who to send to
 
 	// call this if you want to deque any pending events for yourself
 	// this is called automatically by event_handler's desturctor ref_count!=0
-	void deque_events(i4_event_handler_class *for_who);
+	void deque_events(i4_event_handler_class * for_who);
 
 	// this used used mainly by the 3ds tool because the process_events()
 	// never gets a chance to be called
@@ -110,17 +110,17 @@ public:
 	void not_idle();
 
 	// this will add you to a list to receive events of this type
-	virtual void request_events(i4_event_handler_class *for_who, w32 event_types);
+	virtual void request_events(i4_event_handler_class * for_who, w32 event_types);
 
 	// you will no longer receive events you requested previously
-	virtual void unrequest_events(i4_event_handler_class *for_who, w32 event_types);
+	virtual void unrequest_events(i4_event_handler_class * for_who, w32 event_types);
 
-	void add_device(i4_device_class *device);     // returns 16 bits device id
-	void remove_device(i4_device_class *device);
+	void add_device(i4_device_class * device);     // returns 16 bits device id
+	void remove_device(i4_device_class * device);
 	i4_kernel_device_class();
 
-	void broadcast_event_type(i4_event *ev, w32 event_type);
-	void delete_handler(i4_event_handler_class *handler);
+	void broadcast_event_type(i4_event * ev, w32 event_type);
+	void delete_handler(i4_event_handler_class * handler);
 private:
 	void flush_handlers();
 } ;

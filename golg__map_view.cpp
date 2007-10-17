@@ -32,7 +32,7 @@
 #include "image_man.h"
 
 class g1_radar_view_class;
-static g1_radar_view_class *g_radar_list=0;
+static g1_radar_view_class * g_radar_list=0;
 
 
 void g1_calc_map_area(int max_width, int max_height, int &x1, int &y1, int &x2, int &y2)
@@ -134,7 +134,7 @@ struct g1_radar_params_struct
 static float radar_darkness_multiply;
 
 
-static inline int get_mat_color(g1_map_cell_class *c, i4_bool no_fog)
+static inline int get_mat_color(g1_map_cell_class * c, i4_bool no_fog)
 {
 	if (!no_fog && (c->flags & g1_map_cell_class::FOGGED))
 	{
@@ -149,7 +149,7 @@ static inline int get_mat_color(g1_map_cell_class *c, i4_bool no_fog)
 
 	if (mat)
 	{
-		r1_texture_manager_class *tman=g1_render.r_api->get_tmanager();
+		r1_texture_manager_class * tman=g1_render.r_api->get_tmanager();
 		return tman->average_texture_color(mat,0);
 	}
 	else
@@ -173,8 +173,8 @@ static void calc_tables()
 	}
 	tables_calced=1;
 
-	const i4_pal *pal=i4_current_app->get_display()->get_palette();
-	const i4_pixel_format *dst_fmt=&pal->source;
+	const i4_pal * pal=i4_current_app->get_display()->get_palette();
+	const i4_pixel_format * dst_fmt=&pal->source;
 	//I4_ASSERT(dst_fmt->pixel_depth==I4_16BIT,"The radar map currently only supports 16 Bit. You may ignore this message, but the radar will display garbage.");  // 16bit only code below
 
 	b_shift=dst_fmt->blue_shift + (dst_fmt->blue_bits-5);
@@ -184,7 +184,7 @@ static void calc_tables()
 	r_shift=dst_fmt->red_shift + (dst_fmt->red_bits-5);
 
 
-	w8 *t=interp_table;
+	w8 * t=interp_table;
 	for (int c1=0; c1<32; c1++)
 	{
 		for (int c2=0; c2<32; c2++)
@@ -239,9 +239,10 @@ w8 g1_light_555(w8 color_0_31, int light_0_31)
 	return light_table[(color_0_31<<5) | light_0_31];
 }
 
-void g1_draw_strategy_border(i4_image_class *im)
+void g1_draw_strategy_border(i4_image_class * im)
 {
 	int mx1,my1,mx2,my2;
+
 	g1_calc_map_area(im->width(), im->height(), mx1,my1,mx2,my2);
 	i4_draw_context_class context(0,0,im->width()-1, im->height()-1);
 	context.clip.remove_area(mx1,my1,mx2,my2);
@@ -250,9 +251,10 @@ void g1_draw_strategy_border(i4_image_class *im)
 	while (y>0) y-=2;
 
 
+
 	w32 color;
 
-	g1_player_piece_class *com=g1_player_man.get_local()->get_commander();
+	g1_player_piece_class * com=g1_player_man.get_local()->get_commander();
 	if (com)
 	{
 		color=g1_get_upgrade_color(com->upgrade_level_when_built);
@@ -273,16 +275,17 @@ void g1_draw_strategy_border(i4_image_class *im)
 
 
 
-void g1_render_map_area(i4_image_class *im,
-						g1_radar_params_struct *p,
+void g1_render_map_area(i4_image_class * im,
+						g1_radar_params_struct * p,
 						int gx1, int gy1, int gx2, int gy2,
-						i4_status_class *status,
+						i4_status_class * status,
 						i4_bool interlaced,
 						i4_bool edit_mode)
 {
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	int map_width=map->width(), map_height=map->height();
+
 	if (gx1>0)
 	{
 		gx1-=1;
@@ -301,7 +304,7 @@ void g1_render_map_area(i4_image_class *im,
 		gx2+=1;
 	}
 
-	const i4_pal *pal=i4_current_app->get_display()->get_palette();
+	const i4_pal * pal=i4_current_app->get_display()->get_palette();
 	calc_tables();
 
 	float map_x, map_y, map_x_step, map_y_step;
@@ -342,19 +345,19 @@ void g1_render_map_area(i4_image_class *im,
 		// assuming 16bit
 		if (im->get_pal()->source.pixel_depth==16)
 		{
-			w16 *i1 = (w16 *)(((w8 *)im->data) + im->bpl*y + i_im_x1*2);
+			w16 * i1 = (w16 *)(((w8 *)im->data) + im->bpl*y + i_im_x1*2);
 
 			for (x=i_im_x1; x<=i_im_x2; x++)
 			{
 				int i_map_x=i4_f_to_i(map_x), i_map_y=i4_f_to_i(map_y);
-				g1_map_cell_class *cell1   = map->cell(i_map_x, i_map_y);
+				g1_map_cell_class * cell1   = map->cell(i_map_x, i_map_y);
 				w32 color;
 
 				if (i_map_x<map_width-1 && i_map_y<map_height-1)
 				{
 					int ratio=i4_f_to_i((map_x-i_map_x)*32.0f);
 
-					g1_map_vertex_class *v=map->vertex(i_map_x, i_map_y);
+					g1_map_vertex_class * v=map->vertex(i_map_x, i_map_y);
 
 					int lv1=v[0].recalc_light_sum(i_map_x, i_map_y);
 
@@ -415,7 +418,7 @@ void g1_render_map_area(i4_image_class *im,
 				}
 				else
 				{
-					g1_map_vertex_class *v1=map->vertex(i_map_x, i_map_y);
+					g1_map_vertex_class * v1=map->vertex(i_map_x, i_map_y);
 					int lv1=v1[0].recalc_light_sum(i_map_x, i_map_y);
 
 					lv1>>=3;
@@ -459,14 +462,14 @@ void g1_render_map_area(i4_image_class *im,
 			for (x=i_im_x1; x<=i_im_x2; x++)
 			{
 				int i_map_x=i4_f_to_i(map_x), i_map_y=i4_f_to_i(map_y);
-				g1_map_cell_class *cell1   = map->cell(i_map_x, i_map_y);
+				g1_map_cell_class * cell1   = map->cell(i_map_x, i_map_y);
 				w32 color;
 
 				if (i_map_x<map_width-1 && i_map_y<map_height-1)
 				{
 					int ratio=i4_f_to_i((map_x-i_map_x)*256.0f);
 
-					g1_map_vertex_class *v=map->vertex(i_map_x, i_map_y);
+					g1_map_vertex_class * v=map->vertex(i_map_x, i_map_y);
 
 					int lv1=v[0].recalc_light_sum(i_map_x, i_map_y);
 
@@ -527,7 +530,7 @@ void g1_render_map_area(i4_image_class *im,
 				}
 				else
 				{
-					g1_map_vertex_class *v1=map->vertex(i_map_x, i_map_y);
+					g1_map_vertex_class * v1=map->vertex(i_map_x, i_map_y);
 					int lv1=v1[0].recalc_light_sum(i_map_x, i_map_y);
 
 					//lv1>>=3;
@@ -584,7 +587,8 @@ i4_image_class *g1_create_map_image(int max_width, int max_height,
 									i4_bool interlace, i4_bool supress_status,
 									i4_bool edit_mode)
 {
-	i4_status_class *status=0;
+	i4_status_class * status=0;
+
 	if (!supress_status) //don't show status if in resize or reparenting of window
 	//Would GPF
 	{
@@ -592,8 +596,8 @@ i4_image_class *g1_create_map_image(int max_width, int max_height,
 		status->update(0.01f);
 	}
 
-	const i4_pal *pal=i4_current_app->get_display()->get_palette();
-	i4_image_class *im = i4_create_image(max_width, max_height, pal);
+	const i4_pal * pal=i4_current_app->get_display()->get_palette();
+	i4_image_class * im = i4_create_image(max_width, max_height, pal);
 	i4_draw_context_class context(0,0, max_width-1, max_height-1);
 	im->clear(0, context);
 
@@ -651,8 +655,8 @@ class g1_radar_view_class :
 	public i4_parent_window_class
 {
 public:
-	g1_radar_view_class *next;
-	i4_image_class *background;
+	g1_radar_view_class * next;
+	i4_image_class * background;
 	i4_bool grabbing;
 	g1_radar_params_struct setup;
 	int flags;
@@ -721,7 +725,7 @@ public:
 		}
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (flags & G1_RADAR_NO_MAP_EVENTS)
 		{
@@ -862,7 +866,7 @@ public:
 
 
 	void draw_all_paths(g1_team_type team,
-						g1_path_object_class *po,
+						g1_path_object_class * po,
 						w32 color,
 						i4_draw_context_class &context)
 	{
@@ -875,7 +879,7 @@ public:
 				int t=po->total_links(team);
 				for (int k=0; k<t; k++)
 				{
-					g1_path_object_class *p2=po->get_link(team,k);
+					g1_path_object_class * p2=po->get_link(team,k);
 					if (p2)
 					{
 						float x1,y1,x2,y2;
@@ -897,7 +901,7 @@ public:
 
 
 	void draw_recent_path(g1_team_type team,
-						  g1_path_object_class *po,
+						  g1_path_object_class * po,
 						  w32 color,
 						  i4_draw_context_class &context)
 	{
@@ -907,7 +911,7 @@ public:
 			if ((flags & G1_RADAR_DRAW_ALL_PATHS) ||
 				(g1_cells[ix+iy*g1_map_width].flags & g1_map_cell_class::FOGGED)==0)
 			{
-				g1_path_object_class *p2=po->get_recent_link(team, 0);
+				g1_path_object_class * p2=po->get_recent_link(team, 0);
 				if (p2)
 				{
 					float x1,y1,x2,y2;
@@ -958,11 +962,11 @@ public:
 			{
 				alldrawn=i4_T;
 				color=0xc8ff00; //trafsim roads are kinda yellow.
-				g1_object_class *olist[G1_MAX_OBJECTS];
+				g1_object_class * olist[G1_MAX_OBJECTS];
 				int t=g1_get_map()->make_object_list(olist,G1_MAX_OBJECTS),i;
 				for (i=0; i<t; i++)
 				{
-					g1_path_object_class *po=g1_path_object_class::cast(olist[i]);
+					g1_path_object_class * po=g1_path_object_class::cast(olist[i]);
 					if (po)
 					{
 						//quite an overkill. but does it work?
@@ -971,7 +975,7 @@ public:
 						int t=po->total_links(team);
 						for (int k=0; k<t; k++)
 						{
-							g1_path_object_class *p2=po->get_link(team,k);
+							g1_path_object_class * p2=po->get_link(team,k);
 							if (p2)
 							{
 								float x1,y1,x2,y2;
@@ -990,12 +994,12 @@ public:
 			}
 			if ((flags & G1_RADAR_DRAW_UNHIDDEN_PATHS) && !alldrawn)
 			{
-				g1_factory_class *f;
+				g1_factory_class * f;
 				for (f=g1_factory_list.first(); f; f=f->next)
 				{
 					if (g1_player_man.get(f->player_num)->get_team()==my_team)
 					{
-						g1_path_object_class *start=f->get_start();
+						g1_path_object_class * start=f->get_start();
 						if (start)
 						{
 
@@ -1011,12 +1015,12 @@ public:
 			}
 			if ((flags & G1_RADAR_DRAW_UNHIDDEN_PATHS) && alldrawn)
 			{
-				g1_factory_class *f;
+				g1_factory_class * f;
 				for (f=g1_factory_list.first(); f; f=f->next)
 				{
 					if (g1_player_man.get(f->player_num)->get_team()==my_team)
 					{
-						g1_path_object_class *start=f->get_start();
+						g1_path_object_class * start=f->get_start();
 						if (start)
 						{
 
@@ -1039,13 +1043,13 @@ public:
 
 			for (i=0; i<G1_MAX_PLAYERS; i++)
 			{
-				g1_player_info_class *info=g1_player_man.get(i);
+				g1_player_info_class * info=g1_player_man.get(i);
 				int t=info->owned_objects_size();
 				color=info->map_player_color;
 
 				for (int j=0; j<t; j++)
 				{
-					g1_object_class *p=info->get_owned_object(j);
+					g1_object_class * p=info->get_owned_object(j);
 
 					if (!p || p->radar_type==G1_RADAR_NONE)
 					{
@@ -1056,12 +1060,12 @@ public:
 						int cx=i4_f_to_i(p->x);
 						int cy=i4_f_to_i(p->y);
 
-						if ((g1_cells[map_width *cy + cx].flags & g1_map_cell_class::FOGGED)==0)
+						if ((g1_cells[map_width * cy + cx].flags & g1_map_cell_class::FOGGED)==0)
 						{
 							setup.game_2_mouse(p->x, p->y, ix,iy);
 
 
-							i4_image_class *i=p->radar_image->tinted_icons[p->player_num];
+							i4_image_class * i=p->radar_image->tinted_icons[p->player_num];
 							int ix1=i4_f_to_i(ix)-i->width()/2;
 							int iy1=i4_f_to_i(iy)-i->height()/2;
 
@@ -1073,7 +1077,7 @@ public:
 						int cx=i4_f_to_i(p->x);
 						int cy=i4_f_to_i(p->y);
 
-						if ((g1_cells[map_width *cy + cx].flags & g1_map_cell_class::FOGGED)==0)
+						if ((g1_cells[map_width * cy + cx].flags & g1_map_cell_class::FOGGED)==0)
 						{
 							setup.game_2_mouse(p->x, p->y, ix,iy);
 
@@ -1088,7 +1092,7 @@ public:
 
 				} //for (all owned objects)
 			} // for (all players)
-			 //      draw_paths();
+			  //      draw_paths();
 		}
 		else
 		{
@@ -1124,15 +1128,16 @@ public:
 		}
 		else
 		{
-			g1_radar_view_class *p=g_radar_list;
+			g1_radar_view_class * p=g_radar_list;
 			while (p->next!=this)
 				p=p->next;
+
 
 			p->next=next;
 		}
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"radar_view");
 	}
@@ -1144,7 +1149,8 @@ public:
 
 void g1_radar_recalculate_backgrounds()
 {
-	g1_radar_view_class *v=g_radar_list;
+	g1_radar_view_class * v=g_radar_list;
+
 	while (v!=NULL)
 	{
 		v->recalc_background();
@@ -1159,7 +1165,8 @@ void g1_radar_looking_at(float x1, float y1, float x2, float y2)
 
 i4_parent_window_class *g1_create_radar_view(int max_w, int max_h, int _flags)
 {
-	g1_radar_view_class *rv=new g1_radar_view_class(max_w, max_h, _flags);
+	g1_radar_view_class * rv=new g1_radar_view_class(max_w, max_h, _flags);
+
 	return rv;
 }
 
@@ -1167,7 +1174,7 @@ i4_parent_window_class *g1_create_radar_view(int max_w, int max_h, int _flags)
 
 void g1_radar_refresh(int game_x1, int game_y1, int game_x2, int game_y2)
 {
-	for (g1_radar_view_class *v=g_radar_list; v; v=v->next)
+	for (g1_radar_view_class * v=g_radar_list; v; v=v->next)
 	{
 		v->refresh_area(game_x1, game_y1, game_x2, game_y2);
 	}
@@ -1175,7 +1182,7 @@ void g1_radar_refresh(int game_x1, int game_y1, int game_x2, int game_y2)
 
 void g1_radar_update()
 {
-	for (g1_radar_view_class *v=g_radar_list; v; v=v->next)
+	for (g1_radar_view_class * v=g_radar_list; v; v=v->next)
 	{
 		v->request_redraw(i4_F);
 	}
@@ -1187,9 +1194,10 @@ void g1_unfog_radius(const i4_3d_vector &v, float r)
 	int fog_rect_x1=10000, fog_rect_y1=10000,
 		fog_rect_x2=-1, fog_rect_y2=-1, ix,iy;
 
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	int x_left   = i4_f_to_i(v.x-r);
+
 	if (x_left<0)
 	{
 		x_left=0;
@@ -1212,7 +1220,7 @@ void g1_unfog_radius(const i4_3d_vector &v, float r)
 
 	for (iy=y_top;  iy<=y_bottom; iy++)
 	{
-		g1_map_cell_class *c=map->cell(x_left,iy);
+		g1_map_cell_class * c=map->cell(x_left,iy);
 		for (ix=x_left; ix<=x_right;  ix++)
 		{
 			if (c->flags & g1_map_cell_class::FOGGED)

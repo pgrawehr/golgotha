@@ -52,7 +52,7 @@ HRESULT WINAPI texture_enum(LPDDSURFACEDESC lpddsd, LPVOID _regular_format)
 		lpddsd->ddpfPixelFormat.dwRGBBitCount==16)
 	{
 		//find the best non-alpha surface format
-		i4_pixel_format *regular_format = (i4_pixel_format *)_regular_format;
+		i4_pixel_format * regular_format = (i4_pixel_format *)_regular_format;
 
 		sw32 total_new_bits = lpddsd->ddpfPixelFormat.dwRBitMask +
 							  lpddsd->ddpfPixelFormat.dwGBitMask +
@@ -108,9 +108,9 @@ static i4_bool decomp_dir_loaded=i4_F;
    	struct _decomp_entry *next;
    	}DECOMP_ENTRY;
  */
-static i4_array<w32> *decomp_entries=0;
+static i4_array<w32> * decomp_entries=0;
 
-r1_dx5_texture_class::r1_dx5_texture_class(const i4_pal *pal)
+r1_dx5_texture_class::r1_dx5_texture_class(const i4_pal * pal)
 	: r1_texture_manager_class(pal),
 	  finished_array(16,16)
 {
@@ -393,6 +393,7 @@ void r1_dx5_texture_class::uninit()
 IDirectDrawSurface3 *dx5_make_surface(sw32 w, sw32 h, w8 flags)
 {
 	DDSURFACEDESC ddsd;
+
 	memset(&ddsd,0,sizeof(DDSURFACEDESC));
 	ddsd.dwSize = sizeof(DDSURFACEDESC);
 	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
@@ -460,8 +461,8 @@ IDirectDrawSurface3 *dx5_make_surface(sw32 w, sw32 h, w8 flags)
 		ddsd.ddpfPixelFormat=dd_fmt_565;
 	}
 
-	IDirectDrawSurface *return_surface  = 0;
-	IDirectDrawSurface3 *return_surface3 = 0;
+	IDirectDrawSurface * return_surface  = 0;
+	IDirectDrawSurface3 * return_surface3 = 0;
 	DDSCAPS memcaps;
 	memcaps.dwCaps=DDSCAPS_TEXTURE|DDSCAPS_3DDEVICE;
 	DWORD memtotal,memfree;
@@ -500,7 +501,7 @@ IDirectDrawSurface3 *dx5_make_surface(sw32 w, sw32 h, w8 flags)
 		}
 	}
 
-	res = return_surface->QueryInterface(IID_IDirectDrawSurface3,(void **)&return_surface3);
+	res = return_surface->QueryInterface(IID_IDirectDrawSurface3,(void * *)&return_surface3);
 
 	if (!i4_dx5_check(res))
 	{
@@ -522,7 +523,7 @@ IDirectDrawSurface3 *dx5_make_surface(sw32 w, sw32 h, w8 flags)
 
 
 
-r1_dx5_texture_class::used_node *r1_dx5_texture_class::make_surfaces_for_load(
+r1_dx5_texture_class::used_node * r1_dx5_texture_class::make_surfaces_for_load(
 	IDirectDrawSurface3 *&vram_surface3,
 	IDirectDrawSurface3 *&system_surface3,
 	r1_mip_load_info *&load_info,
@@ -530,7 +531,7 @@ r1_dx5_texture_class::used_node *r1_dx5_texture_class::make_surfaces_for_load(
 	w8 node_alloc_flags)
 {
 	pf_dx5_make_surfaces.start();
-	r1_miplevel_t *mip = load_info->dest_mip;
+	r1_miplevel_t * mip = load_info->dest_mip;
 
 	sw32 need_size = actual_w*actual_h*2;
 
@@ -589,7 +590,7 @@ r1_dx5_texture_class::used_node *r1_dx5_texture_class::make_surfaces_for_load(
 		}
 	}
 
-	used_node *new_used = 0;
+	used_node * new_used = 0;
 
 	if (vram_surface3)
 	{
@@ -597,7 +598,7 @@ r1_dx5_texture_class::used_node *r1_dx5_texture_class::make_surfaces_for_load(
 	}
 	else
 	{
-		used_node *u = (used_node *)tex_no_heap->alloc_from_used(mip->width*mip->height*2,node_alloc_flags);
+		used_node * u = (used_node *)tex_no_heap->alloc_from_used(mip->width*mip->height*2,node_alloc_flags);
 
 		if (!u)
 		{
@@ -677,7 +678,7 @@ void reset_decompressed_cache(void)
    	}
  */
 
-int w32_sorter(const w32 *a,const w32 *b)
+int w32_sorter(const w32 * a,const w32 * b)
 {
 	if (*a<*b)
 	{
@@ -717,7 +718,7 @@ w32 r1_get_file_id(const i4_const_str &fname);
    	}
  */
 
-i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
+i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info * load_info)
 {
 	if (no_of_textures_loaded > 0)
 	{
@@ -730,12 +731,12 @@ i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 
 	pf_dx5_install_vram.start();
 
-	IDirectDrawSurface3 *vram_surface   = 0;
-	IDirectDrawSurface3 *system_surface = 0;
+	IDirectDrawSurface3 * vram_surface   = 0;
+	IDirectDrawSurface3 * system_surface = 0;
 
 	sw32 i, /*j,*/ actual_w,actual_h;
 
-	r1_miplevel_t *mip = load_info->dest_mip;
+	r1_miplevel_t * mip = load_info->dest_mip;
 
 	for (actual_w = 1; actual_w < mip->width;  actual_w*=2)
 	{
@@ -774,7 +775,7 @@ i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 		tex_by=4;
 	}
 
-	used_node *new_used = make_surfaces_for_load(vram_surface,system_surface,load_info,actual_w,actual_h);
+	used_node * new_used = make_surfaces_for_load(vram_surface,system_surface,load_info,actual_w,actual_h);
 
 	if (!new_used)
 	{
@@ -789,7 +790,7 @@ i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 	// Lock the surface so we can get the memory address where it is
 	system_surface->Lock(0, &ddsd, DDLOCK_WAIT | DDLOCK_WRITEONLY | DDLOCK_NOSYSLOCK, 0);
 
-	w8 *texture_ptr = (w8 *)ddsd.lpSurface;
+	w8 * texture_ptr = (w8 *)ddsd.lpSurface;
 	sw32 bpl         = mip->width*tex_by;
 
 	i4_bool segmented_load = i4_F;
@@ -802,7 +803,7 @@ i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 		{
 			//expand 24 bit to 32 bit.
 			w32 co,r,b,g;
-			w32 *tex=(w32 *)texture_ptr;
+			w32 * tex=(w32 *)texture_ptr;
 			for (i=0; i<mip->width*mip->height; i++)
 			{
 				//Now THAT's gona be slow...
@@ -817,8 +818,8 @@ i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 		if ((load_info->flags&R1_MIPFLAGS_SRC24) && (load_info->flags&R1_MIPFLAGS_FORCE16))
 		{
 			w32 co,r,g,b;
-			w16 *tex=(w16 *)texture_ptr;
-			const i4_pal *p=i4_current_app->get_display()->get_palette(); //the 24bit pal
+			w16 * tex=(w16 *)texture_ptr;
+			const i4_pal * p=i4_current_app->get_display()->get_palette(); //the 24bit pal
 			for (i=0; i<mip->width*mip->height; i++)
 			{
 				b=load_info->src_file->read_8();
@@ -831,8 +832,8 @@ i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 		if ((load_info->flags&R1_MIPFLAGS_SRC32) && (load_info->flags&R1_MIPFLAGS_FORCE16))
 		{
 			w32 co,r,g,b;
-			w16 *tex=(w16 *)texture_ptr;
-			const i4_pal *p=i4_current_app->get_display()->get_palette(); //the 32bit pal
+			w16 * tex=(w16 *)texture_ptr;
+			const i4_pal * p=i4_current_app->get_display()->get_palette(); //the 32bit pal
 			for (i=0; i<mip->width*mip->height; i++)
 			{
 				load_info->src_file->read_8(); //dummy
@@ -859,11 +860,11 @@ i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 	}
 	else
 	{
-		i4_const_str *fn = r1_texture_id_to_filename(mip->entry->id,r1_get_decompressed_dir());
+		i4_const_str * fn = r1_texture_id_to_filename(mip->entry->id,r1_get_decompressed_dir());
 		//We're going to read from an external file. See it if exists.
 		//if not, we load directly from the jpg file
 
-		i4_file_class *fp = NULL;
+		i4_file_class * fp = NULL;
 
 		//if (tex_by==2 && file_exists(mip->entry->id))//gtx files are for 16 bit only!
 		//	fp=i4_open(*fn,I4_READ);
@@ -919,10 +920,10 @@ i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 	new_used->async_fp       = 0;
 	new_used->data           = 0;
 
-	IDirect3DTexture2 *system_texture, *vram_texture;
+	IDirect3DTexture2 * system_texture, * vram_texture;
 
-	system_surface->QueryInterface(IID_IDirect3DTexture2,(void **)&system_texture);
-	vram_surface->QueryInterface(IID_IDirect3DTexture2,(void **)&vram_texture);
+	system_surface->QueryInterface(IID_IDirect3DTexture2,(void * *)&system_texture);
+	vram_surface->QueryInterface(IID_IDirect3DTexture2,(void * *)&vram_texture);
 
 	//pf_dx5_texture_load.start();
 	if (!i4_dx5_check(vram_texture->Load(system_texture)))
@@ -954,9 +955,9 @@ i4_bool r1_dx5_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
 
 
 
-void dx5_async_callback(w32 count, void *context)
+void dx5_async_callback(w32 count, void * context)
 {
-	r1_dx5_texture_class::used_node *u = (r1_dx5_texture_class::used_node *)context;
+	r1_dx5_texture_class::used_node * u = (r1_dx5_texture_class::used_node *)context;
 
 	/*if (u->async_fp) //need this again to get size of file after load
 	   {
@@ -969,13 +970,13 @@ void dx5_async_callback(w32 count, void *context)
 	u->self_tman->async_load_finished(u);
 };
 
-void r1_dx5_texture_class::async_load_finished(used_node *u)
+void r1_dx5_texture_class::async_load_finished(used_node * u)
 {
 	if (u->mip->flags & R1_MIPLEVEL_LOAD_JPG)
 	{
-		i4_ram_file_class *rp=new i4_ram_file_class(u->data,u->async_fp->size());
+		i4_ram_file_class * rp=new i4_ram_file_class(u->data,u->async_fp->size());
 		//i4_thread_sleep(10);
-		i4_image_class *im=i4_load_image(rp,NULL);
+		i4_image_class * im=i4_load_image(rp,NULL);
 		delete rp;
 		delete u->data;
 		delete u->async_fp;
@@ -998,7 +999,7 @@ void r1_dx5_texture_class::async_load_finished(used_node *u)
 
 		array_lock.lock();
 
-		r1_image_list_struct *ils=image_list.add();
+		r1_image_list_struct * ils=image_list.add();
 		ils->init();
 		ils->usage=30;
 		ils->image=im;
@@ -1016,7 +1017,7 @@ void r1_dx5_texture_class::async_load_finished(used_node *u)
 }
 
 
-i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info *load_info)
+i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info * load_info)
 {
 	if (bytes_loaded > 540000 || no_of_textures_loaded > 16)
 	{
@@ -1029,12 +1030,12 @@ i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info *load_info)
 
 	pf_dx5_install_vram.start();
 
-	IDirectDrawSurface3 *vram_surface   = 0;
-	IDirectDrawSurface3 *system_surface = 0;
+	IDirectDrawSurface3 * vram_surface   = 0;
+	IDirectDrawSurface3 * system_surface = 0;
 
 	sw32 /*i,j,*/ actual_w,actual_h;
 
-	r1_miplevel_t *mip = load_info->dest_mip;
+	r1_miplevel_t * mip = load_info->dest_mip;
 
 	//for (actual_w = 1; actual_w < mip->width;  actual_w*=2); // these need to be power of 2
 	//for (actual_h = 1; actual_h < mip->height; actual_h*=2);
@@ -1076,7 +1077,7 @@ i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info *load_info)
 		tex_by=4;
 	}
 
-	used_node *new_used = make_surfaces_for_load(vram_surface,system_surface,load_info,actual_w,actual_h,R1_TEX_NO_HEAP_DONT_LIST);
+	used_node * new_used = make_surfaces_for_load(vram_surface,system_surface,load_info,actual_w,actual_h,R1_TEX_NO_HEAP_DONT_LIST);
 
 	if (!new_used)
 	{
@@ -1128,8 +1129,8 @@ i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info *load_info)
 	else
 	{
 		//Most of this is obsolete, we don't use any gtx files at all any more.
-		i4_str *fn = r1_texture_id_to_filename(mip->entry->id,r1_get_decompressed_dir());
-		i4_file_class *fp = NULL; //check wheter the exists in g_decompressed folder
+		i4_str * fn = r1_texture_id_to_filename(mip->entry->id,r1_get_decompressed_dir());
+		i4_file_class * fp = NULL; //check wheter the exists in g_decompressed folder
 		//this is currently true for tga-files, as they where decompressed on texture cache creation
 
 		//if (tex_by==2 && file_exists(mip->entry->id))//gtx only for 16 bit, otherwise directly load tga or jpg
@@ -1218,7 +1219,7 @@ i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info *load_info)
 				}
 			}
 			array_lock.unlock();
-			i4_const_str *n=NULL;
+			i4_const_str * n=NULL;
 			n=r1_get_texture_name(mip->entry->id);
 			char buf[100],buf2[150];
 			i4_os_string(*n,buf,100);
@@ -1281,10 +1282,10 @@ i4_bool r1_dx5_texture_class::async_mip_load(r1_mip_load_info *load_info)
 	return i4_T;
 }
 
-void r1_dx5_texture_class::free_mip(void *vram_handle)
+void r1_dx5_texture_class::free_mip(void * vram_handle)
 {
 	pf_dx5_free_vram.start();
-	used_node *u = (used_node *)vram_handle;
+	used_node * u = (used_node *)vram_handle;
 	/*if ((u->system_surface)<(void *)0x01000)
 	   	{
 	   	if(u->system_surface!=0) i4_warning("Decoding failed due to corrupt texture cache. Delete tex_cache.dat and restart the maxtool.");
@@ -1331,7 +1332,7 @@ void r1_dx5_texture_class::select_texture(r1_local_texture_handle_type handle,
 {
 	pf_dx5_select_texture.start();
 
-	used_node *u = (used_node *)handle;
+	used_node * u = (used_node *)handle;
 
 	if (r1_dx5_class_instance.d3d_device->SetRenderState(D3DRENDERSTATE_TEXTUREHANDLE,
 														 u->texture_handle) != D3D_OK)
@@ -1345,9 +1346,10 @@ void r1_dx5_texture_class::select_texture(r1_local_texture_handle_type handle,
 	pf_dx5_select_texture.stop();
 }
 
-i4_pal *r1_dx5_texture_class::MatchingPal(LPDDSURFACEDESC ddsd)
+i4_pal * r1_dx5_texture_class::MatchingPal(LPDDSURFACEDESC ddsd)
 {
-	i4_pal *p=0;
+	i4_pal * p=0;
+
 	//We assume here that if the source format is 16 bit, 16 was
 	//allowed as texture format and the coresponding palettes contain
 	//16 bit formats.
@@ -1374,11 +1376,12 @@ i4_pal *r1_dx5_texture_class::MatchingPal(LPDDSURFACEDESC ddsd)
 	return i4_pal_man.register_pal(&alpha32_format);
 }
 
-i4_image_class *r1_dx5_texture_class::get_texture_image(r1_texture_handle handle,
-														int frame_counter, int desired_width)
+i4_image_class * r1_dx5_texture_class::get_texture_image(r1_texture_handle handle,
+														 int frame_counter, int desired_width)
 {
 	sw32 act_w=0,act_h=0;
 	w32 tid=registered_tnames[handle].id;
+
 	for (int i=0; i<memory_images.size(); i++)
 	{
 		if (memory_images[i].id==tid)
@@ -1386,17 +1389,17 @@ i4_image_class *r1_dx5_texture_class::get_texture_image(r1_texture_handle handle
 			return memory_images[i].image->copy();
 		}                                         //directly return the stored image
 	}
-	r1_miplevel_t *best=get_texture(handle,frame_counter,
-									desired_width<0 ? max_texture_dimention : desired_width,act_w,act_h);
+	r1_miplevel_t * best=get_texture(handle,frame_counter,
+									 desired_width<0 ? max_texture_dimention : desired_width,act_w,act_h);
 	//float bla1,bla2;
 	//select_texture(best->vram_handle,bla1,bla2);
-	used_node *u=(used_node *) best->vram_handle;
+	used_node * u=(used_node *) best->vram_handle;
 	DDSURFACEDESC ddsd;
 	memset(&ddsd,0,sizeof(DDSURFACEDESC));
 	ddsd.dwSize=sizeof(DDSURFACEDESC);
 	u->vram_surface->GetSurfaceDesc(&ddsd);
-	i4_image_class *im=0;
-	const i4_pal *pal_to_use=MatchingPal(&ddsd);
+	i4_image_class * im=0;
+	const i4_pal * pal_to_use=MatchingPal(&ddsd);
 	w32 tex_by=2;
 	if (pal_to_use->source.pixel_depth==I4_24BIT)
 	{
@@ -1414,9 +1417,10 @@ i4_image_class *r1_dx5_texture_class::get_texture_image(r1_texture_handle handle
 }
 
 //this makes only sense for memory images, others could be reloaded any time.
-int r1_dx5_texture_class::set_texture_image(r1_texture_handle handle, i4_image_class *im)
+int r1_dx5_texture_class::set_texture_image(r1_texture_handle handle, i4_image_class * im)
 {
 	w32 tid=registered_tnames[handle].id;
+
 	//i4_image_class *memim;
 	for (int i=0; i<memory_images.size(); i++)
 	{
@@ -1426,13 +1430,13 @@ int r1_dx5_texture_class::set_texture_image(r1_texture_handle handle, i4_image_c
 			memory_images[i].image=im->copy(); //replace saved memory image with new copy
 
 			sw32 act_w=0,act_h=0;
-			r1_miplevel_t *mip=get_texture(handle,0,max_texture_dimention,act_w,act_h);
-			used_node *u=(used_node *) mip->vram_handle;
+			r1_miplevel_t * mip=get_texture(handle,0,max_texture_dimention,act_w,act_h);
+			used_node * u=(used_node *) mip->vram_handle;
 			DDSURFACEDESC ddsd;
 			memset(&ddsd,0,sizeof(DDSURFACEDESC));
 			ddsd.dwSize=sizeof(DDSURFACEDESC);
 			u->vram_surface->GetSurfaceDesc(&ddsd);
-			const i4_pal *pal_to_use=MatchingPal(&ddsd);
+			const i4_pal * pal_to_use=MatchingPal(&ddsd);
 			w32 tex_by=2;
 			if (pal_to_use->source.pixel_depth==I4_24BIT)
 			{
@@ -1452,14 +1456,14 @@ int r1_dx5_texture_class::set_texture_image(r1_texture_handle handle, i4_image_c
 	return i4_F;
 }
 
-r1_miplevel_t *r1_dx5_texture_class::get_texture(r1_texture_handle handle,
-												 w32 frame_counter,
-												 sw32 desired_width,
-												 sw32 &w, sw32 &h)
+r1_miplevel_t * r1_dx5_texture_class::get_texture(r1_texture_handle handle,
+												  w32 frame_counter,
+												  sw32 desired_width,
+												  sw32 &w, sw32 &h)
 {
-	r1_miplevel_t *mip = r1_texture_manager_class::get_texture(handle,frame_counter,desired_width,w,h);
+	r1_miplevel_t * mip = r1_texture_manager_class::get_texture(handle,frame_counter,desired_width,w,h);
 
-	used_node *u = (used_node *)mip->vram_handle;
+	used_node * u = (used_node *)mip->vram_handle;
 
 	tex_no_heap->update_usage((r1_tex_no_heap_used_node *)u);
 
@@ -1475,7 +1479,7 @@ void r1_dx5_texture_class::next_frame()
 
 	for (i=0; i<finished_array.size(); i++)
 	{
-		used_node *u = finished_array[i];
+		used_node * u = finished_array[i];
 
 		//this officially puts it in vram
 		u->mip->vram_handle  = u;
@@ -1515,7 +1519,7 @@ void r1_dx5_texture_class::next_frame()
 
 		//sw32 bpl = u->mip->width*2;
 
-		w8 *texture_ptr = (w8 *)ddsd.lpSurface;
+		w8 * texture_ptr = (w8 *)ddsd.lpSurface;
 		//memset(texture_ptr,55,u->mip->width*u->mip->height*tex_by);
 
 
@@ -1528,12 +1532,12 @@ void r1_dx5_texture_class::next_frame()
 		   }
 		   }
 		   else */
-		i4_image_class *im=NULL;
+		i4_image_class * im=NULL;
 		if (u->mip->flags&R1_MIPLEVEL_LOAD_JPG)
 		{
 			//Case 1: Just loaded a JPG - File to u->data
 			//this case is obsolete, we decompressed them in the callback already
-			i4_ram_file_class *rp=new i4_ram_file_class(u->data,u->async_fp->size());
+			i4_ram_file_class * rp=new i4_ram_file_class(u->data,u->async_fp->size());
 			//i4_bool must_free_mem=i4_largest_free_block()<0x0100000;
 			//Gee: Deleting entries here causes internal error!
 			//The problem is that we have no way of knowing which requests
@@ -1551,7 +1555,7 @@ void r1_dx5_texture_class::next_frame()
 			im=i4_load_image(rp,NULL);
 			pf_jpg_texture_decompress.stop();
 			delete rp;
-			r1_image_list_struct *ils=image_list.add();
+			r1_image_list_struct * ils=image_list.add();
 			ils->init();
 			ils->usage=30;
 			ils->image=im;
@@ -1603,10 +1607,10 @@ void r1_dx5_texture_class::next_frame()
 		}
 		u->data = 0;
 
-		IDirect3DTexture2 *vram_texture;
+		IDirect3DTexture2 * vram_texture;
 
 		//u->system_surface->QueryInterface(IID_IDirect3DTexture2,(void **)&system_texture);
-		u->vram_surface->QueryInterface(IID_IDirect3DTexture2,(void **)&vram_texture);
+		u->vram_surface->QueryInterface(IID_IDirect3DTexture2,(void * *)&vram_texture);
 
 		//pf_dx5_texture_load.start();
 		//if (!i4_dx5_check(vram_texture->Load(system_texture)))

@@ -44,7 +44,7 @@ pf_parent_draw_prepare("window::parent_prepare");
 
 #include <stdlib.h>
 
-i4_parent_window_class *i4_window_class::root_window()
+i4_parent_window_class * i4_window_class::root_window()
 {
 	if (parent)
 	{
@@ -56,7 +56,7 @@ i4_parent_window_class *i4_window_class::root_window()
 	}
 }
 
-i4_parent_window_class *i4_parent_window_class::root_window()
+i4_parent_window_class * i4_parent_window_class::root_window()
 {
 	if (parent)
 	{
@@ -68,7 +68,7 @@ i4_parent_window_class *i4_parent_window_class::root_window()
 	}
 }
 
-i4_bool i4_window_class::isa_parent(i4_window_class *who)
+i4_bool i4_window_class::isa_parent(i4_window_class * who)
 {
 	if (who==0)
 	{
@@ -88,7 +88,7 @@ i4_bool i4_window_class::isa_parent(i4_window_class *who)
 	}
 }
 
-void i4_window_class::receive_event(i4_event *ev)
+void i4_window_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::MOUSE_MOVE)
 	{
@@ -123,7 +123,7 @@ void i4_window_class::receive_event(i4_event *ev)
 	}
 }
 
-void i4_window_class::set_cursor(i4_cursor_class *Cursor)
+void i4_window_class::set_cursor(i4_cursor_class * Cursor)
 {
 	if (cursor)
 	{
@@ -196,6 +196,7 @@ void i4_parent_window_class::resize(w16 new_width, w16 new_height)
 void i4_window_class::private_resize(w16 new_width, w16 new_height)
 {
 	i4_rect_list_class parent_dirty;
+
 	if (width() && height())
 	{
 		parent_dirty.add_area(0,0,width()-1, height()-1);
@@ -228,7 +229,7 @@ void i4_window_class::private_resize(w16 new_width, w16 new_height)
 }
 
 
-void i4_window_class::reparent(i4_image_class *draw_area, i4_parent_window_class *Parent)
+void i4_window_class::reparent(i4_image_class * draw_area, i4_parent_window_class * Parent)
 {
 	parent=Parent;
 	if (parent)
@@ -393,7 +394,7 @@ void i4_parent_window_class::draw(i4_draw_context_class &context)
 				context.yoff+=(c->y()-y());
 
 				// remove the area of other children above us
-				i4_window_class *d=c->next;
+				i4_window_class * d=c->next;
 				for (; d&&(!child_clip.empty()); d=d->next)
 				{
 					child_clip.remove_area(d->x()-c->x(),
@@ -496,9 +497,10 @@ i4_parent_window_class::i4_parent_window_class(w16 w, w16 h) :
 	drag_drop_focus=children.end();
 }
 
-void i4_parent_window_class::bring_to_front(i4_window_class *wnd)
+void i4_parent_window_class::bring_to_front(i4_window_class * wnd)
 {
 	win_iter c=children.begin();
+
 	for (; c!=children.end(); ++c)
 	{
 		if (c.get()==wnd)
@@ -534,7 +536,7 @@ i4_parent_window_class::win_iter i4_parent_window_class::find_window(i4_coord gl
 	return find;
 }
 
-void i4_parent_window_class::drag_drop_move(i4_event *ev)
+void i4_parent_window_class::drag_drop_move(i4_event * ev)
 {
 	CAST_PTR(move, i4_window_drag_drop_move_class, ev);
 	i4_coord real_mx=move->x+x(),
@@ -552,7 +554,7 @@ void i4_parent_window_class::drag_drop_move(i4_event *ev)
 		drag_drop_focus = find;
 		if (find != children.end())
 		{
-			i4_window_class *prev_from=move->from_window;
+			i4_window_class * prev_from=move->from_window;
 			move->from_window=this;
 
 			send_event_to_child(&*find, move);
@@ -573,7 +575,7 @@ i4_bool i4_parent_window_class::find_new_mouse_focus()
 	if (!mouse_focus_grabbed) // see if we need to change the mouse focus
 	{
 		win_iter new_mouse_focus=find_window(mouse_x + x(), mouse_y + y());
-		i4_window_class *nmf,*modwin;
+		i4_window_class * nmf,* modwin;
 		nmf=&*new_mouse_focus;
 		//cmf=&*mouse_focus;
 		modwin=i4_kernel.modal();
@@ -608,7 +610,7 @@ i4_bool i4_parent_window_class::find_new_mouse_focus()
 	}
 }
 
-void i4_parent_window_class::mouse_move(i4_event *ev)
+void i4_parent_window_class::mouse_move(i4_event * ev)
 {
 	CAST_PTR(move, i4_mouse_move_event_class, ev);
 	last_x=mouse_x;
@@ -624,7 +626,7 @@ void i4_parent_window_class::mouse_move(i4_event *ev)
 	}
 }
 
-void i4_parent_window_class::send_event_to_child(i4_window_class *w, i4_event *ev)
+void i4_parent_window_class::send_event_to_child(i4_window_class * w, i4_event * ev)
 {
 	sw32 xo=(sw32)x()-(sw32)w->x(), yo=(sw32)y()-(sw32)w->y();
 
@@ -634,7 +636,7 @@ void i4_parent_window_class::send_event_to_child(i4_window_class *w, i4_event *e
 }
 
 // passes events to mouse_focus or key_focus depending on the event type
-void i4_parent_window_class::receive_event(i4_event *ev)
+void i4_parent_window_class::receive_event(i4_event * ev)
 {
 	switch (ev->type())
 	{
@@ -844,7 +846,7 @@ void i4_parent_window_class::receive_event(i4_event *ev)
 					case i4_window_message_class::NOTIFY_RESIZE:
 						{
 							CAST_PTR(resize,i4_window_notify_resize_class,ev);
-							i4_window_class *cf=resize->from();
+							i4_window_class * cf=resize->from();
 
 							if (cf!=parent) // if this is from our parent, ignore it
 							{
@@ -929,7 +931,7 @@ void i4_parent_window_class::receive_event(i4_event *ev)
 					case i4_window_message_class::NOTIFY_MOVE:
 						{
 							CAST_PTR(move_event,i4_window_notify_move_class,ev);
-							i4_window_class *child=move_event->from();
+							i4_window_class * child=move_event->from();
 							i4_coord old_x=child->x()-move_event->x_offset,old_y=child->y()-move_event->y_offset;
 
 							i4_coord new_x=child->x(),new_y=child->y();
@@ -1059,7 +1061,7 @@ void i4_parent_window_class::receive_event(i4_event *ev)
 	}
 }
 
-void i4_parent_window_class::change_key_focus(i4_window_class *new_focus)
+void i4_parent_window_class::change_key_focus(i4_window_class * new_focus)
 {
 	if (key_focus!=children.end())
 	{
@@ -1077,7 +1079,7 @@ void i4_parent_window_class::change_key_focus(i4_window_class *new_focus)
 }
 
 
-void i4_parent_window_class::change_mouse_focus(i4_window_class *new_focus)
+void i4_parent_window_class::change_mouse_focus(i4_window_class * new_focus)
 {
 	if (mouse_focus!=children.end())
 	{
@@ -1240,7 +1242,7 @@ void i4_parent_window_class::down_key_focus()
 	}
 }
 
-void i4_parent_window_class::reparent(i4_image_class *draw_area, i4_parent_window_class *_parent)
+void i4_parent_window_class::reparent(i4_image_class * draw_area, i4_parent_window_class * _parent)
 {
 	// reparent children first, in case the have a mouse grab and need to tell our
 	// original parent to ungrab
@@ -1257,7 +1259,7 @@ void i4_parent_window_class::reparent(i4_image_class *draw_area, i4_parent_windo
 	}
 }
 
-void i4_parent_window_class::add_child(i4_coord x_, i4_coord y_, i4_window_class *child)
+void i4_parent_window_class::add_child(i4_coord x_, i4_coord y_, i4_window_class * child)
 {
 	children.insert_end(*child);
 	child->reparent(global_image,this);
@@ -1269,7 +1271,7 @@ void i4_parent_window_class::add_child(i4_coord x_, i4_coord y_, i4_window_class
 	}
 }
 
-void i4_parent_window_class::add_child_front(i4_coord x_, i4_coord y_, i4_window_class *child)
+void i4_parent_window_class::add_child_front(i4_coord x_, i4_coord y_, i4_window_class * child)
 {
 	children.insert(*child);
 	child->reparent(global_image,this);
@@ -1291,12 +1293,12 @@ void i4_parent_window_class::forget_redraw()
 	}
 }
 
-void i4_parent_window_class::transfer_children(i4_parent_window_class *other_parent,
+void i4_parent_window_class::transfer_children(i4_parent_window_class * other_parent,
 											   i4_coord x_offset, i4_coord y_offset)
 {
 	while (children.begin() != children.end())
 	{
-		i4_window_class *c=&*children.begin();
+		i4_window_class * c=&*children.begin();
 		i4_coord xn=c->x()-x();
 		i4_coord yn=c->y()-y();
 
@@ -1316,7 +1318,7 @@ void i4_parent_window_class::transfer_children(i4_parent_window_class *other_par
 	}
 }
 
-void i4_parent_window_class::remove_child(i4_window_class *child)
+void i4_parent_window_class::remove_child(i4_window_class * child)
 {
 	if (&*key_focus==child)
 	{
@@ -1486,6 +1488,7 @@ void i4_parent_window_class::arrange_right_down()
 {
 	i4_coord x1=x(),y1=y(),mh=0;
 	win_iter c=children.begin();
+
 	for (; c!=children.end(); ++c)
 	{
 
@@ -1513,6 +1516,7 @@ void i4_parent_window_class::resize_to_fit_children()
 {
 	i4_coord x2=0,y2=0;
 	win_iter c=children.begin();
+
 	for (; c!=children.end(); ++c)
 	{
 		if (c->x()-x()+c->width()>x2)
@@ -1532,6 +1536,7 @@ void i4_parent_window_class::arrange_down_right()                               
 {
 	i4_coord x1=x(),y1=y(),mw=0;
 	win_iter c=children.begin();
+
 	for (; c!=children.end(); ++c)
 	{
 		if (c->height()+y1>=height())
@@ -1567,9 +1572,10 @@ i4_parent_window_class::~i4_parent_window_class()
 
 }
 
-i4_window_class *i4_parent_window_class::get_nth_window(w32 win_num)
+i4_window_class * i4_parent_window_class::get_nth_window(w32 win_num)
 {
 	win_iter i=children.begin();
+
 	while (win_num && i!=children.end())
 	{
 		++i;
@@ -1590,6 +1596,7 @@ i4_window_class *i4_parent_window_class::get_nth_window(w32 win_num)
 void i4_window_class::debug_show()
 {
 	char debug_buf[MAX_NAME_BUFFER_SIZE];
+
 	name(debug_buf);
 	i4_warning("- %s",debug_buf);
 	//if (parent)
@@ -1600,6 +1607,7 @@ void i4_window_class::debug_show()
 void i4_parent_window_class::debug_show()
 {
 	char debug_buf[MAX_NAME_BUFFER_SIZE];
+
 	name(debug_buf);
 	i4_warning("%s has the following children:",debug_buf);
 	win_iter c=children.begin();
@@ -1612,9 +1620,10 @@ void i4_parent_window_class::debug_show()
 	i4_warning("----end of children for %s (total %i)----",debug_buf,nochildren);
 }
 
-i4_bool i4_parent_window_class::isa_child(i4_window_class *w)
+i4_bool i4_parent_window_class::isa_child(i4_window_class * w)
 {
 	win_iter c=children.begin();
+
 	for (; c!=children.end(); ++c)
 	{
 		if (&*c==w)
@@ -1637,7 +1646,7 @@ i4_bool i4_parent_window_class::isa_child(i4_window_class *w)
 
 
 
-i4_color i4_window_manager_class::i4_read_color_from_resource(char *resource)
+i4_color i4_window_manager_class::i4_read_color_from_resource(char * resource)
 {
 	i4_const_str::iterator i=i4gets(resource).begin();
 	i4_color red=i.read_number();
@@ -1672,7 +1681,7 @@ void i4_window_manager_class::root_draw()  // called by application
 //   i4_draw_context_class c(0,0,639,439);
 //   display->get_screen()->clear(0, c);
 
-	i4_parent_window_class::draw(*display->get_context());
+	i4_parent_window_class::draw(* display->get_context());
 
 	display->flush();                                 // tell the display to page-flip or copy-dirty rects
 }
@@ -1696,7 +1705,7 @@ i4_window_manager_class::~i4_window_manager_class()
 	cleanup_old_mode();
 }
 
-void i4_window_manager_class::receive_event(i4_event *ev)
+void i4_window_manager_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::WINDOW_MESSAGE)
 	{
@@ -1763,7 +1772,7 @@ void i4_window_manager_class::receive_event(i4_event *ev)
 	else if (ev->type()==i4_event::DISPLAY_CHANGE)
 	{
 
-		i4_image_class *im=display->get_screen();
+		i4_image_class * im=display->get_screen();
 		private_resize(im->width(),im->height());     // in case the resolution changed
 		reparent(im,0);                       // grab the new image
 
@@ -1809,7 +1818,7 @@ void i4_window_manager_class::receive_event(i4_event *ev)
 	}
 }
 
-void i4_window_manager_class::set_default_cursor(i4_cursor_class *cursor)
+void i4_window_manager_class::set_default_cursor(i4_cursor_class * cursor)
 {
 	if (default_cursor)
 	{
@@ -1825,13 +1834,13 @@ void i4_window_manager_class::set_default_cursor(i4_cursor_class *cursor)
 }
 
 
-i4_graphical_style_class *i4_window_manager_class::get_style()
+i4_graphical_style_class * i4_window_manager_class::get_style()
 {
 	return style;
 }
 
-void i4_window_manager_class::prepare_for_mode(i4_display_class *display,
-											   i4_display_class::mode *mode)
+void i4_window_manager_class::prepare_for_mode(i4_display_class * display,
+											   i4_display_class::mode * mode)
 {
 	cleanup_old_mode();
 
@@ -1866,7 +1875,7 @@ void i4_window_manager_class::prepare_for_mode(i4_display_class *display,
 
 
 
-	i4_image_class *im=display->get_screen();
+	i4_image_class * im=display->get_screen();
 	if (!im)
 	{
 		i4_error("FATAL: No usable display device found");
@@ -1941,7 +1950,7 @@ void i4_drag_info_struct::copy_to(i4_drag_info_struct &drag_struct)
 	drag_struct.t_filenames=t_filenames;
 	if (t_filenames)
 	{
-		drag_struct.filenames=(i4_str **)I4_MALLOC(sizeof(i4_str *) * t_filenames, "");
+		drag_struct.filenames=(i4_str * *)I4_MALLOC(sizeof(i4_str *) * t_filenames, "");
 		for (int i=0; i<t_filenames; i++)
 		{
 			drag_struct.filenames[i]=new i4_str(*filenames[i]);
@@ -1997,6 +2006,7 @@ i4_time_hint_class::i4_time_hint_class()
 	i4_const_str::iterator d=i4gets("button_delay").begin();
 	i4_const_str::iterator r=i4gets("button_repeat").begin();
 	i4_const_str::iterator dc=i4gets("double_click").begin();
+
 	button_delay=d.read_number();
 	button_repeat=r.read_number();
 	double_click=dc.read_number();
@@ -2046,15 +2056,16 @@ void i4_graphical_style_class::init()
 	i4_style_man.add_style(this);
 }
 
-void i4_style_manager_class::add_style(i4_graphical_style_class *which)
+void i4_style_manager_class::add_style(i4_graphical_style_class * which)
 {
 	which->next=list;
 	list=which;
 }
 
-i4_graphical_style_class *i4_style_manager_class::find_style(char *name)
+i4_graphical_style_class * i4_style_manager_class::find_style(char * name)
 {
-	i4_graphical_style_class *f=list;
+	i4_graphical_style_class * f=list;
+
 	for (; f; f=f->next)
 	{
 		if (!strcmp(f->name(),name))
@@ -2065,18 +2076,18 @@ i4_graphical_style_class *i4_style_manager_class::find_style(char *name)
 	return 0;
 }
 
-i4_graphical_style_class *i4_style_manager_class::first_style()
+i4_graphical_style_class * i4_style_manager_class::first_style()
 {
 	return list;
 }
 
-i4_graphical_style_class *i4_style_manager_class::next_style(i4_graphical_style_class *last)
+i4_graphical_style_class * i4_style_manager_class::next_style(i4_graphical_style_class * last)
 {
 	return last->next;
 }
 
 
-i4_color i4_read_color_from_resource(char *name)
+i4_color i4_read_color_from_resource(char * name)
 {
 	i4_const_str::iterator i=i4gets(name).begin();
 
@@ -2113,7 +2124,8 @@ i4_color_hint_class::i4_color_hint_class()
 
 i4_font_hint_class::i4_font_hint_class()
 {
-	i4_image_class *im=i4_load_image(i4gets("small_font"));
+	i4_image_class * im=i4_load_image(i4gets("small_font"));
+
 	normal_font=small_font=new i4_anti_proportional_font_class(im, '!');
 	delete im;
 }
@@ -2126,8 +2138,8 @@ i4_cursor_hint_class::i4_cursor_hint_class()
 }
 
 
-void i4_graphical_style_class::prepare_for_mode(const i4_pal *pal,
-												i4_display_class::mode *mode)
+void i4_graphical_style_class::prepare_for_mode(const i4_pal * pal,
+												i4_display_class::mode * mode)
 {
 	cleanup();
 
@@ -2175,14 +2187,15 @@ i4_icon_hint_class::~i4_icon_hint_class()
 class i4_mwm_context_help :
 	public i4_window_class
 {
-	i4_graphical_style_class *style;
-	i4_str *text;
+	i4_graphical_style_class * style;
+	i4_str * text;
 public:
 	i4_event_handler_reference_class<i4_window_class> shadow;
 
 	void draw(i4_draw_context_class &context)
 	{
-		i4_font_class *f=style->font_hint->small_font;
+		i4_font_class * f=style->font_hint->small_font;
+
 		local_image->clear(style->color_hint->text_background, context);
 		local_image->rectangle(0,0, width()-1, height()-1, 0, context);
 
@@ -2190,7 +2203,7 @@ public:
 		f->put_string(local_image, 2,2, *text, context);
 	}
 
-	i4_mwm_context_help(i4_graphical_style_class *style, const i4_const_str text)
+	i4_mwm_context_help(i4_graphical_style_class * style, const i4_const_str text)
 		:  style(style),
 		  i4_window_class(style->font_hint->small_font->width(text)+4,
 						  style->font_hint->small_font->height(text)+4),
@@ -2209,14 +2222,14 @@ public:
 
 	//if a context help window receives an event, it is most
 	//certainly in the way.
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		call_stack_counter++;
 		i4_kernel.delete_handler(this);
 		call_stack_counter--;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"i4_mwm_context_help");
 	}
@@ -2226,7 +2239,7 @@ class i4_mwm_style_class :
 	public i4_graphical_style_class
 {
 public:
-	i4_image_class *close_icon;
+	i4_image_class * close_icon;
 
 	virtual void uninit()
 	{
@@ -2245,28 +2258,28 @@ public:
 	virtual i4_parent_window_class *create_mp_window(i4_coord x, i4_coord y,
 													 w16 w, w16 h,
 													 const i4_const_str &title,
-													 i4_event_reaction_class *on_delete=0
+													 i4_event_reaction_class * on_delete=0
 	);
 
 	virtual i4_parent_window_class *create_modal_window(i4_coord x, i4_coord y,
 														w16 w, w16 h,
 														const i4_const_str &title,
 														i4_bool show_close_button,
-														i4_event_reaction_class *on_delete=0
+														i4_event_reaction_class * on_delete=0
 	);
 
-	virtual i4_bool close_mp_window(i4_parent_window_class *created_window)
+	virtual i4_bool close_mp_window(i4_parent_window_class * created_window)
 	{
 		if (!created_window)
 		{
 			return i4_F;
 		}
-		i4_parent_window_class *to_del=created_window->get_parent();
+		i4_parent_window_class * to_del=created_window->get_parent();
 		if (!to_del)
 		{
 			return i4_F;
 		}
-		i4_parent_window_class *to_del_parent=to_del->get_parent();
+		i4_parent_window_class * to_del_parent=to_del->get_parent();
 		if (!to_del_parent)
 		{
 			return i4_F;
@@ -2277,7 +2290,7 @@ public:
 		return i4_T;
 	}
 
-	virtual i4_bool available_for_display(i4_display_class *whom)
+	virtual i4_bool available_for_display(i4_display_class * whom)
 	{
 		return i4_T;
 	}
@@ -2298,7 +2311,7 @@ public:
 		left=right=top=bottom=2;
 	}
 
-	virtual void deco_neutral_fill(i4_image_class *screen,
+	virtual void deco_neutral_fill(i4_image_class * screen,
 								   sw32 x1, sw32 y1, sw32 x2, sw32 y2,
 								   i4_draw_context_class &context)
 	{
@@ -2308,7 +2321,7 @@ public:
 		sub_clip.intersect_area((short)x1,(short)y1,(short)x2,(short)y2);
 		sub_clip.swap(&context.clip);
 
-		i4_image_class *im=icon_hint->background_bitmap;
+		i4_image_class * im=icon_hint->background_bitmap;
 		if (im)
 		{
 			int iw=im->width(), ih=im->height();
@@ -2316,7 +2329,9 @@ public:
 			int dy1=-context.yoff;
 			while (dx1+iw<x1) dx1+=iw;
 
+
 			while (dy1+ih<y1) dy1+=ih;
+
 
 
 			int x,y;
@@ -2338,13 +2353,14 @@ public:
 	}
 
 	// draw a decoration around an area that looks like it's pressed into the screen
-	virtual void draw_in_deco(i4_image_class *screen,
+	virtual void draw_in_deco(i4_image_class * screen,
 							  i4_coord x1, i4_coord y1,
 							  i4_coord x2, i4_coord y2,
 							  i4_bool active,
 							  i4_draw_context_class &context)
 	{
-		i4_color_hint_class::bevel *color;
+		i4_color_hint_class::bevel * color;
+
 		if (active)
 		{
 			color=&color_hint->window.active;
@@ -2373,13 +2389,14 @@ public:
 	}
 
 	// draw a decoration around an area that looks like it sticks out the screen
-	virtual void draw_out_deco(i4_image_class *screen,
+	virtual void draw_out_deco(i4_image_class * screen,
 							   i4_coord x1, i4_coord y1,
 							   i4_coord x2, i4_coord y2,
 							   i4_bool active,
 							   i4_draw_context_class &context)
 	{
-		i4_color_hint_class::bevel *color;
+		i4_color_hint_class::bevel * color;
+
 		if (active)
 		{
 			color=&color_hint->window.active;
@@ -2414,8 +2431,8 @@ public:
 	virtual i4_window_class *create_quick_context_help(int mouse_x, int mouse_y,
 													   const i4_const_str &str)
 	{
-		i4_parent_window_class *parent=i4_current_app->get_root_window();
-		i4_mwm_context_help *w=new i4_mwm_context_help(this, str);
+		i4_parent_window_class * parent=i4_current_app->get_root_window();
+		i4_mwm_context_help * w=new i4_mwm_context_help(this, str);
 
 		if (w->width()+mouse_x+3 > parent->width())
 		{
@@ -2426,7 +2443,7 @@ public:
 			mouse_y=parent->height()-w->height()-3;
 		}
 
-		i4_window_class *cw=new i4_color_window_class(w->width(), w->height(), 0, this);
+		i4_window_class * cw=new i4_color_window_class(w->width(), w->height(), 0, this);
 		w->shadow=cw;
 
 		parent->add_child(mouse_x+3, mouse_y+3, cw);
@@ -2451,9 +2468,9 @@ public:
 		RESTORE_YOURSELF,
 		GRAB_FOCUS
 	};
-	i4_window_class *from;
+	i4_window_class * from;
 
-	i4_mwm_event_class(w32 sub_type, i4_window_class *from) :
+	i4_mwm_event_class(w32 sub_type, i4_window_class * from) :
 		i4_user_message_event_class(sub_type),
 		from(from)
 	{
@@ -2468,7 +2485,7 @@ public:
 };
 
 
-static void widget(i4_image_class *im,
+static void widget(i4_image_class * im,
 				   i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 				   i4_color bright, i4_color med, i4_color dark,
 				   i4_draw_context_class &context)
@@ -2488,16 +2505,16 @@ class i4_mwm_close_button_class :
 	public i4_window_class
 {
 protected:
-	i4_graphical_style_class *hint;
+	i4_graphical_style_class * hint;
 	i4_bool active;
 
 public:
-	virtual void name(char *buffer)
+	virtual void name(char * buffer)
 	{
 		static_name(buffer,"close_button");
 	}
 
-	i4_mwm_close_button_class(w16 w, w16 h,i4_graphical_style_class *hint)
+	i4_mwm_close_button_class(w16 w, w16 h,i4_graphical_style_class * hint)
 		: i4_window_class(w,h),
 		  hint(hint)
 	{
@@ -2511,7 +2528,7 @@ public:
 	}
 
 
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	{
 		i4_mwm_event_class c(i4_mwm_event_class::CLOSE_YOURSELF,this);
 		if (ev->type()==i4_event::MOUSE_BUTTON_DOWN && parent)
@@ -2522,7 +2539,8 @@ public:
 
 	virtual void draw(i4_draw_context_class &context)
 	{
-		i4_color_hint_class::bevel *color;
+		i4_color_hint_class::bevel * color;
+
 		/*    if (active)
 		   color=&hint->color_hint->window.active;
 		   else */
@@ -2542,6 +2560,7 @@ public:
 	virtual void show_self(w32 indent)
 	{
 		char fmt[50];
+
 		sprintf(fmt,"%%%ds mwm_close_button",indent);
 		i4_warning(fmt," ");
 	}
@@ -2553,26 +2572,27 @@ class i4_mwm_passive_close_button_class :
 {
 
 public:
-	virtual void name(char *buffer)
+	virtual void name(char * buffer)
 	{
 		static_name(buffer,"passive_close_button");
 	}
 
-	i4_mwm_passive_close_button_class(w16 w, w16 h,i4_graphical_style_class *hint)
+	i4_mwm_passive_close_button_class(w16 w, w16 h,i4_graphical_style_class * hint)
 		: i4_mwm_close_button_class(w,h,hint)
 	{
 		active=i4_F;
 	}
 
 
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	{
 		//No reaction whatsoever
 	}
 
 	virtual void draw(i4_draw_context_class &context)
 	{
-		i4_color_hint_class::bevel *color;
+		i4_color_hint_class::bevel * color;
+
 		/*    if (active)
 		   color=&hint->color_hint->window.active;
 		   else */
@@ -2592,15 +2612,17 @@ public:
 	virtual void show_self(w32 indent)
 	{
 		char fmt[50];
+
 		sprintf(fmt,"%%%ds mwm_passive_close_button",indent);
 		i4_warning(fmt," ");
 	}
 } ;
 
 
-static inline int get_res_num(char *name, int def)
+static inline int get_res_num(char * name, int def)
 {
 	i4_const_str s=i4_string_man.get(name);
+
 	if (s.null())
 	{
 		return def;
@@ -2617,12 +2639,12 @@ class i4_mwm_drag_bar_class :
 	public i4_window_class
 {
 private:
-	i4_graphical_style_class *hint;
+	i4_graphical_style_class * hint;
 	i4_bool active,dragging;
 public:
 	i4_const_str title;
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"drag_bar");
 	}
@@ -2632,7 +2654,7 @@ public:
 		MIN_WIDTH=15
 	};
 
-	i4_mwm_drag_bar_class(w16 w, w16 h, const i4_const_str &title, i4_graphical_style_class *hint) :
+	i4_mwm_drag_bar_class(w16 w, w16 h, const i4_const_str &title, i4_graphical_style_class * hint) :
 		i4_window_class(w,h),
 		hint(hint),
 		title(title)
@@ -2649,7 +2671,8 @@ public:
 
 	void draw(i4_draw_context_class &context)
 	{
-		i4_color_hint_class::bevel *color;
+		i4_color_hint_class::bevel * color;
+
 		if (active)
 		{
 			color=&hint->color_hint->window.active;
@@ -2686,7 +2709,7 @@ public:
 //       local_image->widget(1,1,width()-2,height()-2,
 //                           color->bright,color->medium,color->dark,context);
 
-		i4_font_class *font=hint->font_hint->normal_font;
+		i4_font_class * font=hint->font_hint->normal_font;
 		w16 strw=font->width(title);
 		w16 strh=font->height(title);
 
@@ -2695,7 +2718,7 @@ public:
 		font->put_string(local_image,width()/2-strw/2,height()/2-strh/2,title,context);
 	}
 
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::MOUSE_BUTTON_DOWN)
 		{
@@ -2729,26 +2752,26 @@ class i4_mwm_window_class :
 	public i4_draggable_window_class
 {
 protected:
-	i4_graphical_style_class *hint;
-	i4_mwm_drag_bar_class *drag;
-	i4_mwm_close_button_class *close_button;
+	i4_graphical_style_class * hint;
+	i4_mwm_drag_bar_class * drag;
+	i4_mwm_close_button_class * close_button;
 	i4_bool active,draw_frame;
 	w16 left,right,top,bottom;
-	i4_parent_window_class *user_area;
-	i4_event_reaction_class *on_delete;
+	i4_parent_window_class * user_area;
+	i4_event_reaction_class * on_delete;
 
-	w32 close_button_width(i4_graphical_style_class *style)
+	w32 close_button_width(i4_graphical_style_class * style)
 	{
 		return 2+style->icon_hint->close_icon->width()+3;
 	}
 
-	w32 close_button_height(i4_graphical_style_class *style)
+	w32 close_button_height(i4_graphical_style_class * style)
 	{
 		return 2+style->icon_hint->close_icon->height()+3;
 	}
 
 
-	w32 dragbar_height(i4_graphical_style_class *style, const i4_const_str &title)
+	w32 dragbar_height(i4_graphical_style_class * style, const i4_const_str &title)
 	{
 		return hint->font_hint->normal_font->height(title)+4+1;
 	}
@@ -2762,7 +2785,7 @@ public:
 		}
 		on_delete = 0;
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"mwm window");
 	}
@@ -2774,8 +2797,8 @@ public:
 	i4_mwm_window_class(w16 width, w16 height,
 						const i4_const_str &title,
 						i4_bool show_close_button,
-						i4_graphical_style_class *hint,
-						i4_event_reaction_class *on_delete)
+						i4_graphical_style_class * hint,
+						i4_event_reaction_class * on_delete)
 		: i4_draggable_window_class(width,height),
 		  hint(hint),
 		  on_delete(on_delete)
@@ -2838,7 +2861,7 @@ public:
 			!undrawn_area.clipped_away(0+width()-2,0,0+width()-1,0+height()-1))
 
 		{
-			i4_color_hint_class::bevel *color;
+			i4_color_hint_class::bevel * color;
 			if (active)
 			{
 				color=&hint->color_hint->window.active;
@@ -2881,7 +2904,7 @@ public:
 		return (i4_bool)(i4_parent_window_class::need_redraw()|draw_frame);
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::WINDOW_MESSAGE)
 		{
@@ -2959,8 +2982,8 @@ public:
 	i4_mwm_modal_window_class(w16 width, w16 height,
 							  const i4_const_str &title,
 							  i4_bool show_close_button,
-							  i4_graphical_style_class *hint,
-							  i4_event_reaction_class *on_delete)
+							  i4_graphical_style_class * hint,
+							  i4_event_reaction_class * on_delete)
 		: i4_mwm_window_class(width,height,
 							  title, show_close_button,
 							  hint,
@@ -2973,7 +2996,7 @@ public:
 		i4_kernel.send_event(this,&self_ev);
 	}
 
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	{
 		CAST_PTR(mev,i4_mwm_event_class,ev);
 		if (mev->type()==i4_event::USER_MESSAGE&&mev->sub_type==i4_mwm_event_class::GRAB_FOCUS)
@@ -2990,21 +3013,22 @@ public:
 	{
 		i4_kernel.end_modal(this);
 	}
-	virtual void name(char *buffer)
+	virtual void name(char * buffer)
 	{
 		static_name(buffer, "i4_mwm_modal_window");
 	};
 };
 
 
-i4_parent_window_class *i4_mwm_style_class::create_mp_window(i4_coord x, i4_coord y,
-															 w16 w, w16 h,
-															 const i4_const_str &title,
-															 i4_event_reaction_class *on_delete)
+i4_parent_window_class * i4_mwm_style_class::create_mp_window(i4_coord x, i4_coord y,
+															  w16 w, w16 h,
+															  const i4_const_str &title,
+															  i4_event_reaction_class * on_delete)
 {
-	i4_parent_window_class *parent=i4_current_app->get_root_window();
+	i4_parent_window_class * parent=i4_current_app->get_root_window();
 
-	i4_mwm_window_class *win=new i4_mwm_window_class(w,h,title,i4_T,this,on_delete);
+	i4_mwm_window_class * win=new i4_mwm_window_class(w,h,title,i4_T,this,on_delete);
+
 	if (x==-1)
 	{
 		x=parent->width()/2-w/2;
@@ -3018,16 +3042,17 @@ i4_parent_window_class *i4_mwm_style_class::create_mp_window(i4_coord x, i4_coor
 	return win->user_window();
 }
 
-i4_parent_window_class *i4_mwm_style_class::create_modal_window(i4_coord x, i4_coord y,
-																w16 w, w16 h,
-																const i4_const_str &title,
-																i4_bool show_close_button,
-																i4_event_reaction_class *on_delete)
+i4_parent_window_class * i4_mwm_style_class::create_modal_window(i4_coord x, i4_coord y,
+																 w16 w, w16 h,
+																 const i4_const_str &title,
+																 i4_bool show_close_button,
+																 i4_event_reaction_class * on_delete)
 {
-	i4_parent_window_class *root=i4_current_app->get_root_window();
+	i4_parent_window_class * root=i4_current_app->get_root_window();
 
-	i4_mwm_modal_window_class *win=new i4_mwm_modal_window_class(w,h,title,
-																 show_close_button,this,on_delete);
+	i4_mwm_modal_window_class * win=new i4_mwm_modal_window_class(w,h,title,
+																  show_close_button,this,on_delete);
+
 	if (x==-1)
 	{
 		x=root->width()/2-w/2;
@@ -3059,7 +3084,7 @@ public:
 	i4_bool need_remove_ghost,
 			draw_self;
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"drag_frame");
 	}
@@ -3119,6 +3144,7 @@ public:
 	virtual void show_self(w32 indent)
 	{
 		char fmt[50];
+
 		sprintf(fmt,"%%%ds drag_window",indent);
 		i4_warning(fmt," ");
 	}
@@ -3134,7 +3160,7 @@ i4_draggable_window_class::i4_draggable_window_class(w16 w, w16 h) :
 	last_mouse_y=0;
 }
 
-void i4_draggable_window_class::receive_event(i4_event *ev)
+void i4_draggable_window_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::WINDOW_MESSAGE)
 	{
@@ -3232,20 +3258,21 @@ void i4_draggable_window_class::receive_event(i4_event *ev)
 
 
 
-i4_cursor_class *i4_load_cursor(char *cursor_name,
-								i4_string_manager_class *sman)
+i4_cursor_class *i4_load_cursor(char * cursor_name,
+								i4_string_manager_class * sman)
 {
 	i4_const_str st=sman->get(cursor_name);  // looks up the resource
 	sw32 trans,hot_x,hot_y;
 
 	i4_const_str::iterator s=st.begin();
-	i4_str *fn=s.read_string();
+	i4_str * fn=s.read_string();
+
 	trans=s.read_number();
 	hot_x=s.read_number();
 	hot_y=s.read_number();
 
 
-	i4_image_class *im=i4_load_image(*fn); // try to load up the cursor image
+	i4_image_class * im=i4_load_image(*fn); // try to load up the cursor image
 	if (!im)
 	{
 		delete fn;
@@ -3253,7 +3280,7 @@ i4_cursor_class *i4_load_cursor(char *cursor_name,
 	}
 	else
 	{
-		i4_cursor_class *c=new i4_cursor_class(im,(i4_color)trans,(short)hot_x,(short)hot_y);
+		i4_cursor_class * c=new i4_cursor_class(im,(i4_color)trans,(short)hot_x,(short)hot_y);
 		delete im;
 		delete fn;
 		return c;
@@ -3263,10 +3290,10 @@ i4_cursor_class *i4_load_cursor(char *cursor_name,
 
 
 
-i4_cursor_class::i4_cursor_class(i4_image_class *_pict,
+i4_cursor_class::i4_cursor_class(i4_image_class * _pict,
 								 i4_color trans,
 								 i4_coord hot_x, i4_coord hot_y,
-								 const i4_pal *convert_to)
+								 const i4_pal * convert_to)
 	: trans(trans),
 	  hot_x(hot_x),
 	  hot_y(hot_y)
@@ -3300,7 +3327,7 @@ i4_cursor_class::i4_cursor_class()
 	pict = 0;
 }
 
-i4_cursor_class *i4_cursor_class::copy(const i4_pal *convert_to)
+i4_cursor_class * i4_cursor_class::copy(const i4_pal * convert_to)
 {
 	return new i4_cursor_class(pict, trans, hot_x, hot_y, convert_to);
 }
@@ -3340,11 +3367,12 @@ void i4_color_window_class::parent_draw(i4_draw_context_class &context)
 	i4_parent_window_class::parent_draw(context);
 }
 
-i4_parent_window_class *i4_add_color_window(i4_parent_window_class *parent, i4_color color,
-											i4_graphical_style_class *style,
+i4_parent_window_class *i4_add_color_window(i4_parent_window_class * parent, i4_color color,
+											i4_graphical_style_class * style,
 											i4_coord x, i4_coord y, w16 w, w16 h)
 {
-	i4_color_window_class *cw=new i4_color_window_class(w,h,color, style);
+	i4_color_window_class * cw=new i4_color_window_class(w,h,color, style);
+
 	if (parent)
 	{
 		parent->add_child(x,y,cw);

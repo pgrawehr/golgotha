@@ -63,13 +63,13 @@ static w8 li_recursive_error=0;
 
 
 // returns the length of the list
-li_object *li_length_for_lisp(li_object *o, li_environment *env)
+li_object *li_length_for_lisp(li_object * o, li_environment * env)
 {
 	switch (o->type())
 	{
 		case LI_STRING:
 			{
-				li_string *s=li_string::get(o,env);
+				li_string * s=li_string::get(o,env);
 				return new li_int(strlen(s->value()));
 			}
 		case LI_LIST:
@@ -84,7 +84,7 @@ li_object *li_length_for_lisp(li_object *o, li_environment *env)
 			}
 		case LI_VECTOR:
 			{
-				li_vector *v=li_vector::get(o,env);
+				li_vector * v=li_vector::get(o,env);
 				return new li_int(v->size());
 			}
 		default:
@@ -93,7 +93,7 @@ li_object *li_length_for_lisp(li_object *o, li_environment *env)
 	return li_nil;
 };
 
-int li_length(li_object *o, li_environment *env)
+int li_length(li_object * o, li_environment * env)
 {
 	if (o->type()!=LI_LIST)
 	{
@@ -112,13 +112,13 @@ int li_length(li_object *o, li_environment *env)
 
 }
 
-i4_bool li_is_number(li_object *o, li_environment *env)
+i4_bool li_is_number(li_object * o, li_environment * env)
 {
 	return (i4_bool)(o->type()==LI_INT || o->type()==LI_FLOAT);
 }
 
 
-double li_get_float(li_object *o, li_environment *env)  // will convert int to float
+double li_get_float(li_object * o, li_environment * env)  // will convert int to float
 {
 	if (o->type()==LI_INT)
 	{
@@ -131,7 +131,7 @@ double li_get_float(li_object *o, li_environment *env)  // will convert int to f
 	else if (o->type()==LI_BIGNUM)
 	{
 		//warning: may loose precision
-		li_bignum *a=li_bignum::get(o,env);
+		li_bignum * a=li_bignum::get(o,env);
 		sw32 len=a->get_length()-1;
 		double res=0;
 		while (len)
@@ -152,7 +152,7 @@ double li_get_float(li_object *o, li_environment *env)  // will convert int to f
 	return li_float::get(o,env)->value(); //give error.
 }
 
-int li_get_int(li_object *o, li_environment *env)    // will convert float to int
+int li_get_int(li_object * o, li_environment * env)    // will convert float to int
 {
 	if (o->type()==LI_FLOAT)
 	{
@@ -165,7 +165,7 @@ int li_get_int(li_object *o, li_environment *env)    // will convert float to in
 	else if (o->type()==LI_BIGNUM)
 	{
 		//returns maxint if number cannot be represented as int
-		li_bignum *a=li_bignum::get(o,env);
+		li_bignum * a=li_bignum::get(o,env);
 		sw32 len=a->get_length()-1;
 		sw32 res=0;
 		while (len)
@@ -190,7 +190,7 @@ int li_get_int(li_object *o, li_environment *env)    // will convert float to in
 	return li_int::get(o,env)->value(); //yield out the error
 }
 
-char *li_get_string(li_object *o, li_environment *env)
+char *li_get_string(li_object * o, li_environment * env)
 {
 	return li_string::get(o, env)->value();
 }
@@ -217,7 +217,7 @@ void li_skip_c_comment(char *&s)
 }
 
 
-int li_read_token(char *&s, char *buffer)
+int li_read_token(char *&s, char * buffer)
 {
 	// skip space
 	while (*s==' ' || *s=='\t' || *s=='\n' || *s=='\r' || *s==26)
@@ -278,20 +278,22 @@ int li_read_token(char *&s, char *buffer)
 			   *s!='\n' && *s!='\r' && *s!='\t' && *s!=';' && *s!=26)
 			*(buffer++)=*(s++);
 
+
 		*buffer=0;
 	}
 	return 1;
 }
 
-int li_streq(char *s1, char *s2)
+int li_streq(char * s1, char * s2)
 {
 	return strcmp(s1,s2)==0;
 }
 
 
-long li_str_token_len(char *st)
+long li_str_token_len(char * st)
 {
 	long x=1;
+
 	while (*st && (*st!='"' || st[1]=='"'))
 	{
 		if (*st=='\\' || *st=='"')
@@ -310,12 +312,13 @@ enum {
 };
 static char li_token[MAX_LISP_TOKEN_LEN];  // assume all tokens will be < 512 characters
 
-int li_check_number(char *num)
+int li_check_number(char * num)
 {
 	int i=0;
 	int ret=0;
 	int z=0;
 	int endeok=0;
+
 	do
 	{
 		switch(z)
@@ -455,7 +458,8 @@ int li_check_number(char *num)
 					return 2;
 				}
 		}
-	} while (num[i]);
+	}
+	while (num[i]);
 	if (endeok)
 	{
 		return ret;
@@ -467,12 +471,12 @@ int li_check_number(char *num)
 }
 
 //defined in lisp__math.cpp
-li_object *li_read_number_in_radix(int rd,char *tk);
+li_object *li_read_number_in_radix(int rd,char * tk);
 
-li_object *li_locked_get_expression(char *&s, li_environment *env)
+li_object *li_locked_get_expression(char *&s, li_environment * env)
 {
 
-	li_object *ret=0;
+	li_object * ret=0;
 
 	if (!li_read_token(s,li_token))
 	{
@@ -501,12 +505,12 @@ li_object *li_locked_get_expression(char *&s, li_environment *env)
 	//use as ordinary symbol
 	else if (li_token[0]=='(')                  // make a list of everything in ()
 	{
-		li_list *first=NULL,*cur=NULL,*last=NULL;
+		li_list * first=NULL,* cur=NULL,* last=NULL;
 
 		int done=0;
 		do
 		{
-			char *tmp=s;
+			char * tmp=s;
 			if (!li_read_token(tmp,li_token))     // check for the end of the list
 			{
 				li_error(env, "USER: unexpected end of program");
@@ -540,7 +544,7 @@ li_object *li_locked_get_expression(char *&s, li_environment *env)
 				}
 				else
 				{
-					li_list *p=new li_list(li_locked_get_expression(s, env), 0);
+					li_list * p=new li_list(li_locked_get_expression(s, env), 0);
 					if (last)
 					{
 						last->set_next(p);
@@ -552,7 +556,8 @@ li_object *li_locked_get_expression(char *&s, li_environment *env)
 					last=p;
 				}
 			}
-		} while (!done);
+		}
+		while (!done);
 
 		if (!first)
 		{
@@ -618,9 +623,9 @@ li_object *li_locked_get_expression(char *&s, li_environment *env)
 	}
 	else if (li_token[0]=='"')
 	{
-		li_string *r=new li_string(li_str_token_len(s));
+		li_string * r=new li_string(li_str_token_len(s));
 
-		char *start=r->value();
+		char * start=r->value();
 
 		for (; *s && (*s!='"' || s[1]=='"'); s++,start++)
 		{
@@ -722,7 +727,7 @@ li_object *li_locked_get_expression(char *&s, li_environment *env)
 					char radix[3]={
 						0x0,0x0,0x0
 					};
-					char *radixp=&radix[0];
+					char * radixp=&radix[0];
 					int iradix=0;
 					*(radixp++)=*(s++);
 					if ((*s)!='r'&&(*s)!='R')
@@ -779,16 +784,16 @@ li_object *li_locked_get_expression(char *&s, li_environment *env)
 // because we can only allow one thread to use the token buffer at a time
 // so we don't have to allocate it on the stack (because it's fairly recursive)
 // I lock access to the token buffer per thread
-li_object *li_get_expression(char *&s, li_environment *env)
+li_object *li_get_expression(char *&s, li_environment * env)
 {
 	token_buf_lock.lock();
-	li_object *ret=li_locked_get_expression(s, env);
+	li_object * ret=li_locked_get_expression(s, env);
 	token_buf_lock.unlock();
 	return ret;
 }
 
 
-void lip(li_object *o)
+void lip(li_object * o)
 {
 	if (!o)
 	{
@@ -807,7 +812,8 @@ void lip(li_object *o)
 }
 LI_HEADER(user_mode_print) {
 	//print function for user mode
-	li_object *ret=li_nil;
+	li_object * ret=li_nil;
+
 	while(o)
 	{
 		ret=li_eval(li_car(o,env),env);
@@ -817,9 +823,10 @@ LI_HEADER(user_mode_print) {
 	return ret;
 }
 
-li_object *li_print(li_object *o, li_environment *env)
+li_object *li_print(li_object * o, li_environment * env)
 {
-	li_object *ret=0;
+	li_object * ret=0;
+
 	try{
 		//this may fail if something failed before (like invalid objects in the list)
 		lip(o);
@@ -833,26 +840,27 @@ li_object *li_print(li_object *o, li_environment *env)
 }
 
 void dmem_report();
-li_object *li_dump_memory(li_object *o, li_environment *env)
+li_object *li_dump_memory(li_object * o, li_environment * env)
 {
 	dmem_report();
 	return 0;
 }
 
-li_list *li_make_list(li_object *first, ...)
+li_list *li_make_list(li_object * first, ...)
 {
 	va_list ap;
+
 	va_start(ap, first);
 
-	li_list *ret=new li_list(first,0), *last;
+	li_list * ret=new li_list(first,0), * last;
 	last=ret;
 
 	for(;;)
 	{
-		li_object *o=va_arg(ap, li_object *);
+		li_object * o=va_arg(ap, li_object *);
 		if (o)
 		{
-			li_list *next=new li_list(o,0);
+			li_list * next=new li_list(o,0);
 			last->set_next(next);
 			last=next;
 		}
@@ -864,7 +872,7 @@ li_list *li_make_list(li_object *first, ...)
 	}
 }
 
-void li_define_value(li_symbol *sym, li_object *value, li_environment *env)
+void li_define_value(li_symbol * sym, li_object * value, li_environment * env)
 {
 	if (sym->flags()&LSF_VALUECONSTANT)
 	{
@@ -902,10 +910,11 @@ static i4_profile_class lisp_evaluation("lisp_evaluation");
    @param env Default lisp environment in which the evaluation should take place.
    @return The result of the evaluation, or :novalue if an error occured.
  */
-li_object *li_eval(li_object *expression, li_environment *env)
+li_object *li_eval(li_object * expression, li_environment * env)
 {
-	static li_object *error_symbol=0;
+	static li_object * error_symbol=0;
 	static int recurse_depth=0; //so we can quit to the top-level-loop
+
 	if (!expression)
 	{
 		return li_nil;
@@ -917,7 +926,7 @@ li_object *li_eval(li_object *expression, li_environment *env)
 	{
 		case LI_SYMBOL:
 			{
-				li_object *v=li_get_value(li_symbol::get(expression,env), env);
+				li_object * v=li_get_value(li_symbol::get(expression,env), env);
 				if (!v)
 				{
 					li_error(env, "USER: Symbol '%O' has no value. If you meant the symbol itself, use 'symb. ", expression);
@@ -932,9 +941,9 @@ li_object *li_eval(li_object *expression, li_environment *env)
 
 		case LI_LIST:
 			{
-				li_object *ret=0;
-				li_list *o=0;
-				li_symbol *sym=0;
+				li_object * ret=0;
+				li_list * o=0;
+				li_symbol * sym=0;
 				try{
 					o=li_list::get(expression,env);
 					if (o->data()->type()==LI_SYMBOL) //if first element of list is not a symbol,
@@ -957,7 +966,7 @@ li_object *li_eval(li_object *expression, li_environment *env)
 						//li_error(env,"Expected function invocation or plain value, found multiple items");
 					}
 				}
-				catch(char *str)
+				catch(char * str)
 				{
 					i4_warning("Exception encountered: %s",str);
 
@@ -995,22 +1004,23 @@ li_object *li_eval(li_object *expression, li_environment *env)
 }
 
 
-li_object *li_load(i4_file_class *fp, li_environment *env, i4_status_class *status)
+li_object *li_load(i4_file_class * fp, li_environment * env, i4_status_class * status)
 {
-	li_object *ret=0;
+	li_object * ret=0;
+
 	li_last_line=0;
 
 
 	int l=fp->size();
 
-	char *buf=(char *)I4_MALLOC(l+1,"");
+	char * buf=(char *)I4_MALLOC(l+1,"");
 	buf[l]=0;
 	fp->read(buf,l);
 
-	char *s=buf;
+	char * s=buf;
 
 
-	li_object *exp;
+	li_object * exp;
 	do
 	{
 		if (status)
@@ -1023,22 +1033,24 @@ li_object *li_load(i4_file_class *fp, li_environment *env, i4_status_class *stat
 		{
 			ret=li_eval(exp, env);
 		}
-	} while (exp);
+	}
+	while (exp);
 
 	i4_free(buf);
 	return ret;
 }
 
-li_object *li_load(li_object *name, li_environment *env)
+li_object *li_load(li_object * name, li_environment * env)
 {
 	return li_load(name, env, 0);
 }
 
-li_object *li_load(li_object *name, li_environment *env, i4_status_class *status)
+li_object *li_load(li_object * name, li_environment * env, i4_status_class * status)
 {
-	li_object *ret=0;
+	li_object * ret=0;
 
 	char old_file[256];
+
 	// I4_ASSERT(li_last_file,"The last file is NULL");
 	strcpy(old_file, li_last_file);
 	int old_line=li_last_line;
@@ -1047,14 +1059,14 @@ li_object *li_load(li_object *name, li_environment *env, i4_status_class *status
 
 	while (name)
 	{
-		char *s=li_string::get(li_eval(li_car(name,env),env),env)->value();
+		char * s=li_string::get(li_eval(li_car(name,env),env),env)->value();
 		strcpy(li_last_file, s);
 		//we first try wheter there's a language dependent file
 		//(that is one that has a language suffix).
 		i4_str langstr(s);
 		i4_str::iterator it(langstr.c_str ()+langstr.find_last_of("."));
 		i4_language_extend(langstr,it);
-		i4_file_class *fp=i4_open(langstr);
+		i4_file_class * fp=i4_open(langstr);
 		if (!fp)
 		{
 			fp=i4_open(s);
@@ -1080,10 +1092,11 @@ li_object *li_load(li_object *name, li_environment *env, i4_status_class *status
 	return ret;
 }
 
-li_object *li_read_eval(li_object *o, li_environment *env)
+li_object *li_read_eval(li_object * o, li_environment * env)
 {
-	char line[1000], *c=line;
+	char line[1000], * c=line;
 	int t=0;
+
 	i4_debug->printf("eval>");
 	do
 	{
@@ -1093,26 +1106,28 @@ li_object *li_read_eval(li_object *o, li_environment *env)
 		}
 		t++;
 		c++;
-	} while (c[-1]!='\n' && t<998);
+	}
+	while (c[-1]!='\n' && t<998);
 
 	*c=0;
 	c=line;
-	li_object *ret=li_eval(li_get_expression(c, env), env);
+	li_object * ret=li_eval(li_get_expression(c, env), env);
 	lip(ret);
 	return ret;
 }
 
-li_object *li_load(char *filename, li_environment *env, i4_status_class *status)
+li_object *li_load(char * filename, li_environment * env, i4_status_class * status)
 {
 	return li_load(new li_list(new li_string(filename), 0), env, status);
 }
 
 int li_num_sys_functions=0;
-void li_add_function(li_symbol *sym,
+void li_add_function(li_symbol * sym,
 					 li_function_type fun,
-					 li_environment *env)
+					 li_environment * env)
 {
-	li_function *f=new li_function(fun);
+	li_function * f=new li_function(fun);
+
 	li_num_sys_functions++;
 	if (env)
 	{
@@ -1129,19 +1144,19 @@ LI_HEADER(sys_info) {
 }
 
 
-void li_add_function(char *sym_name, li_function_type fun, li_environment *env)
+void li_add_function(char * sym_name, li_function_type fun, li_environment * env)
 {
 	li_add_function(li_get_symbol(sym_name), fun, env);
 }
 
-i4_bool li_get_bool(li_object *o, li_environment *env)
+i4_bool li_get_bool(li_object * o, li_environment * env)
 {
 	if (!o)
 	{
 		return i4_F;
 	}
 
-	li_symbol *s=li_symbol::get(li_eval(o,env),env);
+	li_symbol * s=li_symbol::get(li_eval(o,env),env);
 
 	if (s==li_nil)
 	{
@@ -1170,8 +1185,8 @@ static inline int fmt_char(char c)
 
 
 
-void li_vprintf(i4_file_class *fp,
-				char *fmt,
+void li_vprintf(i4_file_class * fp,
+				char * fmt,
 				va_list ap)
 {
 
@@ -1179,8 +1194,9 @@ void li_vprintf(i4_file_class *fp,
 	{
 		if (*fmt=='%')
 		{
-			char *fmt_end=fmt;
+			char * fmt_end=fmt;
 			while (!fmt_char(*fmt_end) && *fmt_end) fmt_end++;
+
 
 			char f[10], out[500];
 			memcpy(f, fmt, fmt_end-fmt+1);
@@ -1191,7 +1207,7 @@ void li_vprintf(i4_file_class *fp,
 			{
 				case 'O':
 					{
-						li_object *o=va_arg(ap,li_object *);
+						li_object * o=va_arg(ap,li_object *);
 						if (!o)
 						{
 								::sprintf(out,"nil");
@@ -1220,7 +1236,7 @@ void li_vprintf(i4_file_class *fp,
 
 				case 's':
 					{
-						char *strparam=va_arg(ap,char *);
+						char * strparam=va_arg(ap,char *);
 						int len=strlen(strparam);
 						if (len>490) //otherwise, we have a buffer overrun vulnerability
 						{
@@ -1257,26 +1273,28 @@ void li_vprintf(i4_file_class *fp,
 }
 
 
-void li_printf(i4_file_class *fp,
-			   char *fmt,                   // typical printf format, with %o == li_object
+void li_printf(i4_file_class * fp,
+			   char * fmt,                   // typical printf format, with %o == li_object
 			   ...)
 {
 	va_list ap;
+
 	va_start(ap, fmt);
 	li_vprintf(fp, fmt, ap);
 	va_end(ap);
 
 }
 
-int li_error(li_environment *env,
-			 char *fmt,
+int li_error(li_environment * env,
+			 char * fmt,
 			 ...)
 {
 	int user_choosed=0;
+
 	if (!li_recursive_error)    // error shouldn't call error again!
 	{
 		li_recursive_error++;
-		i4_file_class *fp=i4_open("li_error.txt", I4_WRITE); //must not I4_APPEND here
+		i4_file_class * fp=i4_open("li_error.txt", I4_WRITE); //must not I4_APPEND here
 		//as the error buf may not get larger than 1000 bytes. (gives recursive exceptions then)
 
 		if (fp)
@@ -1307,7 +1325,7 @@ int li_error(li_environment *env,
 				{
 					size =990;
 				}               //otherwise, error handler will overflow
-				char *b=(char *)I4_MALLOC(size+1,"");
+				char * b=(char *)I4_MALLOC(size+1,"");
 				fp->read(b, size);
 				b[size]=0;
 				delete fp;
@@ -1323,15 +1341,16 @@ int li_error(li_environment *env,
 	return user_choosed;
 }
 
-li_object *li_new(char *type_name, li_object *params, li_environment *env)
+li_object *li_new(char * type_name, li_object * params, li_environment * env)
 {
-	li_symbol *s=li_find_symbol(type_name);
+	li_symbol * s=li_find_symbol(type_name);
+
 	if (!s)
 	{
 		return 0;
 	}
 
-	li_object *v=li_get_value(s, env);
+	li_object * v=li_get_value(s, env);
 	if (!v || v->type()!=LI_TYPE)
 	{
 		return 0;
@@ -1341,19 +1360,19 @@ li_object *li_new(char *type_name, li_object *params, li_environment *env)
 	return li_get_type(type)->create(params, env);
 }
 
-li_object *li_new(int type, li_object *params, li_environment *env)
+li_object *li_new(int type, li_object * params, li_environment * env)
 {
 	return li_get_type(type)->create(params, env);
 }
 
-long li_detect_keyword(li_object *o, long oldkeyword)
+long li_detect_keyword(li_object * o, long oldkeyword)
 {
 	if ((!o)||(o->type()!=LI_SYMBOL))
 	{
 		return LKW_NONE;
 	}
-	li_symbol *s=li_symbol::get(o,0);
-	char *sc=s->name()->value();
+	li_symbol * s=li_symbol::get(o,0);
+	char * sc=s->name()->value();
 	if (sc[0]!='&')
 	{
 		return LKW_NONE;
@@ -1408,7 +1427,7 @@ long li_detect_keyword(li_object *o, long oldkeyword)
 	return ret;
 }
 
-i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment *env,w32 flags)
+i4_bool li_bind_params(li_object * funparams,li_object * actparams, li_environment * env,w32 flags)
 {
 	//binds actparams to funparams, takes keywords into acount
 	if (li_detect_keyword(li_car(actparams,env),0)==LKW_AMPERSANDOTHER) //THE HACK to pass noevalonbind around
@@ -1416,8 +1435,8 @@ i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment
 		actparams=li_cdr(actparams,env);
 		flags=LEF_NOEVALONBIND;
 	}
-	li_symbol *cursym=0,*key=0;
-	li_object *defval=0,*ap=actparams, *fp=funparams; //we will need to start over from the beginning, so save paramlist
+	li_symbol * cursym=0,* key=0;
+	li_object * defval=0,* ap=actparams, * fp=funparams; //we will need to start over from the beginning, so save paramlist
 	long keyword=LKW_NONE,curkey=LKW_REQPARAM; //status of binding
 	i4_bool had_allow_other_keys=i4_F;
 
@@ -1475,7 +1494,7 @@ i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment
 					//given as (symbol [initform [svar]]) or just symbol sequence
 					//if there are params left, symbol is bound to the one (svar = t)
 					//else initform is evaled (svar = nil)
-					li_object *optvar=li_car(fp,env);
+					li_object * optvar=li_car(fp,env);
 					fp=li_cdr(fp,env);
 					//if (ap)
 					//	defval=li_car(ap,env);
@@ -1501,7 +1520,7 @@ i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment
 					}
 					else
 					{
-						li_list *opt2=li_list::get(optvar,env);
+						li_list * opt2=li_list::get(optvar,env);
 						optvar=li_symbol::get(li_car(opt2,env),env);
 						i4_bool svar=i4_F;
 						if (ap)
@@ -1551,7 +1570,7 @@ i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment
 				//bind everything what's left to the given symbol
 				//(even if that's processed afterwards)
 				{
-					li_symbol *rest=li_symbol::get(li_car(fp,env),env);
+					li_symbol * rest=li_symbol::get(li_car(fp,env),env);
 					fp=li_cdr(fp,env);
 					li_define_value(rest,ap,env); //ap contains the rest of the list
 
@@ -1566,11 +1585,11 @@ i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment
 					//if only var given, it is keyword, too
 					//if ((keyword var)) given, :keyword is searched for, var is bound
 					//if (var initform) given, like &optional
-					li_symbol *bindvar,*keywordsym,*svar=0;
-					li_object *initform=0;
+					li_symbol * bindvar,* keywordsym,* svar=0;
+					li_object * initform=0;
 
 					i4_bool svar_value=i4_F;
-					li_object *kp=li_car(fp,env);
+					li_object * kp=li_car(fp,env);
 					fp=li_cdr(fp,env);
 					if (kp->type()==LI_SYMBOL)
 					{
@@ -1582,7 +1601,7 @@ i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment
 					else
 					{
 						//is a list
-						li_object *first=li_car(kp,env);
+						li_object * first=li_car(kp,env);
 						if (first->type()==LI_SYMBOL)
 						{
 							bindvar=li_symbol::get(first,env);
@@ -1594,13 +1613,13 @@ i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment
 							keywordsym=li_symbol::get(li_car(first,env),env);
 							bindvar=li_symbol::get(li_car(li_cdr(first,env),env),env);
 						}
-						li_object *second=li_second(kp,env);
+						li_object * second=li_second(kp,env);
 						if (second)
 						{
 							initform=second;
 						}
 
-						li_object *third=li_third(kp,env);
+						li_object * third=li_third(kp,env);
 						if (third)
 						{
 							svar=li_symbol::get(third,env);
@@ -1612,13 +1631,13 @@ i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment
 					}
 					ap=actparams; //reset search loop
 					//to be looked for. doesn't start with ':'
-					char *looking_for_word=keywordsym->name()->value();
+					char * looking_for_word=keywordsym->name()->value();
 					while(ap)
 					{
-						li_object *cp=li_car(ap,env);
+						li_object * cp=li_car(ap,env);
 						ap=li_cdr(ap,env);
 						//current keyword, must start with ':'
-						char *found_word=li_symbol::get(cp,env)->name()->value();
+						char * found_word=li_symbol::get(cp,env)->name()->value();
 						if (found_word[0]!=':')
 						{
 							//always wrong?
@@ -1663,7 +1682,7 @@ i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment
 				} break;
 			case LKW_AUX:
 				{
-					li_object *iv=li_car(fp,env);
+					li_object * iv=li_car(fp,env);
 					fp=li_cdr(fp,env);
 					if (iv->type()==LI_SYMBOL)
 					{
@@ -1671,8 +1690,8 @@ i4_bool li_bind_params(li_object *funparams,li_object *actparams, li_environment
 					}
 					else
 					{
-						li_object *first=li_car(iv,env);
-						li_object *second=li_car(li_cdr(iv,env),env);
+						li_object * first=li_car(iv,env);
+						li_object * second=li_car(li_cdr(iv,env),env);
 						if (second)
 						{
 							second=li_eval(second,env);
@@ -1698,7 +1717,8 @@ LI_HEADER(user_function_evaluator);
 
 LI_HEADER(quote_param_list) {
 	//quote every param that is either a symbol or a list
-	li_list *l=(li_list *)o,*ncar=0;
+	li_list * l=(li_list *)o,* ncar=0;
+
 	while(l&&l->type()==LI_LIST)
 	{
 		w32 type=li_car(l,env)->type();
@@ -1723,7 +1743,7 @@ LI_HEADER(quote_param_list) {
 
 
 
-li_object *li_lambda_eval(li_object *lambda, li_object *params, li_environment *env, w32 flags)
+li_object *li_lambda_eval(li_object * lambda, li_object * params, li_environment * env, w32 flags)
 {
 	if (!lambda)
 	{
@@ -1749,24 +1769,24 @@ li_object *li_lambda_eval(li_object *lambda, li_object *params, li_environment *
 		}
 		return li_call((li_symbol *)lambda,params,env);
 	}
-	li_object *ret=0;
+	li_object * ret=0;
 	if (li_car(lambda,env)!=li_lambda_symbol)
 	{
 		//li_error(0,"LAMBDA_EVAL: Exspecting lambda function, found: %O. ",lambda);
 		//return li_nil;
 		//perhaps some function that will return another function
-		li_object *lambda_func=li_eval(lambda,env);
+		li_object * lambda_func=li_eval(lambda,env);
 		if (lambda_func->type()==LI_USER_FUNCTION)
 		{
 			//unfortunatelly, we have to do everything what call does manually
-			li_user_function *uf=li_user_function::get(lambda_func,env); //call function, will return a function (otherwise, I dono)
+			li_user_function * uf=li_user_function::get(lambda_func,env); //call function, will return a function (otherwise, I dono)
 			if (!uf)
 			{
 				return 0;
 			}                 //something went wrong
 			li_function_type fun=uf->value(); //get the function pointer
-			li_symbol *old_fun=0;
-			li_object *old_args=0;
+			li_symbol * old_fun=0;
+			li_object * old_args=0;
 			if (env)
 			{
 				old_fun=env->current_function();
@@ -1779,12 +1799,12 @@ li_object *li_lambda_eval(li_object *lambda, li_object *params, li_environment *
 				env=new li_environment(env, i4_F);
 			}
 
-			li_symbol *fname=li_get_symbol(uf->name()->value());
+			li_symbol * fname=li_get_symbol(uf->name()->value());
 			env->set_fun(fname,lambda_func); //usually, fname is lambda, so this is mainly a hack to pass the code around
 			env->current_function()=fname; //the first time we can use that field
 			env->current_arguments()=params;
 
-			li_object *ret=fun(params,env); //call that function with our params
+			li_object * ret=fun(params,env); //call that function with our params
 			if (fname==li_lambda_symbol)
 			{
 				env->set_fun(fname,li_nil);
@@ -1799,14 +1819,14 @@ li_object *li_lambda_eval(li_object *lambda, li_object *params, li_environment *
 		else if (lambda_func->type()==LI_FUNCTION)
 		{
 			//unfortunatelly, we have to do everything what call does manually
-			li_function *fn=li_function::get(lambda_func,env); //call function, will return a function (otherwise, I dono)
+			li_function * fn=li_function::get(lambda_func,env); //call function, will return a function (otherwise, I dono)
 			if (!fn)
 			{
 				return 0;
 			}                 //something went wrong
 			li_function_type fun=fn->value(); //get the function pointer
-			li_symbol *old_fun=0;
-			li_object *old_args=0;
+			li_symbol * old_fun=0;
+			li_object * old_args=0;
 			if (env)
 			{
 				old_fun=env->current_function();
@@ -1819,12 +1839,12 @@ li_object *li_lambda_eval(li_object *lambda, li_object *params, li_environment *
 				env=new li_environment(env, i4_F);
 			}
 
-			li_symbol *fname=li_lambda_symbol; //non-user functions don't have a fixed name
+			li_symbol * fname=li_lambda_symbol; //non-user functions don't have a fixed name
 			env->set_fun(fname,lambda_func); //usually, fname is lambda, so this is mainly a hack to pass the code around
 			env->current_function()=fname; //the first time we can use that field
 			env->current_arguments()=params;
 
-			li_object *ret=fun(params,env); //call that function with our params
+			li_object * ret=fun(params,env); //call that function with our params
 			if (fname==li_lambda_symbol)
 			{
 				env->set_fun(fname,li_nil);
@@ -1838,7 +1858,7 @@ li_object *li_lambda_eval(li_object *lambda, li_object *params, li_environment *
 		}
 		else if (lambda_func->type()==LI_SYMBOL)
 		{
-			li_symbol *user=(li_symbol *)lambda_func;
+			li_symbol * user=(li_symbol *)lambda_func;
 			if (flags&LEF_NOEVALONBIND)
 			{
 				if ((user->fun()->type()==LI_USER_FUNCTION)&&
@@ -1848,7 +1868,7 @@ li_object *li_lambda_eval(li_object *lambda, li_object *params, li_environment *
 					//this is used for functions like mapcar and apply
 
 					//we are shure here, that params will be interpreted by bind_val, so we place a little hint as first parameter
-					li_list *newstart=new li_list(li_get_symbol("&noevalonbind"),params);
+					li_list * newstart=new li_list(li_get_symbol("&noevalonbind"),params);
 					params=newstart;
 				}
 				else
@@ -1874,12 +1894,12 @@ li_object *li_lambda_eval(li_object *lambda, li_object *params, li_environment *
 			return 0;
 		}
 	}
-	li_environment *lambda_env=new li_environment(env,i4_T);
+	li_environment * lambda_env=new li_environment(env,i4_T);
 	if (!li_bind_params(li_car(li_cdr(lambda,env),env),params,lambda_env,flags))
 	{
 		return 0;
 	}
-	li_object *expr=li_cdr(li_cdr(lambda,env),env);
+	li_object * expr=li_cdr(li_cdr(lambda,env),env);
 	while (expr)
 	{
 		ret=li_eval(li_car(expr,env),lambda_env);
@@ -1888,12 +1908,12 @@ li_object *li_lambda_eval(li_object *lambda, li_object *params, li_environment *
 	return ret;
 }
 
-li_object *li_call(li_symbol *val, li_object *params, li_environment *env)
+li_object *li_call(li_symbol * val, li_object * params, li_environment * env)
 {
 	if (val)
 	{
-		li_symbol *old_fun=0;
-		li_object *old_args=0;
+		li_symbol * old_fun=0;
+		li_object * old_args=0;
 		if (env)
 		{
 			old_fun=env->current_function();
@@ -1910,8 +1930,8 @@ li_object *li_call(li_symbol *val, li_object *params, li_environment *env)
 		env->current_arguments()=params;
 
 
-		li_object *ret=0;
-		li_object *f=li_get_fun(val, env);
+		li_object * ret=0;
+		li_object * f=li_get_fun(val, env);
 		if (f)
 		{
 			li_function_type fun=0;
@@ -1949,9 +1969,10 @@ li_object *li_call(li_symbol *val, li_object *params, li_environment *env)
    This function implements the class-access operator for the general case
  */
 LI_HEADER(member_access) {
-	li_class *cl=li_class::get(li_eval(li_first(o,env),env),env);
-	li_symbol *memb=li_symbol::get(li_eval(li_second(o,env),env),env);
+	li_class * cl=li_class::get(li_eval(li_first(o,env),env),env);
+	li_symbol * memb=li_symbol::get(li_eval(li_second(o,env),env),env);
 	int membindex=cl->member_offset(memb);
+
 	if (membindex<0)
 	{
 		li_error(env,"USER: Class %O has no member named %O. ",cl,memb);
@@ -1961,22 +1982,24 @@ LI_HEADER(member_access) {
 }
 
 
-li_object *li_class::object_itself(int member)
+li_object * li_class::object_itself(int member)
 {
 	//doing it directly seems to confuse the compiler with the
 	//complicated castings involved.
-	li_object **v=(li_object **) values;
+	li_object * * v=(li_object * *) values;
+
 	return (v[member]);
 }
 
-li_object **li_class::object_place(int member)
+li_object * * li_class::object_place(int member)
 {
-	li_object **v=(li_object **)values;
+	li_object * * v=(li_object * *)values;
+
 	//li_object *r=v[member];
 	return &v[member];
 }
 
-li_object *li_call(char *fun_name, li_object *params, li_environment *env)
+li_object *li_call(char * fun_name, li_object * params, li_environment * env)
 {
 	return li_call(li_get_symbol(fun_name), params, env);
 }
@@ -1986,7 +2009,7 @@ li_object *li_call(char *fun_name, li_object *params, li_environment *env)
 //the others are for C use and return the nth element of the given list
 //without evaluating anything
 
-li_object *li_first(li_object *o, li_environment *env)
+li_object *li_first(li_object * o, li_environment * env)
 {
 	return li_car(o,env);
 }
@@ -1995,7 +2018,7 @@ LI_HEADER(first_operator) {
 	return li_car(li_eval(li_car(o,env),env),env);
 }
 
-li_object *li_second(li_object *o, li_environment *env)
+li_object *li_second(li_object * o, li_environment * env)
 {
 	return li_car(li_cdr(o,env),env);
 }
@@ -2004,7 +2027,7 @@ LI_HEADER(second_operator) {
 	return li_car(li_cdr(li_eval(li_car(o,env),env),env),env);
 }
 
-li_object *li_third(li_object *o, li_environment *env)
+li_object *li_third(li_object * o, li_environment * env)
 {
 	return li_car(li_cdr(li_cdr(o,env),env),env);
 }
@@ -2013,7 +2036,7 @@ LI_HEADER(third_operator) {
 	return li_car(li_cdr(li_cdr(li_eval(li_car(o,env),env),env),env),env);
 }
 
-li_object *li_fourth(li_object *o, li_environment *env)
+li_object *li_fourth(li_object * o, li_environment * env)
 {
 	return li_car(li_cdr(li_cdr(li_cdr(o,env),env),env),env);
 }
@@ -2022,7 +2045,7 @@ LI_HEADER(fourth_operator) {
 	return li_car(li_cdr(li_cdr(li_cdr(li_eval(li_car(o,env),env),env),env),env),env);
 }
 
-li_object *li_fifth(li_object *o, li_environment *env)
+li_object *li_fifth(li_object * o, li_environment * env)
 {
 	return li_car(li_cdr(li_cdr(li_cdr(li_cdr(o,env),env),env),env),env);
 }
@@ -2031,7 +2054,7 @@ LI_HEADER(fifth_operator) {
 	return li_car(li_cdr(li_cdr(li_cdr(li_cdr(li_eval(li_car(o,env),env),env),env),env),env),env);
 }
 
-li_object *li_sixth(li_object *o, li_environment *env)
+li_object *li_sixth(li_object * o, li_environment * env)
 {
 	return li_car(li_cdr(li_cdr(li_cdr(li_cdr(li_cdr(o,env),env),env),env),env),env);
 }
@@ -2040,7 +2063,7 @@ LI_HEADER(sixth_operator) {
 	return li_car(li_cdr(li_cdr(li_cdr(li_cdr(li_cdr(li_eval(li_car(o,env),env),env),env),env),env),env),env);
 }
 
-li_object *li_nth(li_object *o, int x, li_environment *env)
+li_object *li_nth(li_object * o, int x, li_environment * env)
 {
 	if (x<0)
 	{
@@ -2050,10 +2073,11 @@ li_object *li_nth(li_object *o, int x, li_environment *env)
 	while (x--)
 		o=li_cdr(o,env);
 
+
 	return li_car(o,env);
 }
 
-li_object *li_seventh(li_object *o, li_environment *env)
+li_object *li_seventh(li_object * o, li_environment * env)
 {
 	return li_nth(o,7,env);
 }
@@ -2062,7 +2086,7 @@ LI_HEADER(seventh_operator) {
 	return li_nth(li_eval(li_car(o,env),env),7,env);
 }
 
-li_object *li_eighth(li_object *o, li_environment *env)
+li_object *li_eighth(li_object * o, li_environment * env)
 {
 	return li_nth(o,8,env);
 }
@@ -2070,7 +2094,7 @@ li_object *li_eighth(li_object *o, li_environment *env)
 LI_HEADER(eighth_operator) {
 	return li_nth(li_eval(li_car(o,env),env),8,env);
 }
-li_object *li_ninth(li_object *o,li_environment *env)
+li_object *li_ninth(li_object * o,li_environment * env)
 {
 	return li_nth(o,9,env);
 }
@@ -2079,7 +2103,7 @@ LI_HEADER(ninth_operator) {
 	return li_nth(li_eval(li_car(o,env),env),9,env);
 }
 
-li_object *li_tenth(li_object *o,li_environment *env)
+li_object *li_tenth(li_object * o,li_environment * env)
 {
 	return li_nth(o,10,env);
 }
@@ -2088,7 +2112,7 @@ LI_HEADER(tenth_operator) {
 	return li_nth(li_eval(li_car(o,env),env),10,env);
 }
 
-li_object *li_nth_operator(li_object *o, li_environment *env)
+li_object *li_nth_operator(li_object * o, li_environment * env)
 {
 	return li_nth(li_eval(li_car(li_cdr(o,env),env),env),li_get_int(li_eval(li_car(o,env),env),env),env);
 }
@@ -2107,13 +2131,14 @@ static i4_critical_section_class syms_lock;
 static i4_critical_section_class cell_lock;
 static volatile int threads_need_gc=0;
 
-li_object_pointer *li_object_pointer_list=0;
+li_object_pointer * li_object_pointer_list=0;
 i4_profile_class pf_li_gc("li_gc");
 
 
-li_object *li_not(li_object *o, li_environment *env)
+li_object *li_not(li_object * o, li_environment * env)
 {
-	li_object *v=li_eval(li_car(o,env),env);
+	li_object * v=li_eval(li_car(o,env),env);
+
 	if (!v || v==li_nil)
 	{
 		return li_true_sym;
@@ -2124,13 +2149,13 @@ li_object *li_not(li_object *o, li_environment *env)
 	}
 }
 
-li_object *li_perm_space(li_object *o, li_environment *env)
+li_object *li_perm_space(li_object * o, li_environment * env)
 {
 	//PG: Has no function yet, I'm unshure wheter this is needed in golg (comes from abuse)
 	return 0;
 }
 
-li_object *li_tmp_space(li_object *o, li_environment *env)
+li_object *li_tmp_space(li_object * o, li_environment * env)
 {
 	return 0;
 }
@@ -2138,15 +2163,17 @@ li_object *li_tmp_space(li_object *o, li_environment *env)
 LI_HEADER(push_operator) {
 	//append first argument to the list whose symbol is the second arg.
 	//(second arg must be symbol)
-	li_symbol *sym=li_symbol::get(li_car(li_cdr(o,env),env),env);
-	li_object *o2=new li_list(li_eval(li_car(o,env),env),
-							  li_get_value(sym,env));
+	li_symbol * sym=li_symbol::get(li_car(li_cdr(o,env),env),env);
+	li_object * o2=new li_list(li_eval(li_car(o,env),env),
+							   li_get_value(sym,env));
+
 	li_set_value(sym,o2,env);
 	return o2;
 }
 
 LI_HEADER(pop_operator) {
-	li_symbol *sym=li_symbol::get(li_car(o,env),env);
+	li_symbol * sym=li_symbol::get(li_car(o,env),env);
+
 	//sym->set_value(li_cdr(sym->value(),env));
 	//should newer call set_value directly
 	li_set_value(sym,li_get_value(sym,env),env);
@@ -2155,9 +2182,10 @@ LI_HEADER(pop_operator) {
 
 LI_HEADER(reverse) {
 	//reverse the order of the list
-	li_object *a=0;
+	li_object * a=0;
+
 	a=li_eval(li_car(o,env),env);
-	li_list *l=0;
+	li_list * l=0;
 	while(a)
 	{
 		if (l)
@@ -2174,9 +2202,10 @@ LI_HEADER(reverse) {
 }
 
 LI_HEADER(list_star) {
-	li_object *first=0,*current=0,*last=0;
+	li_object * first=0,* current=0,* last=0;
 	int noargs=li_length(o,env);
 	int actarg=1;
+
 	while(o)
 	{
 		current=li_eval(li_car(o,env),env);
@@ -2211,12 +2240,13 @@ LI_HEADER(list_star) {
 	return first ? first : li_nil;
 }
 
-li_object *li_explicit_list_constructor(li_object *o, li_environment *env)
+li_object *li_explicit_list_constructor(li_object * o, li_environment * env)
 {
 	//in contrary to the quote operator, list evaluates its arguments
 	//li_list *l=li_list::get(o,env);
 	//li_object *ret=0;
-	li_object *first=0,*current=0,*last=0;
+	li_object * first=0,* current=0,* last=0;
+
 	while(o)
 	{
 		current=li_eval(li_car(o,env),env);
@@ -2246,21 +2276,23 @@ li_object *li_explicit_list_constructor(li_object *o, li_environment *env)
 	 */
 }
 
-li_object *li_cons_operator(li_object *o, li_environment *env)
+li_object *li_cons_operator(li_object * o, li_environment * env)
 {
 	//CONS: append first argument to the second arg, which is a list
 	//return li_cdr(o,env);
-	li_object *a=li_eval(li_car(o,env),env);
+	li_object * a=li_eval(li_car(o,env),env);
 	//if (a->type()!=LI_LIST) a=new li_list(a);
-	li_object *l=li_eval(li_second(o,env),env);
+	li_object * l=li_eval(li_second(o,env),env);
+
 	//if (l==li_nil) l=0;//end of list
 	//if (l->type()!=LI_LIST) l=new li_list(l);
 	return new li_list(a,l);
 }
 
-li_object *li_progn(li_object *o, li_environment *env)
+li_object *li_progn(li_object * o, li_environment * env)
 {
-	li_object *ret=li_nil;
+	li_object * ret=li_nil;
+
 	while (o)
 	{
 		ret=li_eval(li_car(o,env),env);
@@ -2269,8 +2301,10 @@ li_object *li_progn(li_object *o, li_environment *env)
 	return ret;
 }
 
-LI_HEADER(prog1) { //return result of first form.
-	li_object *ret=li_nil;
+LI_HEADER(prog1) {
+	//return result of first form.
+	li_object * ret=li_nil;
+
 	ret=li_eval(li_car(o,env),env);
 	o=li_cdr(o,env);
 	while(o)
@@ -2283,12 +2317,13 @@ LI_HEADER(prog1) { //return result of first form.
 
 LI_HEADER(zerop) {
 	int i=li_get_int(li_car(o,env),env);
+
 	return (i==0 ? li_true_sym : li_nil);
 }
 
-li_object *li_if(li_object *o, li_environment *env)
+li_object *li_if(li_object * o, li_environment * env)
 {
-	li_object *v=li_eval(li_car(o,env), env);
+	li_object * v=li_eval(li_car(o,env), env);
 
 	if (v && v!=li_nil)
 	{
@@ -2296,7 +2331,7 @@ li_object *li_if(li_object *o, li_environment *env)
 	}
 
 	o=li_cdr(li_cdr(o,env),env);
-	li_object *ret=li_nil;
+	li_object * ret=li_nil;
 	while (o)
 	{
 		ret=li_eval(li_car(o,env), env);
@@ -2307,10 +2342,12 @@ li_object *li_if(li_object *o, li_environment *env)
 
 
 
-LI_HEADER(eq) { //compare addresses only
+LI_HEADER(eq) {
+	//compare addresses only
 	//don't do any evaluation
-	li_object *o1=li_first(o,env);
-	li_object *o2=li_second(o,env);
+	li_object * o1=li_first(o,env);
+	li_object * o2=li_second(o,env);
+
 	if (o1==o2)
 	{
 		return li_true_sym;
@@ -2344,8 +2381,9 @@ LI_HEADER(implementation_version) {
 }
 
 LI_HEADER(eql) {
-	li_object *o1=li_first(o,env);
-	li_object *o2=li_second(o,env);
+	li_object * o1=li_first(o,env);
+	li_object * o2=li_second(o,env);
+
 	if (o1==o2)
 	{
 		return li_true_sym;
@@ -2363,10 +2401,10 @@ LI_HEADER(eql) {
 
 
 
-li_object *li_equal(li_object *o, li_environment *env)
+li_object *li_equal(li_object * o, li_environment * env)
 {
-	li_object *o1=li_eval(li_first(o,env),env);
-	li_object *o2=li_eval(li_second(o,env),env);
+	li_object * o1=li_eval(li_first(o,env),env);
+	li_object * o2=li_eval(li_second(o,env),env);
 
 	if (o1->type()!=o2->type())
 	{
@@ -2389,13 +2427,14 @@ li_object *li_equal(li_object *o, li_environment *env)
 	return li_true_sym;
 }
 
-li_object *li_assoc(li_object *o, li_environment *env)
+li_object *li_assoc(li_object * o, li_environment * env)
 {
-	li_object *item=li_eval(li_car(o,env),env);
-	li_object *list=li_eval(li_second(o,env),env);
+	li_object * item=li_eval(li_car(o,env),env);
+	li_object * list=li_eval(li_second(o,env),env);
+
 	while (list)
 	{
-		li_object *test=li_eql(li_make_list(li_car(li_car(list,env),env),item,0),env);
+		li_object * test=li_eql(li_make_list(li_car(li_car(list,env),env),item,0),env);
 		if (li_get_bool(test,env))
 		{
 			return li_car(list,env);
@@ -2406,14 +2445,15 @@ li_object *li_assoc(li_object *o, li_environment *env)
 }
 
 LI_HEADER(pairlis) {
-	li_object *o1=li_eval(li_first(o,env),env);
-	li_object *o2=li_eval(li_second(o,env),env);
-	li_object *o3=li_cdr(li_cdr(o,env),env);
+	li_object * o1=li_eval(li_first(o,env),env);
+	li_object * o2=li_eval(li_second(o,env),env);
+	li_object * o3=li_cdr(li_cdr(o,env),env);
+
 	if ((o1->type()!=LI_LIST)||(o2->type()!=LI_LIST))
 	{
 		return li_nil;
 	}
-	li_object *ret=0;
+	li_object * ret=0;
 	int l1=li_length(o1,env);
 	int l2=li_length(o2,env);
 	if (l1!=l2)
@@ -2423,7 +2463,7 @@ LI_HEADER(pairlis) {
 	}
 	if (l1!=0)
 	{
-		li_object *cur=0,*last=0;
+		li_object * cur=0,* last=0;
 		while (o1!=0)
 		{
 			last=cur;
@@ -2450,7 +2490,8 @@ LI_HEADER(pairlis) {
 }
 
 LI_HEADER(atom) {
-	li_object *at=li_eval(li_car(o,env),env);
+	li_object * at=li_eval(li_car(o,env),env);
+
 	if (at==0||at==li_nil)
 	{
 		return li_true_sym;
@@ -2467,7 +2508,8 @@ LI_HEADER(atom) {
 	}
 }
 LI_HEADER(consp) {
-	li_object *at=li_eval(li_car(o,env),env);
+	li_object * at=li_eval(li_car(o,env),env);
+
 	if (at==0||at==li_nil)
 	{
 		return li_nil;
@@ -2531,13 +2573,14 @@ LI_HEADER(consp) {
    	}*/
 
 LI_HEADER(append) {
-	li_list *first=0, *next=0, *last=0;
-	li_object *cur=o;
-	li_object *start=o;
-	li_vector *v=new li_vector();
-	li_object_vect_type *args=v->reserved();
-	li_object *tmp=0;
+	li_list * first=0, * next=0, * last=0;
+	li_object * cur=o;
+	li_object * start=o;
+	li_vector * v=new li_vector();
+	li_object_vect_type * args=v->reserved();
+	li_object * tmp=0;
 	int noargs=0;
+
 	while (cur)
 	{
 		noargs++;
@@ -2592,6 +2635,7 @@ LI_HEADER(append) {
 
 		}
 		while (last->next()) last=(li_list *)last->next();
+
 		//go to end of list
 	}    //for
 	return first;
@@ -2603,29 +2647,30 @@ LI_HEADER(append) {
 //! The assignments are done "simoultaneously", so use old environment for
 //! var_list evaluations.
 LI_HEADER(let) {
-	li_object *var_list=li_car(o,env);
-	li_object *block_list=li_cdr(o,env);
+	li_object * var_list=li_car(o,env);
+	li_object * block_list=li_cdr(o,env);
+
 	if (!env)
 	{
 		env=new li_environment(0,i4_F);
 	}
-	li_environment *local=new li_environment(env,i4_T);
+	li_environment * local=new li_environment(env,i4_T);
 	while(var_list&&(var_list!=li_nil))
 	{
-		li_object *a=li_car(var_list,local);
+		li_object * a=li_car(var_list,local);
 		if (a->type()==LI_SYMBOL) //for cases like (let (x) (setq x 10))
 		{
 			li_define_value((li_symbol *)a,li_nil,local);
 		}
 		else
 		{
-			li_symbol *sym=li_symbol::get(li_car(a,local),local);
-			li_object *value=li_eval(li_car(li_cdr(a,env),env),env);
+			li_symbol * sym=li_symbol::get(li_car(a,local),local);
+			li_object * value=li_eval(li_car(li_cdr(a,env),env),env);
 			li_define_value(sym,value,local); //create symbol in new (local) environment
 		}
 		var_list=li_cdr(var_list,env);
 	}
-	li_object *ret=0;
+	li_object * ret=0;
 	while(block_list&&(block_list!=li_nil))
 	{
 		ret=li_eval(li_car(block_list,local),local); //setq's here will automatically find corresponding env
@@ -2636,8 +2681,9 @@ LI_HEADER(let) {
 
 //Add a property value to a symbol
 LI_HEADER(put) {
-	li_symbol *symb=li_symbol::get(li_eval(li_first(o,env),env),env);
-	li_object *value=li_eval(li_third(o,env),env);
+	li_symbol * symb=li_symbol::get(li_eval(li_first(o,env),env),env);
+	li_object * value=li_eval(li_third(o,env),env);
+
 	symb->add_property(li_eval(li_second(o,env),env),value);
 	return value;
 	/*
@@ -2656,47 +2702,52 @@ LI_HEADER(put) {
 
 //retrieve a property value
 LI_HEADER(get) {
-	li_symbol *symb=li_symbol::get(li_eval(li_first(o,env),env),env);
+	li_symbol * symb=li_symbol::get(li_eval(li_first(o,env),env),env);
+
 	return symb->get_property(li_eval(li_second(o,env),env));
 }
 
-LI_HEADER(symbol_plist) { //symbol-plist for lisp
-	li_symbol *symb=li_symbol::get(li_eval(li_first(o,env),env),env);
+LI_HEADER(symbol_plist) {
+	//symbol-plist for lisp
+	li_symbol * symb=li_symbol::get(li_eval(li_first(o,env),env),env);
+
 	return symb->get_plist();
 }
 
 LI_HEADER(setplist) {
-	li_symbol *symb=li_symbol::get(li_eval(li_first(o,env),env),env);
-	li_object *value=li_eval(li_second(o,env),env);
+	li_symbol * symb=li_symbol::get(li_eval(li_first(o,env),env),env);
+	li_object * value=li_eval(li_second(o,env),env);
+
 	symb->set_plist(value);
 	return value;
 }
 
 LI_HEADER(let_star) {
 	//the assignments are done in order,
-	li_object *var_list=li_car(o,env);
-	li_object *block_list=li_cdr(o,env);
+	li_object * var_list=li_car(o,env);
+	li_object * block_list=li_cdr(o,env);
+
 	if (!env)
 	{
 		env=new li_environment(0,i4_F);
 	}
-	li_environment *local=new li_environment(env,i4_T);
+	li_environment * local=new li_environment(env,i4_T);
 	while(var_list)
 	{
-		li_object *a=li_car(var_list,local);
+		li_object * a=li_car(var_list,local);
 		if (a->type()==LI_SYMBOL) //for cases like (let (x) (setq x 10))
 		{
 			li_define_value((li_symbol *)a,li_nil,local);
 		}
 		else
 		{
-			li_symbol *sym=li_symbol::get(li_car(a,local),local);
-			li_object *value=li_eval(li_car(li_cdr(a,local),local),local);
+			li_symbol * sym=li_symbol::get(li_car(a,local),local);
+			li_object * value=li_eval(li_car(li_cdr(a,local),local),local);
 			li_define_value(sym,value,local);
 		}
 		var_list=li_cdr(var_list,env);
 	}
-	li_object *ret=0;
+	li_object * ret=0;
 	while(block_list)
 	{
 		ret=li_eval(li_car(block_list,local),local);
@@ -2706,19 +2757,20 @@ LI_HEADER(let_star) {
 }
 
 
-LI_HEADER(user_function_evaluator) { //called for any user function
-	li_symbol *val=env->current_function();
-	li_object *ret=0;
-	li_object *f=li_get_fun(val, env); //get pointer to function code data
-	li_user_function::user_function_data *uf=li_user_function::get(f,env)->data();
+LI_HEADER(user_function_evaluator) {
+	//called for any user function
+	li_symbol * val=env->current_function();
+	li_object * ret=0;
+	li_object * f=li_get_fun(val, env); //get pointer to function code data
+	li_user_function::user_function_data * uf=li_user_function::get(f,env)->data();
 
 	if (!env)
 	{
 		env=new li_environment(0,i4_F);
 	}
-	li_environment *local=new li_environment(env,i4_T);
-	li_object *p=li_list::get(uf->_params,local); //be type-safe
-	li_object *act=li_list::get(o,local);
+	li_environment * local=new li_environment(env,i4_T);
+	li_object * p=li_list::get(uf->_params,local); //be type-safe
+	li_object * act=li_list::get(o,local);
 	/*while(p)//varargs not yet supported
 	   	{
 	   	li_symbol *sym=li_symbol::get(li_car(p,local),local);
@@ -2729,7 +2781,7 @@ LI_HEADER(user_function_evaluator) { //called for any user function
 	   	}
 	 */
 	li_bind_params(p,act,local);
-	li_object *expr=uf->_code;
+	li_object * expr=uf->_code;
 	while (expr)
 	{
 		ret=li_eval(li_car(expr,local),local);
@@ -2743,7 +2795,7 @@ LI_HEADER(user_macro_evaluator) {
 	//we don't only need to use noevalonbind here but need to quote
 	//every argument before the call, because they will be double-evaled
 	//anyway. (at least I think this will help)
-	li_object *o1=li_get_type(o)->copy(o);
+	li_object * o1=li_get_type(o)->copy(o);
 	//li_list *ob=li_list::get(o1,env);
 
 	//while (ob)
@@ -2753,26 +2805,30 @@ LI_HEADER(user_macro_evaluator) {
 	//    ob=li_list::get(li_cdr(ob,env),env);
 	//    }
 
-	li_object *o2=new li_list(li_get_symbol("&noevalonbind"),o1);
-	li_object *macroeval=li_user_function_evaluator(o2,env);
+	li_object * o2=new li_list(li_get_symbol("&noevalonbind"),o1);
+	li_object * macroeval=li_user_function_evaluator(o2,env);
+
 	return li_eval(macroeval,env); //evaluate result of macro expansion.
 }
 
 LI_HEADER(makunbound) {
-	li_symbol *s=li_symbol::get(li_eval(li_first(o,env),env),env);
+	li_symbol * s=li_symbol::get(li_eval(li_first(o,env),env),env);
+
 	li_set_value(s,0,env); //the gc will do the rest
 	return s;
 }
 
 LI_HEADER(fmakunbound) {
-	li_symbol *s=li_symbol::get(li_eval(li_first(o,env),env),env);
+	li_symbol * s=li_symbol::get(li_eval(li_first(o,env),env),env);
+
 	s->set_fun(0);
 	return s;
 }
 
 
 LI_HEADER(documentation) {
-	li_symbol *s=li_symbol::get(li_first(o,env),env);
+	li_symbol * s=li_symbol::get(li_first(o,env),env);
+
 	if (s->fun())
 	{
 		if (s->fun()->type()==LI_USER_FUNCTION)
@@ -2784,17 +2840,17 @@ LI_HEADER(documentation) {
 }
 
 LI_HEADER(special_function_evaluator) {
-	li_object *ret=0;
-	li_symbol *val=env->current_function();
+	li_object * ret=0;
+	li_symbol * val=env->current_function();
 
-	li_object *f=li_get_fun(val, env); //get pointer to function code data
-	li_user_function::user_function_data *uf=li_user_function::get(f,env)->data();
+	li_object * f=li_get_fun(val, env); //get pointer to function code data
+	li_user_function::user_function_data * uf=li_user_function::get(f,env)->data();
 
 	if (!env)
 	{
 		env=new li_environment(0,i4_F);
 	}                                        //very seldom if this is called with no env
-	li_environment *local=uf->_locals;
+	li_environment * local=uf->_locals;
 	local=local->set_next(env); //include old environment in search chain (only top-level needed, i hope)
 
 
@@ -2808,10 +2864,12 @@ LI_HEADER(symbol_value) {
 	return li_eval(li_car(o,env),env);
 }
 
-LI_HEADER(function) { //called when function is evaluated
-	li_user_function *ret=0;
-	li_object *fn=li_car(o,env);
-	li_string *n=li_get_symbol("lambda")->name();
+LI_HEADER(function) {
+	//called when function is evaluated
+	li_user_function * ret=0;
+	li_object * fn=li_car(o,env);
+	li_string * n=li_get_symbol("lambda")->name();
+
 	//currently, name must be "lambda" otherwise, we risk infinite recusion on evaluation
 	//on something like ((function +) 8 9)
 	/*if (fn->type() == LI_SYMBOL)
@@ -2839,21 +2897,22 @@ LI_HEADER(function) { //called when function is evaluated
 }
 
 LI_HEADER(defmacro_operator) {
-	li_object *n1=li_first(o,env);
+	li_object * n1=li_first(o,env);
+
 	//if (n1->type()==LI_LIST) n1=li_eval(li_car(n1,env),env);//special case if symbol is evaluated
 	if (n1->type()!=LI_SYMBOL)
 	{
 		li_error(env,"USER: defmacro: First argument must be a symbol.");
 		return 0;
 	}
-	li_symbol *n=li_symbol::get(n1,env); //name
-	li_object *hd=li_second(o,env); //param list
+	li_symbol * n=li_symbol::get(n1,env); //name
+	li_object * hd=li_second(o,env); //param list
 	if (hd==li_nil)
 	{
 		hd=0;
 	}                    //faster to test on evaluation
-	li_object *body=li_cdr(li_cdr(o,env),env); //body
-	li_string *docu=0;
+	li_object * body=li_cdr(li_cdr(o,env),env); //body
+	li_string * docu=0;
 	if (li_car(body,env)->type()==LI_STRING)
 	{
 		docu=li_string::get(li_car(body,env),env);
@@ -2861,40 +2920,41 @@ LI_HEADER(defmacro_operator) {
 		body=li_cdr(body,env);
 	}
 
-	li_user_function *fn=new li_user_function(li_user_macro_evaluator,
-											  hd,env,0,body,n->name());
+	li_user_function * fn=new li_user_function(li_user_macro_evaluator,
+											   hd,env,0,body,n->name());
 	fn->data()->_reserved=docu;
 
-	li_symbol *sym=li_symbol::get(n,0); //defmacro has always global effect.
+	li_symbol * sym=li_symbol::get(n,0); //defmacro has always global effect.
 	sym->set_fun(fn);
 	return n;
 }
 
 LI_HEADER(defun_operator) {
-	li_object *n1=li_first(o,env);
+	li_object * n1=li_first(o,env);
+
 	if (n1->type()==LI_LIST)
 	{
 		n1=li_eval(li_car(n1,env),env);
 	}                                                       //special case if symbol is evaluated
-	li_symbol *n=li_symbol::get(n1,env); //name
-	li_object *hd=li_second(o,env); //param list
+	li_symbol * n=li_symbol::get(n1,env); //name
+	li_object * hd=li_second(o,env); //param list
 	if (hd==li_nil)
 	{
 		hd=0;
 	}                    //faster to test on evaluation
-	li_object *body=li_cdr(li_cdr(o,env),env); //body
-	li_string *docu=0;
+	li_object * body=li_cdr(li_cdr(o,env),env); //body
+	li_string * docu=0;
 	if (li_car(body,env)->type()==LI_STRING)
 	{
 		docu=li_string::get(li_car(body,env),env);
 		//has a documentation-string
 		body=li_cdr(body,env);
 	}
-	li_user_function *fn=new li_user_function(li_user_function_evaluator,
-											  hd,env,0,body,n->name());
+	li_user_function * fn=new li_user_function(li_user_function_evaluator,
+											   hd,env,0,body,n->name());
 	fn->data()->_reserved=docu;
 
-	li_symbol *sym=li_symbol::get(n,0); //defun has always global effect.
+	li_symbol * sym=li_symbol::get(n,0); //defun has always global effect.
 	//if (env)
 	//	env->set_fun(sym, fn);
 	//else
@@ -2902,7 +2962,7 @@ LI_HEADER(defun_operator) {
 	return n;
 }
 
-li_object *li_symbol_list(li_object *o, li_environment *env)
+li_object *li_symbol_list(li_object * o, li_environment * env)
 {
 	return li_nil; //Abuse has this like this, dono what it's for.
 }
@@ -2917,6 +2977,7 @@ LI_HEADER(car_operator) {
 
 LI_HEADER(nthcdr) {
 	int i=li_get_int(li_eval(li_car(o,env),env),env);
+
 	o=li_eval(li_second(o,env));
 	while (i>0)
 	{
@@ -2928,12 +2989,13 @@ LI_HEADER(nthcdr) {
 
 
 LI_HEADER(intern) {
-	li_string *s= li_string::get(li_eval(li_car(o,env),env),env);
+	li_string * s= li_string::get(li_eval(li_car(o,env),env),env);
+
 	return li_get_symbol(s->value());
 }
 
 
-li_object *private_backquote(li_object *o, li_environment *env)
+li_object *private_backquote(li_object * o, li_environment * env)
 {
 	//don't call directly
 	if (o==0||o==li_nil)
@@ -2949,9 +3011,9 @@ li_object *private_backquote(li_object *o, li_environment *env)
 	{
 		//a comma: evaluate next element, continue then.
 		//@ not yet supported
-		li_object *a=li_eval(li_car(li_cdr(o,env),env),env);
+		li_object * a=li_eval(li_car(li_cdr(o,env),env),env);
 		//if (a->type()==LI_LIST) a=li_car(a,env);//if this was a function, its result is here
-		li_object *b=private_backquote(li_cdr(li_cdr(o,env),env),env);
+		li_object * b=private_backquote(li_cdr(li_cdr(o,env),env),env);
 		return new li_list(a,b);
 		//warning: for some arbitrary reason, my compiller would evaluate b before a,
 		//which results in strange problems (x not defined)
@@ -2959,33 +3021,34 @@ li_object *private_backquote(li_object *o, li_environment *env)
 	}
 	else
 	{
-		li_object *a2=li_car(o,env);
+		li_object * a2=li_car(o,env);
 		//if (a2->type()==LI_LIST)//recurse only if list
 		a2=private_backquote(a2,env);
-		li_object *b2=private_backquote(li_cdr(o,env),env);
+		li_object * b2=private_backquote(li_cdr(o,env),env);
 		return new li_list(a2,b2);
 	}
 }
 
-li_object *backquote(li_object *o,li_environment *env)
+li_object *backquote(li_object * o,li_environment * env)
 {
 	return private_backquote(li_car(o,env),env); //for some reason, this is needed
 }
 
-li_object *li_acons(li_object *o, li_environment *env)
+li_object *li_acons(li_object * o, li_environment * env)
 {
 	//clisp means (acons a b c) is same as (cons (cons a b) c)
 	//Abuse has something different.
-	li_object *o1=li_eval(li_first(o,env),env);
-	li_object *o2=li_eval(li_second(o,env),env);
-	li_object *o3=li_eval(li_third(o,env),env);
+	li_object * o1=li_eval(li_first(o,env),env);
+	li_object * o2=li_eval(li_second(o,env),env);
+	li_object * o3=li_eval(li_third(o,env),env);
+
 	return new li_list(new li_list(o1,o2),o3); //Eh, GC is fun: We write as in java...
 }
 
 
 
 
-li_object_pointer::li_object_pointer(li_object *obj)
+li_object_pointer::li_object_pointer(li_object * obj)
 {
 	o=obj;
 	next=li_object_pointer_list;
@@ -3000,7 +3063,7 @@ li_object_pointer::~li_object_pointer()
 	}
 	else
 	{
-		li_object_pointer *last=0, *p;
+		li_object_pointer * last=0, * p;
 		for (p=li_object_pointer_list; p && p!=this;)
 		{
 			last=p;
@@ -3016,16 +3079,16 @@ li_object_pointer::~li_object_pointer()
 
 
 // global symbols
-li_symbol *li_nil=0,
-*li_true_sym=0,
-*li_quote=0,
-*li_backquote=0,
-*li_comma=0,
-*li_function_symbol=0,
-*li_vector_symbol=0,
-*li_lambda_symbol=0;
+li_symbol * li_nil=0,
+* li_true_sym=0,
+* li_quote=0,
+* li_backquote=0,
+* li_comma=0,
+* li_function_symbol=0,
+* li_vector_symbol=0,
+* li_lambda_symbol=0;
 
-static li_gc_object_marker_class *gc_helpers=0;
+static li_gc_object_marker_class * gc_helpers=0;
 
 li_gc_object_marker_class::li_gc_object_marker_class()
 {
@@ -3041,7 +3104,7 @@ li_gc_object_marker_class::~li_gc_object_marker_class()
 	}
 	else
 	{
-		li_gc_object_marker_class *last=0, *p;
+		li_gc_object_marker_class * last=0, * p;
 		for (p=gc_helpers; p!=this;)
 		{
 			last=p;
@@ -3067,9 +3130,9 @@ public:
 		TABLE_SIZE=16384
 	};
 protected:
-	li_symbol *table[TABLE_SIZE];
+	li_symbol * table[TABLE_SIZE];
 	i4_bool active;
-	li_symbol *li_find_symbol(li_symbol *&li_root, const char *name)
+	li_symbol *li_find_symbol(li_symbol *&li_root, const char * name)
 	{
 		//Locking is not really necessary, as the only point
 		//where a race condition might occur is when one thread is just
@@ -3079,7 +3142,7 @@ protected:
 		//syms_lock.lock();
 		if (li_root)
 		{
-			li_symbol *p=li_root;
+			li_symbol * p=li_root;
 			for(;;)
 			{
 				int cmp=strcmp(name,p->name()->value());
@@ -3119,7 +3182,7 @@ protected:
 		return 0;
 	}
 
-	li_symbol *li_get_symbol(li_symbol *&li_root, const char *name)         // if symbol doesn't exsist, it is created
+	li_symbol *li_get_symbol(li_symbol *&li_root, const char * name)         // if symbol doesn't exsist, it is created
 	{
 		//syms_lock.lock();
 
@@ -3131,7 +3194,7 @@ protected:
 		}
 		else
 		{
-			li_symbol *p=li_root;
+			li_symbol * p=li_root;
 			for(;;)
 			{
 
@@ -3144,7 +3207,7 @@ protected:
 					}
 					else
 					{
-						li_symbol *atleft=new li_symbol(new li_string(name));
+						li_symbol * atleft=new li_symbol(new li_string(name));
 						p->set_left(atleft);
 						//syms_lock.unlock();
 						return p->left();
@@ -3158,7 +3221,7 @@ protected:
 					}
 					else
 					{
-						li_symbol *atright=new li_symbol(new li_string(name));
+						li_symbol * atright=new li_symbol(new li_string(name));
 						p->set_right(atright);
 						//syms_lock.unlock();
 						return p->right();
@@ -3175,7 +3238,7 @@ protected:
 		//syms_lock.unlock();
 		return 0;
 	}
-	void li_recursive_mark(li_symbol *p, int set)
+	void li_recursive_mark(li_symbol * p, int set)
 	{
 		if (p)
 		{
@@ -3184,7 +3247,7 @@ protected:
 			li_recursive_mark(p->right(), set);
 		}
 	}
-	static w16 li_check_sum16(const char *buf)
+	static w16 li_check_sum16(const char * buf)
 	{
 		w8 c1=0,c2=0;
 
@@ -3203,20 +3266,20 @@ public:
 		active=i4_T;
 	}
 	// Creates a new entry if it doesn't exist.
-	li_symbol *get_symbol(w32 key, const char *name)
+	li_symbol *get_symbol(w32 key, const char * name)
 	{
 		syms_lock.lock();
 		li_symbol *&local_root=table[key%TABLE_SIZE];
-		li_symbol *ret=li_get_symbol(local_root,name);
+		li_symbol * ret=li_get_symbol(local_root,name);
 		syms_lock.unlock();
 		return ret;
 	}
 	//does never alter the table
-	li_symbol *lookup_symbol(w32 key, const char *name)
+	li_symbol *lookup_symbol(w32 key, const char * name)
 	{
 		syms_lock.lock();
 		li_symbol *&local_root=table[key%TABLE_SIZE];
-		li_symbol *ret=li_find_symbol(local_root,name);
+		li_symbol * ret=li_find_symbol(local_root,name);
 		syms_lock.unlock();
 		return ret;
 	}
@@ -3227,7 +3290,7 @@ public:
 			li_recursive_mark(table[k],set);
 		}
 	}
-	static w32 fast_hash(const char *name)
+	static w32 fast_hash(const char * name)
 	{
 		return li_check_sum16(name);
 	}
@@ -3260,7 +3323,7 @@ public:
 		}
 	}
 private:
-	void private_li_symbol_info(li_symbol *p,long depth,
+	void private_li_symbol_info(li_symbol * p,long depth,
 								long &nosymbols, long &maxdepth)
 	{
 		if (p)
@@ -3275,7 +3338,7 @@ private:
 				li_error(0,"CRITICAL: li_symbol_info: Invalid type occured in symbol table.");
 			}
 			private_li_symbol_info(p->left(),depth+1,nosymbols,maxdepth);
-			char *c=p->name()->value();
+			char * c=p->name()->value();
 			i4_warning(c);
 			//Sleep(1);//required, because if OutputDebugString is called to fast, MSVC skips output.
 			i4_thread_sleep(1);
@@ -3293,9 +3356,10 @@ li_sym_hashtable li_hash;
 /// If the symbol doesn't exist, NULL is returned.
 /// \param name The name of the symbol to check for
 /// \return The symbol pointer or NULL.
-li_symbol *li_find_symbol(const char *name)
+li_symbol *li_find_symbol(const char * name)
 {
 	w32 key=li_sym_hashtable::fast_hash(name);
+
 	return li_hash.lookup_symbol(key,name);
 }
 
@@ -3359,11 +3423,12 @@ li_symbol *li_find_symbol(const char *name)
 /// If the symbol doesn't exist, it is created.
 /// \param name The symbol to be searched for.
 /// \return A symbol pointer. Never NULL.
-li_symbol *li_get_symbol(const char *name)
+li_symbol *li_get_symbol(const char * name)
 {
 	// Return a hash value of the name.
 	// Probably we'll do something faster than i4_w32_checksum, also because we only need 16 bit.
 	w32 key=li_sym_hashtable::fast_hash(name);
+
 	return li_hash.get_symbol(key,name);
 }
 
@@ -3446,7 +3511,7 @@ li_symbol *li_get_symbol(const char *name)
    }
  */
 
-li_symbol *li_get_symbol(char *name, li_symbol *&cache_to)
+li_symbol *li_get_symbol(char * name, li_symbol *&cache_to)
 {
 	if (cache_to)
 	{
@@ -3475,7 +3540,7 @@ LI_HEADER(symbol_info) {
 	return new li_list(new li_int(nosymbols),new li_int(maxdepth));
 }
 
-void li_mark_symbol_tree(li_symbol *s, int set)
+void li_mark_symbol_tree(li_symbol * s, int set)
 {
 	if (s)
 	{
@@ -3489,8 +3554,8 @@ void li_mark_symbol_tree(li_symbol *s, int set)
 	}
 }
 
-void li_mark_memory_region(li_list **start, li_list **end,
-						   li_list *c1, li_list *c2, int set, int mask=7)
+void li_mark_memory_region(li_list * * start, li_list * * end,
+						   li_list * c1, li_list * c2, int set, int mask=7)
 {
 	if (set)
 	{
@@ -3498,7 +3563,7 @@ void li_mark_memory_region(li_list **start, li_list **end,
 		//wheter a word contained in it may be a li_object* pointer.
 		//if so, mark it.
 
-		for (li_list **s=start; s!=end; s++)
+		for (li_list * * s=start; s!=end; s++)
 		{
 			if ( ((wptr)(*s)&mask)==0 &&  *s>=c1 && *s<c2 && (*s)->type() && !(*s)->is_marked())
 			{
@@ -3508,7 +3573,7 @@ void li_mark_memory_region(li_list **start, li_list **end,
 	}
 	else
 	{
-		for (li_list **s=start; s!=end; s++)
+		for (li_list * * s=start; s!=end; s++)
 		{
 			if (((wptr)(*s)&mask)==0 && *s>=c1 && *s<c2 && (*s)->is_marked())
 			{
@@ -3519,8 +3584,10 @@ void li_mark_memory_region(li_list **start, li_list **end,
 
 }
 
-LI_HEADER(aref) { //the default (rvalue) implementation
-	li_object *vect=li_eval(li_car(o,env),env); //may be some (make-array) form
+LI_HEADER(aref) {
+	//the default (rvalue) implementation
+	li_object * vect=li_eval(li_car(o,env),env); //may be some (make-array) form
+
 	if (vect->type()==LI_SYMBOL) //this is needed because aref is used like a special form
 	{
 		//if symbol, get contents of it
@@ -3535,7 +3602,8 @@ LI_HEADER(comma_error) {
 }
 
 LI_HEADER(explicit_make_vector) {
-	li_vector *v=new li_vector();
+	li_vector * v=new li_vector();
+
 	o=li_car(o,env); //must dereference once.
 	while (o)
 	{
@@ -3545,9 +3613,10 @@ LI_HEADER(explicit_make_vector) {
 	return v;
 }
 //this is a helper function for the next, don't use otherwise
-static void li_replace_nth_element(li_object *o, li_environment *env, li_object *update_width, int N)
+static void li_replace_nth_element(li_object * o, li_environment * env, li_object * update_width, int N)
 {
-	li_object *list1=li_eval(o,env);
+	li_object * list1=li_eval(o,env);
+
 	for (int nth=0; nth<N; nth++)
 	{
 		list1=li_cdr(list1,env);
@@ -3568,7 +3637,7 @@ static void li_replace_nth_element(li_object *o, li_environment *env, li_object 
    	}
  */
 
-void li_eval_lvalue(li_object *o, li_environment *env, li_object *update_width)
+void li_eval_lvalue(li_object * o, li_environment * env, li_object * update_width)
 {
 	/*for setf, it is required to have an lvalue to set.
 	   this must only be defined for the following functions:
@@ -3588,27 +3657,28 @@ void li_eval_lvalue(li_object *o, li_environment *env, li_object *update_width)
 	   tenth       cdddr      cadddr           cddddr
 	   member
 	 */
-	li_list *expr=li_list::get(o,env);
-	li_symbol *sym=li_symbol::get(li_car(o,env),env);
+	li_list * expr=li_list::get(o,env);
+	li_symbol * sym=li_symbol::get(li_car(o,env),env);
 
-	char *sname=sym->name()->value();
+	char * sname=sym->name()->value();
+
 	if (strcmp(sname,"aref")==0)
 	{
-		li_object *vect=li_eval(li_car(li_cdr(o,env),env),env); //may be some (make-array) form
+		li_object * vect=li_eval(li_car(li_cdr(o,env),env),env); //may be some (make-array) form
 		if (vect->type()==LI_SYMBOL)
 		{
 			//if symbol, get contents of it
 			vect=li_get_value(li_symbol::get(vect,env),env);
 		}
 		int offset=li_get_int(li_eval(li_third(o,env),env),env);
-		li_object_vect_type *a=li_vector::get(vect,env)->reserved();
+		li_object_vect_type * a=li_vector::get(vect,env)->reserved();
 		a->operator [](offset)=update_width; //update array
 		return;
 	}
 	if (strcmp(sname,"member")==0) //class member access operator
 	{
-		li_class *cl=li_class::get(li_eval(li_second(o,env),env),env);
-		li_symbol *memb=li_symbol::get(li_eval(li_third(o,env),env),env);
+		li_class * cl=li_class::get(li_eval(li_second(o,env),env),env);
+		li_symbol * memb=li_symbol::get(li_eval(li_third(o,env),env),env);
 		//*(cl->object_place(cl->member_offset(memb)))=update_width;
 		cl->set_value(cl->member_offset(memb),update_width);
 		return;
@@ -3648,12 +3718,13 @@ void li_eval_lvalue(li_object *o, li_environment *env, li_object *update_width)
 	if (sname[0]=='c') //some sort of car or cdr
 	{
 		char sec=sname[1]; //the first letter, either a or d;
-		li_object *list=li_eval(li_car(li_cdr(o,env),env),env);
+		li_object * list=li_eval(li_car(li_cdr(o,env),env),env);
 		int i=0;
 		do
 		{
 			i++;
-		} while (sname[i+1]!='r');
+		}
+		while (sname[i+1]!='r');
 		for (int j=i; j>1; j--)
 		{
 			if (sname[j]=='a')
@@ -3680,14 +3751,16 @@ void li_eval_lvalue(li_object *o, li_environment *env, li_object *update_width)
 	return;
 }
 
-LI_HEADER(defvar) { //same as (setf symbol value) but doesn't do anything if
+LI_HEADER(defvar) {
+	//same as (setf symbol value) but doesn't do anything if
 //symbol already has a value - returns symbol, not value
 	//always sets global context (env=0)
-	li_symbol *s=li_symbol::get(li_car(o,env),env);
-	li_object *val=li_get_value(s,0);
+	li_symbol * s=li_symbol::get(li_car(o,env),env);
+	li_object * val=li_get_value(s,0);
+
 	if (val==0)
 	{
-		li_object *toeval=li_cdr(o,env);
+		li_object * toeval=li_cdr(o,env);
 		if (toeval!=0&&toeval!=li_nil)
 		{
 			val=li_eval(li_car(li_cdr(o,env),env),env);
@@ -3698,12 +3771,13 @@ LI_HEADER(defvar) { //same as (setf symbol value) but doesn't do anything if
 }
 
 LI_HEADER(make_local_variable) {
-	li_symbol *sym=li_symbol::get(li_eval(li_first(o,env),env),env);
+	li_symbol * sym=li_symbol::get(li_eval(li_first(o,env),env),env);
+
 	if (!env)
 	{
 		li_set_value(sym,li_nil,0);
 	}
-	li_environment *varenv=env->env_for_symbol(li_get_symbol("window_identifier"));
+	li_environment * varenv=env->env_for_symbol(li_get_symbol("window_identifier"));
 	if (varenv==0)
 	{
 		//This is non-standard, but we can just do anything here, since
@@ -3718,8 +3792,9 @@ LI_HEADER(make_local_variable) {
 }
 
 LI_HEADER(memq) {
-	li_object *lookfor=li_eval(li_first(o,env),env);
-	li_object *list=li_eval(li_second(o,env),env);
+	li_object * lookfor=li_eval(li_first(o,env),env);
+	li_object * list=li_eval(li_second(o,env),env);
+
 	while(list)
 	{
 		if (li_car(list,env)==lookfor)
@@ -3731,20 +3806,20 @@ LI_HEADER(memq) {
 	return li_nil;
 }
 
-li_object *li_while(li_object *o, li_environment *env)
+li_object *li_while(li_object * o, li_environment * env)
 {
 	for (;;)
 	{
-		li_object *cond=li_first(o,env);
-		li_object *ret=li_eval(cond,env);
+		li_object * cond=li_first(o,env);
+		li_object * ret=li_eval(cond,env);
 		if (ret==0 || ret==li_nil)
 		{
 			break;
 		}
-		li_object *list=li_cdr(o,env);
+		li_object * list=li_cdr(o,env);
 		while (list && list!=li_nil)
 		{
-			li_object *expr=li_car(list,env);
+			li_object * expr=li_car(list,env);
 			li_eval(expr,env);
 			list=li_cdr(list,env);
 		}
@@ -3758,11 +3833,12 @@ li_object *li_while(li_object *o, li_environment *env)
 
 LI_HEADER(defconstant) {
 	//always sets global context (env=0)
-	li_symbol *s=li_symbol::get(li_car(o,env),env);
-	li_object *val=0;
-	li_object *toeval=li_cdr(o,env);
+	li_symbol * s=li_symbol::get(li_car(o,env),env);
+	li_object * val=0;
+	li_object * toeval=li_cdr(o,env);
 
 	w32 f=s->flags();
+
 	if (f&LSF_FORCECONSTANT)
 	{
 		li_error(env,"USER: defconstant: Cannot assign a new value to %O. Its definition is reserved.",s);
@@ -3775,27 +3851,28 @@ LI_HEADER(defconstant) {
 	return s;
 }
 
-li_object *li_set(li_object *o, li_environment *env)
+li_object *li_set(li_object * o, li_environment * env)
 {
-	li_symbol *sym=li_symbol::get(li_eval(li_first(o,env),env),env);
-	li_object *value=li_eval(li_second(o,env),env);
+	li_symbol * sym=li_symbol::get(li_eval(li_first(o,env),env),env);
+	li_object * value=li_eval(li_second(o,env),env);
+
 	li_set_value(sym,value,env);
 	return value;
 }
 
-li_object *li_setf(li_object *o, li_environment *env)
+li_object *li_setf(li_object * o, li_environment * env)
 {
 	if ((li_length(o,env)%2)==1)
 	{
 		li_error(env,"USER: setf: An even number of arguments is required.");
 		return li_nil;
 	}
-	li_object *value=li_nil;
+	li_object * value=li_nil;
 	while (o)
 	{
 		if (li_car(o,env)->type()==LI_SYMBOL)
 		{
-			li_symbol *s=li_symbol::get(li_car(o,env),env);
+			li_symbol * s=li_symbol::get(li_car(o,env),env);
 			o=li_cdr(o,env);
 			value=li_eval(li_car(o,env), env);
 			if (value&&((value->type()==LI_FUNCTION)||(value->type()==LI_USER_FUNCTION)))
@@ -3856,20 +3933,21 @@ li_object *li_setf(li_object *o, li_environment *env)
 
 //This function is used for the internal quote function
 //that is the '(a b c) form. It CANNOT be used for explicit quotation using (quote a b c)
-li_object *li_quote_fun(li_object *o, li_environment *env)
+li_object *li_quote_fun(li_object * o, li_environment * env)
 {
 	return li_car(o,env);
 }
 
 //This is the explicit (quote ... ) form
-li_object *li_explicit_quote_fun(li_object *o, li_environment *env)
+li_object *li_explicit_quote_fun(li_object * o, li_environment * env)
 {
 	return li_car(o,env);
 }
 
-li_object *li_new(li_object *o, li_environment *env)
+li_object *li_new(li_object * o, li_environment * env)
 {
 	int type=li_type::get(li_eval(li_car(o,env)),env)->value();
+
 	return li_get_type(type)->create(li_cdr(o,env), env);
 }
 
@@ -3877,12 +3955,12 @@ li_object *li_new(li_object *o, li_environment *env)
 
 int li_max_cells=30*1024;
 
-li_object *li_ptr(li_object *o, li_environment *env)
+li_object *li_ptr(li_object * o, li_environment * env)
 {
 	return (li_object *)(li_get_int(li_eval(li_car(o,env), env),env));
 }
 
-li_object *li_null_function(li_object *o, li_environment *env)
+li_object *li_null_function(li_object * o, li_environment * env)
 {
 	return li_nil;
 }
@@ -3904,8 +3982,8 @@ protected:
 	   long li_big_cells,li_small_cells;
 	   long li_big_cells_free,li_small_cells_free;
 	 */
-	memory_block_list *big_blocks;
-	memory_block_list *small_blocks;
+	memory_block_list * big_blocks;
+	memory_block_list * small_blocks;
 	i4_bool active;
 public:
 	li_memory_manager_class()
@@ -3918,10 +3996,10 @@ protected:
 	//(generic)
 	void get_stack_range(li_object *&start, li_object *&end)
 	{
-		void *current_stack_object;
-		li_object *current_stack=(li_object *)(&current_stack_object);
+		void * current_stack_object;
+		li_object * current_stack=(li_object *)(&current_stack_object);
 
-		li_list **stack_start=((li_list **)i4_stack_base);
+		li_list * * stack_start=((li_list * *)i4_stack_base);
 
 		if ((swptr)stack_start<(swptr)current_stack)
 		{
@@ -3934,10 +4012,10 @@ protected:
 			start=current_stack;
 		}
 	}
-	memory_block_list *getblockfor(li_object *o);
+	memory_block_list *getblockfor(li_object * o);
 	//(needs update)
 public:
-	i4_bool valid_object(li_object *o)
+	i4_bool valid_object(li_object * o)
 	{
 
 		if (!li_valid_type(o->type()))
@@ -3950,7 +4028,7 @@ public:
 		}
 		if (i4_stack_base!=0)
 		{
-			li_object *s,*e;
+			li_object * s,* e;
 			get_stack_range(s,e);
 
 			if ((o>=s && o<e))
@@ -3986,9 +4064,9 @@ protected:
 	friend void *li_cell_alloc(size_t size);
 	li_object *alloc_cell(size_t size); //assumes size is newer >16 (checked by new)
 
-	friend void li_cell_free(void *ptr);
+	friend void li_cell_free(void * ptr);
 	//(needs update)
-	void free_cell(li_list *l);
+	void free_cell(li_list * l);
 public:
 
 	//(minor changes needed)
@@ -4008,17 +4086,17 @@ public:
 		SMALL=0,BIG=1,UNUSED=2
 	};
 	int type;     //0 small, 1 big
-	li_free8_list *small_cells;
-	li_free8_list *small_first_free;
-	li_free8_list *small_cells_end;
+	li_free8_list * small_cells;
+	li_free8_list * small_first_free;
+	li_free8_list * small_cells_end;
 	swptr num_cells;
 	swptr num_cells_free;
-	li_list *big_cells;
-	li_list *big_first_free;
-	li_list *big_cells_end;
-	memory_block_list *next;
-	li_memory_manager_class *parent;     //for calling gc() on it.
-	void *memblock;     //the exact address obtained from malloc()
+	li_list * big_cells;
+	li_list * big_first_free;
+	li_list * big_cells_end;
+	memory_block_list * next;
+	li_memory_manager_class * parent;     //for calling gc() on it.
+	void * memblock;     //the exact address obtained from malloc()
 	swptr blocksize;
 private:
 	memory_block_list()
@@ -4026,7 +4104,7 @@ private:
 		li_error(0,"FATAL: Unsynchronized memory management operation");
 	};        //never generate implicitly
 public:
-	memory_block_list(int _type, w32 size, li_memory_manager_class *memman)
+	memory_block_list(int _type, w32 size, li_memory_manager_class * memman)
 	{
 		type=_type;
 		parent=memman;
@@ -4152,6 +4230,7 @@ public:
 	li_object *alloc_cell(size_t size)    //assumes size is newer >16 (checked by new)
 	{
 		int bailout=0;
+
 		if (size==8)
 		{
 			if (!small_cells)
@@ -4165,7 +4244,7 @@ public:
 
 
 			cell_lock.lock();
-			li_free8_list *sret=small_first_free;
+			li_free8_list * sret=small_first_free;
 			if (sret->type()!=0)
 			{
 				cell_lock.unlock();
@@ -4199,7 +4278,7 @@ public:
 			}
 
 			cell_lock.lock();
-			li_list *bret=big_first_free;
+			li_list * bret=big_first_free;
 			if (bret->type()!=0)
 			{
 				cell_lock.unlock();
@@ -4230,14 +4309,14 @@ public:
 	}
 
 	//(needs update)
-	void free_cell(li_list *l)
+	void free_cell(li_list * l)
 	{
 		cell_lock.lock();
 		swptr i;
 
 		if (small_cells)
 		{
-			li_free8_list *l2=(li_free8_list *)l;
+			li_free8_list * l2=(li_free8_list *)l;
 			i=l2-small_cells;
 			small_cells[i].mark_free();
 			small_cells[i].set_next_free(small_first_free);
@@ -4355,8 +4434,8 @@ void li_memory_manager_class::init()
 	//no constant for lambda, its value and fun are altered
 
 	//second part: some environment vars
-	li_symbol *s=li_get_symbol("lambda-list-keywords");
-	li_object *o=li_make_list(
+	li_symbol * s=li_get_symbol("lambda-list-keywords");
+	li_object * o=li_make_list(
 		li_get_symbol("&optional"),
 		li_get_symbol("&rest"),
 		li_get_symbol("&key"),
@@ -4494,6 +4573,7 @@ int li_memory_manager_class::gc()
 			i4_thread_yield();
 
 
+
 		cell_lock.lock();
 		/*int i=0;
 		   for (; i<li_big_cells; i++)
@@ -4507,7 +4587,7 @@ int li_memory_manager_class::gc()
 		   		t_free++;
 		   	}
 		 */
-		memory_block_list *curr=big_blocks;
+		memory_block_list * curr=big_blocks;
 		while (curr!=0)
 		{
 			t_free+=curr->num_free();
@@ -4523,7 +4603,7 @@ int li_memory_manager_class::gc()
 	}
 	else
 	{
-		li_object_pointer *pl;
+		li_object_pointer * pl;
 		int i;
 
 		if (!i4_stack_base)
@@ -4545,7 +4625,7 @@ int li_memory_manager_class::gc()
 		{
 			for (i=1; i<li_max_types(); i++)
 			{
-				li_type_function_table *t=li_get_type(i);
+				li_type_function_table * t=li_get_type(i);
 				if (t)
 				{
 					t->mark(1);
@@ -4553,7 +4633,7 @@ int li_memory_manager_class::gc()
 			}
 		}
 
-		li_gc_object_marker_class *helpers;
+		li_gc_object_marker_class * helpers;
 		for (helpers=gc_helpers; helpers; helpers=helpers->next)
 		{
 			helpers->mark_objects(1);
@@ -4567,7 +4647,7 @@ int li_memory_manager_class::gc()
 			}
 		}
 
-		memory_block_list *curr=big_blocks;
+		memory_block_list * curr=big_blocks;
 		while (curr)
 		{
 			curr->rebuild_free_list();
@@ -4639,7 +4719,7 @@ int li_memory_manager_class::gc()
 		{
 			for (i=1; i<li_max_types(); i++)
 			{
-				li_type_function_table *t=li_get_type(i);
+				li_type_function_table * t=li_get_type(i);
 				if (t)
 				{
 					t->mark(0);
@@ -4698,20 +4778,21 @@ int li_memory_manager_class::gc()
 	return t_free;
 }
 
-void li_memory_manager_class::free_cell(li_list *l)
+void li_memory_manager_class::free_cell(li_list * l)
 {
-	memory_block_list *li=getblockfor(l);
+	memory_block_list * li=getblockfor(l);
+
 	li->free_cell(l);
 };
 
 
 
-li_object *li_memory_manager_class::alloc_cell(size_t size)
+li_object * li_memory_manager_class::alloc_cell(size_t size)
 {
 	if (size<=8)
 	{
-		memory_block_list *curr=small_blocks;
-		li_object *sret=0;
+		memory_block_list * curr=small_blocks;
+		li_object * sret=0;
 		while (curr)
 		{
 			sret=curr->alloc_cell(size);
@@ -4746,8 +4827,8 @@ li_object *li_memory_manager_class::alloc_cell(size_t size)
 	}
 	else
 	{
-		memory_block_list *curr=big_blocks;
-		li_object *bret=0;
+		memory_block_list * curr=big_blocks;
+		li_object * bret=0;
 		while (curr)
 		{
 			bret=curr->alloc_cell(size);
@@ -4785,7 +4866,7 @@ void li_memory_manager_class::uninit()
 	li_hash.uninit();
 
 	// clear all pointer references
-	for (li_object_pointer *pl=li_object_pointer_list; pl; pl=pl->next)
+	for (li_object_pointer * pl=li_object_pointer_list; pl; pl=pl->next)
 	{
 		pl->o=0;
 	}
@@ -4845,9 +4926,10 @@ void li_memory_manager_class::uninit()
 
 }
 
-memory_block_list *li_memory_manager_class::getblockfor(li_object *o)
+memory_block_list * li_memory_manager_class::getblockfor(li_object * o)
 {
-	memory_block_list *curr=big_blocks;
+	memory_block_list * curr=big_blocks;
+
 	while (curr!=0)
 	{
 		if ((o>=curr->big_cells) && (o<(curr->big_cells_end))
@@ -4873,13 +4955,14 @@ memory_block_list *li_memory_manager_class::getblockfor(li_object *o)
 void li_memory_manager_class::mark_stacks(int mark)
 {
 	int id=i4_get_first_thread_id();
+
 	do
 	{
-		void *base, *top;
+		void * base, * top;
 		i4_get_thread_stack(id, base,top);
 		if (base>top)
 		{
-			void *tmp=0;
+			void * tmp=0;
 			tmp=base;
 			base=top;
 			top=tmp;
@@ -4889,23 +4972,24 @@ void li_memory_manager_class::mark_stacks(int mark)
 		//                        (li_list*)small_cells, (li_list*)small_cell_helper, mark);
 		//	  li_mark_memory_region((li_list **)base,(li_list **)top,
 		//		  cells,cells+li_big_cells,mark,15);
-		memory_block_list *curr=big_blocks;
+		memory_block_list * curr=big_blocks;
 		while (curr!=0)
 		{
-			li_mark_memory_region((li_list **)base,(li_list **)top,
+			li_mark_memory_region((li_list * *)base,(li_list * *)top,
 								  curr->big_cells,curr->big_cells_end,mark,15);
 			curr=curr->next;
 		}
 		curr=small_blocks;
 		while (curr!=0)
 		{
-			li_mark_memory_region((li_list **)base,(li_list **)top,
+			li_mark_memory_region((li_list * *)base,(li_list * *)top,
 								  (li_list *)curr->small_cells,
 								  (li_list *)curr->small_cells_end,
 								  mark);
 			curr=curr->next;
 		}
-	} while (i4_get_next_thread_id(id, id));
+	}
+	while (i4_get_next_thread_id(id, id));
 }
 void *li_cell_alloc(size_t size)
 {
@@ -4915,7 +4999,7 @@ void *li_cell_alloc(size_t size)
 	}
 
 
-	void *r= li_mem_man.alloc_cell(size);
+	void * r= li_mem_man.alloc_cell(size);
 	//if (((li_object*)r)->type()!=0)
 	//	  i4_error("STRANGE: This object is already in use.");
 
@@ -4924,7 +5008,7 @@ void *li_cell_alloc(size_t size)
 }
 
 
-void li_cell_free(void *ptr)
+void li_cell_free(void * ptr)
 {
 	li_mem_man.free_cell((li_list *)ptr);
 }
@@ -4932,6 +5016,7 @@ void li_cell_free(void *ptr)
 int li_gc()
 {
 	jmp_buf env;     // save all registers on the stack
+
 	setjmp(env);
 
 
@@ -4939,7 +5024,7 @@ int li_gc()
 }
 
 
-i4_bool li_valid_object(li_object *o)
+i4_bool li_valid_object(li_object * o)
 {
 	return li_mem_man.valid_object(o);
 }
@@ -4954,9 +5039,9 @@ i4_bool li_valid_object(li_object *o)
  ***********************************************************************/
 
 
-static li_type_edit_class *li_class_editor=0;
+static li_type_edit_class * li_class_editor=0;
 
-void li_set_class_editor(li_type_edit_class *editor)
+void li_set_class_editor(li_type_edit_class * editor)
 {
 	li_class_editor=editor;
 }
@@ -4967,30 +5052,30 @@ void li_set_class_editor(li_type_edit_class *editor)
 
 //! This global variable contains the "this" parameter for the current lisp class.
 //! This may seem bad style, but simpliefies some stuff a lot.
-li_class *li_this;
+li_class * li_this;
 
 int li_type_function_table::create_edit_controls(i4_str name,
-												 li_object *object,
-												 li_object *property_list,
-												 i4_window_class **windows,
+												 li_object * object,
+												 li_object * property_list,
+												 i4_window_class * * windows,
 												 int max_windows,
-												 li_environment *env)
+												 li_environment * env)
 {
 	return editor->create_edit_controls(name,object,property_list,windows,max_windows,env);
 }
 
-i4_bool li_type_function_table::can_apply_edit_controls(li_object *objectw,
-														li_object *property_list,
-														i4_window_class **windows,
-														li_environment *env)
+i4_bool li_type_function_table::can_apply_edit_controls(li_object * objectw,
+														li_object * property_list,
+														i4_window_class * * windows,
+														li_environment * env)
 {
 	return editor->can_apply_edit_controls(objectw,property_list,windows,env);
 }
 
-li_object *li_type_function_table::apply_edit_controls(li_object *o,
-													   li_object *property_list,
-													   i4_window_class **windows,
-													   li_environment *env)
+li_object * li_type_function_table::apply_edit_controls(li_object * o,
+														li_object * property_list,
+														i4_window_class * * windows,
+														li_environment * env)
 {
 	return editor->apply_edit_controls(o,property_list,windows,env);
 }
@@ -5002,9 +5087,9 @@ public:
 
 	struct var
 	{
-		li_object *default_value;
-		li_object *property_list;
-		li_symbol *sym;
+		li_object * default_value;
+		li_object * property_list;
+		li_symbol * sym;
 		int original_order;
 
 		void init()
@@ -5016,24 +5101,25 @@ public:
 		}
 	};
 
-	static int var_compare(const var *a, const var *b);
+	static int var_compare(const var * a, const var * b);
 
 	i4_fixed_array<var> vars;
 
 	int old_tvars;
-	sw16 *value_remap;   // used during loading of a li_class
+	sw16 * value_remap;   // used during loading of a li_class
 
-	li_class_type *derived_from;
-	li_symbol *sym;
-	var *get_var(li_symbol *sym);
+	li_class_type * derived_from;
+	li_symbol * sym;
+	var *get_var(li_symbol * sym);
 
 	//PG: moved the following to the base class, to be able to safely
 	//check wheter a given object is of class type.
 	//int type;
 
-	static li_class_type *get(li_type_function_table *o, li_environment *env)
+	static li_class_type *get(li_type_function_table * o, li_environment * env)
 	{
-		li_class_type *c=(li_class_type *)o;
+		li_class_type * c=(li_class_type *)o;
+
 #ifdef LI_TYPE_CHECK
 		if (c!=li_get_type(c->type))
 		{
@@ -5043,15 +5129,15 @@ public:
 		return c;
 	}
 
-	li_object *create(li_object *params, li_environment *env);
+	li_object *create(li_object * params, li_environment * env);
 
 	void mark(int set);
-	void mark(li_object *o, int set);
-	void free(li_object *o);
-	void print(li_object *o, i4_file_class *stream);
+	void mark(li_object * o, int set);
+	void free(li_object * o);
+	void print(li_object * o, i4_file_class * stream);
 	char *name();
 
-	li_class_type(li_symbol *sym, li_class_type *derived_from)
+	li_class_type(li_symbol * sym, li_class_type * derived_from)
 		: sym(sym),
 		  derived_from(derived_from)
 	{
@@ -5059,7 +5145,7 @@ public:
 	}
 
 
-	int get_var_offset(li_symbol *sym, int die_on_error)
+	int get_var_offset(li_symbol * sym, int die_on_error)
 	{
 		w32 r=vars.size();
 
@@ -5068,7 +5154,7 @@ public:
 			return 0;
 		}
 		int l=0,m;
-		li_symbol *s1; //,*s2; JJ not in use
+		li_symbol * s1; //,*s2; JJ not in use
 
 		while (l<(int)r) // JJ cast
 		{
@@ -5112,29 +5198,29 @@ public:
 	}
 
 	// these load and save type information
-	virtual void save(i4_saver_class *fp, li_environment *env);
-	virtual void load(i4_loader_class *fp, li_type_number *type_remap,
-					  li_environment *env);
+	virtual void save(i4_saver_class * fp, li_environment * env);
+	virtual void load(i4_loader_class * fp, li_type_number * type_remap,
+					  li_environment * env);
 
 	virtual void load_done();
 
 	// load & save type instance information
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env);
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
-								   li_environment *env);
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env);
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap,
+								   li_environment * env);
 
 };
 
 
 struct sym_var
 {
-	li_class_type::var *var;
-	li_object *value;
+	li_class_type::var * var;
+	li_object * value;
 };
 
 
 
-char *li_class_type::name()
+char * li_class_type::name()
 {
 	if (sym)
 	{
@@ -5176,12 +5262,12 @@ void li_class::mark(int set)
 		li_object::mark(set);
 	}
 
-	li_class_type *t=get_type();
+	li_class_type * t=get_type();
 	for (int i=0; i<t->vars.size(); i++)
 	{
 		int type=t->vars[i].default_value->unmarked_type();
 
-		li_object *o=object_value(i);
+		li_object * o=object_value(i);
 		// int's and - floats no more - are stored directly and don't need marking
 		if (type!=LI_INT && type!=LI_FLOAT && o->is_marked()!=set)
 		{
@@ -5195,7 +5281,7 @@ void li_class::mark(int set)
 	}
 }
 
-li_class_type::var *li_class_type::get_var(li_symbol *sym)
+li_class_type::var * li_class_type::get_var(li_symbol * sym)
 {
 	for (int i=0; i<vars.size(); i++)
 	{
@@ -5213,29 +5299,29 @@ li_class_type::var *li_class_type::get_var(li_symbol *sym)
 	return 0;
 }
 
-void li_class_type::mark(li_object *o, int set)
+void li_class_type::mark(li_object * o, int set)
 {
 	((li_class *)o)->mark(set);
 }
 
-void li_class_type::free(li_object *o)
+void li_class_type::free(li_object * o)
 {
 	li_class::get(o,0)->free();
 }
 
-void li_class_type::print(li_object *o, i4_file_class *stream)
+void li_class_type::print(li_object * o, i4_file_class * stream)
 {
 	li_class::get(o,0)->print(stream);
 }
 
-li_object *li_class_type::create(li_object *params, li_environment *env)
+li_object * li_class_type::create(li_object * params, li_environment * env)
 {
 	return new li_class(type, params, env);
 }
 
 
 // these load and save type information
-void li_class_type::save(i4_saver_class *fp, li_environment *env)
+void li_class_type::save(i4_saver_class * fp, li_environment * env)
 {
 	fp->write_32(vars.size());
 	for (int i=0; i<vars.size(); i++)
@@ -5254,8 +5340,8 @@ void li_class_type::load_done()
 	}
 }
 
-void li_class_type::load(i4_loader_class *fp, li_type_number *type_remap,
-						 li_environment *env)
+void li_class_type::load(i4_loader_class * fp, li_type_number * type_remap,
+						 li_environment * env)
 {
 	old_tvars=fp->read_32();
 	if (old_tvars)
@@ -5268,7 +5354,7 @@ void li_class_type::load(i4_loader_class *fp, li_type_number *type_remap,
 
 		for (int i=0; i<old_tvars; i++)
 		{
-			li_symbol *old_sym=li_symbol::get(li_load_object(fp, type_remap,env), env);
+			li_symbol * old_sym=li_symbol::get(li_load_object(fp, type_remap,env), env);
 			for (int j=0; j<vars.size(); j++)
 			{
 				if (old_sym==vars[j].sym)
@@ -5282,15 +5368,16 @@ void li_class_type::load(i4_loader_class *fp, li_type_number *type_remap,
 
 
 
-void li_class::save(i4_saver_class *fp, li_environment *env)
+void li_class::save(i4_saver_class * fp, li_environment * env)
 {
-	li_class_type *ct=get_type();
+	li_class_type * ct=get_type();
 
 	int t_vars=ct->vars.size();
+
 	for (int i=0; i<t_vars; i++)
 	{
-		li_object *def=ct->vars[i].default_value;
-		li_object *v=value(i);
+		li_object * def=ct->vars[i].default_value;
+		li_object * v=value(i);
 
 		if (li_get_type(def->type())->equal(def, v))
 		{
@@ -5304,24 +5391,24 @@ void li_class::save(i4_saver_class *fp, li_environment *env)
 }
 
 // load & save type instance information
-void li_class_type::save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+void li_class_type::save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 {
 	li_class::get(o,env)->save(fp, env);
 }
 
-void li_class::load(i4_loader_class *fp, li_type_number *type_remap, li_environment *env)
+void li_class::load(i4_loader_class * fp, li_type_number * type_remap, li_environment * env)
 {
-	li_class_type *ct=get_type();
+	li_class_type * ct=get_type();
 	int old_tvars=ct->old_tvars;
-	sw16 *value_remap=ct->value_remap;
+	sw16 * value_remap=ct->value_remap;
 
 	for (int i=0; i<old_tvars; i++)
 	{
-		li_object *o=li_load_object(fp, type_remap, env);
+		li_object * o=li_load_object(fp, type_remap, env);
 		int remap=value_remap[i];
 		if (remap!=-1)
 		{
-			li_object *def=ct->vars[remap].default_value;
+			li_object * def=ct->vars[remap].default_value;
 
 			// if type has changed use default value
 			if ( (def && o) && o->type()==def->type())
@@ -5332,10 +5419,11 @@ void li_class::load(i4_loader_class *fp, li_type_number *type_remap, li_environm
 	}
 }
 
-li_object *li_class_type::load_object(i4_loader_class *fp, li_type_number *type_remap,
-									  li_environment *env)
+li_object * li_class_type::load_object(i4_loader_class * fp, li_type_number * type_remap,
+									   li_environment * env)
 {
-	li_class *c=new li_class(type);
+	li_class * c=new li_class(type);
+
 	c->load(fp, type_remap, env);
 	return c;
 }
@@ -5344,14 +5432,14 @@ li_object *li_class_type::load_object(i4_loader_class *fp, li_type_number *type_
 //////////////////////////////////// li_class members /////////////////////////////////
 
 li_class::li_class(li_type_number class_type,
-				   li_object *params,
-				   li_environment *env)
+				   li_object * params,
+				   li_environment * env)
 	: li_object(class_type)
 {
-	li_class_type *ct=get_type();
+	li_class_type * ct=get_type();
 	int t_vars=ct->vars.size();
 
-	values=(void **)I4_MALLOC(sizeof(void *) * t_vars, "");
+	values=(void * *)I4_MALLOC(sizeof(void *) * t_vars, "");
 
 
 	int i;
@@ -5365,7 +5453,7 @@ li_class::li_class(li_type_number class_type,
 	i=0;
 	while (params)
 	{
-		li_object *val=li_eval(li_car(params,env));
+		li_object * val=li_eval(li_car(params,env));
 
 
 		for (int j=0; j<t_vars; j++)
@@ -5385,26 +5473,26 @@ li_class::li_class(li_type_number class_type,
 }
 
 
-void li_class::print(i4_file_class *fp)
+void li_class::print(i4_file_class * fp)
 {
 	fp->write("#inst-",6);
 
-	li_class_type *c=get_type();
+	li_class_type * c=get_type();
 
-	char *name=c->name();
+	char * name=c->name();
 	fp->write(name,strlen(name));
 
 	fp->write_8('<');
 
 	for (int i=0; i<c->vars.size(); i++)
 	{
-		li_symbol *sym=c->vars[i].sym;
+		li_symbol * sym=c->vars[i].sym;
 
 		fp->write(" (",2);
 		li_get_type(LI_SYMBOL)->print(sym, fp);
 		fp->write_8(' ');
 
-		li_object *v=value(i);
+		li_object * v=value(i);
 		li_get_type(v->type())->print(v, fp);
 
 		fp->write_8(')');
@@ -5420,17 +5508,17 @@ void li_class::free()
 }
 
 //Not inlined because of dependency problems
-int li_class::member_offset(char *sym) const
+int li_class::member_offset(char * sym) const
 {
 	return get_type()->get_var_offset(li_get_symbol(sym), 0);
 }
 
-int li_class::member_offset(const char *sym) const
+int li_class::member_offset(const char * sym) const
 {
 	return get_type()->get_var_offset(li_get_symbol(sym),0);
 }
 
-int li_class::member_offset(li_symbol *sym) const
+int li_class::member_offset(li_symbol * sym) const
 {
 	return get_type()->get_var_offset(sym, 0);
 }
@@ -5439,7 +5527,7 @@ int li_class::member_offset(li_symbol *sym) const
 
 int li_class::get_offset(li_class_member &c, li_type_number _type) const
 {
-	li_class_type *ct=get_type();
+	li_class_type * ct=get_type();
 
 	if (!c.sym)
 	{
@@ -5470,7 +5558,8 @@ int li_class::get_offset(li_class_member &c, li_type_number _type) const
 
 int li_class::get_offset(const li_class_member &c, li_type_number _type) const
 {
-	li_class_type *ct=get_type();
+	li_class_type * ct=get_type();
+
 	//cannot cache anything on const objects, but
 	//they are usually created on the fly anyways.
 
@@ -5481,7 +5570,7 @@ int li_class::get_offset(const li_class_member &c, li_type_number _type) const
 
 int li_class::get_offset(li_class_member &c) const
 {
-	li_class_type *ct=get_type();
+	li_class_type * ct=get_type();
 
 	if (!c.sym)
 	{
@@ -5496,21 +5585,21 @@ int li_class::get_offset(li_class_member &c) const
 
 int li_class::get_offset(const li_class_member &c) const
 {
-	li_class_type *ct=get_type();
+	li_class_type * ct=get_type();
 
 	return ct->get_var_offset(li_get_symbol(c.name), 1);
 }
 
 //These are inlined on release builds.
 #ifdef _DEBUG
-li_class *li_class::get(li_object *o, li_environment *env)
+li_class * li_class::get(li_object * o, li_environment * env)
 {
 	check_type(o, ((li_class_type *)li_get_type(o->type()))->type, env);
 	return ((li_class *)o);
 }
 
 
-li_class *li_class::get_all(li_object *o, li_environment *env)
+li_class * li_class::get_all(li_object * o, li_environment * env)
 {
 	if (li_get_type(o->type())->type!=0)
 	{
@@ -5520,39 +5609,43 @@ li_class *li_class::get_all(li_object *o, li_environment *env)
 }
 #endif
 
-li_object *li_class::value(int member)
+li_object * li_class::value(int member)
 {
 	switch (get_type()->vars[member].default_value->type())
 	{
 		case LI_INT:
 			return new li_int(int_value(member));
+
 			break;
 		case LI_FLOAT:
 			return new li_float(float_value(member));
+
 			break;
 		default:
 			return object_value(member);
+
 			break;
 	}
 }
 
-li_object *li_class::value(char *member_name)
+li_object * li_class::value(char * member_name)
 {
 	return value(member_offset(member_name));
 }
 
-li_object *li_class::value(const char *member_name)
+li_object * li_class::value(const char * member_name)
 {
 	return value(member_offset(member_name));
 };
 
 
-void li_class::set_value(int member, li_object *value)
+void li_class::set_value(int member, li_object * value)
 {
-	li_class_type *ct=get_type();
-	li_object *def_value=ct->vars[member].default_value;
+	li_class_type * ct=get_type();
+	li_object * def_value=ct->vars[member].default_value;
 
 	int t=def_value->type();
+
 	switch (t)
 	{
 		case LI_INT:
@@ -5570,13 +5663,14 @@ void li_class::set_value(int member, li_object *value)
 
 ///////////////////////////////////// li_def_class ///////////////////////////////////////////
 
-li_object *li_def_class(li_object *fields, li_environment *env)
+li_object *li_def_class(li_object * fields, li_environment * env)
 {
-	li_symbol *sym=li_symbol::get(li_car(fields,env),env);
+	li_symbol * sym=li_symbol::get(li_car(fields,env),env);
+
 	fields=li_cdr(fields,env);
-	li_object *derived=li_eval(li_car(fields,env), env);
+	li_object * derived=li_eval(li_car(fields,env), env);
 	fields=li_cdr(fields,env);
-	li_class_type *d=0;
+	li_class_type * d=0;
 	int derived_type=0;
 
 	if (derived!=li_nil)
@@ -5598,9 +5692,9 @@ li_object *li_def_class(li_object *fields, li_environment *env)
 		}
 	}
 
-	li_class_type *me=new li_class_type(sym, d);
+	li_class_type * me=new li_class_type(sym, d);
 
-	li_object *c;
+	li_object * c;
 	int t_vars=0;
 
 	// how many variables in the parent class
@@ -5626,7 +5720,7 @@ li_object *li_def_class(li_object *fields, li_environment *env)
 		{
 			me->vars[t_vars].init();
 			me->vars[t_vars].original_order=t_vars;
-			li_symbol *s=li_class_get_symbol(derived_type, i);
+			li_symbol * s=li_class_get_symbol(derived_type, i);
 			me->vars[t_vars].sym=s;
 			me->vars[t_vars].default_value=li_class_get_default(derived_type, s);
 			me->vars[t_vars].property_list=li_class_get_property_list(derived_type, s);
@@ -5637,7 +5731,7 @@ li_object *li_def_class(li_object *fields, li_environment *env)
 
 	for (c=fields; c; c=li_cdr(c,env))
 	{
-		li_object *var=li_car(c,env);
+		li_object * var=li_car(c,env);
 		me->vars[t_vars].init();
 		me->vars[t_vars].original_order=t_vars;
 
@@ -5650,8 +5744,8 @@ li_object *li_def_class(li_object *fields, li_environment *env)
 			me->vars[t_vars].default_value=li_eval(li_car(var,env), env);
 			var=li_cdr(var,env);
 
-			li_symbol *s=me->vars[t_vars].sym;
-			li_object *d=me->vars[t_vars].default_value;
+			li_symbol * s=me->vars[t_vars].sym;
+			li_object * d=me->vars[t_vars].default_value;
 
 
 			if (var)
@@ -5666,7 +5760,7 @@ li_object *li_def_class(li_object *fields, li_environment *env)
 	me->vars.sort(li_class_type::var_compare);
 	me->set_editor(li_class_editor);
 	///type must match exactly for parameters passed by reference.
-	li_type_function_table *me_p=me;
+	li_type_function_table * me_p=me;
 	int newtype=li_add_type(me_p);
 	//if type already existed,
 	//the type class is deleted and me is set to zero.
@@ -5679,9 +5773,10 @@ li_object *li_def_class(li_object *fields, li_environment *env)
 	return new li_type(newtype);
 }
 
-li_object *li_class::set(char *member_name, li_object *value) // slow, but easy way to access data
+li_object * li_class::set(char * member_name, li_object * value) // slow, but easy way to access data
 {
 	int off=member_offset(member_name);
+
 	if (off==-1)
 	{
 		li_error(0, "USER: class %O does not have member %s", member_name);
@@ -5691,7 +5786,7 @@ li_object *li_class::set(char *member_name, li_object *value) // slow, but easy 
 }
 
 
-int li_class_type::var_compare(const var *a, const var *b)
+int li_class_type::var_compare(const var * a, const var * b)
 {
 	if (a->sym<b->sym)
 	{
@@ -5715,36 +5810,41 @@ int li_class_total_members(li_type_number type)
 
 li_symbol *li_class_get_symbol(li_type_number type, int member_number)
 {
-	li_class_type *ct=li_class_type::get(li_get_type(type),0);
+	li_class_type * ct=li_class_type::get(li_get_type(type),0);
+
 	return ct->vars[member_number].sym;
 }
 
 
 
-li_object *li_class_get_default(li_type_number type, li_symbol *sym)
+li_object *li_class_get_default(li_type_number type, li_symbol * sym)
 {
-	li_class_type *ct=li_class_type::get(li_get_type(type),0);
+	li_class_type * ct=li_class_type::get(li_get_type(type),0);
+
 	return ct->vars[ct->get_var_offset(sym, 1)].default_value;
 }
 
-li_object *li_class_get_property_list(li_type_number type, li_symbol *sym)
+li_object *li_class_get_property_list(li_type_number type, li_symbol * sym)
 {
-	li_class_type *ct=li_class_type::get(li_get_type(type),0);
+	li_class_type * ct=li_class_type::get(li_get_type(type),0);
+
 	return ct->vars[ct->get_var_offset(sym, 1)].property_list;
 }
 
-li_object *li_setm(li_object *o, li_environment *env)
+li_object *li_setm(li_object * o, li_environment * env)
 {
-	li_class *c=li_class::get(li_eval(li_first(o,env),env),env);
-	li_symbol *member=li_symbol::get(li_second(o,env),env);
-	li_object *value=li_eval(li_third(o,env), env);
+	li_class * c=li_class::get(li_eval(li_first(o,env),env),env);
+	li_symbol * member=li_symbol::get(li_second(o,env),env);
+	li_object * value=li_eval(li_third(o,env), env);
+
 	c->set_value(c->member_offset(member), value);
 	return value;
 }
 
-li_object *li_getm(li_object *o, li_environment *env)
+li_object *li_getm(li_object * o, li_environment * env)
 {
-	li_class *c=li_class::get(li_eval(li_first(o,env),env),env);
+	li_class * c=li_class::get(li_eval(li_first(o,env),env),env);
+
 	return c->value(c->member_offset(li_symbol::get(li_second(o,env),env)));
 }
 
@@ -5778,7 +5878,7 @@ public:
 		CHECK_BOX
 	};
 
-	input_type get_type(li_object *value, li_object *property_list, li_environment *env)
+	input_type get_type(li_object * value, li_object * property_list, li_environment * env)
 	{
 		if (property_list && property_list->type()==LI_LIST &&
 			li_list_box.get()==li_car(property_list,env))
@@ -5799,11 +5899,11 @@ public:
 
 
 	virtual int create_edit_controls(i4_str name,
-									 li_object *o,
-									 li_object *property_list,
-									 i4_window_class **windows,
+									 li_object * o,
+									 li_object * property_list,
+									 i4_window_class * * windows,
 									 int max_windows,
-									 li_environment *env)
+									 li_environment * env)
 	{
 		if (max_windows<2)
 		{
@@ -5820,7 +5920,7 @@ public:
 		li_get_type(o->type())->print(o, &rf);
 		buf[rf.tell()]=0;
 
-		i4_graphical_style_class *style=i4_current_app->get_style();
+		i4_graphical_style_class * style=i4_current_app->get_style();
 
 		//Do some beautification on the identifier
 		//Replace any underscores by blanks (these are identifiers shown to the user)
@@ -5843,15 +5943,15 @@ public:
 		{
 			property_list=li_cdr(property_list, env);
 
-			i4_list_box_class *lb=new i4_list_box_class(260, style,
-														i4_current_app->get_window_manager());
+			i4_list_box_class * lb=new i4_list_box_class(260, style,
+														 i4_current_app->get_window_manager());
 
 			int on=0;
 			for (; property_list; property_list=li_cdr(property_list,env), on++)
 			{
 				char buf[100];
 				i4_ram_file_class rf(buf, 100);
-				li_object *v=li_car(property_list,env);
+				li_object * v=li_car(property_list,env);
 
 
 				li_get_type(v->type())->print(v, &rf);
@@ -5870,9 +5970,9 @@ public:
 		}
 		else if(ctype==CHECK_BOX)
 		{
-			i4_checkbox_class *box=new i4_checkbox_class("",
-														 i4_checkbox_class::CHECKBOX,
-														 style);
+			i4_checkbox_class * box=new i4_checkbox_class("",
+														  i4_checkbox_class::CHECKBOX,
+														  style);
 			box->set_state(li_get_bool(o,env) ? i4_checkbox_class::CHECKED : i4_checkbox_class::UNCHECKED);
 
 			windows[1]=box;
@@ -5901,10 +6001,10 @@ public:
 		return 2;
 	}
 
-	i4_bool can_apply_edit_controls(li_object *o,
-									li_object *property_list,
-									i4_window_class **windows,
-									li_environment *env)
+	i4_bool can_apply_edit_controls(li_object * o,
+									li_object * property_list,
+									i4_window_class * * windows,
+									li_environment * env)
 	{
 		if (windows==0)
 		{
@@ -5921,7 +6021,7 @@ public:
 		i4_bool ok=i4_T;
 		//the following assignment doesn't always hold, but we won't access
 		//it, if the type doesn't fit.
-		i4_text_input_class *w=((i4_text_input_class *)windows[1]);
+		i4_text_input_class * w=((i4_text_input_class *)windows[1]);
 		//i4_const_str::iterator i=w->get_edit_string()->begin();
 		if (o->type()==LI_INT)
 		{
@@ -5963,19 +6063,19 @@ public:
 
 	}
 
-	virtual li_object *apply_edit_controls(li_object *o,
-										   li_object *property_list,
-										   i4_window_class **windows,
-										   li_environment *env)
+	virtual li_object *apply_edit_controls(li_object * o,
+										   li_object * property_list,
+										   i4_window_class * * windows,
+										   li_environment * env)
 	{
 		if (get_type(o,property_list, env)==LIST_BOX)
 		{
-			i4_list_box_class *ib=((i4_list_box_class *)windows[1]);
+			i4_list_box_class * ib=((i4_list_box_class *)windows[1]);
 			return li_nth(property_list, ib->get_current()+1, env);
 		}
 		else if (get_type(o,property_list,env)==CHECK_BOX)
 		{
-			i4_checkbox_class *cb=((i4_checkbox_class *)windows[1]);
+			i4_checkbox_class * cb=((i4_checkbox_class *)windows[1]);
 			return ((cb->get_state()==i4_checkbox_class::CHECKED) ? li_true_sym : li_nil);
 		}
 		else if (get_type(o,property_list, env)==TEXT_INPUT)
@@ -5985,7 +6085,7 @@ public:
 				//Happens if the element didn't have a visible control (was hidden)
 				return o;
 			}            //we can return the original object, since it didn't change
-			i4_text_input_class *w=((i4_text_input_class *)windows[1]);
+			i4_text_input_class * w=((i4_text_input_class *)windows[1]);
 
 			i4_const_str::iterator i=w->get_edit_string()->begin();
 			if (o->type()==LI_INT)
@@ -6026,23 +6126,23 @@ class li_vector_edit_class :
 public:
 
 	virtual int create_edit_controls(i4_str name,
-									 li_object *o,
-									 li_object *property_list,
-									 i4_window_class **windows,
+									 li_object * o,
+									 li_object * property_list,
+									 i4_window_class * * windows,
 									 int max_windows,
-									 li_environment *env)
+									 li_environment * env)
 	{
 		if (max_windows<2)
 		{
 			return 0;
 		}
 
-		li_vect *v=li_vect::get(o,env);
+		li_vect * v=li_vect::get(o,env);
 		i4_const_str afl("( %f , %f , %f )");
-		i4_str *strvectin=afl.sprintf(100,v->x(),
-									  v->y(),v->z());
+		i4_str * strvectin=afl.sprintf(100,v->x(),
+									   v->y(),v->z());
 
-		i4_graphical_style_class *style=i4_current_app->get_style();
+		i4_graphical_style_class * style=i4_current_app->get_style();
 
 		//Do some beautification on the identifier
 		//Replace any underscores by blanks (these are identifiers shown to the user)
@@ -6067,10 +6167,10 @@ public:
 		return 2;
 	}
 
-	i4_bool can_apply_edit_controls(li_object *o,
-									li_object *property_list,
-									i4_window_class **windows,
-									li_environment *env)
+	i4_bool can_apply_edit_controls(li_object * o,
+									li_object * property_list,
+									i4_window_class * * windows,
+									li_environment * env)
 	{
 		if (windows==0)
 		{
@@ -6078,7 +6178,7 @@ public:
 		}
 		//the following assignment doesn't always hold, but we won't access
 		//it, if the type doesn't fit.
-		i4_text_input_class *w=((i4_text_input_class *)windows[1]);
+		i4_text_input_class * w=((i4_text_input_class *)windows[1]);
 
 		char buf[200];
 		i4_float x=0,y=0,z=0;
@@ -6093,15 +6193,16 @@ public:
 
 	}
 
-	virtual li_object *apply_edit_controls(li_object *o,
-										   li_object *property_list,
-										   i4_window_class **windows,
-										   li_environment *env)
+	virtual li_object *apply_edit_controls(li_object * o,
+										   li_object * property_list,
+										   i4_window_class * * windows,
+										   li_environment * env)
 	{
 		char buf[300];
-		i4_text_input_class *w=((i4_text_input_class *)windows[1]);
+		i4_text_input_class * w=((i4_text_input_class *)windows[1]);
 
 		i4_float x=0,y=0,z=0;
+
 		i4_os_string(*(w->get_edit_string()),buf,200);
 		if (sscanf(buf,"( %f , %f , %f )",&x,&y,&z)<3)
 		{
@@ -6123,14 +6224,14 @@ protected:
 	{
 	};
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"li_class_item");
 	}
 
 	i4_array<li_dialog_item *> items;
 
-	li_class_dialog_item(li_class *c, li_object *_prop_list, li_environment *env)
+	li_class_dialog_item(li_class * c, li_object * _prop_list, li_environment * env)
 		: items(5,5)
 	{
 		prop_list=_prop_list;
@@ -6142,11 +6243,11 @@ public:
 
 		for (i=0; i<t; i++)
 		{
-			li_symbol *sym=li_class_get_symbol(c->type(), i);
-			li_object *val=c->value(i);
-			li_object *prop_list=li_class_get_property_list(c->type(), sym);
+			li_symbol * sym=li_class_get_symbol(c->type(), i);
+			li_object * val=c->value(i);
+			li_object * prop_list=li_class_get_property_list(c->type(), sym);
 
-			li_dialog_item *item=new li_dialog_item(sym->name()->value(), val, prop_list, env);
+			li_dialog_item * item=new li_dialog_item(sym->name()->value(), val, prop_list, env);
 			items.add(item);
 
 			int t_win=items[i]->t_windows;
@@ -6196,7 +6297,7 @@ public:
 		private_resize(maxw,dy);
 	}
 
-	i4_bool can_apply(li_environment *env)
+	i4_bool can_apply(li_environment * env)
 	{
 		for (int i=0; i<items.size(); i++)
 		{
@@ -6208,9 +6309,9 @@ public:
 		return i4_T;
 	}
 
-	li_object *apply(li_environment *env)
+	li_object *apply(li_environment * env)
 	{
-		li_class *c=(li_class *)li_new(o.get()->type());
+		li_class * c=(li_class *)li_new(o.get()->type());
 
 		for (int i=0; i<items.size(); i++)
 		{
@@ -6225,10 +6326,10 @@ class li_dummy_class_dialog_item :
 	public li_class_dialog_item
 {
 protected:
-	i4_window_class *rw;
+	i4_window_class * rw;
 public:
 
-	li_dummy_class_dialog_item(i4_window_class *realwindow)
+	li_dummy_class_dialog_item(i4_window_class * realwindow)
 		: li_class_dialog_item()
 	{
 		rw=realwindow;
@@ -6249,17 +6350,17 @@ public:
 		return rw;
 	};
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"dummy_class_dialog_item");
 	};
 
-	i4_bool can_apply(li_environment *env)
+	i4_bool can_apply(li_environment * env)
 	{
 		return i4_T;
 	}
 
-	li_object *apply(li_environment *env)
+	li_object *apply(li_environment * env)
 	{
 		return 0;
 	}
@@ -6275,11 +6376,11 @@ class li_class_edit_class :
 {
 public:
 	virtual int create_edit_controls(i4_str name,
-									 li_object *object,
-									 li_object *property_list,
-									 i4_window_class **windows,
+									 li_object * object,
+									 li_object * property_list,
+									 i4_window_class * * windows,
 									 int max_windows,
-									 li_environment *env)
+									 li_environment * env)
 	{
 		if (max_windows)
 		{
@@ -6292,12 +6393,13 @@ public:
 		}
 	}
 
-	i4_bool can_apply_edit_controls(li_object *objectw,
-									li_object *property_list,
-									i4_window_class **windows,
-									li_environment *env)
+	i4_bool can_apply_edit_controls(li_object * objectw,
+									li_object * property_list,
+									i4_window_class * * windows,
+									li_environment * env)
 	{
-		li_class_dialog_item *w=(li_class_dialog_item *)windows[0];
+		li_class_dialog_item * w=(li_class_dialog_item *)windows[0];
+
 		if (w->is_fake())
 		{
 			return i4_T;
@@ -6308,12 +6410,13 @@ public:
 		}
 	}
 
-	li_object *apply_edit_controls(li_object *o,
-								   li_object *property_list,
-								   i4_window_class **windows,
-								   li_environment *env)
+	li_object *apply_edit_controls(li_object * o,
+								   li_object * property_list,
+								   i4_window_class * * windows,
+								   li_environment * env)
 	{
-		li_class_dialog_item *w=(li_class_dialog_item *)windows[0];
+		li_class_dialog_item * w=(li_class_dialog_item *)windows[0];
+
 		if (w->is_fake())
 		{
 			return 0;
@@ -6362,9 +6465,9 @@ li_dialog_item::li_dialog_item()
 
 
 li_dialog_item::li_dialog_item(const i4_const_str &name,
-							   li_object *_o,
-							   li_object *prop_list,
-							   li_environment *env)
+							   li_object * _o,
+							   li_object * prop_list,
+							   li_environment * env)
 
 	: i4_color_window_class(0,0, i4_current_app->get_style()->color_hint->neutral(),
 							i4_current_app->get_style()),
@@ -6374,14 +6477,14 @@ li_dialog_item::li_dialog_item(const i4_const_str &name,
 	windows=0;
 	t_windows=0;
 	has_extra_label=i4_F;
-	i4_window_class *w[10];
+	i4_window_class * w[10];
 
 	if (li_get_type(o->type())->has_editor())
 	{
 		if (prop_list!=li_get_symbol("no_edit"))
 		{
 
-			li_class *cl=li_class::get_all(_o,env);
+			li_class * cl=li_class::get_all(_o,env);
 			if (cl)
 			{
 				//it's a class contained in another one. Add an extra text item
@@ -6397,8 +6500,8 @@ li_dialog_item::li_dialog_item(const i4_const_str &name,
 																	&w[t_windows], 10-t_windows, env);
 			if (t_windows)
 			{
-				windows=(i4_window_class **)I4_MALLOC(sizeof(i4_window_class *) * t_windows,
-													  "lisp dialog sub windows");
+				windows=(i4_window_class * *)I4_MALLOC(sizeof(i4_window_class *) * t_windows,
+													   "lisp dialog sub windows");
 				int x=0, i, maxh=0;
 				for (i=0; i<t_windows; i++)
 				{
@@ -6424,7 +6527,7 @@ li_dialog_item::li_dialog_item(const i4_const_str &name,
 
 
 
-i4_bool li_dialog_item::can_apply(li_environment *env)
+i4_bool li_dialog_item::can_apply(li_environment * env)
 {
 	if (!li_get_type(o->type())->has_editor())
 	{
@@ -6438,7 +6541,7 @@ i4_bool li_dialog_item::can_apply(li_environment *env)
 }
 
 
-li_object *li_dialog_item::apply(li_environment *env)
+li_object * li_dialog_item::apply(li_environment * env)
 {
 	if (li_get_type(o->type())->has_editor())
 	{
@@ -6459,7 +6562,7 @@ li_dialog_item::~li_dialog_item()
 }
 
 
-i4_graphical_style_class *li_dialog_window_class::style()
+i4_graphical_style_class * li_dialog_window_class::style()
 {
 	return i4_current_app->get_style();
 }
@@ -6483,10 +6586,10 @@ li_dialog_window_class::~li_dialog_window_class()
 }
 
 li_dialog_window_class::li_dialog_window_class(const i4_const_str &name,
-											   li_object *_o,
-											   li_object *_prop_list,
+											   li_object * _o,
+											   li_object * _prop_list,
 											   li_function_type called_on_close,
-											   li_environment *env)
+											   li_environment * env)
 	: i4_color_window_class(0,0, style()->color_hint->neutral(), style()),
 	  called_on_close(called_on_close),
 	  enviroment(env)
@@ -6509,7 +6612,7 @@ li_dialog_window_class::li_dialog_window_class(const i4_const_str &name,
 		}
 	}
 
-	i4_window_class *ok, *cancel;
+	i4_window_class * ok, * cancel;
 
 	if (style()->icon_hint->ok_icon && style()->icon_hint->cancel_icon)
 	{
@@ -6524,10 +6627,10 @@ li_dialog_window_class::li_dialog_window_class(const i4_const_str &name,
 
 	resize_to_fit_children();
 
-	i4_button_class *okb=new i4_button_class(0, ok, style(), //sub_type==1 for ok
-											 new i4_event_reaction_class(this, 1));
-	i4_button_class *cancelb=new i4_button_class(0, cancel, style(), //sub_type==2 for cancel
-												 new i4_event_reaction_class(this, 2));
+	i4_button_class * okb=new i4_button_class(0, ok, style(), //sub_type==1 for ok
+											  new i4_event_reaction_class(this, 1));
+	i4_button_class * cancelb=new i4_button_class(0, cancel, style(), //sub_type==2 for cancel
+												  new i4_event_reaction_class(this, 2));
 	x=width()/2-okb->width()/2-cancelb->width()/2;
 	if (x<0)
 	{
@@ -6541,7 +6644,7 @@ li_dialog_window_class::li_dialog_window_class(const i4_const_str &name,
 
 }
 
-void li_dialog_window_class::receive_event(i4_event *ev)
+void li_dialog_window_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{
@@ -6587,20 +6690,21 @@ void li_dialog_window_class::receive_event(i4_event *ev)
 
 
 li_dialog_window_class *li_create_dialog(const i4_const_str &name,
-										 li_object *o,
-										 li_object *prop_list,
-										 char *close_fun,
-										 li_environment *env)
+										 li_object * o,
+										 li_object * prop_list,
+										 char * close_fun,
+										 li_environment * env)
 {
 	li_function_type fun=0;
+
 	if (close_fun)
 	{
 		fun=li_function::get(li_get_fun(li_get_symbol(close_fun), env),env)->value();
 	}
 
-	li_dialog_window_class *d=new li_dialog_window_class(name, o,prop_list, fun, env);
+	li_dialog_window_class * d=new li_dialog_window_class(name, o,prop_list, fun, env);
 
-	i4_parent_window_class *mp;
+	i4_parent_window_class * mp;
 	mp=i4_current_app->get_style()->create_mp_window(-1,-1, d->width(), d->height(),
 													 name, 0);
 	d->mp_handle=mp;
@@ -6612,14 +6716,15 @@ li_dialog_window_class *li_create_dialog(const i4_const_str &name,
 
 
 li_dialog_window_class *li_create_dialog(const i4_const_str &name,
-										 li_object *o,
-										 li_object *prop_list,
+										 li_object * o,
+										 li_object * prop_list,
 										 li_function_type fun,
-										 li_environment *env)
+										 li_environment * env)
 {
-	li_dialog_window_class *d=new li_dialog_window_class(name, o,prop_list, fun, env);
+	li_dialog_window_class * d=new li_dialog_window_class(name, o,prop_list, fun, env);
 
-	i4_parent_window_class *mp;
+	i4_parent_window_class * mp;
+
 	mp=i4_current_app->get_style()->create_mp_window(-1,-1, d->width(), d->height(),
 													 name, 0);
 	d->mp_handle=mp;
@@ -6641,16 +6746,17 @@ li_dialog_window_class *li_create_dialog(const i4_const_str &name,
 
 
 
-li_type_number *li_load_type_info(i4_loader_class *fp, li_environment *env)
+li_type_number *li_load_type_info(i4_loader_class * fp, li_environment * env)
 {
 	int t_types=fp->read_16(), i;
+
 	if (!t_types)
 	{
 		return 0;
 	}
 
 
-	li_type_number *remap=(li_type_number *)I4_MALLOC(sizeof(li_type_number) * t_types, "");
+	li_type_number * remap=(li_type_number *)I4_MALLOC(sizeof(li_type_number) * t_types, "");
 	memset(remap, 0, sizeof(li_type_number) * t_types);
 
 	for (i=1; i<t_types; i++)
@@ -6698,7 +6804,7 @@ li_type_number *li_load_type_info(i4_loader_class *fp, li_environment *env)
 }
 
 
-void li_free_type_info(li_type_number *remap)
+void li_free_type_info(li_type_number * remap)
 {
 	if (remap)
 	{
@@ -6714,9 +6820,10 @@ void li_free_type_info(li_type_number *remap)
 	}
 }
 
-void li_save_type_info(i4_saver_class *fp, li_environment *env)
+void li_save_type_info(i4_saver_class * fp, li_environment * env)
 {
 	int t_types=1, i;
+
 	for (i=1; i<li_max_types(); i++)
 	{
 		if (li_valid_type(i))
@@ -6731,7 +6838,7 @@ void li_save_type_info(i4_saver_class *fp, li_environment *env)
 	{
 		if (li_valid_type(i))
 		{
-			char *n=li_get_type(i)->name();
+			char * n=li_get_type(i)->name();
 			int nl=strlen(n)+1;
 			fp->write_16(nl);
 			fp->write(n,nl);
@@ -6756,18 +6863,19 @@ void li_save_type_info(i4_saver_class *fp, li_environment *env)
 
 
 
-li_object *li_load_typed_object(char *type_name, i4_loader_class *fp,
-								li_type_number *type_remap,
-								li_environment *env)
+li_object *li_load_typed_object(char * type_name, i4_loader_class * fp,
+								li_type_number * type_remap,
+								li_environment * env)
 {
 	int type=li_find_type(type_name);
+
 	if (!type)
 	{
 		li_error(env,"INTERNAL: type %s unknown", type_name);
 	}
 	else
 	{
-		li_object *o=li_load_object(fp, type_remap, env);
+		li_object * o=li_load_object(fp, type_remap, env);
 		if (!o || o->type()!=(w32)type)
 		{
 			// JJ cast
@@ -6782,10 +6890,11 @@ li_object *li_load_typed_object(char *type_name, i4_loader_class *fp,
 	return 0;
 }
 
-li_object *li_load_typed_object(int type, i4_loader_class *fp, li_type_number *type_remap,
-								li_environment *env)
+li_object *li_load_typed_object(int type, i4_loader_class * fp, li_type_number * type_remap,
+								li_environment * env)
 {
-	li_object *o=li_load_object(fp, type_remap, env);
+	li_object * o=li_load_object(fp, type_remap, env);
+
 	if (!o || o->type()!=(w32)type) // JJ cast
 	{
 		if (type)
@@ -6815,10 +6924,11 @@ li_object *li_load_typed_object(int type, i4_loader_class *fp, li_type_number *t
 
 
 
-li_string::li_string(const char *name)
+li_string::li_string(const char * name)
 	: li_object(LI_STRING)
 {
 	int l=strlen(name)+1;
+
 	_name=(char *)I4_MALLOC(l,"");
 	memcpy(_name, name, l);
 }
@@ -6833,18 +6943,19 @@ li_string::li_string(const i4_const_str &str)
 	: li_object(LI_STRING)
 {
 	int len=str.length()+1;
+
 	_name=(char *)I4_MALLOC(len,"");
 	i4_os_string(str, _name, len);
 }
 
 
 
-void li_save_type(i4_file_class *fp, li_type_number type)
+void li_save_type(i4_file_class * fp, li_type_number type)
 {
 	fp->write_16((w16)type); // JJ cast
 }
 
-li_type_number  li_load_type(i4_file_class *fp, li_type_number *type_remap)
+li_type_number  li_load_type(i4_file_class * fp, li_type_number * type_remap)
 {
 	I4_ASSERT(type_remap, "call li_load_type_info before li_load_type");
 
@@ -6852,7 +6963,7 @@ li_type_number  li_load_type(i4_file_class *fp, li_type_number *type_remap)
 }
 
 
-void li_save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+void li_save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 {
 	if (!o)
 	{
@@ -6878,9 +6989,10 @@ void li_save_object(i4_saver_class *fp, li_object *o, li_environment *env)
 }
 
 
-li_object *li_load_object(i4_loader_class *fp, li_type_number *type_remap, li_environment *env)
+li_object *li_load_object(i4_loader_class * fp, li_type_number * type_remap, li_environment * env)
 {
 	li_type_number old_type=fp->read_16();
+
 	if (old_type==0)
 	{
 		return 0;
@@ -6924,23 +7036,23 @@ li_object *li_load_object(i4_loader_class *fp, li_type_number *type_remap, li_en
 class li_invalid_type_function :
 	public li_type_function_table
 {
-	virtual void mark(li_object *o, int set)
+	virtual void mark(li_object * o, int set)
 	{
 		// objects are marked but invalid when they where just created,
 		// until their constructor is called for the first time.
 		// i4_error("INTERNAL: marking invalid object");
 	}
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
 		i4_error("INTERNAL: freeing invalid object");
 	}
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		i4_error("INTERNAL: comparing invalid object");
 		return 0;
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		li_error(0,"INTERNAL: printing invalid object");
 	}
@@ -6950,12 +7062,12 @@ class li_invalid_type_function :
 		return 0;
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		li_error(env, "INTERNAL: saving invalid object");
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap, li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap, li_environment * env)
 	{
 		li_error(env, "INTERNAL loading invalid object");
 		return 0;
@@ -6964,15 +7076,15 @@ class li_invalid_type_function :
 };
 
 
-void li_symbol::add_property(li_object *name, li_object *value)
+void li_symbol::add_property(li_object * name, li_object * value)
 {
 	if (data->_proplist==0)
 	{
 		data->_proplist=li_make_list(name,value,0);
 		return;
 	}
-	li_list *c=li_list::get(data->_proplist,0);
-	li_object *n=0;
+	li_list * c=li_list::get(data->_proplist,0);
+	li_object * n=0;
 	i4_bool bname=i4_T;
 	while (c)
 	{
@@ -7000,14 +7112,14 @@ void li_symbol::add_property(li_object *name, li_object *value)
 	data->_proplist=new li_list(name,new li_list(value,data->_proplist));
 };
 
-li_object *li_symbol::get_property(li_object *name)
+li_object * li_symbol::get_property(li_object * name)
 {
 	if (data->_proplist==0)
 	{
 		return 0;
 	}
-	li_list *c=li_list::get(data->_proplist,0);
-	li_object *n=0;
+	li_list * c=li_list::get(data->_proplist,0);
+	li_object * n=0;
 	i4_bool bname=i4_T;
 	while (c)
 	{
@@ -7038,9 +7150,10 @@ li_object *li_symbol::get_property(li_object *name)
 class li_symbol_type_function :
 	public li_type_function_table
 {
-	virtual void mark(li_object *o, int set)
+	virtual void mark(li_object * o, int set)
 	{
-		li_symbol *s=(li_symbol *)o;
+		li_symbol * s=(li_symbol *)o;
+
 		s->mark(set);
 
 		if (s->value())
@@ -7051,7 +7164,7 @@ class li_symbol_type_function :
 			}
 		}
 
-		li_object *fun=s->fun();
+		li_object * fun=s->fun();
 		if (fun)
 		{
 			if (set!=fun->is_marked())
@@ -7060,28 +7173,29 @@ class li_symbol_type_function :
 			}
 		}
 
-		li_object *name=s->name();
+		li_object * name=s->name();
 		if (set!=name->is_marked())
 		{
 			li_get_type(name->unmarked_type())->mark(name, set);
 		}
 
-		li_object *prop=s->get_plist();
+		li_object * prop=s->get_plist();
 		if (prop&&set!=prop->is_marked())
 		{
 			li_get_type(prop->unmarked_type())->mark(prop,set);
 		}
 	}
 
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
 		li_symbol::get(o,0)->free();
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
-		li_symbol *s=li_symbol::get(o,0);
-		char *name=s->name()->value();
+		li_symbol * s=li_symbol::get(o,0);
+		char * name=s->name()->value();
+
 		stream->write(name, strlen(name));
 	}
 	char *name()
@@ -7089,21 +7203,22 @@ class li_symbol_type_function :
 		return "symbol";
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
-		li_symbol *s=li_symbol::get(o,env);
-		char *name=s->name()->value();
+		li_symbol * s=li_symbol::get(o,env);
+		char * name=s->name()->value();
 		int name_len=strlen(name)+1;
 
 		fp->write_16(name_len);
 		fp->write(name, name_len);
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
-								   li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap,
+								   li_environment * env)
 	{
 		char buf[200];
 		int len=fp->read_16();
+
 		if (len>200)
 		{
 			li_error(env, "symbol name too long");
@@ -7120,10 +7235,11 @@ char *li_get_type_name(li_type_number type)
 	return li_get_type(type)->name();
 }
 
-li_string::li_string(i4_file_class *fp) :
+li_string::li_string(i4_file_class * fp) :
 	li_object(LI_STRING)
 {
 	int l=fp->read_32();
+
 	_name=(char *)I4_MALLOC(l,"");
 	fp->read(_name, l);
 }
@@ -7131,21 +7247,21 @@ li_string::li_string(i4_file_class *fp) :
 class li_string_type_function :
 	public li_type_function_table
 {
-	virtual li_object *copy(li_object *o)
+	virtual li_object *copy(li_object * o)
 	{
 		return new li_string(li_string::get(o,0)->value());
 	}
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
 		i4_free(li_string::get(o,0)->value());
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		stream->printf("\"%s\"", li_string::get(o,0)->value());
 	}
 
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		return (strcmp(li_string::get(o1,0)->value(), li_string::get(o2,0)->value())==0);
 	}
@@ -7155,15 +7271,16 @@ class li_string_type_function :
 		return "string";
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
-		char *s=li_string::get(o,env)->value();
+		char * s=li_string::get(o,env)->value();
 		int l=strlen(s)+1;
+
 		fp->write_32(l);
 		fp->write(s,l);
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap, li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap, li_environment * env)
 	{
 		return new li_string(fp);
 	}
@@ -7175,16 +7292,16 @@ class li_string_type_function :
 class li_int_type_function :
 	public li_type_function_table
 {
-	virtual li_object *copy(li_object *o)
+	virtual li_object *copy(li_object * o)
 	{
 		return new li_int(li_int::get(o,0)->value());
 	}
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		return li_int::get(o1,0)->value()==li_int::get(o2, 0)->value();
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		stream->printf("%d", li_int::get(o,0)->value());
 	}
@@ -7194,13 +7311,13 @@ class li_int_type_function :
 		return "int";
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		fp->write_32(li_int::get(o,0)->value());
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp,  li_type_number *type_remap,
-								   li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp,  li_type_number * type_remap,
+								   li_environment * env)
 	{
 		return new li_int(fp->read_32());
 	}
@@ -7213,12 +7330,12 @@ class li_type_type_function :
 	public li_type_function_table
 {
 
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		return li_int::get(o1,0)->value()==li_int::get(o2,0)->value();
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		stream->printf("type-%s", li_get_type(li_type::get(o,0)->value())->name());
 	}
@@ -7228,16 +7345,17 @@ class li_type_type_function :
 		return "type";
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o,
-							 li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o,
+							 li_environment * env)
 	{
 		li_save_type(fp, li_type::get(o,env)->value());
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
-								   li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap,
+								   li_environment * env)
 	{
 		int new_type=li_load_type(fp, type_remap);
+
 		if (new_type)
 		{
 			return new li_type(new_type);
@@ -7255,22 +7373,23 @@ class li_type_type_function :
 class li_float_type_function :
 	public li_type_function_table
 {
-	virtual li_object *copy(li_object *o)
+	virtual li_object *copy(li_object * o)
 	{
 		return new li_float(li_float::get(o,0)->value());
 	}
 
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		return li_float::get(o1,0)->value()==li_float::get(o2,0)->value();
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		char buf[200], dec=0;
+
 		sprintf(buf, "%f", li_float::get(o,0)->value());
 
-		for (char *c=buf; *c; c++)
+		for (char * c=buf; *c; c++)
 		{
 			if (*c=='.')
 			{
@@ -7282,6 +7401,7 @@ class li_float_type_function :
 		{
 			while (buf[strlen(buf)-1]=='0')
 				buf[strlen(buf)-1]=0;
+
 
 
 			if (buf[strlen(buf)-1]=='.')
@@ -7299,13 +7419,13 @@ class li_float_type_function :
 		return "float";
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		fp->write_float((float)li_float::get(o,env)->value()); //data loss ok here
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
-								   li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap,
+								   li_environment * env)
 	{
 		return new li_float(fp->read_float());
 	}
@@ -7316,12 +7436,12 @@ class li_float_type_function :
 class li_character_type_function :
 	public li_type_function_table
 {
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		return li_character::get(o1,0)->value()==li_character::get(o2,0)->value();
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		stream->printf("#%c",li_character::get(o,0)->value());
 	}
@@ -7331,13 +7451,13 @@ class li_character_type_function :
 		return "character";
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		fp->write_16(li_character::get(o,env)->value());
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
-								   li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap,
+								   li_environment * env)
 	{
 		return new li_character((w8)fp->read_16()); // JJ cast
 	}
@@ -7349,10 +7469,11 @@ class li_character_type_function :
 class li_list_type_function :
 	public li_type_function_table
 {
-	virtual li_object *copy(li_object *o)
+	virtual li_object *copy(li_object * o)
 	{
-		li_object *ret=0,*newdata=0,*newcell=0;
-		li_list *p=li_list::get(o,0);
+		li_object * ret=0,* newdata=0,* newcell=0;
+		li_list * p=li_list::get(o,0);
+
 		if (o->is_marked())
 		{
 			return o;
@@ -7372,17 +7493,17 @@ class li_list_type_function :
 		return newcell;
 	}
 
-	virtual void mark(li_object *o, int set)
+	virtual void mark(li_object * o, int set)
 	{
 		if (o->is_marked() && set)
 		{
 			return ;
 		}
 
-		li_list *l=(li_list *)o;
+		li_list * l=(li_list *)o;
 		if (l->data())
 		{
-			for (li_list *p=l; p;)
+			for (li_list * p=l; p;)
 			{
 				p->mark(set);
 				if (p->data())
@@ -7427,20 +7548,21 @@ class li_list_type_function :
 		}
 	}
 
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
-		li_list *l=(li_list *)o;
+		li_list * l=(li_list *)o;
+
 		l->cleanup();
 
 	}
 
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		if (o1==o2)
 		{
 			return 1;
 		}
-		li_list *p1=li_list::get(o1,0), *p2=li_list::get(o2,0);
+		li_list * p1=li_list::get(o1,0), * p2=li_list::get(o2,0);
 
 		for (; p1;)
 		{
@@ -7489,10 +7611,10 @@ class li_list_type_function :
 	}
 
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		stream->write_8('(');
-		li_list *p=li_list::get(o,0);
+		li_list * p=li_list::get(o,0);
 		if (o->is_marked())
 		{
 			stream->printf("[cancelling recursive print...]");
@@ -7545,11 +7667,12 @@ class li_list_type_function :
 		stream->write_8(')');
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		int t=0;
 		int last_is_cons=0;
-		li_list *l;
+		li_list * l;
+
 		for (l=li_list::get(o,env); l;)
 		{
 			t++;
@@ -7558,7 +7681,7 @@ class li_list_type_function :
 				li_error(env, "CRITICAL: list is really big : trying to save a circular structure doesn't work");
 			}
 
-			li_object *next=l->next();
+			li_object * next=l->next();
 			if (next)
 			{
 				if (next->type()!=LI_LIST)
@@ -7591,11 +7714,11 @@ class li_list_type_function :
 
 		for (l=li_list::get(o, env); l;)
 		{
-			li_object *data=l->data();
+			li_object * data=l->data();
 
 			li_save_object(fp, data, env);
 
-			li_object *next=l->next();
+			li_object * next=l->next();
 			if (next)
 			{
 				if (next->type()==LI_LIST)
@@ -7615,17 +7738,17 @@ class li_list_type_function :
 		}
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
-								   li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap,
+								   li_environment * env)
 	{
 		int t=fp->read_32();
 		int last_is_cons=fp->read_8();
-		li_list *last=0, *first=0;
+		li_list * last=0, * first=0;
 
 		for (int i=0; i<t; i++)
 		{
-			li_object *data=li_load_object(fp, type_remap, env);
-			li_list *l=new li_list(data, 0);
+			li_object * data=li_load_object(fp, type_remap, env);
+			li_list * l=new li_list(data, 0);
 			if (!first)
 			{
 				first=l;
@@ -7656,12 +7779,12 @@ class li_list_type_function :
 class li_user_function_type_function :
 	public li_type_function_table
 {
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		stream->printf("#<function ");
-		li_user_function *fn=li_user_function::get(o,0);
-		li_string *n=0; //the name is always "lambda" (internal requirement)
-		li_object *c=fn->data()->_code;
+		li_user_function * fn=li_user_function::get(o,0);
+		li_string * n=0; //the name is always "lambda" (internal requirement)
+		li_object * c=fn->data()->_code;
 		if (c->type()==LI_SYMBOL)
 		{
 			n=li_symbol::get(c,0)->name();
@@ -7680,7 +7803,7 @@ class li_user_function_type_function :
 	{
 		return "user_function";
 	};
-	virtual void save_object(i4_saver_class *fp,li_object *o,li_environment *env)
+	virtual void save_object(i4_saver_class * fp,li_object * o,li_environment * env)
 	{
 		fp->write_16((w16)li_type::get(o,env)->value());
 		//saving this kind of object in this context is not needed, just reload the original code
@@ -7688,9 +7811,10 @@ class li_user_function_type_function :
 		//d->_params->save_object(fp);
 		//d->_bindings->save_object(fp);
 	}
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap,li_environment * env)
 	{
 		int t=type_remap[fp->read_16()];
+
 		if (t)
 		{
 			return new li_type(t);
@@ -7700,17 +7824,17 @@ class li_user_function_type_function :
 			return 0;
 		}
 	}
-	virtual void mark(li_object *o, int set)
+	virtual void mark(li_object * o, int set)
 	{
 		if (o->is_marked() && set)
 		{
 			return ;
 		}
-		li_user_function *l=(li_user_function *)o;
+		li_user_function * l=(li_user_function *)o;
 		l->mark(set); //don't forget to mark ourselves
 		if (l->data())
 		{
-			li_user_function::user_function_data *d=l->data();
+			li_user_function::user_function_data * d=l->data();
 			li_get_type(d->_name->unmarked_type())->mark(d->_name,set);
 			if (d->_bindings)
 			{
@@ -7736,12 +7860,13 @@ class li_user_function_type_function :
 		}
 
 	}
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
-		li_user_function *u=li_user_function::get(o,0);
+		li_user_function * u=li_user_function::get(o,0);
+
 		u->cleanup();
 	}
-	virtual int equal(li_object *o1,li_object *o2)
+	virtual int equal(li_object * o1,li_object * o2)
 	{
 		if (o1==o2)
 		{
@@ -7755,7 +7880,7 @@ class li_user_function_type_function :
 class li_function_type_function :
 	public li_type_function_table
 {
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		stream->printf("#<compiled function @ 0x%x>", (long)(li_function::get(o,0)->value()));
 	}
@@ -7765,14 +7890,15 @@ class li_function_type_function :
 		return "function";
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		fp->write_16((w16)li_type::get(o,env)->value()); // JJ cast
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap, li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap, li_environment * env)
 	{
 		int t=type_remap[fp->read_16()];
+
 		if (t)
 		{
 			return new li_type(t);
@@ -7795,36 +7921,37 @@ class li_vector_type_function :
 {
 public:
 
-	virtual li_object *copy(li_object *o)
+	virtual li_object *copy(li_object * o)
 	{
-		li_vector *l=(li_vector *)o;
-		li_vector *cp=new li_vector();
+		li_vector * l=(li_vector *)o;
+		li_vector * cp=new li_vector();
+
 		for (int i=0; i<l->size(); i++) //the known length makes things easy
 		{
-			li_object *e=l->element_at(i);
+			li_object * e=l->element_at(i);
 			cp->add_element(li_get_type(e->type())->copy(e));
 		}
 		return cp;
 	}
 
 // free data associated with an instance of this type
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
 		li_vector::get(o,0)->cleanup();
 	}
 
 	//helper function for gc.
-	virtual void mark(li_object *o,int set)
+	virtual void mark(li_object * o,int set)
 	{
 		if (o->is_marked()&&set)
 		{
 			return;
 		}
-		li_vector *l=(li_vector *)o;
+		li_vector * l=(li_vector *)o;
 		l->mark(set); //mark self
 		for (int i=0; i<l->size(); i++) //the known length makes things easy
 		{
-			li_object *e=l->element_at(i);
+			li_object * e=l->element_at(i);
 			if (e)
 			{
 				li_get_type(e->unmarked_type())->mark(e,set);
@@ -7833,14 +7960,15 @@ public:
 
 	}
 
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
-		li_vector *a=li_vector::get(o1,0),*b=li_vector::get(o2,0);
+		li_vector * a=li_vector::get(o1,0),* b=li_vector::get(o2,0);
+
 		if (a->size()==b->size())
 		{
 			for (int i=0; i<a->size(); i++)
 			{
-				li_object *a1=a->element_at(i),*b1=b->element_at(i);
+				li_object * a1=a->element_at(i),* b1=b->element_at(i);
 				if(!(a1->type()==b1->type()&&li_get_type(a1->type())->equal(a1,b1)))
 				{
 					return i4_F;
@@ -7851,9 +7979,10 @@ public:
 		return i4_F;
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
-		li_vector *a=li_vector::get(o,0);
+		li_vector * a=li_vector::get(o,0);
+
 		stream->printf("#(");
 		for (int i=0; i<a->size(); i++)
 		{
@@ -7869,12 +7998,13 @@ public:
 		return "vector_array";
 	}
 
-	virtual li_object *create(li_object *params, li_environment *env)
+	virtual li_object *create(li_object * params, li_environment * env)
 	{
-		li_vector *v=new li_vector();
+		li_vector * v=new li_vector();
+
 		while(params)
 		{
-			li_object *e=li_car(params,env);
+			li_object * e=li_car(params,env);
 			v->add_element(e);
 			params=li_cdr(params,env);
 		}
@@ -7883,14 +8013,14 @@ public:
 	}
 
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		//not yet supported
 
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
-								   li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap,
+								   li_environment * env)
 	{
 		//not yet supported
 		return new li_vector(0);
@@ -7907,9 +8037,10 @@ li_object *&li_environment::current_arguments()
 {
 	return data->current_args;
 }
-li_environment *li_environment::set_next(li_environment *_next)
+li_environment * li_environment::set_next(li_environment * _next)
 {
-	li_environment *act=_next;
+	li_environment * act=_next;
+
 	while (act)  //be shure, we don't construct a circular list
 	{
 		if (act==this)
@@ -7925,10 +8056,10 @@ li_environment *li_environment::set_next(li_environment *_next)
 };
 
 
-void li_environment::print_call_stack(i4_file_class *fp)
+void li_environment::print_call_stack(i4_file_class * fp)
 {
-	li_symbol *s=current_function();
-	li_object *o=current_arguments();
+	li_symbol * s=current_function();
+	li_object * o=current_arguments();
 
 	if (s && o)
 	{
@@ -7950,9 +8081,9 @@ void li_environment::print_call_stack(i4_file_class *fp)
 }
 
 
-li_object *li_environment::value(li_symbol *s)
+li_object * li_environment::value(li_symbol * s)
 {
-	for (value_data *p=data->value_list; p; p=p->next)
+	for (value_data * p=data->value_list; p; p=p->next)
 	{
 		if (p->symbol==s)
 		{
@@ -7968,9 +8099,9 @@ li_object *li_environment::value(li_symbol *s)
 	return s->value();
 }
 
-li_environment *li_environment::env_for_symbol(li_symbol *s)
+li_environment * li_environment::env_for_symbol(li_symbol * s)
 {
-	for (value_data *p=data->value_list; p; p=p->next)
+	for (value_data * p=data->value_list; p; p=p->next)
 	{
 		if (p->symbol==s)
 		{
@@ -7987,9 +8118,9 @@ li_environment *li_environment::env_for_symbol(li_symbol *s)
 }
 
 
-li_object *li_environment::fun(li_symbol *s)
+li_object * li_environment::fun(li_symbol * s)
 {
-	for (fun_data *p=data->fun_list; p; p=p->next)
+	for (fun_data * p=data->fun_list; p; p=p->next)
 	{
 		if (p->symbol==s)
 		{
@@ -8005,11 +8136,11 @@ li_object *li_environment::fun(li_symbol *s)
 	return s->fun();
 }
 
-void li_environment::define_value(li_symbol *s, li_object *value)
+void li_environment::define_value(li_symbol * s, li_object * value)
 {
 	if (data->local_namespace)
 	{
-		for (value_data *p=data->value_list; p; p=p->next)
+		for (value_data * p=data->value_list; p; p=p->next)
 		{
 			if (p->symbol==s)
 			{
@@ -8018,7 +8149,7 @@ void li_environment::define_value(li_symbol *s, li_object *value)
 			}
 		}
 
-		value_data *v=new value_data;
+		value_data * v=new value_data;
 		v->symbol=s;
 		v->value=value;
 		v->next=data->value_list;
@@ -8036,11 +8167,11 @@ void li_environment::define_value(li_symbol *s, li_object *value)
 
 
 
-void li_environment::set_value(li_symbol *s, li_object *value)
+void li_environment::set_value(li_symbol * s, li_object * value)
 {
 	if (data->local_namespace)
 	{
-		for (value_data *p=data->value_list; p; p=p->next)
+		for (value_data * p=data->value_list; p; p=p->next)
 		{
 			if (p->symbol==s)
 			{
@@ -8073,11 +8204,11 @@ void li_environment::set_value(li_symbol *s, li_object *value)
 }
 
 
-void li_environment::set_fun(li_symbol *s, li_object *fun)
+void li_environment::set_fun(li_symbol * s, li_object * fun)
 {
 	if (data->local_namespace)
 	{
-		for (fun_data *p=data->fun_list; p; p=p->next)
+		for (fun_data * p=data->fun_list; p; p=p->next)
 		{
 			if (p->symbol==s)
 			{
@@ -8085,7 +8216,7 @@ void li_environment::set_fun(li_symbol *s, li_object *fun)
 			}
 		}
 
-		fun_data *f=new fun_data;
+		fun_data * f=new fun_data;
 		f->symbol=s;
 		f->fun=fun;
 		f->next=data->fun_list;
@@ -8106,7 +8237,7 @@ void li_environment::mark(int set)
 {
 	li_object::mark(set);
 
-	for (value_data *v=data->value_list; v; v=v->next)
+	for (value_data * v=data->value_list; v; v=v->next)
 	{
 		if (set!=v->value->is_marked())
 		{
@@ -8114,7 +8245,7 @@ void li_environment::mark(int set)
 		}
 	}
 
-	for (fun_data *f=data->fun_list; f; f=f->next)
+	for (fun_data * f=data->fun_list; f; f=f->next)
 	{
 		if (set!=f->fun->is_marked())
 		{
@@ -8130,16 +8261,16 @@ void li_environment::mark(int set)
 
 void li_environment::free()
 {
-	for (value_data *v=data->value_list; v; )
+	for (value_data * v=data->value_list; v; )
 	{
-		value_data *last=v;
+		value_data * last=v;
 		v=v->next;
 		delete last;
 	}
 
-	for (fun_data *f=data->fun_list; f; )
+	for (fun_data * f=data->fun_list; f; )
 	{
-		fun_data *last=f;
+		fun_data * last=f;
 		f=f->next;
 		delete last;
 	}
@@ -8147,11 +8278,11 @@ void li_environment::free()
 	delete data;
 }
 
-void li_environment::print(i4_file_class *s)
+void li_environment::print(i4_file_class * s)
 {
 	s->printf("#env-(syms=");
 
-	for (value_data *v=data->value_list; v; v=v->next)
+	for (value_data * v=data->value_list; v; v=v->next)
 	{
 		s->write_8('(');
 		li_get_type(v->symbol->type())->print(v->symbol, s);
@@ -8161,7 +8292,7 @@ void li_environment::print(i4_file_class *s)
 	}
 
 	s->printf("funs=");
-	for (fun_data *f=data->fun_list; f; f=f->next)
+	for (fun_data * f=data->fun_list; f; f=f->next)
 	{
 		s->write_8('(');
 		li_get_type(f->symbol->type())->print(f->symbol, s);
@@ -8179,15 +8310,15 @@ class li_environment_type_function :
 	public li_type_function_table
 {
 public:
-	virtual void mark(li_object *o, int set)
+	virtual void mark(li_object * o, int set)
 	{
 		((li_environment *)o)->mark(set);
 	}
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
 		li_environment::get(o,0)->free();
 	}
-	virtual void print(li_object *o, i4_file_class *s)
+	virtual void print(li_object * o, i4_file_class * s)
 	{
 		li_environment::get(o,0)->print(s);
 	}
@@ -8197,12 +8328,12 @@ public:
 	}
 
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		li_error(env, "INTERNAL: li_environments cannot be saved");
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap, li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap, li_environment * env)
 	{
 		li_error(env, "INTERNAL: li_environments cannot be loaded");
 		return 0;
@@ -8210,31 +8341,33 @@ public:
 
 };
 
-i4_bool li_equal_bignum(li_bignum *a, li_bignum *b);
+i4_bool li_equal_bignum(li_bignum * a, li_bignum * b);
 
 class li_bignum_type_function :
 	public li_type_function_table
 {
 public:
-	virtual li_object *copy(li_object *o)
+	virtual li_object *copy(li_object * o)
 	{
-		li_bignum *b=li_bignum::get(o,0);
+		li_bignum * b=li_bignum::get(o,0);
+
 		return new li_bignum(b->get_length(),b->value(),b->get_signum());
 	}
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
 		li_bignum::get(o,0)->cleanup();
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
-		li_bignum *b=li_bignum::get(o,0);
+		li_bignum * b=li_bignum::get(o,0);
+
 		if (b->get_signum())
 		{
 			stream->printf("-");
 		}
 		w32 l=b->get_length();
-		char *c=b->value();
+		char * c=b->value();
 		while (l>1&&(*c==0x0))
 		{
 			c++,l--;
@@ -8248,9 +8381,10 @@ public:
 		}
 	}
 
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
-		li_bignum *a=li_bignum::get(o1,0),*b=li_bignum::get(o2,0);
+		li_bignum * a=li_bignum::get(o1,0),* b=li_bignum::get(o2,0);
+
 		if (a->get_signum()!=b->get_signum())
 		{
 			return i4_F;
@@ -8264,19 +8398,21 @@ public:
 		return "bignum";
 	}
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
-		char *s=li_bignum::get(o,env)->value();
+		char * s=li_bignum::get(o,env)->value();
 		int l=li_bignum::get(o,env)->get_length();
+
 		fp->write_32(l);
 		fp->write(s,l);
 		fp->write_8(li_bignum::get(o,env)->get_signum());
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap, li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap, li_environment * env)
 	{
 		int l=fp->read_32();
-		char *buf=new char[l];
+		char * buf=new char[l];
+
 		fp->read(buf,l);
 		return new li_bignum(l,buf,fp->read_8());
 	}
@@ -8297,20 +8433,22 @@ class li_vect_type_function_table :
 {
 public:
 	// free data associated with an instance of this type
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
 		//delete li_vect::get(o,0)->v;
 	}
 
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		i4_3d_vector v1=li_vect::get(o1,0)->value(), v2=li_vect::get(o2,0)->value();
+
 		return v1.x==v2.x && v1.y==v2.y && v1.z==v1.z;
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
 		i4_3d_vector v=li_vect::get(o,0)->value();
+
 		stream->printf("(vector %f %f %f)",v.x, v.y, v.z);
 	}
 
@@ -8319,9 +8457,10 @@ public:
 		return "vector";
 	}
 
-	virtual li_object *create(li_object *params, li_environment *env)
+	virtual li_object *create(li_object * params, li_environment * env)
 	{
 		i4_3d_vector v;
+
 		if (params)
 		{
 			v.x=(float)li_get_float(li_eval(li_car(params,env), env),env);
@@ -8342,19 +8481,21 @@ public:
 	}
 
 
-	virtual void save_object(i4_saver_class *fp, li_object *o, li_environment *env)
+	virtual void save_object(i4_saver_class * fp, li_object * o, li_environment * env)
 	{
 		i4_3d_vector v=li_vect::get(o,env)->value();
+
 		fp->write_float(v.x);
 		fp->write_float(v.y);
 		fp->write_float(v.z);
 
 	}
 
-	virtual li_object *load_object(i4_loader_class *fp, li_type_number *type_remap,
-								   li_environment *env)
+	virtual li_object *load_object(i4_loader_class * fp, li_type_number * type_remap,
+								   li_environment * env)
 	{
 		i4_3d_vector v;
+
 		v.x=fp->read_float();
 		v.y=fp->read_float();
 		v.z=fp->read_float();
@@ -8373,14 +8514,15 @@ class li_type_manager_class :
 public:
 	i4_array<li_type_function_table *> table;
 
-	int add_init(li_type_function_table *type_functions)
+	int add_init(li_type_function_table * type_functions)
 	{
 		li_type_number new_type=table.size();
+
 		table.add(type_functions);
 		return new_type;
 	}
 	int add(li_type_function_table *&type_functions,
-			li_environment *env=0,
+			li_environment * env=0,
 			int anon=0)
 
 	{
@@ -8388,7 +8530,7 @@ public:
 
 		if (!anon)
 		{
-			li_symbol *sym=li_get_symbol(type_functions->name());
+			li_symbol * sym=li_get_symbol(type_functions->name());
 			if (sym->value() && sym->value()->type()==LI_TYPE)
 			{
 				old_type=li_type::get(sym->value(), env)->value();
@@ -8429,7 +8571,8 @@ public:
 	}
 	void init()
 	{
-		li_invalid_type_function *invalid=new li_invalid_type_function;
+		li_invalid_type_function * invalid=new li_invalid_type_function;
+
 		for (int i=0; i<LI_LAST_TYPE; i++)
 		{
 			//add(invalid,0,1);
@@ -8451,13 +8594,13 @@ public:
 		table[LI_BIGNUM]=new li_bignum_type_function;
 		//The LI_VECT is kinda of a class type and is created using (new vector)
 		//or (new vector x y z), therefore we have to set the symbol definition.
-		li_type_function_table *v_type=new li_vect_type_function_table;
+		li_type_function_table * v_type=new li_vect_type_function_table;
 		table[LI_VECT]=v_type;
-		li_symbol *sym=li_get_symbol(v_type->name());
+		li_symbol * sym=li_get_symbol(v_type->name());
 		li_set_value(sym, new li_type(LI_VECT), NULL);
 	}
 
-	int find(char *name)
+	int find(char * name)
 	{
 		for (int i=1; i<table.size(); i++)
 		{
@@ -8475,7 +8618,7 @@ public:
 static li_type_manager_class li_type_man;
 
 int li_add_type(li_type_function_table *&type_functions,   // return type number for type
-				li_environment *env,
+				li_environment * env,
 				int anon)
 
 {
@@ -8499,9 +8642,10 @@ li_type_function_table *li_get_type(li_type_number type_num)
 
 
 
-li_type_number li_find_type(char *name, li_environment *env)
+li_type_number li_find_type(char * name, li_environment * env)
 {
-	li_symbol *s=li_find_symbol(name);
+	li_symbol * s=li_find_symbol(name);
+
 	if (s)
 	{
 		return li_type::get(li_get_value(s, env),env)->value();
@@ -8512,7 +8656,7 @@ li_type_number li_find_type(char *name, li_environment *env)
 	}
 }
 
-li_type_number li_find_type(char *name, li_environment *env, li_type_number &cache_to)
+li_type_number li_find_type(char * name, li_environment * env, li_type_number &cache_to)
 {
 	if (cache_to)
 	{
@@ -8541,9 +8685,10 @@ int li_max_types()
 #ifndef __sgi
 //SGI Mipspro doesn't like this form of operator delete.
 //Don't know how to do it. It (should) be unused anyway.
-void li_object::operator delete(void *ptr, char *file, int line)
+void li_object::operator delete(void * ptr, char * file, int line)
 {
-	li_object *o = (li_object *)ptr;
+	li_object * o = (li_object *)ptr;
+
 	li_get_type(o->type())->free(o);
 	li_cell_free(o);
 }
@@ -8562,7 +8707,7 @@ void li_object::operator delete(void *ptr, char *file, int line)
 
 
 #ifdef _WINDOWS
-static li_object *msvc_inspect=0;
+static li_object * msvc_inspect=0;
 static char FP_SAVE[108];
 
 void msvc_lip()

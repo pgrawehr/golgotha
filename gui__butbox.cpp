@@ -25,7 +25,7 @@ void i4_button_box_class::parent_draw(i4_draw_context_class &context)
 
 	child_clip.swap(&context.clip);
 
-	i4_graphical_style_class *style=i4_current_app->get_style();
+	i4_graphical_style_class * style=i4_current_app->get_style();
 
 	for (i4_rect_list_class::area_iter c=context.clip.list.begin(); c!=context.clip.list.end(); ++c)
 	{
@@ -40,8 +40,9 @@ void i4_button_group_class::parent_draw(i4_draw_context_class &context)
 {
 
 	w32 left=0,top=0,right=0,bottom=0;
-	i4_graphical_style_class *style=i4_current_app->get_style();
-	i4_font_class *fnt=style->font_hint->normal_font;
+	i4_graphical_style_class * style=i4_current_app->get_style();
+	i4_font_class * fnt=style->font_hint->normal_font;
+
 	if (!(flags&NOBORDER))
 	{
 		style->get_in_deco_size(left,top,right,bottom);
@@ -54,7 +55,7 @@ void i4_button_group_class::parent_draw(i4_draw_context_class &context)
 	i4_button_box_class::parent_draw(context);
 }
 
-i4_button_box_class::i4_button_box_class(i4_event_handler_class *receiver,
+i4_button_box_class::i4_button_box_class(i4_event_handler_class * receiver,
 										 i4_bool require_one_down)
 	: receiver(receiver),
 	  require_one_down(require_one_down)
@@ -64,7 +65,7 @@ i4_button_box_class::i4_button_box_class(i4_event_handler_class *receiver,
 
 i4_button_group_class::i4_button_group_class(i4_const_str &_text,
 											 w16 _width,w16 _height,
-											 i4_event_handler_class *receiver,
+											 i4_event_handler_class * receiver,
 											 w32 _flags)
 	: i4_button_box_class( receiver,
 						  (_flags&i4_checkbox_class::TYPE_MASK)==i4_checkbox_class::CHECKBOX),
@@ -78,7 +79,7 @@ i4_button_group_class::i4_button_group_class(i4_const_str &_text,
 }
 
 
-void i4_button_box_class::add_child(i4_coord x, i4_coord y, i4_window_class *child)
+void i4_button_box_class::add_child(i4_coord x, i4_coord y, i4_window_class * child)
 {
 	i4_error("INTERNAL: You must use add_button() to add buttons to a button_box.");
 }
@@ -87,6 +88,7 @@ void i4_button_box_class::expand_if_needed()
 {
 	win_iter c=children.begin();
 	w32 w=width(),h=height();
+
 	for (; c!=children.end(); ++c)
 	{
 		if (c->x()+c->width()-x()>(sw32)w)
@@ -105,7 +107,7 @@ void i4_button_box_class::expand_if_needed()
 }
 
 // when adding a child, enlarge the button box window if nessary to encompass it
-void i4_button_box_class::add_button(i4_coord _x, i4_coord _y, i4_button_class *child)
+void i4_button_box_class::add_button(i4_coord _x, i4_coord _y, i4_button_class * child)
 {
 	i4_parent_window_class::add_child(_x,_y,child);
 	child->set_menu_parent(this);
@@ -129,11 +131,11 @@ void i4_button_box_class::arrange_down_right()
 	expand_if_needed();
 }
 
-void i4_button_group_class::note_reaction_sent(i4_menu_item_class *who,       // this is who sent it
-											   i4_event_reaction_class *ev, // who it was to
+void i4_button_group_class::note_reaction_sent(i4_menu_item_class * who,       // this is who sent it
+											   i4_event_reaction_class * ev, // who it was to
 											   i4_menu_item_class::reaction_type type)
 {
-	i4_checkbox_class *but=(i4_checkbox_class *)who;
+	i4_checkbox_class * but=(i4_checkbox_class *)who;
 
 	if ((flags&i4_checkbox_class::TYPE_MASK)!=i4_checkbox_class::CHECKBOX)
 	{
@@ -145,7 +147,7 @@ void i4_button_group_class::note_reaction_sent(i4_menu_item_class *who,       //
 		{
 			if (current_down!=but) // see if we need to depress the current button
 			{
-				i4_checkbox_class *old_down=(i4_checkbox_class *)current_down;
+				i4_checkbox_class * old_down=(i4_checkbox_class *)current_down;
 				current_down=but;
 				old_down->set_state(0);
 			}
@@ -164,11 +166,11 @@ void i4_button_group_class::note_reaction_sent(i4_menu_item_class *who,       //
 	}
 }
 
-void i4_button_box_class::note_reaction_sent(i4_menu_item_class *who,       // this is who sent it
-											 i4_event_reaction_class *ev,   // who it was to
+void i4_button_box_class::note_reaction_sent(i4_menu_item_class * who,       // this is who sent it
+											 i4_event_reaction_class * ev,   // who it was to
 											 i4_menu_item_class::reaction_type type)
 {
-	i4_button_class *but=(i4_button_class *)who;
+	i4_button_class * but=(i4_button_class *)who;
 
 	if (type==i4_menu_item_class::PRESSED)
 	{
@@ -176,7 +178,7 @@ void i4_button_box_class::note_reaction_sent(i4_menu_item_class *who,       // t
 		{
 			if (current_down!=but) // see if we need to depress the current button
 			{
-				i4_button_class *old_down=(i4_button_class *)current_down;
+				i4_button_class * old_down=(i4_button_class *)current_down;
 				current_down=but;
 				old_down->do_depress();
 			}
@@ -195,14 +197,14 @@ void i4_button_box_class::note_reaction_sent(i4_menu_item_class *who,       // t
 	}
 }
 
-void i4_button_group_class::push_button(i4_button_class *which, i4_bool send_event)
+void i4_button_group_class::push_button(i4_button_class * which, i4_bool send_event)
 {
 	//Remember: Only checkboxes are supposed to be added to the group.
 	if (!which)
 	{
 		return;
 	}
-	i4_checkbox_class *w=(i4_checkbox_class *) which;
+	i4_checkbox_class * w=(i4_checkbox_class *) which;
 	if (current_down!=which)
 	{
 		((i4_checkbox_class *)current_down)->set_state(0);
@@ -216,7 +218,7 @@ void i4_button_group_class::push_button(i4_button_class *which, i4_bool send_eve
 }
 
 
-void i4_button_box_class::push_button(i4_button_class *which, i4_bool send_event)
+void i4_button_box_class::push_button(i4_button_class * which, i4_bool send_event)
 {
 	if (!which)
 	{
@@ -258,13 +260,13 @@ void i4_button_box_class::push_button(i4_button_class *which, i4_bool send_event
 #include "device/keys.h"
 #include "window/win_evt.h"
 
-i4_button_class::i4_button_class(const i4_const_str *idle_context_help,  // can be null
-								 i4_window_class *child,
-								 i4_graphical_style_class *hint,
-								 i4_event_reaction_class *press,
-								 i4_event_reaction_class *depress,
-								 i4_event_reaction_class *activate,
-								 i4_event_reaction_class *deactivate) :
+i4_button_class::i4_button_class(const i4_const_str * idle_context_help,  // can be null
+								 i4_window_class * child,
+								 i4_graphical_style_class * hint,
+								 i4_event_reaction_class * press,
+								 i4_event_reaction_class * depress,
+								 i4_event_reaction_class * activate,
+								 i4_event_reaction_class * deactivate) :
 	i4_menu_item_class(idle_context_help,
 					   hint,
 					   child ? child->width()+4 :
@@ -314,7 +316,7 @@ i4_button_class::~i4_button_class()
 	}
 }
 
-void i4_button_class::reparent(i4_image_class *draw_area, i4_parent_window_class *par)
+void i4_button_class::reparent(i4_image_class * draw_area, i4_parent_window_class * par)
 {
 	if (grabbing && !draw_area)
 	{
@@ -326,7 +328,7 @@ void i4_button_class::reparent(i4_image_class *draw_area, i4_parent_window_class
 }
 
 
-void i4_button_class::receive_event(i4_event *ev)
+void i4_button_class::receive_event(i4_event * ev)
 {
 	if (!disabled)
 	{
@@ -489,7 +491,7 @@ void i4_button_class::parent_draw(i4_draw_context_class &context)
 {
 	local_image->add_dirty(0,0,width()-1,height()-1,context);
 
-	i4_color_hint_class::bevel *color;
+	i4_color_hint_class::bevel * color;
 	if (active)
 	{
 		color=&hint->color_hint->button.active;
@@ -531,7 +533,7 @@ void i4_button_class::set_popup(i4_bool value)
 	popup=value;
 }
 
-void i4_button_class::set_repeat_down(i4_bool value, i4_event_reaction_class *_repeat_event)
+void i4_button_class::set_repeat_down(i4_bool value, i4_event_reaction_class * _repeat_event)
 {
 	if (!value && (state==WAIT_DELAY || state==WAIT_REPEAT))
 	{
@@ -566,7 +568,7 @@ void i4_button_class::set_repeat_down(i4_bool value, i4_event_reaction_class *_r
 #include "gui/butbox.h"
 #include "gui/deco_win.h"
 
-char *tokens[]={
+char * tokens[]={
 	"=", "(", ")",
 	"[", "]", "right", "down", "up_deco", "down_deco", "'", "text_input", "text",
 	"button", "butbox", "obj_ev", "user_ev", "x+", "y+", "checkbox", 0
@@ -582,10 +584,11 @@ enum {
 
 
 
-void i4_expected(char *why, i4_const_str::iterator i, const i4_const_str &s)
+void i4_expected(char * why, i4_const_str::iterator i, const i4_const_str &s)
 {
-	i4_str *er=new i4_str(i4gets("expected"),2000);
+	i4_str * er=new i4_str(i4gets("expected"),2000);
 	i4_str::iterator x=er->end();
+
 	er->insert(x,why);
 	er->insert(er->end()," parsing ");
 	er->insert(er->end(),s);
@@ -619,7 +622,7 @@ int i4_is_space(i4_const_str::iterator i)
 	}
 }
 
-int i4_cmp_char_str(i4_const_str::iterator i, const i4_const_str &s, char *c)
+int i4_cmp_char_str(i4_const_str::iterator i, const i4_const_str &s, char * c)
 {
 	while (*c && i!=s.end())
 	{
@@ -655,6 +658,7 @@ int i4_read_dlg_token(i4_const_str::iterator &i,
 {
 	while (i!=fmt.end() && i4_is_space(i))
 		++i;
+
 
 
 	if (i==fmt.end())
@@ -739,6 +743,7 @@ int i4_next_token_is_rbrace(i4_const_str::iterator i,
 		++i;
 
 
+
 	if (i==fmt.end())
 	{
 		return 1;
@@ -758,14 +763,14 @@ int i4_next_token_is_rbrace(i4_const_str::iterator i,
 i4_str *i4_read_str(i4_const_str::iterator &i, const i4_const_str &fmt, va_list &ap)
 {
 	sw32 n;
-	void *p;
+	void * p;
 
 	if (i4_read_dlg_token(i, fmt, n, p, ap)!=TK_TICK)
 	{
 		i4_expected("'",i,fmt);
 	}
 
-	i4_str *s=new i4_str();
+	i4_str * s=new i4_str();
 	while (i!=fmt.end() && i.get().value()!='\'')
 	{
 		s->insert(s->end(),i.get());
@@ -774,7 +779,7 @@ i4_str *i4_read_str(i4_const_str::iterator &i, const i4_const_str &fmt, va_list 
 	++i;
 
 	//i4_warning(s->c_str());
-	i4_str *ret=s->vsprintf(200, ap);
+	i4_str * ret=s->vsprintf(200, ap);
 	//i4_warning(ret->c_str());
 	delete s;
 	return ret;
@@ -785,7 +790,7 @@ i4_event_reaction_class *i4_read_reaction(i4_const_str::iterator &i,
 										  va_list &ap)
 {
 	sw32 x,id;
-	void *p, *from, *to;
+	void * p, * from, * to;
 	int t=i4_read_dlg_token(i, fmt, x, p, ap);
 
 	if (t==TK_OBJ_EV)
@@ -815,7 +820,7 @@ i4_event_reaction_class *i4_read_reaction(i4_const_str::iterator &i,
 			i4_expected(")",i,fmt);
 		}
 
-		i4_object_message_event_class *om;
+		i4_object_message_event_class * om;
 		om=new i4_object_message_event_class((i4_event_handler_class *)from, id);
 		return new i4_event_reaction_class((i4_event_handler_class *)to, om);
 	}
@@ -841,7 +846,7 @@ i4_event_reaction_class *i4_read_reaction(i4_const_str::iterator &i,
 			i4_expected(")",i,fmt);
 		}
 
-		i4_user_message_event_class *uev;
+		i4_user_message_event_class * uev;
 		uev=new i4_user_message_event_class(id);
 
 		return new i4_event_reaction_class((i4_event_handler_class *)to, uev);
@@ -853,20 +858,21 @@ i4_event_reaction_class *i4_read_reaction(i4_const_str::iterator &i,
 	}
 }
 
-i4_window_class *i4_read_object(i4_parent_window_class *parent,
-								i4_graphical_style_class *style,
+i4_window_class *i4_read_object(i4_parent_window_class * parent,
+								i4_graphical_style_class * style,
 								sw32 &cx, sw32 &cy,
 								i4_const_str::iterator &i, const i4_const_str &fmt,
 								va_list &ap,
 								int in_buttonbox)
 {
 	sw32 x=0;
-	void *p=0;
+	void * p=0;
 	i4_const_str::iterator start_i=i;
-	i4_window_class *ret=0;
+	i4_window_class * ret=0;
 
 
 	int token=i4_read_dlg_token(i, fmt, x, p, ap);
+
 	switch (token)
 	{
 		case TK_POINTER :
@@ -877,8 +883,8 @@ i4_window_class *i4_read_object(i4_parent_window_class *parent,
 					i4_expected("expected = after %p", start_i, fmt);
 				}
 
-				i4_window_class *r=i4_read_object(parent, style, cx, cy, i, fmt, ap, in_buttonbox);
-				*((i4_window_class **)p)=r;
+				i4_window_class * r=i4_read_object(parent, style, cx, cy, i, fmt, ap, in_buttonbox);
+				*((i4_window_class * *)p)=r;
 				ret=r;
 			} break;
 
@@ -892,7 +898,7 @@ i4_window_class *i4_read_object(i4_parent_window_class *parent,
 
 				sw32 ncx=cx, ncy=cy;
 				int max_w=0, max_h=0;
-				i4_window_class *r;
+				i4_window_class * r;
 				while (!i4_next_token_is_rbrace(i, fmt))
 				{
 					r=i4_read_object(parent, style, ncx, ncy, i, fmt, ap, in_buttonbox);
@@ -981,10 +987,10 @@ i4_window_class *i4_read_object(i4_parent_window_class *parent,
 					i4_expected("number",start_i,fmt);
 				}
 
-				i4_deco_window_class *cw=new i4_deco_window_class((w16)w,(w16)h, i4_T, style);
+				i4_deco_window_class * cw=new i4_deco_window_class((w16)w,(w16)h, i4_T, style);
 
 				sw32 ncx=0, ncy=0;
-				i4_window_class *r=i4_read_object(cw, style, ncx, ncy, i, fmt, ap, 0);
+				i4_window_class * r=i4_read_object(cw, style, ncx, ncy, i, fmt, ap, 0);
 
 				parent->add_child((short)cx,(short)cy, cw);
 
@@ -1003,10 +1009,10 @@ i4_window_class *i4_read_object(i4_parent_window_class *parent,
 					i4_expected("(",start_i,fmt);
 				}
 
-				i4_str *s=i4_read_str(i, fmt, ap);
+				i4_str * s=i4_read_str(i, fmt, ap);
 				if (s)
 				{
-					i4_text_window_class *tw=new i4_text_window_class(*s, style);
+					i4_text_window_class * tw=new i4_text_window_class(*s, style);
 					delete s;
 					parent->add_child((w16)cx, (w16)cy, tw);
 					ret=tw;
@@ -1032,10 +1038,10 @@ i4_window_class *i4_read_object(i4_parent_window_class *parent,
 					i4_expected("number",start_i,fmt);
 				}
 
-				i4_str *s=i4_read_str(i, fmt, ap);
+				i4_str * s=i4_read_str(i, fmt, ap);
 				if (s)
 				{
-					i4_text_input_class *ti=new i4_text_input_class(style, *s, w, 256);
+					i4_text_input_class * ti=new i4_text_input_class(style, *s, w, 256);
 					delete s;
 					parent->add_child((short)cx, (short)cy, ti);
 					ret=ti;
@@ -1056,14 +1062,14 @@ i4_window_class *i4_read_object(i4_parent_window_class *parent,
 				}
 
 				i4_color_window_class tmp_win(0,0,0,style);
-				i4_window_class *r=i4_read_object(&tmp_win, style, cx, cy, i, fmt, ap, in_buttonbox);
-				i4_event_reaction_class *re=i4_read_reaction(i, fmt, ap);
+				i4_window_class * r=i4_read_object(&tmp_win, style, cx, cy, i, fmt, ap, in_buttonbox);
+				i4_event_reaction_class * re=i4_read_reaction(i, fmt, ap);
 
 				if (r)
 				{
 					tmp_win.remove_child(r);
 
-					i4_button_class *b=new i4_button_class(0, r, style, re);
+					i4_button_class * b=new i4_button_class(0, r, style, re);
 
 					if (in_buttonbox)
 					{
@@ -1101,13 +1107,13 @@ i4_window_class *i4_read_object(i4_parent_window_class *parent,
 				}
 
 
-				i4_button_box_class *bbox=new i4_button_box_class(0);
+				i4_button_box_class * bbox=new i4_button_box_class(0);
 
 				sw32 ncx=0,ncy=0;
-				i4_window_class *r=i4_read_object(bbox, style, ncx, ncy, i, fmt, ap, 1);
+				i4_window_class * r=i4_read_object(bbox, style, ncx, ncy, i, fmt, ap, 1);
 				bbox->resize_to_fit_children();
 
-				i4_button_class *b=(i4_button_class *)bbox->get_nth_window(def_down);
+				i4_button_class * b=(i4_button_class *)bbox->get_nth_window(def_down);
 				if (b)
 				{
 					bbox->push_button(b,0);
@@ -1128,11 +1134,12 @@ i4_window_class *i4_read_object(i4_parent_window_class *parent,
 }
 
 void i4_create_dialog(const i4_const_str &fmt,
-					  i4_parent_window_class *parent,
-					  i4_graphical_style_class *style,
+					  i4_parent_window_class * parent,
+					  i4_graphical_style_class * style,
 					  ...)
 {
 	va_list ap;
+
 	va_start(ap, style);
 
 
@@ -1159,7 +1166,7 @@ void i4_create_dialog(const i4_const_str &fmt,
 #include "window/style.h"
 #include "window/win_evt.h"
 
-void i4_divider_class::reparent(i4_image_class *draw_area, i4_parent_window_class *parent)
+void i4_divider_class::reparent(i4_image_class * draw_area, i4_parent_window_class * parent)
 {
 	if (parent && (w_attached && width()!=parent->width() ||
 				   h_attached && height()!=parent->height()))
@@ -1246,6 +1253,7 @@ void i4_divider_class::resize(w16 new_width, w16 new_height)
 void i4_divider_class::get_drag_area(int &x1, int &y1, int &x2, int &y2)
 {
 	w32 l,r,t,b;
+
 	style->get_out_deco_size(l,t,r,b);
 
 	if (split_up_down)
@@ -1269,9 +1277,9 @@ void i4_divider_class::get_drag_area(int &x1, int &y1, int &x2, int &y2)
 i4_divider_class::i4_divider_class(int w, int h,
 								   i4_bool split_up_down,
 								   int split_x_or_y,
-								   i4_window_class *window1,
-								   i4_window_class *window2,
-								   i4_graphical_style_class *style,
+								   i4_window_class * window1,
+								   i4_window_class * window2,
+								   i4_graphical_style_class * style,
 								   int window1_min_size,
 								   int window2_min_size)
 	: split_up_down(split_up_down),
@@ -1330,13 +1338,14 @@ i4_divider_class::i4_divider_class(int w, int h,
 void i4_divider_class::parent_draw(i4_draw_context_class &context)
 {
 	int x1,y1,x2,y2;
+
 	get_drag_area(x1,y1,x2,y2);
 	local_image->add_dirty(x1,y1,x2,y2, context);
 	style->draw_out_deco(local_image, x1,y1, x2,y2, i4_F, context);
 }
 
 
-void i4_divider_class::receive_event(i4_event *ev)
+void i4_divider_class::receive_event(i4_event * ev)
 {
 	switch (ev->type())
 	{
@@ -1425,7 +1434,7 @@ void i4_divider_class::receive_event(i4_event *ev)
 #include "palette/pal.h"
 #include "image/context.h"
 
-void i4_gradiant_bar(i4_image_class *im, int x1, int y1, int x2, int y2,
+void i4_gradiant_bar(i4_image_class * im, int x1, int y1, int x2, int y2,
 					 i4_color start_color, i4_color end_color,
 					 i4_draw_context_class &context)
 {
@@ -1446,13 +1455,13 @@ void i4_gradiant_bar(i4_image_class *im, int x1, int y1, int x2, int y2,
 	int h=(y2-y1+1);
 	if (w*h*4<32*1024) // do it fast if it's small than 32k
 	{
-		i4_image_class *fast=i4_create_image(w,h, i4_pal_man.default_no_alpha_32());
+		i4_image_class * fast=i4_create_image(w,h, i4_pal_man.default_no_alpha_32());
 
 		for (int x=0; x<w; x++)
 		{
 			w32 c=(((int)sr)<<16) | (((int)sg)<<8) | (((int)sb));
 
-			w32 *sl=((w32 *)fast->data)+x;
+			w32 * sl=((w32 *)fast->data)+x;
 			for (int y=0; y<h; y++)
 			{
 				*sl=c;
@@ -1498,7 +1507,7 @@ void i4_gradiant_bar(i4_image_class *im, int x1, int y1, int x2, int y2,
 #include "image/image.h"
 
 
-void i4_image_window_class::reparent(i4_image_class *draw_area, i4_parent_window_class *parent)
+void i4_image_window_class::reparent(i4_image_class * draw_area, i4_parent_window_class * parent)
 {
 	if (draw_area)
 	{
@@ -1511,7 +1520,7 @@ void i4_image_window_class::reparent(i4_image_class *draw_area, i4_parent_window
 		{
 			int x,y, w=im->width(), h=im->height();
 
-			i4_image_class *d=i4_create_image(w, h, draw_area->get_pal());
+			i4_image_class * d=i4_create_image(w, h, draw_area->get_pal());
 
 			for (y=0; y<h; y++)
 			{
@@ -1539,7 +1548,7 @@ void i4_image_window_class::reparent(i4_image_class *draw_area, i4_parent_window
 }
 
 
-void i4_image_window_class::change_image(i4_image_class *new_im)
+void i4_image_window_class::change_image(i4_image_class * new_im)
 {
 	if (del && im)
 	{
@@ -1551,7 +1560,7 @@ void i4_image_window_class::change_image(i4_image_class *new_im)
 }
 
 
-i4_image_window_class::i4_image_window_class(i4_image_class *im,
+i4_image_window_class::i4_image_window_class(i4_image_class * im,
 											 i4_bool delete_on_destructor,
 											 i4_bool dark_when_not_active)
 	: i4_parent_window_class(im->width(),im->height()),
@@ -1597,7 +1606,7 @@ void i4_image_window_class::parent_draw(i4_draw_context_class &context)
 
 }
 
-void i4_image_window_class::receive_event(i4_event *ev)
+void i4_image_window_class::receive_event(i4_event * ev)
 {
 	CAST_PTR(wev, i4_window_message_class, ev);
 	if (ev->type()==i4_event::WINDOW_MESSAGE &&
@@ -1656,17 +1665,18 @@ i4_image_window_class::~i4_image_window_class()
 
 i4_event_handler_reference_class<i4_pull_menu_class> li_pull;
 
-static li_object *li_add_sub(li_object *o, li_environment *env)
+static li_object *li_add_sub(li_object * o, li_environment * env)
 {
-	i4_graphical_style_class *style=i4_current_app->get_style();
+	i4_graphical_style_class * style=i4_current_app->get_style();
 
-	i4_menu_item_class *top_name;
+	i4_menu_item_class * top_name;
+
 	top_name=new i4_text_item_class(li_string::get(li_eval(li_car(o,env),env),env)->value(),
 									style,
 									&li_pull->menu_colors,
 									0,0,0,0,0,  5,3);
 
-	i4_menu_class *sub=style->create_menu(i4_T);
+	i4_menu_class * sub=style->create_menu(i4_T);
 
 	for (o=li_cdr(o,env); o; o=li_cdr(o,env))
 	{
@@ -1678,11 +1688,11 @@ static li_object *li_add_sub(li_object *o, li_environment *env)
 		}
 		else
 		{
-			li_object *s=li_car(o,env);
-			char *view_name=li_string::get(li_eval(li_car(s,env),env),env)->value();
+			li_object * s=li_car(o,env);
+			char * view_name=li_string::get(li_eval(li_car(s,env),env),env)->value();
 			s=li_cdr(s,env);
-			char *com_name=li_string::get(li_eval(li_car(s,env),env),env)->value();
-			char *check_name=0;
+			char * com_name=li_string::get(li_eval(li_car(s,env),env),env)->value();
+			char * check_name=0;
 			s=li_cdr(s,env);
 			if (s)
 			{
@@ -1691,21 +1701,21 @@ static li_object *li_add_sub(li_object *o, li_environment *env)
 
 			int command_id=i4_key_man.get_command_id(com_name);
 
-			i4_do_command_event_class *do_cmd=new i4_do_command_event_class(com_name, command_id);
-			i4_event_reaction_class *command=new i4_event_reaction_class(i4_current_app, do_cmd);
+			i4_do_command_event_class * do_cmd=new i4_do_command_event_class(com_name, command_id);
+			i4_event_reaction_class * command=new i4_event_reaction_class(i4_current_app, do_cmd);
 
-			i4_end_command_event_class *end_cmd=new i4_end_command_event_class(com_name, command_id);
-			i4_event_reaction_class *end_command=new i4_event_reaction_class(i4_current_app, end_cmd);
+			i4_end_command_event_class * end_cmd=new i4_end_command_event_class(com_name, command_id);
+			i4_event_reaction_class * end_command=new i4_event_reaction_class(i4_current_app, end_cmd);
 
 
-			i4_text_item_class *ki=new i4_text_item_class(view_name,
-														  style,
-														  &li_pull->menu_colors,
-														  0,
-														  command, end_command,
-														  0,0,
-														  10,3,
-														  check_name);
+			i4_text_item_class * ki=new i4_text_item_class(view_name,
+														   style,
+														   &li_pull->menu_colors,
+														   0,
+														   command, end_command,
+														   0,0,
+														   10,3,
+														   check_name);
 			sub->add_item(ki);
 		}
 	}
@@ -1720,7 +1730,7 @@ LI_HEADER(clear_subs) {
 	return 0;
 }
 
-i4_pull_menu_class *li_create_pull_menu(char *filename)
+i4_pull_menu_class *li_create_pull_menu(char * filename)
 {
 	if (li_pull.get())
 	{
@@ -1729,10 +1739,10 @@ i4_pull_menu_class *li_create_pull_menu(char *filename)
 	}
 
 
-	i4_graphical_style_class *style=i4_current_app->get_style();
+	i4_graphical_style_class * style=i4_current_app->get_style();
 	li_pull=new i4_pull_menu_class(style, i4_current_app->get_window_manager());
 
-	li_environment *env=new li_environment(0, i4_T);
+	li_environment * env=new li_environment(0, i4_T);
 	//li_add_function("add_sub_menu", li_add_sub, env);//declare at load-time
 	li_load(filename, env);
 
@@ -1761,7 +1771,7 @@ li_automatic_add_function(li_add_sub,"add_sub_menu");
 #include "gui/deco_win.h"
 #include "gui/image_win.h"
 
-void i4_list_box_class::set_top(i4_menu_item_class *item)
+void i4_list_box_class::set_top(i4_menu_item_class * item)
 {
 	if (top)
 	{
@@ -1800,9 +1810,9 @@ i4_list_box_class::~i4_list_box_class()
 }
 
 i4_list_box_class::i4_list_box_class(w16 w,
-									 i4_graphical_style_class *style,
-									 i4_parent_window_class *root_window,
-									 i4_event_reaction_class *react)
+									 i4_graphical_style_class * style,
+									 i4_parent_window_class * root_window,
+									 i4_event_reaction_class * react)
 
 	: i4_menu_class(i4_F),
 	  entries(0,8),
@@ -1810,7 +1820,7 @@ i4_list_box_class::i4_list_box_class(w16 w,
 	  root_window(root_window),
 	  reaction(react)
 {
-	i4_image_class *down_im=style->icon_hint->down_icon;
+	i4_image_class * down_im=style->icon_hint->down_icon;
 
 	down=new i4_button_class(0, new i4_image_window_class(down_im), style,
 							 0,
@@ -1838,7 +1848,7 @@ void i4_list_box_class::parent_draw(i4_draw_context_class &context)
 }
 
 
-void i4_list_box_class::add_item(i4_menu_item_class *item)
+void i4_list_box_class::add_item(i4_menu_item_class * item)
 {
 
 
@@ -1870,9 +1880,9 @@ void i4_list_box_class::set_current_item(int entry_num)
 class i4_list_pull_down_class :
 	public i4_deco_window_class
 {
-	i4_window_class *buddy;
+	i4_window_class * buddy;
 public:
-	i4_list_pull_down_class(w16 w, w16 h, i4_window_class *buddy, i4_graphical_style_class *style)
+	i4_list_pull_down_class(w16 w, w16 h, i4_window_class * buddy, i4_graphical_style_class * style)
 		: i4_deco_window_class(w,h, i4_T, style),
 		  buddy(buddy)
 	{
@@ -1884,7 +1894,7 @@ public:
 		i4_kernel.send_event(parent, &grab);
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::MOUSE_BUTTON_DOWN)
 		{
@@ -1902,13 +1912,13 @@ public:
 		i4_deco_window_class::receive_event(ev);
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"list_box_pull_down");
 	}
 };
 
-void i4_list_box_class::show(i4_parent_window_class *show_on, i4_coord px, i4_coord py)
+void i4_list_box_class::show(i4_parent_window_class * show_on, i4_coord px, i4_coord py)
 {
 	if (!pull_down)
 	{
@@ -1956,7 +1966,7 @@ void i4_list_box_class::hide()
 
 
 
-void i4_list_box_class::receive_event(i4_event *ev)
+void i4_list_box_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{
@@ -1976,8 +1986,8 @@ void i4_list_box_class::receive_event(i4_event *ev)
 }
 
 
-void i4_list_box_class::note_reaction_sent(i4_menu_item_class *who,       // this is who sent it
-										   i4_event_reaction_class *ev,   // who it was to
+void i4_list_box_class::note_reaction_sent(i4_menu_item_class * who,       // this is who sent it
+										   i4_event_reaction_class * ev,   // who it was to
 										   i4_menu_item_class::reaction_type type)
 {
 	if (type==i4_menu_item_class::PRESSED)
@@ -2027,7 +2037,7 @@ void i4_list_box_class::note_reaction_sent(i4_menu_item_class *who,       // thi
 
 
 
-inline void draw_out_deco(i4_image_class *screen,
+inline void draw_out_deco(i4_image_class * screen,
 						  i4_draw_context_class &context,
 						  i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 						  i4_color bright, i4_color medium, i4_color dark, i4_color black)
@@ -2050,9 +2060,9 @@ class i4_scroll_button :
 	public i4_window_class
 {
 	i4_bool active,dragging;
-	i4_scroll_bar *buddy;
+	i4_scroll_bar * buddy;
 
-	void reparent(i4_image_class *draw_area, i4_parent_window_class *parent)
+	void reparent(i4_image_class * draw_area, i4_parent_window_class * parent)
 	{
 		i4_window_class::reparent(draw_area, parent);
 		if (parent)
@@ -2108,13 +2118,13 @@ public:
 		}
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"scroll_button");
 	}
 
 
-	i4_scroll_button(i4_scroll_bar *buddy)
+	i4_scroll_button(i4_scroll_bar * buddy)
 		: i4_window_class(0,0),
 		  buddy(buddy)
 	{
@@ -2124,7 +2134,8 @@ public:
 
 	void draw(i4_draw_context_class &context)
 	{
-		i4_color_hint_class::bevel *color;
+		i4_color_hint_class::bevel * color;
+
 		if (active)
 		{
 			color=&style()->color_hint->window.active;
@@ -2142,7 +2153,7 @@ public:
 					  style()->color_hint->black);
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		switch (ev->type())
 		{
@@ -2249,7 +2260,7 @@ void i4_scroll_bar::set_new_total(int total)
 	scroll_but->fit_parent();
 }
 
-i4_button_class *i4_scroll_bar::create_button(i4_button_class *&b, i4_image_class *im)
+i4_button_class * i4_scroll_bar::create_button(i4_button_class *&b, i4_image_class * im)
 {
 	b=new i4_button_class(0, new i4_image_window_class(im), style);
 
@@ -2265,8 +2276,8 @@ i4_scroll_bar::i4_scroll_bar(i4_bool vertical,
 							 int total_visible_objects,
 							 int total_scroll_objects,    // total number of objects
 							 w32 message_id,
-							 i4_event_handler_class *send_to,
-							 i4_graphical_style_class *style)
+							 i4_event_handler_class * send_to,
+							 i4_graphical_style_class * style)
 
 	: i4_parent_window_class(0,0),
 	  vertical(vertical),
@@ -2318,7 +2329,7 @@ i4_scroll_bar::i4_scroll_bar(i4_bool vertical,
 
 
 
-void i4_scroll_bar::receive_event(i4_event *ev)
+void i4_scroll_bar::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::OBJECT_MESSAGE)
 	{
@@ -2353,6 +2364,7 @@ void i4_scroll_bar::set_bar_pos(sw32 pos)
 {
 	sw32 reverse_pos;
 	sw32 realpos;
+
 	if (vertical)
 	{
 		if (total_scroll_objects<=1)
@@ -2447,9 +2459,9 @@ void i4_scroll_bar::send_position()
 
 i4_slider_class::i4_slider_class(sw32 width,
 								 sw32 initial_start,
-								 i4_event_handler_class *notify,
+								 i4_event_handler_class * notify,
 								 w32 milli_delay,
-								 i4_graphical_style_class *style)
+								 i4_graphical_style_class * style)
 	: i4_window_class((w16)width,style->font_hint->normal_font->largest_height()+2),
 	  style(style),
 	  notify(notify),
@@ -2468,6 +2480,7 @@ void i4_slider_class::draw(i4_draw_context_class &context)
 {
 	w32 il,ir,it,ib;
 	w32 med=style->color_hint->window.passive.medium;
+
 	local_image->clear(med, context);
 
 	style->get_in_deco_size(il,it,ir,ib);
@@ -2538,7 +2551,7 @@ void i4_slider_class::set_off_from_mouse()
 	}
 }
 
-void i4_slider_class::receive_event(i4_event *ev)
+void i4_slider_class::receive_event(i4_event * ev)
 {
 	switch (ev->type())
 	{
@@ -2615,10 +2628,10 @@ void i4_slider_class::receive_event(i4_event *ev)
 #include "gui/button.h"
 #include "gui/text.h"
 
-g1_message_box *g1_message_box::dialog_active=0;
+g1_message_box * g1_message_box::dialog_active=0;
 w32 g1_message_box::modal_result=0;
 //i4_str *g1_message_box::text=0;
-g1_message_box::g1_message_box(w16 w, w16 h, i4_graphical_style_class *style,
+g1_message_box::g1_message_box(w16 w, w16 h, i4_graphical_style_class * style,
 							   //i4_const_str &title, i4_const_str &message,
 							   w32 flags)
 	: style(style),
@@ -2648,7 +2661,7 @@ i4_str g1_message_box::get_text()
 {
 	if (inputwindow)
 	{
-		return *inputwindow->get_edit_string();
+		return * inputwindow->get_edit_string();
 	}
 	else
 	{
@@ -2657,7 +2670,7 @@ i4_str g1_message_box::get_text()
 }
 
 
-void g1_message_box::receive_event(i4_event *ev)
+void g1_message_box::receive_event(i4_event * ev)
 {
 
 	if (ev->type()==i4_event::USER_MESSAGE)
@@ -2703,19 +2716,19 @@ public:
 		YES, NO
 	};
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"simple dlg");
 	}
-	i4_event_handler_class *send_to;
-	i4_event *yes_event, *no_event;
+	i4_event_handler_class * send_to;
+	i4_event * yes_event, * no_event;
 	i4_color bg_color;
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 
 	i4_simple_dlg_class(w16 w, w16 h,
-						i4_graphical_style_class *style,
-						i4_event_handler_class *send_to,
-						i4_event *yes_event, i4_event *no_event)
+						i4_graphical_style_class * style,
+						i4_event_handler_class * send_to,
+						i4_event * yes_event, i4_event * no_event)
 		: i4_parent_window_class(w,h),
 		  yes_event(yes_event),
 		  no_event(no_event),
@@ -2725,7 +2738,7 @@ public:
 	{
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::USER_MESSAGE)
 		{
@@ -2755,44 +2768,46 @@ public:
 };
 
 i4_button_class *i4_simple_create_button(const i4_const_str &name,
-										 i4_event_handler_class *send_to,
-										 i4_event *ev,
-										 i4_graphical_style_class *style)
+										 i4_event_handler_class * send_to,
+										 i4_event * ev,
+										 i4_graphical_style_class * style)
 {
-	i4_button_class *b=new i4_button_class(0,
-										   new i4_text_window_class(name, style),
-										   style,
-										   new i4_event_reaction_class(send_to, ev));
+	i4_button_class * b=new i4_button_class(0,
+											new i4_text_window_class(name, style),
+											style,
+											new i4_event_reaction_class(send_to, ev));
+
 	b->set_popup(i4_T);
 	return b;
 
 }
 
-i4_parent_window_class *i4_create_yes_no_dialog(i4_parent_window_class *parent,
-												i4_graphical_style_class *style,
+i4_parent_window_class *i4_create_yes_no_dialog(i4_parent_window_class * parent,
+												i4_graphical_style_class * style,
 												const i4_const_str &title,
 												const i4_const_str &message,
 												const i4_const_str &yes, const i4_const_str &no,
-												i4_event_handler_class *send_to,
-												i4_event *yes_event, i4_event *no_event)
+												i4_event_handler_class * send_to,
+												i4_event * yes_event, i4_event * no_event)
 {
-	i4_parent_window_class *root=parent;
+	i4_parent_window_class * root=parent;
 
 
-	i4_simple_dlg_class *sd=new i4_simple_dlg_class(100,50,
-													style,
-													send_to,
-													yes_event, no_event);
+	i4_simple_dlg_class * sd=new i4_simple_dlg_class(100,50,
+													 style,
+													 send_to,
+													 yes_event, no_event);
 
 
-	i4_button_class *y=i4_simple_create_button(yes, sd,
-											   new i4_user_message_event_class(0), style);
-	i4_button_class *n=i4_simple_create_button(no, sd,
-											   new i4_user_message_event_class(1), style);
-	i4_text_window_class *t=new i4_text_window_class(message, style);
+	i4_button_class * y=i4_simple_create_button(yes, sd,
+												new i4_user_message_event_class(0), style);
+	i4_button_class * n=i4_simple_create_button(no, sd,
+												new i4_user_message_event_class(1), style);
+	i4_text_window_class * t=new i4_text_window_class(message, style);
 
 	sw32 w=t->width(),h=t->height()+2+y->height();
 	sw32 bw=y->width()+n->width();
+
 	if (w<bw)
 	{
 		w=bw;
@@ -2800,7 +2815,7 @@ i4_parent_window_class *i4_create_yes_no_dialog(i4_parent_window_class *parent,
 
 	sd->resize((w16)w,(w16)h);
 
-	i4_parent_window_class *p;
+	i4_parent_window_class * p;
 	p=style->create_mp_window(parent->width()/2-w/2, parent->height()/2-h/2, (w16)w,(w16)h, title);
 
 
@@ -2813,7 +2828,7 @@ i4_parent_window_class *i4_create_yes_no_dialog(i4_parent_window_class *parent,
 	return p;
 }
 
-char *button_names[MSG_LASTBUTTON+1]= //only the power-of-two values are used
+char * button_names[MSG_LASTBUTTON+1]= //only the power-of-two values are used
 {
 	"Nobutton", //0
 	"yes", //1
@@ -2852,22 +2867,22 @@ char *button_names[MSG_LASTBUTTON+1]= //only the power-of-two values are used
 
 w32 i4_input_box(const i4_const_str &title, const i4_const_str &message, const i4_const_str &preset, i4_str &rettext, w32 flags)
 {
-	i4_parent_window_class *root=i4_current_app->get_root_window();
-	i4_graphical_style_class *style=i4_current_app->get_style();
+	i4_parent_window_class * root=i4_current_app->get_root_window();
+	i4_graphical_style_class * style=i4_current_app->get_style();
 
 	if (flags==0)
 	{
 		flags=4;
 	}                    //no buttons-> ok button
-	i4_button_class *buttons[MSG_LASTBUTTON+1]; //much too large, i know, but
+	i4_button_class * buttons[MSG_LASTBUTTON+1]; //much too large, i know, but
 	//this is only an array of pointers, so there's no trouble in wasting space.
 
-	g1_message_box *sd=new g1_message_box(50,100,
-										  style,
-										  flags);
+	g1_message_box * sd=new g1_message_box(50,100,
+										   style,
+										   flags);
 
 	sw32 w=0,h=0,bw=2;
-	i4_button_class *cb;
+	i4_button_class * cb;
 	int numbuttons=0;
 	int i=0;
 	for (; i<MSG_LASTBUTTON+1; i++)
@@ -2901,7 +2916,7 @@ w32 i4_input_box(const i4_const_str &title, const i4_const_str &message, const i
 	//                                          new i4_user_message_event_class(0), style);
 	//i4_button_class *n=i4_simple_create_button(no, sd,
 	//                                          new i4_user_message_event_class(1), style);
-	i4_text_window_class *t=new i4_text_window_class(message, style, 0, 300);
+	i4_text_window_class * t=new i4_text_window_class(message, style, 0, 300);
 	w=t->width()+2;
 	if (w<150)
 	{
@@ -2921,7 +2936,7 @@ w32 i4_input_box(const i4_const_str &title, const i4_const_str &message, const i
 
 	sd->resize((w16)w,(w16)h);
 
-	i4_parent_window_class *p;
+	i4_parent_window_class * p;
 	p=style->create_modal_window(root->width()/2-w/2, root->height()/2-h/2, (w16)w,(w16)h, title,
 								 false);
 
@@ -2973,22 +2988,22 @@ w32 i4_input_box(const i4_const_str &title, const i4_const_str &message, const i
 
 w32 i4_message_box(const i4_const_str &title, const i4_const_str &message, w32 flags)
 {
-	i4_parent_window_class *root=i4_current_app->get_root_window();
-	i4_graphical_style_class *style=i4_current_app->get_style();
+	i4_parent_window_class * root=i4_current_app->get_root_window();
+	i4_graphical_style_class * style=i4_current_app->get_style();
 
 	if (flags==0)
 	{
 		flags=4;
 	}                    //no buttons-> ok button
-	i4_button_class *buttons[MSG_LASTBUTTON+1]; //much too large, i know, but
+	i4_button_class * buttons[MSG_LASTBUTTON+1]; //much too large, i know, but
 	//this is only an array of pointers, so there's no trouble in wasting space.
 
-	g1_message_box *sd=new g1_message_box(50,100,
-										  style,
-										  flags);
+	g1_message_box * sd=new g1_message_box(50,100,
+										   style,
+										   flags);
 
 	sw32 w=0,h=0,bw=2;
-	i4_button_class *cb;
+	i4_button_class * cb;
 	int numbuttons=0;
 	int i=0;
 	for (; i<MSG_LASTBUTTON+1; i++)
@@ -3022,7 +3037,7 @@ w32 i4_message_box(const i4_const_str &title, const i4_const_str &message, w32 f
 	//                                          new i4_user_message_event_class(0), style);
 	//i4_button_class *n=i4_simple_create_button(no, sd,
 	//                                          new i4_user_message_event_class(1), style);
-	i4_text_window_class *t=new i4_text_window_class(message, style, 0, 300);
+	i4_text_window_class * t=new i4_text_window_class(message, style, 0, 300);
 
 	w=t->width()+2;
 	h+=t->height()+4;
@@ -3034,7 +3049,7 @@ w32 i4_message_box(const i4_const_str &title, const i4_const_str &message, w32 f
 
 	sd->resize((w16)w,(w16)h);
 
-	i4_parent_window_class *p;
+	i4_parent_window_class * p;
 	p=style->create_modal_window(root->width()/2-w/2, root->height()/2-h/2, (w16)w,(w16)h, title,false);
 
 
@@ -3093,8 +3108,8 @@ w32 i4_message_box(const i4_const_str &title, const i4_const_str &message, w32 f
 
 struct tab
 {
-	i4_menu_item_class *tab_top;
-	i4_window_class *tab_body;
+	i4_menu_item_class * tab_top;
+	i4_window_class * tab_body;
 	int desired_width;
 };
 
@@ -3115,7 +3130,7 @@ public:
 	i4_array<tab> tabs;
 	int current_tab;
 	int top_height;
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 
 	i4_tab_bar_data()
 		: tabs(0,8)
@@ -3126,7 +3141,7 @@ public:
 };
 
 
-i4_tab_bar::i4_tab_bar(int width, int height, i4_graphical_style_class *style)
+i4_tab_bar::i4_tab_bar(int width, int height, i4_graphical_style_class * style)
 	: i4_menu_class(i4_F)
 {
 	data=new i4_tab_bar_data();
@@ -3222,7 +3237,7 @@ void i4_tab_bar::private_resize(w16 new_width, w16 new_height)
 
 
 
-void i4_tab_bar::add_tab(i4_menu_item_class *tab_top, i4_window_class *tab_body)
+void i4_tab_bar::add_tab(i4_menu_item_class * tab_top, i4_window_class * tab_body)
 {
 	i4_parent_window_class::add_child(0,0, tab_top);
 	if (!data->tabs.size())
@@ -3257,7 +3272,7 @@ void i4_tab_bar::set_current_tab(int tab_number)
 		return ;
 	}
 
-	i4_window_class *client=data->tabs[data->current_tab].tab_body;
+	i4_window_class * client=data->tabs[data->current_tab].tab_body;
 	int cx=client->x()-x(), cy=client->y()-y();
 
 
@@ -3276,8 +3291,8 @@ void i4_tab_bar::set_current_tab(int tab_number)
 }
 
 
-void i4_tab_bar::note_reaction_sent(i4_menu_item_class *who,
-									i4_event_reaction_class *ev,
+void i4_tab_bar::note_reaction_sent(i4_menu_item_class * who,
+									i4_event_reaction_class * ev,
 									i4_menu_item_class::reaction_type type)
 {
 	if (type==i4_menu_item_class::PRESSED)
@@ -3305,7 +3320,7 @@ void i4_tab_bar::parent_draw(i4_draw_context_class &context)
 		med=data->style->color_hint->button.passive.medium,
 		dark=data->style->color_hint->button.passive.dark;
 
-	i4_image_class *im=local_image;
+	i4_image_class * im=local_image;
 
 	int dx=LEFT_SPACING, dy=0;
 	int cur=data->current_tab;
@@ -3388,7 +3403,7 @@ class cursor_blink_class :
 	public i4_object_message_event_class
 {
 public:
-	cursor_blink_class(void *object) :
+	cursor_blink_class(void * object) :
 		i4_object_message_event_class(object)
 	{
 	}
@@ -3401,15 +3416,16 @@ public:
 sw32 i4_text_input_class::get_number()
 {
 	i4_str::iterator is=get_edit_string()->begin();
+
 	return is.read_number();
 }
 
-i4_text_input_class::i4_text_input_class(i4_graphical_style_class *style,
+i4_text_input_class::i4_text_input_class(i4_graphical_style_class * style,
 										 const i4_const_str &default_string,
 										 w32 width,       // width in pixels of window
 										 w32 _max_width,
-										 i4_event_handler_class *change_notify,
-										 i4_font_class *_font)
+										 i4_event_handler_class * change_notify,
+										 i4_font_class * _font)
 	: style(style),
 	  i4_window_class(0,0),
 	  change_notify(change_notify)
@@ -3547,6 +3563,7 @@ w32 i4_text_input_class::mouse_to_cursor()
 
 	w32 char_on=0;
 	w32 x,fw;
+
 	if (last_x<0)
 	{
 		last_x=0;
@@ -3776,7 +3793,7 @@ void i4_text_input_class::become_unactive()
 
 }
 
-void i4_text_input_class::receive_event(i4_event *ev)
+void i4_text_input_class::receive_event(i4_event * ev)
 {
 	switch (ev->type())
 	{
@@ -4070,15 +4087,15 @@ i4_text_input_class::~i4_text_input_class()
 }
 
 
-i4_window_class *i4_create_text_input(i4_graphical_style_class *style,
+i4_window_class *i4_create_text_input(i4_graphical_style_class * style,
 									  const i4_const_str &default_string,
 									  w32 width,        // width in pixels of window
 									  w32 max_width)
 {
-	i4_text_input_class *ti=new i4_text_input_class(style,
-													default_string,
-													width,
-													max_width);
+	i4_text_input_class * ti=new i4_text_input_class(style,
+													 default_string,
+													 width,
+													 max_width);
 
 
 
@@ -4133,17 +4150,19 @@ static inline int fmt_char(char c)
 	return 0;
 }
 
-void i4_text_scroll_window_class::printf(char *fmt, ...)
+void i4_text_scroll_window_class::printf(char * fmt, ...)
 {
 	va_list ap;
+
 	va_start(ap, fmt);
 
 	while (*fmt)
 	{
 		if (*fmt=='%')
 		{
-			char *fmt_end=fmt;
+			char * fmt_end=fmt;
 			while (!fmt_char(*fmt_end) && *fmt_end) fmt_end++;
+
 
 			char f[10], out[500];
 			memcpy(f, fmt, fmt_end-fmt+1);
@@ -4154,7 +4173,7 @@ void i4_text_scroll_window_class::printf(char *fmt, ...)
 			{
 				case 's':
 					{
-						char *str=va_arg(ap,char *);
+						char * str=va_arg(ap,char *);
 						output_string(str);
 					} break;
 
@@ -4197,7 +4216,7 @@ void i4_text_scroll_window_class::printf(char *fmt, ...)
 
 
 
-i4_text_scroll_window_class::i4_text_scroll_window_class(i4_graphical_style_class *style,
+i4_text_scroll_window_class::i4_text_scroll_window_class(i4_graphical_style_class * style,
 														 i4_color text_foreground,
 														 i4_color text_background,
 														 w16 width, w16 height,    // in pixels
@@ -4211,7 +4230,7 @@ i4_text_scroll_window_class::i4_text_scroll_window_class(i4_graphical_style_clas
 {
 
 
-	i4_font_class *fnt=style->font_hint->normal_font;
+	i4_font_class * fnt=style->font_hint->normal_font;
 
 	term_height=height/fnt->largest_height();
 	if (max_scrollback<term_height)
@@ -4279,7 +4298,7 @@ void i4_text_scroll_window_class::skip_first_line()
  */
 }
 
-void i4_text_scroll_window_class::output_string(char *string)
+void i4_text_scroll_window_class::output_string(char * string)
 {
 	while (*string)
 	{
@@ -4315,7 +4334,7 @@ void i4_text_scroll_window_class::scroll_text_up()
 	request_redraw(i4_T);
 }
 
-void i4_text_scroll_window_class::receive_event(i4_event *ev)
+void i4_text_scroll_window_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{
@@ -4340,7 +4359,7 @@ void i4_text_scroll_window_class::output_char(const i4_char &ch)
 	{
 		return;
 	}
-	i4_font_class *fnt=style->font_hint->normal_font;
+	i4_font_class * fnt=style->font_hint->normal_font;
 
 	/*
 	   if (used_size+2>term_size)
@@ -4409,7 +4428,8 @@ void i4_text_scroll_window_class::clear()
 
 void i4_text_scroll_window_class::resize(w16 new_width, w16 new_height)
 {
-	i4_font_class *fnt=style->font_hint->normal_font;
+	i4_font_class * fnt=style->font_hint->normal_font;
+
 	term_height=new_height/fnt->largest_height();
 	term_width=new_width/fnt->largest_width();
 	scrollbar->resize(scrollbar->width(),new_height);
@@ -4433,7 +4453,7 @@ void i4_text_scroll_window_class::resize(w16 new_width, w16 new_height)
 
 void i4_text_scroll_window_class::parent_draw(i4_draw_context_class &context)
 {
-	i4_font_class *fnt=style->font_hint->normal_font;
+	i4_font_class * fnt=style->font_hint->normal_font;
 
 	if (!undrawn_area.empty())
 	{
@@ -4458,8 +4478,8 @@ void i4_text_scroll_window_class::parent_draw(i4_draw_context_class &context)
 	sw32 first_scroll_line=max_scrollback-used_lines+pos;
 	//pos*=term_width;
 	pos=term_width*first_scroll_line;
-	i4_char *cpos=term_out+pos;
-	i4_char *linestart=cpos;
+	i4_char * cpos=term_out+pos;
+	i4_char * linestart=cpos;
 	sw32 xpos=0,ypos=0;
 	while (cpos<term_end)
 	{

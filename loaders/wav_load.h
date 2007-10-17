@@ -26,7 +26,7 @@ public:
 
 // fills in the info field and advances file pointer to where sound data start
 // returns false if something screwy is detected in the wav file
-i4_bool i4_load_wav_info(i4_file_class *f, i4_sound_info &info);
+i4_bool i4_load_wav_info(i4_file_class * f, i4_sound_info &info);
 
 
 

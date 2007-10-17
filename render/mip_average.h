@@ -90,41 +90,41 @@ inline void alpha_remap_pixel(w16 *&dst, w8 *&src)
 				 (((w16)src[0] << mip_a_a_shift) & mip_a_a_and));
 }
 
-void r1_dos_paths(char *src);
+void r1_dos_paths(char * src);
 
-void r1_unix_paths(char *src);
+void r1_unix_paths(char * src);
 
-char *r1_remove_paths(char *src);
+char *r1_remove_paths(char * src);
 
-void r1_remove_extention(char *src);
+void r1_remove_extention(char * src);
 
-void r1_concatenate_path(char *src, char *path);
+void r1_concatenate_path(char * src, char * path);
 
 void chroma_process(w8 *&p, float &r, float &g, float &b, sw8 &num_regular, sw8 &num_chroma);
 
-void average_4x4_chroma(w16 *&dst, w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3);
+void average_4x4_chroma(w16 *&dst, w8 * dst_24, w8 *&p0, w8 * p1, w8 * p2, w8 * p3);
 
-void average_4x4_chroma(w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3);
+void average_4x4_chroma(w8 * dst_24, w8 *&p0, w8 * p1, w8 * p2, w8 * p3);
 
-void average_4x4_alpha(w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3);
+void average_4x4_alpha(w8 * dst_24, w8 *&p0, w8 * p1, w8 * p2, w8 * p3);
 
-void average_4x4_alpha(w16 *dst, w8 *dst_24, w8 *&p0, w8 *p1, w8 *p2, w8 *p3);
+void average_4x4_alpha(w16 * dst, w8 * dst_24, w8 *&p0, w8 * p1, w8 * p2, w8 * p3);
 
-void average_4x4_normal(w16 *dst, w8 *dst_24, w8 *p0, w32 bpl);
+void average_4x4_normal(w16 * dst, w8 * dst_24, w8 * p0, w32 bpl);
 
-void average_4x4_normal(w8 *dst_24, w8 *p0, w32 bpl);
+void average_4x4_normal(w8 * dst_24, w8 * p0, w32 bpl);
 
-void mip_24_to_16(w8 *mip24, w16 *mip16, sw32 &width,
+void mip_24_to_16(w8 * mip24, w16 * mip16, sw32 &width,
 				  sw32 &height, sw32 &base_width, w8 &flags);
 
-void make_next_mip(w8 *mip24, w16 *mip16, sw32 &width, sw32 &height,
+void make_next_mip(w8 * mip24, w16 * mip16, sw32 &width, sw32 &height,
 				   sw32 &base_width, w8 &flags);
 
-void make_square(w8 *mip24, w8 *square_mip24, w8 base_pixel_size, sw32 base_width,
+void make_square(w8 * mip24, w8 * square_mip24, w8 base_pixel_size, sw32 base_width,
 				 sw32 base_height, sw32 new_dimention);
 
 void generate_mip_offsets(sw32 base_width,sw32 base_height,
 						  sw32 num_to_copy,
-						  sw32 *offsets, sw32 pixel_size);
+						  sw32 * offsets, sw32 pixel_size);
 
 #endif

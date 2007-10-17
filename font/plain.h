@@ -34,19 +34,19 @@
 class i4_plain_font_class :
 	public i4_font_class
 {
-	i4_image_class *bitmap;
+	i4_image_class * bitmap;
 	w16 w,h;
 public:
-	i4_plain_font_class(i4_image_class *bitmap); // bitmap is copied and stored internally
+	i4_plain_font_class(i4_image_class * bitmap); // bitmap is copied and stored internally
 
 	virtual void set_color(i4_color color);
 
-	virtual void put_string(i4_image_class *screen,
+	virtual void put_string(i4_image_class * screen,
 							sw16 x, sw16 y,
 							const i4_const_str &string,
 							i4_draw_context_class &context);
 
-	virtual void put_character(i4_image_class *screen,
+	virtual void put_character(i4_image_class * screen,
 							   sw16 x, sw16 y,
 							   const i4_char &c,
 							   i4_draw_context_class &context);

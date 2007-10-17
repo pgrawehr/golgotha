@@ -37,12 +37,12 @@ class g1_light_obj_edit_class :
 	w32 selected_objects[G1_MAX_OBJECTS];
 	int t_sel;
 	i4_text_input_class
-	*ti_r,
-	*ti_g,
-	*ti_b,
-	*ti_c1,
-	*ti_c2,
-	*ti_c3;
+	* ti_r,
+	* ti_g,
+	* ti_b,
+	* ti_c1,
+	* ti_c2,
+	* ti_c3;
 public:
 
 
@@ -51,17 +51,17 @@ public:
 		OK=1, CANCEL=2
 	};
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"light_obj editor");
 	}
-	g1_light_obj_edit_class(i4_graphical_style_class *style)
+	g1_light_obj_edit_class(i4_graphical_style_class * style)
 
 		: i4_color_window_class(400, 200, style->color_hint->neutral(), style)
 	{
 		t_sel=g1_get_map()->make_selected_objects_list(selected_objects, G1_MAX_OBJECTS);
 
-		g1_light_object_class *light;
+		g1_light_object_class * light;
 		if (!t_sel)
 		{
 			return;
@@ -83,7 +83,7 @@ public:
 		}
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		i4_color_window_class::receive_event(ev);
 
@@ -114,7 +114,7 @@ public:
 						}
 						else
 						{
-							g1_light_object_class *light;
+							g1_light_object_class * light;
 
 							for (int i=0; i<t_sel; i++)
 							{
@@ -147,7 +147,7 @@ class g1_light_object_def_class :
 	public g1_object_definer<g1_light_object_class>
 {
 public:
-	g1_light_object_def_class(char *name,
+	g1_light_object_def_class(char * name,
 							  w32 type_flags=0,
 							  function_type _init = 0,
 							  function_type _uninit = 0)
@@ -230,7 +230,7 @@ g1_light_object_class::~g1_light_object_class()
 }
 
 g1_light_object_class::g1_light_object_class(g1_object_type id,
-											 g1_loader_class *fp)
+											 g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 	add_intensities=0;
@@ -257,7 +257,7 @@ g1_light_object_class::g1_light_object_class(g1_object_type id,
 }
 
 
-void g1_light_object_class::save(g1_saver_class *fp)
+void g1_light_object_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 	fp->start_version(DATA_VERSION);
@@ -265,7 +265,7 @@ void g1_light_object_class::save(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_light_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_light_object_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	g1_editor_model_draw(this, draw_params, context, viewer_position);
 }
@@ -304,7 +304,7 @@ i4_bool g1_light_object_class::occupy_location()
 
 
 		sw32 ix=i4_f_to_i(x), iy=i4_f_to_i(y);
-		w32 *a=add_intensities;
+		w32 * a=add_intensities;
 
 		for (sw32 ty=-change_radius+iy; ty<=change_radius+iy; ty++)
 		{
@@ -313,7 +313,7 @@ i4_bool g1_light_object_class::occupy_location()
 			{
 				start_x=0;
 			}
-			g1_map_vertex_class *v=g1_get_map()->vertex(start_x,ty);
+			g1_map_vertex_class * v=g1_get_map()->vertex(start_x,ty);
 
 			for (int tx=-change_radius+ix; tx<=change_radius+ix; tx++, a++)
 			{
@@ -403,7 +403,7 @@ void g1_light_object_class::unoccupy_location()
 
 	sw32 w=change_radius*2+1,h=change_radius*2+1;
 	sw32 ix=i4_f_to_i(x), iy=i4_f_to_i(y);
-	w32 *a=add_intensities;
+	w32 * a=add_intensities;
 
 	for (sw32 ty=-change_radius+iy; ty<=change_radius+iy; ty++)
 	{
@@ -412,7 +412,7 @@ void g1_light_object_class::unoccupy_location()
 		{
 			start_x=0;
 		}
-		g1_map_vertex_class *v=g1_get_map()->vertex(start_x,ty);
+		g1_map_vertex_class * v=g1_get_map()->vertex(start_x,ty);
 		for (int tx=-change_radius+ix; tx<=change_radius+ix; tx++, a++)
 		{
 			if (tx>=0 && ty>=0 && tx<=g1_get_map()->width() && ty<=g1_get_map()->height())

@@ -46,13 +46,13 @@ void g1_map_vertex_class::init()
 void g1_map_vertex_class::wave_transform(i4_transform_class &t, float map_x, float map_y)
 {
 #if 0 //needs fixing, because the horizontal movement of the vertices can lead to
-	//holes in the map
-	//Big Problem: Also the vertical movement alone leads to holes.
-	//It seems that the vertices need to be moved in some think() method, not
-	//as part of the render process. But this currently allows only vertical movement.
-	//What about adding some texture animation to the water?
-	//Also, I suggest adding some kind of "water-wave" object (similar to shockwave)
-	//that's generated whenever some vehicle moves inside the water.
+	  //holes in the map
+	  //Big Problem: Also the vertical movement alone leads to holes.
+	  //It seems that the vertices need to be moved in some think() method, not
+	  //as part of the render process. But this currently allows only vertical movement.
+	  //What about adding some texture animation to the water?
+	  //Also, I suggest adding some kind of "water-wave" object (similar to shockwave)
+	  //that's generated whenever some vehicle moves inside the water.
 	int tick=g1_tick_counter;
 #if 1
 	float lx=map_x;
@@ -82,7 +82,7 @@ void g1_map_vertex_class::wave_transform(i4_transform_class &t, float map_x, flo
 #endif
 }
 
-void g1_map_class::calc_height_pitch_roll(g1_object_class *for_obj, i4_float x, i4_float y, i4_float z,
+void g1_map_class::calc_height_pitch_roll(g1_object_class * for_obj, i4_float x, i4_float y, i4_float z,
 										  i4_float &height, i4_float &pitch, i4_float &roll)
 {
 	pf_calc_height_pitch_roll.start();
@@ -98,19 +98,19 @@ void g1_map_class::calc_height_pitch_roll(g1_object_class *for_obj, i4_float x, 
 	}
 
 
-	g1_map_cell_class *c = cell(ix,iy);
+	g1_map_cell_class * c = cell(ix,iy);
 
 	i4_3d_vector ray(0,0,-5);
 	float h;
 	i4_bool check_with_object=i4_F;
 
-	g1_object_chain_class *chain=c->get_solid_list();
+	g1_object_chain_class * chain=c->get_solid_list();
 	for (; chain; chain=chain->next_solid())
 	{
 		if ((chain->object->flags & g1_object_class::CAN_DRIVE_ON) &&
 			chain->object!=for_obj)
 		{
-			g1_object_class *o=chain->object;
+			g1_object_class * o=chain->object;
 
 			if (g1_model_collide_polygonal(o, o->draw_params, i4_3d_vector(x,y,z+0.2f), ray, normal))
 			{
@@ -146,7 +146,7 @@ void g1_map_class::calc_height_pitch_roll(g1_object_class *for_obj, i4_float x, 
 	i4_3d_vector u,v;
 	if (x>y)
 	{
-		g1_map_vertex_class *v1=verts+ ix + iy * (w+1), *v2,*v3;
+		g1_map_vertex_class * v1=verts+ ix + iy * (w+1), * v2,* v3;
 		v2=v1+1;
 		v3=v2+w+1;
 
@@ -158,7 +158,7 @@ void g1_map_class::calc_height_pitch_roll(g1_object_class *for_obj, i4_float x, 
 	}
 	else
 	{
-		g1_map_vertex_class *v1=verts+ ix + iy * (w+1), *v2,*v3;
+		g1_map_vertex_class * v1=verts+ ix + iy * (w+1), * v2,* v3;
 		v2=v1+w+1;
 		v3=v2+1;
 
@@ -194,17 +194,17 @@ i4_float g1_map_class::map_height(i4_float x, i4_float y, i4_float z) const
 		return 1000;
 	}
 
-	g1_map_cell_class *c = cell(ix,iy);
+	g1_map_cell_class * c = cell(ix,iy);
 
 	i4_3d_vector normal;
 	i4_bool check_with_object=i4_F;
 	float height=0, h;
-	g1_object_chain_class *chain=c->get_solid_list();
+	g1_object_chain_class * chain=c->get_solid_list();
 	for (; chain; chain=chain->next_solid())
 	{
 		if (chain->object->flags & g1_object_class::CAN_DRIVE_ON)
 		{
-			g1_object_class *o=chain->object;
+			g1_object_class * o=chain->object;
 			i4_3d_vector ray(0,0,-5);
 			if (g1_model_collide_polygonal(o, o->draw_params, i4_3d_vector(x,y,z+0.2f), ray, normal))
 			{
@@ -231,7 +231,7 @@ i4_float g1_map_class::map_height(i4_float x, i4_float y, i4_float z) const
 
 	if (x>y)
 	{
-		g1_map_vertex_class *v1=verts+ ix + iy * (w+1), *v2,*v3;
+		g1_map_vertex_class * v1=verts+ ix + iy * (w+1), * v2,* v3;
 		v2=v1+1;
 		v3=v2+w+1;
 
@@ -240,7 +240,7 @@ i4_float g1_map_class::map_height(i4_float x, i4_float y, i4_float z) const
 	}
 	else
 	{
-		g1_map_vertex_class *v1=verts+ ix + iy * (w+1), *v2,*v3;
+		g1_map_vertex_class * v1=verts+ ix + iy * (w+1), * v2,* v3;
 		v2=v1+w+1;
 		v3=v2+1;
 
@@ -270,7 +270,7 @@ i4_float g1_map_class::terrain_height(i4_float x, i4_float y) const
 	float ret=0;
 	if (x>y)
 	{
-		g1_map_vertex_class *v1=verts+ ix + iy * (w+1), *v2,*v3;
+		g1_map_vertex_class * v1=verts+ ix + iy * (w+1), * v2,* v3;
 		v2=v1+1;
 		v3=v2+w+1;
 
@@ -279,7 +279,7 @@ i4_float g1_map_class::terrain_height(i4_float x, i4_float y) const
 	}
 	else
 	{
-		g1_map_vertex_class *v1=verts+ ix + iy * (w+1), *v2,*v3;
+		g1_map_vertex_class * v1=verts+ ix + iy * (w+1), * v2,* v3;
 		v2=v1+w+1;
 		v3=v2+1;
 
@@ -306,7 +306,7 @@ void g1_map_class::calc_pitch_and_roll(i4_float x, i4_float y, i4_float z,
 	x-=(i4_float)ix;
 	y-=(i4_float)iy;
 
-	g1_map_cell_class *c = cell(ix,iy);
+	g1_map_cell_class * c = cell(ix,iy);
 
 	if (!(ix>=0 && iy>=0 && ix<(int)w && iy<(int)h))
 	{
@@ -315,12 +315,12 @@ void g1_map_class::calc_pitch_and_roll(i4_float x, i4_float y, i4_float z,
 		iy=0;
 	}
 
-	g1_object_chain_class *chain=c->get_solid_list();
+	g1_object_chain_class * chain=c->get_solid_list();
 	for (; chain; chain=chain->next_solid())
 	{
 		if (chain->object->flags & g1_object_class::CAN_DRIVE_ON)
 		{
-			g1_object_class *o=chain->object;
+			g1_object_class * o=chain->object;
 			i4_3d_vector ray(0,0,-5);
 			if (g1_model_collide_polygonal(o, o->draw_params, i4_3d_vector(x,y,z+0.2f), ray, normal))
 			{
@@ -336,7 +336,7 @@ void g1_map_class::calc_pitch_and_roll(i4_float x, i4_float y, i4_float z,
 
 	if (x>y)
 	{
-		g1_map_vertex_class *v1=verts+ ix + iy * (w+1), *v2,*v3;
+		g1_map_vertex_class * v1=verts+ ix + iy * (w+1), * v2,* v3;
 		v2=v1+1;
 		v3=v2+w+1;
 
@@ -347,7 +347,7 @@ void g1_map_class::calc_pitch_and_roll(i4_float x, i4_float y, i4_float z,
 	}
 	else
 	{
-		g1_map_vertex_class *v1=verts+ ix + iy * (w+1), *v2,*v3;
+		g1_map_vertex_class * v1=verts+ ix + iy * (w+1), * v2,* v3;
 		v2=v1+w+1;
 		v3=v2+1;
 
@@ -365,7 +365,7 @@ void g1_map_class::calc_pitch_and_roll(i4_float x, i4_float y, i4_float z,
 void g1_map_class::calc_terrain_normal(i4_float x, i4_float y, i4_3d_vector &normal)
 {
 	sw32 ix=i4_f_to_i(x), iy=i4_f_to_i(y);
-	g1_map_cell_class *c=cells + ix + iy *width();
+	g1_map_cell_class * c=cells + ix + iy *width();
 
 	if (x>y)
 	{
@@ -380,7 +380,8 @@ void g1_map_class::calc_terrain_normal(i4_float x, i4_float y, i4_3d_vector &nor
 
 void g1_map_class::change_vert_height(sw32 x, sw32 y, w8 new_height)
 {
-	g1_map_vertex_class *v=verts + x + y*(w+1);
+	g1_map_vertex_class * v=verts + x + y*(w+1);
+
 	v->height=new_height;
 	v->normal=0x8000;
 	v->light_sum=0x80000000;
@@ -388,7 +389,8 @@ void g1_map_class::change_vert_height(sw32 x, sw32 y, w8 new_height)
 
 w8 g1_map_class::get_vert_height(sw32 x, sw32 y)
 {
-	g1_map_vertex_class *v=verts+ x+ y*(w+1);
+	g1_map_vertex_class * v=verts+ x+ y*(w+1);
+
 	return v->height;
 }
 
@@ -396,7 +398,7 @@ w8 g1_map_class::get_vert_height(sw32 x, sw32 y)
 void g1_map_vertex_class::recalc_normal(int x, int y)
 {
 	i4_3d_vector sum(0,0,0), v,v2;
-	g1_map_cell_class *c=g1_get_map()->cell(x,y);
+	g1_map_cell_class * c=g1_get_map()->cell(x,y);
 	int mw=g1_get_map()->width(), mh=g1_get_map()->height();
 
 	I4_ASSERT(x<=mw && y<=mh, "recalc normal : vert out of range");
@@ -452,7 +454,7 @@ void g1_map_class::get_illumination_light(i4_float wx, i4_float wy,
 
 	i4_float x=wx-ix, y=wy-iy;
 
-	g1_map_vertex_class *v1,*v2,*v3;
+	g1_map_vertex_class * v1,* v2,* v3;
 	i4_float r[3],g[3],b[3];
 
 	if (x>y)
@@ -491,6 +493,7 @@ void g1_map_class::get_illumination_light(i4_float wx, i4_float wy,
 float g1_map_vertex_class::get_non_dynamic_light_intensity(int cvx, int cvy)
 {
 	i4_3d_vector n;
+
 	get_normal(n, cvx, cvy);
 
 	// directional contribution (white light)
@@ -558,13 +561,14 @@ w32 g1_map_vertex_class::recalc_light_sum(int cvx, int cvy)
 }
 
 
-void g1_save_map_verts(g1_map_vertex_class *list,
+void g1_save_map_verts(g1_map_vertex_class * list,
 					   int lsize,
-					   i4_saver_class *fp,
+					   i4_saver_class * fp,
 					   int mark_sections)
 
 {
 	int i;
+
 	i4_rle_class<w32> fp32(fp);
 	i4_rle_class<w16> fp16(fp);
 	i4_rle_class<w8> fp8(fp);
@@ -625,11 +629,11 @@ void g1_save_map_verts(g1_map_vertex_class *list,
 }
 
 
-i4_bool g1_load_map_verts(g1_map_vertex_class *list, int lsize,
-						  i4_loader_class *fp,
+i4_bool g1_load_map_verts(g1_map_vertex_class * list, int lsize,
+						  i4_loader_class * fp,
 						  int goto_sections)
 {
-	w16 *index=0;
+	w16 * index=0;
 	int i, load_old=0;
 
 	i4_rle_class<w32> fp32(fp);
@@ -725,7 +729,8 @@ i4_bool g1_load_map_verts(g1_map_vertex_class *list, int lsize,
 					{
 						list[index].load_v4(fp);
 					}
-				} while (index!=0xffff);
+				}
+				while (index!=0xffff);
 			}
 			else
 			{
@@ -773,7 +778,7 @@ i4_bool g1_load_map_verts(g1_map_vertex_class *list, int lsize,
 
 ////////////////// OLD LOAD METHODS ////////////////////////////////////
 
-void g1_map_vertex_class::load_v1(i4_file_class *fp)
+void g1_map_vertex_class::load_v1(i4_file_class * fp)
 {
 	dynamic_light=0;
 	light_sum=0x80000000;
@@ -789,7 +794,7 @@ void g1_map_vertex_class::load_v1(i4_file_class *fp)
 	flags=0;
 }
 
-void g1_map_vertex_class::load_v2(i4_file_class *fp)
+void g1_map_vertex_class::load_v2(i4_file_class * fp)
 {
 	dynamic_light=0;
 	light_sum=0x80000000;
@@ -806,7 +811,7 @@ void g1_map_vertex_class::load_v2(i4_file_class *fp)
 	clip_code=0;
 }
 
-void g1_map_vertex_class::load_v4(i4_file_class *fp)
+void g1_map_vertex_class::load_v4(i4_file_class * fp)
 {
 	dynamic_light=0;
 	light_sum=0x80000000;

@@ -17,22 +17,22 @@ class i4_image_class;
 class i4_image_window_class :
 	public i4_parent_window_class
 {
-	i4_image_class *im, *darken_im;
+	i4_image_class * im, * darken_im;
 	i4_bool del, darken, active;
 
-	void reparent(i4_image_class *draw_area, i4_parent_window_class *parent);
+	void reparent(i4_image_class * draw_area, i4_parent_window_class * parent);
 public:
 	// if delete on destructor is true then change_image will delete the old image
-	void change_image(i4_image_class *im);
+	void change_image(i4_image_class * im);
 
-	i4_image_window_class(i4_image_class *im,
+	i4_image_window_class(i4_image_class * im,
 						  i4_bool delete_on_destructor=i4_F,
 						  i4_bool dark_when_not_active=i4_T);
 
 	virtual void parent_draw(i4_draw_context_class &context);
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 	~i4_image_window_class();
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"image_window");
 	}

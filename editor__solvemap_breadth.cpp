@@ -16,7 +16,7 @@
 #include "map_vert.h"
 #include <math.h>
 
-void g1_breadth_first_map_solver_class::set_block_map(g1_block_map_class *_block)
+void g1_breadth_first_map_solver_class::set_block_map(g1_block_map_class * _block)
 //{{{
 {
 	block = _block;
@@ -142,7 +142,8 @@ i4_bool g1_breadth_first_map_solver_class::get_next_cell(w32 &x,w32 &y, i4_float
 		{
 			tail=0;
 		}
-	} while (tail!=head && get_length(x,y)<length);  //skip entry if already obsolete
+	}
+	while (tail!=head && get_length(x,y)<length);    //skip entry if already obsolete
 	if (tail==head&&head>2) //queue underrun, this means no way.
 	{
 		//head>2 is true if we didn't just start
@@ -155,11 +156,12 @@ i4_bool g1_breadth_first_map_solver_class::get_next_cell(w32 &x,w32 &y, i4_float
 i4_bool g1_breadth_first_map_solver_class::path_solve(i4_float startx, i4_float starty,
 													  i4_float destx, i4_float desty,
 													  w8 sizex, w8 sizey, w8 grade,
-													  i4_float *point, w16 &points)
+													  i4_float * point, w16 &points)
 //{{{
 {
 	w32 x,y,xs,ys;
 	i4_float l;
+
 	set_block_map(g1_get_map()->get_block_map(grade));
 	w32 b=unblocked(block,startx,starty,destx,desty);
 	if (b==BLOCK_EASY_WAY)
@@ -269,10 +271,11 @@ i4_bool g1_breadth_first_map_solver_class::path_solve(i4_float startx, i4_float 
 	return i4_T;
 }
 
-w32 g1_map_solver_class::unblocked(g1_block_map_class *block,i4_float startx, i4_float starty, i4_float destx, i4_float desty)
+w32 g1_map_solver_class::unblocked(g1_block_map_class * block,i4_float startx, i4_float starty, i4_float destx, i4_float desty)
 {
 	//uses bresenham to check for a direct path from start to dest
 	w32 x1,y1,x2,y2;
+
 	//i4_coord cx1,cy1,cx2,cy2;
 	//i4_bool skip;
 

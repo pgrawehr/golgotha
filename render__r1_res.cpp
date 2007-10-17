@@ -19,7 +19,7 @@ static char compressed[60], decompressed[60], cache_file[MAX_PATH];
 static i4_const_str /*comp(""), */ decomp(""), cache("");
 
 
-static void get(char *var, char *buffer, int max_buffer, char *def)
+static void get(char * var, char * buffer, int max_buffer, char * def)
 {
 	if (i4_get_registry(I4_REGISTRY_USER,
 						0,
@@ -32,7 +32,7 @@ static void get(char *var, char *buffer, int max_buffer, char *def)
 		}
 	}
 
-	char *c=getenv(var);
+	char * c=getenv(var);
 	if (c)
 	{
 		strncpy(buffer, c, max_buffer);
@@ -54,6 +54,7 @@ public:
 	void init()
 	{
 		char decomp_prefix[60];
+
 		get("G_DECOMPRESSED", decomp_prefix, 60, "g_decompressed");
 		sprintf(decompressed,"%s",decomp_prefix);
 
@@ -75,7 +76,7 @@ public:
 		   delete dirtest;
 		 */
 //    i4_mkdir(compressed);
-		i4_file_class *f=i4_open("resource.res");
+		i4_file_class * f=i4_open("resource.res");
 		if (f)
 		{
 			delete f;
@@ -144,7 +145,7 @@ const i4_const_str &r1_get_decompressed_dir()
 
 //This function should be called once after it is known which
 //renderer is used.
-void r1_name_cache_file(const char *rendername)
+void r1_name_cache_file(const char * rendername)
 {
 
 	sprintf(cache_file,"%s/%s_%s_tex_cache.dat",decompressed, I4_FILE_PREFIX, rendername);

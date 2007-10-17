@@ -20,15 +20,15 @@ class i4_box_menu_class :
 	public i4_menu_class
 {
 
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 
 public:
 	// show should make the menu visible on the screen
-	virtual void show(i4_parent_window_class *show_on, i4_coord x, i4_coord y);
+	virtual void show(i4_parent_window_class * show_on, i4_coord x, i4_coord y);
 	virtual void hide();
 
 	virtual void parent_draw(i4_draw_context_class &context);
-	i4_box_menu_class(i4_graphical_style_class *style,
+	i4_box_menu_class(i4_graphical_style_class * style,
 					  i4_bool hide_on_pick) :
 		i4_menu_class(hide_on_pick),
 		style(style)
@@ -36,7 +36,7 @@ public:
 		;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"box_menu");
 	}

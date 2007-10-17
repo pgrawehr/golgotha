@@ -29,6 +29,7 @@ extern int m1_max_mip_level;
 static i4_str *m1_locate_texture(const i4_const_str &texture_filename)
 {
 	i4_file_status_struct s;
+
 	//i4_str *path, *fname, *ext;
 
 	if (texture_filename.null())
@@ -72,23 +73,24 @@ static i4_str *m1_locate_texture(const i4_const_str &texture_filename)
 
 
 
-static i4_image_class *m1_convert_8_to_32(i4_image_class *image8)
+static i4_image_class *m1_convert_8_to_32(i4_image_class * image8)
 {
 	i4_pixel_format fmt;
+
 	fmt.default_format();
 
-	const i4_pal *pal=i4_pal_man.register_pal(&fmt);
+	const i4_pal * pal=i4_pal_man.register_pal(&fmt);
 
-	i4_image_class *im8=image8;
+	i4_image_class * im8=image8;
 
-	i4_image_class *new32=i4_create_image(im8->width(),
-										  im8->height(),
-										  pal);
+	i4_image_class * new32=i4_create_image(im8->width(),
+										   im8->height(),
+										   pal);
 
-	w32 *i32=(w32 *)new32->data;
-	w8 *i8=(w8 *)im8->data;
+	w32 * i32=(w32 *)new32->data;
+	w8 * i8=(w8 *)im8->data;
 
-	w32 *pal_data=image8->get_pal()->source.lookup;
+	w32 * pal_data=image8->get_pal()->source.lookup;
 
 	w32 i,t=im8->width()*im8->height();
 	for (i=0; i<t; i++)
@@ -101,14 +103,14 @@ static i4_image_class *m1_convert_8_to_32(i4_image_class *image8)
 	return new32;
 }
 
-i4_bool r1_write_tga_mips(i4_image_class *src_texture,
-						  char *dst_file,i4_file_class *dst_f,
-						  char *texture_name, w32 chroma_color);
+i4_bool r1_write_tga_mips(i4_image_class * src_texture,
+						  char * dst_file,i4_file_class * dst_f,
+						  char * texture_name, w32 chroma_color);
 
 i4_bool m1_pack_mip_texture(const i4_const_str &src_tga,
 							const i4_const_str &out_ctext)
 {
-	i4_file_class *fp = i4_open(src_tga);
+	i4_file_class * fp = i4_open(src_tga);
 
 	i4_bool result = i4_F;
 
@@ -117,10 +119,10 @@ i4_bool m1_pack_mip_texture(const i4_const_str &src_tga,
 		return i4_F;
 	}
 
-	i4_str *stat_str=r1_gets("loading_texture_x").sprintf(200,&src_tga);
-	i4_status_class *status=i4_create_status(*stat_str);
+	i4_str * stat_str=r1_gets("loading_texture_x").sprintf(200,&src_tga);
+	i4_status_class * status=i4_create_status(*stat_str);
 	delete stat_str;
-	i4_image_class *src_texture = i4_load_image(fp, status);
+	i4_image_class * src_texture = i4_load_image(fp, status);
 	if (status)
 	{
 		delete status;
@@ -135,7 +137,7 @@ i4_bool m1_pack_mip_texture(const i4_const_str &src_tga,
 
 	if (src_texture->get_pal()->source.pixel_depth==I4_8BIT)
 	{
-		i4_image_class *old = src_texture;
+		i4_image_class * old = src_texture;
 		src_texture = m1_convert_8_to_32(src_texture);
 		delete old;
 	}
@@ -194,7 +196,7 @@ i4_bool is_newer(const i4_const_str &f1,
 // compressed mip version and updates it if it is newer
 i4_bool m1_update_texture(const i4_const_str &texture_filename,
 						  i4_bool force_all,
-						  i4_status_class *stat,
+						  i4_status_class * stat,
 						  float start, float end)
 {
 	i4_bool ret=i4_F;
@@ -203,7 +205,8 @@ i4_bool m1_update_texture(const i4_const_str &texture_filename,
 	i4_file_status_struct s1,s2;
 	//if the texture is a ".jpg" file, we should just don't find it.
 	//No g_compressed required, as texture already is compressed.
-	i4_str *tname=m1_locate_texture(texture_filename);
+	i4_str * tname=m1_locate_texture(texture_filename);
+
 	if (tname)
 	{
 		if (!force_all)
@@ -213,7 +216,7 @@ i4_bool m1_update_texture(const i4_const_str &texture_filename,
 
 		w32 id = r1_get_texture_id(*tname);
 
-		i4_str *texture_file = r1_texture_id_to_filename(id, r1_get_compressed_dir());
+		i4_str * texture_file = r1_texture_id_to_filename(id, r1_get_compressed_dir());
 
 		ret=i4_T;
 
@@ -248,18 +251,19 @@ i4_bool m1_update_texture(const i4_const_str &texture_filename,
 // this calls m1_update_texture on all the textures in an object model file
 i4_bool m1_update_object_textures(const i4_const_str &object_filename,
 								  i4_bool force_all,
-								  const i4_const_str *out_dir)
+								  const i4_const_str * out_dir)
 {
 
-	i4_str *info=i4gets("updating_obj").sprintf(100, &object_filename);
-	i4_status_class *stat=i4_create_status(*info);
+	i4_str * info=i4gets("updating_obj").sprintf(100, &object_filename);
+	i4_status_class * stat=i4_create_status(*info);
 
 
 	i4_bool ret=i4_F;
-	i4_file_class *fp=i4_open(object_filename);
+	i4_file_class * fp=i4_open(object_filename);
+
 	if (fp)
 	{
-		i4_loader_class *gfp=i4_open_save_file(fp);
+		i4_loader_class * gfp=i4_open_save_file(fp);
 		if (gfp)
 		{
 			if (gfp->goto_section(G1_SECTION_MODEL_TEXTURE_NAMES))
@@ -268,7 +272,7 @@ i4_bool m1_update_object_textures(const i4_const_str &object_filename,
 
 				for (int i=0; i<num_quads; i++)
 				{
-					i4_str *texture_name = gfp->read_counted_str();
+					i4_str * texture_name = gfp->read_counted_str();
 
 					if (m1_update_texture(*texture_name, force_all, stat,
 										  i/(float)num_quads, (i+1)/(float)num_quads))
@@ -306,7 +310,7 @@ struct m1_tentry
 	w16 first_size;
 	w16 w, h;
 	w32 ns;
-	w8 *data;
+	w8 * data;
 	w8 flags;
 };
 
@@ -314,10 +318,10 @@ struct m1_tarray
 {
 	w32 id;
 	w16 total;
-	w32 *ids;
+	w32 * ids;
 };
 
-static int id_compare(const m1_tentry *a, const m1_tentry *b)
+static int id_compare(const m1_tentry * a, const m1_tentry * b)
 {
 	if (a->id < b->id)
 	{
@@ -337,8 +341,9 @@ static int id_compare(const m1_tentry *a, const m1_tentry *b)
 
 void m1_convert_all_in_dir(const i4_const_str &dir)
 {
-	i4_str *info=i4gets("converting_directory").sprintf(100,&dir);
-	i4_status_class *stat=i4_create_status(*info);
+	i4_str * info=i4gets("converting_directory").sprintf(100,&dir);
+	i4_status_class * stat=i4_create_status(*info);
+
 	delete info;
 
 
@@ -347,7 +352,7 @@ void m1_convert_all_in_dir(const i4_const_str &dir)
 	{
 		for (w32 i=0; i<ds.tfiles; i++)
 		{
-			i4_str *n=i4_const_str("%S/%S").sprintf(200, &dir, ds.files[i]);
+			i4_str * n=i4_const_str("%S/%S").sprintf(200, &dir, ds.files[i]);
 
 			m1_update_texture(*n, i4_F, stat, i/(float)ds.tfiles, (i+1)/(float)ds.tfiles);
 			delete n;

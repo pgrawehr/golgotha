@@ -30,13 +30,13 @@ class g1_path_tool_window_class :
 	public i4_button_box_class
 {
 protected:
-	i4_image_class *grade_icon[4], *size_icon[2];
-	i4_const_str *grade_help[4], *size_help[2];
+	i4_image_class * grade_icon[4], * size_icon[2];
+	i4_const_str * grade_help[4], * size_help[2];
 public:
-	g1_path_tool_window_class(i4_graphical_style_class *style, i4_event_handler_class *send_to,
-							  int buttons, i4_image_class **img, i4_const_str **help_names);
+	g1_path_tool_window_class(i4_graphical_style_class * style, i4_event_handler_class * send_to,
+							  int buttons, i4_image_class * * img, i4_const_str * * help_names);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"path_tool_win");
 	}
@@ -53,7 +53,7 @@ class g1_path_window_class :
 	public i4_parent_window_class
 {
 protected:
-	i4_image_class *start_icon, *dest_icon, *crit_icon;
+	i4_image_class * start_icon, * dest_icon, * crit_icon;
 	int last_x, last_y;
 	int map_changed;
 
@@ -90,17 +90,17 @@ public:
 	w16 grade;
 	w8 size;
 	w8 tofrom;
-	g1_map_class *map;
-	g1_critical_graph_class *critical_graph;
+	g1_map_class * map;
+	g1_critical_graph_class * critical_graph;
 
-	g1_critical_map_maker_class *maker;
-	g1_astar_map_solver_class *solvemap_astar;
-	g1_map_solver_class *solvemap;
-	g1_breadth_first_graph_solver_class *solvegraph;
+	g1_critical_map_maker_class * maker;
+	g1_astar_map_solver_class * solvemap_astar;
+	g1_map_solver_class * solvemap;
+	g1_breadth_first_graph_solver_class * solvegraph;
 
-	i4_image32 *bitmap;
+	i4_image32 * bitmap;
 
-	g1_path_window_class(g1_map_class *map, i4_image_class **icons);
+	g1_path_window_class(g1_map_class * map, i4_image_class * * icons);
 	~g1_path_window_class();
 
 	w32 critical_color(w16 x, w16 y);
@@ -114,16 +114,16 @@ public:
 
 	void draw_to_bitmap();
 	void parent_draw(i4_draw_context_class &context);
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"path_win");
 	}
 private:
-	w16 map_size_x(g1_map_class *map);
-	w16 map_size_y(g1_map_class *map);
+	w16 map_size_x(g1_map_class * map);
+	w16 map_size_y(g1_map_class * map);
 	i4_bool within_map(w16 x, w16 y);
 	i4_bool within_radar(w16 x, w16 y);
 	w16 radar_x_pos;

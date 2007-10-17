@@ -20,7 +20,7 @@
 
 class i4_display_class;
 class win32_display_class;
-extern win32_display_class *win32_display_ptr;
+extern win32_display_class * win32_display_ptr;
 
 
 // this classes process key &mouse input for a win32 winow
@@ -46,7 +46,7 @@ class win32_input_class :
 	i4_bool have_window;
 	w16 modifier_state;
 	volatile i4_bool active;
-	i4_display_class *display;
+	i4_display_class * display;
 	static i4_bool class_registered;
 	i4_bool mouse_locked;
 
@@ -94,7 +94,7 @@ public:
 	}
 
 	//dx_threaded_mouse_class *async_mouse;
-	void *async_mouse;
+	void * async_mouse;
 
 	sw32 mouse_x, mouse_y;
 	struct confine_struct
@@ -108,9 +108,9 @@ public:
 
 	sw32 process(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, DWORD time);
 
-	win32_input_class(char *extra_message);
+	win32_input_class(char * extra_message);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"Win32 device manager");
 	}
@@ -118,7 +118,7 @@ public:
 	void get_window_area(int &x, int &y, int &w, int &h);
 
 	i4_bool create_window(sw32 x, sw32 y, w32 w, w32 h,
-						  i4_display_class *display_responsible_for_close,
+						  i4_display_class * display_responsible_for_close,
 						  i4_bool takeup_fullscreen=i4_F);
 
 	void destroy_window();
@@ -130,7 +130,7 @@ public:
 
 	virtual i4_bool process_events();
 
-	void set_async_mouse(dx_threaded_mouse_class *m);
+	void set_async_mouse(dx_threaded_mouse_class * m);
 
 	i4_bool lock_mouse_in_place(i4_bool yes_no);
 };

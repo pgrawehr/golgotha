@@ -74,7 +74,7 @@
 // line is a comment or not. Note that the first character in this constant is
 // the one used when writing comments to disk (if the comment does not allready
 // contain an indicator)
-const char *CommentIndicators=";#";
+const char * CommentIndicators=";#";
 
 // EqualIndicators
 // This constant contains the characters that we check against to determine if
@@ -83,12 +83,12 @@ const char *CommentIndicators=";#";
 // ability of CDataFile to read/write to .ini files.  Also, note that the
 // first character in this constant is the one that is used when writing the
 // values to the file. (EqualIndicators[0])
-const char *EqualIndicators="=:";
+const char * EqualIndicators="=:";
 
 // WhiteSpace
 // This constant contains the characters that the Trim() function removes from
 // the head and tail of strings.
-const char *WhiteSpace =" \t\n\r";
+const char * WhiteSpace =" \t\n\r";
 
 
 // CDataFile
@@ -165,7 +165,7 @@ bool CDataFile::Load(t_Str szFileName)
 	// return false and report the failure.
 	//ios::failbit=0;
 	//fstream File(szFileName.c_str(), ios::in|ios::nocreate);
-	i4_file_class *File=i4_open(szFileName, I4_READ);
+	i4_file_class * File=i4_open(szFileName, I4_READ);
 
 	if ( File )
 	{
@@ -176,7 +176,7 @@ bool CDataFile::Load(t_Str szFileName)
 		t_Str szLine;
 		t_Str szComment;
 		char buffer[MAX_BUFFER_LEN];
-		t_Section *pSection = GetSection("");
+		t_Section * pSection = GetSection("");
 
 		// These need to be set, we'll restore the original values later.
 		m_Flags |= AUTOCREATE_KEYS;
@@ -191,9 +191,10 @@ bool CDataFile::Load(t_Str szFileName)
 			{
 				buffer[bufpos]=File->read_8();
 				bufpos++;
-			} while( buffer[bufpos-1]!='\n'
-					&& !File->eof()
-					&& bufpos<MAX_BUFFER_LEN);
+			}
+			while( buffer[bufpos-1]!='\n'
+				  && !File->eof()
+				  && bufpos<MAX_BUFFER_LEN);
 
 			szLine = buffer;
 			Trim(szLine);
@@ -272,14 +273,14 @@ bool CDataFile::Save()
 	}
 	//ios::failbit=0;
 	//fstream File(m_szFileName.c_str(), ios::out|ios::trunc);
-	i4_file_class *File=i4_open(m_szFileName,I4_WRITE);
+	i4_file_class * File=i4_open(m_szFileName,I4_WRITE);
 
 	if ( File )
 	{
 		SectionItor s_pos;
 		KeyItor k_pos;
-		t_Section *Section;
-		t_Key *Key;
+		t_Section * Section;
+		t_Key * Key;
 
 		for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
 		{
@@ -337,7 +338,7 @@ bool CDataFile::Save()
 bool CDataFile::SetKeyComment(t_Str szKey, t_Str szComment, t_Str szSection)
 {
 	KeyItor k_pos;
-	t_Section *pSection;
+	t_Section * pSection;
 
 	if ( (pSection = GetSection(szSection)) == NULL )
 	{
@@ -386,8 +387,8 @@ bool CDataFile::SetSectionComment(t_Str szSection, t_Str szComment)
 // the proper value and place it in the section requested.
 bool CDataFile::SetValue(t_Str szKey, t_Str szValue, t_Str szComment, t_Str szSection)
 {
-	t_Key *pKey = GetKey(szKey, szSection);
-	t_Section *pSection = GetSection(szSection);
+	t_Key * pKey = GetKey(szKey, szSection);
+	t_Section * pSection = GetSection(szSection);
 
 	if (pSection == NULL)
 	{
@@ -472,7 +473,7 @@ bool CDataFile::SetBool(t_Str szKey, bool bValue, t_Str szComment, t_Str szSecti
 // t_Str("") indicates that the key could not be found.
 t_Str CDataFile::GetValue(t_Str szKey, t_Str szSection)
 {
-	t_Key *pKey = GetKey(szKey, szSection);
+	t_Key * pKey = GetKey(szKey, szSection);
 
 	return (pKey == NULL) ? t_Str("") : pKey->szValue;
 }
@@ -558,7 +559,7 @@ bool CDataFile::DeleteSection(t_Str szSection)
 bool CDataFile::DeleteKey(t_Str szKey, t_Str szFromSection)
 {
 	KeyItor k_pos;
-	t_Section *pSection;
+	t_Section * pSection;
 
 	if ( (pSection = GetSection(szFromSection)) == NULL )
 	{
@@ -607,7 +608,7 @@ bool CDataFile::CreateKey(t_Str szKey, t_Str szValue, t_Str szComment, t_Str szS
 // sucessfully created, or false otherwise.
 bool CDataFile::CreateSection(t_Str szSection, t_Str szComment)
 {
-	t_Section *pSection = GetSection(szSection);
+	t_Section * pSection = GetSection(szSection);
 
 	if ( pSection )
 	{
@@ -639,7 +640,7 @@ bool CDataFile::CreateSection(t_Str szSection, t_Str szComment, KeyList Keys)
 		return false;
 	}
 
-	t_Section *pSection = GetSection(szSection);
+	t_Section * pSection = GetSection(szSection);
 
 	if ( !pSection )
 	{
@@ -651,7 +652,7 @@ bool CDataFile::CreateSection(t_Str szSection, t_Str szComment, KeyList Keys)
 	pSection->szName = szSection;
 	for (k_pos = Keys.begin(); k_pos != Keys.end(); k_pos++)
 	{
-		t_Key *pKey = new t_Key;
+		t_Key * pKey = new t_Key;
 		pKey->szComment = Keys[k_pos]->szComment;
 		pKey->szKey = Keys[k_pos]->szKey;
 		pKey->szValue = Keys[k_pos]->szValue;
@@ -694,10 +695,10 @@ int CDataFile::KeyCount()
 // GetKey
 // Given a key and section name, looks up the key and if found, returns a
 // pointer to that key, otherwise returns NULL.
-t_Key *CDataFile::GetKey(t_Str szKey, t_Str szSection)
+t_Key * CDataFile::GetKey(t_Str szKey, t_Str szSection)
 {
 	KeyItor k_pos;
-	t_Section *pSection;
+	t_Section * pSection;
 
 	// Since our default section has a name value of t_Str("") this should
 	// always return a valid section, wether or not it has any keys in it is
@@ -722,7 +723,7 @@ t_Key *CDataFile::GetKey(t_Str szKey, t_Str szSection)
 // GetSection
 // Given a section name, locates that section in the list and returns a pointer
 // to it. If the section was not found, returns NULL
-t_Section *CDataFile::GetSection(t_Str szSection)
+t_Section * CDataFile::GetSection(t_Str szSection)
 {
 	SectionItor s_pos;
 
@@ -836,7 +837,7 @@ void Trim(t_Str& szStr)
 // WriteLn
 // Writes the formatted output to the file stream, returning the number of
 // bytes written.
-int WriteLn(i4_file_class *stream, char *fmt, ...)
+int WriteLn(i4_file_class * stream, char * fmt, ...)
 {
 	char buf[MAX_BUFFER_LEN];
 	int nLength;
@@ -865,7 +866,7 @@ int WriteLn(i4_file_class *stream, char *fmt, ...)
 // A simple reporting function. Outputs the report messages to stdout
 // This is a dumb'd down version of a simmilar function of mine, so if
 // it looks like it should do more than it does, that's why...
-void Report(e_DebugLevel DebugLevel, char *fmt, ...)
+void Report(e_DebugLevel DebugLevel, char * fmt, ...)
 {
 	char buf[MAX_BUFFER_LEN];
 	int nLength;

@@ -28,15 +28,15 @@ extern i4_float g1_vert_height_table[256];
 
 class g1_map_vertex_class
 {
-	friend g1_map_vertex_class *g1_vertex_min(g1_map_vertex_class *v1,g1_map_vertex_class *v2);
+	friend g1_map_vertex_class *g1_vertex_min(g1_map_vertex_class * v1,g1_map_vertex_class * v2);
 	friend class g1_map_class;
 	friend class g1_cloud_class; //clouds have a special way of creating shadows
-	friend void g1_save_map_verts(g1_map_vertex_class *list,
+	friend void g1_save_map_verts(g1_map_vertex_class * list,
 								  int lsize,
-								  i4_saver_class *fp,
+								  i4_saver_class * fp,
 								  int mark_sections);
-	friend i4_bool g1_load_map_verts(g1_map_vertex_class *list, int lsize,
-									 i4_loader_class *fp,
+	friend i4_bool g1_load_map_verts(g1_map_vertex_class * list, int lsize,
+									 i4_loader_class * fp,
 									 int goto_sections);
 	friend class g1_lod_context_class;
 public:
@@ -330,7 +330,7 @@ public:
 		return clip_code;
 	}
 
-	void set_r1_vert(r1_vert *r)
+	void set_r1_vert(r1_vert * r)
 	{
 		r->v.x = v.x;
 		r->v.y = v.y;
@@ -341,16 +341,16 @@ public:
 		r->outcode = clip_code;
 	}
 
-	void load_v1(i4_file_class *fp);
-	void load_v2(i4_file_class *fp);
-	void load_v4(i4_file_class *fp);
+	void load_v1(i4_file_class * fp);
+	void load_v2(i4_file_class * fp);
+	void load_v4(i4_file_class * fp);
 
 	void init();
 
 };
 
 
-inline g1_map_vertex_class *g1_vertex_min(g1_map_vertex_class *v1,g1_map_vertex_class *v2)
+inline g1_map_vertex_class *g1_vertex_min(g1_map_vertex_class * v1,g1_map_vertex_class * v2)
 {
 	if (v1->height<v2->height)
 	{
@@ -362,11 +362,11 @@ inline g1_map_vertex_class *g1_vertex_min(g1_map_vertex_class *v1,g1_map_vertex_
 	}
 }
 
-i4_bool g1_load_map_verts(g1_map_vertex_class *list, int lsize,
-						  i4_loader_class *fp, int goto_sections);
+i4_bool g1_load_map_verts(g1_map_vertex_class * list, int lsize,
+						  i4_loader_class * fp, int goto_sections);
 
-void g1_save_map_verts(g1_map_vertex_class *list, int lsize,
-					   i4_saver_class *fp,  int mark_section);
+void g1_save_map_verts(g1_map_vertex_class * list, int lsize,
+					   i4_saver_class * fp,  int mark_section);
 
 inline g1_map_vertex_class *g1_get_vertex(int x, int y)
 {

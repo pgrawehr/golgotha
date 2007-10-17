@@ -38,10 +38,10 @@ public:
 	};
 
 protected:
-	g1_critical_graph_class *graph;
+	g1_critical_graph_class * graph;
 
 
-	solve_node *solve_graph;
+	solve_node * solve_graph;
 	w32 nodes;
 
 	// Breadth first heap
@@ -68,7 +68,7 @@ public:
 		solve_graph(0)
 	{
 	}
-	g1_breadth_first_graph_solver_class(g1_critical_graph_class *_graph)
+	g1_breadth_first_graph_solver_class(g1_critical_graph_class * _graph)
 		: heap(100,20),
 		  solve_graph(0)
 	{
@@ -76,10 +76,10 @@ public:
 	}
 	~g1_breadth_first_graph_solver_class();
 
-	void set_graph(g1_critical_graph_class *_graph);
+	void set_graph(g1_critical_graph_class * _graph);
 	i4_bool path_solve_nodes(g1_graph_node start_node, g1_graph_node end_node,
 							 w8 group_size, w8 grade,
-							 i4_float *point, w16 &points);
+							 i4_float * point, w16 &points);
 
 };
 

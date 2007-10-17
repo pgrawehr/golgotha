@@ -203,15 +203,15 @@ void linux_voice_class::lock(w32 start_position, w32 size,
 
 }
 
-void linux_voice_class::unlock(void *block1, w32 block1_size,
-							   void *block2, w32 block2_size)
+void linux_voice_class::unlock(void * block1, w32 block1_size,
+							   void * block2, w32 block2_size)
 {
 
 }
 
 
 
-void linux_sound_class::free_voice(i4_voice_class *voice)
+void linux_sound_class::free_voice(i4_voice_class * voice)
 {
 	delete voice;
 }
@@ -241,6 +241,7 @@ void linux_sound_class::stop_thread()
 
 		while (thread_state != LINUX_SOUND_STOPPED && thread_state != LINUX_SOUND_UNINITIALIZED)
 			sched_yield();
+
 
 
 		thread_state = LINUX_SOUND_UNINITIALIZED;
@@ -373,7 +374,7 @@ void linux_sound_class::set_listener_orientation(i4_float f_x,i4_float f_y,
 }
 
 
-i4_voice_class *linux_sound_class::alloc(w32 buffer_size, sound_parameters &desc)
+i4_voice_class * linux_sound_class::alloc(w32 buffer_size, sound_parameters &desc)
 {
 
 	int i=0;
@@ -383,6 +384,7 @@ i4_voice_class *linux_sound_class::alloc(w32 buffer_size, sound_parameters &desc
 
 	while (i<LINUX_SOUND_NUM_VOICE && voice[i].sound)
 		i++;
+
 
 
 	if (i<LINUX_SOUND_NUM_VOICE)
@@ -406,13 +408,13 @@ i4_voice_class *linux_sound_class::alloc(w32 buffer_size, sound_parameters &desc
 	}
 }
 
-i4_voice_class *linux_sound_class::duplicate_2d(i4_voice_class *voice)
+i4_voice_class * linux_sound_class::duplicate_2d(i4_voice_class * voice)
 {
 
 }
 
 
-void *linux_sound_mixer(void *arg)
+void *linux_sound_mixer(void * arg)
 {
 #if 0
 	w16 voc,i;
@@ -444,6 +446,7 @@ void *linux_sound_mixer(void *arg)
 						{
 							while (v.index >= v.sound->size)
 								v.index -= v.sound->size;
+
 
 						}
 					}

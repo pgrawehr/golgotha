@@ -41,16 +41,16 @@
 #include "render/r1_api.h"
 #include "render/tmanage.h"
 
-extern i4_grow_heap_class *g1_object_heap;
+extern i4_grow_heap_class * g1_object_heap;
 
 g1_sprite_list_class g1_sprite_list_man;
 
 // todo : add a sprite loader instead of mouching the load3d
 // its mooching, jonathan. -trey
 
-void g1_sprite_list_class::load(r1_render_api_class *tmap)
+void g1_sprite_list_class::load(r1_render_api_class * tmap)
 {
-	i4_const_str *sprites=i4_string_man.get_array("sprite_array");
+	i4_const_str * sprites=i4_string_man.get_array("sprite_array");
 	w32 count;
 
 	g1_quad_object_loader_class loader(g1_object_heap);
@@ -59,8 +59,8 @@ void g1_sprite_list_class::load(r1_render_api_class *tmap)
 	{
 		I4_ASSERT(count<=G1_MAX_SPRITES, "increase G1_MAX_SPRITES");
 
-		i4_str *name=i4gets("spr_fmt").sprintf(200, &sprites[count]);
-		i4_file_class *in_file=i4_open(*name);
+		i4_str * name=i4gets("spr_fmt").sprintf(200, &sprites[count]);
+		i4_file_class * in_file=i4_open(*name);
 
 
 		if (!in_file)
@@ -69,10 +69,10 @@ void g1_sprite_list_class::load(r1_render_api_class *tmap)
 		}
 		else
 		{
-			g1_loader_class *fp=g1_open_save_file(in_file);
+			g1_loader_class * fp=g1_open_save_file(in_file);
 			if (fp)
 			{
-				g1_quad_object_class *tmp=loader.load(fp, sprites[count], tmap->get_tmanager());
+				g1_quad_object_class * tmp=loader.load(fp, sprites[count], tmap->get_tmanager());
 				tmp->scale(0.1);
 
 				array[count].add_x=tmp->animation[0].vertex[0].v.x;

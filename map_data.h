@@ -17,22 +17,22 @@ class g1_saver_class;
 class g1_map_data_class
 {
 public:
-	char *name;
+	char * name;
 
-	g1_map_data_class *next;
-	static g1_map_data_class *first;
+	g1_map_data_class * next;
+	static g1_map_data_class * first;
 
-	g1_map_data_class(char *name);
+	g1_map_data_class(char * name);
 	~g1_map_data_class();
 
 
 	virtual void free()
 	{
 	}
-	virtual void load(g1_loader_class *fp, w32 sections)
+	virtual void load(g1_loader_class * fp, w32 sections)
 	{
 	}
-	virtual void save(g1_saver_class *fp, w32 sections)
+	virtual void save(g1_saver_class * fp, w32 sections)
 	{
 	}
 };

@@ -17,7 +17,7 @@
 
 #define i4_dx5_check(res) i4_dx5_check_lineinfo(res,__FILE__,__LINE__)
 //i4_bool i4_dx5_check(HRESULT res);
-i4_bool i4_dx5_check_lineinfo(HRESULT res,char *f,int line);
+i4_bool i4_dx5_check_lineinfo(HRESULT res,char * f,int line);
 #define i4_dx9_check(res) i4_dx5_check_lineinfo(res,__FILE__,__LINE__)
 
 #else

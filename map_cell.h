@@ -51,7 +51,7 @@ public:
 	};
 
 
-	g1_object_chain_class *object_list; // lists of objects that are standing on this tile
+	g1_object_chain_class * object_list; // lists of objects that are standing on this tile
 
 	void add_object(g1_object_chain_class &c);
 	i4_bool remove_object(g1_object_chain_class &c);
@@ -146,11 +146,11 @@ public:
 //       flags=((flags & (~OWNER_BITS)) | (player<<8));
 //   }
 
-	void load_v2(i4_file_class *fp, w16 *tile_remap); // version 2
-	void load_v3(i4_file_class *fp, w16 *tile_remap); // version 3
-	void load_v4(i4_file_class *fp, w16 *tile_remap); // version 4
-	void load_v5(i4_file_class *fp, w16 *tile_remap); // version 5
-	void load_v6(i4_file_class *fp, w16 *tile_remap); // version 6
+	void load_v2(i4_file_class * fp, w16 * tile_remap); // version 2
+	void load_v3(i4_file_class * fp, w16 * tile_remap); // version 3
+	void load_v4(i4_file_class * fp, w16 * tile_remap); // version 4
+	void load_v5(i4_file_class * fp, w16 * tile_remap); // version 5
+	void load_v6(i4_file_class * fp, w16 * tile_remap); // version 6
 
 	void set_rotation(g1_rotation_type type)
 	{
@@ -196,10 +196,10 @@ public:
 };
 
 
-i4_bool g1_load_map_cells(g1_map_cell_class *list, int lsize,
-						  w16 *tile_remap, i4_loader_class *fp);
+i4_bool g1_load_map_cells(g1_map_cell_class * list, int lsize,
+						  w16 * tile_remap, i4_loader_class * fp);
 
-void g1_save_map_cells(g1_map_cell_class *list, int lsize, i4_saver_class *fp);
+void g1_save_map_cells(g1_map_cell_class * list, int lsize, i4_saver_class * fp);
 
 inline g1_map_cell_class *g1_get_cell(int x, int y)
 {

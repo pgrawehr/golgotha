@@ -25,7 +25,7 @@ protected:
 
 	struct context
 	{
-		char *name;
+		char * name;
 		w16 modifiers_taken; // in this context these modifiers cannot be used as combo-keys
 		w16 modifiers_used;
 		context() {
@@ -35,20 +35,20 @@ protected:
 
 	i4_array<context> *context_list;   // list of context's we've seen so far
 	i4_array<char *> *command_list;
-	i4_grow_heap_class *char_heap;
+	i4_grow_heap_class * char_heap;
 	struct key_item
 	{
 		i4_key key;
 		w16 context_mask;
 		w16 command_id;
 
-		key_item *next;
-		key_item *next_active;
+		key_item * next;
+		key_item * next_active;
 
 		w8 command_active;
 		w8 modifier_flags;
 
-		key_item(w16 context_mask, w16 command_id, w8 modifier_flags, i4_key key, key_item *next)
+		key_item(w16 context_mask, w16 command_id, w8 modifier_flags, i4_key key, key_item * next)
 			: context_mask(context_mask),
 			  command_id(command_id),
 			  modifier_flags(modifier_flags),
@@ -59,23 +59,23 @@ protected:
 		}
 	};
 
-	key_item *keys[I4_NUM_KEYS];
-	key_item *active_list;
+	key_item * keys[I4_NUM_KEYS];
+	key_item * active_list;
 
-	void add_active(i4_key_man_class::key_item *i, i4_time_class &time);
+	void add_active(i4_key_man_class::key_item * i, i4_time_class &time);
 	void get_modifiers(int k_mod);
 	void end_actives(int matches_key, i4_time_class &time);
 	void end_all_commands(void);
 
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 	i4_bool process_events()
 	{
 		return i4_F;
 	}
 	void check_init();
-	char *alloc_str(char *s);
-	int use_modifiers_for_contexts(int context_mask, int mod, char *key_name);
-	int acquire_modifiers_for_contexts(int context_mask, int mod, char *key_name);
+	char *alloc_str(char * s);
+	int use_modifiers_for_contexts(int context_mask, int mod, char * key_name);
+	int acquire_modifiers_for_contexts(int context_mask, int mod, char * key_name);
 	w16 key_modifiers_pressed;
 	i4_bool loaded;
 
@@ -96,21 +96,21 @@ public:
 
 	i4_key_man_class();
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"key manager");
 	}
 	i4_bool load(const i4_const_str &filename);
 	void uninit();
 
-	int get_context_id(char *context);
-	int get_command_id(char *command);
+	int get_context_id(char * context);
+	int get_command_id(char * command);
 
 	void set_context(int _context_id)
 	{
 		context_id=_context_id;
 	}
-	void set_context(char *context)
+	void set_context(char * context)
 	{
 		set_context(get_context_id(context));
 	}
@@ -125,7 +125,7 @@ public:
 	}
 
 	i4_bool get_key_for_command(int command_id, i4_key &key, w16 &mod);
-	i4_bool get_key_for_command(char *command_name, i4_key &key, w16 &mod)
+	i4_bool get_key_for_command(char * command_name, i4_key &key, w16 &mod)
 	{
 		return get_key_for_command(get_command_id(command_name), key, mod);
 	}
@@ -137,7 +137,7 @@ class i4_key_matchup_class
 {
 	struct command_matchup
 	{
-		command_matchup *left, *right;
+		command_matchup * left, * right;
 		w16 command_id;
 		int remap_id;
 
@@ -148,7 +148,7 @@ class i4_key_matchup_class
 			remap_id(remap) {
 		}
 
-		int compare(const command_matchup *b) const
+		int compare(const command_matchup * b) const
 		{
 			if (command_id>b->command_id)
 			{
@@ -169,7 +169,7 @@ class i4_key_matchup_class
 	i4_binary_tree<command_matchup> matchup;
 
 public:
-	void add(char *command, int remap);
+	void add(char * command, int remap);
 	int remap(int command_id);
 
 	~i4_key_matchup_class()

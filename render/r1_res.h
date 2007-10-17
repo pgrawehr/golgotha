@@ -16,11 +16,11 @@
 #include "string/string.h"
 
 extern int r1_max_texture_size;
-const i4_const_str &r1_gets(char *str, i4_bool barf_on_error=i4_T);
+const i4_const_str &r1_gets(char * str, i4_bool barf_on_error=i4_T);
 //Call this function after the renderer is ready with some
 //unique name of the actually used renderer instance.
 //the name must not
-void r1_name_cache_file(const char *rendername);
+void r1_name_cache_file(const char * rendername);
 const i4_const_str &r1_get_decompressed_dir();
 //no more needed
 //const i4_const_str &r1_get_compressed_dir();

@@ -47,11 +47,11 @@ int inst_sizes[3]={
 	20,40,60
 };
 
-char *reg_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
-char *i4_display_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
-char *sfx_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
+char * reg_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
+char * i4_display_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
+char * sfx_key="SOFTWARE\\Crack dot Com\\Golgotha\\1.0";
 
-i4_file_class *uninstall_script=0;
+i4_file_class * uninstall_script=0;
 
 int installed=0;
 int col2=120;
@@ -76,7 +76,7 @@ int size_needed_to_install=0;
  */
 
 
-void fix_path(char *f)
+void fix_path(char * f)
 {
 	for (; *f; f++)
 #ifndef _WINDOWS
@@ -102,7 +102,7 @@ void fix_path(char *f)
 //setup_options *setup_window=0;
 
 
-void write_header(i4_file_class *fp, i4_sound_info &fmt)
+void write_header(i4_file_class * fp, i4_sound_info &fmt)
 {
 	fp->write("RIFF",4);
 	fp->write_32(36+fmt.size);     // 36 + snd->size
@@ -127,9 +127,10 @@ void write_header(i4_file_class *fp, i4_sound_info &fmt)
 
 
 
-char *forward_slash(char *f)
+char *forward_slash(char * f)
 {
-	char *r=f;
+	char * r=f;
+
 	for (; *f; f++)
 	{
 		if (*f=='\\')
@@ -143,11 +144,11 @@ char *forward_slash(char *f)
 
 
 
-li_object *li_uninstall_cmd(li_object *o, li_environment *env)
+li_object *li_uninstall_cmd(li_object * o, li_environment * env)
 {
 	if (uninstall_script)
 	{
-		li_object *c=li_eval(li_car(o,env),env);
+		li_object * c=li_eval(li_car(o,env),env);
 		li_get_type(c->type())->print(c, uninstall_script);
 		return li_true_sym;
 	}
@@ -155,9 +156,10 @@ li_object *li_uninstall_cmd(li_object *o, li_environment *env)
 }
 
 
-li_object *li_delete(li_object *o, li_environment *env)
+li_object *li_delete(li_object * o, li_environment * env)
 {
 	char p[200];
+
 	strcpy(p,li_get_string(li_eval(li_car(o,env), env),env));
 	fix_path(p);
 
@@ -172,10 +174,11 @@ li_object *li_delete(li_object *o, li_environment *env)
 	}
 }
 
-li_object *li_mkdir(li_object *o, li_environment *env)
+li_object *li_mkdir(li_object * o, li_environment * env)
 {
-	char *fn=li_get_string(li_eval(li_car(o,env),env),env);
+	char * fn=li_get_string(li_eval(li_car(o,env),env),env);
 	char p[200];
+
 	sprintf(p, "%s/%s", inst_path, fn);
 	fix_path(p);
 
@@ -195,9 +198,10 @@ li_object *li_mkdir(li_object *o, li_environment *env)
 }
 
 
-li_object *li_rmdir(li_object *o, li_environment *env)
+li_object *li_rmdir(li_object * o, li_environment * env)
 {
-	char *fn=li_get_string(li_eval(li_car(o,env),env),env);
+	char * fn=li_get_string(li_eval(li_car(o,env),env),env);
+
 	fix_path(fn);
 
 	i4_directory_struct ds;
@@ -238,15 +242,16 @@ li_object *li_rmdir(li_object *o, li_environment *env)
 }
 
 
-void down_sample_wav(char *in_file, char *out_file, int rate)
+void down_sample_wav(char * in_file, char * out_file, int rate)
 {
 	i4_sound_info s;
-	i4_file_class *in=i4_open(in_file);
+	i4_file_class * in=i4_open(in_file);
+
 	if (!in)
 	{
 		return;
 	}
-	i4_file_class *out=i4_open(out_file, I4_WRITE);
+	i4_file_class * out=i4_open(out_file, I4_WRITE);
 	if (!out)
 	{
 		delete in;
@@ -256,7 +261,7 @@ void down_sample_wav(char *in_file, char *out_file, int rate)
 
 	if (i4_load_wav_info(in, s))
 	{
-		w16 *inm=(w16 *)I4_MALLOC(s.size,"");
+		w16 * inm=(w16 *)I4_MALLOC(s.size,"");
 		in->read(inm, s.size);
 
 		float x_end=s.size/2;
@@ -265,7 +270,7 @@ void down_sample_wav(char *in_file, char *out_file, int rate)
 		int out_samples=out_size/2;
 
 
-		w16 *outm=(w16 *)I4_MALLOC(out_size,"");
+		w16 * outm=(w16 *)I4_MALLOC(out_size,"");
 
 
 		while (outc<out_samples)
@@ -289,12 +294,13 @@ void down_sample_wav(char *in_file, char *out_file, int rate)
 	delete out;
 }
 
-li_object *mp3_2_wav(li_object *o, li_environment *env)
+li_object *mp3_2_wav(li_object * o, li_environment * env)
 {
-	char *fn=li_get_string(li_eval(li_car(o,env),env),env);
+	char * fn=li_get_string(li_eval(li_car(o,env),env),env);
 	i4_filename_struct split;
 
 	int resample_rate=-1;
+
 	if (li_cdr(o,env))
 	{
 		resample_rate=li_get_int(li_eval(li_second(o,env),env),env);
@@ -312,7 +318,7 @@ li_object *mp3_2_wav(li_object *o, li_environment *env)
 	fix_path(tmp_name);
 
 
-	i4_file_class *out=i4_open(resample_rate==-1 ? out_name : tmp_name, I4_WRITE);
+	i4_file_class * out=i4_open(resample_rate==-1 ? out_name : tmp_name, I4_WRITE);
 	if (!out)
 	{
 		return 0;
@@ -325,7 +331,7 @@ li_object *mp3_2_wav(li_object *o, li_environment *env)
 
 
 	fix_path(fn);
-	i4_file_class *in=i4_open(fn);
+	i4_file_class * in=i4_open(fn);
 	if (!in)
 	{
 		delete out;
@@ -337,7 +343,7 @@ li_object *mp3_2_wav(li_object *o, li_environment *env)
 
 	char stat[200];
 	sprintf(stat, "Decoding MP3 : %s", fn);
-	i4_status_class *status=i4_create_status(stat);
+	i4_status_class * status=i4_create_status(stat);
 
 	i4_bool ret=i4_load_mp3(in, out, fmt, status);
 	out->seek(0);
@@ -365,15 +371,16 @@ li_object *mp3_2_wav(li_object *o, li_environment *env)
 
 
 
-li_object *copy_file(li_object *o, li_environment *env)
+li_object *copy_file(li_object * o, li_environment * env)
 {
-	char *f1=li_get_string(li_eval(li_first(o,env),env),env);
-	char *f2=li_get_string(li_eval(li_second(o,env),env),env);
+	char * f1=li_get_string(li_eval(li_first(o,env),env),env);
+	char * f2=li_get_string(li_eval(li_second(o,env),env),env);
 	char full_f2[256];
+
 	sprintf(full_f2, "%s/%s", inst_path, f2);
 
 	fix_path(full_f2);
-	i4_file_class *out=i4_open(full_f2, I4_WRITE | I4_NO_BUFFER);
+	i4_file_class * out=i4_open(full_f2, I4_WRITE | I4_NO_BUFFER);
 	if (!out)
 	{
 		i4_warning("Could not open output file %s\n", f2);
@@ -386,7 +393,7 @@ li_object *copy_file(li_object *o, li_environment *env)
 	}
 
 	fix_path(f1);
-	i4_file_class *in=i4_open(f1, I4_NO_BUFFER | I4_READ);
+	i4_file_class * in=i4_open(f1, I4_NO_BUFFER | I4_READ);
 	if (!in)
 	{
 		i4_warning("Could not open %s\nAre you running setup from the correct directory?", f1);
@@ -395,7 +402,7 @@ li_object *copy_file(li_object *o, li_environment *env)
 
 	char s[200];
 	sprintf(s, "Copying to %s", f2);
-	i4_status_class *status=i4_create_status(s);
+	i4_status_class * status=i4_create_status(s);
 
 
 	char buf[4096];
@@ -421,9 +428,10 @@ li_object *copy_file(li_object *o, li_environment *env)
 	return li_true_sym;
 }
 
-li_object *li_dir(li_object *o, li_environment *env)
+li_object *li_dir(li_object * o, li_environment * env)
 {
-	char *c;
+	char * c;
+
 	if (li_first(o,env))
 	{
 		c=li_get_string(li_eval(li_first(o,env),env),env);
@@ -453,7 +461,7 @@ li_object *li_dir(li_object *o, li_environment *env)
 	{
 		i4_os_string(*ds.files[i],fname_buf,MAX_PATH);
 		w32 _32bitsize=(w32)ds.file_status[i].size;
-		char *_time=ctime((long *)&ds.file_status[i].last_modified);
+		char * _time=ctime((long *)&ds.file_status[i].last_modified);
 		if (ds.file_status[i].size>0xffffffff)
 		{
 			i4_warning("%s   >4GB  %s",fname_buf,_time);

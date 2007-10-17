@@ -50,7 +50,7 @@ void g1_sprite_object_class::think()
 
 
 g1_sprite_object_class::g1_sprite_object_class(g1_object_type id,
-											   g1_loader_class *fp)
+											   g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 	model_id=0;
@@ -60,6 +60,7 @@ g1_sprite_object_class::g1_sprite_object_class(g1_object_type id,
 void g1_sprite_object_class::init()
 {
 	/// get animation length now rather than in the constructor to make sure model_id is valid
-	g1_sprite_class *sprite=g1_sprite_list_man.get_sprite(model_id);
+	g1_sprite_class * sprite=g1_sprite_list_man.get_sprite(model_id);
+
 	anim_length = sprite->num_animation_frames;
 }

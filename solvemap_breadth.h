@@ -21,9 +21,9 @@ class g1_breadth_first_map_solver_class :
 protected:
 	w16 wx, wy;
 
-	w8 *solve_map;
-	i4_float *length_map;
-	g1_block_map_class *block;
+	w8 * solve_map;
+	i4_float * length_map;
+	g1_block_map_class * block;
 
 	// Breadth first Queue
 	enum {
@@ -71,7 +71,7 @@ public:
 	{
 		flags=IS_MAP_SOLVER|IS_BREADTH_SOLVER;
 	}
-	g1_breadth_first_map_solver_class(g1_block_map_class *_block) :
+	g1_breadth_first_map_solver_class(g1_block_map_class * _block) :
 		solve_map(0)
 	{
 		set_block_map(_block);
@@ -90,7 +90,7 @@ public:
 	}
 	i4_bool is_visited(int x, int y)
 	{
-		return (solve_map[y *wx+x] & VISITED)!=0;
+		return (solve_map[y * wx+x] & VISITED)!=0;
 	}
 
 	void ok(int x, int y)
@@ -103,12 +103,12 @@ public:
 	}
 	i4_bool is_ok(int x, int y)
 	{
-		return (solve_map[y *wx+x] & OK)!=0;
+		return (solve_map[y * wx+x] & OK)!=0;
 	}
 
 	w8 solve_dir(int x, int y)
 	{
-		return solve_map[y *wx+x]&0xf;
+		return solve_map[y * wx+x]&0xf;
 	}
 	void set_length(int x, int y, i4_float l)
 	{
@@ -116,7 +116,7 @@ public:
 	};
 	i4_float get_length(int x, int y)
 	{
-		return length_map[y *wx+x];
+		return length_map[y * wx+x];
 	};
 	void set_solve_dir(int x, int y, w8 dir)
 	//{{{
@@ -125,14 +125,14 @@ public:
 	}
 	//}}}
 
-	void set_block_map(g1_block_map_class *_block);
+	void set_block_map(g1_block_map_class * _block);
 	//Diese Syntax nur für astar_map_solver!
 	//virtual i4_bool path_solve(w32 startx, w32 starty, w32 destx, w32 desty, w8 size, w8 grade,
 	//                           i4_float *point, w16 &points);
 	i4_bool path_solve(i4_float startx, i4_float starty,
 					   i4_float destx, i4_float desty,
 					   w8 sizex, w8 sizey, w8 grade,
-					   i4_float *point, w16 &points);
+					   i4_float * point, w16 &points);
 
 	//i4_bool unblocked(i4_float startx, i4_float starty, i4_float destx, i4_float desty);
 
@@ -148,13 +148,13 @@ class g1_no_way_solver_class :
 		flags=IS_MAP_SOLVER;
 	}
 
-	void set_block_map(g1_block_map_class *_block)
+	void set_block_map(g1_block_map_class * _block)
 	{
 	};
 	virtual i4_bool path_solve(i4_float startx, i4_float starty,
 							   i4_float destx, i4_float desty,
 							   w8 sizex, w8 sizey, w8 grade,
-							   i4_float *point, w16 &points)
+							   i4_float * point, w16 &points)
 	{
 		points=0;
 		return i4_F;

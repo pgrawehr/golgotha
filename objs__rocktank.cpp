@@ -73,20 +73,20 @@ g1_rocket_tank_def("rocket_tank",
 				   g1_object_definition_class::EDITOR_SELECTABLE,
 				   g1_rocket_tank_init);
 
-static char *chunk_list[3]={
+static char * chunk_list[3]={
 	"chunk_missiletruck_body", "chunk_missiletruck_launcher",
 	"chunk_missiletruck_tread"
 };
 
 
-int g1_rocket_tank_class::get_chunk_names(char **&list)
+int g1_rocket_tank_class::get_chunk_names(char * *&list)
 {
 	list=chunk_list;
 	return 3;
 }
 
 g1_rocket_tank_class::g1_rocket_tank_class(g1_object_type id,
-										   g1_loader_class *fp)
+										   g1_loader_class * fp)
 	: g1_map_piece_class(id, fp)
 {
 	draw_params.setup(model_ref.id(), shadow_ref.id(), base_lod.id());
@@ -168,7 +168,7 @@ g1_rocket_tank_class::g1_rocket_tank_class(g1_object_type id,
 			 DANGEROUS, 1);
 }
 
-void g1_rocket_tank_class::save(g1_saver_class *fp)
+void g1_rocket_tank_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -182,7 +182,7 @@ void g1_rocket_tank_class::save(g1_saver_class *fp)
 
 	fp->end_version();
 }
-void g1_rocket_tank_class::skipload(g1_loader_class *fp)
+void g1_rocket_tank_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->check_version(DATA_VERSION);
@@ -192,7 +192,7 @@ void g1_rocket_tank_class::skipload(g1_loader_class *fp)
 	fp->read_float();
 	fp->end_version(I4_LF);
 }
-void g1_rocket_tank_class::load(g1_loader_class *fp)
+void g1_rocket_tank_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -205,7 +205,8 @@ void g1_rocket_tank_class::load(g1_loader_class *fp)
 
 void g1_rocket_tank_class::fire()
 {
-	g1_object_class *target=attack_target.get();
+	g1_object_class * target=attack_target.get();
+
 	if (target)
 	{
 		//i4_float bx,by,bz;

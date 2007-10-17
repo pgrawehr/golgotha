@@ -40,14 +40,14 @@ public:
 	{
 		sw32 fd;
 		w32 size;
-		void *buffer;
+		void * buffer;
 		i4_file_class::async_callback callback;
-		void *context;
+		void * context;
 		w32 prio;
 		int caller_id; //identifies the caller, simplfies debugging
-		read_request(sw32 fd, void *buffer,
+		read_request(sw32 fd, void * buffer,
 					 w32 size, i4_file_class::async_callback callback,
-					 void *context, w32 prio, int caller_id)
+					 void * context, w32 prio, int caller_id)
 			: fd(fd),
 			  buffer(buffer),
 			  size(size),
@@ -79,7 +79,7 @@ protected:
 	void emulate_speeds(read_request &r);
 protected:
 
-	virtual w32 read(sw32 fd, void *buffer, w32 count) = 0;
+	virtual w32 read(sw32 fd, void * buffer, w32 count) = 0;
 
 #ifdef _WINDOWS
 	DWORD hPRIVATE_thread;
@@ -90,19 +90,19 @@ protected:
 public:
 	virtual w32 max_priority()=0; //the maximum priority this reader should handle
 	// name is just some unique name.  Windows requires this for Semaphores
-	i4_async_reader(char *name);
+	i4_async_reader(char * name);
 
 	void init(); // creates thread (called by i4_init()
 	void uninit(); // waits for thread to die (called by i4_uninit()
 	static i4_bool is_idle();
 
 	// ques up a request
-	i4_bool start_read(int fd, void *buffer, w32 size,
+	i4_bool start_read(int fd, void * buffer, w32 size,
 					   i4_file_class::async_callback call,
-					   void *context, w32 priority, int caller_id);
+					   void * context, w32 priority, int caller_id);
 
-	static i4_bool request_for_callback(void *buffer, w32 size,
-										i4_file_class::async_callback call, void *context, w32 priority, int caller_id);
+	static i4_bool request_for_callback(void * buffer, w32 size,
+										i4_file_class::async_callback call, void * context, w32 priority, int caller_id);
 
 	void PRIVATE_thread(); // don't call this!
 };

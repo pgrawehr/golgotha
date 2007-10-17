@@ -20,12 +20,12 @@ class g1_buildable_object_definer :
 	public g1_object_definition_class
 {
 public:
-	g1_object_defaults_struct *defaults;
+	g1_object_defaults_struct * defaults;
 	g1_object_build_info build_info;
 
 	g1_buildable_object_definer<T>
-	(char *name,
-	 char *factory_name,
+	(char * name,
+	 char * factory_name,
 	 w32 type_flags,
 	 function_type _init = 0,
 	 function_type _uninit = 0)
@@ -34,9 +34,10 @@ public:
 	}
 
 	virtual g1_object_class *create_object(g1_object_type id,
-										   g1_loader_class *fp)
+										   g1_loader_class * fp)
 	{
-		T *o=new T(id, fp);
+		T * o=new T(id, fp);
+
 		o->defaults=defaults;
 		o->init();
 		return o;

@@ -17,12 +17,12 @@ public:
 	i4_rect_list_class clip;
 	// all areas that only need updating for the next frame
 	// This list is very sparsely used
-	i4_rect_list_class *single_dirty;
+	i4_rect_list_class * single_dirty;
 	// all areas that need updating on all future frames
 	// This usually means it is updated twice (for the two buffers of the screen flip chain)
-	i4_rect_list_class *both_dirty;
+	i4_rect_list_class * both_dirty;
 	// The region which was used by the render windows in the last frame
-	i4_rect_list_class *render_area;
+	i4_rect_list_class * render_area;
 	sw16 xoff,yoff;
 
 	i4_draw_context_class(sw16 x1, sw16 y1, sw16 x2, sw16 y2)

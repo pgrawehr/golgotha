@@ -78,7 +78,7 @@ class g1_tower_electric_class :
 	public g1_map_piece_class
 {
 protected:
-	g1_mini_object *pod, *prod, *bottom;
+	g1_mini_object * pod, * prod, * bottom;
 	i4_float guard_angle, guard_pitch;
 	g1_typed_reference_class<g1_bolt_class> bolt[4];
 
@@ -86,7 +86,7 @@ protected:
 	int charge;
 	int guard_time;
 public:
-	g1_tower_electric_class(g1_object_type id, g1_loader_class *fp)
+	g1_tower_electric_class(g1_object_type id, g1_loader_class * fp)
 	//{{{
 		: g1_map_piece_class(id,fp)
 	{
@@ -133,7 +133,7 @@ public:
 	}
 	//}}}
 
-	virtual void save(g1_saver_class *fp)
+	virtual void save(g1_saver_class * fp)
 	//{{{
 	{
 		g1_map_piece_class::save(fp);
@@ -334,7 +334,7 @@ public:
 	}
 	//}}}
 
-	virtual void damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir)
+	virtual void damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir)
 	//{{{
 	{
 		if (health>1)
@@ -353,7 +353,7 @@ public:
 	//}}}
 
 	i4_bool check_collision(
-		g1_object_class *source,
+		g1_object_class * source,
 		const i4_3d_vector &start, i4_3d_vector &ray)
 	{
 		return g1_model_collide_radial(this, draw_params, start, ray);

@@ -32,7 +32,7 @@ class i4_interval_template
 {
 protected:
 	class interval_node;
-	typedef interval_node *interval_link;
+	typedef interval_node * interval_link;
 	class interval_node
 	//{{{
 	{
@@ -64,7 +64,7 @@ public:
 	//}}}
 	interval_link root;
 
-	interval_link *find_interval(T val, interval_link *pp)
+	interval_link *find_interval(T val, interval_link * pp)
 	//{{{
 	{
 		interval_link p;
@@ -88,7 +88,7 @@ public:
 	}
 	//}}}
 
-	i4_bool recurse_combine(interval_link *pp,
+	i4_bool recurse_combine(interval_link * pp,
 							T min,
 							T max,
 							interval_link replace)

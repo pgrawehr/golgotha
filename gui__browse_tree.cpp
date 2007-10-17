@@ -38,6 +38,7 @@ void i4_vertical_compact_window_class::compact()
 {
 	sw32 my=0,largest_width=0;
 	i4_parent_window_class::win_iter w;
+
 	for (w=children.begin();
 		 w!=children.end(); ++w)
 	{
@@ -72,6 +73,7 @@ void i4_horizontal_compact_window_class::compact()
 {
 	sw32 mx=0,largest_height=0;
 	i4_parent_window_class::win_iter w;
+
 	for (w=children.begin();
 		 w!=children.end(); ++w)
 	{
@@ -101,7 +103,7 @@ void i4_horizontal_compact_window_class::compact()
 	}
 }
 
-void i4_vertical_compact_window_class::receive_event(i4_event *ev)
+void i4_vertical_compact_window_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::WINDOW_MESSAGE)
 	{
@@ -145,7 +147,7 @@ void i4_vertical_compact_window_class::parent_draw(i4_draw_context_class &contex
 }
 
 
-void i4_horizontal_compact_window_class::receive_event(i4_event *ev)
+void i4_horizontal_compact_window_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::WINDOW_MESSAGE)
 	{
@@ -185,7 +187,7 @@ class i4_browse_toggle_class :
 	public i4_window_class
 {
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"browse_toggle");
 	}
@@ -194,11 +196,11 @@ public:
 		EXPANDED, COMPACTED, NO_CHILDREN
 	} state;
 
-	i4_browse_window_class *browse_parent;
-	i4_graphical_style_class *style;
+	i4_browse_window_class * browse_parent;
+	i4_graphical_style_class * style;
 
-	i4_browse_toggle_class(i4_graphical_style_class *style,
-						   i4_browse_window_class *browse_parent,
+	i4_browse_toggle_class(i4_graphical_style_class * style,
+						   i4_browse_window_class * browse_parent,
 						   i4_bool show_plus_minus,
 						   i4_bool expanded,
 						   i4_bool has_a_child)
@@ -241,7 +243,7 @@ public:
 		}
 	}
 
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::MOUSE_BUTTON_DOWN && state!=NO_CHILDREN)
 		{
@@ -262,7 +264,7 @@ public:
 } ;
 
 
-void i4_browse_window_class::add_arranged_child(i4_window_class *child)
+void i4_browse_window_class::add_arranged_child(i4_window_class * child)
 {
 	title_area->add_child(0,0,child);
 	((i4_horizontal_compact_window_class *)title_area)->compact();
@@ -303,7 +305,7 @@ void i4_browse_window_class::expand()
 	}
 }
 
-void i4_browse_window_class::replace_object(i4_window_class *object)
+void i4_browse_window_class::replace_object(i4_window_class * object)
 {
 	if (child_object)
 	{
@@ -352,15 +354,15 @@ public:
 		i4_parent_window_class(0,0)
 	{
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"browse title container");
 	}
 };
 
-i4_browse_window_class::i4_browse_window_class(i4_graphical_style_class *style,
-											   i4_window_class *title_object,
-											   i4_window_class *child_obj,
+i4_browse_window_class::i4_browse_window_class(i4_graphical_style_class * style,
+											   i4_window_class * title_object,
+											   i4_window_class * child_obj,
 											   i4_bool show_plus_minus,
 											   i4_bool expanded)
 	: style(style),
@@ -402,7 +404,7 @@ sw32 i4_browse_window_class::x_start()
 
 
 
-void i4_browse_window_class::receive_event(i4_event *ev)
+void i4_browse_window_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::WINDOW_MESSAGE)
 	{

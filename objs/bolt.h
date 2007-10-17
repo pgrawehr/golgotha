@@ -41,8 +41,8 @@ public:
 
 	void setup(const i4_3d_vector &start_pos,
 			   const i4_3d_vector &target_pos,
-			   g1_object_class *originator,
-			   g1_object_class *target=0);
+			   g1_object_class * originator,
+			   g1_object_class * target=0);
 
 	void setup_look(i4_float _size,
 					i4_float start_width,     i4_float end_width,
@@ -66,9 +66,9 @@ public:
 
 	~g1_bolt_class();
 
-	g1_bolt_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	g1_bolt_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	virtual void think();
 	virtual void post_think();
 

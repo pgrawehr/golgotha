@@ -49,14 +49,14 @@ public:
 	{
 	}
 
-	void project(i4_vertex_class *v)
+	void project(i4_vertex_class * v)
 	{
 		v->px=v->v.x;
 		v->py=v->v.y;
 	}
 
 	// used by poly_clip template function
-	i4_float intersect(i4_vertex_class *v1, i4_vertex_class *v2, int plane)
+	i4_float intersect(i4_vertex_class * v1, i4_vertex_class * v2, int plane)
 	{
 		switch (plane)
 		{
@@ -123,9 +123,9 @@ class g1_vert_transformer
 public:
 	w32 max_cells;
 	w32 t_cells;
-	g1_visible_cell *cell_list;
+	g1_visible_cell * cell_list;
 	i4_transform_class t;
-	g1_map_vertex_class *verts;
+	g1_map_vertex_class * verts;
 	int map_width_p1;
 	i4_float xscale, yscale;
 
@@ -140,9 +140,9 @@ public:
 	}
 
 	g1_vert_transformer(i4_transform_class &trans,
-						g1_map_vertex_class *verts,
+						g1_map_vertex_class * verts,
 						int map_width_p1,
-						g1_visible_cell *cell_list,
+						g1_visible_cell * cell_list,
 						w32 max_cells,
 						i4_float xscale, i4_float yscale)
 
@@ -168,7 +168,7 @@ public:
 
 public:
 		i4_3d_vector ground;
-		g1_map_vertex_class *v;
+		g1_map_vertex_class * v;
 		w8 x,y;
 
 		screen_pointer& operator=(const screen_pointer& p)
@@ -269,8 +269,8 @@ public:
 
 
 int g1_map_class::calc_visible(i4_transform_class &t,
-							   i4_polygon_class *area_poly,
-							   g1_visible_cell *buffer, w32 buf_elements,
+							   i4_polygon_class * area_poly,
+							   g1_visible_cell * buffer, w32 buf_elements,
 							   i4_float xscale, i4_float yscale)
 {
 	pf_map_calc_visible.start();

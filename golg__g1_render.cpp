@@ -105,7 +105,7 @@ i4_float g1_render_class::scale_x,
 
 sw8 g1_render_class::render_damage_level = -1;
 
-r1_render_api_class *g1_render_class::r_api;
+r1_render_api_class * g1_render_class::r_api;
 
 
 float g1_render_class::calculate_frame_ratio()
@@ -136,14 +136,14 @@ float g1_render_class::calculate_frame_ratio()
 }
 
 // this is the default function for handling tinted polygons
-g1_quad_class *g1_tint_modify_function(g1_quad_class *in,
+g1_quad_class *g1_tint_modify_function(g1_quad_class * in,
 									   g1_player_type player)
 {
 	g1_render.r_api->set_color_tint(g1_player_tint_handles[player]);
 	return in;
 }
 
-void g1_get_ambient_function(i4_transform_class *object_to_world,
+void g1_get_ambient_function(i4_transform_class * object_to_world,
 							 i4_float &ar, i4_float &ag, i4_float &ab)
 {
 	g1_get_map()->get_illumination_light(object_to_world->t.x,
@@ -152,7 +152,7 @@ void g1_get_ambient_function(i4_transform_class *object_to_world,
 
 
 //Does this also need to be changed to double precision?
-void fast_transform(i4_transform_class *t,const i4_3d_vector &src, r1_3d_point_class &dst)
+void fast_transform(i4_transform_class * t,const i4_3d_vector &src, r1_3d_point_class &dst)
 {
 #ifndef _WINDOWS
 	dst.x = t->x.x*src.x + t->y.x*src.y + t->z.x*src.z + t->t.x;
@@ -161,111 +161,147 @@ void fast_transform(i4_transform_class *t,const i4_3d_vector &src, r1_3d_point_c
 #else
 	_asm
 	{
-    mov     eax, t
-    mov     ecx, src
-    mov     edx, dst
+		mov eax, t
+		mov ecx, src
+		mov edx, dst
 
-    //optimized transformation: 34 cycles                
-    //compute t->x.x*src.x, t->x.y*src.x, t->x.z*src.x
-    fld dword ptr  [ecx+0]     ;starts & ends on cycle 0
-    fmul dword ptr [eax+0]     ;starts on cycle 1       
-    fld dword ptr  [ecx+0]     ;starts & ends on cycle 2
-    fmul dword ptr [eax+4]     ;starts on cycle 3        
-    fld dword ptr  [ecx+0]     ;starts & ends on cycle 4
-    fmul dword ptr [eax+8]     ;starts on cycle 5    
-    
-    //compute t->y.x*src.y, t->y.y*src.y, t->y.z*src.y
-    fld dword ptr  [ecx+4]     ;starts & ends on cycle 6
-    fmul dword ptr [eax+12]    ;starts on cycle 7      
-    fld dword ptr  [ecx+4]     ;starts & ends on cycle 8
-    fmul dword ptr [eax+16]    ;starts on cycle 9       
-    fld dword ptr  [ecx+4]     ;starts & ends on cycle 10
-    fmul dword ptr [eax+20]    ;starts on cycle 11  
-    
-    //st0           st1           st2           st3           st4           st5
-    //t->y.z*src.y  t->y.y*src.y  t->y.x*src.y  t->x.z*src.x  t->x.y*src.x  t->x.x*src.x
-    
-    fxch           st(2)       ;no cost             
-    //st0           st1           st2           st3           st4           st5
-    //t->y.x*src.y  t->y.y*src.y  t->y.z*src.y  t->x.z*src.x  t->x.y*src.x  t->x.x*src.x
+		//optimized transformation: 34 cycles
+		//compute t->x.x*src.x, t->x.y*src.x, t->x.z*src.x
+		fld dword ptr  [ecx+0]     ;
+		starts & ends on cycle 0
+		fmul dword ptr [eax+0]     ;
+		starts on cycle 1
+		fld dword ptr  [ecx+0]     ;
+		starts & ends on cycle 2
+		fmul dword ptr [eax+4]     ;
+		starts on cycle 3
+		fld dword ptr  [ecx+0]     ;
+		starts & ends on cycle 4
+		fmul dword ptr [eax+8]     ;
+		starts on cycle 5
 
-    faddp          st(5),st(0) ;starts on cycle 12  
-    //st0           st1           st2           st3           st4 
-    //t->y.y*src.y  t->y.z*src.y  t->x.z*src.x  t->x.y*src.x  t->x.x*src.x+
-    //                                                        t->y.x*src.y
+		//compute t->y.x*src.y, t->y.y*src.y, t->y.z*src.y
+		fld dword ptr  [ecx+4]     ;
+		starts & ends on cycle 6
+		fmul dword ptr [eax+12]    ;
+		starts on cycle 7
+		fld dword ptr  [ecx+4]     ;
+		starts & ends on cycle 8
+		fmul dword ptr [eax+16]    ;
+		starts on cycle 9
+		fld dword ptr  [ecx+4]     ;
+		starts & ends on cycle 10
+		fmul dword ptr [eax+20]    ;
+		starts on cycle 11
 
-    faddp          st(3),st(0) ;starts on cycle 13  
-    //st0           st1           st2           st3
-    //t->y.z*src.y  t->x.z*src.x  t->x.y*src.x+ t->x.x*src.x+
-    //                            t->y.y*src.y  t->y.x*src.y
+		//st0           st1           st2           st3           st4           st5
+		//t->y.z*src.y  t->y.y*src.y  t->y.x*src.y  t->x.z*src.x  t->x.y*src.x  t->x.x*src.x
 
-    faddp          st(1),st(0) ;starts on cycle 14
-    //st0           st1           st2
-    //t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
-    //t->y.z*src.y  t->y.y*src.y  t->y.x*src.y
+		fxch           st(2)       ;
+		no cost
+		//st0           st1           st2           st3           st4           st5
+		//t->y.x*src.y  t->y.y*src.y  t->y.z*src.y  t->x.z*src.x  t->x.y*src.x  t->x.x*src.x
 
-    //compute t->z.x*src.z, t->z.y*src.z, t->z.z*src.z
-    fld dword ptr  [ecx+8]     ;starts & ends on cycle 15
-    fmul dword ptr [eax+24]    ;starts on cycle 16      
-    fld dword ptr  [ecx+8]     ;starts & ends on cycle 17
-    fmul dword ptr [eax+28]    ;starts on cycle 18       
-    fld dword ptr  [ecx+8]     ;starts & ends on cycle 19
-    fmul dword ptr [eax+32]    ;starts on cycle 20       
-    
-    //st0           st1           st2           st3           st4           st5
-    //t->z.z*src.z  t->z.y*src.z  t->z.x*src.z  t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
-    //                                          t->y.z*src.y  t->y.y*src.y  t->y.x*src.y
-    fxch           st(2)       ;no cost                  
-    
-    faddp          st(5),st(0) ;starts on cycle 21       
-    //st0           st1           st2           st3           st4
-    //t->z.y*src.z  t->z.z*src.z  t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
-    //                            t->y.z*src.y  t->y.y*src.y  t->y.x*src.y+
-    //                                                        t->z.x*src.z
-    
-    faddp          st(3),st(0) ;starts on cycle 22       
-    
-    //st0           st1           st2           st3
-    //t->z.z*src.z  t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
-    //              t->y.z*src.y  t->y.y*src.y+ t->y.x*src.y+
-    //                            t->z.y*src.z  t->z.x*src.z    
-    
-    faddp          st(1),st(0) ;starts on cycle 23       
-    //st0           st1           st2
-    //t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
-    //t->y.z*src.y+ t->y.y*src.y+ t->y.x*src.y+
-    //t->z.z*src.z  t->z.y*src.z  t->z.x*src.z
+		faddp          st(5),st(0) ;
+		starts on cycle 12
+		//st0           st1           st2           st3           st4
+		//t->y.y*src.y  t->y.z*src.y  t->x.z*src.x  t->x.y*src.x  t->x.x*src.x+
+		//                                                        t->y.x*src.y
 
-    fxch           st(2)       ;no cost                  
-    //st0            st1           st2
-    //t->x.x*src.x+  t->x.y*src.x+ t->x.z*src.x+ 
-    //t->y.x*src.y+  t->y.y*src.y+ t->y.z*src.y+ 
-    //t->z.x*src.z   t->z.y*src.z  t->z.z*src.z
-    
-    fadd dword ptr [eax+36]    ;starts on cycle 24       
-    fxch           st(1)       ;starts on cycle 25       
-    
-    //st0            st1           st2
-    //t->x.y*src.x+  dest_x        t->x.z*src.x+ 
-    //t->y.y*src.y+                t->y.z*src.y+ 
-    //t->z.y*src.z                 t->z.z*src.z
-    
-    fadd dword ptr [eax+40]    ;starts on cycle 26       
-    fxch           st(2)       ;no cost                  
-    
-    //st0            st1    st2
-    //t->x.z*src.x+  dest_x dest_y
-    //t->y.z*src.y+         
-    //t->z.z*src.z
-    fadd dword ptr [eax+44]    ;starts on cycle 27       
-    fxch           st(1)       ;no cost
-    
-    //st0     st1    st2
-    //dest_x  dest_z dest_y
-    
-    fstp dword ptr [edx+0]     ;starts on cycle 28, ends on cycle 29
-    fstp dword ptr [edx+8]     ;starts on cycle 30, ends on cycle 31
-    fstp dword ptr [edx+4]     ;starts on cycle 32, ends on cycle 33  
+		faddp          st(3),st(0) ;
+		starts on cycle 13
+		//st0           st1           st2           st3
+		//t->y.z*src.y  t->x.z*src.x  t->x.y*src.x+ t->x.x*src.x+
+		//                            t->y.y*src.y  t->y.x*src.y
+
+		faddp          st(1),st(0) ;
+		starts on cycle 14
+		//st0           st1           st2
+		//t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
+		//t->y.z*src.y  t->y.y*src.y  t->y.x*src.y
+
+		//compute t->z.x*src.z, t->z.y*src.z, t->z.z*src.z
+		fld dword ptr  [ecx+8]     ;
+		starts & ends on cycle 15
+		fmul dword ptr [eax+24]    ;
+		starts on cycle 16
+		fld dword ptr  [ecx+8]     ;
+		starts & ends on cycle 17
+		fmul dword ptr [eax+28]    ;
+		starts on cycle 18
+		fld dword ptr  [ecx+8]     ;
+		starts & ends on cycle 19
+		fmul dword ptr [eax+32]    ;
+		starts on cycle 20
+
+		//st0           st1           st2           st3           st4           st5
+		//t->z.z*src.z  t->z.y*src.z  t->z.x*src.z  t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
+		//                                          t->y.z*src.y  t->y.y*src.y  t->y.x*src.y
+		fxch           st(2)       ;
+		no cost
+
+		faddp          st(5),st(0) ;
+		starts on cycle 21
+		//st0           st1           st2           st3           st4
+		//t->z.y*src.z  t->z.z*src.z  t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
+		//                            t->y.z*src.y  t->y.y*src.y  t->y.x*src.y+
+		//                                                        t->z.x*src.z
+
+		faddp          st(3),st(0) ;
+		starts on cycle 22
+
+		//st0           st1           st2           st3
+		//t->z.z*src.z  t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
+		//              t->y.z*src.y  t->y.y*src.y+ t->y.x*src.y+
+		//                            t->z.y*src.z  t->z.x*src.z
+
+		faddp          st(1),st(0) ;
+		starts on cycle 23
+		//st0           st1           st2
+		//t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
+		//t->y.z*src.y+ t->y.y*src.y+ t->y.x*src.y+
+		//t->z.z*src.z  t->z.y*src.z  t->z.x*src.z
+
+		fxch           st(2)       ;
+		no cost
+		//st0            st1           st2
+		//t->x.x*src.x+  t->x.y*src.x+ t->x.z*src.x+
+		//t->y.x*src.y+  t->y.y*src.y+ t->y.z*src.y+
+		//t->z.x*src.z   t->z.y*src.z  t->z.z*src.z
+
+		fadd dword ptr [eax+36]    ;
+		starts on cycle 24
+		fxch           st(1)       ;
+		starts on cycle 25
+
+		//st0            st1           st2
+		//t->x.y*src.x+  dest_x        t->x.z*src.x+
+		//t->y.y*src.y+                t->y.z*src.y+
+		//t->z.y*src.z                 t->z.z*src.z
+
+		fadd dword ptr [eax+40]    ;
+		starts on cycle 26
+		fxch           st(2)       ;
+		no cost
+
+		//st0            st1    st2
+		//t->x.z*src.x+  dest_x dest_y
+		//t->y.z*src.y+
+		//t->z.z*src.z
+		fadd dword ptr [eax+44]    ;
+		starts on cycle 27
+		fxch           st(1)       ;
+		no cost
+
+		//st0     st1    st2
+		//dest_x  dest_z dest_y
+
+		fstp dword ptr [edx+0]     ;
+		starts on cycle 28, ends on cycle 29
+		fstp dword ptr [edx+8]     ;
+		starts on cycle 30, ends on cycle 31
+		fstp dword ptr [edx+4]     ;
+		starts on cycle 32, ends on cycle 33
 	}
 #endif
 }
@@ -285,7 +321,7 @@ void g1_render_class::uninstall_font()
 void g1_render_class::install_font()
 {
 	uninstall_font();
-	i4_image_class *im=i4_load_image("bitmaps/golg_font_18.bmp");
+	i4_image_class * im=i4_load_image("bitmaps/golg_font_18.bmp");
 	if (im)
 	{
 		rendered_font=new r1_font_class(r_api, im);
@@ -293,8 +329,8 @@ void g1_render_class::install_font()
 	}
 }
 
-static int g1_quad_sorter(g1_quad_class *const *a,
-						  g1_quad_class *const *b)
+static int g1_quad_sorter(g1_quad_class * const * a,
+						  g1_quad_class * const * b)
 {
 	if (*a==*b)
 	{
@@ -311,14 +347,15 @@ static int g1_quad_sorter(g1_quad_class *const *a,
 }
 
 i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class *> &qif,
-												  g1_quad_object_class *obj,
-												  g1_vert_class *src_vert,
-												  i4_transform_class *tf,
-												  i4_transform_class *object_to_world,
+												  g1_quad_object_class * obj,
+												  g1_vert_class * src_vert,
+												  i4_transform_class * tf,
+												  i4_transform_class * object_to_world,
 												  w8 &ANDCODE,
 												  w8 &ORCODE)
 {
-	g1_octree *oc=obj->octree;
+	g1_octree * oc=obj->octree;
+
 	//quads in frustrum
 	pf_draw_octree.start();
 
@@ -344,8 +381,8 @@ i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class *> &qif
 	}
 	qif.sort(g1_quad_sorter);
 
-	g1_quad_class *curquad;
-	g1_vert_class *src_v=0;
+	g1_quad_class * curquad;
+	g1_vert_class * src_v=0;
 
 	i4_3d_vector t_light;
 
@@ -369,7 +406,7 @@ i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class *> &qif
 	w32 n_vert;
 	int vertid;
 	int curquadidx;
-	r1_vert *v;
+	r1_vert * v;
 	w8 code;
 	i4_float ooz,dot,reflected_intensity;
 	for (curquadidx=0; curquadidx<qif.size(); curquadidx++)
@@ -441,13 +478,13 @@ void g1_render_class::ensure_capacity(int num_vertices)
 }
 
 
-void g1_render_class::render_object(g1_quad_object_class *obj,
-									i4_transform_class *object_to_view,
-									i4_transform_class *object_to_world,
+void g1_render_class::render_object(g1_quad_object_class * obj,
+									i4_transform_class * object_to_view,
+									i4_transform_class * object_to_world,
 									i4_float texture_scale,
 									int player_num,
 									sw32 current_frame,
-									g1_screen_box *bound_box,
+									g1_screen_box * bound_box,
 									w32 option_flags)
 {
 	if (!obj)
@@ -468,12 +505,12 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 
 
 
-	r1_vert *v              = t_vertices;
-	g1_vert_class *src_vert = obj->get_verts(0, current_frame);
+	r1_vert * v              = t_vertices;
+	g1_vert_class * src_vert = obj->get_verts(0, current_frame);
 	w8 ANDCODE = 0xFF;
 	w8 ORCODE  = 0;
 
-	g1_vert_class *src_v=src_vert;
+	g1_vert_class * src_v=src_vert;
 
 	//pf_render_object_transform.start();
 
@@ -636,7 +673,7 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 	//pf_render_object_light.stop();
 
 	pf_render_object_pack.start();
-	g1_quad_class *q_ptr = obj->quad, *q;
+	g1_quad_class * q_ptr = obj->quad, * q;
 	int allquads=obj->num_quad;
 	if (use_ot)
 	{
@@ -701,7 +738,7 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 				{
 					for (j=0; j<num_poly_verts; j++)
 					{
-						r1_vert *temp_vert = &t_vertices[q->vertex_ref[j]];
+						r1_vert * temp_vert = &t_vertices[q->vertex_ref[j]];
 
 						float ooz = temp_vert->w;
 
@@ -744,7 +781,7 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 				{
 					for (j=0; j<num_poly_verts; j++)
 					{
-						r1_vert *temp_vert = &t_vertices[q->vertex_ref[j]];
+						r1_vert * temp_vert = &t_vertices[q->vertex_ref[j]];
 
 						float ooz = temp_vert->w;
 
@@ -767,7 +804,7 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 			{
 				r1_vert temp_buf_1[64];
 				r1_vert temp_buf_2[64];
-				r1_vert *clipped_poly;
+				r1_vert * clipped_poly;
 
 				clipped_poly = r_api->clip_poly(&num_poly_verts,
 												t_vertices,
@@ -784,7 +821,7 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 
 					if (!bound_box)
 					{
-						r1_vert *temp_vert = clipped_poly;
+						r1_vert * temp_vert = clipped_poly;
 
 						for (j=0; j<num_poly_verts; j++, temp_vert++)
 						{
@@ -802,7 +839,7 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 					}
 					else
 					{
-						r1_vert *temp_vert = clipped_poly;
+						r1_vert * temp_vert = clipped_poly;
 
 						for (j=0; j<num_poly_verts; j++,temp_vert++)
 						{
@@ -868,8 +905,8 @@ void g1_render_class::render_object(g1_quad_object_class *obj,
 	pf_render_object_pack.stop();
 }
 
-void g1_render_class::render_object_polys(g1_quad_object_class *obj,
-										  i4_transform_class *object_to_view,
+void g1_render_class::render_object_polys(g1_quad_object_class * obj,
+										  i4_transform_class * object_to_view,
 										  sw32 current_frame)
 {
 	int i,j, /*k,*/ num_vertices;
@@ -883,13 +920,13 @@ void g1_render_class::render_object_polys(g1_quad_object_class *obj,
 		max_t_vertices=num_vertices+50;
 		t_vertices=(r1_vert *)realloc(t_vertices,max_t_vertices*sizeof(r1_vert));
 	}
-	r1_vert *v              = t_vertices;
-	g1_vert_class *src_vert = obj->get_verts(0, current_frame);
+	r1_vert * v              = t_vertices;
+	g1_vert_class * src_vert = obj->get_verts(0, current_frame);
 
 	w8 ANDCODE = 0xFF;
 	w8 ORCODE  = 0;
 
-	g1_vert_class *src_v=src_vert;
+	g1_vert_class * src_v=src_vert;
 
 	pf_render_object_transform.start();
 
@@ -943,7 +980,7 @@ void g1_render_class::render_object_polys(g1_quad_object_class *obj,
 
 	pf_render_object_pack.start();
 
-	g1_quad_class *q_ptr = obj->quad;
+	g1_quad_class * q_ptr = obj->quad;
 
 	for (i=0; i<obj->num_quad; i++, q_ptr++)
 	{
@@ -957,7 +994,7 @@ void g1_render_class::render_object_polys(g1_quad_object_class *obj,
 		{
 			r1_vert temp_buf_1[64];
 			r1_vert temp_buf_2[64];
-			r1_vert *clipped_poly;
+			r1_vert * clipped_poly;
 
 			clipped_poly = r_api->clip_poly(&num_poly_verts,
 											t_vertices,
@@ -969,7 +1006,7 @@ void g1_render_class::render_object_polys(g1_quad_object_class *obj,
 
 			if (clipped_poly && num_poly_verts>=3)
 			{
-				r1_vert *temp_vert = clipped_poly;
+				r1_vert * temp_vert = clipped_poly;
 
 				for (j=0; j<num_poly_verts; j++, temp_vert++)
 				{
@@ -994,7 +1031,7 @@ void g1_render_class::render_3d_line(const i4_3d_point_class &p1,
 									 const i4_3d_point_class &p2,
 									 i4_color color1,
 									 i4_color color2,
-									 i4_transform_class *t,
+									 i4_transform_class * t,
 									 i4_bool draw_in_front_of_everything)
 {
 	r1_vert v[2];
@@ -1056,7 +1093,7 @@ void g1_render_class::render_2d_point(int px, int py, i4_color color)
 	}
 }
 
-void g1_render_class::render_3d_point(const i4_3d_point_class &p1, i4_color color, i4_transform_class *t)
+void g1_render_class::render_3d_point(const i4_3d_point_class &p1, i4_color color, i4_transform_class * t)
 {
 	r1_vert v;
 
@@ -1070,9 +1107,10 @@ void g1_render_class::render_3d_point(const i4_3d_point_class &p1, i4_color colo
 	}
 }
 
-void g1_draw_vert_line(float x, float y1, float y2, r1_vert *v)
+void g1_draw_vert_line(float x, float y1, float y2, r1_vert * v)
 {
-	r1_vert *v1=v, *v2=v+1;
+	r1_vert * v1=v, * v2=v+1;
+
 	v1->px=x;
 	v2->px=x;
 	v1->py=y1;
@@ -1083,10 +1121,11 @@ void g1_draw_vert_line(float x, float y1, float y2, r1_vert *v)
 
 
 
-void g1_draw_horz_line(float y, float x1, float x2, r1_vert *v)
+void g1_draw_horz_line(float y, float x1, float x2, r1_vert * v)
 
 {
-	r1_vert *v1=v, *v2=v+1;
+	r1_vert * v1=v, * v2=v+1;
+
 	v1->py=y;
 	v2->py=y;
 	v1->px=x1;
@@ -1099,7 +1138,7 @@ void g1_draw_horz_line(float y, float x1, float x2, r1_vert *v)
    @param for_who The object itself
  */
 
-void g1_render_class::draw_outline(g1_screen_box *box, g1_object_class *for_who)
+void g1_render_class::draw_outline(g1_screen_box * box, g1_object_class * for_who)
 {
 	if ((box->flags&g1_screen_box::DRAWN))
 	{
@@ -1184,7 +1223,7 @@ void g1_render_class::draw_outline(g1_screen_box *box, g1_object_class *for_who)
 	}
 	else
 	{
-		g1_player_info_class *p=g1_player_man.get(for_who->player_num);
+		g1_player_info_class * p=g1_player_man.get(for_who->player_num);
 		float r = ((p->map_player_color >> 16) & 0xff) / 255.f;
 		float g = ((p->map_player_color >> 8) & 0xff) / 255.f;
 		float b = (p->map_player_color & 0xff) / 255.0f;
@@ -1299,7 +1338,7 @@ void g1_render_class::draw_outline(g1_screen_box *box, g1_object_class *for_who)
 	pf_render_draw_outline.stop();
 }
 
-int g1_sprite_depth_compare(const void *a, const void *b)
+int g1_sprite_depth_compare(const void * a, const void * b)
 {
 	if (((g1_post_draw_sprite_struct *)a)->z<((g1_post_draw_sprite_struct *)b)->z)
 	{
@@ -1355,16 +1394,16 @@ void g1_render_class::post_draw_quads()
 
 		for (i=0; i<t; i++)
 		{
-			g1_post_draw_quad_class *q = &g1_post_draw_quads[i];
+			g1_post_draw_quad_class * q = &g1_post_draw_quads[i];
 
 			sw32 num_poly_verts = (q->vert_ref[3]==0xFFFF) ? (3) : (4);
 
-			r1_vert *clipped_poly = r_api->clip_poly(&num_poly_verts,
-													 g1_post_draw_verts,
-													 q->vert_ref,
-													 temp_buf_1,
-													 temp_buf_2,
-													 0);
+			r1_vert * clipped_poly = r_api->clip_poly(&num_poly_verts,
+													  g1_post_draw_verts,
+													  q->vert_ref,
+													  temp_buf_1,
+													  temp_buf_2,
+													  0);
 
 			if (clipped_poly && num_poly_verts>=3)
 			{
@@ -1393,7 +1432,7 @@ void g1_render_class::post_draw_quads()
 
 	for (i=0; i<g1_t_post_draw_sprites; i++)
 	{
-		g1_post_draw_sprite_struct *s=g1_post_draw_sprites + i;
+		g1_post_draw_sprite_struct * s=g1_post_draw_sprites + i;
 		r1_clip_render_textured_rect(s->x1,s->y1,s->x2,s->y2, s->z,
 									 1.0,
 									 i4_f_to_i(g1_render.center_x*2),
@@ -1408,9 +1447,9 @@ void g1_render_class::post_draw_quads()
 
 }
 
-void g1_render_class::clip_render_quad(g1_quad_class *q,
-									   r1_vert *verts,
-									   i4_transform_class *t,
+void g1_render_class::clip_render_quad(g1_quad_class * q,
+									   r1_vert * verts,
+									   i4_transform_class * t,
 									   int current_frame)
 {
 	int i;
@@ -1424,7 +1463,7 @@ void g1_render_class::clip_render_quad(g1_quad_class *q,
 	{
 		int vref=q->vertex_ref[i];
 
-		r1_3d_point_class *v=&verts[vref].v;
+		r1_3d_point_class * v=&verts[vref].v;
 
 		p=i4_3d_vector(v->x, v->y, v->z);
 
@@ -1449,12 +1488,12 @@ void g1_render_class::clip_render_quad(g1_quad_class *q,
 	r1_vert temp_buf_2[32];
 
 
-	r1_vert *clipped_poly = r_api->clip_poly(&num_poly_verts,
-											 verts,
-											 q->vertex_ref,
-											 temp_buf_1,
-											 temp_buf_2,
-											 R1_CLIP_NO_CALC_OUTCODE);
+	r1_vert * clipped_poly = r_api->clip_poly(&num_poly_verts,
+											  verts,
+											  q->vertex_ref,
+											  temp_buf_1,
+											  temp_buf_2,
+											  R1_CLIP_NO_CALC_OUTCODE);
 
 
 	if (clipped_poly && num_poly_verts>=3)
@@ -1486,8 +1525,8 @@ void g1_render_class::clip_render_quad(g1_quad_class *q,
 }
 
 
-void g1_render_class::add_translucent_trail(i4_transform_class *t,
-											i4_3d_point_class *spots, int t_spots,
+void g1_render_class::add_translucent_trail(i4_transform_class * t,
+											i4_3d_point_class * spots, int t_spots,
 											float start_width, float end_width,
 											float start_alpha, float end_alpha,
 											w32 sc, w32 ec)
@@ -1525,7 +1564,7 @@ void g1_render_class::add_translucent_trail(i4_transform_class *t,
 
 	int i;
 	i4_3d_point_class proj[256];
-	i4_3d_point_class *p = proj;
+	i4_3d_point_class * p = proj;
 
 	for (i=0; i<t_spots; i++, p++)
 	{
@@ -1641,16 +1680,16 @@ void g1_render_class::add_translucent_trail(i4_transform_class *t,
 					   (proj[i].y - perp.y * next_width) * ooyscale,
 					   proj[i].z, r,g,b, edge_alpha);
 
-		g1_post_draw_quad_class q1(sv+ i *3,
-								   sv + i *3+1,
-								   sv + i *3-2,
-								   sv + i *3-3);
+		g1_post_draw_quad_class q1(sv+ i * 3,
+								   sv + i * 3+1,
+								   sv + i * 3-2,
+								   sv + i * 3-3);
 		add_post_draw_quad(q1);
 
-		g1_post_draw_quad_class q2(sv +i *3+1,
-								   sv + i *3+2,
-								   sv + i *3-1,
-								   sv + i *3-2);
+		g1_post_draw_quad_class q2(sv +i * 3+1,
+								   sv + i * 3+2,
+								   sv + i * 3-1,
+								   sv + i * 3-2);
 		add_post_draw_quad(q2);
 	}
 
@@ -1658,8 +1697,8 @@ void g1_render_class::add_translucent_trail(i4_transform_class *t,
 }
 
 
-inline g1_map_vertex_class *g1vmin(g1_map_vertex_class *v1,
-								   g1_map_vertex_class *v2)
+inline g1_map_vertex_class *g1vmin(g1_map_vertex_class * v1,
+								   g1_map_vertex_class * v2)
 {
 	if (v1->get_height_value()<v2->get_height_value())
 	{
@@ -1674,7 +1713,7 @@ inline g1_map_vertex_class *g1vmin(g1_map_vertex_class *v1,
 
 i4_bool g1_render_class::project_point(const i4_3d_point_class &p,
 									   r1_vert &v,
-									   i4_transform_class *transform)
+									   i4_transform_class * transform)
 {
 	i4_3d_vector &temp_v = (i4_3d_vector &)v.v;
 	/*i4_d3d_vector dtemp_v;
@@ -1731,10 +1770,11 @@ i4_bool g1_render_class::project_point(const i4_3d_point_class &p,
 }
 
 w8 g1_render_class::point_classify(const i4_3d_point_class &p,
-								   i4_transform_class *transform)
+								   i4_transform_class * transform)
 {
 
 	i4_3d_vector temp;
+
 	transform->transform(p,temp);
 	//temp.x *= scale_x;  //although project_point above is exactly doing the same,
 	//temp.y *= scale_y;  //this is wrong here (causes point to be off by a factor for the larger of the two)
@@ -1772,14 +1812,14 @@ w8 g1_render_class::point_classify(const i4_3d_point_class &p,
 }
 
 i4_bool g1_render_class::point_in_frustrum(const i4_3d_point_class &p,
-										   i4_transform_class *transform)
+										   i4_transform_class * transform)
 {
 	return (point_classify(p,transform)==0);
 }
 
 i4_bool g1_render_class::sphere_in_frustrum(const i4_3d_point_class center,
 											i4_float size,
-											i4_transform_class *transform)
+											i4_transform_class * transform)
 {
 	//check wheter all 8 vertices of the cube lie on the same
 	//side of the frustrum (otherwise, it might be that the cube
@@ -1791,6 +1831,7 @@ i4_bool g1_render_class::sphere_in_frustrum(const i4_3d_point_class center,
 	//if the andcode becomes zero at one point, at least one part
 	//of the cube lies in the frustrum
 	w8 ANDCODE=0xff;
+
 	ANDCODE&=point_classify(i4_3d_point_class(center.x+s,center.y+s,center.z+s),
 							transform);
 	if (!ANDCODE)
@@ -1846,7 +1887,7 @@ i4_bool g1_render_class::cube_in_frustrum(const i4_3d_point_class center,
 										  i4_float xsize,
 										  i4_float ysize,
 										  i4_float zsize,
-										  i4_transform_class *transform)
+										  i4_transform_class * transform)
 {
 	//check wheter all 8 vertices of the cube lie on the same
 	//side of the frustrum (otherwise, it might be that the cube
@@ -1860,6 +1901,7 @@ i4_bool g1_render_class::cube_in_frustrum(const i4_3d_point_class center,
 	//if the andcode becomes zero at one point, at least one part
 	//of the cube lies in the frustrum
 	w8 ANDCODE=0xff;
+
 	ANDCODE&=point_classify(i4_3d_point_class(center.x+xs,center.y+ys,center.z+zs),
 							transform);
 	if (!ANDCODE)
@@ -1915,7 +1957,7 @@ void g1_render_class::cube_in_frustrum(const i4_3d_point_class center,
 									   i4_float xsize,
 									   i4_float ysize,
 									   i4_float zsize,
-									   i4_transform_class *transform,
+									   i4_transform_class * transform,
 									   w8 &ANDCODE,
 									   w8 &ORCODE)
 {
@@ -1928,6 +1970,7 @@ void g1_render_class::cube_in_frustrum(const i4_3d_point_class center,
 	i4_float xs=xsize/2;
 	i4_float ys=ysize/2;
 	i4_float zs=zsize/2;
+
 	//if the andcode becomes zero at one point, at least one part
 	//of the cube lies in the frustrum
 	ANDCODE=0xff;
@@ -1972,6 +2015,7 @@ void g1_render_class::draw_rectangle(int sx1, int sy1, int sx2, int sy2, i4_colo
 									 i4_draw_context_class &context)
 {
 	sw32 x1,y1,x2,y2;
+
 	if (sx1<sx2)
 	{
 		x1=sx1;
@@ -2002,7 +2046,7 @@ void g1_render_class::draw_rectangle(int sx1, int sy1, int sx2, int sy2, i4_colo
 }
 
 
-void g1_setup_tri_texture_coords(r1_vert *tri1, r1_vert *tri2,
+void g1_setup_tri_texture_coords(r1_vert * tri1, r1_vert * tri2,
 								 int cell_rotation, int cell_is_mirrored)
 {
 	float u[4]={
@@ -2056,7 +2100,7 @@ void g1_render_class::render_sprite(const i4_3d_vector &p,
 	{
 		if (g1_t_post_draw_sprites<G1_MAX_SPRITES)
 		{
-			g1_post_draw_sprite_struct *s=g1_post_draw_sprites + g1_t_post_draw_sprites;
+			g1_post_draw_sprite_struct * s=g1_post_draw_sprites + g1_t_post_draw_sprites;
 
 			float ooz = r1_ooz(p.z);
 
@@ -2093,7 +2137,7 @@ void g1_render_class::render_near_sprite(float px, float py,
 {
 	if (g1_t_post_draw_sprites<G1_MAX_SPRITES)
 	{
-		g1_post_draw_sprite_struct *s=g1_post_draw_sprites + g1_t_post_draw_sprites;
+		g1_post_draw_sprite_struct * s=g1_post_draw_sprites + g1_t_post_draw_sprites;
 		s->x1=px-sprite_width/2;
 		s->y1=py-sprite_height/2;
 		s->x2=px+sprite_width/2;

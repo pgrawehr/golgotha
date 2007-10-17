@@ -21,14 +21,16 @@ void i4_wait_threads()  // waits for all threads to terminate (don't call from a
 	while (i4_thread_count!=0)
 		i4_thread_yield();
 
+
 }
 
 static i4_critical_section_class i4_thread_start_lock;
 static i4_thread_func_type i4_thread_to_start;
 
-void i4_thread_starter(void *arg)
+void i4_thread_starter(void * arg)
 {
 	i4_thread_func_type start=i4_thread_to_start;
+
 	i4_thread_start_lock.unlock();
 	start(arg);
 
@@ -39,7 +41,7 @@ void i4_thread_starter(void *arg)
 	_endthread();
 }
 
-void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void *arg_list)
+void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void * arg_list)
 
 {
 	i4_thread_start_lock.lock();

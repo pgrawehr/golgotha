@@ -50,6 +50,7 @@ inline w32 i4_16bpp_to_32bpp(w32 color)
 	w32 r=((color>>11) & (1|2|4|8|16))   <<3;
 	w32 g=((color>>5)  & (1|2|4|8|16|32))<<2;
 	w32 b=((color>>0)  & (1|2|4|8|16))   <<3;
+
 	return (r<<16)|(g<<8)|b;
 }
 
@@ -59,7 +60,7 @@ inline w32 i4_rgb_to_32bit(w8 r, w8 g, w8 b)
 }
 
 #if (I4_SCREEN_DEPTH==15)
-inline w16 i4_32bpp_to_screen(w32 color, w32 *pal)
+inline w16 i4_32bpp_to_screen(w32 color, w32 * pal)
 {
 	return i4_32bpp_to_15bpp(color);
 }
@@ -68,7 +69,7 @@ inline w16 i4_32bpp_to_screen(w32 color, w32 *pal)
 
 
 #if (I4_SCREEN_DEPTH==16)
-inline w16 i4_32bpp_to_screen(w32 color, w32 *pal)
+inline w16 i4_32bpp_to_screen(w32 color, w32 * pal)
 {
 	return i4_32bpp_to_16bpp(color);
 }
@@ -77,7 +78,7 @@ inline w16 i4_32bpp_to_screen(w32 color, w32 *pal)
 
 
 #if (I4_SCREEN_DEPTH==32)
-inline w16 i4_32bpp_to_screen(w32 color, w32 *pal)
+inline w16 i4_32bpp_to_screen(w32 color, w32 * pal)
 {
 	return color;
 }
@@ -86,7 +87,7 @@ inline w16 i4_32bpp_to_screen(w32 color, w32 *pal)
 
 #if (I4_SCREEN_DEPTH==8)
 #error need to solve this problem
-inline w16 i4_32bpp_to_screen(w32 color, w32 *pal)
+inline w16 i4_32bpp_to_screen(w32 color, w32 * pal)
 {
 	return 0;
 }

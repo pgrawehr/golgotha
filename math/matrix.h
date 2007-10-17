@@ -185,6 +185,7 @@ public:
 	//{{{
 	{
 		i4_4x4_matrix_class result;
+
 		multiply(b,result);
 		*this=result;
 	}
@@ -194,6 +195,7 @@ public:
 	//{{{
 	{
 		i4_float vx,vy,vz;
+
 		vx=b.x;
 		vy=b.y;
 		vz=b.z;

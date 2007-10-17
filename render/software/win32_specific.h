@@ -26,7 +26,7 @@ public:
 		return "Software Renderer with ddraw";
 	}
 	~r1_software_dd_class();
-	i4_bool init(i4_display_class *display);
+	i4_bool init(i4_display_class * display);
 	void uninit();
 	i4_bool resize(w16 new_width,w16 new_height);
 	i4_bool expand_type_supported(r1_expand_type type);
@@ -36,7 +36,7 @@ public:
 	void clear_area(int x1, int y1, int x2, int y2, w32 color, float z);
 	i4_image_class *create_compatible_image(w16 w, w16 h);
 
-	void copy_part(i4_image_class *im,
+	void copy_part(i4_image_class * im,
 				   int x, int y,                            // position on screen
 				   int x1, int y1,                          // area of image to copy
 				   int x2, int y2);
@@ -47,8 +47,8 @@ class r1_software_gdi_class :
 {
 protected:
 	friend class r1_software_gdi_render_window_class;
-	i4_image_class *render_image;
-	w16 *render_image_data;
+	i4_image_class * render_image;
+	w16 * render_image_data;
 public:
 	r1_software_gdi_class();
 	char *name()
@@ -56,7 +56,7 @@ public:
 		return "Software Renderer with plain GDI";
 	}
 	~r1_software_gdi_class();
-	i4_bool init(i4_display_class *display);
+	i4_bool init(i4_display_class * display);
 	void uninit();
 	i4_bool resize(w16 new_width,w16 new_height);
 	i4_bool expand_type_supported(r1_expand_type type);
@@ -64,7 +64,7 @@ public:
 												 r1_expand_type expand_type);
 	void clear_area(int x1, int y1, int x2, int y2, w32 color, float z);
 	i4_image_class *create_compatible_image(w16 w, w16 h);
-	void copy_part(i4_image_class *im,
+	void copy_part(i4_image_class * im,
 				   int x, int y,                            // position on screen
 				   int x1, int y1,                          // area of image to copy
 				   int x2, int y2);
@@ -81,7 +81,7 @@ public:
 
 	r1_software_dd_render_window_class(w16 w, w16 h,
 									   r1_expand_type expand_type,
-									   r1_render_api_class *api);
+									   r1_render_api_class * api);
 
 	~r1_software_dd_render_window_class();
 
@@ -90,7 +90,7 @@ public:
 	void draw(i4_draw_context_class &context);
 	//void receive_event(i4_event *ev);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"dd software render window");
 	}
@@ -104,7 +104,7 @@ public:
 
 	r1_software_gdi_render_window_class(w16 w, w16 h,
 										r1_expand_type expand_type,
-										r1_render_api_class *api);
+										r1_render_api_class * api);
 
 
 	~r1_software_gdi_render_window_class();
@@ -112,7 +112,7 @@ public:
 	void draw(i4_draw_context_class &context);
 	//void receive_event(i4_event *ev);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"gdi software render window");
 	}

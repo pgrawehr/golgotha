@@ -121,13 +121,13 @@ void g1_object_controller_class::reset_global_ids()
 	selectable_list.t_recent=0;
 }
 
-i4_bool g1_object_controller_class::add_spin_event(char *model_name, w8 lost)
+i4_bool g1_object_controller_class::add_spin_event(char * model_name, w8 lost)
 {
 	spin_event e(g1_model_list_man.find_handle(model_name), lost);
 	return spin_events.que(e);
 }
 
-g1_player_piece_class *g1_object_controller_class::get_track()
+g1_player_piece_class * g1_object_controller_class::get_track()
 {
 	return g1_player_man.get(team_on())->get_commander();
 }
@@ -145,7 +145,7 @@ void g1_object_controller_class::get_pos(i4_3d_vector& pos)
 }
 
 g1_object_controller_class::g1_object_controller_class(w16 w, w16 h,
-													   i4_graphical_style_class *style)
+													   i4_graphical_style_class * style)
 	: i4_parent_window_class(w,h),
 	  style(style),
 	  notifier(0)
@@ -278,7 +278,7 @@ void g1_object_controller_class::draw_counts()
 		}
 		else
 		{
-			g1_quad_object_class *model = g1_model_list_man.get_model(current_spin.model);
+			g1_quad_object_class * model = g1_model_list_man.get_model(current_spin.model);
 
 			if (model)
 			{
@@ -356,7 +356,7 @@ void g1_object_controller_class::editor_post_draw(i4_draw_context_class &context
 }
 
 //returns true if rendering is enabled after call
-li_object *li_toggle_rendering(li_object *o, li_environment *env)
+li_object *li_toggle_rendering(li_object * o, li_environment * env)
 {
 	g1_disable_all_drawing= (g1_disable_all_drawing+1) % 3;
 	if (g1_disable_all_drawing)
@@ -443,7 +443,7 @@ void g1_object_controller_class::parent_draw(i4_draw_context_class &context)
 		}
 
 
-		g1_player_piece_class *track=get_track();
+		g1_player_piece_class * track=get_track();
 
 		editor_pre_draw(context);
 
@@ -502,14 +502,15 @@ void g1_object_controller_class::parent_draw(i4_draw_context_class &context)
 			g1_render.r_api->clear_area(0,0, width()-1, height()-1, 0, r1_far_clip_z);
 			repeat=i4_T;
 
-			for (i4_idle_class *p=i4_idle_class::first; p; p=p->next)
+			for (i4_idle_class * p=i4_idle_class::first; p; p=p->next)
 			{
 				p->idle();
 			}
 		}
 
 		// keep drawing till everything is rez-ed in
-	} while (repeat);
+	}
+	while (repeat);
 	first_frame=i4_F;
 
 
@@ -588,7 +589,7 @@ void g1_object_controller_class::scroll_message(const i4_const_str &m, i4_color 
 	request_redraw();
 }
 
-void g1_object_controller_class::window_event(i4_window_message_class *wev)
+void g1_object_controller_class::window_event(i4_window_message_class * wev)
 {
 	switch (wev->sub_type)
 	{
@@ -599,7 +600,7 @@ void g1_object_controller_class::window_event(i4_window_message_class *wev)
 	}
 }
 
-void g1_object_controller_class::do_command_event(i4_do_command_event_class *ev)
+void g1_object_controller_class::do_command_event(i4_do_command_event_class * ev)
 {
 	if (!strcmp(ev->command, "Toggle Stats"))
 	{
@@ -620,12 +621,12 @@ void g1_object_controller_class::do_command_event(i4_do_command_event_class *ev)
 	}
 }
 
-void g1_object_controller_class::end_command_event(i4_end_command_event_class *ev)
+void g1_object_controller_class::end_command_event(i4_end_command_event_class * ev)
 {
 	g1_input.receive_event(ev);
 }
 
-g1_object_class *dummy_obj = NULL;
+g1_object_class * dummy_obj = NULL;
 
 void g1_object_controller_class::change_mouse_mask(int new_mask)
 {
@@ -654,7 +655,7 @@ void g1_object_controller_class::change_mouse_mask(int new_mask)
 }
 
 
-void g1_object_controller_class::reparent(i4_image_class *draw_area, i4_parent_window_class *parent)
+void g1_object_controller_class::reparent(i4_image_class * draw_area, i4_parent_window_class * parent)
 {
 	change_mouse_mask(0);
 	i4_parent_window_class::reparent(draw_area, parent);
@@ -664,7 +665,7 @@ void g1_object_controller_class::update_cursor()
 {
 	//last_mouse_x=last_mouse_x();
 	//last_mouse_y=last_mouse_y();
-	g1_object_class *o=find_object_under_mouse(last_mouse_x, last_mouse_y,0);
+	g1_object_class * o=find_object_under_mouse(last_mouse_x, last_mouse_y,0);
 	w8 new_cursor=g1_human->determine_cursor(o);
 
 	if (new_cursor!=cursor_state)
@@ -675,7 +676,7 @@ void g1_object_controller_class::update_cursor()
 }
 
 
-void g1_object_controller_class::receive_event(i4_event *ev)
+void g1_object_controller_class::receive_event(i4_event * ev)
 {
 	i4_parent_window_class::receive_event(ev);
 
@@ -742,13 +743,13 @@ void g1_object_controller_class::receive_event(i4_event *ev)
 				{
 					if (mev->left())
 					{
-						char *s=li_string::get(li_get_value(li_mouse_left_button.get()),0)->value();
+						char * s=li_string::get(li_get_value(li_mouse_left_button.get()),0)->value();
 						i4_end_command_event_class cmd(s, i4_key_man.get_command_id (s), mev->time);
 						g1_input.receive_event(&cmd);
 					}
 					else if (mev->right())
 					{
-						char *s=li_string::get(li_get_value(li_mouse_right_button.get()),0)->value();
+						char * s=li_string::get(li_get_value(li_mouse_right_button.get()),0)->value();
 						i4_end_command_event_class cmd(s, i4_key_man.get_command_id (s), mev->time);
 						g1_input.receive_event(&cmd);
 					}
@@ -767,7 +768,7 @@ void g1_object_controller_class::receive_event(i4_event *ev)
 				{
 					//was the user dragging?
 					//No.
-					g1_object_class *obj=find_object_under_mouse(mev->x,mev->y,mev->left() ? MOUSE_LEFT : 0);
+					g1_object_class * obj=find_object_under_mouse(mev->x,mev->y,mev->left() ? MOUSE_LEFT : 0);
 					if (mev->left())
 					{
 
@@ -846,13 +847,13 @@ void g1_object_controller_class::receive_event(i4_event *ev)
 				{
 					if (mev->left())
 					{
-						char *s=li_string::get(li_get_value(li_mouse_left_button.get()),0)->value();
+						char * s=li_string::get(li_get_value(li_mouse_left_button.get()),0)->value();
 						i4_do_command_event_class cmd(s, i4_key_man.get_command_id (s), mev->time);
 						g1_input.receive_event(&cmd);
 					}
 					else if (mev->right())
 					{
-						char *s=li_string::get(li_get_value(li_mouse_right_button.get()),0)->value();
+						char * s=li_string::get(li_get_value(li_mouse_right_button.get()),0)->value();
 						i4_do_command_event_class cmd(s, i4_key_man.get_command_id (s), mev->time);
 						g1_input.receive_event(&cmd);
 					}
@@ -952,6 +953,7 @@ i4_bool g1_object_controller_class::view_to_game(sw32 mouse_x, sw32 mouse_y,
 	i4_transform_class tran=transform;
 
 	i4_float max_dim = width() > height() ? (i4_float)width() : (i4_float)height();
+
 	max_dim/=2;
 
 	i4_float mx=(float)(mouse_x - width()/2);
@@ -1053,8 +1055,9 @@ i4_bool g1_object_controller_class::view_to_game(sw32 mouse_x, sw32 mouse_y,
 
 void g1_object_controller_class::find_objects_in_rectangle(w32 x1, w32 y1, w32 x2, w32 y2, i4_bool cleartostart)
 {
-	g1_screen_box *a=selectable_list.recent, *current=0;
+	g1_screen_box * a=selectable_list.recent, * current=0;
 	w32 t;
+
 	if (cleartostart&& !i4_current_app->get_window_manager()->shift_pressed())
 	{
 		g1_human->clear_selected();
@@ -1093,9 +1096,9 @@ void g1_object_controller_class::find_objects_in_rectangle(w32 x1, w32 y1, w32 x
 }
 
 
-g1_object_class *g1_object_controller_class::find_object_under_mouse(sw32 mx, sw32 my, w32 flags)
+g1_object_class * g1_object_controller_class::find_object_under_mouse(sw32 mx, sw32 my, w32 flags)
 {
-	g1_screen_box *b=selectable_list.recent, *closest=0;
+	g1_screen_box * b=selectable_list.recent, * closest=0;
 
 	for (int i=0; i<(int)selectable_list.t_recent; i++, b++)
 	{
@@ -1108,8 +1111,8 @@ g1_object_class *g1_object_controller_class::find_object_under_mouse(sw32 mx, sw
 			}
 		}
 	} //won't add an object without a global_id. So these are per se
-	 //not selectable!
-	 //exception: The buttons are a bit special
+	  //not selectable!
+	  //exception: The buttons are a bit special
 	if (closest && closest->flags&g1_screen_box::BUTTON
 		&& g1_global_id.check_id(closest->object_id))
 	{
@@ -1117,8 +1120,8 @@ g1_object_class *g1_object_controller_class::find_object_under_mouse(sw32 mx, sw
 		{
 			return 0;
 		}           //if just collision testing, the buttons don't count.
-		g1_object_class *obj=g1_global_id.get(closest->object_id);
-		char *cmdname=command_lookup_table.get(closest->commandnum)->commandname;
+		g1_object_class * obj=g1_global_id.get(closest->object_id);
+		char * cmdname=command_lookup_table.get(closest->commandnum)->commandname;
 		I4_ASSERT(cmdname, "INTERNAL: Unknown special command identifier found.");
 		obj->message(li_get_symbol("commands-exec"),
 					 li_get_symbol(cmdname),
@@ -1128,7 +1131,7 @@ g1_object_class *g1_object_controller_class::find_object_under_mouse(sw32 mx, sw
 
 	if (closest && g1_global_id.check_id(closest->object_id))
 	{
-		g1_object_class *obj=g1_global_id.get(closest->object_id);
+		g1_object_class * obj=g1_global_id.get(closest->object_id);
 		g1_render.draw_outline(closest,obj);
 		return obj;
 	}
@@ -1192,13 +1195,13 @@ scy("scaley"),scz("scalez"),rotx("rotatex"),roty("rotatey"),rotz("rotatez");
 
 //The next two methods are friend of g1_view_state_class, therefore they are allowed
 //to set the members directly.
-li_object *g1_set_camera_params(li_object *o, li_environment *env)
+li_object *g1_set_camera_params(li_object * o, li_environment * env)
 {
 	if (o==0)
 	{
 		return 0;
 	}
-	li_class *c=li_class::get(li_car(o, env),env);
+	li_class * c=li_class::get(li_car(o, env),env);
 	li_class_context ctx(c);
 	g1_current_controller->scale(scx(),scy(),scz());
 	g1_current_controller->view.end.gx=cx();
@@ -1214,9 +1217,10 @@ li_object *g1_set_camera_params(li_object *o, li_environment *env)
 
 
 
-li_object *g1_edit_camera_params(li_object *o, li_environment *env)
+li_object *g1_edit_camera_params(li_object * o, li_environment * env)
 {
-	li_object *cl=li_new("camera_params",o,env);
+	li_object * cl=li_new("camera_params",o,env);
+
 	li_class_context ctx(li_class::get(cl,env));
 	scx()=g1_current_controller->view.current.scale_x;
 	scy()=g1_current_controller->view.current.scale_y;
@@ -1234,7 +1238,7 @@ li_object *g1_edit_camera_params(li_object *o, li_environment *env)
 
 //This zooms the view to a factor of 3.0 or back to normal (sensefull only in action mode). Hint: Changing the view state
 //to something other than action mode resets the camera to normal.
-li_object *g1_toggle_glasses(li_object *o, li_environment *env)
+li_object *g1_toggle_glasses(li_object * o, li_environment * env)
 {
 	if (g1_current_controller->view.current.scale_y<1.1)
 	{
@@ -1273,6 +1277,7 @@ void g1_object_controller_class::setup_clip()
 {
 	i4_3d_vector a,b;
 	int i;
+
 	// view_point_init.set_to_val();
 	// transform
 	for (i=0; i<NUM_VIEW_POINTS; i++)

@@ -55,7 +55,7 @@ void g1_particle_emitter_class::unoccupy_location()
 	}
 }
 
-void g1_particle_class::load(i4_file_class *fp)
+void g1_particle_class::load(i4_file_class * fp)
 {
 	fp->read_format("ffffffff", &x,&y,&z, &xv,&yv,&zv, &grow_speed, &size);
 	ticks_left=fp->read_32();
@@ -64,14 +64,14 @@ void g1_particle_class::load(i4_file_class *fp)
 	lz=z;
 }
 
-void g1_particle_class::save(i4_file_class *fp)
+void g1_particle_class::save(i4_file_class * fp)
 {
 	fp->write_format("ffffffff", &x,&y,&z, &xv,&yv,&zv, &grow_speed, &size);
 	fp->write_32(ticks_left);
 
 }
 
-g1_particle_emitter_class::g1_particle_emitter_class(g1_object_type id, g1_loader_class *fp)
+g1_particle_emitter_class::g1_particle_emitter_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	cell_on.object=this;
@@ -88,7 +88,7 @@ g1_particle_emitter_class::g1_particle_emitter_class(g1_object_type id, g1_loade
 
 }
 
-void g1_particle_emitter_class::save(g1_saver_class *fp)
+void g1_particle_emitter_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 }
@@ -154,7 +154,7 @@ void g1_particle_emitter_class::move(float new_x, float new_y, float new_h)
 	occupy_location();
 }
 
-void g1_particle_emitter_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_particle_emitter_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	if (!t_in_use)
 	{

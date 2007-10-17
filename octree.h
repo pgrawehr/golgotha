@@ -138,7 +138,7 @@ public:
 	/// This renders all of the lines.
 	/// This is for debugging purposes only!
 	/// \param transform The world-to-camera transform
-	void RenderDebugLines(i4_transform_class *transform);
+	void RenderDebugLines(i4_transform_class * transform);
 
 	/// This clears all of the debug lines
 	void Clear();
@@ -193,7 +193,7 @@ public:
 	/// \return An octree of pWorld or NULL if it is useless to build
 	/// an octree of this object, i.e. because it contains only very
 	/// few vertices.
-	static g1_octree *Build(g1_quad_object_class *pWorld);
+	static g1_octree *Build(g1_quad_object_class * pWorld);
 
 	/// The deserialization constructor.
 	/// This constructor loads the octree from the stream fp.
@@ -201,14 +201,14 @@ public:
 	/// \param pWorld The (already loaded) object we are loading the
 	/// octree for.
 	/// \param fp The file stream to be loaded from.
-	g1_octree(g1_quad_object_class *pWorld, i4_loader_class *fp);
+	g1_octree(g1_quad_object_class * pWorld, i4_loader_class * fp);
 	/// The destructor.
 	~g1_octree();
 
 	/// Saves an octree.
 	/// Writes a serialized version of the octree to the disk.
 	/// \param fp The file pointer to be used.
-	void save(i4_saver_class *fp);
+	void save(i4_saver_class * fp);
 
 	/// This returns the center of this node.
 	i4_3d_vector GetCenter() const
@@ -237,13 +237,13 @@ public:
 	/// This sets the initial width, height and depth for the whole scene.
 	/// It modifies the current instance.
 	/// \param pWorld The object we're checking for.
-	void GetSceneDimensions(g1_quad_object_class *pWorld);
+	void GetSceneDimensions(g1_quad_object_class * pWorld);
 
 	/// This returns the number of polygons in our entire scene.
 	/// \param pWorld The master object we're counting triangles on.
 	/// \return A triangle count. The returned value is actually the same
 	/// as pWorld->num_verts.
-	int GetSceneTriangleCount(g1_quad_object_class *pWorld);
+	int GetSceneTriangleCount(g1_quad_object_class * pWorld);
 
 	// This returns this nodes display list ID
 	//int GetDisplayListID()		{   return m_DisplayListID;		}
@@ -271,17 +271,17 @@ public:
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 
 	/// This subdivides a node depending on the triangle count and node width.
-	i4_bool CreateNode(g1_quad_object_class *pWorld, tFaceList *pList, int numberOfTriangles, i4_3d_vector vCenter,
+	i4_bool CreateNode(g1_quad_object_class * pWorld, tFaceList * pList, int numberOfTriangles, i4_3d_vector vCenter,
 					   float xwidth,float ywidth, float zwidth);
 
 	/// This cleans up the new subdivided node creation process, so our code isn't HUGE!
-	i4_bool CreateNewNode(g1_quad_object_class *pWorld, tFaceList &pList, int triangleCount,
+	i4_bool CreateNewNode(g1_quad_object_class * pWorld, tFaceList &pList, int triangleCount,
 						  i4_3d_vector vCenter,
 						  float xwidth, float ywidth, float zwidth,
 						  int nodeID);
 
 	/// Once we are finished subdividing we need to assign the face indices to the end node.
-	void AssignTrianglesToNode(g1_quad_object_class *pWorld, int numberOfTriangles);
+	void AssignTrianglesToNode(g1_quad_object_class * pWorld, int numberOfTriangles);
 
 	/// Prepare for the drawing of the octree.
 	/// This goes through each of the nodes and then draws the end nodes vertices.
@@ -296,7 +296,7 @@ public:
 	/// method returns never false.
 	/// \return i4_T if it makes sense to draw using the octree, false
 	/// if not.
-	i4_bool DrawOctree(i4_transform_class *transform, g1_quadlist &quads, int depth);
+	i4_bool DrawOctree(i4_transform_class * transform, g1_quadlist &quads, int depth);
 
 	/// Scale the octree cubes.
 	/// If the models are scaled to fit the size of the world (the common
@@ -394,7 +394,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the left neighbour or NULL.
 	 */
-	g1_octree *GetNeighbourLeft(g1_octree *root);
+	g1_octree *GetNeighbourLeft(g1_octree * root);
 
 	/**
 	 * This method returns a pointer to the left neighbour. If no neighbour is found,
@@ -406,7 +406,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the left neighbour with same level or NULL.
 	 */
-	g1_octree *GetNeighbourLeftSameLevel(g1_octree *root);
+	g1_octree *GetNeighbourLeftSameLevel(g1_octree * root);
 
 	/**
 	 * This method returns a pointer of the right neighbour. If no neighbour is found,
@@ -415,7 +415,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the right neighbour or NULL.
 	 */
-	g1_octree *GetNeighbourRight(g1_octree *root);
+	g1_octree *GetNeighbourRight(g1_octree * root);
 
 	/**
 	 * This method returns a pointer to the right neighbour. If no neighbour is found,
@@ -427,7 +427,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the right neighbour with same level or NULL.
 	 */
-	g1_octree *GetNeighbourRightSameLevel(g1_octree *root);
+	g1_octree *GetNeighbourRightSameLevel(g1_octree * root);
 
 	/**
 	 * This method returns a pointer of the front neighbour. If no neighbour is found,
@@ -436,7 +436,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the front neighbour or NULL.
 	 */
-	g1_octree *GetNeighbourFront(g1_octree *root);
+	g1_octree *GetNeighbourFront(g1_octree * root);
 
 	/**
 	 * This method returns a pointer to the front neighbour. If no neighbour is found,
@@ -448,7 +448,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the front neighbour with same level or NULL.
 	 */
-	g1_octree *GetNeighbourFrontSameLevel(g1_octree *root);
+	g1_octree *GetNeighbourFrontSameLevel(g1_octree * root);
 
 	/**
 	 * This method returns a pointer of the rear neighbour. If no neighbour is found,
@@ -457,7 +457,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the rear neighbour or NULL.
 	 */
-	g1_octree *GetNeighbourBack(g1_octree *root);
+	g1_octree *GetNeighbourBack(g1_octree * root);
 
 	/**
 	 * This method returns a pointer to the rear neighbour. If no neighbour is found,
@@ -469,7 +469,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the rear neighbour with same level or NULL.
 	 */
-	g1_octree *GetNeighbourBackSameLevel(g1_octree *root);
+	g1_octree *GetNeighbourBackSameLevel(g1_octree * root);
 
 	/**
 	 * This method returns a pointer of the bottom neighbour. If no neighbour is found,
@@ -478,7 +478,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the bottom neighbour or NULL.
 	 */
-	g1_octree *GetNeighbourBottom(g1_octree *root);
+	g1_octree *GetNeighbourBottom(g1_octree * root);
 
 	/**
 	 * This method returns a pointer to the bottom neighbour. If no neighbour is found,
@@ -490,7 +490,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the bottom neighbour with same level or NULL.
 	 */
-	g1_octree *GetNeighbourBottomSameLevel(g1_octree *root);
+	g1_octree *GetNeighbourBottomSameLevel(g1_octree * root);
 
 	/**
 	 * This method returns a pointer of the top neighbour. If no neighbour is found,
@@ -499,7 +499,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the top neighbour or NULL.
 	 */
-	g1_octree *GetNeighbourTop(g1_octree *root);
+	g1_octree *GetNeighbourTop(g1_octree * root);
 
 	/**
 	 * This method returns a pointer to the top neighbour. If no neighbour is found,
@@ -511,9 +511,9 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns a pointer to the top neighbour with same level or NULL.
 	 */
-	g1_octree *GetNeighbourTopSameLevel(g1_octree *root);
+	g1_octree *GetNeighbourTopSameLevel(g1_octree * root);
 
-	g1_octree *GetNeighbour(int Side, g1_octree *root);
+	g1_octree *GetNeighbour(int Side, g1_octree * root);
 	/**
 	 * This method returns all 26 neighbours of the current OcTree node to.
 	 * Nodes are sorted lexicographically from left to right, front to rear
@@ -546,7 +546,7 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns true if test successful.
 	 */
-	bool GetNeighbourCellsTest(g1_octree *root);
+	bool GetNeighbourCellsTest(g1_octree * root);
 
 	/**
 	 * Testing methods for the neighbour cells methods with same level.
@@ -555,15 +555,15 @@ public:
 	 *				specifies the <code>OcTree</code> the node belongs to.
 	 * @return returns true if test successful.
 	 */
-	bool GetNeighbourCellsSameLevelTest(g1_octree *root);
+	bool GetNeighbourCellsSameLevelTest(g1_octree * root);
 
 	class iterator
 	{
 private:
-		g1_octree *node;
+		g1_octree * node;
 		friend class g1_octree;
 public:
-		iterator(g1_octree *startnode)
+		iterator(g1_octree * startnode)
 			: node(startnode)
 		{
 		}
@@ -588,7 +588,7 @@ public:
 		{
 			return node!=i.node;
 		}
-		g1_octree *operator->() const
+		g1_octree * operator->() const
 		{
 			return node;
 		}
@@ -609,6 +609,7 @@ public:
 		iterator operator++(int)
 		{
 			iterator it=*this;
+
 			Next();
 			return it;
 		}
@@ -616,7 +617,8 @@ protected:
 		//Traverse the octree pre-order-wise. (Root first, then children)
 		void Next()
 		{
-			g1_octree *oldnode=node;
+			g1_octree * oldnode=node;
+
 			for(int i=0; i<8; i++)
 			{
 				if (node->m_pOctreeNodes[i]!=NULL)
@@ -625,7 +627,7 @@ protected:
 					return;
 				}
 			}
-			g1_octree *p=node->m_pParent;
+			g1_octree * p=node->m_pParent;
 			if (p==NULL)
 			{
 				//No children and no parent -> End
@@ -677,7 +679,7 @@ protected:
 protected:
 	i4_bool PointInCube(i4_3d_vector p) const;
 	i4_bool RayShorterThanCubeSize(i4_3d_vector ray) const;
-	static i4_bool ListContainsNode(i4_array<g1_octree *> &list, g1_octree *node);
+	static i4_bool ListContainsNode(i4_array<g1_octree *> &list, g1_octree * node);
 private:
 
 	/// This tells us if we have divided this node into more sub nodes
@@ -738,20 +740,20 @@ protected:
 	/// This holds all the scene information (verts, normals, texture info, etc..) for this node.
 	/// It is actually a reference to the object this octree belongs to (the reference is needed
 	/// since we need to have access to the vertices and quads defined there.
-	g1_quad_object_class *m_pWorld;
+	g1_quad_object_class * m_pWorld;
 
 	/// This stores a list of all the quads in this node.
 	i4_array<int>   m_pQuadList;
 
 	/// These are the eight nodes branching down from this current node
-	g1_octree *m_pOctreeNodes[8];
+	g1_octree * m_pOctreeNodes[8];
 	/// The parent element
-	g1_octree *m_pParent;
+	g1_octree * m_pParent;
 };
 
 
 class i4_grow_heap_class;
-extern i4_grow_heap_class *g1_object_heap;
+extern i4_grow_heap_class * g1_object_heap;
 
 extern g1_octree_debug g_Debug;
 

@@ -43,15 +43,15 @@ private:
 	g1_view_state_class view_state;
 
 protected:                           // for use by derived classes
-	i4_graphical_style_class *style;
-	i4_parent_window_class *parent;
-	i4_image_class *root_image;
+	i4_graphical_style_class * style;
+	i4_parent_window_class * parent;
+	i4_image_class * root_image;
 
 
-	const i4_pal *pal;
+	const i4_pal * pal;
 
 public:                             // called by main program
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"g1_cwin_man_class");
 	}
@@ -61,11 +61,11 @@ public:                             // called by main program
 
 	virtual void map_changed();   // called when a new map is loaded/created
 
-	virtual void init(i4_parent_window_class *_parent,
-					  i4_graphical_style_class *_style,
-					  i4_image_class *_root_image,
-					  i4_display_class *display,
-					  i4_window_manager_class *wm);
+	virtual void init(i4_parent_window_class * _parent,
+					  i4_graphical_style_class * _style,
+					  i4_image_class * _root_image,
+					  i4_display_class * display,
+					  i4_window_manager_class * wm);
 
 	virtual void uninit()
 	{
@@ -82,10 +82,10 @@ public:                             // called by main program
 		;
 	}
 
-	virtual void save_views(g1_saver_class *fp);
-	virtual void load_views(g1_loader_class *fp);
+	virtual void save_views(g1_saver_class * fp);
+	virtual void load_views(g1_loader_class * fp);
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	g1_cwin_man_class();
 };
@@ -95,7 +95,7 @@ public:                             // called by main program
 // this to have different behavior,  if still 0 by the time the game uses it
 // it will create a g1_cwin_man_class
 
-extern g1_cwin_man_class *g1_cwin_man;
+extern g1_cwin_man_class * g1_cwin_man;
 
 void g1_change_key_context(w8 view_mode);
 

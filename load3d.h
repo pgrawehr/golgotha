@@ -32,11 +32,11 @@ protected:
 	{
 	}
 public:
-	i4_grow_heap_class *heap;
-	r1_texture_manager_class *tman;
-	const i4_const_str *error_name;
+	i4_grow_heap_class * heap;
+	r1_texture_manager_class * tman;
+	const i4_const_str * error_name;
 
-	g1_quad_object_loader_class(i4_grow_heap_class *_heap) :
+	g1_quad_object_loader_class(i4_grow_heap_class * _heap) :
 		heap(_heap)
 	{
 	}
@@ -52,9 +52,9 @@ public:
 	virtual void store_vertex_normal(w16 anim, w16 frame, w16 index, const i4_3d_vector& normal);
 
 	virtual void set_num_quads(w16 num_quads);
-	virtual void create_quad(w16 quad, int verts, w16 *ref, w32 flags);
+	virtual void create_quad(w16 quad, int verts, w16 * ref, w32 flags);
 	virtual void store_texture_name(w32 quad, const i4_const_str &name);
-	virtual void store_texture_params(w32 quad, i4_float scale, i4_float *u, i4_float *v);
+	virtual void store_texture_params(w32 quad, i4_float scale, i4_float * u, i4_float * v);
 	virtual void store_quad_normal(w16 quad, const i4_3d_vector& v);
 
 	virtual void set_num_mount_points(w16 num_mounts);
@@ -68,8 +68,8 @@ public:
 
 	virtual void finish_object();
 
-	g1_quad_object_class *load(i4_loader_class *fp, const i4_const_str &_error_name,
-							   r1_texture_manager_class *_tman);
+	g1_quad_object_class *load(i4_loader_class * fp, const i4_const_str &_error_name,
+							   r1_texture_manager_class * _tman);
 };
 
 #endif

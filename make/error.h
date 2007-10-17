@@ -15,12 +15,12 @@
 #include <string.h>
 
 extern int line_on;
-extern char *file_on;
-extern char *file_contents;
+extern char * file_on;
+extern char * file_contents;
 extern int mk_debug_on;
 
-void mk_error(char *format,...);
-void mk_debug(char *format,...);
+void mk_error(char * format,...);
+void mk_debug(char * format,...);
 
 #define assert(cond,mess) if (!(cond)){mk_error("%s:%d - %s\n",__FILE__,__LINE__,mess)
 

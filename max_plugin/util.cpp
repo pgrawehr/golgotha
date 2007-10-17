@@ -124,23 +124,23 @@ public:
 		}
 	};
 
-	char *set_g1_name(char *dest, char *name);
+	char *set_g1_name(char * dest, char * name);
 
 	int add_vert(i4_array<g1_vert_class> &vert_list,
 				 w32 vert_start,
 				 g1_vert_class &vt);
 public:
-	IUtil *iu;
+	IUtil * iu;
 	TimeValue time;
-	Interface *ip;
+	Interface * ip;
 	HWND hPanel;
 	//  HWND hwnd;
 
-	m1_poly_object_class *max_obj;
+	m1_poly_object_class * max_obj;
 
 	m1_utility_class();
-	void BeginEditParams(Interface *ip,IUtil *iu);
-	void EndEditParams(Interface *ip,IUtil *iu);
+	void BeginEditParams(Interface * ip,IUtil * iu);
+	void EndEditParams(Interface * ip,IUtil * iu);
 	void DeleteThis()
 	{
 	}
@@ -149,11 +149,11 @@ public:
 	void Destroy(HWND hWnd);
 
 	void create_objects();
-	void grab_model_instance(int level, INode *node,
-							 m1_poly_object_class *o,
+	void grab_model_instance(int level, INode * node,
+							 m1_poly_object_class * o,
 							 w16 anim, w16 frame);
-	void grab_model_instance2(int level, INode *node,
-							  m1_poly_object_class *o,
+	void grab_model_instance2(int level, INode * node,
+							  m1_poly_object_class * o,
 							  w16 anim, w16 frame);
 
 	void clean_objects();
@@ -163,27 +163,32 @@ public:
 	void rotate_selected_left()
 	{
 		rotate_left_modifier tmp;
+
 		tmp.modify_selected(ip);
 	}
 	void rotate_selected_right()
 	{
 		rotate_right_modifier tmp;
+
 		tmp.modify_selected(ip);
 	}
 	void tint_toggle()
 	{
 		tint_texture_modifier tmp;
+
 		tmp.modify_selected(ip);
 	}
 
 	void flip_normal()
 	{
 		flip_normal_modifier tmp;
+
 		tmp.modify_selected(ip);
 	}
 	void reverse_texture()
 	{
 		reverse_texture_modifier tmp;
+
 		tmp.modify_selected(ip);
 	}
 	void set_trans()
@@ -333,7 +338,7 @@ m1_utility_class::m1_utility_class()
 }
 
 
-void m1_utility_class::BeginEditParams(Interface *_ip,IUtil *_iu)
+void m1_utility_class::BeginEditParams(Interface * _ip,IUtil * _iu)
 {
 	iu = _iu;
 	ip = _ip;
@@ -345,7 +350,7 @@ void m1_utility_class::BeginEditParams(Interface *_ip,IUtil *_iu)
 }
 
 
-void m1_utility_class::EndEditParams(Interface *_ip,IUtil *_iu)
+void m1_utility_class::EndEditParams(Interface * _ip,IUtil * _iu)
 {
 	iu = NULL;
 	ip = NULL;
@@ -368,11 +373,12 @@ void m1_utility_class::Destroy(HWND hWnd)
 }
 
 
-char *m1_utility_class::set_g1_name(char *dest, char *name)
+char * m1_utility_class::set_g1_name(char * dest, char * name)
 {
 	char s[256];
+
 #if 0
-	static char *remap[][2] =
+	static char * remap[][2] =
 	{
 		{"f:/", "/u/"},
 		{"//alpha1/", "/u/"},
@@ -380,7 +386,7 @@ char *m1_utility_class::set_g1_name(char *dest, char *name)
 	};
 #endif
 
-	char *p,*q;
+	char * p,* q;
 
 	p = name;
 	q = s;
@@ -431,6 +437,7 @@ int m1_utility_class::add_vert(i4_array<g1_vert_class> &vert_list,
 							   g1_vert_class &vt)
 {
 	float E_DELTA=0.001;
+
 	for (int i=vert_start; i<vert_list.size(); i++)
 	{
 		if (fabs(vt.v.x-vert_list[i].v.x)<E_DELTA &&
@@ -446,8 +453,8 @@ int m1_utility_class::add_vert(i4_array<g1_vert_class> &vert_list,
 }
 
 void m1_utility_class::grab_model_instance2(int level,
-											INode *node,
-											m1_poly_object_class *max_obj,
+											INode * node,
+											m1_poly_object_class * max_obj,
 											w16 anim, w16 frame)
 {
 	dbg("grab2\n");
@@ -457,18 +464,19 @@ void m1_utility_class::grab_model_instance2(int level,
 	int quad_offset = max_obj->quad_a.size();
 
 	TSTR str;
-	char *mat_name[1024], *mat_uv[1024];
+	char * mat_name[1024], * mat_uv[1024];
 	int mat_size=0;
 
-	char *name = node->GetName();
+	char * name = node->GetName();
 
 	node->GetUserPropBuffer(str);
-	char *p = str;
+	char * p = str;
 
 	if (strncmp(p, gmod_sig, strlen(gmod_sig))==0)
 	{
 		// skip first signature line
 		while (*p && *p!='\n') p++;
+
 
 		if (*p)
 		{
@@ -477,13 +485,14 @@ void m1_utility_class::grab_model_instance2(int level,
 
 		dbg("previously assigned polygon parameters\n");
 
-		char *mat, *uv;
+		char * mat, * uv;
 		while (*p)
 		{
 			max_obj->quad_a.add(0);
 			mat = p+1;
 
 			while (*p && *p!='\n' && *p!=' ') p++;
+
 
 			if (*p==' ')
 			{
@@ -493,6 +502,7 @@ void m1_utility_class::grab_model_instance2(int level,
 				uv = p;
 			}
 			while (*p && *p!='\n') p++;
+
 
 			if (*p=='\n')
 			{
@@ -510,7 +520,7 @@ void m1_utility_class::grab_model_instance2(int level,
 	}
 
 	// Get base state of object
-	Object *obj = node->EvalWorldState(0).obj;
+	Object * obj = node->EvalWorldState(0).obj;
 	if (!obj)
 	{
 		// do nothing
@@ -526,7 +536,7 @@ void m1_utility_class::grab_model_instance2(int level,
 	}
 	else if (obj->CanConvertToType(triObjectClassID))
 	{
-		TriObject *tri = (TriObject *)obj->ConvertToType(time, triObjectClassID);
+		TriObject * tri = (TriObject *)obj->ConvertToType(time, triObjectClassID);
 		Mesh &mesh = tri->mesh;
 		Matrix3 tm = node->GetObjectTM(time);
 		w16 vert_id[1024];
@@ -595,7 +605,7 @@ void m1_utility_class::grab_model_instance2(int level,
 
 				if (found>=0)
 				{
-					m1_quad_class *q = max_obj->quad_a[found];
+					m1_quad_class * q = max_obj->quad_a[found];
 
 					dbg("Part of %d, added [%d]", found, tri[1]);
 					// found other half.  add the remaining vertex
@@ -609,7 +619,7 @@ void m1_utility_class::grab_model_instance2(int level,
 				dbg("Unallocated ");
 
 				// need to add this triangle
-				m1_quad_class *q = new m1_quad_class(tri[0], tri[1], tri[2]);
+				m1_quad_class * q = new m1_quad_class(tri[0], tri[1], tri[2]);
 
 				dbg("Created [%d, %d, %d]", tri[0], tri[1], tri[2]);
 
@@ -714,8 +724,8 @@ void m1_utility_class::grab_model_instance2(int level,
 }
 
 void m1_utility_class::grab_model_instance(int level,
-										   INode *node,
-										   m1_poly_object_class *max_obj,
+										   INode * node,
+										   m1_poly_object_class * max_obj,
 										   w16 anim, w16 frame)
 {
 	w32 vert_start = 0;
@@ -730,24 +740,24 @@ void m1_utility_class::grab_model_instance(int level,
 	matname[0] = 0;
 
 	// Get material
-	Mtl *mat = node->GetMtl();
+	Mtl * mat = node->GetMtl();
 
 	if (mat)
 	{
 		// Check for a diffuse bitmap as real texture name
 		if (mat->NumSubTexmaps())
 		{
-			Texmap *tex = mat->GetSubTexmap(ID_DI);
+			Texmap * tex = mat->GetSubTexmap(ID_DI);
 
 			if (tex && tex->ClassID()==Class_ID(BMTEX_CLASS_ID,0))
 			{
-				BitmapTex *bmt = (BitmapTex *)tex;
+				BitmapTex * bmt = (BitmapTex *)tex;
 				set_g1_name(matname,bmt->GetMapName());
 			}
 		}
 	}
 
-	m1_quad_class *q = max_obj->quad_a[max_obj->quad_a.size()-1];
+	m1_quad_class * q = max_obj->quad_a[max_obj->quad_a.size()-1];
 
 	int quad_off=0,flip=0,reverse=0,trans=31,tint=0;
 	TSTR tst;
@@ -894,8 +904,8 @@ void m1_utility_class::render()
 	if (max_obj->quad_a.size() && max_obj->num_vertex)
 	{
 		dbg("Save Objects\n");
-		i4_file_class *f = i4_open(i4gets("fly_name"),I4_WRITE);
-		i4_saver_class *g1_saver=new i4_saver_class(f);
+		i4_file_class * f = i4_open(i4gets("fly_name"),I4_WRITE);
+		i4_saver_class * g1_saver=new i4_saver_class(f);
 
 		if (f)
 		{
@@ -910,7 +920,7 @@ void m1_utility_class::render()
 			restart_fly();
 		}
 
-		char *name;
+		char * name;
 
 		if (slot.initialized())
 		{
@@ -931,7 +941,7 @@ void m1_utility_class::render()
 }
 
 
-void m1_utility_class::property_modifier::modify_selected(Interface *ip)
+void m1_utility_class::property_modifier::modify_selected(Interface * ip)
 {
 	for (int i=0; i<ip->GetSelNodeCount(); i++)
 	{
@@ -940,7 +950,7 @@ void m1_utility_class::property_modifier::modify_selected(Interface *ip)
 }
 
 
-void m1_utility_class::property_modifier::modify_node(INode *node)
+void m1_utility_class::property_modifier::modify_node(INode * node)
 {
 	prop_list p;
 	TSTR tst;

@@ -100,6 +100,7 @@ public:
 	i4_dvector3_template operator*(Coord b)
 	{
 		i4_dvector3_template tmp;
+
 		tmp.x = x * b;
 		tmp.y = y * b;
 		tmp.z = z * b;
@@ -111,6 +112,7 @@ public:
 	i4_dvector3_template operator+(Coord b)
 	{
 		i4_dvector3_template tmp;
+
 		tmp.x = x + b;
 		tmp.y = y + b;
 		tmp.z = z + b;
@@ -121,6 +123,7 @@ public:
 	i4_dvector3_template operator+(i4_dvector3_template v)
 	{
 		i4_dvector3_template tmp;
+
 		tmp.x = x + v.x;
 		tmp.y = y + v.y;
 		tmp.z = z + v.z;
@@ -131,6 +134,7 @@ public:
 	i4_dvector3_template operator*(i4_dvector3_template v)
 	{
 		i4_dvector3_template tmp;
+
 		tmp.x = x * v.x;
 		tmp.y = y * v.y;
 		tmp.z = z * v.z;
@@ -292,6 +296,7 @@ public:
 	void normalize()
 	{
 		i4_double ool=1.0/length();
+
 		x*=ool;
 		y*=ool;
 	}

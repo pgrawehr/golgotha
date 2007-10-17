@@ -25,9 +25,9 @@
 #include "tex_id.h"
 #include "mip.h"
 
-int load_gtext(i4_const_str texture_name, i4_image_class **images)
+int load_gtext(i4_const_str texture_name, i4_image_class * * images)
 {
-	i4_file_class *fp;
+	i4_file_class * fp;
 	tex_cache_header_t theader;
 	mipheader_t header;
 
@@ -41,7 +41,7 @@ int load_gtext(i4_const_str texture_name, i4_image_class **images)
 	delete fp;
 
 	w32 id=r1_get_texture_id(texture_name);
-	i4_str *fn = r1_texture_id_to_filename(id, r1_gets("local_texture_dir"));
+	i4_str * fn = r1_texture_id_to_filename(id, r1_gets("local_texture_dir"));
 	fp=i4_open(*fn);
 	delete fn;
 	if (!fp)
@@ -52,7 +52,7 @@ int load_gtext(i4_const_str texture_name, i4_image_class **images)
 	header.read(fp);
 
 	int w=header.base_width, h=header.base_height, i;
-	i4_pal *pal;
+	i4_pal * pal;
 
 	if (header.flags & R1_MIP_IS_TRANSPARENT)
 	{
@@ -71,11 +71,11 @@ int load_gtext(i4_const_str texture_name, i4_image_class **images)
 	{
 		fp->seek(header.offsets[i]+8);
 
-		w16 *data=(w16 *)i4_malloc(w*h*2,"");
+		w16 * data=(w16 *)i4_malloc(w*h*2,"");
 		fp->read(data,w*h*2);
 
 
-		i4_image16 *im=new i4_image16(w,h, pal, (w8 *)data, w*2);
+		i4_image16 * im=new i4_image16(w,h, pal, (w8 *)data, w*2);
 		im->dont_free_data=i4_T;
 
 		images[i]=im;
@@ -87,7 +87,7 @@ int load_gtext(i4_const_str texture_name, i4_image_class **images)
 	return header.num_mip_levels;
 }
 
-extern i4_image_class *global_im;
+extern i4_image_class * global_im;
 class test_app :
 	public i4_application_class
 {
@@ -96,7 +96,7 @@ public:
 	{
 		i4_application_class::init();
 
-		i4_image_class *im[10];
+		i4_image_class * im[10];
 
 		int t = load_gtext("explosions2.tga", im);
 		//i4_image_class *im=i4_load_image("/u/crack/golgotha/textures/moon.tga");
@@ -104,7 +104,7 @@ public:
 		int x=0;
 		for (int i=0; i<t; i++)
 		{
-			i4_image_window_class *im_win=new i4_image_window_class(im[i], i4_T, i4_F);
+			i4_image_window_class * im_win=new i4_image_window_class(im[i], i4_T, i4_F);
 
 			wm->add_child(x,0, im_win);
 			x+=im[i]->width();
@@ -120,8 +120,9 @@ public:
 	}
 };
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	test_app test;
+
 	test.run();
 }

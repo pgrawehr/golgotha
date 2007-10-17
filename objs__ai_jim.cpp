@@ -27,7 +27,7 @@
 //(Oli) hack for reloading this AI
 extern w16 ai_jim_dll_ref;
 
-char *unit_name[] = {
+char * unit_name[] = {
 	"stank",         //a
 	"peon_tank",     //b
 	"electric_car",  //c
@@ -43,7 +43,7 @@ char *unit_name[] = {
 const int num_unit_types=sizeof(unit_name)/sizeof(char *);
 w16 unit_type[num_unit_types];
 
-char *formation[] =
+char * formation[] =
 {
 	// LAND
 
@@ -89,7 +89,7 @@ public:
 	sw16 form, spot;
 
 
-	ai_jim(g1_loader_class *f)
+	ai_jim(g1_loader_class * f)
 	{
 		reload=0;
 	}
@@ -111,7 +111,7 @@ public:
 	}
 	//}}}
 
-	virtual void load(g1_loader_class *f)
+	virtual void load(g1_loader_class * f)
 	//{{{
 	{
 		w16 ver=0,data_size;
@@ -132,7 +132,7 @@ public:
 	}
 	//}}}
 
-	virtual void save(g1_saver_class *f)
+	virtual void save(g1_saver_class * f)
 	//{{{
 	{
 		f->start_version(DATA_VERSION);
@@ -145,7 +145,7 @@ public:
 	void find_new_target()
 	//{{{
 	{
-		g1_path_object_class *p;
+		g1_path_object_class * p;
 
 		for (int tries=0; tries<5; tries++)
 		{
@@ -201,7 +201,7 @@ public:
 	{
 		if ((g1_rand(0)&7)==0)
 		{
-			li_object *list=li_get_value("enemy_buildable");
+			li_object * list=li_get_value("enemy_buildable");
 			int t=li_length(list, 0);
 			if (t)
 			{
@@ -321,7 +321,7 @@ void g1_team_api_class::guide_hero()
 	{
 		//commander()->set_path(0);
 
-		g1_object_class *mp = commander()->attack_target.get();
+		g1_object_class * mp = commander()->attack_target.get();
 
 		if (mp)
 		{
@@ -422,7 +422,7 @@ public:
 	sw16 form, spot;
 	w8 reload;
 
-	ai_formation_jim(g1_loader_class *f)
+	ai_formation_jim(g1_loader_class * f)
 	{
 		reload=0;
 	}
@@ -441,7 +441,7 @@ public:
 	}
 	//}}}
 
-	virtual void load(g1_loader_class *f)
+	virtual void load(g1_loader_class * f)
 	//{{{
 	{
 		w16 ver=0,data_size;
@@ -462,7 +462,7 @@ public:
 	}
 	//}}}
 
-	virtual void save(g1_saver_class *f)
+	virtual void save(g1_saver_class * f)
 	//{{{
 	{
 		f->start_version(DATA_VERSION);
@@ -475,7 +475,7 @@ public:
 	void find_new_target()
 	//{{{
 	{
-		g1_path_object_class *p;
+		g1_path_object_class * p;
 
 		for (int tries=0; tries<30; tries++)
 		{
@@ -498,7 +498,7 @@ public:
 				set_current_target(p->global_id);
 
 				int bad_path=0;
-				for (g1_factory_class *f=g1_factory_list.first(); f; f=f->next)
+				for (g1_factory_class * f=g1_factory_list.first(); f; f=f->next)
 				{
 					for (p=f->get_start(); p;)
 					{
@@ -579,7 +579,7 @@ public:
 		{
 			//commander()->set_path(0);
 
-			g1_object_class *mp = commander()->attack_target.get();
+			g1_object_class * mp = commander()->attack_target.get();
 
 			if (mp)
 			{

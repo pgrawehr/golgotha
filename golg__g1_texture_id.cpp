@@ -10,8 +10,9 @@
 #include "checksum/checksum.h"
 //#include <string.h>
 
-r1_texture_handle g1_get_texture(char *texture_name)
+r1_texture_handle g1_get_texture(char * texture_name)
 {
 	int l=strlen(texture_name);
+
 	return g1_tile_man.get(g1_tile_man.get_tile_from_checksum(i4_check_sum32(texture_name, l)))->texture;
 }

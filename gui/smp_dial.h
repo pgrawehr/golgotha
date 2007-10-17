@@ -20,13 +20,13 @@ class i4_event;
 class i4_parent_window_class;
 class i4_graphical_style_class;
 
-i4_parent_window_class *i4_create_yes_no_dialog(i4_parent_window_class *parent,
-												i4_graphical_style_class *style,
+i4_parent_window_class *i4_create_yes_no_dialog(i4_parent_window_class * parent,
+												i4_graphical_style_class * style,
 												const i4_const_str &title,
 												const i4_const_str &message,
 												const i4_const_str &yes, const i4_const_str &no,
-												i4_event_handler_class *send_to,
-												i4_event *yes_event, i4_event *no_event);
+												i4_event_handler_class * send_to,
+												i4_event * yes_event, i4_event * no_event);
 
 //Messagebox-Flags
 //not all flags are already implemented
@@ -60,22 +60,22 @@ class g1_message_box :
 protected:
 	i4_bool modal;
 	static w32 modal_result;
-	static g1_message_box *dialog_active;
+	static g1_message_box * dialog_active;
 	//i4_event *yes_event,*no_event,*ok_event,*cancel_event,*ignore_event;
-	i4_event *textual_event,*checkbox_event;
-	i4_text_input_class *inputwindow;
+	i4_event * textual_event,* checkbox_event;
+	i4_text_input_class * inputwindow;
 	i4_color bg_color;
-	i4_event_handler_class *send_to;
-	i4_graphical_style_class *style;
+	i4_event_handler_class * send_to;
+	i4_graphical_style_class * style;
 	w32 flags;
 	//static i4_str *text;
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"MessageBox class");
 	};
-	virtual void receive_event(i4_event *ev);
-	g1_message_box(w16 w, w16 h, i4_graphical_style_class *style,
+	virtual void receive_event(i4_event * ev);
+	g1_message_box(w16 w, w16 h, i4_graphical_style_class * style,
 				   //i4_const_str &title, i4_const_str &message,
 				   w32 flags=4);
 	//g1_message_box(w16 w, w16 h, i4_graphical_style_class *style,

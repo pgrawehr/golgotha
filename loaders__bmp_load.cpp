@@ -24,17 +24,19 @@ class i4_bmp_loader_class :
 {
 
 public:
-	w16 get_short(w32 offset, void *data)
+	w16 get_short(w32 offset, void * data)
 	{
 		w8 buf[2];
+
 		buf[0]=*(((w8 *)data)+offset);
 		buf[1]=*(((w8 *)data)+offset+1);
 		return (buf[1]<<8)|buf[0];
 	}
 
-	w32 get_long(w32 offset, void *data)
+	w32 get_long(w32 offset, void * data)
 	{
 		w8 buf[4];
+
 		buf[0]=*(((w8 *)data)+offset);
 		buf[1]=*(((w8 *)data)+offset+1);
 		buf[2]=*(((w8 *)data)+offset+2);
@@ -48,14 +50,15 @@ public:
 	{
 		return 2;
 	}
-	virtual i4_bool recognize_header(w8 *buf)
+	virtual i4_bool recognize_header(w8 * buf)
 	{
 		return (i4_bool)(buf[0]=='B' && buf[1]=='M');
 	}
-	virtual i4_image_class *load(i4_file_class *fp,
-								 i4_status_class *status)
+	virtual i4_image_class *load(i4_file_class * fp,
+								 i4_status_class * status)
 	{
-		void *buf[54];
+		void * buf[54];
+
 		if (fp->read(buf,54)!=54)
 		{
 			return 0;
@@ -93,8 +96,8 @@ public:
 
 			fmt.lookup=pdata;
 
-			const i4_pal *pal=i4_pal_man.register_pal(&fmt);
-			i4_image_class *im=i4_create_image(width,height,pal);
+			const i4_pal * pal=i4_pal_man.register_pal(&fmt);
+			i4_image_class * im=i4_create_image(width,height,pal);
 
 			if (compress==0)
 			{
@@ -130,7 +133,7 @@ public:
 			else if (compress==1)
 			{
 				i4_bool done=i4_F;
-				w8 *d=(w8 *)im->data;
+				w8 * d=(w8 *)im->data;
 				w32 x=0,y=height-1;
 
 				while (!done)
@@ -202,11 +205,11 @@ public:
 
 
 			w16 x,y;
-			const i4_pal *pal32=i4_pal_man.register_pal(&fmt);
-			i4_image_class *im=i4_create_image(width,height,pal32);
+			const i4_pal * pal32=i4_pal_man.register_pal(&fmt);
+			i4_image_class * im=i4_create_image(width,height,pal32);
 			memset(im->data, 0, width*height*4);
 
-			w32 *sl=(w32 *)((w8 *)im->data + (height-1)*im->bpl);
+			w32 * sl=(w32 *)((w8 *)im->data + (height-1)*im->bpl);
 
 			int end_of_line_skip=(fsize-54)/height - width*3;
 			fp->seek(offset);

@@ -39,16 +39,16 @@ public:
 		sw16 x1,y1,x2,y2;
 	};
 private:
-	i4_string_manager_class *use;
+	i4_string_manager_class * use;
 
-	void g_float(i4_float &f, char *res_name);
-	void g_cursor(i4_cursor_class *&c, char *res_name, int big, int color);
-	void g_point(i4_3d_point_class &p, char *res_name);
-	void g_w32(w32 &x, char *res_name);
-	void g_sw32(sw32 &x, char *res_name);
-	void g_w16(w16 &x, char *res_name);
-	void g_sw16(sw16 &x, char *res_name);
-	void g_rect(rect &r, char *res_name);
+	void g_float(i4_float &f, char * res_name);
+	void g_cursor(i4_cursor_class *&c, char * res_name, int big, int color);
+	void g_point(i4_3d_point_class &p, char * res_name);
+	void g_w32(w32 &x, char * res_name);
+	void g_sw32(sw32 &x, char * res_name);
+	void g_w16(w16 &x, char * res_name);
+	void g_sw16(sw16 &x, char * res_name);
+	void g_rect(rect &r, char * res_name);
 public:
 	g1_resource_class() //at least the pointers should be inited
 	{
@@ -86,10 +86,10 @@ public:
 	};
 
 	int t_build_context_helps;
-	i4_const_str *build_context_help;   // fetched from res/g1.res
+	i4_const_str * build_context_help;   // fetched from res/g1.res
 
 	int t_images;
-	i4_image_class **images;
+	i4_image_class * * images;
 
 
 	enum dflags {
@@ -111,11 +111,11 @@ public:
 	w8 render_window_expand_mode;
 
 
-	i4_str *username; // for net games
+	i4_str * username; // for net games
 
 
-	i4_cursor_class *big_cursors[G1_TOTAL_CURSORS];
-	i4_cursor_class *small_cursors[G1_TOTAL_CURSORS];
+	i4_cursor_class * big_cursors[G1_TOTAL_CURSORS];
+	i4_cursor_class * small_cursors[G1_TOTAL_CURSORS];
 
 	i4_float recoil_factor,
 			 recoil_gravity;

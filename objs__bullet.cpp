@@ -72,7 +72,7 @@ void g1_bullet_class::think()
 }
 
 
-void g1_bright_ambient(i4_transform_class *object_to_world,
+void g1_bright_ambient(i4_transform_class * object_to_world,
 					   i4_float &ar, i4_float &ag, i4_float &ab)
 {
 	ar=ag=ab=1;
@@ -80,7 +80,7 @@ void g1_bright_ambient(i4_transform_class *object_to_world,
 
 
 g1_bullet_class::g1_bullet_class(g1_object_type id,
-								 g1_loader_class *fp)
+								 g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 	range=10;
@@ -139,11 +139,11 @@ void g1_bullet_class::move_forward()
 
 void g1_bullet_class::setup(const i4_3d_vector &start_pos,
 							const i4_3d_vector &_vel,
-							g1_object_class *this_guy_fired_me,
+							g1_object_class * this_guy_fired_me,
 							i4_float _range,
 							w32 flags,
 							r1_texture_handle sprite_texture,
-							g1_light_object_class *_light)
+							g1_light_object_class * _light)
 
 {
 	bullet_flags = flags;
@@ -222,7 +222,7 @@ void g1_bullet_class::setup(const i4_3d_vector &start_pos,
 }
 
 
-void g1_bullet_class::save(g1_saver_class *fp)
+void g1_bullet_class::save(g1_saver_class * fp)
 {
 	// tell direived classes to save themselves
 	g1_object_class::save(fp);
@@ -239,7 +239,7 @@ void g1_bullet_class::save(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_bullet_class::skipload(g1_loader_class *fp)
+void g1_bullet_class::skipload(g1_loader_class * fp)
 {
 	g1_object_class::skipload(fp);
 	fp->check_version(DATA_VERSION);
@@ -248,7 +248,7 @@ void g1_bullet_class::skipload(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 }
 
-void g1_bullet_class::load(g1_loader_class *fp)
+void g1_bullet_class::load(g1_loader_class * fp)
 {
 	g1_object_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -261,7 +261,7 @@ void g1_bullet_class::load(g1_loader_class *fp)
 }
 
 
-void g1_bullet_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_bullet_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	if ((bullet_flags & IS_SPRITE)==0)
 	{
@@ -285,14 +285,14 @@ void g1_bullet_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_
 }
 
 
-void g1_bullet_class::done(i4_bool hit, g1_object_class *hit_object)
+void g1_bullet_class::done(i4_bool hit, g1_object_class * hit_object)
 {
 	unoccupy_location();
 	request_remove();
 
 	if (hit_object)
 	{
-		g1_shrapnel_class *shrap =
+		g1_shrapnel_class * shrap =
 			(g1_shrapnel_class *)g1_create_object(g1_get_object_type(shrapnel_type.get()));
 
 		if (shrap)
@@ -304,7 +304,7 @@ void g1_bullet_class::done(i4_bool hit, g1_object_class *hit_object)
 	}
 	else if (hit)
 	{
-		g1_flak_class *flak = (g1_flak_class *)g1_create_object(g1_get_object_type(flak_type.get()));
+		g1_flak_class * flak = (g1_flak_class *)g1_create_object(g1_get_object_type(flak_type.get()));
 
 		if (flak)
 		{
@@ -335,7 +335,7 @@ i4_bool g1_bullet_class::move()
 		return i4_F;
 	}
 
-	g1_object_class *hit = 0;
+	g1_object_class * hit = 0;
 
 	i4_3d_vector pos(x,y,h);
 	if (!g1_get_map()->check_non_player_collision(this,player_num,pos,vel,hit))

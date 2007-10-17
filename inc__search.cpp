@@ -8,9 +8,9 @@
 #include "pch.h"
 #include "search.h"
 
-i4_bool i4_base_bsearch(const void *member, w32 &loc,
-						const void *array, w32 member_size, w32 size,
-						int (*compare)(const void *a, const void *b))
+i4_bool i4_base_bsearch(const void * member, w32 &loc,
+						const void * array, w32 member_size, w32 size,
+						int (* compare)(const void * a, const void * b))
 {
 	w32 l=0,r=size,m;
 	int c;

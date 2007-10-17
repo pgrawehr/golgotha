@@ -66,7 +66,7 @@ void g1_add_to_sound_average(g1_rumble_type type, const i4_3d_vector& v, const i
 	pos -= v;
 	if (pos.dot(pos)<r*r)
 	{
-		g1_average_sound *s=g1_average_rumbles+type;
+		g1_average_sound * s=g1_average_rumbles+type;
 		s->add_to_average(v);
 		s->xv=vel.x;
 		s->yv=vel.y;
@@ -100,7 +100,7 @@ void g1_recalc_sound_averages()
 	{
 		return;
 	}
-	g1_average_sound *s=g1_average_rumbles;
+	g1_average_sound * s=g1_average_rumbles;
 	for (int i=0; i<G1_T_RUMBLES; i++,s++)
 	{
 		if (s->t_contributors)

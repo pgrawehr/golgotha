@@ -20,22 +20,23 @@ static int defer_draws=0;
 
 static i4_pixel_format softz_pixel_fmt;
 class r1_softz_window;
-static r1_softz_window *cur_win=0;
+static r1_softz_window * cur_win=0;
 
 class r1_softz_window :
 	public r1_render_window_class
 {
 public:
-	i4_image_class *im;
-	float *zbuffer;
+	i4_image_class * im;
+	float * zbuffer;
 	i4_draw_context_class ctext;
 	volatile int rendering;
 
 	r1_softz_window(int w, int h, r1_expand_type type);
 	void clear_z(int x1, int y1, int x2, int y2, float z)
 	{
-		float *s=zbuffer + y1 *width()+x1;
+		float * s=zbuffer + y1 *width()+x1;
 		int t=(x2-x1+1);
+
 		for (int y=y1; y<=y2; y++)
 		{
 			for (int i=0; i<t; i++)
@@ -113,7 +114,7 @@ class r1_softz_tman :
 	public r1_texture_manager_class
 {
 public:
-	r1_softz_tman(const i4_pal *pal) :
+	r1_softz_tman(const i4_pal * pal) :
 		r1_texture_manager_class(pal)
 	{
 	}
@@ -151,12 +152,12 @@ public:
 	}
 
 public:
-	virtual i4_bool immediate_mip_load(r1_mip_load_info *load_info)
+	virtual i4_bool immediate_mip_load(r1_mip_load_info * load_info)
 	{
 		return i4_T;
 	}
 
-	virtual i4_bool async_mip_load(r1_mip_load_info *load_info)
+	virtual i4_bool async_mip_load(r1_mip_load_info * load_info)
 	{
 		return i4_T;
 	}
@@ -190,7 +191,7 @@ public:
 	{
 	}
 
-	virtual void render_poly(int t_verts, r1_vert *verts)
+	virtual void render_poly(int t_verts, r1_vert * verts)
 	{
 		render_lines(t_verts-1, verts);
 		r1_vert l[2];
@@ -206,7 +207,7 @@ public:
 		softz_pixel_fmt.calc_shift();
 	}
 
-	i4_bool init(i4_display_class *display)
+	i4_bool init(i4_display_class * display)
 	{
 		tmanager=new r1_softz_tman(display->get_palette());
 		return i4_T;
@@ -218,10 +219,10 @@ public:
 		delete tmanager;
 	}
 
-	virtual void render_pixel(r1_vert *pixel)
+	virtual void render_pixel(r1_vert * pixel)
 	{
 		int iw=cur_win->width();
-		float *zbuffer=cur_win->zbuffer;
+		float * zbuffer=cur_win->zbuffer;
 		int off=(int)pixel->px + ((int)pixel->py)*iw;
 
 		if (write_mask & R1_COMPARE_W)
@@ -233,7 +234,7 @@ public:
 		}
 
 
-		w32 *im_data=(w32 *)cur_win->im->data;
+		w32 * im_data=(w32 *)cur_win->im->data;
 
 		if (write_mask & R1_WRITE_COLOR)
 		{
@@ -252,11 +253,11 @@ public:
 
 	}
 
-	virtual void render_lines(int t_lines, r1_vert *verts)
+	virtual void render_lines(int t_lines, r1_vert * verts)
 	{
-		w32 *im_data=(w32 *)cur_win->im->data;
+		w32 * im_data=(w32 *)cur_win->im->data;
 		int iw=cur_win->im->width();
-		float *zbuffer=cur_win->zbuffer;
+		float * zbuffer=cur_win->zbuffer;
 
 		for (int i=0; i<t_lines; i++)
 		{
@@ -330,7 +331,7 @@ public:
 		return new r1_softz_window(visable_w, visable_h, type);
 	}
 
-	virtual void copy_part(i4_image_class *im,
+	virtual void copy_part(i4_image_class * im,
 						   int x, int y,           // position on screen
 						   int x1, int y1,         // area of image to copy
 						   int x2, int y2)

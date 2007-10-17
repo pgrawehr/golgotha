@@ -18,7 +18,7 @@
 
 //#include <memory.h>
 
-void i4_wav_callback(w32 count, void *context)
+void i4_wav_callback(w32 count, void * context)
 {
 	((i4_stream_wav_player *)context)->PRIVATE_callback(count);
 }
@@ -58,7 +58,7 @@ void i4_stream_wav_player::load_buffer(i4_bool async)
 i4_array<i4_stream_wav_player *> self_references(0,10); //what sounds are currently playing?
 
 
-i4_stream_wav_player::i4_stream_wav_player(i4_file_class *_fp,
+i4_stream_wav_player::i4_stream_wav_player(i4_file_class * _fp,
 										   w32 _buf_size,
 										   i4_bool _loop,
 										   i4_bool first_load_is_async,
@@ -173,7 +173,7 @@ void i4_stream_wav_player::PRIVATE_callback(w32 count)
 
 			//set the remaining part of the buffer to 0
 
-			w8 *start_clearing_here = (w8 *)locked_buffer_start + count;
+			w8 * start_clearing_here = (w8 *)locked_buffer_start + count;
 
 			memset(start_clearing_here, 0, locked_buffer_size - count);
 
@@ -359,6 +359,7 @@ i4_stream_wav_player::~i4_stream_wav_player()
 	if (voice)
 	{
 		while (wait_read) ;
+
 		// if we need to wait for an async read to finish
 
 		i4_sound_man->free_voice(voice);

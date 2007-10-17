@@ -37,15 +37,15 @@ i4_str *m1_get_dir()
 	}
 }
 
-li_object *m1_save(li_object *o, li_environment *env)
+li_object *m1_save(li_object * o, li_environment * env)
 {
 	if (m1_info.obj && m1_info.models.size()>m1_info.current_model)
 	{
-		i4_file_class *fp=i4_open(m1_info.current_filename(), I4_WRITE);
+		i4_file_class * fp=i4_open(m1_info.current_filename(), I4_WRITE);
 		if (fp)
 		{
 			m1_info.obj->update(0);
-			i4_saver_class *sfp=new i4_saver_class(fp);
+			i4_saver_class * sfp=new i4_saver_class(fp);
 			m1_info.obj->save(sfp);
 			sfp->begin_data_write();
 			m1_info.obj->save(sfp);
@@ -62,11 +62,11 @@ class m1_saveas_handler_class :
 	public i4_event_handler_class
 {
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"saveas");
 	}
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		CAST_PTR(f, i4_file_open_message_class, ev);
 		if (f->sub_type)
@@ -79,11 +79,11 @@ public:
 } m1_saveas_handler;
 
 
-li_object *m1_saveas(li_object *o, li_environment *env)
+li_object *m1_saveas(li_object * o, li_environment * env)
 {
 	if (m1_info.obj && m1_info.models.size()>m1_info.current_model)
 	{
-		i4_str *sdir=m1_get_dir();
+		i4_str * sdir=m1_get_dir();
 		i4_create_file_save_dialog(i4_current_app->get_style(),
 								   m1_info.current_filename(),
 								   "Save Model As...",
@@ -103,11 +103,11 @@ class m1_open_handler_class :
 	public i4_event_handler_class
 {
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"open");
 	}
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		CAST_PTR(f, i4_file_open_message_class, ev);
 		if (f->sub_type)
@@ -120,7 +120,7 @@ public:
 } m1_open_handler;
 
 
-li_object *m1_open(li_object *o, li_environment *env)
+li_object *m1_open(li_object * o, li_environment * env)
 {
 	if (o)
 	{
@@ -133,7 +133,7 @@ li_object *m1_open(li_object *o, li_environment *env)
 	}
 	else
 	{
-		i4_str *sdir=m1_get_dir();
+		i4_str * sdir=m1_get_dir();
 		i4_create_file_open_dialog(i4_current_app->get_style(),
 								   "Open Model",
 								   *sdir,

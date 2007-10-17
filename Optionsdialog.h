@@ -16,7 +16,7 @@ class OptionsDialog :
 {
 // Konstruktion
 public:
-	OptionsDialog(CWnd *pParent = NULL);   // Standardkonstruktor
+	OptionsDialog(CWnd * pParent = NULL);   // Standardkonstruktor
 	virtual ~OptionsDialog();
 	void Apply();
 	void Cleanup();
@@ -48,7 +48,7 @@ public:
 	virtual BOOL DestroyWindow();
 	virtual void OnCancel();
 protected:
-	virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV-Unterstützung
+	virtual void DoDataExchange(CDataExchange * pDX);    // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
 
 // Implementierung
@@ -63,9 +63,9 @@ protected:
 	afx_msg void OnWindowed();
 	afx_msg void OnSelchangeResolutions();
 	afx_msg void OnSelchangeRenderDevice();
-	afx_msg void OnReleasedcaptureTextureQuality(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnReleasedcaptureView(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar *pScrollBar);
+	afx_msg void OnReleasedcaptureTextureQuality(NMHDR * pNMHDR, LRESULT * pResult);
+	afx_msg void OnReleasedcaptureView(NMHDR * pNMHDR, LRESULT * pResult);
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar * pScrollBar);
 	afx_msg void OnTex16();
 	afx_msg void OnTex32();
 	afx_msg void OnTexdef();

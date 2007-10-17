@@ -15,17 +15,17 @@ class li_object;
 class li_object_pointer
 {
 public:
-	li_object *o;
-	li_object_pointer *next;
+	li_object * o;
+	li_object_pointer * next;
 
-	li_object_pointer(li_object *o=0);
+	li_object_pointer(li_object * o=0);
 	~li_object_pointer();
 
 	li_object& operator*() const
 	{
 		return *o;
 	}
-	li_object *operator->() const
+	li_object * operator->() const
 	{
 		return o;
 	}
@@ -39,7 +39,7 @@ public:
 		o=other.o;
 		return *this;
 	}
-	li_object_pointer &operator=(li_object *object)
+	li_object_pointer &operator=(li_object * object)
 	{
 		o=object;
 		return *this;

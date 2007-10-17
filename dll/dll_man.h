@@ -20,10 +20,10 @@ class i4_dll_manager_class :
 protected:
 	struct dll_node
 	{
-		dll_node *next;
-		i4_str *name;
-		i4_dll_file *dll;
-		i4_init_class *init_list; // list of all i4_init_class'es in the dll
+		dll_node * next;
+		i4_str * name;
+		i4_dll_file * dll;
+		i4_init_class * init_list; // list of all i4_init_class'es in the dll
 		~dll_node();
 	};
 
@@ -44,6 +44,6 @@ public:
 
 extern i4_dll_manager_class i4_dll_man;
 
-extern char *i4_dll_dir;
+extern char * i4_dll_dir;
 
 #endif

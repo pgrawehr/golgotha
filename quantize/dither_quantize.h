@@ -29,4 +29,4 @@
 
 
 class i4_image_class;
-void i4_dither_quantize(i4_image_class *source, i4_image_class *dest);
+void i4_dither_quantize(i4_image_class * source, i4_image_class * dest);

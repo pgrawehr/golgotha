@@ -21,7 +21,7 @@ template <class T>
 class i4_isl_list
 {
 protected:
-	typedef T *link;
+	typedef T * link;
 	link list;
 
 public:
@@ -67,7 +67,7 @@ public:
 		{
 			return *node;
 		}
-		T *operator->() const
+		T * operator->() const
 		{
 			return node;
 		}
@@ -129,6 +129,7 @@ public:
 			while (last->next)
 				last=last->next;
 
+
 			last->next=&item;
 		}
 	}
@@ -155,9 +156,10 @@ public:
 		}
 	}
 
-	iterator find(T *item)
+	iterator find(T * item)
 	{
 		iterator p=begin();
+
 		for (; p!=end(); ++p)
 		{
 			if (p.node==item)
@@ -171,6 +173,7 @@ public:
 	void swap(i4_isl_list &other)
 	{
 		link other_list=other.list;
+
 		other.list=list;
 		list=other_list;
 	}
@@ -214,9 +217,10 @@ public:
 		insert_after(second,*cur);
 	}
 
-	T *find_and_unlink(T *item)
+	T *find_and_unlink(T * item)
 	{
 		iterator p=begin(), last=end();
+
 		for (; p!=end(); ++p)
 		{
 			if (p.node==item)

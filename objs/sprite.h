@@ -31,7 +31,7 @@ class g1_sprite_list_class
 	g1_sprite_class array[G1_MAX_SPRITES];
 
 public:
-	void load(r1_render_api_class *tmap);
+	void load(r1_render_api_class * tmap);
 	g1_sprite_class *get_sprite(w16 handle)
 	{
 		return &array[handle];

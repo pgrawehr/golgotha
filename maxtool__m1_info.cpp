@@ -19,7 +19,7 @@
 #include "maxtool/render2.h"
 
 m1_info_struct m1_info;
-extern i4_text_scroll_window_class *m1_warn_window;
+extern i4_text_scroll_window_class * m1_warn_window;
 
 const i4_const_str m1_info_struct::current_filename()
 {
@@ -58,7 +58,7 @@ void m1_info_struct::get_texture_list(i4_array<i4_str *> &array, i4_bool for_all
 		// add any textures from res files
 		if (res_files.size())
 		{
-			i4_file_class *fp[500];
+			i4_file_class * fp[500];
 
 
 			for (i=0; i<res_files.size(); i++)
@@ -106,7 +106,7 @@ void m1_info_struct::get_texture_list(i4_array<i4_str *> &array, i4_bool for_all
 }
 
 
-void m1_info_struct::init(int argc, i4_const_str *argv)
+void m1_info_struct::init(int argc, i4_const_str * argv)
 {
 	for (int i=1; i<argc; i++)
 	{
@@ -141,6 +141,7 @@ void m1_info_struct::init(int argc, i4_const_str *argv)
 void m1_info_struct::uninit()
 {
 	int i;
+
 	if (obj)
 	{
 		delete obj;
@@ -183,7 +184,7 @@ void m1_info_struct::texture_list_changed()
 		return ;
 	}
 
-	r1_texture_manager_class *tman=r_api->get_tmanager(tman_index);
+	r1_texture_manager_class * tman=r_api->get_tmanager(tman_index);
 
 	if (!obj)
 	{

@@ -398,7 +398,7 @@ void i4_image_class::line(i4_coord ox1, i4_coord oy1,
 }
 
 
-void i4_image_class::put_part(i4_image_class *to,
+void i4_image_class::put_part(i4_image_class * to,
 							  i4_coord _x,  i4_coord _y,
 							  i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 							  i4_draw_context_class &context)
@@ -468,8 +468,8 @@ void i4_image_class::put_part(i4_image_class *to,
 			}
 
 
-			const i4_pixel_format *from_format=&get_pal()->source;
-			const i4_pixel_format *to_format=&to->get_pal()->source;
+			const i4_pixel_format * from_format=&get_pal()->source;
+			const i4_pixel_format * to_format=&to->get_pal()->source;
 			if (from_format->alpha_mask==0 || to_format->alpha_mask)
 			{
 				if (!(lx1>lx2 || ly1>ly2))
@@ -526,7 +526,7 @@ void i4_image_class::put_part(i4_image_class *to,
 
 
 
-void i4_image_class::put_part_trans(i4_image_class *to,
+void i4_image_class::put_part_trans(i4_image_class * to,
 									i4_coord _x,  i4_coord _y,
 									i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 									i4_color trans_color,
@@ -597,8 +597,8 @@ void i4_image_class::put_part_trans(i4_image_class *to,
 			}
 
 
-			const i4_pixel_format *from_format=&get_pal()->source;
-			const i4_pixel_format *to_format=&to->get_pal()->source;
+			const i4_pixel_format * from_format=&get_pal()->source;
+			const i4_pixel_format * to_format=&to->get_pal()->source;
 
 			if (!(lx1>lx2 || ly1>ly2))
 			{
@@ -624,7 +624,7 @@ void i4_image_class::put_part_trans(i4_image_class *to,
 
 
 
-i4_image_class *i4_create_image(int width, int height, const i4_pal *pal)
+i4_image_class *i4_create_image(int width, int height, const i4_pal * pal)
 {
 	switch (pal->source.pixel_depth)
 	{
@@ -659,8 +659,8 @@ i4_image_class *i4_create_image(int width, int height, const i4_pal *pal)
 }
 
 i4_image_class *i4_create_image(int width, int height,
-								const i4_pal *pal,
-								void *data,
+								const i4_pal * pal,
+								void * data,
 								int bpl)
 {
 	switch (pal->source.pixel_depth)
@@ -691,9 +691,9 @@ i4_image_class *i4_create_image(int width, int height,
 	return 0;
 }
 
-i4_image_class *i4_image_class::copy()
+i4_image_class * i4_image_class::copy()
 {
-	i4_image_class *im=i4_create_image(width(), height(), pal);
+	i4_image_class * im=i4_create_image(width(), height(), pal);
 
 	for (int y=0; y<h; y++)
 	{
@@ -731,11 +731,12 @@ void i4_image_class::rectangle(i4_coord x1, i4_coord y1,
 	bar(x1+1,y2,x2-1,y2,color,context);
 }
 
-i4_image_class *i4_image_class::scale_image(i4_image_class *to,i4_coord newx,i4_coord newy,
-											const i4_pal *_pal)
+i4_image_class * i4_image_class::scale_image(i4_image_class * to,i4_coord newx,i4_coord newy,
+											 const i4_pal * _pal)
 {
-	i4_image_class *r=0;
-	const i4_pal *newpal;
+	i4_image_class * r=0;
+	const i4_pal * newpal;
+
 	if (to)
 	{
 		if (to->width()!=newx||to->height()!=newy)
@@ -782,18 +783,19 @@ i4_image_class *i4_image_class::scale_image(i4_image_class *to,i4_coord newx,i4_
 	return r;
 }
 
-void i4_image_class::put_image(i4_image_class *to, i4_coord x, i4_coord y)
+void i4_image_class::put_image(i4_image_class * to, i4_coord x, i4_coord y)
 {
 	i4_draw_context_class ctx(0,0,to->width(),to->height());
 	put_image(to,x,y,ctx);
 }
 
-i4_image_class *i4_image_class::rotate_image(g1_rotation_type rotation, i4_bool mirror)
+i4_image_class * i4_image_class::rotate_image(g1_rotation_type rotation, i4_bool mirror)
 {
 	int neww=width();
 	int newh=height();
 	bool bReverse=i4_T;     //true if x and y are exchanged (is true by default,
-							//for unknown historical reasons)
+
+	//for unknown historical reasons)
 	//I4_ASSERT(neww==newh,"Width not equal height");
 	if (rotation==G1_ROTATE_90 || rotation == G1_ROTATE_270)
 	{
@@ -808,7 +810,7 @@ i4_image_class *i4_image_class::rotate_image(g1_rotation_type rotation, i4_bool 
 		newh=neww;
 		neww=temp;
 	}
-	i4_image_class *ret=i4_create_image(neww,newh,this->get_pal());
+	i4_image_class * ret=i4_create_image(neww,newh,this->get_pal());
 	int y,x;
 	int outerloop=newh;
 	int innerloop=neww;
@@ -885,12 +887,13 @@ i4_image_class *i4_image_class::rotate_image(g1_rotation_type rotation, i4_bool 
 
 }
 
-void i4_image_class::copy_image_to(i4_image_class *to,
+void i4_image_class::copy_image_to(i4_image_class * to,
 								   i4_coord new_xpos, i4_coord new_ypos,
 								   sw32 xsize, sw32 ysize,
 								   g1_rotation_type rotation, i4_bool mirror)
 {
-	i4_image_class *temp_im1=NULL, *temp_im2=NULL;
+	i4_image_class * temp_im1=NULL, * temp_im2=NULL;
+
 	//Rotate image and mirror image
 	temp_im1=rotate_image(rotation,mirror);
 	//Scale image to target size and convert color depth.
@@ -925,7 +928,7 @@ void i4_image8::put_pixel(i4_coord x, i4_coord y, w32 color)
 }
 
 
-i4_image8::i4_image8(w16 _w, w16 _h, const i4_pal *_pal)
+i4_image8::i4_image8(w16 _w, w16 _h, const i4_pal * _pal)
 {
 	w=_w;
 	h=_h;
@@ -934,8 +937,8 @@ i4_image8::i4_image8(w16 _w, w16 _h, const i4_pal *_pal)
 	data=new w8[w*h]; //I4_MALLOC(w*h,"");
 }
 
-i4_image8::i4_image8(w16 _w, w16 _h, const i4_pal *_pal,
-					 void *_data, int _bpl)
+i4_image8::i4_image8(w16 _w, w16 _h, const i4_pal * _pal,
+					 void * _data, int _bpl)
 {
 	data=(w8 *)_data;
 	bpl=_bpl;
@@ -956,9 +959,9 @@ i4_image8::~i4_image8()
 }
 
 
-i4_image_class *i4_image8::copy()
+i4_image_class * i4_image8::copy()
 {
-	i4_image_class *im=i4_create_image(width(), height(), pal);
+	i4_image_class * im=i4_create_image(width(), height(), pal);
 
 
 	for (int y=0; y<h; y++)
@@ -992,14 +995,15 @@ i4_color i4_image16::get_pixel(i4_coord x, i4_coord y)
 
 void i4_image16::put_pixel(i4_coord x, i4_coord y, w32 color)
 {
-	w16 *addr=paddr(x,y);
+	w16 * addr=paddr(x,y);
+
 	*addr=(w16)i4_pal_man.convert_32_to(color, &pal->source);
 }
 
 
 
 
-i4_image16::i4_image16(w16 _w, w16 _h, const i4_pal *_pal)
+i4_image16::i4_image16(w16 _w, w16 _h, const i4_pal * _pal)
 {
 	w=_w;
 	h=_h;
@@ -1009,8 +1013,8 @@ i4_image16::i4_image16(w16 _w, w16 _h, const i4_pal *_pal)
 	dont_free_data=i4_F;
 }
 
-i4_image16::i4_image16(w16 _w, w16 _h, const i4_pal *_pal,
-					   void *_data, int _bpl)
+i4_image16::i4_image16(w16 _w, w16 _h, const i4_pal * _pal,
+					   void * _data, int _bpl)
 {
 	data=(w8 *)_data;
 	bpl=_bpl;
@@ -1021,9 +1025,9 @@ i4_image16::i4_image16(w16 _w, w16 _h, const i4_pal *_pal,
 	dont_free_data=i4_T;
 }
 
-i4_image_class *i4_image16::copy()
+i4_image_class * i4_image16::copy()
 {
-	i4_image_class *im=i4_create_image(width(), height(), pal);
+	i4_image_class * im=i4_create_image(width(), height(), pal);
 
 	//w32 size=w*h*2;
 	//for (int y=0; y<h; y++)
@@ -1270,13 +1274,13 @@ void i4_image16::line(i4_coord ox1, i4_coord oy1,
 }
 
 
-void i4_image16::put_part(i4_image_class *to,
+void i4_image16::put_part(i4_image_class * to,
 						  i4_coord _x,  i4_coord _y,
 						  i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 						  i4_draw_context_class &context)
 {
-	const i4_pixel_format *from_format=&get_pal()->source;
-	const i4_pixel_format *to_format=&to->get_pal()->source;
+	const i4_pixel_format * from_format=&get_pal()->source;
+	const i4_pixel_format * to_format=&to->get_pal()->source;
 	i4_bool success=i4_F;
 
 	if ((to_format->pixel_depth!=I4_16BIT ||
@@ -1364,9 +1368,9 @@ void i4_image16::put_part(i4_image_class *to,
 				}
 
 
-				w16 *source=paddr(lx1, ly1);
-				w16 *dest=((i4_image16 *)to)->paddr(x + context.xoff,
-													y + context.yoff);
+				w16 * source=paddr(lx1, ly1);
+				w16 * dest=((i4_image16 *)to)->paddr(x + context.xoff,
+													 y + context.yoff);
 
 				int copy_width=((lx2-lx1)+1)*2;
 
@@ -1388,14 +1392,14 @@ void i4_image16::put_part(i4_image_class *to,
 
 
 
-void i4_image16::put_part_one_pixel_at_a_time(i4_image_class *to,
+void i4_image16::put_part_one_pixel_at_a_time(i4_image_class * to,
 											  i4_coord _x,  i4_coord _y,
 											  i4_coord x1, i4_coord y1,
 											  i4_coord x2, i4_coord y2,
 											  i4_draw_context_class &context)
 {
-	const i4_pixel_format *from_format=&get_pal()->source;
-	const i4_pixel_format *to_format=&to->get_pal()->source;
+	const i4_pixel_format * from_format=&get_pal()->source;
+	const i4_pixel_format * to_format=&to->get_pal()->source;
 
 
 	if ((to_format->pixel_depth!=I4_16BIT ||
@@ -1476,9 +1480,9 @@ void i4_image16::put_part_one_pixel_at_a_time(i4_image_class *to,
 				}
 
 
-				w16 *source=paddr(lx1, ly1);
-				w16 *dest=((i4_image16 *)to)->paddr(x + context.xoff,
-													y + context.yoff);
+				w16 * source=paddr(lx1, ly1);
+				w16 * dest=((i4_image16 *)to)->paddr(x + context.xoff,
+													 y + context.yoff);
 
 				int copy_width=((lx2-lx1)+1)*2;
 
@@ -1504,14 +1508,14 @@ void i4_image16::put_part_one_pixel_at_a_time(i4_image_class *to,
 
 
 
-void i4_image16::put_part_trans(i4_image_class *to,
+void i4_image16::put_part_trans(i4_image_class * to,
 								i4_coord _x,  i4_coord _y,
 								i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2,
 								i4_color trans_color,
 								i4_draw_context_class &context)
 {
-	const i4_pixel_format *from_format=&get_pal()->source;
-	const i4_pixel_format *to_format=&to->get_pal()->source;
+	const i4_pixel_format * from_format=&get_pal()->source;
+	const i4_pixel_format * to_format=&to->get_pal()->source;
 
 
 	if ((to_format->pixel_depth!=I4_16BIT ||
@@ -1597,9 +1601,9 @@ void i4_image16::put_part_trans(i4_image_class *to,
 				{
 					to->add_dirty(x,y,x+(lx2-lx1+1),y+(ly2-ly1+1),context);
 
-					w16 *source=paddr(lx1, ly1);
-					w16 *dest=((i4_image16 *)to)->paddr(x + context.xoff,
-														y + context.yoff);
+					w16 * source=paddr(lx1, ly1);
+					w16 * dest=((i4_image16 *)to)->paddr(x + context.xoff,
+														 y + context.yoff);
 					int w=(lx2-lx1+1);
 
 					for (; ly1<=ly2; ly1++)
@@ -1668,7 +1672,7 @@ void i4_image16::bar(i4_coord x1,    i4_coord y1,
 
 		if (!(lx1>lx2 || ly1>ly2))
 		{
-			w16 *d=paddr(lx1 + context.xoff, ly1+context.yoff);
+			w16 * d=paddr(lx1 + context.xoff, ly1+context.yoff);
 			int count=lx2-lx1+1;
 
 			add_dirty(lx1,ly1,lx2,ly2,context);
@@ -1704,7 +1708,7 @@ void i4_image32::put_pixel(i4_coord x, i4_coord y, w32 color)
 	*paddr(x,y)=i4_pal_man.convert_32_to(color, &pal->source);
 }
 
-i4_image32::i4_image32(w16 _w, w16 _h, const i4_pal *_pal)
+i4_image32::i4_image32(w16 _w, w16 _h, const i4_pal * _pal)
 {
 	w=_w;
 	h=_h;
@@ -1714,8 +1718,8 @@ i4_image32::i4_image32(w16 _w, w16 _h, const i4_pal *_pal)
 	dont_free_data=i4_F;
 }
 
-i4_image32::i4_image32(w16 _w, w16 _h, const i4_pal *_pal,
-					   void *_data, int _bpl)
+i4_image32::i4_image32(w16 _w, w16 _h, const i4_pal * _pal,
+					   void * _data, int _bpl)
 {
 	data=(w8 *)_data;
 	bpl=_bpl;
@@ -1735,13 +1739,13 @@ i4_image32::~i4_image32()
 	}
 }
 
-void i4_image32::put_part(i4_image_class *to, i4_coord _x, i4_coord _y, i4_coord x1,
+void i4_image32::put_part(i4_image_class * to, i4_coord _x, i4_coord _y, i4_coord x1,
 						  i4_coord y1, i4_coord x2, i4_coord y2, i4_draw_context_class &context)
 {
 	//i4_image_class::put_part(to,_x,_y,x1,y1,x2,y2,context);
 	//return;
-	const i4_pixel_format *from_format=&get_pal()->source;
-	const i4_pixel_format *to_format=&to->get_pal()->source;
+	const i4_pixel_format * from_format=&get_pal()->source;
+	const i4_pixel_format * to_format=&to->get_pal()->source;
 	i4_bool success=i4_F;
 
 	if (to_format->pixel_depth!=I4_32BIT)
@@ -1819,10 +1823,10 @@ void i4_image32::put_part(i4_image_class *to, i4_coord _x, i4_coord _y, i4_coord
 						}
 
 
-						w32 *source=paddr(lx1, ly1),*xsoffs;
-						w16 *dest=((i4_image16 *)to)->paddr(x + context.xoff,
-															y + context.yoff);
-						w16 *xdoffs;
+						w32 * source=paddr(lx1, ly1),* xsoffs;
+						w16 * dest=((i4_image16 *)to)->paddr(x + context.xoff,
+															 y + context.yoff);
+						w16 * xdoffs;
 						w32 col,cold;
 						int copy_width=((lx2-lx1)+1)*4;
 
@@ -1968,9 +1972,9 @@ void i4_image32::put_part(i4_image_class *to, i4_coord _x, i4_coord _y, i4_coord
 				}
 
 
-				w32 *source=paddr(lx1, ly1);
-				w32 *dest=((i4_image32 *)to)->paddr(x + context.xoff,
-													y + context.yoff);
+				w32 * source=paddr(lx1, ly1);
+				w32 * dest=((i4_image32 *)to)->paddr(x + context.xoff,
+													 y + context.yoff);
 
 				int copy_width=((lx2-lx1)+1)*4;
 
@@ -1992,9 +1996,9 @@ void i4_image32::put_part(i4_image_class *to, i4_coord _x, i4_coord _y, i4_coord
 }
 
 
-i4_image_class *i4_image32::copy()
+i4_image_class * i4_image32::copy()
 {
-	i4_image_class *im=i4_create_image(width(), height(), pal);
+	i4_image_class * im=i4_create_image(width(), height(), pal);
 
 	memcpy(im->data,data,w*h*4);
 	//for (int y=0; y<h; y++)
@@ -2030,10 +2034,10 @@ inline w16 _32_to_16_565(w32 c)
 }
 
 
-i4_image_class *i4_image32::quantize(const i4_pal *pal,
-									 w32 skip_colors,
-									 i4_coord x1, i4_coord y1,
-									 i4_coord x2, i4_coord y2)
+i4_image_class * i4_image32::quantize(const i4_pal * pal,
+									  w32 skip_colors,
+									  i4_coord x1, i4_coord y1,
+									  i4_coord x2, i4_coord y2)
 {
 
 	if (pal->source.pixel_depth!=I4_8BIT)
@@ -2067,13 +2071,13 @@ i4_image_class *i4_image32::quantize(const i4_pal *pal,
 	}
 
 
-	i4_image8 *im8 = new i4_image8(x2-x1+1,
-								   y2-y1+1,
-								   pal);
+	i4_image8 * im8 = new i4_image8(x2-x1+1,
+									y2-y1+1,
+									pal);
 
 
-	w32 *pixel32 = (w32 *)((w8 *)data + x1*4 + y1*bpl);
-	w8 *pixel8 = (w8 *)im8->data;
+	w32 * pixel32 = (w32 *)((w8 *)data + x1*4 + y1*bpl);
+	w8 * pixel8 = (w8 *)im8->data;
 
 	w32 skip_32 = bpl-(x2-x1+1); // pixels to skip per line
 	w32 x,y;
@@ -2081,16 +2085,16 @@ i4_image_class *i4_image32::quantize(const i4_pal *pal,
 	w8 closest_color=0;
 	w32 closest_distance,
 		distance,
-	*color_index;
+	* color_index;
 
-	w32 *pal_data=pal->source.lookup;
+	w32 * pal_data=pal->source.lookup;
 
 
 	// maps 16 bits color space into closest 8 bit color
-	w8 *lookup_table=(w8 *)I4_MALLOC(0x10000, "lookup");
+	w8 * lookup_table=(w8 *)I4_MALLOC(0x10000, "lookup");
 
 	// indicates if above color has been calculated yet
-	w8 *table_calced=(w8 *)I4_MALLOC(0x10000, "table_calced");
+	w8 * table_calced=(w8 *)I4_MALLOC(0x10000, "table_calced");
 
 	memset(table_calced,0,0x10000);   // initially no mappings are calculated
 
@@ -2160,7 +2164,8 @@ i4_color i4_image24::get_pixel(i4_coord x, i4_coord y)
 void i4_image24::put_pixel(i4_coord x, i4_coord y, w32 color)
 {
 	//i4_color c=i4_pal_man.convert_24_to(color, &pal->source)
-	w8 *a=(w8 *)paddr(x,y); //Wir müssen (leider) byteweise zugreifen
+	w8 * a=(w8 *)paddr(x,y); //Wir müssen (leider) byteweise zugreifen
+
 	*a=(w8)(color); //r
 	a++;
 	*a=(w8)(color>>8); //g
@@ -2190,7 +2195,7 @@ void i4_image24::put_pixel(i4_coord x, i4_coord y, w32 color)
 
 }
 
-i4_image24::i4_image24(w16 _w, w16 _h, const i4_pal *_pal)
+i4_image24::i4_image24(w16 _w, w16 _h, const i4_pal * _pal)
 {
 	w=_w;
 	h=_h;
@@ -2200,8 +2205,8 @@ i4_image24::i4_image24(w16 _w, w16 _h, const i4_pal *_pal)
 	dont_free_data=i4_F;
 }
 
-i4_image24::i4_image24(w16 _w, w16 _h, const i4_pal *_pal,
-					   void *_data, int _bpl)
+i4_image24::i4_image24(w16 _w, w16 _h, const i4_pal * _pal,
+					   void * _data, int _bpl)
 {
 	data=(w8 *)_data;
 	bpl=_bpl;
@@ -2246,9 +2251,9 @@ inline w16 _24_to_16_565(w32 c)
 	return (r<<11) | (g<<5) | b;
 }
 
-i4_image_class *i4_image24::copy()
+i4_image_class * i4_image24::copy()
 {
-	i4_image_class *im=i4_create_image(width(), height(), pal);
+	i4_image_class * im=i4_create_image(width(), height(), pal);
 
 	memcpy(im->data,data,w*h*3);
 	//for (int y=0; y<h; y++)
@@ -2259,10 +2264,10 @@ i4_image_class *i4_image24::copy()
 }
 
 typedef unsigned char w24[3];
-i4_image_class *i4_image24::quantize(const i4_pal *pal,
-									 w32 skip_colors,
-									 i4_coord x1, i4_coord y1,
-									 i4_coord x2, i4_coord y2)
+i4_image_class * i4_image24::quantize(const i4_pal * pal,
+									  w32 skip_colors,
+									  i4_coord x1, i4_coord y1,
+									  i4_coord x2, i4_coord y2)
 {
 
 	if (pal->source.pixel_depth!=I4_8BIT)
@@ -2296,13 +2301,13 @@ i4_image_class *i4_image24::quantize(const i4_pal *pal,
 	}
 
 
-	i4_image8 *im8 = new i4_image8(x2-x1+1,
-								   y2-y1+1,
-								   pal);
+	i4_image8 * im8 = new i4_image8(x2-x1+1,
+									y2-y1+1,
+									pal);
 
 
-	w32 *pixel24 = (w32 *)((w8 *)data + x1*3 + y1*bpl);
-	w8 *pixel8 = (w8 *)im8->data;
+	w32 * pixel24 = (w32 *)((w8 *)data + x1*3 + y1*bpl);
+	w8 * pixel8 = (w8 *)im8->data;
 
 	w32 skip_24 = bpl-(x2-x1+1); // pixels to skip per line
 	w32 x,y;
@@ -2310,16 +2315,16 @@ i4_image_class *i4_image24::quantize(const i4_pal *pal,
 	w8 closest_color=0;
 	w32 closest_distance,
 		distance,
-	*color_index;
+	* color_index;
 
-	w32 *pal_data=pal->source.lookup;
+	w32 * pal_data=pal->source.lookup;
 
 
 	// maps 16 bits color space into closest 8 bit color
-	w8 *lookup_table=(w8 *)I4_MALLOC(0x10000, "lookup");
+	w8 * lookup_table=(w8 *)I4_MALLOC(0x10000, "lookup");
 
 	// indicates if above color has been calculated yet
-	w8 *table_calced=(w8 *)I4_MALLOC(0x10000, "table_calced");
+	w8 * table_calced=(w8 *)I4_MALLOC(0x10000, "table_calced");
 
 	memset(table_calced,0,0x10000);   // initially no mappings are calculated
 

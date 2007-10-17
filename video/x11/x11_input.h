@@ -45,20 +45,20 @@ class x11_input_class :
 {
 public:
 	Atom wm_delete_window, wm_protocols;
-	XVisualInfo *my_visual;
-	Display *display;
+	XVisualInfo * my_visual;
+	Display * display;
 	i4_bool mouse_locked;
 	Window mainwin;
 	Window errorwin;
 	GC gc;
-	i4_display_class *i4_display;
+	i4_display_class * i4_display;
 	Colormap xcolor_map;
 	int screen_num;
 	//set to true by an exposure event
 	//to indicate when the display should be redrawn completelly.
 	i4_bool was_exposed;
 
-	i4_draw_context_class *context;
+	i4_draw_context_class * context;
 	w16 modifier_state;                               // keyboard shift state
 	sw32 mouse_x, mouse_y;
 	i4_time_class last_down[3], last_up[3];
@@ -80,11 +80,11 @@ public:
 	void close_display();
 
 	i4_bool create_window(sw32 x, sw32 y, w32 w, w32 h,
-						  i4_display_class *i4_display,
+						  i4_display_class * i4_display,
 						  i4_bool takeup_fullscreen,
-						  XVisualInfo *visual);
-	int create_error_window(const char *error_msg);
-	void draw_error(Display *disp, const char *error_msg, int width, int height, int screen_e_num);
+						  XVisualInfo * visual);
+	int create_error_window(const char * error_msg);
+	void draw_error(Display * disp, const char * error_msg, int width, int height, int screen_e_num);
 	void destroy_window();
 
 	virtual i4_bool process_events();
@@ -104,7 +104,7 @@ public:
 		return i4_T;
 	}
 
-	virtual void name(char *buf)
+	virtual void name(char * buf)
 	{
 		static_name(buf, "x11_input_class");
 	}
@@ -113,7 +113,7 @@ public:
 	~x11_input_class();
 };
 
-int showerror(const char *error_msg);
+int showerror(const char * error_msg);
 
 
 #endif

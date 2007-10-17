@@ -18,7 +18,7 @@
 //all calls to qftoi() here assume it will truncate, so be sure that start_trunc() gets
 //called before these functions execute
 
-inline void standard_draw_tri(s_vert *v0,s_vert *v1, s_vert *v2, w8 poly_type)
+inline void standard_draw_tri(s_vert * v0,s_vert * v1, s_vert * v2, w8 poly_type)
 {
 	if (!tri_draw_functions[poly_type])
 	{
@@ -30,7 +30,7 @@ inline void standard_draw_tri(s_vert *v0,s_vert *v1, s_vert *v2, w8 poly_type)
 	}
 
 	//find top, middle, and bottom verts
-	s_vert *min_y=0,*mid_y=0,*max_y=0;
+	s_vert * min_y=0,* mid_y=0,* max_y=0;
 
 	sw32 midedgecompare,botedgecompare;
 
@@ -151,7 +151,7 @@ inline void standard_draw_tri(s_vert *v0,s_vert *v1, s_vert *v2, w8 poly_type)
 	stop_single();
 }
 
-inline void setup_spans_for_poly(s_vert *v, sw32 t_verts, span_tri_info *new_tri, i4_bool reverse=0)
+inline void setup_spans_for_poly(s_vert * v, sw32 t_verts, span_tri_info * new_tri, i4_bool reverse=0)
 {
 	new_tri->color_tint = r1_software_class_ptr->cur_color_tint;
 
@@ -194,7 +194,7 @@ inline void setup_spans_for_poly(s_vert *v, sw32 t_verts, span_tri_info *new_tri
 		}                //edge is perfectly horizontal? ignore it
 
 		//allocate a new edge
-		span_edge *new_edge = new_span_edge();
+		span_edge * new_edge = new_span_edge();
 		if (!new_edge)
 		{
 			return;
@@ -237,7 +237,7 @@ inline void setup_spans_for_poly(s_vert *v, sw32 t_verts, span_tri_info *new_tri
 	}
 }
 
-void sprite_setup_affine_unlit_alpha(s_vert *v,sw32 t_verts)
+void sprite_setup_affine_unlit_alpha(s_vert * v,sw32 t_verts)
 {
 	if (t_verts != 4)
 	{
@@ -247,11 +247,11 @@ void sprite_setup_affine_unlit_alpha(s_vert *v,sw32 t_verts)
 	//just draw a sprite. calculate some necessary info first, though
 
 	//alias the vertex list
-	s_vert *v0 = &v[0],
-	*v1 = &v[1],
-	*v2 = &v[2];
+	s_vert * v0 = &v[0],
+	* v1 = &v[1],
+	* v2 = &v[2];
 
-	tri_area_struct *t = triangle_info; //areas for each tri have already been calculated and stored here
+	tri_area_struct * t = triangle_info; //areas for each tri have already been calculated and stored here
 
 	i4_bool reverse; //used to determine if the sprite is backfacing
 
@@ -277,10 +277,10 @@ void sprite_setup_affine_unlit_alpha(s_vert *v,sw32 t_verts)
 	}
 
 	//setup an alias
-	tri_gradients *grads;
+	tri_gradients * grads;
 
 	//setup new spanned triangle
-	span_tri_info *new_tri = 0;
+	span_tri_info * new_tri = 0;
 
 	if (r1_software_class_ptr->use_spans)
 	{
@@ -389,23 +389,24 @@ void sprite_setup_affine_unlit_alpha(s_vert *v,sw32 t_verts)
 	}
 }
 
-void poly_setup_affine_lit(s_vert *v,sw32 t_verts)
+void poly_setup_affine_lit(s_vert * v,sw32 t_verts)
 {
 	//step through the vertices and extract the tris for drawing (or span buffering)
 
 	i4_bool do_light = (small_poly_type==SPAN_TRI_AFFINE_LIT);
 
 	//alias the vertex list
-	s_vert *v0 = &v[0],
-	*v1 = &v[1],
-	*v2 = &v[2];
+	s_vert * v0 = &v[0],
+	* v1 = &v[1],
+	* v2 = &v[2];
 
 	//temporary list of verts for each tri,
 	//needed for the call to setup_spans_for_poly (which doesnt take tris, but rather polys)
 	s_vert span_verts[3];
+
 	span_verts[0] = *v0;
 
-	tri_area_struct *t = triangle_info; //areas for each tri have already been calculated and stored here
+	tri_area_struct * t = triangle_info; //areas for each tri have already been calculated and stored here
 
 	i4_bool reverse; //used to determine if the tri is backfacing
 	sw32 i;
@@ -449,10 +450,10 @@ void poly_setup_affine_lit(s_vert *v,sw32 t_verts)
 		}
 
 		//setup an alias
-		tri_gradients *grads;
+		tri_gradients * grads;
 
 		//setup new spanned triangle
-		span_tri_info *new_tri = 0;
+		span_tri_info * new_tri = 0;
 
 		if (r1_software_class_ptr->use_spans)
 		{
@@ -629,12 +630,13 @@ void poly_setup_affine_lit(s_vert *v,sw32 t_verts)
 	}
 }
 
-void poly_setup_perspective_lit(s_vert *v,sw32 t_verts)
+void poly_setup_perspective_lit(s_vert * v,sw32 t_verts)
 {
 	i4_bool do_light = (big_poly_type==SPAN_TRI_PERSPECTIVE_LIT);
 
 	i4_bool reverse;
-	s_vert *v0,*v1,*v2;
+	s_vert * v0,* v1,* v2;
+
 	v0 = &v[0];
 	v1 = &v[1];
 	v2 = &v[2];
@@ -651,7 +653,7 @@ void poly_setup_perspective_lit(s_vert *v,sw32 t_verts)
 
 	v_2[0] = *v0;
 
-	tri_area_struct *t = triangle_info;
+	tri_area_struct * t = triangle_info;
 
 	//by default this will be a "big" polygon (thats why the perspective
 	//setup was called in the 1st place)
@@ -697,10 +699,10 @@ void poly_setup_perspective_lit(s_vert *v,sw32 t_verts)
 		}
 
 		//setup new spanned triangle
-		span_tri_info *new_tri=0;
+		span_tri_info * new_tri=0;
 
 		//setup an alias
-		tri_gradients *grads;
+		tri_gradients * grads;
 
 		if (r1_software_class_ptr->use_spans)
 		{
@@ -904,22 +906,22 @@ void poly_setup_perspective_lit(s_vert *v,sw32 t_verts)
 	}
 }
 
-void poly_setup_solid_color(s_vert *v, sw32 t_verts)
+void poly_setup_solid_color(s_vert * v, sw32 t_verts)
 {
 	i4_bool reverse;
 
-	s_vert *v0 = &v[0],
-	*v1 = &v[1],
-	*v2 = &v[2];
+	s_vert * v0 = &v[0],
+	* v1 = &v[1],
+	* v2 = &v[2];
 
 	sw32 i;
-	tri_area_struct *t = triangle_info;
+	tri_area_struct * t = triangle_info;
 
 	if (r1_software_class_ptr->use_spans)
 	{
-		span_tri_info *new_tri = 0;
+		span_tri_info * new_tri = 0;
 
-		tri_area_struct *t = triangle_info;
+		tri_area_struct * t = triangle_info;
 
 		float &dx1x0 = t->dx1x0;
 		float &dx2x0 = t->dx2x0;
@@ -949,7 +951,7 @@ void poly_setup_solid_color(s_vert *v, sw32 t_verts)
 			return;
 		}
 
-		tri_gradients *grads = &new_tri->grads;
+		tri_gradients * grads = &new_tri->grads;
 
 		double oodgx = 1.0 / (double) denom_gradx;
 		double oodgy = -oodgx;
@@ -1003,7 +1005,7 @@ void poly_setup_solid_color(s_vert *v, sw32 t_verts)
 				continue;
 			}
 
-			tri_gradients *grads = &cur_grads;
+			tri_gradients * grads = &cur_grads;
 
 			double oodgx = 1.0 / (double) denom_gradx;
 			double oodgy = -oodgx;

@@ -9,6 +9,6 @@
 #include "image/image.h"
 
 
-void i4_gradiant_bar(i4_image_class *im, int x1, int y1, int x2, int y2,
+void i4_gradiant_bar(i4_image_class * im, int x1, int y1, int x2, int y2,
 					 i4_color start_color, i4_color end_color,
 					 i4_draw_context_class &context);

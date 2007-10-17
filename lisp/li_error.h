@@ -12,7 +12,7 @@ class i4_file_class;        // defined in i4/file/file.hh
 class li_environment;
 
 // typical printf format, with %O == li_object *
-void li_printf(i4_file_class *fp, char *fmt, ...);
+void li_printf(i4_file_class * fp, char * fmt, ...);
 
 // typical printf format, with %O == li_object, calls i4_error with resulting string
-int li_error(li_environment *env, char *fmt, ...);
+int li_error(li_environment * env, char * fmt, ...);

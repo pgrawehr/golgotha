@@ -145,11 +145,11 @@ typedef SectionList::iterator SectionItor;
 
 /// General Purpose Utility Functions ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
-void    Report(e_DebugLevel DebugLevel, char *fmt, ...);
+void    Report(e_DebugLevel DebugLevel, char * fmt, ...);
 t_Str   GetNextWord(t_Str& CommandLine);
 int     CompareNoCase(t_Str str1, t_Str str2);
 void    Trim(t_Str& szStr);
-int     WriteLn(i4_file_class *stream, char *fmt, ...);
+int     WriteLn(i4_file_class * stream, char * fmt, ...);
 
 
 /// Class Definitions ///////////////////////////////////////////////////////////
@@ -276,6 +276,6 @@ protected:
 	t_Str m_szFileName;   // The filename to write to
 	bool m_bDirty;       // Tracks whether or not data has changed.
 };
-extern CDataFile *inifile;
+extern CDataFile * inifile;
 
 #endif

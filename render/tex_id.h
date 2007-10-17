@@ -26,12 +26,12 @@ void r1_cleanup_texture_lookup_table(void);
 struct r1_texture_ref
 {
 public:
-	static r1_texture_ref *first;
+	static r1_texture_ref * first;
 
-	char *name;
+	char * name;
 	r1_texture_handle texture_handle;
 
-	r1_texture_ref(char *texture_name) :
+	r1_texture_ref(char * texture_name) :
 		name(texture_name) {
 		texture_handle=0;
 		next=first;
@@ -40,7 +40,7 @@ public:
 
 	~r1_texture_ref();
 
-	r1_texture_ref *next;
+	r1_texture_ref * next;
 
 	r1_texture_handle get()
 	{

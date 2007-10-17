@@ -108,7 +108,8 @@ int g1_crate_class::added_chain()
 
 g1_crate_class::ctype g1_crate_class::get_ctype()
 {
-	li_symbol *s=vars->get(type);
+	li_symbol * s=vars->get(type);
+
 	if (s==li_health.get())
 	{
 		return HEALTH;
@@ -133,7 +134,7 @@ g1_crate_class::ctype g1_crate_class::get_ctype()
 
 void g1_crate_class::set_ctype(ctype x)
 {
-	li_symbol *s=0;
+	li_symbol * s=0;
 	int sub_type;
 
 	switch (x)
@@ -275,7 +276,7 @@ void g1_crate_class::go_away()
 	request_remove();
 }
 
-void g1_crate_class::note_stank_near(g1_player_piece_class *s)
+void g1_crate_class::note_stank_near(g1_player_piece_class * s)
 {
 	float dist_sqrd=(s->x-x)*(s->x-x)+(s->y-y)*(s->y-y)+(s->h-h)*(s->h-h);
 
@@ -377,10 +378,11 @@ void g1_crate_class::note_stank_near(g1_player_piece_class *s)
 	}
 }
 
-void g1_crate_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_crate_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
-	i4_transform_class *old = context->transform;
+	i4_transform_class * old = context->transform;
 	i4_transform_class view_transform;
+
 	context->transform = &view_transform;
 
 	i4_3d_vector my_interp_position = world_transform->t;
@@ -427,7 +429,7 @@ void g1_crate_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_p
 	context->transform=old;
 }
 
-g1_crate_class::g1_crate_class(g1_object_type id, g1_loader_class *fp)
+g1_crate_class::g1_crate_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	ticks_to_think=0;
@@ -473,7 +475,7 @@ void g1_crate_class::setup(const i4_3d_vector &pos, ctype t, atype amount, int t
 	}
 }
 
-void g1_crate_class::object_changed_by_editor(g1_object_class *who, li_class *old_values)
+void g1_crate_class::object_changed_by_editor(g1_object_class * who, li_class * old_values)
 {
 	if (who==this)
 	{

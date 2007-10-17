@@ -11,7 +11,7 @@
 #include "lisp/lisp.h"
 #include "lisp/li_init.h"
 
-li_object *add(li_object *o, li_environment *env)
+li_object *add(li_object * o, li_environment * env)
 {
 	int int_sum=0, return_float=0;
 	float float_sum=0;
@@ -21,7 +21,7 @@ li_object *add(li_object *o, li_environment *env)
 		// li_car get's the data for this node in the parameter list
 		// i.e. o->data()
 		// li_eval evaluates the object if it's not already a number
-		li_object *item=li_eval(li_car(o, env), env);
+		li_object * item=li_eval(li_car(o, env), env);
 
 
 
@@ -49,7 +49,7 @@ li_object *add(li_object *o, li_environment *env)
 }
 
 
-li_object *sub(li_object *o, li_environment *env)
+li_object *sub(li_object * o, li_environment * env)
 {
 	float x1=li_get_float(li_eval(li_first(o,env), env),env);
 	float x2=li_get_float(li_eval(li_second(o,env), env),env);
@@ -62,7 +62,7 @@ li_object *sub(li_object *o, li_environment *env)
 // through c++ magic.
 li_automatic_add_function(sub, "sub");
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	i4_init();
 

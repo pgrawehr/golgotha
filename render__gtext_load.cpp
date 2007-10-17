@@ -16,9 +16,9 @@
 #include "render/r1_res.h"
 #include "memory/malloc.h"
 
-int r1_load_gtext(w32 id, i4_image_class **images)
+int r1_load_gtext(w32 id, i4_image_class * * images)
 {
-	i4_file_class *fp;
+	i4_file_class * fp;
 	tex_cache_header_t theader;
 	mipheader_t header;
 
@@ -36,7 +36,7 @@ int r1_load_gtext(w32 id, i4_image_class **images)
 	delete fp;
 
 
-	i4_str *fn = r1_texture_id_to_filename(id, r1_get_decompressed_dir());
+	i4_str * fn = r1_texture_id_to_filename(id, r1_get_decompressed_dir());
 	fp=i4_open(*fn);
 	delete fn;
 	if (!fp)
@@ -47,7 +47,7 @@ int r1_load_gtext(w32 id, i4_image_class **images)
 	header.read(fp);
 
 	int w=header.base_width, h=header.base_height, i;
-	const i4_pal *pal;
+	const i4_pal * pal;
 
 	if (header.flags & R1_MIP_IS_TRANSPARENT)
 	{
@@ -66,11 +66,11 @@ int r1_load_gtext(w32 id, i4_image_class **images)
 	{
 		fp->seek(header.offsets[i]+8);
 
-		w16 *data=new w16[w*h]; //(w16 *)I4_MALLOC(w*h*2,"");
+		w16 * data=new w16[w*h]; //(w16 *)I4_MALLOC(w*h*2,"");
 		fp->read(data,w*h*2);
 
 
-		i4_image_class *im=i4_create_image(w,h, pal, (w8 *)data, w*2);
+		i4_image_class * im=i4_create_image(w,h, pal, (w8 *)data, w*2);
 		im->dont_free_data=i4_F;
 
 		images[i]=im;

@@ -15,18 +15,18 @@
 #endif  //DIRECT3D_VERSION
 
 // include this file content only if compiling for DX9 interfaces
-#if(DIRECT3D_VERSION >= 0x0900)
+#if (DIRECT3D_VERSION >= 0x0900)
 
-#if defined(_X86_) || defined(_IA64)
+#if defined (_X86_) || defined (_IA64)
 #pragma pack(4)
 #endif
 
 typedef struct _D3DVSHADERCAPS2_0
 {
-        DWORD Caps;
-        INT DynamicFlowControlDepth;
-        INT NumTemps;
-        INT StaticFlowControlDepth;
+	DWORD Caps;
+	INT DynamicFlowControlDepth;
+	INT NumTemps;
+	INT StaticFlowControlDepth;
 } D3DVSHADERCAPS2_0;
 
 #define D3DVS20CAPS_PREDICATION             (1<<0)
@@ -40,11 +40,11 @@ typedef struct _D3DVSHADERCAPS2_0
 
 typedef struct _D3DPSHADERCAPS2_0
 {
-    DWORD Caps;
-    INT DynamicFlowControlDepth;
-    INT NumTemps;
-    INT StaticFlowControlDepth;
-    INT NumInstructionSlots;
+	DWORD Caps;
+	INT DynamicFlowControlDepth;
+	INT NumTemps;
+	INT StaticFlowControlDepth;
+	INT NumInstructionSlots;
 } D3DPSHADERCAPS2_0;
 
 #define D3DPS20CAPS_ARBITRARYSWIZZLE        (1<<0)
@@ -67,97 +67,97 @@ typedef struct _D3DPSHADERCAPS2_0
 
 typedef struct _D3DCAPS9
 {
-    /* Device Info */
-    D3DDEVTYPE  DeviceType;
-    UINT        AdapterOrdinal;
+	/* Device Info */
+	D3DDEVTYPE DeviceType;
+	UINT AdapterOrdinal;
 
-    /* Caps from DX7 Draw */
-    DWORD   Caps;
-    DWORD   Caps2;
-    DWORD   Caps3;
-    DWORD   PresentationIntervals;
+	/* Caps from DX7 Draw */
+	DWORD Caps;
+	DWORD Caps2;
+	DWORD Caps3;
+	DWORD PresentationIntervals;
 
-    /* Cursor Caps */
-    DWORD   CursorCaps;
+	/* Cursor Caps */
+	DWORD CursorCaps;
 
-    /* 3D Device Caps */
-    DWORD   DevCaps;
+	/* 3D Device Caps */
+	DWORD DevCaps;
 
-    DWORD   PrimitiveMiscCaps;
-    DWORD   RasterCaps;
-    DWORD   ZCmpCaps;
-    DWORD   SrcBlendCaps;
-    DWORD   DestBlendCaps;
-    DWORD   AlphaCmpCaps;
-    DWORD   ShadeCaps;
-    DWORD   TextureCaps;
-    DWORD   TextureFilterCaps;          // D3DPTFILTERCAPS for IDirect3DTexture9's
-    DWORD   CubeTextureFilterCaps;      // D3DPTFILTERCAPS for IDirect3DCubeTexture9's
-    DWORD   VolumeTextureFilterCaps;    // D3DPTFILTERCAPS for IDirect3DVolumeTexture9's
-    DWORD   TextureAddressCaps;         // D3DPTADDRESSCAPS for IDirect3DTexture9's
-    DWORD   VolumeTextureAddressCaps;   // D3DPTADDRESSCAPS for IDirect3DVolumeTexture9's
+	DWORD PrimitiveMiscCaps;
+	DWORD RasterCaps;
+	DWORD ZCmpCaps;
+	DWORD SrcBlendCaps;
+	DWORD DestBlendCaps;
+	DWORD AlphaCmpCaps;
+	DWORD ShadeCaps;
+	DWORD TextureCaps;
+	DWORD TextureFilterCaps;          // D3DPTFILTERCAPS for IDirect3DTexture9's
+	DWORD CubeTextureFilterCaps;      // D3DPTFILTERCAPS for IDirect3DCubeTexture9's
+	DWORD VolumeTextureFilterCaps;    // D3DPTFILTERCAPS for IDirect3DVolumeTexture9's
+	DWORD TextureAddressCaps;         // D3DPTADDRESSCAPS for IDirect3DTexture9's
+	DWORD VolumeTextureAddressCaps;   // D3DPTADDRESSCAPS for IDirect3DVolumeTexture9's
 
-    DWORD   LineCaps;                   // D3DLINECAPS
+	DWORD LineCaps;                   // D3DLINECAPS
 
-    DWORD   MaxTextureWidth, MaxTextureHeight;
-    DWORD   MaxVolumeExtent;
+	DWORD MaxTextureWidth, MaxTextureHeight;
+	DWORD MaxVolumeExtent;
 
-    DWORD   MaxTextureRepeat;
-    DWORD   MaxTextureAspectRatio;
-    DWORD   MaxAnisotropy;
-    float   MaxVertexW;
+	DWORD MaxTextureRepeat;
+	DWORD MaxTextureAspectRatio;
+	DWORD MaxAnisotropy;
+	float MaxVertexW;
 
-    float   GuardBandLeft;
-    float   GuardBandTop;
-    float   GuardBandRight;
-    float   GuardBandBottom;
+	float GuardBandLeft;
+	float GuardBandTop;
+	float GuardBandRight;
+	float GuardBandBottom;
 
-    float   ExtentsAdjust;
-    DWORD   StencilCaps;
+	float ExtentsAdjust;
+	DWORD StencilCaps;
 
-    DWORD   FVFCaps;
-    DWORD   TextureOpCaps;
-    DWORD   MaxTextureBlendStages;
-    DWORD   MaxSimultaneousTextures;
+	DWORD FVFCaps;
+	DWORD TextureOpCaps;
+	DWORD MaxTextureBlendStages;
+	DWORD MaxSimultaneousTextures;
 
-    DWORD   VertexProcessingCaps;
-    DWORD   MaxActiveLights;
-    DWORD   MaxUserClipPlanes;
-    DWORD   MaxVertexBlendMatrices;
-    DWORD   MaxVertexBlendMatrixIndex;
+	DWORD VertexProcessingCaps;
+	DWORD MaxActiveLights;
+	DWORD MaxUserClipPlanes;
+	DWORD MaxVertexBlendMatrices;
+	DWORD MaxVertexBlendMatrixIndex;
 
-    float   MaxPointSize;
+	float MaxPointSize;
 
-    DWORD   MaxPrimitiveCount;          // max number of primitives per DrawPrimitive call
-    DWORD   MaxVertexIndex;
-    DWORD   MaxStreams;
-    DWORD   MaxStreamStride;            // max stride for SetStreamSource
+	DWORD MaxPrimitiveCount;          // max number of primitives per DrawPrimitive call
+	DWORD MaxVertexIndex;
+	DWORD MaxStreams;
+	DWORD MaxStreamStride;            // max stride for SetStreamSource
 
-    DWORD   VertexShaderVersion;
-    DWORD   MaxVertexShaderConst;       // number of vertex shader constant registers
+	DWORD VertexShaderVersion;
+	DWORD MaxVertexShaderConst;       // number of vertex shader constant registers
 
-    DWORD   PixelShaderVersion;
-    float   PixelShader1xMaxValue;      // max value storable in registers of ps.1.x shaders
+	DWORD PixelShaderVersion;
+	float PixelShader1xMaxValue;      // max value storable in registers of ps.1.x shaders
 
-    // Here are the DX9 specific ones
-    DWORD   DevCaps2;
+	// Here are the DX9 specific ones
+	DWORD DevCaps2;
 
-    float   MaxNpatchTessellationLevel;
-    DWORD   Reserved5;
+	float MaxNpatchTessellationLevel;
+	DWORD Reserved5;
 
-    UINT    MasterAdapterOrdinal;       // ordinal of master adaptor for adapter group
-    UINT    AdapterOrdinalInGroup;      // ordinal inside the adapter group
-    UINT    NumberOfAdaptersInGroup;    // number of adapters in this adapter group (only if master)
-    DWORD   DeclTypes;                  // Data types, supported in vertex declarations
-    DWORD   NumSimultaneousRTs;         // Will be at least 1
-    DWORD   StretchRectFilterCaps;      // Filter caps supported by StretchRect
-    D3DVSHADERCAPS2_0 VS20Caps;
-    D3DPSHADERCAPS2_0 PS20Caps;
-    DWORD   VertexTextureFilterCaps;    // D3DPTFILTERCAPS for IDirect3DTexture9's for texture, used in vertex shaders
-    DWORD   MaxVShaderInstructionsExecuted; // maximum number of vertex shader instructions that can be executed
-    DWORD   MaxPShaderInstructionsExecuted; // maximum number of pixel shader instructions that can be executed
-    DWORD   MaxVertexShader30InstructionSlots; 
-    DWORD   MaxPixelShader30InstructionSlots;
+	UINT MasterAdapterOrdinal;       // ordinal of master adaptor for adapter group
+	UINT AdapterOrdinalInGroup;      // ordinal inside the adapter group
+	UINT NumberOfAdaptersInGroup;    // number of adapters in this adapter group (only if master)
+	DWORD DeclTypes;                  // Data types, supported in vertex declarations
+	DWORD NumSimultaneousRTs;         // Will be at least 1
+	DWORD StretchRectFilterCaps;      // Filter caps supported by StretchRect
+	D3DVSHADERCAPS2_0 VS20Caps;
+	D3DPSHADERCAPS2_0 PS20Caps;
+	DWORD VertexTextureFilterCaps;    // D3DPTFILTERCAPS for IDirect3DTexture9's for texture, used in vertex shaders
+	DWORD MaxVShaderInstructionsExecuted; // maximum number of vertex shader instructions that can be executed
+	DWORD MaxPShaderInstructionsExecuted; // maximum number of pixel shader instructions that can be executed
+	DWORD MaxVertexShader30InstructionSlots;
+	DWORD MaxPixelShader30InstructionSlots;
 } D3DCAPS9;
 
 //
@@ -189,7 +189,7 @@ typedef struct _D3DCAPS9
 // COPY and COPYVSYNC swap effects work whether or not this flag is set.
 #define D3DCAPS3_ALPHA_FULLSCREEN_FLIP_OR_DISCARD   0x00000020L
 
-// Indicates that the device can perform a gamma correction from 
+// Indicates that the device can perform a gamma correction from
 // a windowed back buffer containing linear content to the sRGB desktop.
 #define D3DCAPS3_LINEAR_TO_SRGB_PRESENTATION 0x00000080L
 
@@ -255,7 +255,7 @@ typedef struct _D3DCAPS9
 #define D3DPMISCCAPS_INDEPENDENTWRITEMASKS     0x00004000L /* Device supports independent write masks for MET or MRT */
 #define D3DPMISCCAPS_PERSTAGECONSTANT   0x00008000L /* Device supports per-stage constants */
 #define D3DPMISCCAPS_FOGANDSPECULARALPHA   0x00010000L /* Device supports separate fog and specular alpha (many devices
-                                                          use the specular alpha channel to store fog factor) */
+													      use the specular alpha channel to store fog factor) */
 #define D3DPMISCCAPS_SEPARATEALPHABLEND         0x00020000L /* Device supports separate blend settings for the alpha channel */
 #define D3DPMISCCAPS_MRTINDEPENDENTBITDEPTHS    0x00040000L /* Device supports different bit depths for MRT */
 #define D3DPMISCCAPS_MRTPOSTPIXELSHADERBLENDING 0x00080000L /* Device supports post-pixel shader operations for MRT */
@@ -288,7 +288,7 @@ typedef struct _D3DCAPS9
 #define D3DPRASTERCAPS_COLORPERSPECTIVE       0x00400000L /* Device iterates colors perspective correct */
 #define D3DPRASTERCAPS_SCISSORTEST            0x01000000L
 #define D3DPRASTERCAPS_SLOPESCALEDEPTHBIAS    0x02000000L
-#define D3DPRASTERCAPS_DEPTHBIAS              0x04000000L 
+#define D3DPRASTERCAPS_DEPTHBIAS              0x04000000L
 #define D3DPRASTERCAPS_MULTISAMPLE_TOGGLE     0x08000000L
 
 //
@@ -351,8 +351,8 @@ typedef struct _D3DCAPS9
 #define D3DPTEXTURECAPS_MIPCUBEMAP          0x00010000L /* Device can do mipmapped cube maps */
 #define D3DPTEXTURECAPS_CUBEMAP_POW2        0x00020000L /* Device requires that cubemaps be power-of-2 dimension */
 #define D3DPTEXTURECAPS_VOLUMEMAP_POW2      0x00040000L /* Device requires that volume maps be power-of-2 dimension */
-#define D3DPTEXTURECAPS_NOPROJECTEDBUMPENV  0x00200000L /* Device does not support projected bump env lookup operation 
-                                                           in programmable and fixed function pixel shaders */
+#define D3DPTEXTURECAPS_NOPROJECTEDBUMPENV  0x00200000L	/* Device does not support projected bump env lookup operation
+														   in programmable and fixed function pixel shaders */
 
 //
 // TextureFilterCaps, StretchRectFilterCaps
@@ -441,7 +441,7 @@ typedef struct _D3DCAPS9
 #define D3DVTXPCAPS_TWEENING            0x00000040L /* device can do vertex tweening */
 #define D3DVTXPCAPS_TEXGEN_SPHEREMAP    0x00000100L /* device supports D3DTSS_TCI_SPHEREMAP */
 #define D3DVTXPCAPS_NO_TEXGEN_NONLOCALVIEWER   0x00000200L /* device does not support TexGen in non-local
-                                                            viewer mode */
+														      viewer mode */
 
 //
 // DevCaps2
@@ -473,4 +473,3 @@ typedef struct _D3DCAPS9
 
 #endif /* (DIRECT3D_VERSION >= 0x0900) */
 #endif /* _d3d9CAPS_H_ */
-

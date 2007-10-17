@@ -32,8 +32,8 @@ public:
 
 	virtual i4_bool mouse_up()
 	{
-		g1_quad_object_class *obj = m1_info.obj;
-		g1_vert_class *src_vert = obj->get_verts(m1_info.current_animation, m1_info.current_frame);
+		g1_quad_object_class * obj = m1_info.obj;
+		g1_vert_class * src_vert = obj->get_verts(m1_info.current_animation, m1_info.current_frame);
 		r1_vert v;
 		i4_float tmp;
 
@@ -60,7 +60,7 @@ public:
 
 		for (int i=0; i<obj->num_quad; i++)
 		{
-			g1_quad_class *q = 0;
+			g1_quad_class * q = 0;
 			q= &(obj->quad[i]);
 			i4_bool out=i4_F;
 			for (int j=0; j<q->num_verts() && !out; j++)
@@ -91,7 +91,7 @@ public:
 
 static m1_drag_select_class drag_select;
 
-li_object *m1_drag_select(li_object *o, li_environment *env)
+li_object *m1_drag_select(li_object * o, li_environment * env)
 {
 	if (m1_info.obj)
 	{

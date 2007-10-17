@@ -19,15 +19,15 @@ class i4_temp_file_class :
 //This class is used much like i4_ram_file_class, but correctly handles
 //growth of the file
 protected:
-	w8 *buf;
+	w8 * buf;
 	w32 bs, offset, fs;     //buffsize, offset, filesize. fs always <= bs
 	w32 incsize;
 public:
 
 	i4_temp_file_class();
 	i4_temp_file_class(w32 startsize, w32 _incsize);
-	virtual w32 read(void *buffer, w32 size);
-	virtual w32 write(const void *buffer, w32 size);
+	virtual w32 read(void * buffer, w32 size);
+	virtual w32 write(const void * buffer, w32 size);
 	virtual w32 seek(w32 _offset);
 	virtual w32 size()
 	{
@@ -52,22 +52,23 @@ public:
 class i4_ram_file_class :
 	public i4_file_class
 {
-	w8 *buf;
+	w8 * buf;
 	w32 bs, offset;
 
 public:
 	virtual i4_file_class *dup()
 	{
-		i4_file_class *f=new i4_ram_file_class(buf, bs);
+		i4_file_class * f=new i4_ram_file_class(buf, bs);
+
 		f->seek(tell());
 		return f;
 	}
 
-	i4_ram_file_class(void *buffer, int buffer_size);
+	i4_ram_file_class(void * buffer, int buffer_size);
 
-	virtual w32 read(void *buffer, w32 size);
+	virtual w32 read(void * buffer, w32 size);
 
-	virtual w32 write(const void *buffer, w32 size);
+	virtual w32 write(const void * buffer, w32 size);
 
 
 	virtual w32 seek(w32 _offset)

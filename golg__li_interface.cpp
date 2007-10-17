@@ -9,7 +9,7 @@
 #include "lisp/li_init.h"
 #include "g1_object.h"
 
-static li_object *li_get_object_type(li_object *o, li_environment *env)
+static li_object *li_get_object_type(li_object * o, li_environment * env)
 {
 	return new li_int(g1_get_object_type(li_string::get(li_eval(li_car(o,env), env),env)->value()));
 }

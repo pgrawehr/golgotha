@@ -37,10 +37,10 @@
 #include "memory/malloc.h"
 
 // counts for each color, global so that it can be accessed by qsort function
-static w32 *counts;
+static w32 * counts;
 
 
-static int red_compare(const void *a, const void *b)
+static int red_compare(const void * a, const void * b)
 {
 	w16 color1=(w16)counts[*((w16 *)a)],
 		color2=(w16)counts[*((w16 *)b)];
@@ -50,7 +50,7 @@ static int red_compare(const void *a, const void *b)
 }
 
 
-static int green_compare(const void *a, const void *b)
+static int green_compare(const void * a, const void * b)
 {
 	w16 color1=(w16)counts[*((w16 *)a)],
 		color2=(w16)counts[*((w16 *)b)];
@@ -60,7 +60,7 @@ static int green_compare(const void *a, const void *b)
 }
 
 
-static int blue_compare(const void *a, const void *b)
+static int blue_compare(const void * a, const void * b)
 {
 	w16 color1=(w16)counts[*((w16 *)a)],
 		color2=(w16)counts[*((w16 *)b)];
@@ -77,7 +77,7 @@ struct quantize_box
 	w32 sum;
 };
 
-static int box_compare(const void *a, const void *b)
+static int box_compare(const void * a, const void * b)
 {
 	return ((quantize_box *)b)->sum-((quantize_box *)a)->sum;
 }
@@ -93,10 +93,10 @@ inline void _16_to_rgb(w32 rgb, w8 &r, w8 &g, w8 &b)
 	r=(w8)(rgb & (1 | 2 | 4 | 8 | 16))<<3;
 }
 
-void i4_median_cut(i4_histogram_class *hist,
+void i4_median_cut(i4_histogram_class * hist,
 				   w32 skip_colors,
 				   w32 t_colors,
-				   w32 *return_palette)
+				   w32 * return_palette)
 
 {
 	enum {
@@ -106,8 +106,8 @@ void i4_median_cut(i4_histogram_class *hist,
 
 	counts=hist->counts;
 
-	quantize_box *box_list=(quantize_box *)I4_MALLOC(sizeof(quantize_box)
-													 * MAX_COLORS, "boxes");
+	quantize_box * box_list=(quantize_box *)I4_MALLOC(sizeof(quantize_box)
+													  * MAX_COLORS, "boxes");
 
 	// setup the initial box
 	w32 total_boxes    = 1;

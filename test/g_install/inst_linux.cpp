@@ -8,7 +8,7 @@
 
 #include "install.h"
 
-int i4_disk_free_space(char *path)
+int i4_disk_free_space(char * path)
 {
 	return 80*1024*1024;
 }

@@ -27,7 +27,7 @@ w8 jpg_g_shift;
 w16 jpg_b_and;
 w8 jpg_b_shift;                //b shift is to the right
 
-void setup_pix_format(const i4_pixel_format *fmt)
+void setup_pix_format(const i4_pixel_format * fmt)
 {
 	jpg_b_shift = (w8)(8-fmt->blue_bits);
 	jpg_b_and   = (w8)(fmt->blue_mask);
@@ -42,7 +42,7 @@ void setup_pix_format(const i4_pixel_format *fmt)
 LOCAL(unsigned int)
 jpeg_getc(j_decompress_ptr cinfo) {
 /* Read next byte */
-	struct jpeg_source_mgr *datasrc = cinfo->src;
+	struct jpeg_source_mgr * datasrc = cinfo->src;
 
 	if (datasrc->bytes_in_buffer == 0)
 	{
@@ -116,7 +116,7 @@ COM_handler(j_decompress_ptr cinfo) {
 	return TRUE;
 }
 
-static inline void pack_colorbgr(w16 *dest, w8 *src, sw32 num_pixels)
+static inline void pack_colorbgr(w16 * dest, w8 * src, sw32 num_pixels)
 {
 	while (num_pixels)
 	{
@@ -132,14 +132,15 @@ static inline void pack_colorbgr(w16 *dest, w8 *src, sw32 num_pixels)
 	}
 }
 
-i4_bool i4_jpg_loader_class::convert_to_raw16(i4_file_class *src_fp,
-											  FILE *dst_fp,
-											  i4_status_class *status,
-											  const i4_pal *pal,
+i4_bool i4_jpg_loader_class::convert_to_raw16(i4_file_class * src_fp,
+											  FILE * dst_fp,
+											  i4_status_class * status,
+											  const i4_pal * pal,
 											  sw32 expected_width,
 											  sw32 expected_height)
 {
 	djpeg_dest_ptr dest_mgr = NULL;
+
 	thread_sync->wait_signal();
 	JDIMENSION num_scanlines;
 	int i; //,x;
@@ -167,7 +168,7 @@ i4_bool i4_jpg_loader_class::convert_to_raw16(i4_file_class *src_fp,
 	/* Start decompressor */
 	(void) jpeg_start_decompress(&cinfo);
 
-	w16 *data = (w16 *)I4_MALLOC(cinfo.image_width*2, "jpeg 16-bit buffer");
+	w16 * data = (w16 *)I4_MALLOC(cinfo.image_width*2, "jpeg 16-bit buffer");
 
 	w32 scn=0;
 	/* Process data */
@@ -209,10 +210,10 @@ i4_bool i4_jpg_loader_class::convert_to_raw16(i4_file_class *src_fp,
 	return i4_T;
 }
 
-i4_bool i4_jpg_loader_class::special_load16(i4_file_class *src_fp,
-											w16 *dst_tex,
+i4_bool i4_jpg_loader_class::special_load16(i4_file_class * src_fp,
+											w16 * dst_tex,
 											sw32 base_width,
-											const i4_pal *pal)
+											const i4_pal * pal)
 {
 	pf_jpg_decode.start();
 	thread_sync->wait_signal();
@@ -243,7 +244,7 @@ i4_bool i4_jpg_loader_class::special_load16(i4_file_class *src_fp,
 	/* Start decompressor */
 	(void) jpeg_start_decompress(&cinfo);
 
-	w16 *data = dst_tex;
+	w16 * data = dst_tex;
 
 	w32 scn=0;
 	/* Process data */
@@ -284,10 +285,10 @@ void i4_jpg_loader_class::uninit()
 	i4_image_loader_class::uninit();
 }
 
-i4_bool i4_jpg_loader_class::special_load24(i4_file_class *src_fp,
-											w8 *dst_tex,
-											sw32 *dst_width,
-											sw32 *dst_height)
+i4_bool i4_jpg_loader_class::special_load24(i4_file_class * src_fp,
+											w8 * dst_tex,
+											sw32 * dst_width,
+											sw32 * dst_height)
 {
 
 	pf_jpg_decode.start();
@@ -317,7 +318,7 @@ i4_bool i4_jpg_loader_class::special_load24(i4_file_class *src_fp,
 	/* Start decompressor */
 	(void) jpeg_start_decompress(&cinfo);
 
-	w8 *data = dst_tex;
+	w8 * data = dst_tex;
 	sw32 data_add = cinfo.image_width*3;
 
 	*dst_width  = cinfo.image_width;
@@ -352,8 +353,8 @@ i4_bool i4_jpg_loader_class::special_load24(i4_file_class *src_fp,
 }
 
 
-i4_image_class *i4_jpg_loader_class::load(i4_file_class *fp,
-										  i4_status_class *status)
+i4_image_class * i4_jpg_loader_class::load(i4_file_class * fp,
+										   i4_status_class * status)
 {
 	thread_sync->wait_signal();
 	djpeg_dest_ptr dest_mgr = NULL;
@@ -382,7 +383,7 @@ i4_image_class *i4_jpg_loader_class::load(i4_file_class *fp,
 	(void) jpeg_start_decompress(&cinfo);
 
 
-	w32 *data=(w32 *) new w8[cinfo.image_width*cinfo.image_height*4]; //(w32 *)I4_MALLOC(cinfo.image_width*cinfo.image_height*4,"jpeg image");
+	w32 * data=(w32 *) new w8[cinfo.image_width*cinfo.image_height*4]; //(w32 *)I4_MALLOC(cinfo.image_width*cinfo.image_height*4,"jpeg image");
 	w32 scn=0;
 	/* Process data */
 	while (cinfo.output_scanline < cinfo.output_height)
@@ -422,9 +423,9 @@ i4_image_class *i4_jpg_loader_class::load(i4_file_class *fp,
 	fmt.calc_shift();
 
 
-	const i4_pal *pal=i4_pal_man.register_pal(&fmt);
+	const i4_pal * pal=i4_pal_man.register_pal(&fmt);
 
-	i4_image_class *im=i4_create_image(
+	i4_image_class * im=i4_create_image(
 		cinfo.image_width,
 		cinfo.image_height,           // width & height
 		pal,                        // palette (should be 32 bit by default)

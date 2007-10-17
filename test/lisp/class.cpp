@@ -14,7 +14,7 @@
 
 static li_int_class_member x("x"), y("y");
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	i4_init();
 
@@ -32,7 +32,7 @@ void i4_main(w32 argc, i4_const_str *argv)
 	// li_get_type fetch the class with type virtual functions
 	// then we call create with null parameters
 	// finally we cast the result into a li_class
-	li_class *c1=li_class::get(li_get_type(type)->create(0,0),0);
+	li_class * c1=li_class::get(li_get_type(type)->create(0,0),0);
 
 	// go through all the members in the class and print out their values
 	int total_members=li_class_total_members(type);
@@ -41,14 +41,14 @@ void i4_main(w32 argc, i4_const_str *argv)
 
 		fp.printf("member %s : value = ", li_class_get_symbol(type, i)->name()->value());
 
-		li_object *value=c1->value(i);
+		li_object * value=c1->value(i);
 		li_get_type(value->type())->print(value, &fp);
 
 		fp.printf("\n");
 	}
 
 	// now print out the class instance defined in the script file and assigned to "test"
-	li_class *c2=li_class::get(li_get_value("test"),0);
+	li_class * c2=li_class::get(li_get_value("test"),0);
 
 	fp.printf("test = ");
 	li_get_type(type)->print(c2, &fp);

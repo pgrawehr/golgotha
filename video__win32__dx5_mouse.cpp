@@ -25,7 +25,7 @@ dx5_mouse_class::dx5_mouse_class(i4_bool page_flipped)
 
 }
 
-void dx5_mouse_class::set_cursor(i4_cursor_class *c)
+void dx5_mouse_class::set_cursor(i4_cursor_class * c)
 {
 	/*if (cursor.pict)
 	   {
@@ -38,7 +38,7 @@ void dx5_mouse_class::set_cursor(i4_cursor_class *c)
 		int cw=c->pict->width(), ch=c->pict->height();
 
 		i4_draw_context_class context(0,0, cw-1, ch-1);
-		i4_dx5_image_class *dx5_image=(i4_dx5_image_class *)cursor.pict;
+		i4_dx5_image_class * dx5_image=(i4_dx5_image_class *)cursor.pict;
 		if ((!cursor.pict)||(cw!=cursor.pict->width())||ch!=cursor.pict->height())
 		{
 			delete cursor.pict;
@@ -98,6 +98,7 @@ i4_bool dx5_mouse_class::primary_is_gdi()
 	//i4_bool ret;
 	LPDIRECTDRAWSURFACE lpgdi=0;
 	LPDIRECTDRAWSURFACE3 lpgdi3=0;
+
 	//LPSURFACEDESC lpsd=0;
 	//DDSCAPS caps;
 	//dx5_common.primary_surface->GetCaps(&caps);
@@ -106,7 +107,7 @@ i4_bool dx5_mouse_class::primary_is_gdi()
 	//else
 	//	return i4_F;
 	i4_dx5_check(dx5_common.ddraw->GetGDISurface(&lpgdi));
-	i4_dx5_check(lpgdi->QueryInterface(IID_IDirectDrawSurface3,(void **)&lpgdi3));
+	i4_dx5_check(lpgdi->QueryInterface(IID_IDirectDrawSurface3,(void * *)&lpgdi3));
 	if (lpgdi)
 	{
 		lpgdi->Release();
@@ -167,7 +168,7 @@ void dx5_mouse_class::save_and_draw(int x, int y)
 
 
 	RECT src;
-	i4_display_class *disp=i4_current_app->get_display();
+	i4_display_class * disp=i4_current_app->get_display();
 	//PG: Not having these two conditions allows the cursor
 	//to move all the way to the right or bottom of the screen,
 	//but may cause trouble with the BltFast operation

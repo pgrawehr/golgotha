@@ -42,7 +42,7 @@ void g1_smoke_trail_class::setup(i4_float start_x, i4_float start_y, i4_float st
 }
 
 g1_smoke_trail_class::g1_smoke_trail_class(g1_object_type id,
-										   g1_loader_class *fp)
+										   g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	if (fp && fp->check_version(DATA_VERSION))
@@ -72,7 +72,7 @@ g1_smoke_trail_class::g1_smoke_trail_class(g1_object_type id,
 	}
 }
 
-void g1_smoke_trail_class::save(g1_saver_class *fp)
+void g1_smoke_trail_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 
@@ -130,13 +130,14 @@ void g1_smoke_trail_class::update_head(i4_float nx, i4_float ny, i4_float nh)
 	}
 }
 
-void g1_smoke_trail_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_smoke_trail_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	//w32 cur_frame=context->tmap->get_frame_counter();
 
 	i4_float fr=g1_render.frame_ratio;
 
 	i4_3d_point_class s[TAIL_LENGTH+1];
+
 	s[0].x=(x-lx)*fr + lx;
 	s[0].y=(y-ly)*fr + ly;
 	s[0].z=(h-lh)*fr + lh;

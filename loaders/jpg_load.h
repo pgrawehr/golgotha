@@ -23,7 +23,7 @@
 
 #include <ctype.h>       /* to declare isprint() */
 
-static const char *const cdjpeg_message_table[] = {
+static const char * const cdjpeg_message_table[] = {
 #include "loaders/jpg/cderror.h"
 	NULL
 };
@@ -33,15 +33,16 @@ static const char *const cdjpeg_message_table[] = {
 //The secon solution works with alignment checking off only,
 //but for the sake of simplicity, we always use the first.
 #if 1
-static inline w32 read_colorbgr(w8 *cp)
+static inline w32 read_colorbgr(w8 * cp)
 {
 	w8 r=cp[0];
 	w8 g=cp[1];
 	w8 b=cp[2];
+
 	return (w32)(r<<16 | g<<8 | b);
 }
 #else
-static inline w32 read_colorbgr(w8 *cp)
+static inline w32 read_colorbgr(w8 * cp)
 {
 	w8 buf[4];
 
@@ -58,7 +59,7 @@ class i4_jpg_loader_class :
 	public i4_image_loader_class
 {
 protected:
-	i4_signal_object *thread_sync;
+	i4_signal_object * thread_sync;
 public:
 	// returns the maximum size you need to identify your file format
 	void init();
@@ -67,7 +68,7 @@ public:
 	{
 		return 10;
 	}
-	virtual i4_bool recognize_header(w8 *buf)
+	virtual i4_bool recognize_header(w8 * buf)
 	{
 		if(buf[0]==0xff &&  //marker
 		   buf[1]==0xd8 && //soi seg
@@ -84,23 +85,23 @@ public:
 		}
 	}
 
-	i4_bool special_load24(i4_file_class *fp,w8 *dst_texture, sw32 *dst_width, sw32 *dst_height);
+	i4_bool special_load24(i4_file_class * fp,w8 * dst_texture, sw32 * dst_width, sw32 * dst_height);
 
-	i4_bool special_load16(i4_file_class *fp,
-						   w16 *dst_texture,
+	i4_bool special_load16(i4_file_class * fp,
+						   w16 * dst_texture,
 						   sw32 base_width,
-						   const i4_pal *pal);
+						   const i4_pal * pal);
 
-	i4_bool convert_to_raw16(i4_file_class *fp,
-							 FILE *dst_file,
-							 i4_status_class *status,
-							 const i4_pal *pal,
+	i4_bool convert_to_raw16(i4_file_class * fp,
+							 FILE * dst_file,
+							 i4_status_class * status,
+							 const i4_pal * pal,
 							 sw32 expected_width,
 							 sw32 expected_height);
 
 	// assume fp is at the start of the file
-	virtual i4_image_class *load(i4_file_class *fp,
-								 i4_status_class *status);
+	virtual i4_image_class *load(i4_file_class * fp,
+								 i4_status_class * status);
 
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;

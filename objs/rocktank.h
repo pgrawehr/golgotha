@@ -16,21 +16,21 @@ class g1_rocket_tank_class :
 	public g1_map_piece_class
 {
 protected:
-	g1_mini_object *missile_rack;
+	g1_mini_object * missile_rack;
 	i4_float guard_angle, guard_pitch;
 	int guard_time;
 public:
-	g1_rocket_tank_class(g1_object_type id, g1_loader_class *fp);
-	void save(g1_saver_class *fp);
-	void load(g1_loader_class *fp);
-	void skipload(g1_loader_class *fp);
+	g1_rocket_tank_class(g1_object_type id, g1_loader_class * fp);
+	void save(g1_saver_class * fp);
+	void load(g1_loader_class * fp);
+	void skipload(g1_loader_class * fp);
 
 	virtual void fire();
 	virtual void think();
 
 	void raise_rack();
 	void lower_rack();
-	int get_chunk_names(char **&list);
+	int get_chunk_names(char * *&list);
 };
 
 #endif

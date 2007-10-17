@@ -15,7 +15,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-char *form(char *form, ... );
+char *form(char * form, ... );
 
 
 #endif

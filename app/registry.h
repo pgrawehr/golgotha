@@ -18,18 +18,18 @@ enum i4_registry_type
 };
 
 void i4_language_extend(i4_str& str, i4_str::iterator where);
-int i4_get_int(char *key_name,int *retval);
-void i4_set_int(char *key_name,int i);
+int i4_get_int(char * key_name,int * retval);
+void i4_set_int(char * key_name,int i);
 
 i4_bool i4_get_registry(i4_registry_type type,
-						char *path,
-						char *key_name,
-						char *buffer, int buf_length);
+						char * path,
+						char * key_name,
+						char * buffer, int buf_length);
 
 i4_bool i4_set_registry(i4_registry_type type,
-						char *path,
-						char *key_name,
-						char *buffer);
+						char * path,
+						char * key_name,
+						char * buffer);
 
 
 

@@ -32,7 +32,7 @@ public:
 	g1_typed_reference_class<g1_object_class> mark;
 	g1_typed_reference_class<g1_object_class> last_on;
 
-	g1_bridger_object_class(g1_object_type id, g1_loader_class *fp)
+	g1_bridger_object_class(g1_object_type id, g1_loader_class * fp)
 		: g1_map_piece_class(id,fp)
 	{
 		allocate_mini_objects(1, "builder mini objects");
@@ -65,7 +65,7 @@ public:
 		}
 	}
 
-	i4_bool can_attack(g1_object_class *who)
+	i4_bool can_attack(g1_object_class * who)
 	{
 		return i4_F;
 	}
@@ -88,8 +88,8 @@ public:
 			int bridgers_found=0;
 
 			mark=0;
-			g1_object_chain_class *chain=g1_get_map()->cell((int)x, (int)y)->get_obj_list();
-			for (g1_object_chain_class *c=chain; c; c=c->next)
+			g1_object_chain_class * chain=g1_get_map()->cell((int)x, (int)y)->get_obj_list();
+			for (g1_object_chain_class * c=chain; c; c=c->next)
 			{
 				if (g1_path_object_class::cast(c->object))
 				{
@@ -138,11 +138,12 @@ public:
 	//this needs to be overwritten, since a bridger is not round enough
 	//for the easy case to work (you won't be able to fire on the bridge
 	//if you use radial tests only!)
-	i4_bool check_collision(g1_object_class *source,
+	i4_bool check_collision(g1_object_class * source,
 							const i4_3d_vector &start,
 							i4_3d_vector &ray)
 	{
 		i4_3d_vector normal;
+
 		return g1_model_collide_polygonal_ex(this, source, ray, normal);
 	}
 

@@ -18,14 +18,14 @@
 // return true if texture was updated
 i4_bool m1_update_texture(const i4_const_str &texture_filename,
 						  i4_bool force_all,
-						  i4_status_class *stat,
+						  i4_status_class * stat,
 						  float start, float end);
 
 // this calls m1_update_texture on all the textures in an object model file
 // returns true if one or more textures were updated
 i4_bool m1_update_object_textures(const i4_const_str &object_filename,
 								  i4_bool force_all=i4_F,
-								  const i4_const_str *copy_to=0);
+								  const i4_const_str * copy_to=0);
 
 
 void m1_convert_all_in_dir(const i4_const_str &dir);

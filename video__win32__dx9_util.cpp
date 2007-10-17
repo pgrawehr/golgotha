@@ -323,10 +323,10 @@ CD3DEnumeration::~CD3DEnumeration()
 // Name: SortModesCallback
 // Desc: Used to sort D3DDISPLAYMODEs
 //-----------------------------------------------------------------------------
-static int __cdecl SortModesCallback( const void *arg1, const void *arg2 )
+static int __cdecl SortModesCallback( const void * arg1, const void * arg2 )
 {
-	D3DDISPLAYMODE *pdm1 = (D3DDISPLAYMODE *)arg1;
-	D3DDISPLAYMODE *pdm2 = (D3DDISPLAYMODE *)arg2;
+	D3DDISPLAYMODE * pdm1 = (D3DDISPLAYMODE *)arg1;
+	D3DDISPLAYMODE * pdm2 = (D3DDISPLAYMODE *)arg2;
 
 	if (pdm1->Width > pdm2->Width)
 	{
@@ -373,6 +373,7 @@ static int __cdecl SortModesCallback( const void *arg1, const void *arg2 )
 HRESULT CD3DEnumeration::Enumerate()
 {
 	HRESULT hr;
+
 	CArrayList adapterFormatList( AL_VALUE, sizeof(D3DFORMAT) );
 
 	if( m_pD3D == NULL )
@@ -413,7 +414,7 @@ HRESULT CD3DEnumeration::Enumerate()
 		return hr;
 	}
 
-	D3DAdapterInfo *pAdapterInfo = NULL;
+	D3DAdapterInfo * pAdapterInfo = NULL;
 	UINT numAdapters = m_pD3D->GetAdapterCount();
 
 	for (UINT adapterOrdinal = 0; adapterOrdinal < numAdapters; adapterOrdinal++)
@@ -492,8 +493,8 @@ HRESULT CD3DEnumeration::Enumerate()
 // Name: EnumerateDevices
 // Desc: Enumerates D3D devices for a particular adapter.
 //-----------------------------------------------------------------------------
-HRESULT CD3DEnumeration::EnumerateDevices( D3DAdapterInfo *pAdapterInfo,
-										  CArrayList *pAdapterFormatList )
+HRESULT CD3DEnumeration::EnumerateDevices( D3DAdapterInfo * pAdapterInfo,
+										  CArrayList * pAdapterFormatList )
 {
 	const D3DDEVTYPE devTypeArray[] = {
 		D3DDEVTYPE_HAL, D3DDEVTYPE_SW, D3DDEVTYPE_REF
@@ -501,7 +502,8 @@ HRESULT CD3DEnumeration::EnumerateDevices( D3DAdapterInfo *pAdapterInfo,
 	const UINT devTypeArrayCount = sizeof(devTypeArray) / sizeof(devTypeArray[0]);
 	HRESULT hr;
 
-	D3DDeviceInfo *pDeviceInfo = NULL;
+	D3DDeviceInfo * pDeviceInfo = NULL;
+
 	for( UINT idt = 0; idt < devTypeArrayCount; idt++ )
 	{
 		pDeviceInfo = new D3DDeviceInfo;
@@ -550,8 +552,8 @@ HRESULT CD3DEnumeration::EnumerateDevices( D3DAdapterInfo *pAdapterInfo,
 // Name: EnumerateDeviceCombos
 // Desc: Enumerates DeviceCombos for a particular device.
 //-----------------------------------------------------------------------------
-HRESULT CD3DEnumeration::EnumerateDeviceCombos( D3DDeviceInfo *pDeviceInfo,
-											   CArrayList *pAdapterFormatList )
+HRESULT CD3DEnumeration::EnumerateDeviceCombos( D3DDeviceInfo * pDeviceInfo,
+											   CArrayList * pAdapterFormatList )
 {
 	const D3DFORMAT backBufferFormatArray[] =
 	{
@@ -565,6 +567,7 @@ HRESULT CD3DEnumeration::EnumerateDeviceCombos( D3DDeviceInfo *pDeviceInfo,
 
 	// See which adapter formats are supported by this device
 	D3DFORMAT adapterFormat;
+
 	for( UINT iaf = 0; iaf < pAdapterFormatList->Count(); iaf++ )
 	{
 		adapterFormat = *(D3DFORMAT *)pAdapterFormatList->GetPtr(iaf);
@@ -597,7 +600,7 @@ HRESULT CD3DEnumeration::EnumerateDeviceCombos( D3DDeviceInfo *pDeviceInfo,
 				// DeviceCombo that is supported by the system.  We still need to confirm that it's
 				// compatible with the app, and find one or more suitable depth/stencil buffer format,
 				// multisample type, vertex processing type, and present interval.
-				D3DDeviceCombo *pDeviceCombo = NULL;
+				D3DDeviceCombo * pDeviceCombo = NULL;
 				pDeviceCombo = new D3DDeviceCombo;
 				if( pDeviceCombo == NULL )
 				{
@@ -664,7 +667,7 @@ HRESULT CD3DEnumeration::EnumerateDeviceCombos( D3DDeviceInfo *pDeviceInfo,
 // Desc: Adds all depth/stencil formats that are compatible with the device
 //       and app to the given D3DDeviceCombo.
 //-----------------------------------------------------------------------------
-void CD3DEnumeration::BuildDepthStencilFormatList( D3DDeviceCombo *pDeviceCombo )
+void CD3DEnumeration::BuildDepthStencilFormatList( D3DDeviceCombo * pDeviceCombo )
 {
 	const D3DFORMAT depthStencilFormatArray[] =
 	{
@@ -679,6 +682,7 @@ void CD3DEnumeration::BuildDepthStencilFormatList( D3DDeviceCombo *pDeviceCombo 
 											  sizeof(depthStencilFormatArray[0]);
 
 	D3DFORMAT depthStencilFmt;
+
 	for( UINT idsf = 0; idsf < depthStencilFormatArrayCount; idsf++ )
 	{
 		depthStencilFmt = depthStencilFormatArray[idsf];
@@ -712,7 +716,7 @@ void CD3DEnumeration::BuildDepthStencilFormatList( D3DDeviceCombo *pDeviceCombo 
 // Desc: Adds all multisample types that are compatible with the device and app to
 //       the given D3DDeviceCombo.
 //-----------------------------------------------------------------------------
-void CD3DEnumeration::BuildMultiSampleTypeList( D3DDeviceCombo *pDeviceCombo )
+void CD3DEnumeration::BuildMultiSampleTypeList( D3DDeviceCombo * pDeviceCombo )
 {
 	const D3DMULTISAMPLE_TYPE msTypeArray[] = {
 		D3DMULTISAMPLE_NONE,
@@ -737,6 +741,7 @@ void CD3DEnumeration::BuildMultiSampleTypeList( D3DDeviceCombo *pDeviceCombo )
 
 	D3DMULTISAMPLE_TYPE msType;
 	DWORD msQuality;
+
 	for( UINT imst = 0; imst < msTypeArrayCount; imst++ )
 	{
 		msType = msTypeArray[imst];
@@ -757,7 +762,7 @@ void CD3DEnumeration::BuildMultiSampleTypeList( D3DDeviceCombo *pDeviceCombo )
 // Desc: Find any conflicts between the available depth/stencil formats and
 //       multisample types.
 //-----------------------------------------------------------------------------
-void CD3DEnumeration::BuildDSMSConflictList( D3DDeviceCombo *pDeviceCombo )
+void CD3DEnumeration::BuildDSMSConflictList( D3DDeviceCombo * pDeviceCombo )
 {
 	D3DDSMSConflict DSMSConflict;
 
@@ -786,10 +791,11 @@ void CD3DEnumeration::BuildDSMSConflictList( D3DDeviceCombo *pDeviceCombo )
 // Desc: Adds all vertex processing types that are compatible with the device
 //       and app to the given D3DDeviceCombo.
 //-----------------------------------------------------------------------------
-void CD3DEnumeration::BuildVertexProcessingTypeList( D3DDeviceInfo *pDeviceInfo,
-													D3DDeviceCombo *pDeviceCombo )
+void CD3DEnumeration::BuildVertexProcessingTypeList( D3DDeviceInfo * pDeviceInfo,
+													D3DDeviceCombo * pDeviceCombo )
 {
 	VertexProcessingType vpt;
+
 	if ((pDeviceInfo->Caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) != 0)
 	{
 		if ((pDeviceInfo->Caps.DevCaps & D3DDEVCAPS_PUREDEVICE) != 0)
@@ -834,8 +840,8 @@ void CD3DEnumeration::BuildVertexProcessingTypeList( D3DDeviceInfo *pDeviceInfo,
 // Desc: Adds all present intervals that are compatible with the device and app
 //       to the given D3DDeviceCombo.
 //-----------------------------------------------------------------------------
-void CD3DEnumeration::BuildPresentIntervalList( D3DDeviceInfo *pDeviceInfo,
-											   D3DDeviceCombo *pDeviceCombo )
+void CD3DEnumeration::BuildPresentIntervalList( D3DDeviceInfo * pDeviceInfo,
+											   D3DDeviceCombo * pDeviceCombo )
 {
 	const UINT piArray[] = {
 		D3DPRESENT_INTERVAL_IMMEDIATE,
@@ -848,6 +854,7 @@ void CD3DEnumeration::BuildPresentIntervalList( D3DDeviceInfo *pDeviceInfo,
 	const UINT piArrayCount = sizeof(piArray) / sizeof(piArray[0]);
 
 	UINT pi;
+
 	for( UINT ipi = 0; ipi < piArrayCount; ipi++ )
 	{
 		pi = piArray[ipi];
@@ -876,9 +883,9 @@ void CD3DEnumeration::BuildPresentIntervalList( D3DDeviceInfo *pDeviceInfo,
 
 dx9_common_class dx9_common;
 LPDIRECT3D9 dx9_common_class::pD3D9;
-IDirect3DSurface9 *dx9_common_class::back_surface,
-*dx9_common_class::front_surface;
-IDirect3DDevice9 *dx9_common_class::device;
+IDirect3DSurface9 * dx9_common_class::back_surface,
+* dx9_common_class::front_surface;
+IDirect3DDevice9 * dx9_common_class::device;
 D3DPRESENT_PARAMETERS dx9_common_class::present;
 DDPIXELFORMAT dx9_common_class::dd_fmt_565, dx9_common_class::dd_fmt_1555;
 i4_pixel_format dx9_common_class::i4_fmt_565, dx9_common_class::i4_fmt_1555;
@@ -924,7 +931,7 @@ CArrayList::~CArrayList( void )
 // Name: CArrayList::Add
 // Desc: Adds pEntry to the list.
 //-----------------------------------------------------------------------------
-HRESULT CArrayList::Add( void *pEntry )
+HRESULT CArrayList::Add( void * pEntry )
 {
 	if( m_BytesPerEntry == 0 )
 	{
@@ -932,7 +939,7 @@ HRESULT CArrayList::Add( void *pEntry )
 	}
 	if( m_pData == NULL || m_NumEntries + 1 > m_NumEntriesAllocated )
 	{
-		void *pDataNew;
+		void * pDataNew;
 		UINT NumEntriesAllocatedNew;
 		if( m_NumEntriesAllocated == 0 )
 		{
@@ -962,7 +969,7 @@ HRESULT CArrayList::Add( void *pEntry )
 	}
 	else
 	{
-		*(((void **)m_pData) + m_NumEntries) = pEntry;
+		*(((void * *)m_pData) + m_NumEntries) = pEntry;
 	}
 	m_NumEntries++;
 
@@ -982,7 +989,7 @@ void CArrayList::Remove( UINT Entry )
 	m_NumEntries--;
 
 	// Find the entry address
-	BYTE *pData = (BYTE *)m_pData + (Entry * m_BytesPerEntry);
+	BYTE * pData = (BYTE *)m_pData + (Entry * m_BytesPerEntry);
 
 	// Collapse the array
 	MoveMemory( pData, pData + m_BytesPerEntry, ( m_NumEntries - Entry ) * m_BytesPerEntry );
@@ -995,7 +1002,7 @@ void CArrayList::Remove( UINT Entry )
 // Name: CArrayList::GetPtr
 // Desc: Returns a pointer to the Entry'th entry in the list.
 //-----------------------------------------------------------------------------
-void *CArrayList::GetPtr( UINT Entry )
+void * CArrayList::GetPtr( UINT Entry )
 {
 	if( m_ArrayListType == AL_VALUE )
 	{
@@ -1003,7 +1010,7 @@ void *CArrayList::GetPtr( UINT Entry )
 	}
 	else
 	{
-		return *(((void **)m_pData) + Entry);
+		return *(((void * *)m_pData) + Entry);
 	}
 }
 
@@ -1015,7 +1022,7 @@ void *CArrayList::GetPtr( UINT Entry )
 // Desc: Returns whether the list contains an entry identical to the
 //       specified entry data.
 //-----------------------------------------------------------------------------
-bool CArrayList::Contains( void *pEntryData )
+bool CArrayList::Contains( void * pEntryData )
 {
 	for( UINT iEntry = 0; iEntry < m_NumEntries; iEntry++ )
 	{
@@ -1039,14 +1046,15 @@ bool CArrayList::Contains( void *pEntryData )
 
 
 
-IDirect3DSurface9 *dx9_common_class::create_surface(dx9_surface_type type,
-													int width, int height,
-													int flags,
-													D3DFORMAT format)
+IDirect3DSurface9 * dx9_common_class::create_surface(dx9_surface_type type,
+													 int width, int height,
+													 int flags,
+													 D3DFORMAT format)
 {
 	HRESULT result;
 	D3DSURFACE_DESC ddsd;
-	IDirect3DSurface9 *surface=0;
+	IDirect3DSurface9 * surface=0;
+
 	//if (width<30||height<30) flags=((flags&(~DX5_VRAM))|DX5_SYSTEM_RAM);
 	//Creates new texcache, fails to load textures
 	memset(&ddsd,0,sizeof(D3DSURFACE_DESC));
@@ -1196,7 +1204,7 @@ dx9_common_class::dx9_common_class()
    return DDENUMRET_OK;
    }
  */
-CArrayList *dx9_common_class::get_mode_list(UINT adaptor)
+CArrayList * dx9_common_class::get_mode_list(UINT adaptor)
 {
 //  dx_mode_list=0;
 	if (!d3denum)
@@ -1205,7 +1213,7 @@ CArrayList *dx9_common_class::get_mode_list(UINT adaptor)
 		d3denum->SetD3D(pD3D9);
 		d3denum->Enumerate();
 	}
-	D3DAdapterInfo *adapt=(D3DAdapterInfo *)d3denum->m_pAdapterInfoList->GetPtr(adaptor);
+	D3DAdapterInfo * adapt=(D3DAdapterInfo *)d3denum->m_pAdapterInfoList->GetPtr(adaptor);
 	return adapt->pDisplayModeList;
 }
 /*
@@ -1236,7 +1244,7 @@ CArrayList *dx9_common_class::get_mode_list(UINT adaptor)
    return DDENUMRET_OK;
    }
  */
-CArrayList *dx9_common_class::get_driver_list()
+CArrayList * dx9_common_class::get_driver_list()
 {
 	//if (dx_driver_list) free_driver_list(dx_driver_list);//This function can be called more than once.
 //but its the callers responsability to delete the list after use.
@@ -1310,9 +1318,10 @@ LPDIRECT3D9 dx9_common_class::initialize_driver()
 	return pD3D9;
 }
 
-D3DDeviceInfo *dx9_common_class::get_driver_hardware_info(LPDIRECT3D9 dd, w32 adapter)
+D3DDeviceInfo * dx9_common_class::get_driver_hardware_info(LPDIRECT3D9 dd, w32 adapter)
 {
 	int a=0;
+
 	a=(adapter& (~0x8001))/2;
 	return (D3DDeviceInfo *)d3denum->m_pAdapterInfoList->GetPtr(a);
 }
@@ -1320,8 +1329,9 @@ D3DDeviceInfo *dx9_common_class::get_driver_hardware_info(LPDIRECT3D9 dd, w32 ad
 void i4_dx9_image_class::put_pixel(i4_coord x, i4_coord y, w32 color)
 {
 	//char* a;
-	w16 *a16;
-	w8 *a8;
+	w16 * a16;
+	w8 * a8;
+
 	//w32 b;
 	//char *d;
 	switch(pal->source.pixel_depth)
@@ -1445,7 +1455,7 @@ i4_dx9_image_class::i4_dx9_image_class(w16 _w, w16 _h, w32 flags)
    	}
  */
 
-void i4_dx9_image_class::put_part(i4_image_class *to, i4_coord x, i4_coord y, i4_coord x1,
+void i4_dx9_image_class::put_part(i4_image_class * to, i4_coord x, i4_coord y, i4_coord x1,
 								  i4_coord y1, i4_coord x2, i4_coord y2, i4_draw_context_class &context)
 {
 	i4_image_class::put_part(to,x,y,x1,y1,x2,y2,context);
@@ -1456,6 +1466,7 @@ void i4_dx9_image_class::lock()
 {
 
 	D3DLOCKED_RECT lkinfo;
+
 	if (!i4_dx9_check(surface->LockRect(&lkinfo,0,D3DLOCK_NOSYSLOCK)))
 	{
 		i4_error("SEVERE: Could not lock auxilary backbuffer surface");
@@ -1482,7 +1493,7 @@ i4_dx9_image_class::~i4_dx9_image_class()
 	}
 }
 
-IDirect3DSurface9 *dx9_common_class::get_surface(i4_image_class *im)
+IDirect3DSurface9 * dx9_common_class::get_surface(i4_image_class * im)
 {
 	return ((i4_dx9_image_class *)im)->surface;
 
@@ -1490,7 +1501,7 @@ IDirect3DSurface9 *dx9_common_class::get_surface(i4_image_class *im)
 
 
 
-i4_image_class *dx9_common_class::create_image(int w, int h, w32 surface_flags)
+i4_image_class * dx9_common_class::create_image(int w, int h, w32 surface_flags)
 {
 	return new i4_dx9_image_class(w,h,surface_flags);
 }

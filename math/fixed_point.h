@@ -113,7 +113,7 @@ public:
 	{
 		return int (value>>precision);
 	}
-	operator unsignedint () const {
+	operator unsignedint() const {
 		return int (((w32)value)>>precision);
 	}
 	operator sw8() const

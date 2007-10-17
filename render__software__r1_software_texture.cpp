@@ -22,7 +22,7 @@ i4_profile_class pf_software_free_vram("software free vram texture");
 //multiple instances at once are allowed, so this is of no use.
 //r1_software_texture_class *r1_software_texture_class_instance=0;
 
-r1_software_texture_class::r1_software_texture_class(const i4_pal *pal)
+r1_software_texture_class::r1_software_texture_class(const i4_pal * pal)
 	: r1_texture_manager_class(pal),
 	  finished_array(16,16)
 {
@@ -129,7 +129,7 @@ void r1_software_texture_class::uninit()
 	}
 }
 
-i4_bool r1_software_texture_class::immediate_mip_load(r1_mip_load_info *load_info)
+i4_bool r1_software_texture_class::immediate_mip_load(r1_mip_load_info * load_info)
 {
 	if (no_of_textures_loaded > 0)
 	{
@@ -140,10 +140,10 @@ i4_bool r1_software_texture_class::immediate_mip_load(r1_mip_load_info *load_inf
 		}
 	}
 	pf_software_install_vram.start();
-	r1_miplevel_t *mip = load_info->dest_mip;
+	r1_miplevel_t * mip = load_info->dest_mip;
 	sw32 need_size;
 	need_size = mip->width * mip->height * 2;
-	used_node *new_used = (used_node *)tex_heap_man->alloc(need_size);
+	used_node * new_used = (used_node *)tex_heap_man->alloc(need_size);
 	if (!new_used)
 	{
 		pf_software_install_vram.stop();
@@ -151,7 +151,7 @@ i4_bool r1_software_texture_class::immediate_mip_load(r1_mip_load_info *load_inf
 		return i4_F;
 	}
 
-	free_node *f = (free_node *)new_used->node;
+	free_node * f = (free_node *)new_used->node;
 
 	//f is the node we'll use
 
@@ -160,8 +160,8 @@ i4_bool r1_software_texture_class::immediate_mip_load(r1_mip_load_info *load_inf
 		if ((load_info->flags&R1_MIPFLAGS_SRC32))
 		{
 			w32 co,r,g,b;
-			w16 *tex=(w16 *)f->start;
-			const i4_pal *p=i4_pal_man.default_no_alpha_32();
+			w16 * tex=(w16 *)f->start;
+			const i4_pal * p=i4_pal_man.default_no_alpha_32();
 			for (int i=0; i<mip->width*mip->height; i++)
 			{
 				//The order here is a bit strange (argb backwards).
@@ -220,11 +220,12 @@ i4_bool r1_software_texture_class::immediate_mip_load(r1_mip_load_info *load_inf
 	return i4_T;
 }
 
-int r1_software_texture_class::set_texture_image(r1_texture_handle handle, i4_image_class *im)
+int r1_software_texture_class::set_texture_image(r1_texture_handle handle, i4_image_class * im)
 {
 	w32 tid=registered_tnames[handle].id;
 	//i4_image_class *memim;
 	sw32 act_w=0,act_h=0;
+
 	for (int i=0; i<memory_images.size(); i++)
 	{
 		if (memory_images[i].id==tid)
@@ -233,9 +234,9 @@ int r1_software_texture_class::set_texture_image(r1_texture_handle handle, i4_im
 			memory_images[i].image=im->copy(); //replace saved memory image with new copy
 
 			sw32 act_w=0,act_h=0;
-			r1_miplevel_t *mip=get_texture(handle,0,max_texture_dimention,act_w,act_h);
-			used_node *u=(used_node *) mip->vram_handle;
-			free_node *f=(free_node *) u->node;
+			r1_miplevel_t * mip=get_texture(handle,0,max_texture_dimention,act_w,act_h);
+			used_node * u=(used_node *) mip->vram_handle;
+			free_node * f=(free_node *) u->node;
 			float b1,b2;
 			select_texture(u,b1,b2);
 			memcpy((void *)f->start,im->data,act_w*act_h*2);
@@ -247,15 +248,16 @@ int r1_software_texture_class::set_texture_image(r1_texture_handle handle, i4_im
 
 
 
-i4_image_class *r1_software_texture_class::get_texture_image(r1_texture_handle handle,
-															 int frame_counter, int desired_width)
+i4_image_class * r1_software_texture_class::get_texture_image(r1_texture_handle handle,
+															  int frame_counter, int desired_width)
 {
 	sw32 act_w=0,act_h=0;
 	w32 tid=registered_tnames[handle].id;
 	//get the best one currently loaded
-	r1_miplevel_t *best=get_texture(handle,frame_counter,
-									desired_width<0 ? max_texture_dimention : desired_width,act_w,act_h);
-	used_node *u=(used_node *)best->vram_handle;
+	r1_miplevel_t * best=get_texture(handle,frame_counter,
+									 desired_width<0 ? max_texture_dimention : desired_width,act_w,act_h);
+	used_node * u=(used_node *)best->vram_handle;
+
 	for (int i=0; i<memory_images.size(); i++)
 	{
 		if (memory_images[i].id==tid)
@@ -265,8 +267,8 @@ i4_image_class *r1_software_texture_class::get_texture_image(r1_texture_handle h
 	}
 	//float bla_1,bla_2;
 	//select_texture(best->vram_handle,bla_1,bla_2);
-	i4_image_class *ima=0;
-	free_node *f=(free_node *)u->node;
+	i4_image_class * ima=0;
+	free_node * f=(free_node *)u->node;
 	if (f->mip->entry->is_transparent())
 	{
 		ima=i4_create_image(act_w,act_h,i4_pal_man.register_pal(&chroma_format));
@@ -298,14 +300,15 @@ r1_software_texture_class::~r1_software_texture_class()
 
 
 
+
 	uninit();
 }
 //typedef void (*async_callback)(w32 count, void *context);
 
-void software_async_callback(w32 count, void *context)
+void software_async_callback(w32 count, void * context)
 {
-	r1_software_texture_class::used_node *u = (r1_software_texture_class::used_node *)context;
-	r1_software_texture_class::free_node *f = (r1_software_texture_class::free_node *)u->node;
+	r1_software_texture_class::used_node * u = (r1_software_texture_class::used_node *)context;
+	r1_software_texture_class::free_node * f = (r1_software_texture_class::free_node *)u->node;
 
 	//if (f->async_fp)
 	//  delete f->async_fp;
@@ -322,7 +325,7 @@ void software_async_callback(w32 count, void *context)
 	num_async_pending_lock.unlock();
 }
 
-i4_bool r1_software_texture_class::async_mip_load(r1_mip_load_info *load_info)
+i4_bool r1_software_texture_class::async_mip_load(r1_mip_load_info * load_info)
 {
 	if (bytes_loaded > 100000 || no_of_textures_loaded > 16)
 	{
@@ -337,11 +340,11 @@ i4_bool r1_software_texture_class::async_mip_load(r1_mip_load_info *load_info)
 
 //  sw32 i;
 
-	r1_miplevel_t *mip = load_info->dest_mip;
+	r1_miplevel_t * mip = load_info->dest_mip;
 
 	w32 need_size = mip->width * mip->height * 2;
 
-	used_node *new_used = (used_node *)tex_heap_man->alloc(need_size,R1_TEX_HEAP_DONT_LIST);
+	used_node * new_used = (used_node *)tex_heap_man->alloc(need_size,R1_TEX_HEAP_DONT_LIST);
 
 	if (!new_used)
 	{
@@ -351,7 +354,7 @@ i4_bool r1_software_texture_class::async_mip_load(r1_mip_load_info *load_info)
 	}
 
 	//f is the node we'll use
-	free_node *f = (free_node *)new_used->node;
+	free_node * f = (free_node *)new_used->node;
 
 	f->mip         = mip;
 	f->async_fp    = 0;
@@ -396,7 +399,7 @@ i4_bool r1_software_texture_class::async_mip_load(r1_mip_load_info *load_info)
 		 */
 
 		//See the dx5 renderer on explanations how this works
-		i4_file_class *fp = NULL;
+		i4_file_class * fp = NULL;
 
 		async_worked=i4_F;
 		int most_unused=0,really_old_guy=-1;
@@ -444,7 +447,7 @@ i4_bool r1_software_texture_class::async_mip_load(r1_mip_load_info *load_info)
 			}
 		}
 		array_lock.unlock();
-		i4_const_str *n=NULL;
+		i4_const_str * n=NULL;
 		n=r1_get_texture_name(mip->entry->id);
 		char buf[100],buf2[150];
 		i4_os_string(*n,buf,100);
@@ -505,14 +508,15 @@ i4_bool r1_software_texture_class::async_mip_load(r1_mip_load_info *load_info)
 	return i4_T;
 }
 
-void r1_software_texture_class::async_load_finished(used_node *u)
+void r1_software_texture_class::async_load_finished(used_node * u)
 {
-	free_node *f = (free_node *)u->node;
+	free_node * f = (free_node *)u->node;
+
 	if (f->mip->flags & R1_MIPLEVEL_LOAD_JPG)
 	{
-		i4_ram_file_class *rp=new i4_ram_file_class(f->data,f->async_fp->size());
+		i4_ram_file_class * rp=new i4_ram_file_class(f->data,f->async_fp->size());
 		//i4_thread_sleep(10);
-		i4_image_class *im=i4_load_image(rp,NULL);
+		i4_image_class * im=i4_load_image(rp,NULL);
 		I4_ASSERT(im,"Image must not be NULL at this point");
 		delete rp;
 		delete f->data;
@@ -536,7 +540,7 @@ void r1_software_texture_class::async_load_finished(used_node *u)
 		array_lock.lock();
 		f->mip->flags &=~R1_MIPLEVEL_LOAD_JPG;
 
-		r1_image_list_struct *ils=image_list.add();
+		r1_image_list_struct * ils=image_list.add();
 		ils->usage=30;
 		ils->image=im;
 		ils->id=f->mip->entry->id;
@@ -558,11 +562,11 @@ void r1_software_texture_class::next_frame()
 	sw32 i;
 
 	array_lock.lock();
-	i4_image_class *im=NULL;
+	i4_image_class * im=NULL;
 	for (i=0; i<finished_array.size(); i++)
 	{
-		used_node *u = finished_array[i];
-		free_node *f = (free_node *)u->node;
+		used_node * u = finished_array[i];
+		free_node * f = (free_node *)u->node;
 
 		//this officially puts it in vram
 
@@ -640,26 +644,27 @@ void r1_software_texture_class::select_texture(
 	r1_local_texture_handle_type handle,
 	float &smul, float &tmul)
 {
-	r1_tex_heap_used_node *u = (r1_tex_heap_used_node *)handle;
+	r1_tex_heap_used_node * u = (r1_tex_heap_used_node *)handle;
 
-	free_node *f = (free_node *)u->node;
+	free_node * f = (free_node *)u->node;
 
 	smul = f->mip->width;
 	tmul = f->mip->height;
 }
 
-r1_miplevel_t *r1_software_texture_class::get_texture(r1_texture_handle handle,
-													  w32 frame_counter,
-													  sw32 desired_width,
-													  sw32 &w, sw32 &h)
+r1_miplevel_t * r1_software_texture_class::get_texture(r1_texture_handle handle,
+													   w32 frame_counter,
+													   sw32 desired_width,
+													   sw32 &w, sw32 &h)
 {
-	r1_miplevel_t *mip = r1_texture_manager_class::get_texture(handle,frame_counter,desired_width,w,h);
+	r1_miplevel_t * mip = r1_texture_manager_class::get_texture(handle,frame_counter,desired_width,w,h);
+
 	if (!mip)
 	{
 		return 0;
 	}
 
-	r1_tex_heap_used_node *u = (r1_tex_heap_used_node *)mip->vram_handle;
+	r1_tex_heap_used_node * u = (r1_tex_heap_used_node *)mip->vram_handle;
 
 	if (u)
 	{

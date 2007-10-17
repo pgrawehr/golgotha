@@ -61,7 +61,7 @@ class i4_x11_opengl_display_class :
 private:
 
 	XVisualInfo *find_visual();
-	XVisualInfo *the_visual;
+	XVisualInfo * the_visual;
 	XVisualInfo *visual();
 	GLXContext glx_cx;
 	void setup_modes();
@@ -80,6 +80,7 @@ public:
 	i4_bool input_exposed()
 	{
 		i4_bool r=input.was_exposed;
+
 		input.was_exposed=i4_F;
 		return r;
 	}
@@ -123,11 +124,11 @@ public:
 		mouse_y = mouse_y - 2 * ( mouse_y - height()/2 );
 	}
 
-	virtual i4_bool initialize_mode(mode *m);
+	virtual i4_bool initialize_mode(mode * m);
 
 };
 
-i4_bool i4_x11_opengl_display_class::initialize_mode(mode *m)
+i4_bool i4_x11_opengl_display_class::initialize_mode(mode * m)
 {
 
 	// this sets up the window for us
@@ -206,7 +207,7 @@ void i4_x11_opengl_display_class::setup_modes()
 		return;
 	}
 
-	XVisualInfo *v = visual();
+	XVisualInfo * v = visual();
 	if (!v)
 	{
 		i4_warning("Attempting to guess a video mode.");
@@ -252,14 +253,14 @@ void i4_x11_opengl_display_class::setup_modes()
 }
 
 // For now we'll look for visual on DefaultScreen(), this should be changed later.
-XVisualInfo *i4_x11_opengl_display_class::find_visual()
+XVisualInfo * i4_x11_opengl_display_class::find_visual()
 {
 
 	if (!input.display && !input.open_display())
 	{
 		return NULL;
 	}
-	XVisualInfo vis_info, *v;
+	XVisualInfo vis_info, * v;
 	input.screen_num=DefaultScreen(input.display);
 	v = glXChooseVisual(input.display, input.screen_num, glx_attribs);
 	if (!v)
@@ -276,7 +277,7 @@ XVisualInfo *i4_x11_opengl_display_class::find_visual()
 	return v;
 }
 
-XVisualInfo *i4_x11_opengl_display_class::visual()
+XVisualInfo * i4_x11_opengl_display_class::visual()
 {
 	if (!the_visual)
 	{

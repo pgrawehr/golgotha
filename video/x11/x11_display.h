@@ -48,7 +48,7 @@ class x11_display_input_class :
 public:
 	virtual void resize(int w, int h);
 	virtual void note_event(XEvent &xev);
-	virtual void name(char *buf)
+	virtual void name(char * buf)
 	{
 		static_name(buf, "x11_display_input_class");
 	}
@@ -58,11 +58,11 @@ class x11_display_class :
 	public i4_display_class
 {
 protected:
-	virtual XVisualInfo *get_visual(Display *display);
+	virtual XVisualInfo *get_visual(Display * display);
 
 public:
 	//i4_display_list_struct me;
-	x11_shm_extension_class *shm_extension;
+	x11_shm_extension_class * shm_extension;
 
 	x11_display_input_class input;
 
@@ -71,7 +71,7 @@ public:
 	void close_display();
 
 
-	i4_bool open_X_window(w32 width, w32 height, i4_display_class::mode *mode);
+	i4_bool open_X_window(w32 width, w32 height, i4_display_class::mode * mode);
 	void    create_X_image(w32 width, w32 height);
 	void    destroy_X_image();
 	void    close_X_window();
@@ -85,25 +85,25 @@ public:
 		public mode
 	{
 public:
-		i4_display_class *assoc; // pointer to use, so we can confirm we created this mode
+		i4_display_class * assoc; // pointer to use, so we can confirm we created this mode
 	};
 
 	x11_mode amode, cur_mode;
 
 	// generic image which will take the type of the screen when we copy the save portion
-	i4_image_class *mouse_pict;
+	i4_image_class * mouse_pict;
 
-	i4_image_class *mouse_save, *screen;
+	i4_image_class * mouse_save, * screen;
 
-	i4_draw_context_class *context;
+	i4_draw_context_class * context;
 
 	i4_coord mouse_hot_x,mouse_hot_y;
-	const i4_pal *mouse_pal;
+	const i4_pal * mouse_pal;
 	i4_color mouse_trans;
-	x11_shm_image_class *shm_image;
-	XImage *ximage;
+	x11_shm_image_class * shm_image;
+	XImage * ximage;
 
-	virtual i4_bool set_mouse_shape(i4_cursor_class *cursor);
+	virtual i4_bool set_mouse_shape(i4_cursor_class * cursor);
 
 	virtual i4_image_class *get_screen()
 	{
@@ -192,6 +192,6 @@ public:
 };
 
 extern x11_display_class x11_display_instance;
-extern x11_display_class *x11_display_ptr;
+extern x11_display_class * x11_display_ptr;
 
 #endif

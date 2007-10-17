@@ -27,7 +27,7 @@ struct i4_jpg_write_mgr : public jpeg_destination_mgr
 {
 	w8 buf[JPG_BUF_SIZE];
 	int size;
-	i4_file_class *fp;
+	i4_file_class * fp;
 
 	i4_jpg_write_mgr(i4_file_class *fp) :
 		fp(fp) {
@@ -42,9 +42,10 @@ struct i4_jpg_write_mgr : public jpeg_destination_mgr
 
 boolean i4_jpg_empty(j_compress_ptr cinfo)
 {
-	i4_jpg_write_mgr *m=i4_current_jpg_write_mgr;
+	i4_jpg_write_mgr * m=i4_current_jpg_write_mgr;
 
 	int ws=JPG_BUF_SIZE;
+
 	i4_current_jpg_write_mgr->fp->write(m->buf, ws);
 
 	m->size+=ws;
@@ -57,14 +58,16 @@ boolean i4_jpg_empty(j_compress_ptr cinfo)
 
 void i4_jpg_fin(j_compress_ptr cinfo)
 {
-	i4_jpg_write_mgr *m=i4_current_jpg_write_mgr;
+	i4_jpg_write_mgr * m=i4_current_jpg_write_mgr;
 	int ws=(w8 *)m->next_output_byte-m->buf;
+
 	i4_current_jpg_write_mgr->fp->write(m->buf, ws);
 }
 
-i4_bool i4_write_jpeg(i4_image_class *im, const i4_const_str &name, int quality)
+i4_bool i4_write_jpeg(i4_image_class * im, const i4_const_str &name, int quality)
 {
-	i4_file_class *fp=i4_open(name,I4_WRITE);
+	i4_file_class * fp=i4_open(name,I4_WRITE);
+
 	if (fp)
 	{
 		int ret=i4_write_jpeg(im,fp,quality,NULL);
@@ -80,10 +83,10 @@ i4_bool i4_write_jpeg(i4_image_class *im, const i4_const_str &name, int quality)
 }
 
 // return size of jpeg written
-int i4_write_jpeg(i4_image_class *im,
-				  i4_file_class *fp,
+int i4_write_jpeg(i4_image_class * im,
+				  i4_file_class * fp,
 				  int quality,             // 0..100
-				  i4_status_class *status)
+				  i4_status_class * status)
 {
 	if (im->width()>4096)
 	{
@@ -172,7 +175,7 @@ int i4_write_jpeg(i4_image_class *im,
 		JSAMPROW scanline[1]={
 			buf
 		};
-		w8 *c=buf;
+		w8 * c=buf;
 
 		for (int x=0; x<im_w; x++)
 		{

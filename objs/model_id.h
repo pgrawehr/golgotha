@@ -28,15 +28,15 @@ typedef w16 g1_model_id_type;
 class g1_model_list_class :
 	public i4_init_class
 {
-	friend int g1_model_info_compare(const void *a, const void *b);
+	friend int g1_model_info_compare(const void * a, const void * b);
 	struct model_info
 	{
-		g1_quad_object_class *model;
-		char *name_start;
-	} *array;
+		g1_quad_object_class * model;
+		char * name_start;
+	} * array;
 
 
-	i4_grow_heap_class *name_buffer;
+	i4_grow_heap_class * name_buffer;
 	int total_models;
 	i4_float model_scaling; //actual scaling of models
 
@@ -47,11 +47,11 @@ class g1_model_list_class :
 public:
 	//! Resets the model manager.
 	//! Resets the model manager and loads the model with the given model names.
-	void reset(i4_array<i4_str *> &model_names, r1_texture_manager_class *tmap);
+	void reset(i4_array<i4_str *> &model_names, r1_texture_manager_class * tmap);
 
 	//! Adds a model to the list.
 	//! Use this method to add a new model at runtime.
-	void add_model(const i4_str& model_name, r1_texture_manager_class *tmap);
+	void add_model(const i4_str& model_name, r1_texture_manager_class * tmap);
 
 	//! Returns the current scale factor.
 	i4_float get_scaling() const
@@ -76,7 +76,7 @@ public:
 	}
 
 	//!Returns the Handle for a namely known model.
-	g1_model_id_type find_handle(char *name) const;
+	g1_model_id_type find_handle(char * name) const;
 	void cleanup();
 
 	//!Returns the name for a handle.
@@ -99,12 +99,12 @@ extern g1_model_list_class g1_model_list_man;
 class g1_model_ref
 {
 public:
-	char *name;
+	char * name;
 	g1_model_id_type value;
-	g1_model_ref *next;
+	g1_model_ref * next;
 
-	g1_model_ref(char *name=0); // assumes name is a static value (it is not copied)
-	void set_name(char *name);
+	g1_model_ref(char * name=0); // assumes name is a static value (it is not copied)
+	void set_name(char * name);
 	~g1_model_ref();
 
 	g1_model_id_type id() const
@@ -115,7 +115,7 @@ public:
 	{
 		return g1_model_list_man.get_model(value);
 	}
-	g1_quad_object_class *operator()() const
+	g1_quad_object_class * operator()() const
 	{
 		return g1_model_list_man.get_model(value);
 	}

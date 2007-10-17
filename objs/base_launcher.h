@@ -21,8 +21,8 @@ public:
 		DATA_VERSION=1
 	};
 	i4_bool first_time;
-	g1_base_launcher_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
+	g1_base_launcher_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
 
 	enum {
 		ORIGNAL_RUMBLE_VOLUME=I4_SOUND_VOLUME_LEVELS/8
@@ -33,7 +33,7 @@ public:
 
 	virtual i4_bool occupy_location();
 
-	virtual i4_bool can_attack(g1_object_class *who);
+	virtual i4_bool can_attack(g1_object_class * who);
 };
 
 #endif

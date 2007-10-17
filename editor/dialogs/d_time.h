@@ -13,7 +13,7 @@
 class i4_parent_window_class;
 class i4_graphical_style_class;
 
-i4_parent_window_class *g1_create_time_edit_window(i4_graphical_style_class *style,
+i4_parent_window_class *g1_create_time_edit_window(i4_graphical_style_class * style,
 												   w32 cur_frame);
 
 

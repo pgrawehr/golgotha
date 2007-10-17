@@ -64,7 +64,7 @@ static void done_fb_write()
 
 }
 
-i4_opengl_display_class *i4_opengl_display=0;
+i4_opengl_display_class * i4_opengl_display=0;
 
 
 i4_opengl_display_class::i4_opengl_display_class()
@@ -84,7 +84,7 @@ i4_opengl_display_class::i4_opengl_display_class()
 	back_pal = 0;
 }
 
-i4_bool i4_opengl_display_class::set_mouse_shape(i4_cursor_class *cursor)
+i4_bool i4_opengl_display_class::set_mouse_shape(i4_cursor_class * cursor)
 {
 	if (mcursor)
 	{
@@ -101,7 +101,7 @@ i4_bool i4_opengl_display_class::set_mouse_shape(i4_cursor_class *cursor)
 }
 
 // this was used to add a rectangular region to screen
-void i4_opengl_display_class::remove_cursor(sw32 x, sw32 y, i4_image_class *mouse_save)
+void i4_opengl_display_class::remove_cursor(sw32 x, sw32 y, i4_image_class * mouse_save)
 {
 	if (mcursor && mouse_save)
 	{
@@ -193,18 +193,18 @@ void i4_opengl_display_class::draw_cursor(sw32 x, sw32 y)
 		i4_draw_context_class no_clip_context(0,0, w-1, h-1);
 
 		// get region under cursor
-		i4_image_class *back = 0;
+		i4_image_class * back = 0;
 		save_cursor(x,y,back);
 
 		// flip back image vertically
 		//w8 tmp[back->bpl];
 		//MIPSPRO compiler doesn't like this
-		w8 *tmp;
+		w8 * tmp;
 		tmp=(w8 *)malloc(back->bpl);
 		for (w32 i=0; i<h/2; i++)
 		{
-			w16 *ptr1 = (w16 *)back->data + i * w;
-			w16 *ptr2 = (w16 *)back->data + (h - 1 - i) * w;
+			w16 * ptr1 = (w16 *)back->data + i * w;
+			w16 * ptr2 = (w16 *)back->data + (h - 1 - i) * w;
 			memcpy(tmp,ptr1,back->bpl);
 			memcpy(ptr1,ptr2,back->bpl);
 			memcpy(ptr2,tmp,back->bpl);
@@ -235,7 +235,7 @@ void i4_opengl_display_class::flush()
 	context->both_dirty->intersect_area(0,0,width()-1,height()-1);
 
 	i4_rect_list_class::area_iter a=context->both_dirty->list.begin();
-	i4_rect_list_class *use_list=0;
+	i4_rect_list_class * use_list=0;
 #ifdef GL_NOREALPAGEFLIP
 	use_list=context->both_dirty;
 #else
@@ -291,7 +291,7 @@ void i4_opengl_display_class::flush()
 		mouse_y -= mcursor->hot_y + mcursor->pict->height();
 	}
 
-	i4_image_class **cur_save;
+	i4_image_class * * cur_save;
 
 	if (!prev_mouse_save || prev_mouse_save == mouse_save2)
 	{
@@ -350,7 +350,7 @@ i4_bool i4_opengl_display_class::close()
 	return i4_T;
 }
 
-i4_display_class::mode *i4_opengl_display_class::get_first_mode(int driver_id)
+i4_display_class::mode * i4_opengl_display_class::get_first_mode(int driver_id)
 {
 	if (!n_modes)
 	{
@@ -360,7 +360,7 @@ i4_display_class::mode *i4_opengl_display_class::get_first_mode(int driver_id)
 	return &modes[0];
 }
 
-i4_display_class::mode *i4_opengl_display_class::get_next_mode()
+i4_display_class::mode * i4_opengl_display_class::get_next_mode()
 {
 	mode_pointer++;
 	if (mode_pointer >= n_modes)
@@ -373,7 +373,8 @@ i4_display_class::mode *i4_opengl_display_class::get_next_mode()
 
 void i4_opengl_display_class::init()
 {
-	i4_display_list_struct *s=new i4_display_list_struct;
+	i4_display_list_struct * s=new i4_display_list_struct;
+
 	s->add_to_list("OpenGL (native)", 0x8000, /*Priority*/ 245, this, i4_display_list);
 }
 
@@ -386,7 +387,7 @@ i4_bool i4_opengl_display_class::initialize_mode()
 	return initialize_mode(&modes[mode_pointer]);
 }
 
-i4_bool i4_opengl_display_class::initialize_mode(mode *m)
+i4_bool i4_opengl_display_class::initialize_mode(mode * m)
 {
 
 	destroy_window();
@@ -441,7 +442,7 @@ i4_bool i4_opengl_display_class::initialize_mode(mode *m)
 	return i4_T;
 }
 
-i4_image_class *i4_opengl_display_class::lock_frame_buffer(i4_frame_buffer_type type, i4_frame_access_type access)
+i4_image_class * i4_opengl_display_class::lock_frame_buffer(i4_frame_buffer_type type, i4_frame_access_type access)
 {
 
 	if (access == I4_FRAME_BUFFER_READ)
@@ -461,7 +462,7 @@ i4_image_class *i4_opengl_display_class::lock_frame_buffer(i4_frame_buffer_type 
 						 (GLvoid *)back_screen->data);
 			//glReadPixels(width(),height(),0,0,GL_RGB,GL_UNSIGNED_SHORT_5_6_5,(GLvoid*) back_screen->data);
 			//back_screen->bpl=0;
-			i4_image_class *tim=back_screen->copy();
+			i4_image_class * tim=back_screen->copy();
 			//almost working: The middle row is missing. But is it the first or the last?
 			for (int i=0; i<back_screen->height(); i++)
 			{

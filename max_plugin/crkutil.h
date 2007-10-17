@@ -10,7 +10,7 @@
 #define __CRKUTIL_HH
 
 //#include <Max.h>
-typedef void *ClassDesc;
+typedef void * ClassDesc;
 #include "crkutilr.h"
 
 TCHAR *GetString(int id);
@@ -20,7 +20,7 @@ enum {
 	MAX_MATERIAL_OFFSET = 1024
 };
 
-extern char *gmod_sig;
+extern char * gmod_sig;
 
 extern ClassDesc *GetCrackUtilDesc();
 extern ClassDesc *GetCrackImportDesc();

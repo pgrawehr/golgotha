@@ -41,6 +41,7 @@ inline sw32 i4_f_to_i(i4_float f)
 	w16 i4_f_to_i_control_word_1;
 	w16 i4_f_to_i_control_word_2;
 	sw32 res;
+
 	__asm
 	{
 		fld f
@@ -64,6 +65,7 @@ inline sw32 i4_s_to_i(double f)
 	w16 i4_f_to_i_control_word_1;
 	w16 i4_f_to_i_control_word_2;
 	sw32 res;
+
 	__asm
 	{
 		fld qword ptr [f]

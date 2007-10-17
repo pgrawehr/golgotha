@@ -7,4 +7,4 @@
  ***********************************************************************/
 
 
-const i4_const_str &g1_ges(char *res);
+const i4_const_str &g1_ges(char * res);

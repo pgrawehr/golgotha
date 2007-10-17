@@ -20,13 +20,13 @@ class g1_sfx_obj_class;
 class g1_sound_manager_class
 {
 public:
-	g1_sfx_obj_class *sfx_obj_list;
+	g1_sfx_obj_class * sfx_obj_list;
 	i4_bool loop_current_song;
 
 	g1_sound_manager_class();
 	~g1_sound_manager_class();
-	void add_sfx_to_list(g1_sfx_obj_class *sfx);
-	void remove_sfx_from_list(g1_sfx_obj_class *sfx);
+	void add_sfx_to_list(g1_sfx_obj_class * sfx);
+	void remove_sfx_from_list(g1_sfx_obj_class * sfx);
 
 	// should be called by main game every tick, check to see if a new narative should be played
 	// and to update the position of the 3d listener

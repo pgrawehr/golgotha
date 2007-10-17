@@ -39,8 +39,8 @@ enum
 g1_object_type *g1_get_old_object_type_remap()
 {
 
-	g1_object_type *a=(g1_object_type *)I4_MALLOC(sizeof(g1_object_type) * G1_TOTAL_TYPES,
-												  "old obj_remap");
+	g1_object_type * a=(g1_object_type *)I4_MALLOC(sizeof(g1_object_type) * G1_TOTAL_TYPES,
+												   "old obj_remap");
 
 	for (int i=0; i<G1_TOTAL_TYPES; i++)
 	{

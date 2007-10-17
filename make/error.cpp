@@ -10,11 +10,11 @@
 
 
 int line_on=0;
-char *file_on=0;
+char * file_on=0;
 int mk_debug_on=0;
-char *file_contents=0;
+char * file_contents=0;
 
-void mk_error(char *format,...)
+void mk_error(char * format,...)
 {
 	if (file_on)
 	{
@@ -31,7 +31,7 @@ void mk_error(char *format,...)
 	exit(1);
 }
 
-void mk_debug(char *format,...)
+void mk_debug(char * format,...)
 {
 	if (mk_debug_on)
 	{

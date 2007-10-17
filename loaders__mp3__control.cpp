@@ -34,12 +34,13 @@ extern int tabsel_123[2][3][16];
 int sajber_sendmsg(int type,int data)
 {
 	TControlMsg msg;
+
 	msg.type = type;
 	msg.data = data;
 	return write(1,&msg,sizeof(TControlMsg));
 }
 
-void control_sajber(struct frame *fr)
+void control_sajber(struct frame * fr)
 {
 	struct timeval timeout;
 	fd_set readfds;
@@ -251,7 +252,7 @@ void control_sajber(struct frame *fr)
 	}
 }
 
-void control_tk3play(struct frame *fr)
+void control_tk3play(struct frame * fr)
 {
 
 }

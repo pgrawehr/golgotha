@@ -13,9 +13,9 @@
 #include "string/string.h"
 
 i4_sound_manager_class i4_null_sound;
-i4_sound_manager_class *i4_sound_man = &i4_null_sound;
+i4_sound_manager_class * i4_sound_man = &i4_null_sound;
 
-static i4_sound_manager_class *i4_disabled_sound_man = &i4_null_sound;
+static i4_sound_manager_class * i4_disabled_sound_man = &i4_null_sound;
 
 
 void i4_sound_manager_class::init()

@@ -40,14 +40,14 @@ public:
 	//{{{
 	{
 		mobj()->animation[anim].num_frames=frames;
-		g1_vert_class *v;
+		g1_vert_class * v;
 		mobj()->backup_references(); //warning: do not assign
 		//directly, as restore_references() may just damage animation[anim]
 		//entry if anim<=num_animations already
 		v=mobj()->vert_store.add_many(frames*mobj()->num_vertex);
 		mobj()->restore_references();
 		mobj()->animation[anim].vertex=v;
-		i4_str *n=0;
+		i4_str * n=0;
 		if (name.null())
 		{
 			n=new i4_str("default");
@@ -71,7 +71,7 @@ public:
 	}
 	//}}}
 
-	virtual void create_quad(w16 quad, int verts, w16 *ref, w32 flags)
+	virtual void create_quad(w16 quad, int verts, w16 * ref, w32 flags)
 	//{{{
 	{
 		g1_quad_object_loader_class::create_quad(quad,verts,ref,flags);
@@ -89,10 +89,11 @@ public:
 	virtual void store_texture_name(w32 quad, const i4_const_str &name)
 	//{{{
 	{
-		char buf[512], *p=buf;
+		char buf[512], * p=buf;
 
 		i4_os_string(name, buf, sizeof(buf));
 		while (*p) p++;
+
 
 		--p;
 		if (p>buf && *p!='.')
@@ -166,7 +167,7 @@ public:
 	virtual g1_quad_object_class *allocate_object()
 	//{{{
 	{
-		m1_poly_object_class *o = new m1_poly_object_class;
+		m1_poly_object_class * o = new m1_poly_object_class;
 
 		if (o)
 		{
@@ -177,8 +178,8 @@ public:
 	}
 	//}}}
 
-	m1_poly_object_class *load(i4_loader_class *fp, const i4_const_str &_error_name,
-							   r1_texture_manager_class *_tman)
+	m1_poly_object_class *load(i4_loader_class * fp, const i4_const_str &_error_name,
+							   r1_texture_manager_class * _tman)
 	//{{{
 	{
 		error_name = &_error_name;
@@ -195,17 +196,17 @@ public:
 };
 
 void m1_load_model_dir(const i4_const_str &object_filename,
-					   r1_texture_manager_class *tman)
+					   r1_texture_manager_class * tman)
 {
 	tman->reset();
 	m1_info.textures_loaded=i4_F;
 
 	i4_array<i4_str *> tname_a(128,16);
 
-	i4_file_class *fp=i4_open(object_filename);
+	i4_file_class * fp=i4_open(object_filename);
 	if (fp)
 	{
-		i4_loader_class *gfp=i4_open_save_file(fp);
+		i4_loader_class * gfp=i4_open_save_file(fp);
 		if (gfp)
 		{
 			if (gfp->goto_section(G1_SECTION_MODEL_TEXTURE_NAMES))
@@ -213,7 +214,7 @@ void m1_load_model_dir(const i4_const_str &object_filename,
 				w16 quads=gfp->read_16();
 				for (int i=0; i<quads; i++)
 				{
-					i4_str *s=gfp->read_counted_str();
+					i4_str * s=gfp->read_counted_str();
 					if (!s->null())
 					{
 						tname_a.add(s);
@@ -240,7 +241,7 @@ void m1_load_model_dir(const i4_const_str &object_filename,
 }
 
 m1_poly_object_class *m1_load_model(const i4_const_str &name,
-									r1_texture_manager_class *tman)
+									r1_texture_manager_class * tman)
 //{{{
 {
 	m1_info.recalcing_textures=i4_T;
@@ -255,14 +256,14 @@ m1_poly_object_class *m1_load_model(const i4_const_str &name,
 	m1_info.recalcing_textures=i4_F;
 
 
-	i4_file_class *fp=i4_open(name);
+	i4_file_class * fp=i4_open(name);
 	if (fp)
 	{
-		i4_loader_class *gfp=i4_open_save_file(fp);
+		i4_loader_class * gfp=i4_open_save_file(fp);
 
 		if (gfp)
 		{
-			m1_poly_object_class *o;
+			m1_poly_object_class * o;
 			m1_poly_object_loader_class mo_loader;
 			o = mo_loader.load(gfp, name, tman);
 			delete gfp;

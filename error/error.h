@@ -21,7 +21,7 @@ extern "C" {
 
 #include <stdarg.h>
 
-typedef int (*i4_error_function_type)(const char *str);
+typedef int (*i4_error_function_type)(const char * str);
 
 void i4_set_error_function(i4_error_function_type fun);
 i4_error_function_type i4_get_error_function();
@@ -29,29 +29,29 @@ i4_error_function_type i4_get_error_function();
 void i4_set_warning_function(i4_error_function_type fun);
 i4_error_function_type i4_get_warning_function();
 
-int i4_default_warning(const char *st);
-int i4_default_error(const char *st);
+int i4_default_warning(const char * st);
+int i4_default_error(const char * st);
 
 
-int i4_error_file_line(char *file, int line, const char *format, ...);
-int i4_warning_file_line(char *file, int line, const char *format, ...);
+int i4_error_file_line(char * file, int line, const char * format, ...);
+int i4_warning_file_line(char * file, int line, const char * format, ...);
 
 class i4_file_class;
-extern i4_file_class *i4_debug;     // stream you can print debug messages to
+extern i4_file_class * i4_debug;     // stream you can print debug messages to
 
 
 // this are so we can get the line and file an error occured on
-typedef int (*i4_error_pointer_type)(const char *format...);
-i4_error_pointer_type i4_get_error_function_pointer(const char *file, int line);
-i4_error_pointer_type i4_get_warning_function_pointer(const char *file, int line);
-extern const char *i4_error_file_on;
+typedef int (*i4_error_pointer_type)(const char * format...);
+i4_error_pointer_type i4_get_error_function_pointer(const char * file, int line);
+i4_error_pointer_type i4_get_warning_function_pointer(const char * file, int line);
+extern const char * i4_error_file_on;
 extern int i4_error_line_on;
 
 
 
 #ifdef _DEBUG
 #define I4_LF __LINE__, __FILE__
-#define I4_LF_ARGS int I4_LINE, char *I4_FILE
+#define I4_LF_ARGS int I4_LINE, char * I4_FILE
 #define I4_DEBUG
 #else
 #define I4_LF
@@ -60,7 +60,7 @@ extern int i4_error_line_on;
 #define I4_FILE ""
 #endif
 
-#define I4_LF_ARG (char *I4_FILE, int I4_LINE)
+#define I4_LF_ARG (char * I4_FILE, int I4_LINE)
 
 
 

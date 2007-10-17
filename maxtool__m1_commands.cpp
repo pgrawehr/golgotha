@@ -18,14 +18,14 @@
 #include "gui/smp_dial.h"
 #include "octree.h"
 
-li_object *m1_wireframe_toggle(li_object *o, li_environment *env)
+li_object *m1_wireframe_toggle(li_object * o, li_environment * env)
 {
 	m1_info.set_flags(M1_WIREFRAME, ~m1_info.get_flags(M1_WIREFRAME));
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_toggle_octree(li_object *o, li_environment *env)
+li_object *m1_toggle_octree(li_object * o, li_environment * env)
 {
 	m1_info.set_flags(M1_SHOW_OCTREE_SUBDIVISIONS,
 					  ~m1_info.get_flags(M1_SHOW_OCTREE_SUBDIVISIONS));
@@ -33,7 +33,7 @@ li_object *m1_toggle_octree(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_select_none(li_object *o, li_environment *env)
+li_object *m1_select_none(li_object * o, li_environment * env)
 {
 	// deselect all the old polys
 	if (m1_info.obj==NULL)
@@ -51,7 +51,7 @@ li_object *m1_select_none(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_select_all(li_object *o, li_environment *env)
+li_object *m1_select_all(li_object * o, li_environment * env)
 {
 	// select all polys (usefull command if object has no textures jet)
 	if (m1_info.obj==NULL)
@@ -69,10 +69,11 @@ li_object *m1_select_all(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_select_similar(li_object *o, li_environment *env)
+li_object *m1_select_similar(li_object * o, li_environment * env)
 {
-	i4_str *texture=0;
+	i4_str * texture=0;
 	int i,j;
+
 	if (m1_info.obj==NULL)
 	{
 		return 0;
@@ -105,7 +106,7 @@ li_object *m1_select_similar(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_rotate_texture_selected(li_object *o, li_environment *env)
+li_object *m1_rotate_texture_selected(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==NULL)
 	{
@@ -113,7 +114,7 @@ li_object *m1_rotate_texture_selected(li_object *o, li_environment *env)
 	}
 	for (int i=0; i<m1_info.obj->num_quad; i++)
 	{
-		g1_quad_class *q = &m1_info.obj->quad[i];
+		g1_quad_class * q = &m1_info.obj->quad[i];
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			i4_float u=q->u[0],v=q->v[0], nu,nv;
@@ -135,7 +136,7 @@ li_object *m1_rotate_texture_selected(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_reverse_texture_selected(li_object *o, li_environment *env)
+li_object *m1_reverse_texture_selected(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==NULL)
 	{
@@ -143,7 +144,7 @@ li_object *m1_reverse_texture_selected(li_object *o, li_environment *env)
 	}
 	for (int i=0; i<m1_info.obj->num_quad; i++)
 	{
-		g1_quad_class *q = &m1_info.obj->quad[i];
+		g1_quad_class * q = &m1_info.obj->quad[i];
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			int j = q->num_verts()-1;
@@ -164,7 +165,7 @@ li_object *m1_reverse_texture_selected(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_toggle_bothsided_selected(li_object *o, li_environment *env)
+li_object *m1_toggle_bothsided_selected(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==NULL)
 	{
@@ -172,7 +173,7 @@ li_object *m1_toggle_bothsided_selected(li_object *o, li_environment *env)
 	}
 	for (int i=0; i<m1_info.obj->num_quad; i++)
 	{
-		g1_quad_class *q = &m1_info.obj->quad[i];
+		g1_quad_class * q = &m1_info.obj->quad[i];
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			if (q->get_flags(g1_quad_class::BOTHSIDED))
@@ -191,7 +192,7 @@ li_object *m1_toggle_bothsided_selected(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_flip_normal_selected(li_object *o, li_environment *env)
+li_object *m1_flip_normal_selected(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==NULL)
 	{
@@ -199,7 +200,7 @@ li_object *m1_flip_normal_selected(li_object *o, li_environment *env)
 	}
 	for (int i=0; i<m1_info.obj->num_quad; i++)
 	{
-		g1_quad_class *q = &m1_info.obj->quad[i];
+		g1_quad_class * q = &m1_info.obj->quad[i];
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			int j = q->num_verts()-1;
@@ -227,7 +228,7 @@ li_object *m1_flip_normal_selected(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_recalc_normals(li_object *o, li_environment *env)
+li_object *m1_recalc_normals(li_object * o, li_environment * env)
 {
 	m1_info.obj->calc_extents();
 	m1_info.obj->calc_vert_normals();
@@ -236,7 +237,7 @@ li_object *m1_recalc_normals(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_default_coordinates(li_object *o, li_environment *env)
+li_object *m1_default_coordinates(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==NULL)
 	{
@@ -244,7 +245,7 @@ li_object *m1_default_coordinates(li_object *o, li_environment *env)
 	}
 	for (int i=0; i<m1_info.obj->num_quad; i++)
 	{
-		g1_quad_class *q = &m1_info.obj->quad[i];
+		g1_quad_class * q = &m1_info.obj->quad[i];
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			q->u[0] = 0;
@@ -263,7 +264,7 @@ li_object *m1_default_coordinates(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_tint_selected(li_object *o, li_environment *env)
+li_object *m1_tint_selected(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==NULL)
 	{
@@ -281,7 +282,7 @@ li_object *m1_tint_selected(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_untint_selected(li_object *o, li_environment *env)
+li_object *m1_untint_selected(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==NULL)
 	{
@@ -299,7 +300,7 @@ li_object *m1_untint_selected(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_get_object_info(li_object *o, li_environment *env)
+li_object *m1_get_object_info(li_object * o, li_environment * env)
 {
 	if (!m1_info.obj)
 	{
@@ -315,7 +316,7 @@ li_object *m1_get_object_info(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_add_anim(li_object *o, li_environment *env)
+li_object *m1_add_anim(li_object * o, li_environment * env)
 {
 	if (!m1_info.obj)
 	{
@@ -332,13 +333,13 @@ li_object *m1_add_anim(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_rename_anim(li_object *o, li_environment *env)
+li_object *m1_rename_anim(li_object * o, li_environment * env)
 {
 	if (!m1_info.obj)
 	{
 		return 0;
 	}
-	i4_str *oldptr=m1_info.obj->animation_names[m1_info.current_animation];
+	i4_str * oldptr=m1_info.obj->animation_names[m1_info.current_animation];
 	i4_str oldname(*oldptr);
 	i4_str newname("newnametemp");
 	if (i4_input_box("Rename animation","Rename the animation",oldname,newname,MSG_INPUTBOX+MSG_OKCANCEL)==MSG_CANCEL)
@@ -349,7 +350,7 @@ li_object *m1_rename_anim(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_add_mount(li_object *o, li_environment *env)
+li_object *m1_add_mount(li_object * o, li_environment * env)
 {
 	if (!m1_info.obj)
 	{
@@ -367,11 +368,12 @@ li_object *m1_add_mount(li_object *o, li_environment *env)
 i4_3d_vector m1_vector_input(const i4_const_str &msg, i4_3d_vector oldvalue)
 {
 	i4_3d_vector retval;
+
 	i4_str strvectout("out");
 	i4_const_str afl("( %f , %f , %f )");
 	i4_3d_vector &v=oldvalue;
-	i4_str *strvectin=afl.sprintf(100,v.x,
-								  v.y,v.z);
+	i4_str * strvectin=afl.sprintf(100,v.x,
+								   v.y,v.z);
 
 	if (i4_input_box("Vector",msg,*strvectin,
 					 strvectout,MSG_OK+MSG_CANCEL)==MSG_CANCEL)
@@ -392,7 +394,7 @@ i4_3d_vector m1_vector_input(const i4_const_str &msg, i4_3d_vector oldvalue)
 	return retval;
 }
 
-li_object *m1_scale_object(li_object *o, li_environment *env)
+li_object *m1_scale_object(li_object * o, li_environment * env)
 {
 	if (!m1_info.obj)
 	{
@@ -403,8 +405,8 @@ li_object *m1_scale_object(li_object *o, li_environment *env)
 		i4_3d_vector(1.0f,1.0f,1.0f));
 	//This one needs to be regenerated afterwards.
 	li_call("remove_octree",0,0);
-	g1_vert_class *v=m1_info.obj->get_verts(m1_info.current_animation,
-											m1_info.current_frame);
+	g1_vert_class * v=m1_info.obj->get_verts(m1_info.current_animation,
+											 m1_info.current_frame);
 	for (int i=0; i<m1_info.obj->num_vertex; i++,v++)
 	{
 		v->v.x*=scale.x;
@@ -414,7 +416,7 @@ li_object *m1_scale_object(li_object *o, li_environment *env)
 	return li_true_sym;
 }
 
-li_object *m1_move_object(li_object *o, li_environment *env)
+li_object *m1_move_object(li_object * o, li_environment * env)
 {
 	if (!m1_info.obj)
 	{
@@ -425,8 +427,8 @@ li_object *m1_move_object(li_object *o, li_environment *env)
 		i4_3d_vector(0,0,0));
 	//This one needs to be regenerated afterwards.
 	li_call("remove_octree",0,0);
-	g1_vert_class *v=m1_info.obj->get_verts(m1_info.current_animation,
-											m1_info.current_frame);
+	g1_vert_class * v=m1_info.obj->get_verts(m1_info.current_animation,
+											 m1_info.current_frame);
 	for (int i=0; i<m1_info.obj->num_vertex; i++,v++)
 	{
 		v->v.x+=move.x;
@@ -438,7 +440,7 @@ li_object *m1_move_object(li_object *o, li_environment *env)
 
 
 
-li_object *m1_delete_anim(li_object *o, li_environment *env)
+li_object *m1_delete_anim(li_object * o, li_environment * env)
 {
 	if (!m1_info.obj)
 	{
@@ -464,7 +466,7 @@ li_object *m1_delete_anim(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_add_vertex(li_object *o, li_environment *env)
+li_object *m1_add_vertex(li_object * o, li_environment * env)
 {
 	if (!m1_info.obj)
 	{
@@ -478,9 +480,10 @@ li_object *m1_add_vertex(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_remove_vertex(li_object *o, li_environment *env)
+li_object *m1_remove_vertex(li_object * o, li_environment * env)
 {
 	int vertno=0;
+
 	if (!m1_info.obj)
 	{
 		return 0;
@@ -518,14 +521,14 @@ li_object *m1_remove_vertex(li_object *o, li_environment *env)
 }
 
 
-li_object *m1_add_quad(li_object *o, li_environment *env)
+li_object *m1_add_quad(li_object * o, li_environment * env)
 //adds a quad, this is a face of an object.
 {
 	if (m1_info.obj==NULL)
 	{
 		return 0;
 	}
-	m1_poly_object_class *obj=m1_info.obj;
+	m1_poly_object_class * obj=m1_info.obj;
 	int num_points=0;
 	int points[4]={
 		0,0,0,0xffff
@@ -579,7 +582,7 @@ li_object *m1_add_quad(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_delete_selected_quad(li_object *o, li_environment *env)
+li_object *m1_delete_selected_quad(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==NULL)
 	{
@@ -589,7 +592,7 @@ li_object *m1_delete_selected_quad(li_object *o, li_environment *env)
 	{
 		return 0;
 	}
-	m1_poly_object_class *obj=m1_info.obj;
+	m1_poly_object_class * obj=m1_info.obj;
 	if (obj)
 	{
 		int shift=0;
@@ -618,13 +621,13 @@ li_object *m1_delete_selected_quad(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *m1_join_coords(li_object *o, li_environment *env)
+li_object *m1_join_coords(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==NULL)
 	{
 		return 0;
 	}
-	m1_poly_object_class *obj=m1_info.obj;
+	m1_poly_object_class * obj=m1_info.obj;
 
 	i4_float u=0,v=0;
 	int set=0;
@@ -633,7 +636,7 @@ li_object *m1_join_coords(li_object *o, li_environment *env)
 	{
 		for (int j=0; j<obj->num_quad; j++)
 		{
-			g1_quad_class *q=obj->quad+j;
+			g1_quad_class * q=obj->quad+j;
 			if (q->get_flags(g1_quad_class::SELECTED))
 			{
 				for (w32 i=0; i<q->num_verts(); i++)
@@ -662,7 +665,7 @@ li_object *m1_join_coords(li_object *o, li_environment *env)
 }
 
 
-li_object *m1_team1(li_object *o, li_environment *env)
+li_object *m1_team1(li_object * o, li_environment * env)
 {
 	m1_info.current_team=1;
 	m1_render_window->request_redraw();
@@ -670,7 +673,7 @@ li_object *m1_team1(li_object *o, li_environment *env)
 }
 
 
-li_object *m1_team2(li_object *o, li_environment *env)
+li_object *m1_team2(li_object * o, li_environment * env)
 {
 	m1_info.current_team=2;
 	m1_render_window->request_redraw();
@@ -679,7 +682,7 @@ li_object *m1_team2(li_object *o, li_environment *env)
 
 
 
-li_object *m1_team3(li_object *o, li_environment *env)
+li_object *m1_team3(li_object * o, li_environment * env)
 {
 	m1_info.current_team=3;
 	m1_render_window->request_redraw();
@@ -688,7 +691,7 @@ li_object *m1_team3(li_object *o, li_environment *env)
 
 
 
-li_object *m1_team4(li_object *o, li_environment *env)
+li_object *m1_team4(li_object * o, li_environment * env)
 {
 	m1_info.current_team=4;
 	m1_render_window->request_redraw();
@@ -696,49 +699,49 @@ li_object *m1_team4(li_object *o, li_environment *env)
 }
 
 
-li_object *m1_team_default(li_object *o, li_environment *env)
+li_object *m1_team_default(li_object * o, li_environment * env)
 {
 	m1_info.current_team=0;
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_back_black(li_object *o, li_environment *env)
+li_object *m1_back_black(li_object * o, li_environment * env)
 {
 	m1_info.bg_color=0;
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_back_red(li_object *o, li_environment *env)
+li_object *m1_back_red(li_object * o, li_environment * env)
 {
 	m1_info.bg_color=0xff0000;
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_back_white(li_object *o, li_environment *env)
+li_object *m1_back_white(li_object * o, li_environment * env)
 {
 	m1_info.bg_color=0xffffff;
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_back_blue(li_object *o, li_environment *env)
+li_object *m1_back_blue(li_object * o, li_environment * env)
 {
 	m1_info.bg_color=0xff;
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_back_darkblue(li_object *o, li_environment *env)
+li_object *m1_back_darkblue(li_object * o, li_environment * env)
 {
 	m1_info.bg_color=0x2f;
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_back_green(li_object *o, li_environment *env)
+li_object *m1_back_green(li_object * o, li_environment * env)
 {
 	m1_info.bg_color=0xff00;
 	m1_render_window->request_redraw();
@@ -746,13 +749,13 @@ li_object *m1_back_green(li_object *o, li_environment *env)
 }
 
 
-li_object *m1_recenter(li_object *o, li_environment *env)
+li_object *m1_recenter(li_object * o, li_environment * env)
 {
 	m1_render_window->recenter();
 	return 0;
 }
 
-li_object *m1_axis_toggle(li_object *o, li_environment *env)
+li_object *m1_axis_toggle(li_object * o, li_environment * env)
 {
 	m1_info.set_flags(M1_SHOW_AXIS, ~m1_info.get_flags(M1_SHOW_AXIS));
 	m1_render_window->request_redraw();
@@ -760,14 +763,14 @@ li_object *m1_axis_toggle(li_object *o, li_environment *env)
 }
 
 
-li_object *m1_toggle_shading(li_object *o, li_environment *env)
+li_object *m1_toggle_shading(li_object * o, li_environment * env)
 {
 	m1_info.set_flags(M1_SHADING, ~m1_info.get_flags(M1_SHADING));
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_toggle_names(li_object *o, li_environment *env)
+li_object *m1_toggle_names(li_object * o, li_environment * env)
 {
 	m1_info.set_flags(M1_SHOW_FACE_NAMES, ~m1_info.get_flags(M1_SHOW_FACE_NAMES));
 	m1_render_window->request_redraw();
@@ -776,14 +779,14 @@ li_object *m1_toggle_names(li_object *o, li_environment *env)
 
 
 
-li_object *m1_toggle_numbers(li_object *o, li_environment *env)
+li_object *m1_toggle_numbers(li_object * o, li_environment * env)
 {
 	m1_info.set_flags(M1_SHOW_FACE_NUMBERS, ~m1_info.get_flags(M1_SHOW_FACE_NUMBERS));
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_toggle_origin(li_object *o, li_environment *env)
+li_object *m1_toggle_origin(li_object * o, li_environment * env)
 {
 	m1_info.set_flags(M1_SHOW_ORIGIN, ~m1_info.get_flags(M1_SHOW_ORIGIN));
 	m1_render_window->request_redraw();
@@ -791,30 +794,31 @@ li_object *m1_toggle_origin(li_object *o, li_environment *env)
 }
 
 
-li_object *m1_toggle_vnumbers(li_object *o, li_environment *env)
+li_object *m1_toggle_vnumbers(li_object * o, li_environment * env)
 {
 	m1_info.set_flags(M1_SHOW_VERT_NUMBERS, ~m1_info.get_flags(M1_SHOW_VERT_NUMBERS));
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_toggle_orphans(li_object *o, li_environment *env)
+li_object *m1_toggle_orphans(li_object * o, li_environment * env)
 {
 	m1_info.set_flags(M1_SHOW_ORPHANS, ~m1_info.get_flags(M1_SHOW_ORPHANS));
 	m1_render_window->request_redraw();
 	return 0;
 }
 
-li_object *m1_swap_polynums(li_object *o, li_environment *env)
+li_object *m1_swap_polynums(li_object * o, li_environment * env)
 {
 	int q1=-1,q2=-1;
+
 	if (m1_info.obj==NULL)
 	{
 		return 0;
 	}
 	for (int i=0; i<m1_info.obj->num_quad; i++)
 	{
-		g1_quad_class *q = &m1_info.obj->quad[i];
+		g1_quad_class * q = &m1_info.obj->quad[i];
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			if (q1==-1)
@@ -834,9 +838,9 @@ li_object *m1_swap_polynums(li_object *o, li_environment *env)
 
 	if (q1!=-1 && q2!=-1)
 	{
-		m1_poly_object_class *obj=m1_info.obj;
+		m1_poly_object_class * obj=m1_info.obj;
 
-		i4_str *tmp=obj->texture_names[q1];
+		i4_str * tmp=obj->texture_names[q1];
 		obj->texture_names[q1]=obj->texture_names[q2];
 		obj->texture_names[q2]=tmp;
 
@@ -853,13 +857,13 @@ li_object *m1_swap_polynums(li_object *o, li_environment *env)
 }
 
 
-li_object *m1_dump_polys(li_object *o, li_environment *env)
+li_object *m1_dump_polys(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==NULL)
 	{
 		return 0;
 	}
-	i4_file_class *fp=i4_open("dump.scm", I4_WRITE);
+	i4_file_class * fp=i4_open("dump.scm", I4_WRITE);
 	if (!fp)
 	{
 		return 0;
@@ -867,7 +871,7 @@ li_object *m1_dump_polys(li_object *o, li_environment *env)
 
 	for (int i=0; i<m1_info.obj->num_quad; i++)
 	{
-		g1_quad_class *q = &m1_info.obj->quad[i];
+		g1_quad_class * q = &m1_info.obj->quad[i];
 
 		char tname[256];
 		i4_os_string(*m1_info.obj->texture_names[i], tname,  256);
@@ -909,9 +913,9 @@ li_object *m1_dump_polys(li_object *o, li_environment *env)
 }
 
 //reload maxtool textures (should be called if something returns DDERR_SURFACELOST)
-li_object *m1_reload_textures(li_object *o, li_environment *env)
+li_object *m1_reload_textures(li_object * o, li_environment * env)
 {
-	r1_texture_manager_class *t;
+	r1_texture_manager_class * t;
 
 	t=m1_info.r_api->get_tmanager(m1_info.tman_index);
 
@@ -935,9 +939,10 @@ li_object *m1_reload_textures(li_object *o, li_environment *env)
 
 //reload the main texture manager (to be called if something returns
 //DDERR_SURFACELOST)
-li_object *g1_reload_textures(li_object *o, li_environment *env)
+li_object *g1_reload_textures(li_object * o, li_environment * env)
 {
-	r1_texture_manager_class *t;
+	r1_texture_manager_class * t;
+
 	t=m1_info.r_api->get_tmanager();
 	i4_warning("Attempting to reload main textures");
 	t->reopen();
@@ -952,7 +957,7 @@ li_object *g1_reload_textures(li_object *o, li_environment *env)
 	return li_true_sym;
 }
 
-li_object *m1_animation_rewind(li_object *o, li_environment *env)
+li_object *m1_animation_rewind(li_object * o, li_environment * env)
 //{{{
 {
 	m1_info.current_animation = 0;
@@ -966,10 +971,11 @@ li_object *m1_animation_rewind(li_object *o, li_environment *env)
 }
 //}}}
 
-li_object *m1_animation_advance(li_object *o, li_environment *env)
+li_object *m1_animation_advance(li_object * o, li_environment * env)
 //{{{
 {
-	m1_poly_object_class *obj = m1_info.obj;
+	m1_poly_object_class * obj = m1_info.obj;
+
 	if (!obj)
 	{
 		return 0;
@@ -988,10 +994,11 @@ li_object *m1_animation_advance(li_object *o, li_environment *env)
 }
 //}}}
 
-li_object *m1_animation_back(li_object *o, li_environment *env)
+li_object *m1_animation_back(li_object * o, li_environment * env)
 //{{{
 {
-	m1_poly_object_class *obj = m1_info.obj;
+	m1_poly_object_class * obj = m1_info.obj;
+
 	if (!obj)
 	{
 		return 0;
@@ -1012,7 +1019,7 @@ li_object *m1_animation_back(li_object *o, li_environment *env)
 //Todo: Check that these functions have unique names (no overlapping with level-editor)
 
 
-li_object *m1_update_textures(li_object *o, li_environment *env)
+li_object *m1_update_textures(li_object * o, li_environment * env)
 {
 	m1_info.texture_list_changed();
 	return 0;
@@ -1020,7 +1027,7 @@ li_object *m1_update_textures(li_object *o, li_environment *env)
 //li_automatic_add_function(m1_update_textures, "update_textures");
 
 
-li_object *m1_build_octree(li_object *o, li_environment *env)
+li_object *m1_build_octree(li_object * o, li_environment * env)
 {
 	if (m1_info.obj==0)
 	{
@@ -1029,7 +1036,7 @@ li_object *m1_build_octree(li_object *o, li_environment *env)
 	delete m1_info.obj->octree;
 	m1_info.obj->octree=0;
 	m1_info.obj->octree=g1_octree::Build(m1_info.obj);
-	g1_octree *oc=m1_info.obj->octree;
+	g1_octree * oc=m1_info.obj->octree;
 	if (oc)
 	{
 		i4_warning("Octree built.");
@@ -1041,7 +1048,7 @@ li_object *m1_build_octree(li_object *o, li_environment *env)
 	return li_true_sym;
 }
 
-li_object *m1_remove_octree(li_object *o, li_environment *env)
+li_object *m1_remove_octree(li_object * o, li_environment * env)
 {
 	if (m1_info.obj && m1_info.obj->octree)
 	{

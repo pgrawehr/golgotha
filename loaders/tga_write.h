@@ -12,7 +12,7 @@
 #include "arch.h"
 class i4_image_class;
 class i4_file_class;
-i4_bool i4_write_tga(i4_image_class *im, i4_file_class *fp, int include_alpha=0);
-i4_bool i4_write_tga(i4_image_class *im, const i4_const_str &name, i4_bool include_alpha=false);
+i4_bool i4_write_tga(i4_image_class * im, i4_file_class * fp, int include_alpha=0);
+i4_bool i4_write_tga(i4_image_class * im, const i4_const_str &name, i4_bool include_alpha=false);
 
 #endif

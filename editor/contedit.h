@@ -33,13 +33,13 @@ class g1_controller_edit_class :
 	friend class g1_object_mode;
 	friend class g1_ai_mode;
 
-	g1_mode_handler *mode;
+	g1_mode_handler * mode;
 
 	i4_bool graph_changed;
 	i4_bool drag_select, focus_visible;
 
-	i4_spline_class::point *move_point;
-	g1_object_class *place_object;
+	i4_spline_class::point * move_point;
+	g1_object_class * place_object;
 	i4_bool place_object_on_map;
 
 	//g1_object_class *selected_object;
@@ -64,11 +64,11 @@ class g1_controller_edit_class :
 
 	// this will replace the 'original' with new cell and move all the objects
 	// on original to new_cell
-	void replace_cell(g1_map_class *map,
+	void replace_cell(g1_map_class * map,
 					  g1_map_cell_class &original,
 					  g1_map_cell_class &new_cell);
 
-	void send_to_parent(i4_event *ev); // defined in editor.cc
+	void send_to_parent(i4_event * ev); // defined in editor.cc
 
 	void changed();        // so user can save, defined in editor.cc
 	void change_map_cell();
@@ -87,7 +87,7 @@ class g1_controller_edit_class :
 
 	void refresh();
 
-	i4_window_class *edit_win;
+	i4_window_class * edit_win;
 
 	void display_edit_win(); // defined in editor.cc
 
@@ -125,7 +125,7 @@ class g1_controller_edit_class :
 
 	i4_spline_class::point *find_spline_point(sw32 mx, sw32 my, w32 instance);
 
-	int get_current_splines(i4_spline_class **buffer, int buf_size);
+	int get_current_splines(i4_spline_class * * buffer, int buf_size);
 	void setup_context();
 
 
@@ -155,12 +155,12 @@ public:
 	//  void set_current_height(w8 height);
 
 	g1_controller_edit_class(w16 w, w16 h,
-							 i4_graphical_style_class *style);
+							 i4_graphical_style_class * style);
 
 	void mouse_moved(sw32 x, sw32 y);
 
-	void button_down(i4_mouse_button_down_event_class *bev);
-	void button_up(i4_mouse_button_up_event_class *bev);
+	void button_down(i4_mouse_button_down_event_class * bev);
+	void button_up(i4_mouse_button_up_event_class * bev);
 
 
 	void restore_cell();
@@ -170,27 +170,27 @@ public:
 	void show_focus();
 	void hide_focus();
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	void draw_3d_line(const i4_3d_point_class &p1,
 					  const i4_3d_point_class &p2,
 					  i4_color color1,   // for first point
 					  i4_color color2,   // for second point
-					  i4_image_class *local_image,
-					  g1_draw_context_class *context);
+					  i4_image_class * local_image,
+					  g1_draw_context_class * context);
 
 	void draw_3d_point(sw32 w,
 					   i4_color color,
 					   const i4_3d_point_class &p,
-					   i4_image_class *local_image,
-					   g1_draw_context_class *context);
+					   i4_image_class * local_image,
+					   g1_draw_context_class * context);
 
-	void draw_spline(i4_image_class *local_image,
-					 g1_draw_context_class *context,
+	void draw_spline(i4_image_class * local_image,
+					 g1_draw_context_class * context,
 					 i4_color cpoint_color,
 					 i4_color line_color,
 					 i4_color spline_color,
-					 i4_spline_class *s,
+					 i4_spline_class * s,
 					 w32 cur_frame);
 
 	virtual void process_input(i4_time_class tick_time);
@@ -208,7 +208,7 @@ public:
 		return mode;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"contedit");
 	}

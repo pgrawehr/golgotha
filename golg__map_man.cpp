@@ -10,12 +10,12 @@
 #include "map.h"
 #include "g1_object.h"
 
-g1_map_cell_class *g1_cells=0;
-g1_map_vertex_class *g1_verts=0;
+g1_map_cell_class * g1_cells=0;
+g1_map_vertex_class * g1_verts=0;
 int g1_map_width, g1_map_height, g1_map_width_plus_one;
 
 
-g1_map_class *g1_current_map_PRIVATE=0;
+g1_map_class * g1_current_map_PRIVATE=0;
 
 void g1_destroy_map()
 {
@@ -29,7 +29,7 @@ void g1_destroy_map()
 			if (g1_object_type_array[i] &&
 				(g1_object_type_array[i]->flags & g1_object_definition_class::DELETE_WITH_LEVEL))
 			{
-				g1_object_definition_class *od = g1_object_type_array[i];
+				g1_object_definition_class * od = g1_object_type_array[i];
 				g1_remove_object_type(i);
 				delete od;
 			}
@@ -39,7 +39,7 @@ void g1_destroy_map()
 }
 
 
-void g1_set_map(g1_map_class *map)
+void g1_set_map(g1_map_class * map)
 {
 	if (map)
 	{

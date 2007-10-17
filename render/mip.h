@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include "palette/pal.h"
 
-typedef void *r1_vram_handle_type;
+typedef void * r1_vram_handle_type;
 
 inline int r1_mip_header_disk_size()
 {
@@ -35,7 +35,7 @@ struct mipheader_t
 	w8 flags;
 	sw8 num_mip_levels;
 
-	void write(i4_file_class *fp)
+	void write(i4_file_class * fp)
 	{
 		for (int i=0; i<R1_MAX_MIP_LEVELS; i++)
 		{
@@ -49,7 +49,7 @@ struct mipheader_t
 		fp->write_8(num_mip_levels);
 	}
 
-	void read(i4_file_class *fp)
+	void read(i4_file_class * fp)
 	{
 		for (int i=0; i<R1_MAX_MIP_LEVELS; i++)
 		{
@@ -101,14 +101,14 @@ class r1_texture_entry_struct;
 class r1_mip_load_info
 {
 public:
-	r1_miplevel_t *dest_mip;
-	i4_file_class *src_file;
+	r1_miplevel_t * dest_mip;
+	i4_file_class * src_file;
 	w32 flags;
 	w8 error;
 	char texture_name[200];
 };
 
-w32 r1_pal_to_flags(const i4_pal *pal,w32 def);
+w32 r1_pal_to_flags(const i4_pal * pal,w32 def);
 
 #define R1_MIPLEVEL_IS_LOADING 1
 #define R1_MIPLEVEL_LOAD_JPG   2
@@ -137,7 +137,7 @@ public:
 	//the current frame # is copied into last_frame_used
 	sw32 last_frame_used;
 
-	r1_texture_entry_struct *entry;
+	r1_texture_entry_struct * entry;
 	r1_vram_handle_type vram_handle; //this is just a void * (defined above)
 
 	sw16 width,height; //not technically necessary, can be recalculated via entry and level
@@ -147,30 +147,30 @@ public:
 
 
 struct i4_pixel_format;
-void r1_setup_decompression(i4_pixel_format *reg_fmt,
-							i4_pixel_format *chroma_fmt,
-							i4_pixel_format *alpha_fmt,
+void r1_setup_decompression(i4_pixel_format * reg_fmt,
+							i4_pixel_format * chroma_fmt,
+							i4_pixel_format * alpha_fmt,
 							w32 chroma_color,
 							i4_bool square_textures);
 
 void r1_end_decompression();
 
-i4_bool r1_decompress_to_local_mip(i4_file_class *src_file,
-								   i4_file_class *dst_lowest_mip,
-								   char *network_file,
-								   char *local_file,
-								   mipheader_t *old_mipheader,
+i4_bool r1_decompress_to_local_mip(i4_file_class * src_file,
+								   i4_file_class * dst_lowest_mip,
+								   char * network_file,
+								   char * local_file,
+								   mipheader_t * old_mipheader,
 								   sw32 max_mip_dimention);
 
-void process_intern_jpg_decomp_dummy(i4_file_class *dst_file,
-									 i4_file_class *dst_lowmip_file,
-									 i4_file_class *src_file,
+void process_intern_jpg_decomp_dummy(i4_file_class * dst_file,
+									 i4_file_class * dst_lowmip_file,
+									 i4_file_class * src_file,
 									 mipheader_t &new_mipheader,
 									 mipheader_t *&old_mipheader,
 									 sw32 &start_here);
-void process_intern_raw_decomp(i4_file_class *dst_file,
-							   i4_file_class *dst_lowmip_file,
-							   i4_file_class *src_file,
+void process_intern_raw_decomp(i4_file_class * dst_file,
+							   i4_file_class * dst_lowmip_file,
+							   i4_file_class * src_file,
 							   mipheader_t &new_mipheader,
 							   mipheader_t *&old_mipheader,
 							   sw32 &start_here);
@@ -178,8 +178,8 @@ void process_intern_raw_decomp(i4_file_class *dst_file,
 
 //i4_file_class *build_temp_tex_file(w32 id);
 class i4_image_class;
-void get_header_info(mipheader_t &header, i4_image_class *src_texture,
-					 char *texture_name, w32 chroma_color);
+void get_header_info(mipheader_t &header, i4_image_class * src_texture,
+					 char * texture_name, w32 chroma_color);
 void get_mip_size(sw32 miplevel,sw32 width,sw32 height, sw32 &mipwidth, sw32 &mipheight);
 
 #endif

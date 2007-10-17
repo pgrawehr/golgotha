@@ -11,7 +11,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
-int fb_strneq(char *n1, char *n2, int t)
+int fb_strneq(char * n1, char * n2, int t)
 {
 	for (int i=0; i<t; i++)
 	{
@@ -24,11 +24,11 @@ int fb_strneq(char *n1, char *n2, int t)
 	return 1;
 }
 
-void fb_split_url(char *url,
+void fb_split_url(char * url,
 				  fb_url_type &type,
-				  char *server,
+				  char * server,
 				  int &port,
-				  char *page)
+				  char * page)
 {
 	// initalize defaults in case an error occurs
 	port=80;
@@ -63,6 +63,7 @@ void fb_split_url(char *url,
 		// read the server name
 		while (url[0] && (url[0]!='/' || url[1]!='/')) url++;
 
+
 		if (*url)
 		{
 			url+=2;
@@ -71,6 +72,7 @@ void fb_split_url(char *url,
 		while (*url && *url!='/' && *url!=':')
 			*(server++)=*(url++);
 
+
 		*server=0;
 
 
@@ -78,7 +80,7 @@ void fb_split_url(char *url,
 		if (*url==':')
 		{
 			url++;
-			char num_buf[50],*c, count=0;
+			char num_buf[50],* c, count=0;
 			for (c=num_buf; *url && *url!='/' && count<48; count++)
 			{
 				*(c++)=*(url++);
@@ -99,13 +101,15 @@ void fb_split_url(char *url,
 	while (*url)
 		*(page++)=*(url++);
 
+
 	*page=0;
 }
 
 
-char *end_name(char *name)
+char *end_name(char * name)
 {
-	char *start=name;
+	char * start=name;
+
 	while (*name)
 	{
 		if (*name=='/' || *name=='\\')
@@ -118,7 +122,7 @@ char *end_name(char *name)
 }
 
 
-i4_net_socket *fb_url::connect_to_server(i4_net_protocol *prot)
+i4_net_socket * fb_url::connect_to_server(i4_net_protocol * prot)
 {
 	fb_url_type type;
 	char server[256], page[256];
@@ -126,7 +130,7 @@ i4_net_socket *fb_url::connect_to_server(i4_net_protocol *prot)
 
 	fb_split_url(full_name, type, server, port, page);
 
-	i4_net_address *addr=prot->name_to_address(server);
+	i4_net_address * addr=prot->name_to_address(server);
 
 	if (!addr)
 	{
@@ -135,7 +139,7 @@ i4_net_socket *fb_url::connect_to_server(i4_net_protocol *prot)
 
 	addr->set_port(port);
 
-	i4_net_socket *sock=prot->connect(addr, I4_CONTINOUS_STREAM);
+	i4_net_socket * sock=prot->connect(addr, I4_CONTINOUS_STREAM);
 	delete addr;
 
 	if (sock)
@@ -148,7 +152,7 @@ i4_net_socket *fb_url::connect_to_server(i4_net_protocol *prot)
 
 
 
-fb_url::fb_url(char *name, fb_url *server_from)
+fb_url::fb_url(char * name, fb_url * server_from)
 {
 	char server[256], page[256], buf[256];
 	int port;
@@ -190,10 +194,11 @@ fb_url::fb_url(char *name, fb_url *server_from)
 }
 
 
-char *fb_url::get_extension()
+char * fb_url::get_extension()
 {
-	char *ext=0;
-	for (char *c=full_name; *c; c++)
+	char * ext=0;
+
+	for (char * c=full_name; *c; c++)
 	{
 		if (*c=='.')
 		{
@@ -208,10 +213,11 @@ char *fb_url::get_extension()
 	return ext;
 }
 
-char *fb_url::get_filename()
+char * fb_url::get_filename()
 {
 	// extract the filename
-	char *c=full_name, *start=0;
+	char * c=full_name, * start=0;
+
 	for (; *c; c++)
 	{
 		if (*c=='/')

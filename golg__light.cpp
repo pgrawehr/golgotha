@@ -39,7 +39,7 @@ void g1_light_info::set_directional_intensity(float v)
 
 
 
-void g1_light_info::save(i4_saver_class *fp)
+void g1_light_info::save(i4_saver_class * fp)
 {
 	fp->mark_section("Map Lights V2");
 	fp->write_format("fffff",
@@ -48,7 +48,7 @@ void g1_light_info::save(i4_saver_class *fp)
 					 &ambient_intensity);
 }
 
-i4_bool g1_light_info::load(i4_loader_class *fp)
+i4_bool g1_light_info::load(i4_loader_class * fp)
 {
 	if (fp && fp->goto_section("Map Lights V2"))
 	{

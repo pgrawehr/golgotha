@@ -14,21 +14,21 @@ class g1_object_class;
 class g1_structure_death_class
 {
 protected:
-	g1_object_class *me;
+	g1_object_class * me;
 public:
 	g1_structure_death_class()
 	{
 	};                                              // JJ  modification not to issue MSVC warning
-	void SetG1_Object_Class( g1_object_class *pMe)
+	void SetG1_Object_Class( g1_object_class * pMe)
 	{
 		me = pMe;
 	}                                                          // JJ
-	g1_structure_death_class(g1_object_class *me) :
+	g1_structure_death_class(g1_object_class * me) :
 		me(me)
 	{
 	}
 	i4_bool think();
-	void damage(g1_object_class *obj, int hp, i4_3d_vector damage_dir);
+	void damage(g1_object_class * obj, int hp, i4_3d_vector damage_dir);
 };
 
 #endif

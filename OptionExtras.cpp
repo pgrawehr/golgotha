@@ -32,7 +32,7 @@ OptionExtras::~OptionExtras()
 {
 }
 
-void OptionExtras::DoDataExchange(CDataExchange *pDX)
+void OptionExtras::DoDataExchange(CDataExchange * pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(OptionExtras)

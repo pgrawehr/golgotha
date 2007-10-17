@@ -33,28 +33,29 @@ CR1_dx5_render_window_class::~CR1_dx5_render_window_class()
 {
 }
 
-CR1_dx5_render_window_class::CR1_dx5_render_window_class(w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class *api)
+CR1_dx5_render_window_class::CR1_dx5_render_window_class(w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class * api)
 	: r1_render_window_class(w,h, expand_type, api)
 {
 }
 
 
 
-void r1_dx5_class::copy_part(i4_image_class *im,
+void r1_dx5_class::copy_part(i4_image_class * im,
 							 int x, int y,            // position on screen
 							 int x1, int y1,          // area of image to copy
 							 int x2, int y2)
 {
 
 	DDSURFACEDESC ddsd;
+
 	memset(&ddsd,0,sizeof(DDSURFACEDESC));
 	ddsd.dwSize = sizeof(DDSURFACEDESC);
 	//dx5_common.back_surface->Lock(NULL,&ddsd,DDLOCK_WAIT | DDLOCK_WRITEONLY,0);
 	dx5_common.back_surface->Lock(NULL,&ddsd,DDLOCK_WAIT|DDLOCK_NOSYSLOCK,0);
 
 	//get frame buffer pointer
-	w8 *fb = (w8 *)ddsd.lpSurface;
-	w8 *im_src = (w8 *)im->data + x + y*im->bpl;
+	w8 * fb = (w8 *)ddsd.lpSurface;
+	w8 * im_src = (w8 *)im->data + x + y*im->bpl;
 
 	sw32 w_pitch = ddsd.lPitch;
 	sw32 im_width  = x2-x1+1;
@@ -80,6 +81,7 @@ void r1_dx5_class::copy_part(i4_image_class *im,
 void CR1_dx5_render_window_class::draw(i4_draw_context_class &context)
 {
 	static i4_bool recursion=i4_F;
+
 	r1_dx5_class_instance.x_off = context.xoff;
 	r1_dx5_class_instance.y_off = context.yoff;
 
@@ -118,8 +120,8 @@ void CR1_dx5_render_window_class::draw(i4_draw_context_class &context)
 	//request_redraw(i4_T);//request redrawing of our childs for next frame
 };
 
-r1_render_window_class *r1_dx5_class::create_render_window(int visable_w, int visable_h,
-														   r1_expand_type type)
+r1_render_window_class * r1_dx5_class::create_render_window(int visable_w, int visable_h,
+															r1_expand_type type)
 {
 	return new CR1_dx5_render_window_class(visable_w, visable_h, type, this);
 }
@@ -209,9 +211,10 @@ r1_dx5_class::~r1_dx5_class()
 	uninit();
 }
 
-i4_bool r1_dx5_class::init(i4_display_class *display)
+i4_bool r1_dx5_class::init(i4_display_class * display)
 {
 	HRESULT hResult = DD_OK;
+
 	// JJ FOR TEST
 	if (display!=i4_dx5_display)
 	{
@@ -228,7 +231,7 @@ i4_bool r1_dx5_class::init(i4_display_class *display)
 		return i4_F;
 	}
 
-	if (!i4_dx5_check(dx5_common.ddraw->QueryInterface(IID_IDirect3D2,(void **)&d3d)))
+	if (!i4_dx5_check(dx5_common.ddraw->QueryInterface(IID_IDirect3D2,(void * *)&d3d)))
 	{
 		return i4_F;
 	}
@@ -308,7 +311,7 @@ i4_bool r1_dx5_class::init(i4_display_class *display)
 	}
 	// JJ
 
-	IDirectDrawSurface *z_surf;
+	IDirectDrawSurface * z_surf;
 	// <<JJ NEW CODE
 	CHECK_DX(dx5_common.ddraw->CreateSurface(&ddsd, &z_surf,0));
 	if(FAILED(hResult) )
@@ -326,7 +329,7 @@ i4_bool r1_dx5_class::init(i4_display_class *display)
 	}
 
 	// >> JJ NEW CODE
-	if (!i4_dx5_check(z_surf->QueryInterface(IID_IDirectDrawSurface3,(void **)&zbuffer_surface)))
+	if (!i4_dx5_check(z_surf->QueryInterface(IID_IDirectDrawSurface3,(void * *)&zbuffer_surface)))
 	{
 		z_surf->Release();
 		return i4_F;
@@ -343,7 +346,7 @@ i4_bool r1_dx5_class::init(i4_display_class *display)
 		{
 			return i4_F;
 		}
-		if (!i4_dx5_check(z_surf->QueryInterface(IID_IDirectDrawSurface3,(void **)&zbuffer_surface)))
+		if (!i4_dx5_check(z_surf->QueryInterface(IID_IDirectDrawSurface3,(void * *)&zbuffer_surface)))
 		{
 			z_surf->Release();
 			return i4_F;
@@ -357,8 +360,8 @@ i4_bool r1_dx5_class::init(i4_display_class *display)
 		z_surf->Release();
 	}
 
-	IDirectDrawSurface *back_surf;
-	dx5_common.back_surface->QueryInterface(IID_IDirectDrawSurface,(void **)&back_surf);
+	IDirectDrawSurface * back_surf;
+	dx5_common.back_surface->QueryInterface(IID_IDirectDrawSurface,(void * *)&back_surf);
 
 	if (!i4_dx5_check(d3d->CreateDevice(*info->lpGuid, back_surf, &d3d_device)))
 	{
@@ -367,7 +370,7 @@ i4_bool r1_dx5_class::init(i4_display_class *display)
 		ddsd.ddsCaps.dwCaps &= ~DDSCAPS_VIDEOMEMORY;
 		ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 		CHECK_DX(dx5_common.ddraw->CreateSurface(&ddsd,&z_surf,0));
-		if (!i4_dx5_check(z_surf->QueryInterface(IID_IDirectDrawSurface3,(void **)&zbuffer_surface)))
+		if (!i4_dx5_check(z_surf->QueryInterface(IID_IDirectDrawSurface3,(void * *)&zbuffer_surface)))
 		{
 			z_surf->Release();
 			return i4_F;
@@ -771,7 +774,7 @@ i4_bool r1_dx5_class::redepth(w16 new_bitdepth)
 	return i4_T;
 }
 
-r1_texture_manager_class *r1_dx5_class::install_new_tmanager(w32& index)
+r1_texture_manager_class * r1_dx5_class::install_new_tmanager(w32& index)
 {
 	/*if (!index)
 	   	{
@@ -781,7 +784,8 @@ r1_texture_manager_class *r1_dx5_class::install_new_tmanager(w32& index)
 	   	//(At least as long as the caller knows to which one he refers)
 	   	//if (tmanager->textures_loaded) {tmanager->reopen();};
 	   	}*/
-	r1_texture_manager_class *new_tman=0;
+	r1_texture_manager_class * new_tman=0;
+
 	new_tman= new r1_dx5_texture_class(tmanager->get_pal()); //use same parameters as default instance (must never be deleted)
 	new_tman->is_master_tman=i4_F;
 	//Reuse entries that might have been freed.
@@ -894,7 +898,7 @@ void r1_dx5_class::use_texture(w32 index,r1_texture_handle material_ref,sw32 des
 
 	sw32 width=0,height=0;
 
-	r1_miplevel_t *mip = tmanagers[index]->get_texture(material_ref, frame, desired_width, width, height);
+	r1_miplevel_t * mip = tmanagers[index]->get_texture(material_ref, frame, desired_width, width, height);
 
 	// don't select the texture again if it's the same one we used last time
 	if (mip)
@@ -942,7 +946,7 @@ void r1_dx5_class::use_texture(r1_texture_handle material_ref, sw32 desired_widt
 
 	sw32 width=0,height=0;
 
-	r1_miplevel_t *mip = tmanager->get_texture(material_ref, frame, desired_width, width, height);
+	r1_miplevel_t * mip = tmanager->get_texture(material_ref, frame, desired_width, width, height);
 
 	// don't select the texture again if it's the same one we used last time
 	if (mip)
@@ -994,6 +998,7 @@ static i4_float f_0_1_to_i_0_255_255 = 255.f;
 
 sw32 inline f_0_1_to_i_0_255(float f) {
 	sw32 res;
+
 	__asm
 	{
 		fld f
@@ -1006,6 +1011,7 @@ sw32 inline f_0_1_to_i_0_255(float f) {
 
 i4_float inline i_to_f(sw32 i) {
 	i4_float res;
+
 	__asm
 	{
 		fild i
@@ -1037,12 +1043,12 @@ void r1_dx5_class::set_z_range(i4_float near_z, i4_float far_z)
 	r1_far_clip_z  = far_z;
 }
 
-inline void make_d3d5_verts(D3DTLVERTEX *dxverts,r1_vert *r1verts,r1_dx5_class *c,int total)
+inline void make_d3d5_verts(D3DTLVERTEX * dxverts,r1_vert * r1verts,r1_dx5_class * c,int total)
 {
 	int i;
 
-	D3DTLVERTEX *dx_v = dxverts;
-	r1_vert *r1_v = r1verts;
+	D3DTLVERTEX * dx_v = dxverts;
+	r1_vert * r1_v = r1verts;
 
 	//add vertex information
 	for (i=0; i<total; i++)
@@ -1216,6 +1222,7 @@ WORD r1_dx5_tmp_indices[DX5_INDEX_BUF_SIZE];
 void init_d3d5_vert_buffer()
 {
 	sw32 i;
+
 	for (i=0; i<DX5_VERT_BUF_SIZE; i++)
 	{
 		r1_dx5_tmp_verts[i].specular = 0;
@@ -1249,7 +1256,7 @@ void r1_dx5_class::flush_vert_buffer()
 #endif
 }
 
-void r1_dx5_class::render_poly(int t_verts, r1_vert *verts)
+void r1_dx5_class::render_poly(int t_verts, r1_vert * verts)
 {
 	if (t_verts > DX5_VERT_BUF_SIZE)
 	{
@@ -1319,7 +1326,7 @@ void r1_dx5_class::render_poly(int t_verts, r1_vert *verts)
 #endif
 }
 
-void r1_dx5_class::render_pixel(int t_points, r1_vert *pixel)
+void r1_dx5_class::render_pixel(int t_points, r1_vert * pixel)
 {
 	if (t_points>256)
 	{
@@ -1334,7 +1341,7 @@ void r1_dx5_class::render_pixel(int t_points, r1_vert *pixel)
 							  0);
 }
 
-void r1_dx5_class::render_lines(int t_lines, r1_vert *verts)
+void r1_dx5_class::render_lines(int t_lines, r1_vert * verts)
 {
 	if (t_lines+1>256)
 	{
@@ -1499,7 +1506,7 @@ void r1_dx5_class::clear_area(int x1, int y1, int x2, int y2, w32 color, float z
    }
    }*/
 
-i4_image_class *r1_dx5_class::create_compatible_image(w16 w, w16 h)
+i4_image_class * r1_dx5_class::create_compatible_image(w16 w, w16 h)
 {
 	return i4_create_image(w,h,i4_dx5_display->get_palette());
 }

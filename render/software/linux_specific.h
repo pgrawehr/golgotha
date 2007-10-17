@@ -25,9 +25,9 @@ class r1_software_x11_class :
 	friend class r1_software_x11_render_window_class;
 protected:
 	//! The render target surface.
-	i4_image_class *render_image;
+	i4_image_class * render_image;
 	//! This pointer to the image data is used as the render target.
-	w16 *render_image_data;
+	w16 * render_image_data;
 public:
 	r1_software_x11_class();
 	char *name()
@@ -35,7 +35,7 @@ public:
 		return "Software Renderer for X11";
 	}
 	~r1_software_x11_class();
-	i4_bool init(i4_display_class *display);
+	i4_bool init(i4_display_class * display);
 	void uninit();
 	i4_bool resize(w16 new_width,w16 new_height);
 	i4_bool expand_type_supported(r1_expand_type type);
@@ -45,7 +45,7 @@ public:
 	void clear_area(int x1, int y1, int x2, int y2, w32 color, float z);
 	i4_image_class *create_compatible_image(w16 w, w16 h);
 
-	void copy_part(i4_image_class *im,
+	void copy_part(i4_image_class * im,
 				   int x, int y,                            // position on screen
 				   int x1, int y1,                          // area of image to copy
 				   int x2, int y2);
@@ -63,7 +63,7 @@ public:
 
 	r1_software_x11_render_window_class(w16 w, w16 h,
 										r1_expand_type expand_type,
-										r1_render_api_class *api);
+										r1_render_api_class * api);
 
 
 	~r1_software_x11_render_window_class();

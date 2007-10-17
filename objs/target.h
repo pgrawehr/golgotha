@@ -20,14 +20,14 @@ class g1_target_class :
 public:
 	g1_model_draw_parameters draw_params;
 
-	g1_target_class(g1_object_type id, g1_loader_class *fp);
+	g1_target_class(g1_object_type id, g1_loader_class * fp);
 
 	virtual i4_float occupancy_radius() const
 	{
 		return 0.0;
 	}
 	virtual i4_bool occupy_location();
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	virtual void think()
 	{
 	}

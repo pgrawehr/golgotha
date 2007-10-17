@@ -38,7 +38,7 @@ public:
 
 	w32 average_color;
 
-	r1_miplevel_t *mipmaps[R1_MAX_MIP_LEVELS+1]; //null terminated
+	r1_miplevel_t * mipmaps[R1_MAX_MIP_LEVELS+1]; //null terminated
 	w32 file_offsets[R1_MAX_MIP_LEVELS];
 
 	i4_bool is_transparent()
@@ -79,7 +79,7 @@ struct r1_texture_animation_entry_struct
 {
 	w32 id;
 	w16 total_frames;
-	r1_texture_handle *frames;
+	r1_texture_handle * frames;
 };
 
 struct r1_image_list_struct {
@@ -89,7 +89,7 @@ struct r1_image_list_struct {
 		w32 usage;
 		w32 average_color;
 	};
-	i4_image_class *image;
+	i4_image_class * image;
 private:
 	w32 lock_count;
 public:
@@ -136,7 +136,7 @@ protected:
 	i4_array<r1_image_list_struct>      image_list;
 	i4_array<r1_texture_matchup_struct> registered_tnames;
 	i4_array<r1_texture_entry_struct>   *entries;
-	r1_texture_animation_entry_struct *tanims;
+	r1_texture_animation_entry_struct * tanims;
 	i4_array<r1_image_list_struct>      memory_images;
 public:
 	i4_bool textures_loaded; ///<Don't assign any semantics to this flag. It's obsolete.
@@ -163,8 +163,8 @@ public:
 	 \return Success or failure.
 	 */
 	static i4_bool size_image_to_texture(
-		void *dest,
-		i4_image_class *image,
+		void * dest,
+		i4_image_class * image,
 		w32 width,
 		w32 height,
 		w32 target_depth,
@@ -172,7 +172,7 @@ public:
 		i4_bool alpha);
 
 	/*!The constructor*/
-	r1_texture_manager_class(const i4_pal *pal);
+	r1_texture_manager_class(const i4_pal * pal);
 
 	/*!The destructor*/
 	virtual ~r1_texture_manager_class();
@@ -204,6 +204,7 @@ public:
 	i4_bool texture_resolution_change()
 	{
 		i4_bool ret = texture_resolution_changed;
+
 		texture_resolution_changed  = i4_F;
 		return ret;
 	}
@@ -216,22 +217,22 @@ public:
 	//!Register a texture (returns handle to it) Handle becomes invalid on next uninit()!
 	r1_texture_handle register_texture(const i4_const_str &tname,
 									   const i4_const_str &error_string,
-									   i4_bool *has_been_loaded=0);
+									   i4_bool * has_been_loaded=0);
 
 	//!returns handle to texture, but does newer add a new texture
 	r1_texture_handle query_texture(const i4_const_str &tname,
-									i4_bool *has_been_loaded=0);
+									i4_bool * has_been_loaded=0);
 
 	/*!Loads the given image as texture and returns its handle.
 	   Warning: the textures must have been loaded before! */
-	r1_texture_handle register_image(i4_image_class *image);
+	r1_texture_handle register_image(i4_image_class * image);
 
 	//!Returns the texture data for the given handle in a new image.
 	virtual i4_image_class *get_texture_image(r1_texture_handle handle,
 											  int frame_counter, int desired_width)=0;
 
 	//!Changes the given texture to the new image
-	virtual int set_texture_image(r1_texture_handle handle, i4_image_class *im)=0;
+	virtual int set_texture_image(r1_texture_handle handle, i4_image_class * im)=0;
 
 	//! loads textures previously registered with register_texture
 	i4_bool load_textures();
@@ -249,7 +250,7 @@ public:
 	}
 
 	//returns i4_T if something was freed
-	static i4_bool release_higher_miplevels(r1_texture_manager_class *this_tman);
+	static i4_bool release_higher_miplevels(r1_texture_manager_class * this_tman);
 
 	//!Can be used to free up as much memory as possible without unloading.
 	virtual void release_higher_miplevels();
@@ -297,10 +298,10 @@ public:
 	}
 protected:
 	//virtual i4_bool load_texture_from_file(char *name,w32 id,void *data, w32 width, w32 height, w32 pitch);
-	virtual i4_bool load_texture_from_file(const i4_const_str &name,w32 id,void *data,
+	virtual i4_bool load_texture_from_file(const i4_const_str &name,w32 id,void * data,
 										   w32 width, w32 height, w32 pitch,w32 tex_by, i4_bool chroma, i4_bool alpha);
 //!functions to manage the texture cache file
-	void keep_cache_current(i4_array<w32> *file_ids);
+	void keep_cache_current(i4_array<w32> * file_ids);
 
 	i4_bool build_cache_file(i4_array<w32> &texture_file_ids,
 							 const i4_const_str &local_dir);
@@ -320,7 +321,7 @@ protected:
 
 	i4_bool texture_resolution_changed;
 
-	const i4_pal *pal;
+	const i4_pal * pal;
 
 	//////////////////////////// derive / specify these for each texture manager derivative
 	static i4_pixel_format regular_format;
@@ -337,10 +338,10 @@ protected:
 
 public:
 	//!This must be overwritten
-	virtual i4_bool immediate_mip_load(r1_mip_load_info *load_info) = 0;
+	virtual i4_bool immediate_mip_load(r1_mip_load_info * load_info) = 0;
 
 	//!This must also be overwritten
-	virtual i4_bool async_mip_load(r1_mip_load_info *load_info) = 0;
+	virtual i4_bool async_mip_load(r1_mip_load_info * load_info) = 0;
 //protected:
 //	int async_mip_prepare_load(w32 tex_by, async_callback call);
 //public:

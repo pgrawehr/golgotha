@@ -44,7 +44,7 @@
 // PG: That is an exspected behaviour. 8 bit is not supported at all.
 
 x11_display_class x11_display_instance;
-x11_display_class *x11_display_ptr=0;
+x11_display_class * x11_display_ptr=0;
 
 x11_display_class::x11_display_class()
 {
@@ -63,7 +63,8 @@ x11_display_class::x11_display_class()
 
 void x11_display_input_class::resize(int w, int h)
 {
-	x11_display_class *d=(x11_display_class *)i4_display;
+	x11_display_class * d=(x11_display_class *)i4_display;
+
 	if (w!=d->width() || h!=d->height())
 	{
 		d->destroy_X_image();
@@ -73,7 +74,8 @@ void x11_display_input_class::resize(int w, int h)
 
 void x11_display_input_class::note_event(XEvent &xev)
 {
-	x11_display_class *d=(x11_display_class *)i4_display;
+	x11_display_class * d=(x11_display_class *)i4_display;
+
 	if (d->shm_extension)
 	{
 		d->shm_extension->note_event(xev);
@@ -89,20 +91,20 @@ void x11_display_input_class::note_event(XEvent &xev)
 /* phooky 5.11.1998
    This code isn't actually used anywhere.  It's cruft.  Axe it.
  */
-i4_image_class *x11_display_class::get_back_buffer(int x1, int y1, int x2, int y2)
+i4_image_class * x11_display_class::get_back_buffer(int x1, int y1, int x2, int y2)
 {
 	if (x2<x1 || y2<y1)
 	{
 		return 0;
 	}
 
-	i4_image_class *im=i4_create_image(x2-x1+1, y2-y1+1, screen->pal);
+	i4_image_class * im=i4_create_image(x2-x1+1, y2-y1+1, screen->pal);
 	screen->put_part(im, 0,0, x1,y1,x2,y2);
 	return im;
 }
 #endif /* Code doesn't compile */
 
-i4_bool x11_display_class::open_X_window(w32 width, w32 height, i4_display_class::mode *mode)
+i4_bool x11_display_class::open_X_window(w32 width, w32 height, i4_display_class::mode * mode)
 {
 	if (input.create_window(0,0,width,height, this, i4_F, get_visual(input.display)))
 	{
@@ -121,7 +123,7 @@ i4_bool x11_display_class::open_X_window(w32 width, w32 height, i4_display_class
 
 		if (shm_extension)
 		{
-			char *ds_name=getenv("DISPLAY");
+			char * ds_name=getenv("DISPLAY");
 			if (!ds_name)
 			{
 				ds_name="unix:0.0";
@@ -199,7 +201,7 @@ void x11_display_class::init()
 {
 	if (input.display || input.open_display())
 	{
-		i4_display_list_struct *s=new i4_display_list_struct;
+		i4_display_list_struct * s=new i4_display_list_struct;
 		s->add_to_list("X Windows", 0, 100, this, i4_display_list);
 		input.close_display();
 	}
@@ -222,12 +224,12 @@ i4_bool x11_display_class::initialize_mode()
 }
 
 
-XVisualInfo *x11_display_class::get_visual(Display *display)
+XVisualInfo * x11_display_class::get_visual(Display * display)
 {
 	return input.find_visual_with_depth(DEPTH);
 }
 
-i4_display_class::mode *x11_display_class::get_first_mode(int driver_id)
+i4_display_class::mode * x11_display_class::get_first_mode(int driver_id)
 {
 	if (!input.open_display())
 	{
@@ -235,7 +237,7 @@ i4_display_class::mode *x11_display_class::get_first_mode(int driver_id)
 	}
 	else
 	{
-		XVisualInfo *v = get_visual(input.display);
+		XVisualInfo * v = get_visual(input.display);
 		if (v)
 		{
 			strcpy(amode.name,"Software X11 windowed");
@@ -365,6 +367,7 @@ void x11_display_class::flush()   // the actual work of the function is in copy_
 	int mw=0, mh=0;
 	i4_coord rmx,rmy;
 	sw32 mx=input.mouse_x, my=input.mouse_y;
+
 	if (mx-mouse_hot_x<0)
 	{
 		mx=mouse_hot_x;
@@ -460,7 +463,7 @@ i4_bool x11_display_class::copy_part_to_vram(i4_coord x, i4_coord y,
 }
 
 
-i4_bool x11_display_class::set_mouse_shape(i4_cursor_class *cursor)
+i4_bool x11_display_class::set_mouse_shape(i4_cursor_class * cursor)
 {
 	if (mouse_pict)
 	{

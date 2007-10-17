@@ -26,8 +26,8 @@ public:
 
 	static const int perframe[LAST];
 	static const int max_perframe[LAST];
-	static const char *strs[LAST];
-	static const char *max_strs[LAST];
+	static const char * strs[LAST];
+	static const char * max_strs[LAST];
 
 	sw32 counter_array[LAST];
 	w32 current_counter;
@@ -92,6 +92,7 @@ public:
 	void reset()
 	{
 		w32 i;
+
 		for (i=0; i<LAST; i++)
 		{
 			if (perframe[i]==1)

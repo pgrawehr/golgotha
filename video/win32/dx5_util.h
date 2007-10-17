@@ -37,8 +37,8 @@ enum
 struct dx5_mode
 {
 	DDSURFACEDESC desc;
-	dx5_mode *next;
-	dx5_mode(dx5_mode *next) :
+	dx5_mode * next;
+	dx5_mode(dx5_mode * next) :
 		next(next) {
 	}
 };
@@ -48,8 +48,8 @@ struct dx5_driver
 	LPGUID lpGuid;
 	char DriverName[128];
 	char DeviceDesc[128];
-	dx5_driver *next;
-	dx5_driver(dx5_driver *next) :
+	dx5_driver * next;
+	dx5_driver(dx5_driver * next) :
 		next(next) {
 	}
 };
@@ -73,8 +73,8 @@ class dx5_common_class
 {
 
 public:
-	static IDirectDraw2 *ddraw;
-	static IDirectDrawSurface3 *primary_surface, *back_surface, *front_surface;
+	static IDirectDraw2 * ddraw;
+	static IDirectDrawSurface3 * primary_surface, * back_surface, * front_surface;
 	static DDPIXELFORMAT dd_fmt_565, dd_fmt_1555;
 	static i4_pixel_format i4_fmt_565, i4_fmt_1555;
 	static LPDIRECTDRAWCLIPPER lpddclipper;
@@ -84,17 +84,17 @@ public:
 	IDirectDrawSurface3 *create_surface(dx5_surface_type type,
 										int width=0, int height=0, // not need for primary
 										int flags=0,
-										DDPIXELFORMAT *format=0); // format not need for primary
+										DDPIXELFORMAT * format=0); // format not need for primary
 
 
-	i4_bool get_surface_description(IDirectDrawSurface3 *surface, DDSURFACEDESC &surface_desc)
+	i4_bool get_surface_description(IDirectDrawSurface3 * surface, DDSURFACEDESC &surface_desc)
 	{
 		memset(&surface_desc,0,sizeof(DDSURFACEDESC));
 		surface_desc.dwSize = sizeof(DDSURFACEDESC);
 		return (i4_bool)(surface->GetSurfaceDesc(&surface_desc)==DD_OK);
 	}
 
-	i4_bool get_desc(IDirectDrawSurface3 *surface, DDSURFACEDESC &surface_desc)
+	i4_bool get_desc(IDirectDrawSurface3 * surface, DDSURFACEDESC &surface_desc)
 	{
 		memset(&surface_desc,0,sizeof(DDSURFACEDESC));
 		surface_desc.dwSize = sizeof(DDSURFACEDESC);
@@ -102,16 +102,16 @@ public:
 	}
 
 
-	dx5_d3d_info *get_driver_hardware_info(IDirectDraw2 *dd, w32 mode);
+	dx5_d3d_info *get_driver_hardware_info(IDirectDraw2 * dd, w32 mode);
 
-	dx5_mode *get_mode_list(IDirectDraw2 *dd);
-	void free_mode_list(dx5_mode *list);
+	dx5_mode *get_mode_list(IDirectDraw2 * dd);
+	void free_mode_list(dx5_mode * list);
 
 	dx5_driver *get_driver_list();
-	void free_driver_list(dx5_driver *list);
-	IDirectDraw2 *initialize_driver(dx5_driver *driver);
+	void free_driver_list(dx5_driver * list);
+	IDirectDraw2 *initialize_driver(dx5_driver * driver);
 
-	IDirectDrawSurface3 *get_surface(i4_image_class *im);
+	IDirectDrawSurface3 *get_surface(i4_image_class * im);
 	i4_image_class *create_image(int w, int h, w32 surface_flags);
 
 	void cleanup();
@@ -122,7 +122,7 @@ class i4_dx5_image_class :
 	public i4_image_class
 {
 public:
-	IDirectDrawSurface3 *surface;
+	IDirectDrawSurface3 * surface;
 	i4_dx5_image_class(w16 w, w16 h, w32 surface_flags=DX5_SYSTEM_RAM);
 	~i4_dx5_image_class();
 
@@ -131,6 +131,7 @@ public:
 	{
 		w32 x1=x;
 		wptr target=0;
+
 		switch (pal->source.pixel_depth)
 		{
 			case I4_32BIT:
@@ -159,7 +160,7 @@ public:
 
 	void put_pixel(i4_coord x, i4_coord y, w32 color); //Put Pixel to surface
 
-	void put_part(i4_image_class *to, i4_coord x, i4_coord y, i4_coord x1,
+	void put_part(i4_image_class * to, i4_coord x, i4_coord y, i4_coord x1,
 				  i4_coord y1, i4_coord x2, i4_coord y2, i4_draw_context_class &context);
 
 

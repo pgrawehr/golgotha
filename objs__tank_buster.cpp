@@ -77,7 +77,7 @@ g1_tank_buster_def("tank_buster",
 				   g1_tank_buster_init);
 
 g1_tank_buster_class::g1_tank_buster_class(g1_object_type id,
-										   g1_loader_class *fp)
+										   g1_loader_class * fp)
 	: g1_map_piece_class(id, fp)
 {
 	draw_params.setup(model_ref.id(),0,bot_lod.id());
@@ -137,7 +137,7 @@ g1_tank_buster_class::g1_tank_buster_class(g1_object_type id,
 			 DANGEROUS, 1);
 }
 
-void g1_tank_buster_class::save(g1_saver_class *fp)
+void g1_tank_buster_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -151,7 +151,7 @@ void g1_tank_buster_class::save(g1_saver_class *fp)
 
 	fp->end_version();
 }
-void g1_tank_buster_class::load(g1_loader_class *fp)
+void g1_tank_buster_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -160,7 +160,7 @@ void g1_tank_buster_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 }
 
-void g1_tank_buster_class::skipload(g1_loader_class *fp)
+void g1_tank_buster_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->check_version(DATA_VERSION);
@@ -172,7 +172,7 @@ void g1_tank_buster_class::skipload(g1_loader_class *fp)
 
 void g1_tank_buster_class::fire()
 {
-	g1_object_class *target=attack_target.get();
+	g1_object_class * target=attack_target.get();
 
 	if (target)
 	{

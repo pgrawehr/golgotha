@@ -19,7 +19,7 @@ url::~url()
 }
 
 
-split_url::split_url(char *url_name)
+split_url::split_url(char * url_name)
 {
 	port=80;
 	type=HTTP;
@@ -48,15 +48,17 @@ split_url::split_url(char *url_name)
 		// read the server name
 		while (url_name[0] && (url_name[0]!='/' || url_name[1]!='/')) url_name++;
 
+
 		if (*url_name)
 		{
 			url_name+=2;
 		}
 
 
-		char *s=server;
+		char * s=server;
 		while (*url_name && *url_name!='/' && *url_name!=':')
 			*(s++)=*(url_name++);
+
 
 		*s=0;
 
@@ -65,7 +67,7 @@ split_url::split_url(char *url_name)
 		if (*url_name==':')
 		{
 			url_name++;
-			char num_buf[50],*c, count=0;
+			char num_buf[50],* c, count=0;
 			for (c=num_buf; *url && *url!='/' && count<48; count++)
 			{
 				*(c++)=*(url_name++);
@@ -86,6 +88,7 @@ split_url::split_url(char *url_name)
 	// read off the page name
 	while (*url)
 		*(page++)=*(url++);
+
 
 	*page=0;
 

@@ -20,8 +20,8 @@ class i4_graphical_style_class;
 class g1_scene_editor_class :
 	public i4_event_handler_class
 {
-	g1_movie_flow_class *movie;
-	i4_graphical_style_class *style;
+	g1_movie_flow_class * movie;
+	i4_graphical_style_class * style;
 	i4_event_handler_reference_class<i4_parent_window_class> parent;
 	sw32 wx, wy;
 
@@ -41,16 +41,16 @@ public:
 		wx=wy=0;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"scene_editor");
 	}
 
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 
-	void show(i4_parent_window_class *parent_window,
-			  g1_movie_flow_class *movie,
-			  i4_graphical_style_class *style);
+	void show(i4_parent_window_class * parent_window,
+			  g1_movie_flow_class * movie,
+			  i4_graphical_style_class * style);
 
 	void hide();
 

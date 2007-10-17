@@ -65,7 +65,7 @@
 #include "net/server.h"
 #endif
 
-g2_singleton *g2_singleton::first=0;
+g2_singleton * g2_singleton::first=0;
 
 g1_height_info::g1_height_info()
 {
@@ -103,7 +103,7 @@ void g1_map_class::remove_object(g1_object_chain_class &c)
 
 i4_float g1_map_class::min_terrain_height(w16 x, w16 y)
 {
-	g1_map_vertex_class *v1,*v2,*v3,*v4;
+	g1_map_vertex_class * v1,* v2,* v3,* v4;
 
 	v1 = verts+ x + y * (w+1);
 	v2 = v1+1;
@@ -114,7 +114,7 @@ i4_float g1_map_class::min_terrain_height(w16 x, w16 y)
 }
 
 
-g1_map_solver_class *g1_map_class::get_prefered_solver()
+g1_map_solver_class * g1_map_class::get_prefered_solver()
 {
 	if (solvehint==0)
 	{
@@ -127,17 +127,17 @@ g1_map_solver_class *g1_map_class::get_prefered_solver()
 		path_sref("sight_only"),path_gref("graph_solver"),
 		bind_dbref("default_bound"),bind_fbref("force_bound"),
 		bind_furef("force_unbound"),bind_duref("default_unbound");
-		li_symbol *sf=g1_map_vars.vars()->get(fpath);
-		g1_map_cell_class *c;
+		li_symbol * sf=g1_map_vars.vars()->get(fpath);
+		g1_map_cell_class * c;
 		int y,x,mw=width(),mh=height();
 		for (y=0; y<mh; y++)
 		{
 			c=cell(0,y);
 			for (x=0; x<mw; x++,c++)
 			{
-				g1_object_chain_class *p=c->get_obj_list();
-				g1_object_class *o=0;
-				g1_map_piece_class *mp=0;
+				g1_object_chain_class * p=c->get_obj_list();
+				g1_object_class * o=0;
+				g1_map_piece_class * mp=0;
 				while(p)
 				{
 					o=p->object;
@@ -162,12 +162,12 @@ g1_map_solver_class *g1_map_class::get_prefered_solver()
 			solvehint|=SF_HAS_PATHS;
 		}
 
-		li_symbol *tr=g1_map_vars.vars()->get(traffic);
+		li_symbol * tr=g1_map_vars.vars()->get(traffic);
 		if (tr!=li_nil)
 		{
 			solvehint|=SF_BOUND_ANYWAY;
 		}
-		li_symbol *pf=g1_map_vars.vars()->get(ppath);
+		li_symbol * pf=g1_map_vars.vars()->get(ppath);
 
 		if (pf==bind_dbref.get())
 		{
@@ -283,7 +283,7 @@ i4_bool g1_map_class::has_paths()
 
 // only use this if you know what you are doing
 void g1_map_class::change_map(int _w, int _h,
-							  g1_map_cell_class *_cells, g1_map_vertex_class *_vertex)
+							  g1_map_cell_class * _cells, g1_map_vertex_class * _vertex)
 {
 	if (cells)
 	{
@@ -305,9 +305,9 @@ void g1_map_class::change_map(int _w, int _h,
 void g1_map_class::remove_object_type(g1_object_type type)
 {
 	int i,j; //,k;
-	g1_map_cell_class *c=cell(0,0);
-	g1_object_chain_class *cell, *l;
-	g1_object_class *obj;
+	g1_map_cell_class * c=cell(0,0);
+	g1_object_chain_class * cell, * l;
+	g1_object_class * obj;
 
 	for (j=0; j<height(); j++)
 	{
@@ -382,12 +382,12 @@ g1_map_class::~g1_map_class()
 {
 	g1_stop_sound_averages();
 
-	g1_map_class *old_current=g1_current_map_PRIVATE;
+	g1_map_class * old_current=g1_current_map_PRIVATE;
 	g1_set_map(this);
-	i4_status_class *stat=i4_create_status("Removing map from memory...");
+	i4_status_class * stat=i4_create_status("Removing map from memory...");
 
 
-	for (g1_map_data_class *md=g1_map_data_class::first; md; md=md->next)
+	for (g1_map_data_class * md=g1_map_data_class::first; md; md=md->next)
 	{
 		md->free();
 	}
@@ -409,7 +409,7 @@ g1_map_class::~g1_map_class()
 
 	if (cells)
 	{
-		g1_object_class *olist[G1_MAX_OBJECTS];
+		g1_object_class * olist[G1_MAX_OBJECTS];
 		w32 ids[G1_MAX_OBJECTS];
 
 		sw32 t=make_object_list(olist, G1_MAX_OBJECTS), i;
@@ -430,7 +430,7 @@ g1_map_class::~g1_map_class()
 			}
 			if (g1_global_id.check_id(ids[i]))
 			{
-				g1_object_class *o=g1_global_id.get(ids[i]);
+				g1_object_class * o=g1_global_id.get(ids[i]);
 				o->unoccupy_location();
 				o->request_remove();
 				g1_remove_man.process_requests();
@@ -488,11 +488,12 @@ g1_map_class::~g1_map_class()
 
 void check_olist()
 {
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
+
 }
 
-sw32 g1_map_class::make_object_list(g1_object_class **&buffer, OBJ_FILTER_TYPE obj_filter)
+sw32 g1_map_class::make_object_list(g1_object_class * *&buffer, OBJ_FILTER_TYPE obj_filter)
 {
 	//extended version, returns only objects that match the given filter.
 	//also returns managed objects if they match!
@@ -500,7 +501,8 @@ sw32 g1_map_class::make_object_list(g1_object_class **&buffer, OBJ_FILTER_TYPE o
 	//we dont, but fortunatelly we now have a dynamic array for this
 	int x=width() *height(), i;
 	//sw32 t=0;
-	g1_map_cell_class *c=cells;
+	g1_map_cell_class * c=cells;
+
 	//if (buf_size==0) return 0;
 
 	map_objects.clear();
@@ -508,9 +510,9 @@ sw32 g1_map_class::make_object_list(g1_object_class **&buffer, OBJ_FILTER_TYPE o
 	{
 		if (c->object_list)
 		{
-			for (g1_object_chain_class *obj=c->get_obj_list(); obj; obj=obj->next)
+			for (g1_object_chain_class * obj=c->get_obj_list(); obj; obj=obj->next)
 			{
-				g1_object_class *o=obj->object;
+				g1_object_class * o=obj->object;
 				if (!o->get_flag(g1_object_class::SCRATCH_BIT) && (!obj_filter||obj_filter(o)))
 				// make sure object only added once
 				{
@@ -537,11 +539,12 @@ sw32 g1_map_class::make_object_list(g1_object_class **&buffer, OBJ_FILTER_TYPE o
 
 
 // returns total added
-sw32 g1_map_class::make_object_list(g1_object_class **buffer, sw32 buf_size)
+sw32 g1_map_class::make_object_list(g1_object_class * * buffer, sw32 buf_size)
 {
 	int x=width() *height(), i;
 	sw32 t=0;
-	g1_map_cell_class *c=cells;
+	g1_map_cell_class * c=cells;
+
 	if (buf_size==0)
 	{
 		return 0;
@@ -552,9 +555,9 @@ sw32 g1_map_class::make_object_list(g1_object_class **buffer, sw32 buf_size)
 	{
 		if (c->object_list)
 		{
-			for (g1_object_chain_class *obj=c->get_obj_list(); obj; obj=obj->next)
+			for (g1_object_chain_class * obj=c->get_obj_list(); obj; obj=obj->next)
 			{
-				g1_object_class *o=obj->object;
+				g1_object_class * o=obj->object;
 				if (!o->get_flag(g1_object_class::SCRATCH_BIT) && o->global_id!=0)
 				// make sure object only added once
 				{
@@ -578,11 +581,12 @@ sw32 g1_map_class::make_object_list(g1_object_class **buffer, sw32 buf_size)
 	return t;
 }
 
-sw32 g1_map_class::make_selected_objects_list(w32 *buffer, sw32 buf_size)
+sw32 g1_map_class::make_selected_objects_list(w32 * buffer, sw32 buf_size)
 {
 	int x=width() *height(), i;
 	sw32 t=0;
-	g1_map_cell_class *c=cells;
+	g1_map_cell_class * c=cells;
+
 	if (buf_size==0)
 	{
 		return 0;
@@ -593,9 +597,9 @@ sw32 g1_map_class::make_selected_objects_list(w32 *buffer, sw32 buf_size)
 	{
 		if (c->object_list)
 		{
-			for (g1_object_chain_class *obj=c->get_obj_list(); obj; obj=obj->next)
+			for (g1_object_chain_class * obj=c->get_obj_list(); obj; obj=obj->next)
 			{
-				g1_object_class *o=obj->object;
+				g1_object_class * o=obj->object;
 
 				// make sure object only added once
 				if (o->selected() && !o->get_flag(g1_object_class::SCRATCH_BIT) && o->global_id)
@@ -624,7 +628,8 @@ extern w32 g1_disable_all_drawing;
 //let the objects think
 void g1_map_class::think_objects()
 {
-	li_class *old_this=li_this;
+	li_class * old_this=li_this;
+
 	if (!g1_current_view_state()) //might happen in some situations (view has just changed)
 	{
 		return;
@@ -638,7 +643,7 @@ void g1_map_class::think_objects()
 
 		pf_map_think.start();
 
-		g1_realtime_saver_class *rtfp=0;
+		g1_realtime_saver_class * rtfp=0;
 
 #ifdef NETWORK_INCLUDED
 		if (i4_network_active())
@@ -662,16 +667,16 @@ void g1_map_class::think_objects()
 #endif
 		g1_input.que_keys(tick_time);
 		//do the thinking for all singletons.
-		for (g2_singleton *s=g2_singleton::first; s; s=s->next_sin)
+		for (g2_singleton * s=g2_singleton::first; s; s=s->next_sin)
 		{
 			s->think();
 		}
 		;
-		li_symbol *loosefn=li_symbol::get(li_get_symbol("loose_function"),0);
+		li_symbol * loosefn=li_symbol::get(li_get_symbol("loose_function"),0);
 		if (loosefn && ((g1_tick_counter & 0xf)==0))
 		{
 
-			li_object *haslost=
+			li_object * haslost=
 				li_call(loosefn,li_make_list(new li_int(g1_tick_counter),
 											 new li_int(g1_player_man.local_player),0),0);
 			if (haslost==li_true_sym)
@@ -681,11 +686,11 @@ void g1_map_class::think_objects()
 				i4_kernel.send_event(i4_current_app,&loser);
 			}
 		}
-		li_symbol *winfn=li_symbol::get(li_get_symbol("winning_function"),0);
+		li_symbol * winfn=li_symbol::get(li_get_symbol("winning_function"),0);
 		if (winfn && ((g1_tick_counter & 0xf)==0))
 		{
 
-			li_object *haswon=
+			li_object * haswon=
 				li_call(winfn,li_make_list(new li_int(g1_tick_counter),
 										   new li_int(g1_player_man.local_player),0),0);
 			if (haswon==li_true_sym)
@@ -697,7 +702,7 @@ void g1_map_class::think_objects()
 			else if (haswon!=li_nil && haswon!=0)
 			{
 				li_call("ForcePause",0,0);
-				li_string *str=li_string::get(haswon,0);
+				li_string * str=li_string::get(haswon,0);
 				if (str)
 				{
 					i4_file_open_message_class winner2(G1_YOU_WIN,
@@ -730,7 +735,7 @@ void g1_map_class::think_objects()
 		g1_reset_sound_averages();
 
 		//pf_map_think.start();
-		g1_object_class *o=0;
+		g1_object_class * o=0;
 
 		for (; i<h; i++)
 		{
@@ -868,13 +873,14 @@ void g1_map_class::think_objects()
 
 		li_this=old_this;
 		pf_map_think.stop();
-	} while(--thinkloops>0);
+	}
+	while(--thinkloops>0);
 	//think_loops
 
 }
 
 
-void g1_map_class::damage_range(g1_object_class *obj,
+void g1_map_class::damage_range(g1_object_class * obj,
 								i4_float x, i4_float y, i4_float z,
 								i4_float range, w16 damage, i4_float falloff)
 // damage to vehicles centers at x,y,z and falls off by falloff*damage at range distance
@@ -905,8 +911,8 @@ void g1_map_class::damage_range(g1_object_class *obj,
 	}
 
 	// get first one
-	g1_map_cell_class *c;
-	g1_object_chain_class *objlist;
+	g1_map_cell_class * c;
+	g1_object_chain_class * objlist;
 	i4_float dist,dx,dy,dz;
 
 	range *= range;
@@ -919,7 +925,7 @@ void g1_map_class::damage_range(g1_object_class *obj,
 		{
 			for (objlist=c->get_obj_list(); objlist; objlist=objlist->next)
 			{
-				g1_object_class *hurt_obj=objlist->object;
+				g1_object_class * hurt_obj=objlist->object;
 
 				if (objlist==&hurt_obj->occupied_squares[0]) // make sure object is only hurt once
 				{
@@ -943,13 +949,13 @@ void g1_map_class::damage_range(g1_object_class *obj,
 
 
 
-g1_object_class *g1_map_class::find_object_by_id(w32 object_id,
-												 g1_player_type prefered_team)
+g1_object_class * g1_map_class::find_object_by_id(w32 object_id,
+												  g1_player_type prefered_team)
 {
 	sw32 i,j=width() *height();
-	g1_map_cell_class *c=cells;
-	g1_object_chain_class *o;
-	g1_object_class *best=0;
+	g1_map_cell_class * c=cells;
+	g1_object_chain_class * o;
+	g1_object_class * best=0;
 
 	for (i=0; i<j; i++, c++)
 	{
@@ -971,11 +977,11 @@ g1_object_class *g1_map_class::find_object_by_id(w32 object_id,
 	return best;
 }
 
-g1_object_class *g1_map_class::find_player_object(w32 object_id, g1_player_type player_num)
+g1_object_class * g1_map_class::find_player_object(w32 object_id, g1_player_type player_num)
 {
 	sw32 i,j=width() *height();
-	g1_map_cell_class *c=cells;
-	g1_object_chain_class *o;
+	g1_map_cell_class * c=cells;
+	g1_object_chain_class * o;
 
 	for (i=0; i<j; i++, c++)
 	{
@@ -992,7 +998,7 @@ g1_object_class *g1_map_class::find_player_object(w32 object_id, g1_player_type 
 }
 
 
-void g1_map_class::remove_from_think_list(g1_object_class *obj)
+void g1_map_class::remove_from_think_list(g1_object_class * obj)
 {
 	/*w32 i = think_tail,
 	   	h = think_head;
@@ -1006,6 +1012,7 @@ void g1_map_class::remove_from_think_list(g1_object_class *obj)
 	   	i=0;
 	   }*/
 	int t=think_que_dyn.size();
+
 	for (int i=0; i<t; i++)
 	{
 		if (think_que_dyn[i]==obj)
@@ -1015,7 +1022,7 @@ void g1_map_class::remove_from_think_list(g1_object_class *obj)
 	}
 }
 
-void g1_map_class::request_remove(g1_object_class *obj)
+void g1_map_class::request_remove(g1_object_class * obj)
 {
 	obj->flags |= g1_object_class::DELETED;
 
@@ -1073,7 +1080,7 @@ void g1_map_class::make_block_maps()
 				}
 				else
 				{
-					g1_object_chain_class *ch = cell(x,y)->get_solid_list();
+					g1_object_chain_class * ch = cell(x,y)->get_solid_list();
 					//skip while (there's an object) and (that object is not blocking
 					//or that object can move.)
 					//todo: skip also if object is smaller than 4 squares on the map
@@ -1088,6 +1095,7 @@ void g1_map_class::make_block_maps()
 						ch = ch->next;
 
 
+
 					if (ch)
 					{
 						block[grade].block(x,y, G1_NORTH|G1_SOUTH|G1_WEST|G1_EAST);
@@ -1096,7 +1104,7 @@ void g1_map_class::make_block_maps()
 					else
 					{
 						i4_float max_grade = grade_max[grade];
-						g1_map_vertex_class *v1, *v2, *v3, *v4;
+						g1_map_vertex_class * v1, * v2, * v3, * v4;
 
 						v1=verts + x + y * (w+1);
 						v2=v1+1;
@@ -1162,11 +1170,12 @@ void g1_map_class::make_block_maps()
 	block_map_inited=i4_T;
 }
 
-void g1_map_class::update_block_maps(w16 x, w16 y, g1_object_class *changingobj, i4_bool added)
+void g1_map_class::update_block_maps(w16 x, w16 y, g1_object_class * changingobj, i4_bool added)
 {
 	//will add/remove any object passed, so call only for buildings.
 	//static i4_float grade_max[G1_GRADE_LEVELS] = { 10, 17, 30, 256 };
 	int i,grade;
+
 	if (!block_map_inited)
 	{
 		return;
@@ -1197,7 +1206,7 @@ void g1_map_class::update_block_maps(w16 x, w16 y, g1_object_class *changingobj,
 			}
 			else
 			{
-				g1_object_chain_class *ch = cell(x,y)->get_solid_list();
+				g1_object_chain_class * ch = cell(x,y)->get_solid_list();
 				while (ch &&
 					   (!ch->object->get_flag(g1_object_class::BLOCKING) ||
 						//ch->object->get_flag(g1_object_class::CAN_DRIVE_ON) ||
@@ -1215,7 +1224,7 @@ void g1_map_class::update_block_maps(w16 x, w16 y, g1_object_class *changingobj,
 				else
 				{
 					i4_float max_grade = grade_max[grade];
-					g1_map_vertex_class *v1, *v2, *v3, *v4;
+					g1_map_vertex_class * v1, * v2, * v3, * v4;
 
 					v1=verts + x + y * (w+1);
 					v2=v1+1;
@@ -1323,8 +1332,8 @@ void g1_map_class::recalc_static_stuff()
 
 	if (recalc & (G1_RECALC_WATER_VERTS))
 	{
-		g1_map_vertex_class *v=verts+(w+1)+1;
-		g1_map_cell_class *c=cells+(w)+1;
+		g1_map_vertex_class * v=verts+(w+1)+1;
+		g1_map_cell_class * c=cells+(w)+1;
 
 		for (int y=1; y<(int)h-1; y++)
 		{
@@ -1375,7 +1384,7 @@ void g1_map_class::recalc_static_stuff()
 void g1_map_class::range_iterator::begin(float x, float y, float range)
 //{{{
 {
-	g1_map_class *map = g1_get_map();
+	g1_map_class * map = g1_get_map();
 	int wx = map->width(), wy = map->height();
 
 	left   = i4_f_to_i(x - range);
@@ -1462,7 +1471,7 @@ void g1_map_class::range_iterator::next()
 }
 
 sw32 g1_map_class::get_objects_in_range_fn(float x, float y, float range,
-										   g1_object_class *dest_array[],
+										   g1_object_class * dest_array[],
 										   w32 array_size,
 										   OBJ_FILTER_TYPE fn) const
 {
@@ -1494,15 +1503,15 @@ sw32 g1_map_class::get_objects_in_range_fn(float x, float y, float range,
 
 	for (iy=y_top;  iy<=y_bottom; iy++)
 	{
-		g1_map_cell_class *cell = g1_get_map()->cell((w16)x_left, (w16)iy);
+		g1_map_cell_class * cell = g1_get_map()->cell((w16)x_left, (w16)iy);
 
 		for (ix=x_left; ix<=x_right;  ix++, cell++)
 		{
-			g1_object_chain_class *p     = cell->get_solid_list();
+			g1_object_chain_class * p     = cell->get_solid_list();
 
 			while (p && num_found < (int)array_size)
 			{
-				g1_object_class *o = p->object;
+				g1_object_class * o = p->object;
 				//second condition assures object is only found once
 				if (o && (&o->occupied_squares[0]==p) && (fn(o)))
 				{
@@ -1531,7 +1540,7 @@ sw32 g1_map_class::get_objects_in_range_fn(float x, float y, float range,
 }
 
 sw32 g1_map_class::get_objects_in_range(float x, float y, float range,
-										g1_object_class *dest_array[], w32 array_size,
+										g1_object_class * dest_array[], w32 array_size,
 										w32 object_mask_flags, w32 type_mask_flags) const
 {
 	sw32 x_left,x_right,y_top,y_bottom;
@@ -1562,15 +1571,15 @@ sw32 g1_map_class::get_objects_in_range(float x, float y, float range,
 
 	for (iy=y_top;  iy<=y_bottom; iy++)
 	{
-		g1_map_cell_class *cell = g1_get_map()->cell((w16)x_left, (w16)iy);
+		g1_map_cell_class * cell = g1_get_map()->cell((w16)x_left, (w16)iy);
 
 		for (ix=x_left; ix<=x_right;  ix++, cell++)
 		{
-			g1_object_chain_class *p     = cell->get_solid_list();
+			g1_object_chain_class * p     = cell->get_solid_list();
 
 			while (p && num_found < (int)array_size)
 			{
-				g1_object_class *o = p->object;
+				g1_object_class * o = p->object;
 
 				if (o && (&o->occupied_squares[0]==p) && (o->flags & object_mask_flags))
 				{

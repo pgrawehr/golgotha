@@ -24,21 +24,23 @@ class li_file_type_function_table :
 {
 public:
 	// free data associated with an instance of this type
-	virtual void free(li_object *o)
+	virtual void free(li_object * o)
 	{
 		li_file::get(o,0)->free();
 	}
 
-	virtual int equal(li_object *o1, li_object *o2)
+	virtual int equal(li_object * o1, li_object * o2)
 	{
 		//not very useful on files (they have no name!)
-		i4_file_class *v1=li_file::get(o1,0)->value(), *v2=li_file::get(o2,0)->value();
+		i4_file_class * v1=li_file::get(o1,0)->value(), * v2=li_file::get(o2,0)->value();
+
 		return v1==v2;
 	}
 
-	virtual void print(li_object *o, i4_file_class *stream)
+	virtual void print(li_object * o, i4_file_class * stream)
 	{
-		i4_file_class *v=li_file::get(o,0)->value();
+		i4_file_class * v=li_file::get(o,0)->value();
+
 		stream->printf("<#file address %i>",v);
 	}
 
@@ -64,13 +66,14 @@ public:
 	   (setf myfile (new file "text.txt" (or I4_READ I4_WRITE)))
 
 	 */
-	virtual li_object *create(li_object *params, li_environment *env)
+	virtual li_object *create(li_object * params, li_environment * env)
 	{
-		i4_file_class *v=0;
+		i4_file_class * v=0;
 		w32 flags=0;
+
 		if (params)
 		{
-			li_string *s=li_string::get(li_eval(li_first(params,env),env),env);
+			li_string * s=li_string::get(li_eval(li_first(params,env),env),env);
 			flags=li_get_int(li_eval(li_second(params,env),env),env);
 			v=i4_open(i4_const_str(s->value()),flags);
 
@@ -79,12 +82,12 @@ public:
 		return new li_file(v);
 	}
 
-	void save_object(i4_saver_class *fp,li_object *o, li_environment *env)
+	void save_object(i4_saver_class * fp,li_object * o, li_environment * env)
 	{
 		//cannot save filepointers to disk
 		return;
 	}
-	li_object *load_object(i4_loader_class *fp,li_type_number *type_remap,li_environment *env)
+	li_object *load_object(i4_loader_class * fp,li_type_number * type_remap,li_environment * env)
 	{
 		return new li_file(0);
 	}
@@ -94,7 +97,8 @@ public:
 li_automatic_add_type(li_file_type_function_table, li_file_type);
 
 LI_HEADER(close_file) {
-	li_file *f=li_file::get(li_eval(li_first(o,env),env),env);
+	li_file * f=li_file::get(li_eval(li_first(o,env),env),env);
+
 	if (f)
 	{
 		f->set(0);
@@ -103,7 +107,8 @@ LI_HEADER(close_file) {
 }
 
 LI_HEADER(is_open) {
-	li_file *f=li_file::get(li_eval(li_first(o,env),env),env);
+	li_file * f=li_file::get(li_eval(li_first(o,env),env),env);
+
 	if (f && f->value())
 	{
 		return li_true_sym;
@@ -123,18 +128,21 @@ LI_HEADER(rename_file) {
 }
 
 LI_HEADER(delete_file) {
-	li_string *f=li_string::get(li_eval(li_first(o,env),env),env);
+	li_string * f=li_string::get(li_eval(li_first(o,env),env),env);
+
 	return i4_unlink(f->value()) ? li_true_sym : li_nil;
 }
 
 LI_HEADER(probe_file) {
-	li_string *f=li_string::get(li_eval(li_first(o,env),env),env);
+	li_string * f=li_string::get(li_eval(li_first(o,env),env),env);
 	i4_file_status_struct fstat;
+
 	return i4_get_status(f->value(),fstat) ? li_true_sym : li_nil;
 }
 
 LI_HEADER(file_position) {
-	li_file *f=li_file::get(li_eval(li_first(o,env),env),env);
+	li_file * f=li_file::get(li_eval(li_first(o,env),env),env);
+
 	if (f&&f->value())
 	{
 		if (li_second(o,env))
@@ -154,6 +162,7 @@ LI_HEADER(file_position) {
 
 LI_HEADER(streamp) {
 	li_type_number t=li_eval(li_first(o,env),env)->type();
+
 	if (t==li_file_type||t==li_loader_file_type||t==li_saver_file_type)
 	{
 		return li_true_sym;
@@ -168,8 +177,9 @@ LI_HEADER(streamp) {
    	If the third parameter is t, the returned value is converted to signed
  */
 LI_HEADER(read_byte) {
-	li_file *f=li_file::get(li_eval(li_first(o,env),env),env);
+	li_file * f=li_file::get(li_eval(li_first(o,env),env),env);
 	w32 w;
+
 	if (li_eval(li_second(o,env),env)==li_true_sym)
 	{
 		w=f->value()->read_8();
@@ -194,8 +204,9 @@ LI_HEADER(read_byte) {
    	If the third parameter is t, the returned value is converted to signed
  */
 LI_HEADER(read_16) {
-	li_file *f=li_file::get(li_eval(li_first(o,env),env),env);
+	li_file * f=li_file::get(li_eval(li_first(o,env),env),env);
 	w32 w;
+
 	if (li_eval(li_second(o,env),env)==li_true_sym)
 	{
 		w=f->value()->read_16();
@@ -220,8 +231,9 @@ LI_HEADER(read_16) {
 
  */
 LI_HEADER(read_32) {
-	li_file *f=li_file::get(li_eval(li_first(o,env),env),env);
+	li_file * f=li_file::get(li_eval(li_first(o,env),env),env);
 	w32 w;
+
 	w=f->value()->read_32();
 	return new li_int(w);
 

@@ -55,8 +55,8 @@ i4_time_device_class::timed_event::~timed_event()
 	delete event;
 }
 
-i4_time_device_class::timed_event::timed_event(i4_event_handler_class *send_to,
-											   i4_event *event,
+i4_time_device_class::timed_event::timed_event(i4_event_handler_class * send_to,
+											   i4_event * event,
 											   w32 milli_wait)
 	: send_to(send_to),
 	  event(event->copy()),
@@ -182,8 +182,8 @@ i4_bool i4_time_device_class::process_events()       // returns true if an event
 	return ret;
 }
 
-i4_time_device_class::id i4_time_device_class::request_event(i4_event_handler_class *send_to, // who to send the event to
-															 i4_event *event, // what event to send
+i4_time_device_class::id i4_time_device_class::request_event(i4_event_handler_class * send_to, // who to send the event to
+															 i4_event * event, // what event to send
 															 w32 milli_wait) // how much time to wait (in milli-seconds)
 {
 	// first make sure this is not an event that needs to be sent right now
@@ -193,7 +193,7 @@ i4_time_device_class::id i4_time_device_class::request_event(i4_event_handler_cl
 		i4_error("INTERNAL: Cannot send NOW events throught the time device!");
 	}
 
-	timed_event *ev=new timed_event(send_to,event,milli_wait);
+	timed_event * ev=new timed_event(send_to,event,milli_wait);
 	events.insert_end(*ev);
 	return id(ev);
 }
@@ -272,6 +272,7 @@ i4_time_class::i4_time_class(sw32 milli_sec)
 w64 i4_get_system_clock()
 {
 	w32 lo, hi;
+
 	__asm
 	{
 		__emit 0x0F
@@ -292,6 +293,7 @@ int i4_get_clocks_per_second()
 
 		i4_time_class now,start;
 		while (now.milli_diff(start) < 1000) now.get();
+
 
 
 		w64 end = i4_get_system_clock();
@@ -327,7 +329,7 @@ void i4_milli_sleep(int milli_seconds)
 
 i4_profile_stack_struct i4_profile_stack;
 i4_profile_stack_item i4_profile_stack_struct::stack[I4_MAX_PROFILE_STACK_DEPTH];
-i4_profile_class *i4_profile_class::list;
+i4_profile_class * i4_profile_class::list;
 int i4_profile_on=0;
 int i4_profile_stack_top=0;
 
@@ -352,10 +354,10 @@ void i4_profile_stack_struct::underflow()
 	i4_error("INTERNAL: Unbalanced profile start/stop");
 }
 
-i4_profile_class::i4_profile_class(char *debug_name)
+i4_profile_class::i4_profile_class(char * debug_name)
 	: name(debug_name)
 {
-	for (i4_profile_class *p=list; p; p=p->next)
+	for (i4_profile_class * p=list; p; p=p->next)
 	{
 		if (p==this)
 		{
@@ -375,9 +377,10 @@ i4_profile_class::i4_profile_class(char *debug_name)
 void i4_profile_class::called_start()
 {
 	w64 current_clock=i4_get_system_clock();
+
 	if (i4_get_thread_id()==i4_get_main_thread_id())
 	{
-		i4_profile_stack_item *top=i4_profile_stack.get_top();
+		i4_profile_stack_item * top=i4_profile_stack.get_top();
 		if (top)
 		{
 			top->item->total_time+=current_clock-top->start_clock;
@@ -395,7 +398,7 @@ void i4_profile_class::called_stop()
 
 	if (i4_get_thread_id()==i4_get_main_thread_id())
 	{
-		i4_profile_stack_item *me=i4_profile_stack.pop();
+		i4_profile_stack_item * me=i4_profile_stack.pop();
 		if (me->item!=this)
 		{
 			i4_error("profile stop unmatched %s (%s on stack)",
@@ -404,7 +407,7 @@ void i4_profile_class::called_stop()
 
 		total_time+=current_clock - me->start_clock;
 
-		i4_profile_stack_item *top=i4_profile_stack.get_top();
+		i4_profile_stack_item * top=i4_profile_stack.get_top();
 		if (top)
 		{
 			top->start_clock=current_clock;
@@ -423,8 +426,8 @@ i4_profile_class::~i4_profile_class()
 	}
 	else
 	{
-		i4_profile_class *last=0;
-		i4_profile_class *p;
+		i4_profile_class * last=0;
+		i4_profile_class * p;
 
 		for (p=list; p && p!=this; )
 		{
@@ -449,17 +452,17 @@ i4_profile_class::~i4_profile_class()
 void i4_profile_clear()
 {
 	i4_profile_stack.flush_stack();
-	for (i4_profile_class *p=i4_profile_class::list; p; p=p->next)
+	for (i4_profile_class * p=i4_profile_class::list; p; p=p->next)
 	{
 		p->total_time=0;
 	}
 
 }
 
-static int profile_compare(const void *a, const void *b)
+static int profile_compare(const void * a, const void * b)
 {
-	i4_profile_class *ap=*((i4_profile_class **)a);
-	i4_profile_class *bp=*((i4_profile_class **)b);
+	i4_profile_class * ap=*((i4_profile_class * *)a);
+	i4_profile_class * bp=*((i4_profile_class * *)b);
 
 	if (ap->total_time<bp->total_time)
 	{
@@ -485,13 +488,13 @@ void i4_profile_report_start()
 
 
 // print a report to about timing since the last clear or program start
-void i4_profile_report(char *filename)
+void i4_profile_report(char * filename)
 {
 	i4_profile_stack.flush_stack();
 
 	double total_time=0;
 	int t=0,i=0;
-	i4_profile_class *p;
+	i4_profile_class * p;
 
 	for (p=i4_profile_class::list; p; p=p->next, t++)
 	{
@@ -499,8 +502,8 @@ void i4_profile_report(char *filename)
 	}
 
 	// put them all in a list and sort them by clocks
-	i4_profile_class **plist;
-	plist=(i4_profile_class **)I4_MALLOC(sizeof(i4_profile_class *)*t,"");
+	i4_profile_class * * plist;
+	plist=(i4_profile_class * *)I4_MALLOC(sizeof(i4_profile_class *)*t,"");
 	for (p=i4_profile_class::list; p; p=p->next)
 	{
 		plist[i++]=p;
@@ -513,7 +516,7 @@ void i4_profile_report(char *filename)
 	double oo_total=1.0/total_time;
 	char buf[100];
 
-	i4_file_class *fp=i4_open(filename, I4_WRITE);
+	i4_file_class * fp=i4_open(filename, I4_WRITE);
 	if (fp)
 	{
 		sprintf(buf,"%2.2f total clocks\n", total_time);
@@ -550,9 +553,10 @@ void i4_profile_report(char *filename)
 #ifndef _CONSOLE
 
 
-li_object *li_profile(li_object *o, li_environment *env)
+li_object *li_profile(li_object * o, li_environment * env)
 {
-	li_object *r=li_eval(li_car(o,env),env);
+	li_object * r=li_eval(li_car(o,env),env);
+
 	if (r->type()!=LI_STRING)
 	{
 		i4_warning("profile expects a string arg");
@@ -562,7 +566,7 @@ li_object *li_profile(li_object *o, li_environment *env)
 		i4_profile_clear();
 		i4_profile_stack_top=0;
 
-		for (i4_profile_class *c=i4_profile_class::list; c; c=c->next)
+		for (i4_profile_class * c=i4_profile_class::list; c; c=c->next)
 		{
 			if (strstr(c->name, li_get_string(r,env))!=0)
 			{
@@ -579,9 +583,10 @@ li_object *li_profile(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *li_profile_report(li_object *o, li_environment *env)
+li_object *li_profile_report(li_object * o, li_environment * env)
 {
-	li_object *r=li_eval(li_car(o,env),env);
+	li_object * r=li_eval(li_car(o,env),env);
+
 	if (r->type()!=LI_STRING)
 	{
 		i4_warning("profile expects a string arg");
@@ -624,14 +629,14 @@ class i4_prof_win_class :
 	public i4_parent_window_class
 {
 	i4_bool update_stats;
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	i4_time_device_class::id poll_id;
-	i4_event_reaction_class *on_close;
+	i4_event_reaction_class * on_close;
 	w64 last_clock;
 
 public:
-	i4_prof_win_class(w16 w, w16 h, i4_graphical_style_class *style,
-					  i4_event_reaction_class *on_close)
+	i4_prof_win_class(w16 w, w16 h, i4_graphical_style_class * style,
+					  i4_event_reaction_class * on_close)
 		: i4_parent_window_class(w,h),
 		  style(style),
 		  on_close(on_close)
@@ -643,7 +648,7 @@ public:
 
 
 		// count how many profile classes are in memory
-		for (i4_profile_class *p=i4_profile_class::list; p; p=p->next)
+		for (i4_profile_class * p=i4_profile_class::list; p; p=p->next)
 		{
 			p->total_time=0;
 		}
@@ -655,7 +660,8 @@ public:
 	{
 		int t=0,i=0;
 		double total_time_measured=0.0;
-		i4_profile_class *p=i4_profile_class::list;
+		i4_profile_class * p=i4_profile_class::list;
+
 		// count how many profile classes are in memory
 		for (; p; p=p->next)
 		{
@@ -669,8 +675,8 @@ public:
 		if (update_stats)
 		{
 			// put them all in a list and sort them by clocks
-			i4_profile_class **plist;
-			plist=(i4_profile_class **)I4_MALLOC(sizeof(i4_profile_class *)*t,"pl");
+			i4_profile_class * * plist;
+			plist=(i4_profile_class * *)I4_MALLOC(sizeof(i4_profile_class *)*t,"pl");
 			for (p=i4_profile_class::list; p; p=p->next)
 			{
 				plist[i]=p;
@@ -688,7 +694,7 @@ public:
 			double oo_total = 1.0/(double)((sw64)current_clock - (sw64)last_clock);
 			last_clock=i4_get_system_clock();
 
-			i4_font_class *fnt=style->font_hint->small_font;
+			i4_font_class * fnt=style->font_hint->small_font;
 			fnt->set_color(0x0000ff);
 			sprintf(buf,"%2.2f Total", ((double)(sw64)total_time_measured * oo_total) * 100.0);
 			fnt->put_string(local_image, x+1, y, buf, context);
@@ -729,7 +735,7 @@ public:
 		pf_profile_draw.stop();
 	}
 
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 
 	~i4_prof_win_class()
 	{
@@ -743,15 +749,15 @@ public:
 		i4_profile_on=0;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"profile window");
 	}
 };
 
-i4_parent_window_class *i4_prof_win=0;
+i4_parent_window_class * i4_prof_win=0;
 
-void i4_prof_win_class::receive_event(i4_event *ev)
+void i4_prof_win_class::receive_event(i4_event * ev)
 {
 	CAST_PTR(oev, i4_object_message_event_class, ev);
 
@@ -778,12 +784,12 @@ void i4_prof_win_class::receive_event(i4_event *ev)
 	}
 }
 
-void i4_profile_watch(i4_graphical_style_class *style,
-					  i4_parent_window_class *parent,
+void i4_profile_watch(i4_graphical_style_class * style,
+					  i4_parent_window_class * parent,
 					  sw32 &win_x, sw32 &win_y,
 					  w32 w, w32 h,
 					  int open_type,  // 0==close, 1==open, 2==toggle window
-					  i4_event_reaction_class *on_close)
+					  i4_event_reaction_class * on_close)
 {
 	if (i4_prof_win && (open_type==0 || open_type==2))
 	{
@@ -795,9 +801,9 @@ void i4_profile_watch(i4_graphical_style_class *style,
 	}
 	else if (!i4_prof_win && (open_type==1 || open_type==2))
 	{
-		i4_prof_win_class *p=new i4_prof_win_class((w16)w,(w16)h, style, on_close);
+		i4_prof_win_class * p=new i4_prof_win_class((w16)w,(w16)h, style, on_close);
 
-		i4_event_reaction_class *re;
+		i4_event_reaction_class * re;
 		re=new i4_event_reaction_class(p, new i4_object_message_event_class(p,CLOSE_WIN,i4_event::NOW));
 
 		i4_prof_win=style->create_mp_window((short) win_x, (short) win_y,(w16) w,(w16)h,

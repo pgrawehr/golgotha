@@ -18,7 +18,7 @@ class i4_button_class :
 {
 protected:
 
-	i4_window_class *decore;
+	i4_window_class * decore;
 	i4_bool grabbing;
 	i4_bool repeat_down;
 	i4_bool popup;
@@ -27,26 +27,26 @@ protected:
 		WAIT_CLICK, WAIT_DELAY, WAIT_REPEAT
 	} state;
 	i4_time_device_class::id time_id;
-	i4_event_reaction_class *repeat_event;
+	i4_event_reaction_class * repeat_event;
 
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"button_class");
 	}
-	i4_button_class(const i4_const_str *idle_context_help, // can be null
-					i4_window_class *child,
-					i4_graphical_style_class *hint,
-					i4_event_reaction_class *press=0,
-					i4_event_reaction_class *depress=0,
-					i4_event_reaction_class *activate=0,
-					i4_event_reaction_class *deactivate=0      );
+	i4_button_class(const i4_const_str * idle_context_help, // can be null
+					i4_window_class * child,
+					i4_graphical_style_class * hint,
+					i4_event_reaction_class * press=0,
+					i4_event_reaction_class * depress=0,
+					i4_event_reaction_class * activate=0,
+					i4_event_reaction_class * deactivate=0      );
 
-	virtual void reparent(i4_image_class *draw_area, i4_parent_window_class *parent);
-	virtual void receive_event(i4_event *ev);
+	virtual void reparent(i4_image_class * draw_area, i4_parent_window_class * parent);
+	virtual void receive_event(i4_event * ev);
 	virtual void parent_draw(i4_draw_context_class &context);
 
-	void set_repeat_down(i4_bool value, i4_event_reaction_class *repeat_event=0);
+	void set_repeat_down(i4_bool value, i4_event_reaction_class * repeat_event=0);
 	void set_popup(i4_bool value);
 
 	i4_menu_item_class *copy()

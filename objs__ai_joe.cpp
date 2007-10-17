@@ -42,7 +42,7 @@
 #include "player.h"
 
 
-char *unit_name_joe[] =
+char * unit_name_joe[] =
 {
 	"stank",                      //0
 	"peon_tank",                  //1
@@ -56,7 +56,7 @@ char *unit_name_joe[] =
 const int num_unit_types=sizeof(unit_name_joe)/sizeof(char *);
 w16 unit_type_joe[num_unit_types];
 
-char *goodies_name[] =
+char * goodies_name[] =
 {
 	"takeover_pad",               //1
 	"floorpad"                     //2
@@ -65,7 +65,7 @@ char *goodies_name[] =
 const int num_goodies_types=sizeof(goodies_name)/sizeof(char *);
 w16 goodies_type[num_goodies_types];
 
-static i4_bool goodies_filter(g1_object_class *who)
+static i4_bool goodies_filter(g1_object_class * who)
 {
 	for (int i=0; i<num_goodies_types; i++)
 	{
@@ -78,7 +78,7 @@ static i4_bool goodies_filter(g1_object_class *who)
 }
 
 
-char *formation_joe[] =
+char * formation_joe[] =
 {
 	"      "
 	"      "
@@ -239,7 +239,7 @@ public:
 
 	//int reload;  // supertank is going to reload ammo
 
-	ai_joe(g1_loader_class *f=0)
+	ai_joe(g1_loader_class * f=0)
 		: convoys(40,40),
 		  time(40,40),
 		  goals(40,40)
@@ -360,6 +360,7 @@ public:
 			place++;
 
 
+
 		if (place==6*6)
 		{
 			form=-1;
@@ -380,6 +381,7 @@ public:
 	void guide_units()
 	{
 		int i;
+
 		for (i=0; i<time.size(); i++)
 		{
 			if (!convoys[i]->valid()) //an entire convoy was killed
@@ -443,7 +445,7 @@ public:
 		g1_team_api_class::object_built(id);
 	}
 
-	virtual void object_added(g1_object_class *which, g1_object_class *toobj)
+	virtual void object_added(g1_object_class * which, g1_object_class * toobj)
 	{
 		g1_typed_reference_class<g1_convoy_class> *newconv;
 		if (where.get()!=toobj)
@@ -460,7 +462,7 @@ public:
 			}
 			where=toobj;
 		}
-		g1_convoy_class *myconv=0;
+		g1_convoy_class * myconv=0;
 		if (!building.valid())
 		{
 			myconv=(g1_convoy_class *)g1_create_object(convoy_type);
@@ -563,7 +565,7 @@ public:
 			case COLLECT_GOALS:
 				{
 					int numgoals;
-					g1_object_class **buf;
+					g1_object_class * * buf;
 					numgoals=g1_get_map()->make_object_list(buf,goodies_filter);
 					int n;
 					for (n=0; n<goals.size(); n++)
@@ -606,7 +608,7 @@ public:
 	enum {
 		JOE_DATA_VERSION=5
 	};
-	void save(g1_saver_class *fp)
+	void save(g1_saver_class * fp)
 	{
 		fp->start_version(JOE_DATA_VERSION);
 		fp->write_reference(building);
@@ -622,9 +624,10 @@ public:
 		fp->end_version();
 	}
 
-	void load(g1_loader_class *fp)
+	void load(g1_loader_class * fp)
 	{
 		w16 data_version=0,size=0;
+
 		clear_unitlists();
 		fp->get_version(data_version,size);
 		g1_typed_reference_class<g1_convoy_class> *aref;

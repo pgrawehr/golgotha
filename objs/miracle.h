@@ -34,15 +34,15 @@ public:
 		arc_point_struct arc_points[NUM_ARC_POINTS];
 	};
 
-	void new_arc_points(i4_3d_vector src, i4_3d_vector dest, arc_point_struct *dest_points);
-	void copy_old_points(arc_point_struct *dest_points);
+	void new_arc_points(i4_3d_vector src, i4_3d_vector dest, arc_point_struct * dest_points);
+	void copy_old_points(arc_point_struct * dest_points);
 
 	i4_array<arc_point_list_struct> *electric_arcs;
 
-	g1_miracle_class(g1_object_type id, g1_loader_class *fp);
+	g1_miracle_class(g1_object_type id, g1_loader_class * fp);
 	~g1_miracle_class();
 
-	virtual void save(g1_saver_class *fp);
+	virtual void save(g1_saver_class * fp);
 
 	enum {
 		LIGHTNING=1
@@ -54,9 +54,9 @@ public:
 
 	void post_think();
 	void think();
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 
-	void setup(g1_map_piece_class *convoy_to_attack, w32 _miracle_type, i4_3d_vector pos);
+	void setup(g1_map_piece_class * convoy_to_attack, w32 _miracle_type, i4_3d_vector pos);
 
 	i4_float occupancy_radius() const
 	{

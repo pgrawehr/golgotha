@@ -11,11 +11,11 @@
 
 class g1_object_class;
 
-g1_object_class *g1_create_carcass(g1_object_class *from,
-								   g1_quad_object_class *model,
+g1_object_class *g1_create_carcass(g1_object_class * from,
+								   g1_quad_object_class * model,
 								   const i4_const_str &model_n,
 								   int ticks=30,
 								   int ticks_to_smoke=10,
-								   g1_quad_object_class *lod_model=0);
+								   g1_quad_object_class * lod_model=0);
 
 #endif

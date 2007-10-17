@@ -24,11 +24,11 @@ class CR1_dx5_render_window_class :
 	public r1_render_window_class
 {
 public:
-	CR1_dx5_render_window_class(w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class *api);
+	CR1_dx5_render_window_class(w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class * api);
 	~CR1_dx5_render_window_class();
 
 	void    draw( i4_draw_context_class &context );
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"dx5 render window");
 	};
@@ -41,14 +41,14 @@ class r1_dx5_class :
 {
 
 	// position on screen  // area of image to copy
-	void    copy_part(i4_image_class *im, int x, int y, int x1, int y1, int x2, int y2);
+	void    copy_part(i4_image_class * im, int x, int y, int x1, int y1, int x2, int y2);
 protected:
 	DWORD m_dwFogColor,m_dwFogMode;
 	FLOAT m_fFogStartValue,m_fFogEndValue,m_fFogDensity;
 	BOOL m_bRangeBasedFog;
 public:
 
-	friend inline void make_d3d5_verts(D3DTLVERTEX *dx_v,r1_vert *r1_v,r1_dx5_class *c,int total);
+	friend inline void make_d3d5_verts(D3DTLVERTEX * dx_v,r1_vert * r1_v,r1_dx5_class * c,int total);
 	r1_dx5_class();
 	~r1_dx5_class();
 
@@ -56,7 +56,7 @@ public:
 	// the directx display to the glide render api it return false
 	// init will create the texture manager, which can be used after this call
 	// text_mem_size if size of buffer to hold compressed textures (in system memory)
-	i4_bool init(i4_display_class *display);
+	i4_bool init(i4_display_class * display);
 
 	// this will delete the texture manager(s) (and free textures associated with) created by init
 	void uninit();
@@ -78,9 +78,9 @@ public:
 	void set_write_mode(r1_write_mask_type mask);
 
 	// draws the polygon at the end of the frame (during end_render())
-	virtual void render_poly(int t_verts, r1_vert *verts);
-	void render_pixel(int t_points, r1_vert *pixel);
-	void render_lines(int t_lines, r1_vert *verts);
+	virtual void render_poly(int t_verts, r1_vert * verts);
+	void render_pixel(int t_points, r1_vert * pixel);
+	void render_lines(int t_lines, r1_vert * verts);
 	void clear_area(int x1, int y1, int x2, int y2, w32 color, float w);
 
 	// creates an image of the same bit depth and palette of screen (for use with put_image)
@@ -125,11 +125,11 @@ public:
 		return d3d_driver_name;
 	}
 
-	IDirectDrawSurface3 *zbuffer_surface;
-	IDirect3D2 *d3d;
-	IDirect3DDevice2 *d3d_device;
-	IDirect3DViewport2 *d3d_viewport;
-	dx5_d3d_info *info;
+	IDirectDrawSurface3 * zbuffer_surface;
+	IDirect3D2 * d3d;
+	IDirect3DDevice2 * d3d_device;
+	IDirect3DViewport2 * d3d_viewport;
+	dx5_d3d_info * info;
 };
 
 extern r1_dx5_class r1_dx5_class_instance;

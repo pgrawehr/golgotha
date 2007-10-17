@@ -34,7 +34,7 @@ void g1_reference_class::remove_ref()
 	i4_error("remove reference : not found");
 }
 
-void g1_reference_class::reference_object(g1_object_class *object_being_referenced)
+void g1_reference_class::reference_object(g1_object_class * object_being_referenced)
 {
 	if (ref)
 	{

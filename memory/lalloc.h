@@ -55,9 +55,9 @@ protected:
 
 	class PreBlock
 	{
-		typedef char *pointer;
+		typedef char * pointer;
 public:
-		PreBlock *link;
+		PreBlock * link;
 #ifdef I4_DEBUG
 		w32 items;
 #endif
@@ -66,9 +66,10 @@ public:
 			return (void *)(((pointer) this) + sizeof(PreBlock) + size*i );
 		}
 
-		void *init(w32 size, PreBlock *_link, w32 _items, void *_next)
+		void *init(w32 size, PreBlock * _link, w32 _items, void * _next)
 		{
-			void *ref;
+			void * ref;
+
 #ifdef I4_DEBUG
 			items = _items;
 #endif
@@ -76,7 +77,7 @@ public:
 			for (w32 i=0; i<_items; i++)
 			{
 				ref = GetPtr(i, size);
-				*((void **)ref) = _next;
+				*((void * *)ref) = _next;
 				_next = ref;
 			}
 			return _next;
@@ -97,7 +98,7 @@ public:
 			printf("\n");
 		}
 
-		int valid_pointer(void *ptr, int size)
+		int valid_pointer(void * ptr, int size)
 		{
 			w32 offs = (w32)((pointer)ptr - (((pointer) this) + sizeof(PreBlock)));
 
@@ -106,17 +107,17 @@ public:
 #endif
 	};
 
-	PreBlock *mem;
-	void *next;
+	PreBlock * mem;
+	void * next;
 	w32 grow, size;
-	char *name;
+	char * name;
 
 	//{{{ Debugging Variables
 #ifdef I4_DEBUG
 	w32 blocks, items;
 #endif
 public:
-	i4_linear_allocator(w32 _size, w32 _number, w32 _grow, char *_name)
+	i4_linear_allocator(w32 _size, w32 _number, w32 _grow, char * _name)
 		: mem(0),
 		  next(0),
 		  name(_name),
@@ -161,7 +162,7 @@ public:
 	//
 	//  destroys blocks of memory used by allocator
 	{
-		PreBlock *p;
+		PreBlock * p;
 
 		while (mem)
 		{
@@ -176,12 +177,12 @@ public:
 	//  allocate an item void
 	{
 		lock.lock();
-		void *ret;
+		void * ret;
 
 		if (next)
 		{
 			ret = next;
-			next = *((void **)next);
+			next = *((void * *)next);
 		}
 		else
 		{
@@ -191,13 +192,13 @@ public:
 				printf("Allocator '%s' out of items\n",name);
 			}
 
-			PreBlock *newblock =
+			PreBlock * newblock =
 				(PreBlock *) I4_MALLOC( size*grow + sizeof(PreBlock), name );
 			next = newblock->init(size, mem, grow, next);
 			mem = newblock;
 
 			ret = next;
-			next = *((void **)next);
+			next = *((void * *)next);
 #ifdef I4_DEBUG
 			blocks++;
 #endif
@@ -210,7 +211,7 @@ public:
 		return ret;
 	}
 
-	void free(void *item)
+	void free(void * item)
 	//
 	//  free item T back into pool
 	//
@@ -218,11 +219,12 @@ public:
 		lock.lock();
 
 #ifdef I4_DEBUG
-		PreBlock *p;
+		PreBlock * p;
 
 		p = mem;
 		while ( p && !p->valid_pointer(item, size) )
 			p = p->link;
+
 
 		if (!p)
 		{
@@ -231,7 +233,7 @@ public:
 			return;
 		}
 #endif
-		*((void **)item) = next;
+		*((void * *)item) = next;
 		next = item;
 #ifdef I4_DEBUG
 		items--;
@@ -244,7 +246,7 @@ public:
 	//  debugging dump of contents of linear allocator
 	void dump()
 	{
-		PreBlock *p;
+		PreBlock * p;
 
 		printf( "i4_linear_allocator '%s'\n"
 				"Items: %d  Blocks: %d\n"
@@ -264,7 +266,7 @@ class i4_linear_allocator_template :
 	public i4_linear_allocator
 {
 public:
-	i4_linear_allocator_template(w32 _number, w32 _grow, char *_name)
+	i4_linear_allocator_template(w32 _number, w32 _grow, char * _name)
 		: i4_linear_allocator(sizeof(T), _number, _grow, _name)
 	{
 	}
@@ -273,7 +275,7 @@ public:
 	{
 		return (T *)i4_linear_allocator::alloc();
 	}
-	void free(T *item)
+	void free(T * item)
 	{
 		i4_linear_allocator::free((void *)item);
 	}

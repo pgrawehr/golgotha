@@ -23,8 +23,8 @@
 i4_profile_class pf_solve_astar("solve_astar");
 
 const i4_float sqrt2 = (float)sqrt(2.0);
-static g1_map_class *map_ref; //for faster reference
-static BitArray2D *visited_array=0;
+static g1_map_class * map_ref; //for faster reference
+static BitArray2D * visited_array=0;
 
 //enum { VISITED = g1_map_cell_class::VISITED, OK = g1_map_cell_class::ROUTEOK };
 
@@ -52,7 +52,7 @@ inline i4_bool is_ok(w16 x, w16 y)
 
 inline void set_solve_link(w16 x, w16 y, w16 from_x, w16 from_y,i4_float f_length)
 {
-	g1_map_cell_class *c = map_ref->cell(x,y);
+	g1_map_cell_class * c = map_ref->cell(x,y);
 
 	c->scratch_x = from_x;
 	c->scratch_y = from_y;
@@ -61,7 +61,7 @@ inline void set_solve_link(w16 x, w16 y, w16 from_x, w16 from_y,i4_float f_lengt
 
 inline void solve_link(w16 x, w16 y, w16 &from_x, w16 &from_y, i4_float &f_length)
 {
-	g1_map_cell_class *c = map_ref->cell(x,y);
+	g1_map_cell_class * c = map_ref->cell(x,y);
 
 	from_x = c->scratch_x;
 	from_y = c->scratch_y;
@@ -69,9 +69,10 @@ inline void solve_link(w16 x, w16 y, w16 &from_x, w16 &from_y, i4_float &f_lengt
 }
 
 typedef g1_astar_map_solver_class::cell cell_type;
-int cell_compare(const i4_float *a, const cell_type *b)
+int cell_compare(const i4_float * a, const cell_type * b)
 {
 	i4_float ca = *a, cb = b->hint + b->length;
+
 	if (cb<ca)
 	{
 		return -1;
@@ -99,7 +100,7 @@ i4_bool g1_astar_map_solver_class::add_link(w16 from_x,w16 from_y, w16 x,w16 y,
 	hint = dx*dx+dy*dy, //this is the distance estimate
 	cost = hint + from_length;
 	w32 loc;
-	cell *p;
+	cell * p;
 
 	if (heap.size()>0)
 	{
@@ -126,7 +127,7 @@ i4_bool g1_astar_map_solver_class::add_step_link(w16 from_x,w16 from_y, w16 x,w1
 												 i4_float from_length,w8 dir)
 //{{{
 {
-	g1_map_class *map = map_ref;
+	g1_map_class * map = map_ref;
 	w16 fx,fy;
 	i4_float flen;
 
@@ -185,7 +186,7 @@ i4_bool g1_astar_map_solver_class::get_next_cell(w16 &x,w16 &y, i4_float &length
 		return i4_F;
 	}
 
-	cell *p = &heap[heap.size()-1];
+	cell * p = &heap[heap.size()-1];
 	x = p->x;
 	y = p->y;
 	length = p->length;
@@ -201,7 +202,8 @@ void g1_astar_map_solver_class::clear_solve()
 //{{{
 {
 	int x=0,y=0;
-	g1_map_cell_class *c;
+	g1_map_cell_class * c;
+
 	map_ref=g1_get_map();
 	for (y=0; y<map_ref->height(); y++)
 	{
@@ -251,7 +253,7 @@ const i4_float costadj[8][8]=
 i4_bool g1_astar_map_solver_class::path_solve(i4_float startx, i4_float starty,
 											  i4_float destx, i4_float desty,
 											  w8 sizex, w8 sizey, w8 grade,
-											  i4_float *point, w16 &points)
+											  i4_float * point, w16 &points)
 //{{{
 {
 	//I need a fast data structure to do insertions/lookups on a (x,y) key.

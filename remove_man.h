@@ -29,7 +29,7 @@ public:
 	{
 	};
 	void process_requests();
-	void request_remove(g1_object_class *obj);
+	void request_remove(g1_object_class * obj);
 
 };
 

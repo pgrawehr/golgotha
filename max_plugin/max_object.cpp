@@ -15,9 +15,9 @@
 #define G3DF_VERSION 3
 
 w32 current_anim=0, current_frame=0;       // these reference model1
-m1_poly_object_class *current_model_1=0, *current_model_2=0;
+m1_poly_object_class * current_model_1=0, * current_model_2=0;
 
-i4_grow_heap_class *m1_object_heap=0;
+i4_grow_heap_class * m1_object_heap=0;
 
 
 i4_bool m1_quad_class::set(w16 a, w16 b, w16 c, w16 d)
@@ -46,7 +46,7 @@ i4_bool m1_quad_class::set(w16 a, w16 b, w16 c, w16 d)
 
 void m1_quad_class::calc_texture(int reverse,
 								 i4_array<g1_vert_class> &verts, w16 vert_off,
-								 char *tname)
+								 char * tname)
 {
 	i4_float
 	tmp_u[4], tmp_v[4],
@@ -122,7 +122,7 @@ void m1_quad_class::calc_texture(int reverse,
 	}
 }
 
-void m1_quad_class::set_texture(char *tname)
+void m1_quad_class::set_texture(char * tname)
 {
 	strcpy(texture_name, tname);
 }
@@ -168,7 +168,7 @@ void m1_quad_class::calc_texture_scale(i4_array<g1_vert_class> &verts, w16 vert_
 }
 
 
-void m1_poly_object_class::save_quads(i4_saver_class *fp)
+void m1_poly_object_class::save_quads(i4_saver_class * fp)
 {
 	int i,j;
 
@@ -192,7 +192,7 @@ void m1_poly_object_class::save_quads(i4_saver_class *fp)
 	}
 }
 
-void m1_poly_object_class::save_texture_names(i4_saver_class *fp)
+void m1_poly_object_class::save_texture_names(i4_saver_class * fp)
 {
 	fp->mark_section(G1_SECTION_MODEL_TEXTURE_NAMES);
 
@@ -206,7 +206,7 @@ void m1_poly_object_class::save_texture_names(i4_saver_class *fp)
 }
 
 
-void m1_poly_object_class::save_vert_animations(i4_saver_class *fp)
+void m1_poly_object_class::save_vert_animations(i4_saver_class * fp)
 {
 	int i,j;
 
@@ -223,7 +223,7 @@ void m1_poly_object_class::save_vert_animations(i4_saver_class *fp)
 
 		for (j=0; j<anim_a[i]->vertex_a.size(); j++)
 		{
-			g1_vert_class *v=&anim_a[i]->vertex_a[j];
+			g1_vert_class * v=&anim_a[i]->vertex_a[j];
 
 			fp->write_float(v->v.x);
 			fp->write_float(v->v.y);
@@ -236,7 +236,7 @@ void m1_poly_object_class::save_vert_animations(i4_saver_class *fp)
 	}
 }
 
-void m1_poly_object_class::save_mount_points(i4_saver_class *fp)
+void m1_poly_object_class::save_mount_points(i4_saver_class * fp)
 {
 	int i,j;
 
@@ -340,9 +340,10 @@ void m1_poly_object_class::calc_vert_normals()
 }
 
 
-void m1_poly_object_class::save(i4_saver_class *fp)
+void m1_poly_object_class::save(i4_saver_class * fp)
 {
 	int i,j;
+
 	calc_vert_normals();
 
 	dbg("saving textures...");

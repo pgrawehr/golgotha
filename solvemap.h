@@ -36,14 +36,14 @@ public:
 	{
 	};
 	w32 flags;
-	virtual void set_block_map(g1_block_map_class *_block) = 0;
+	virtual void set_block_map(g1_block_map_class * _block) = 0;
 	//finds a path from start to dest
 	virtual i4_bool path_solve(i4_float startx, i4_float starty, i4_float destx, i4_float desty,
 							   w8 sizex, w8 sizey, w8 grade,
-							   i4_float *point, w16 &points) = 0;
+							   i4_float * point, w16 &points) = 0;
 	//is there a straigth way to the destination?
-	static w32 unblocked(g1_block_map_class *block, i4_float startx, i4_float starty, i4_float destx, i4_float desty);
-	static g1_map_solver_class *cast(g1_map_solver_class *sc)
+	static w32 unblocked(g1_block_map_class * block, i4_float startx, i4_float starty, i4_float destx, i4_float desty);
+	static g1_map_solver_class *cast(g1_map_solver_class * sc)
 	{
 		//although this is the base itself, it should not be considered
 		//as the implementation of the map solver.

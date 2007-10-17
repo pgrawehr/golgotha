@@ -34,7 +34,7 @@ void i4_pixel_format::default_format()
 
 
 
-w32 i4_pixel_format::write(i4_file_class *f)
+w32 i4_pixel_format::write(i4_file_class * f)
 {
 	if (!f)
 	{
@@ -62,7 +62,7 @@ w32 i4_pixel_format::write(i4_file_class *f)
 	return (13*4); //(# of bytes written)
 }
 
-void i4_pixel_format::read(i4_file_class *f)
+void i4_pixel_format::read(i4_file_class * f)
 {
 	red_mask    = f->read_32();
 	red_shift   = f->read_32();
@@ -85,15 +85,15 @@ void i4_pixel_format::read(i4_file_class *f)
 	lookup = 0;
 }
 
-i4_bool i4_lookup_pal::can_convert(const i4_pixel_format *source_fmt,
-								   const i4_pixel_format *dest_fmt) const
+i4_bool i4_lookup_pal::can_convert(const i4_pixel_format * source_fmt,
+								   const i4_pixel_format * dest_fmt) const
 {
 	return i4_T;
 }
 
 
 i4_color i4_lookup_pal::convert(const i4_color source_pixel,
-								const i4_pixel_format *dest) const
+								const i4_pixel_format * dest) const
 {
 	w32 rgb=source.lookup[source_pixel];
 
@@ -108,7 +108,7 @@ i4_color i4_lookup_pal::convert(const i4_color source_pixel,
 	return r|g|b;
 }
 
-i4_lookup_pal::i4_lookup_pal(i4_pixel_format *source_fmt)
+i4_lookup_pal::i4_lookup_pal(i4_pixel_format * source_fmt)
 {
 	source=*source_fmt;
 	//int size=i4_lk_cmp_size[source.pixel_depth];
@@ -140,14 +140,14 @@ i4_lookup_pal::~i4_lookup_pal()
 	i4_free(source.lookup);
 }
 
-i4_rgb_pal::i4_rgb_pal(i4_pixel_format *source_fmt)
+i4_rgb_pal::i4_rgb_pal(i4_pixel_format * source_fmt)
 {
 	source=*source_fmt;
 	source.lookup=0;
 }
 
-i4_bool i4_rgb_pal::can_convert(const i4_pixel_format *source_fmt,
-								const i4_pixel_format *dest_fmt) const
+i4_bool i4_rgb_pal::can_convert(const i4_pixel_format * source_fmt,
+								const i4_pixel_format * dest_fmt) const
 {
 	if ((source_fmt->pixel_depth == I4_32BIT ||
 		 source_fmt->pixel_depth==I4_24BIT||
@@ -165,7 +165,7 @@ i4_bool i4_rgb_pal::can_convert(const i4_pixel_format *source_fmt,
 }
 
 i4_color i4_rgb_pal::convert(const i4_color source_pixel,
-							 const i4_pixel_format *dest) const
+							 const i4_pixel_format * dest) const
 {
 	w32 argb = source_pixel;
 
@@ -184,12 +184,13 @@ i4_color i4_rgb_pal::convert(const i4_color source_pixel,
 
 
 
-i4_pal *i4_pal_manager_class::register_pal(i4_pixel_format *format)
+i4_pal * i4_pal_manager_class::register_pal(i4_pixel_format * format)
 {
 	i4_pixel_format dest;
+
 	dest.default_format();
 
-	i4_pal *p;
+	i4_pal * p;
 
 	i4_isl_list<i4_pal>::iterator i;
 	for (i=pal_list.begin(); i!=pal_list.end(); ++i)
@@ -237,13 +238,13 @@ i4_pal *i4_pal_manager_class::register_pal(i4_pixel_format *format)
 		format->pixel_depth == I4_4BIT ||
 		format->pixel_depth == I4_2BIT)
 	{
-		i4_lookup_pal *l= new i4_lookup_pal(format);
+		i4_lookup_pal * l= new i4_lookup_pal(format);
 		pal_list.insert(*l);
 		p=l;
 	}
 	else
 	{
-		i4_rgb_pal *l= new i4_rgb_pal(format);
+		i4_rgb_pal * l= new i4_rgb_pal(format);
 		pal_list.insert(*l);
 		p=l;
 	}
@@ -254,6 +255,7 @@ i4_pal *i4_pal_manager_class::register_pal(i4_pixel_format *format)
 void i4_pal_manager_class::init()
 {
 	i4_pixel_format d;
+
 	d.default_format();
 
 	def32=register_pal(&d);
@@ -279,24 +281,24 @@ void i4_pal_manager_class::uninit()
 //PG: bugfix: in the following two methods, def_na_24 and def32 were the wrong way round
 //Must check wheter this change affects some windows.
 i4_color i4_pal_manager_class::convert_24_to(i4_color c,
-											 const i4_pixel_format *dest_format) const
+											 const i4_pixel_format * dest_format) const
 {
 	return def_na_24->convert(c,dest_format);
 }
 
 i4_color i4_pal_manager_class::convert_32_to(i4_color c,
-											 const i4_pixel_format *dest_format) const
+											 const i4_pixel_format * dest_format) const
 {
 	return def32->convert(c, dest_format);
 }
 
 i4_color i4_pal_manager_class::convert_to_24(i4_color c,
-											 const i4_pal *source_format) const
+											 const i4_pal * source_format) const
 {
 	return source_format->convert(c, &def_na_24->source);
 }
 
-i4_color i4_pal_manager_class::convert_to_32(i4_color c, const i4_pal *source_format)
+i4_color i4_pal_manager_class::convert_to_32(i4_color c, const i4_pal * source_format)
 const
 {
 	return source_format->convert(c, &def32->source);

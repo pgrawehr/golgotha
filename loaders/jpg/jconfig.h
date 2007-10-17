@@ -23,13 +23,13 @@
 
 //#define USE_MSDOS_MEMMGR	/* Define this if you use jmemdos.c */
 
-#define MAX_ALLOC_CHUNK 65520L	/* Maximum request to malloc() */
+#define MAX_ALLOC_CHUNK 65520L  /* Maximum request to malloc() */
 
-#define USE_FMEM		/* Microsoft has _fmemcpy() and _fmemset() */
+#define USE_FMEM        /* Microsoft has _fmemcpy() and _fmemset() */
 
-#define NEED_FHEAPMIN		/* far heap management routines are broken */
+#define NEED_FHEAPMIN       /* far heap management routines are broken */
 
-#define SHORTxLCONST_32		/* enable compiler-specific DCT optimization */
+#define SHORTxLCONST_32     /* enable compiler-specific DCT optimization */
 /* Note: the above define is known to improve the code with Microsoft C 6.00A.
  * I do not know whether it is good for later compiler versions.
  * Please report any info on this point to jpeg-info@uunet.uu.net.
@@ -43,13 +43,13 @@
 //#define GIF_SUPPORTED		/* GIF image file format */
 //#define PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */
 //#undef RLE_SUPPORTED		/* Utah RLE image file format */
-#define TARGA_SUPPORTED		/* Targa image file format */
+#define TARGA_SUPPORTED     /* Targa image file format */
 
 #define TWO_FILE_COMMANDLINE
-#define USE_SETMODE		/* Microsoft has setmode() */
+#define USE_SETMODE     /* Microsoft has setmode() */
 //#define NEED_SIGNAL_CATCHER	/* Define this if you use jmemdos.c */
 #undef DONT_USE_B_MODE
-#undef PROGRESS_REPORT		/* optional */
+#undef PROGRESS_REPORT      /* optional */
 
 #endif /* JPEG_CJPEG_DJPEG */
 

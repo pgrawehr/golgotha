@@ -23,7 +23,7 @@ template <class T>
 class i4_fixed_array
 {
 protected:
-	T *entry;
+	T * entry;
 	int entries;
 public:
 
@@ -80,13 +80,13 @@ public:
 	}
 
 
-	void sort(int (*compar)(const T *, const T *))
+	void sort(int (* compar)(const T *, const T *))
 	{
-		typedef int (*compare_type)(const void *x, const void *y);
+		typedef int (*compare_type)(const void * x, const void * y);
 		qsort(entry, size(), sizeof(T), (compare_type)compar);
 	}
 
-	int binary_search(const T *find, int (*compar)(const T *a, const T *b))
+	int binary_search(const T * find, int (* compar)(const T * a, const T * b))
 	{
 		if (size()==0)
 		{

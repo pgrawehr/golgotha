@@ -69,7 +69,8 @@ void CALLBACK win32_timer_callback(UINT id, UINT msg, DWORD user, DWORD dw1, DWO
 
 void i4_time_device_class::callback(w32 user)
 {
-	timed_event *got_event=(timed_event *)(user);
+	timed_event * got_event=(timed_event *)(user);
+
 	got_event->send_to->receive_event(got_event->event);
 
 	if (got_event==&*i4_time_dev.events.begin())
@@ -93,8 +94,8 @@ void i4_time_device_class::callback(w32 user)
 }
 
 // who to send the event to
-i4_time_device_class::id i4_time_device_class::request_event(i4_event_handler_class *send_to,
-															 i4_event *event, // what event to send
+i4_time_device_class::id i4_time_device_class::request_event(i4_event_handler_class * send_to,
+															 i4_event * event, // what event to send
 															 w32 milli_wait) // how much time to wait (in milli-seconds)
 {
 	// first make sure this is not an event that needs to be sent right now
@@ -104,7 +105,7 @@ i4_time_device_class::id i4_time_device_class::request_event(i4_event_handler_cl
 		i4_error("Cannot send NOW events throught the time device!");
 	}
 
-	timed_event *ev=new timed_event(send_to,event,milli_wait);
+	timed_event * ev=new timed_event(send_to,event,milli_wait);
 	events.insert(*ev);
 	ev->win32_timer_id=timeSetEvent(milli_wait,0,
 									win32_timer_callback,

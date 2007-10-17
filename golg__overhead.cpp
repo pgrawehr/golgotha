@@ -25,7 +25,7 @@
 static i4_profile_class pf_draw_overhead("draw_overhead");
 static g1_model_ref lock_own("lock_own");
 
-void g1_object_controller_class::draw_overhead(g1_draw_context_class *context)
+void g1_object_controller_class::draw_overhead(g1_draw_context_class * context)
 {
 //  w32 i;
 	pf_draw_overhead.start();
@@ -33,7 +33,7 @@ void g1_object_controller_class::draw_overhead(g1_draw_context_class *context)
 #if 0
 	i4_polygon_class vp;
 
-	g1_camera_info_struct *camera=view.get_camera();
+	g1_camera_info_struct * camera=view.get_camera();
 
 	if (view.get_view_mode()==G1_ACTION_MODE)
 	{
@@ -179,7 +179,7 @@ void g1_object_controller_class::draw_overhead(g1_draw_context_class *context)
 	get_map()->fast_draw_cells(context, cell_list, t_vis);
 #endif
 	//r1_far_clip_z=250.0;
-	g1_camera_info_struct *camera=view.get_camera();
+	g1_camera_info_struct * camera=view.get_camera();
 
 	if (g1_hurt_tint>0)
 	{

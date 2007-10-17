@@ -30,7 +30,7 @@ public:
 	void init()
 	{
 		HMODULE OurModule = GetModuleHandle(0);
-		BYTE *pBaseOfImage = 0;
+		BYTE * pBaseOfImage = 0;
 
 		if ( (GetVersion() & 0xC0000000) == 0x80000000)
 		{
@@ -38,9 +38,9 @@ public:
 			HMODULE Win32sKernel = GetModuleHandle("W32SKRNL.DLL");
 
 			typedef DWORD __stdcall translator (DWORD);
-			translator *pImteFromHModule =
+			translator * pImteFromHModule =
 				(translator *) GetProcAddress(Win32sKernel, "_ImteFromHModule@4");
-			translator *pBaseAddrFromImte =
+			translator * pBaseAddrFromImte =
 				(translator *) GetProcAddress(Win32sKernel, "_BaseAddrFromImte@4");
 
 			if (pImteFromHModule && pBaseAddrFromImte)
@@ -58,9 +58,9 @@ public:
 
 		if (pBaseOfImage)
 		{
-			IMAGE_OPTIONAL_HEADER *pHeader = (IMAGE_OPTIONAL_HEADER *)
-											 (pBaseOfImage + ( (IMAGE_DOS_HEADER *) pBaseOfImage)->e_lfanew +
-											  sizeof(IMAGE_NT_SIGNATURE) + sizeof(IMAGE_FILE_HEADER));
+			IMAGE_OPTIONAL_HEADER * pHeader = (IMAGE_OPTIONAL_HEADER *)
+											  (pBaseOfImage + ( (IMAGE_DOS_HEADER *) pBaseOfImage)->e_lfanew +
+											   sizeof(IMAGE_NT_SIGNATURE) + sizeof(IMAGE_FILE_HEADER));
 
 			DWORD OldRights;
 

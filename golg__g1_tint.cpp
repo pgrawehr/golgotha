@@ -31,7 +31,7 @@ g1_tint_struct g1_hurt_tint_data[G1_NUM_HURT_TINTS] =
 };
 r1_color_tint_handle g1_hurt_tint_handles[G1_NUM_HURT_TINTS];
 
-void g1_init_color_tints(r1_render_api_class *api)
+void g1_init_color_tints(r1_render_api_class * api)
 {
 	int i;
 

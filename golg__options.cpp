@@ -24,8 +24,8 @@ i4_event_handler_reference_class<g1_option_window> g1_options_window;
 void g1_option_window::add_buttons()
 {
 	int i;
-	i4_button_box_class *visbox=new i4_button_box_class(this);
-	i4_button_class *vi[3];
+	i4_button_box_class * visbox=new i4_button_box_class(this);
+	i4_button_class * vi[3];
 
 	vi[0]=create_button(i4gets("vis_low_help"),
 						g1_resource_class::OPTIONS_VIS_LOW, 0, VIS_LOW);
@@ -46,7 +46,7 @@ void g1_option_window::add_buttons()
 	visbox->resize_to_fit_children();
 
 
-	i4_button_box_class *pixelbox=0;
+	i4_button_box_class * pixelbox=0;
 	if (g1_render.r_api->expand_type_supported(R1_COPY_2x2) ||
 		g1_render.r_api->expand_type_supported(R1_COPY_1x1_SCANLINE_SKIP))
 	{
@@ -83,34 +83,34 @@ void g1_option_window::add_buttons()
 		x+=pixelbox->width()+5;
 	}
 
-	i4_button_class *sound_but=create_button(i4gets("3d/2d_sound_help"),
-											 g1_resource_class::OPTIONS_SOUND,
-											 &sound_image_win, SOUND);
+	i4_button_class * sound_but=create_button(i4gets("3d/2d_sound_help"),
+											  g1_resource_class::OPTIONS_SOUND,
+											  &sound_image_win, SOUND);
 	add_child(x,y, sound_but);
 	x+=sound_but->width();
 
 #if 0
-	i4_button_class *shadow_but=create_button(i4gets("shadows_help"),
-											  g1_enable_shadows ?
-											  g1_resource_class::OPTIONS_SHADOWS_ON :
-											  g1_resource_class::OPTIONS_SHADOWS_OFF,
-											  &shadow_image_win, SHADOWS);
+	i4_button_class * shadow_but=create_button(i4gets("shadows_help"),
+											   g1_enable_shadows ?
+											   g1_resource_class::OPTIONS_SHADOWS_ON :
+											   g1_resource_class::OPTIONS_SHADOWS_OFF,
+											   &shadow_image_win, SHADOWS);
 	shadow_but->set_popup(i4_T);
 
 	add_child(x,y, shadow_but);
 	x+=shadow_but->width();
 #endif
 
-	i4_button_class *gamespeed_but=create_button(i4gets("gamespeed_help"),
-												 g1_resource_class::OPTIONS_GAME_SPEED, 0,
-												 GAME_SPEED);
+	i4_button_class * gamespeed_but=create_button(i4gets("gamespeed_help"),
+												  g1_resource_class::OPTIONS_GAME_SPEED, 0,
+												  GAME_SPEED);
 	add_child(x,y, gamespeed_but);
 	x+=gamespeed_but->width();
 
 }
 g1_option_window::g1_option_window(w16 w, w16 h,
-								   i4_event_handler_class *notify,
-								   i4_graphical_style_class *style)
+								   i4_event_handler_class * notify,
+								   i4_graphical_style_class * style)
 	: i4_parent_window_class(w,h),
 	  notify(notify),
 	  style(style)
@@ -131,7 +131,7 @@ g1_option_window::g1_option_window(w16 w, w16 h,
 }
 
 
-g1_option_window::g1_option_window(i4_graphical_style_class *style)
+g1_option_window::g1_option_window(i4_graphical_style_class * style)
 	: i4_parent_window_class(0,0),
 	  style(style)
 {
@@ -165,22 +165,23 @@ void g1_option_window::forget_redraw()
 
 }
 
-i4_button_class *g1_option_window::create_button(const i4_const_str &help,
-												 int im1,
-												 i4_event_handler_reference_class<i4_image_window_class> *win_ref,
-												 int mess_id)
+i4_button_class * g1_option_window::create_button(const i4_const_str &help,
+												  int im1,
+												  i4_event_handler_reference_class<i4_image_window_class> * win_ref,
+												  int mess_id)
 {
-	i4_image_class *im=g1_resources.images[im1];
-	i4_image_window_class *im_win=new i4_image_window_class(im);
+	i4_image_class * im=g1_resources.images[im1];
+	i4_image_window_class * im_win=new i4_image_window_class(im);
+
 	if (win_ref)
 	{
 		(*win_ref)=im_win;
 	}
 
-	i4_user_message_event_class *uev=new i4_user_message_event_class(mess_id);
-	i4_event_reaction_class *rev=new i4_event_reaction_class(this, uev);
+	i4_user_message_event_class * uev=new i4_user_message_event_class(mess_id);
+	i4_event_reaction_class * rev=new i4_event_reaction_class(this, uev);
 
-	i4_button_class *b=new i4_button_class(&help, im_win, style, rev);
+	i4_button_class * b=new i4_button_class(&help, im_win, style, rev);
 	return b;
 }
 
@@ -194,6 +195,7 @@ void g1_option_window::parent_draw(i4_draw_context_class &context)
 int g1_option_window::get_correction()
 {
 	int sum=0, x=options_background->width();
+
 	while (x)
 	{
 		x/=2;
@@ -203,7 +205,7 @@ int g1_option_window::get_correction()
 }
 
 
-void g1_option_window::receive_event(i4_event *ev)
+void g1_option_window::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{

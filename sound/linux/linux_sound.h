@@ -43,7 +43,7 @@ enum {
 class linux_sample_class
 {
 public:
-	w8 *data;
+	w8 * data;
 	linux_sound_index sample_rate;
 	linux_sound_index size;
 };
@@ -60,16 +60,16 @@ public:
 	sw16 pan;
 	w16 left_vol,right_vol;
 	i4_bool looping, active;
-	linux_sample_class *sound;
+	linux_sample_class * sound;
 
-	i4_stream_wav_player *stream_man;
+	i4_stream_wav_player * stream_man;
 	float hearable_distance;
 
 	i4_stream_wav_player *stream_manager()
 	{
 		return stream_man;
 	}
-	void set_stream_manager(i4_stream_wav_player *s)
+	void set_stream_manager(i4_stream_wav_player * s)
 	{
 		stream_man = s;
 	}
@@ -94,8 +94,8 @@ public:
 					  void *&block1, w32 &block1_size,
 					  void *&block2, w32 &block2_size);
 
-	virtual void unlock(void *block1, w32 block1_size,
-						void *block2, w32 block2_size);
+	virtual void unlock(void * block1, w32 block1_size,
+						void * block2, w32 block2_size);
 
 	virtual w32 get_sound_position();
 	virtual void set_sound_position(w32 pos);
@@ -119,10 +119,10 @@ public:
 class linux_sound_class :
 	public i4_sound_manager_class
 {
-	friend void *linux_sound_mixer(void *arg);
+	friend void *linux_sound_mixer(void * arg);
 protected:
 	int audio_fd;
-	linux_sample_class *sound;
+	linux_sample_class * sound;
 	linux_voice_class voice[LINUX_SOUND_NUM_VOICE];
 	int thread_state;
 
@@ -144,12 +144,12 @@ public:
 
 	i4_voice_class *alloc(w32 buffer_size, sound_parameters &description);
 
-	i4_voice_class *duplicate_2d(i4_voice_class *voice);
+	i4_voice_class *duplicate_2d(i4_voice_class * voice);
 
 	void set_listener_orientation(i4_float f_x,i4_float f_y,i4_float f_z,
 								  i4_float u_x,i4_float u_y,i4_float u_z);
 
-	virtual void free_voice(i4_voice_class *voice);
+	virtual void free_voice(i4_voice_class * voice);
 
 };
 

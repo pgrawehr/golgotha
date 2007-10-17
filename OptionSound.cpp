@@ -32,7 +32,7 @@ COptionSound::~COptionSound()
 {
 }
 
-void COptionSound::DoDataExchange(CDataExchange *pDX)
+void COptionSound::DoDataExchange(CDataExchange * pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionSound)
@@ -68,8 +68,9 @@ BOOL CALLBACK DSEnumCallback(
 {
 	//Currently, this is only displaying the devices, it has no active
 	//feature
-	CComboBox *cb=(CComboBox *) lpContext;
+	CComboBox * cb=(CComboBox *) lpContext;
 	int index=cb->AddString(lpcstrDescription);
+
 	cb->SetItemData(index,(ULONG) lpGuid);
 	return TRUE;
 }
@@ -146,6 +147,7 @@ BOOL CALLBACK DSCapsProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	DSCAPS DSCaps;
 	UINT dwEntry=0;
 	HRESULT hr;
+
 	switch (message)
 	{
 		case WM_INITDIALOG:
@@ -255,6 +257,7 @@ void COptionSound::OnSoundcapabilities()
 	//BOOL DefaultDevice ;
 	GUID guPreferredDevice;
 	LPGUID lpguTemp;
+
 	lpguTemp = (LPGUID)m_soundcard.GetItemData( m_soundcard.GetCurSel());
 	if( NULL != lpguTemp )
 	{

@@ -24,7 +24,7 @@
 
 g1_sound_manager_class g1_sound_man;
 
-i4_stream_wav_player *g1_music_stream=0;
+i4_stream_wav_player * g1_music_stream=0;
 static int music_count_down=0;
 
 static i4_signal_object m_hmutex("sound_man_lock",1,1);
@@ -56,6 +56,7 @@ g1_sound_manager_class::~g1_sound_manager_class()
 	//CloseHandle(m_hmutex);
 	//if (g1_music_stream) delete g1_music_stream;
 	g1_music_stream=0;
+
 	//m_hmutex=0;
 }
 
@@ -76,7 +77,7 @@ void g1_sound_manager_class::pause()
 {
 	//WaitForSingleObject(m_hmutex,INFINITE);
 	m_hmutex.wait_signal();
-	for (g1_sfx_obj_class *s=sfx_obj_list; s; s=s->next_sfx)
+	for (g1_sfx_obj_class * s=sfx_obj_list; s; s=s->next_sfx)
 	{
 		if (s->stream)
 		{
@@ -96,7 +97,7 @@ void g1_sound_manager_class::unpause()
 {
 	//WaitForSingleObject(m_hmutex,INFINITE);
 	m_hmutex.wait_signal();
-	for (g1_sfx_obj_class *s=sfx_obj_list; s; s=s->next_sfx)
+	for (g1_sfx_obj_class * s=sfx_obj_list; s; s=s->next_sfx)
 	{
 		if (s->stream)
 		{
@@ -119,10 +120,11 @@ inline float dist_comp(i4_3d_vector &a, i4_3d_vector &b)
 
 static int get_music_volume()
 {
-	li_object *music=li_get_value("music");
+	li_object * music=li_get_value("music");
+
 	if (music)
 	{
-		li_class *c=li_class::get(music,0);
+		li_class * c=li_class::get(music,0);
 		return li_get_int(c->value("volume"),0);
 	}
 	else
@@ -134,10 +136,11 @@ static int get_music_volume()
 static void set_music_volume(int vol)
 {
 
-	li_object *music=li_get_value("music");
+	li_object * music=li_get_value("music");
+
 	if (music)
 	{
-		li_class *c=li_class::get(music,0);
+		li_class * c=li_class::get(music,0);
 
 		if (vol>I4_SOUND_VOLUME_LEVELS-1)
 		{
@@ -159,7 +162,7 @@ static void set_music_volume(int vol)
 
 
 //set take_mutex to false ONLY if the calling function already owns it.
-static void restart_song(char *newfn,i4_bool take_mutex=i4_T)
+static void restart_song(char * newfn,i4_bool take_mutex=i4_T)
 //Should be upgraded to be able to read MP3
 {
 	//WaitForSingleObject(m_hmutex,INFINITE);
@@ -183,7 +186,7 @@ static void restart_song(char *newfn,i4_bool take_mutex=i4_T)
 	else
 	{
 
-		i4_file_class *fp=i4_open(fn, I4_SUPPORT_ASYNC | I4_READ);
+		i4_file_class * fp=i4_open(fn, I4_SUPPORT_ASYNC | I4_READ);
 		if (fp)
 		{
 			g1_music_stream=new i4_stream_wav_player(fp, 256*1024, i4_F, i4_T);
@@ -212,17 +215,17 @@ static void restart_song(char *newfn,i4_bool take_mutex=i4_T)
 
 
 
-li_object *g1_set_song(li_object *o, li_environment *env)
+li_object *g1_set_song(li_object * o, li_environment * env)
 {
 	if (o==0)
 	{
 		return 0;
 	}
-	li_class *oldv=li_class::get(li_second(o,env),env);
-	li_class *newv=li_class::get(li_first(o,env),env);
+	li_class * oldv=li_class::get(li_second(o,env),env);
+	li_class * newv=li_class::get(li_first(o,env),env);
 
-	char *oldfn=li_get_string(oldv->value("songs"),env);
-	char *newfn=li_get_string(newv->value("songs"),env);
+	char * oldfn=li_get_string(oldv->value("songs"),env);
+	char * newfn=li_get_string(newv->value("songs"),env);
 
 
 	if (strcmp(oldfn,newfn))
@@ -241,7 +244,7 @@ li_object *g1_set_song(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_edit_music(li_object *o, li_environment *env)
+li_object *g1_edit_music(li_object * o, li_environment * env)
 {
 	li_create_dialog("Music",
 					 li_get_value("music"),
@@ -250,14 +253,14 @@ li_object *g1_edit_music(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_music_up(li_object *o, li_environment *env)
+li_object *g1_music_up(li_object * o, li_environment * env)
 {
 	set_music_volume(get_music_volume()+8);
 	return 0;
 }
 
 
-li_object *g1_music_down(li_object *o, li_environment *env)
+li_object *g1_music_down(li_object * o, li_environment * env)
 {
 	set_music_volume(get_music_volume()-8);
 	return 0;
@@ -271,6 +274,7 @@ li_automatic_add_function(g1_music_down, "music_down");
 void g1_sound_manager_class::poll(i4_bool game_is_running)
 {
 	i4_3d_vector listener;
+
 	if (!i4_sound_man->is_enabled())
 	{
 		return;
@@ -285,7 +289,7 @@ void g1_sound_manager_class::poll(i4_bool game_is_running)
 		return;
 	}
 	s1_get_camera_pos(listener);
-	for (g1_sfx_obj_class *sfx=sfx_obj_list; sfx; sfx=sfx->next_sfx)
+	for (g1_sfx_obj_class * sfx=sfx_obj_list; sfx; sfx=sfx->next_sfx)
 	{
 		sfx->dist_from_camera_sqrd=(sfx->x - listener.x) * (sfx->x - listener.x) +
 									(sfx->y - listener.y) * (sfx->y - listener.y) +
@@ -304,12 +308,12 @@ void g1_sound_manager_class::poll(i4_bool game_is_running)
 			}
 			else
 			{
-				li_object *music=li_get_value("music");
+				li_object * music=li_get_value("music");
 				if (music)
 				{
-					li_class *c=li_class::get(music,0);
-					li_object *list=li_cdr(li_class_get_property_list(c->type(), li_get_symbol("songs")),0), *o;
-					li_object *cur_song=c->value("songs");
+					li_class * c=li_class::get(music,0);
+					li_object * list=li_cdr(li_class_get_property_list(c->type(), li_get_symbol("songs")),0), * o;
+					li_object * cur_song=c->value("songs");
 
 					for (o=list; o && li_car(o,0)!=cur_song; o=li_cdr(o,0))
 					{
@@ -356,7 +360,7 @@ void g1_sound_manager_class::poll(i4_bool game_is_running)
 			}
 		}
 
-		for (g1_sfx_obj_class *s=sfx_obj_list; s; s=s->next_sfx)
+		for (g1_sfx_obj_class * s=sfx_obj_list; s; s=s->next_sfx)
 		{
 			if (s->stream)
 			{
@@ -384,7 +388,7 @@ void g1_sound_manager_class::poll(i4_bool game_is_running)
 				{
 					if (i4_sound_man!=&i4_null_sound)
 					{
-						i4_file_class *fp=i4_open(*s->filename, I4_READ | I4_SUPPORT_ASYNC | I4_NO_BUFFER);
+						i4_file_class * fp=i4_open(*s->filename, I4_READ | I4_SUPPORT_ASYNC | I4_NO_BUFFER);
 						if (!fp)
 						{
 							i4_filename_struct fs;
@@ -435,15 +439,16 @@ void g1_sound_manager_class::poll(i4_bool game_is_running)
 	m_hmutex.signal();
 }
 
-void g1_sound_manager_class::add_sfx_to_list(g1_sfx_obj_class *sfx)
+void g1_sound_manager_class::add_sfx_to_list(g1_sfx_obj_class * sfx)
 {
 	sfx->next_sfx=sfx_obj_list;
 	sfx_obj_list=sfx;
 }
 
-void g1_sound_manager_class::remove_sfx_from_list(g1_sfx_obj_class *sfx)
+void g1_sound_manager_class::remove_sfx_from_list(g1_sfx_obj_class * sfx)
 {
-	g1_sfx_obj_class *last=0, *p;
+	g1_sfx_obj_class * last=0, * p;
+
 	for (p=sfx_obj_list; p && p!=sfx;)
 	{
 		last=p;
@@ -463,14 +468,15 @@ void g1_sound_manager_class::remove_sfx_from_list(g1_sfx_obj_class *sfx)
 
 
 
-li_object *g1_list_sfx(li_object *o, li_environment *env)
+li_object *g1_list_sfx(li_object * o, li_environment * env)
 {
-	i4_file_class *fp=i4_open("sfx_list.txt", I4_WRITE);
+	i4_file_class * fp=i4_open("sfx_list.txt", I4_WRITE);
+
 	if (fp)
 	{
 		s1_save_sfx_list(fp);
 
-		for (g1_sfx_obj_class *s=g1_sound_man.sfx_obj_list; s; s=s->next_sfx)
+		for (g1_sfx_obj_class * s=g1_sound_man.sfx_obj_list; s; s=s->next_sfx)
 		{
 			char fname[256];
 			i4_os_string(*s->filename, fname, 256);
@@ -504,7 +510,7 @@ public:
 
 
 
-static li_object *next_song(li_object *o, li_environment *env)
+static li_object *next_song(li_object * o, li_environment * env)
 {
 	g1_sound_man.next_song();
 	return 0;

@@ -32,9 +32,9 @@ class i4_event_handler_private_reference_class
 {
 protected:
 	friend class i4_event_handler_class;
-	i4_event_handler_class *ref;
-	i4_event_handler_private_reference_class *next;
-	void reference(i4_event_handler_class *who);    // if who is 0, then reference is destroyed
+	i4_event_handler_class * ref;
+	i4_event_handler_private_reference_class * next;
+	void reference(i4_event_handler_class * who);    // if who is 0, then reference is destroyed
 	void destroy_ref();
 public:
 	i4_event_handler_private_reference_class()
@@ -56,7 +56,7 @@ public:
 	{
 		return (T *)ref;
 	}
-	void reference(T *r)
+	void reference(T * r)
 	{
 		i4_event_handler_private_reference_class::reference((i4_event_handler_class *)r);
 	}
@@ -65,7 +65,7 @@ public:
 	{
 		return *((T *)ref);
 	}
-	T *operator->() const
+	T * operator->() const
 	{
 		return (T *)ref;
 	}
@@ -75,7 +75,7 @@ public:
 		return *this;
 	}
 
-	i4_event_handler_reference_class<T>& operator=(const T *ref)
+	i4_event_handler_reference_class<T>& operator=(const T * ref)
 	{
 		i4_event_handler_private_reference_class::reference((i4_event_handler_class *)ref);
 		return *this;
@@ -88,7 +88,7 @@ public:
 class i4_event_handler_class
 {
 	friend class i4_event_handler_private_reference_class;
-	i4_event_handler_private_reference_class *first;
+	i4_event_handler_private_reference_class * first;
 public:
 	w16 call_stack_counter;                 // this ensures we are not deleted while running
 
@@ -101,7 +101,7 @@ public:
 		call_stack_counter=0;
 		first=0;
 	}
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	{
 		;
 	}
@@ -110,12 +110,12 @@ public:
 	//Although this class is abstract, the following function must not be pure
 	//virtual as it is not always correctly overwritten which result is problems
 	//when the name is used.
-	virtual void name(char *buffer) =0;
+	virtual void name(char * buffer) =0;
 	//{return ("i4_event_handler_class");};
 
 protected:
 	static const int MAX_NAME_BUFFER_SIZE=128;
-	void static_name(char *buffer, const char *str)
+	void static_name(char * buffer, const char * str)
 	{
 		strncpy(buffer,str,MAX_NAME_BUFFER_SIZE);
 		buffer[MAX_NAME_BUFFER_SIZE-1]=0;
@@ -130,17 +130,17 @@ class i4_event_reaction_class
 {
 public:
 	i4_event_handler_reference_class<i4_event_handler_class> handler_reference;
-	i4_event *event;
+	i4_event * event;
 
 	i4_event_reaction_class()
 	{
 		event=0;
 	}
 
-	i4_event_reaction_class(i4_event_handler_class *handler,
-							i4_event *event);
+	i4_event_reaction_class(i4_event_handler_class * handler,
+							i4_event * event);
 
-	i4_event_reaction_class(i4_event_handler_class *handler, w32 user_message_id);
+	i4_event_reaction_class(i4_event_handler_class * handler, w32 user_message_id);
 
 	i4_event_reaction_class *copy();
 	~i4_event_reaction_class();
@@ -153,10 +153,10 @@ class i4_device_class :
 	public i4_event_handler_class
 {
 protected:
-	i4_device_class *dev_list;
+	i4_device_class * dev_list;
 
 public:
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		;
 	}
@@ -179,9 +179,9 @@ public:
 		FLAG_ALL_EVENTS          = 16383 //Sum of the above (adjust if new events are added)
 	}; //also don't forget to add an entry in the enum of device/kernel.h!
 	typedef w32 device_flags;
-	i4_device_class *next;
+	i4_device_class * next;
 
-	void send_event_to_agents(i4_event *ev, device_flags receive_types);
+	void send_event_to_agents(i4_event * ev, device_flags receive_types);
 	i4_device_class();
 
 	// ************* Implement these functions for each device *******************

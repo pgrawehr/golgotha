@@ -64,7 +64,7 @@
  */
 
 static int demo_last_tick=0;
-static i4_file_class *record_file=0;
+static i4_file_class * record_file=0;
 static int wait_ticks=0;
 static float camera_dist=0;
 
@@ -80,13 +80,14 @@ static void flush_time()
 
 static i4_bool copy_file(const i4_const_str &f1, const i4_const_str &f2)
 {
-	i4_file_class *in=i4_open(f1);
+	i4_file_class * in=i4_open(f1);
+
 	if (!in)
 	{
 		return i4_F;
 	}
 
-	i4_file_class *out=i4_open(f2, I4_WRITE);
+	i4_file_class * out=i4_open(f2, I4_WRITE);
 	if (!out)
 	{
 		delete in;
@@ -114,7 +115,7 @@ static i4_bool copy_file(const i4_const_str &f1, const i4_const_str &f2)
 
 static int current_demo_num=0;
 
-static li_object *record_toggle(li_object *o, li_environment *env)
+static li_object *record_toggle(li_object * o, li_environment * env)
 {
 	if (record_file)
 	{
@@ -143,18 +144,19 @@ static li_object *record_toggle(li_object *o, li_environment *env)
 				found=0;
 			}
 
-		} while (found);
+		}
+		while (found);
 
 
-		i4_file_class *out=i4_open(demo_name, I4_WRITE);
-		i4_file_class *in=i4_open("demos/tmp_level.level");
+		i4_file_class * out=i4_open(demo_name, I4_WRITE);
+		i4_file_class * in=i4_open("demos/tmp_level.level");
 
-		i4_file_class *sdata[3];
+		i4_file_class * sdata[3];
 		sdata[0]=i4_open("demos/tmp_script.scm");
 		sdata[1]=i4_open("demos/tmp_inputs.gdm");
 		sdata[2]=i4_open("demos/tmp_resources.scm");
 
-		char *snames[3]={
+		char * snames[3]={
 			"script", "inputs", "resources"
 		};
 
@@ -175,13 +177,13 @@ static li_object *record_toggle(li_object *o, li_environment *env)
 	{
 		i4_mkdir("demos");
 
-		i4_str *res_file=g1_get_res_filnename(g1_get_map()->get_filename());
+		i4_str * res_file=g1_get_res_filnename(g1_get_map()->get_filename());
 		if (!copy_file(*res_file, "demos/tmp_resources.scm"))
 		{
 			return 0;
 		}
 
-		i4_file_class *out=i4_open("demos/tmp_level.level", I4_WRITE);
+		i4_file_class * out=i4_open("demos/tmp_level.level", I4_WRITE);
 		if (!out)
 		{
 			i4_warning("Couldn't save initial demo level state!");
@@ -189,7 +191,7 @@ static li_object *record_toggle(li_object *o, li_environment *env)
 		}
 
 
-		g1_saver_class *save=new g1_saver_class(out);
+		g1_saver_class * save=new g1_saver_class(out);
 		g1_get_map()->save(save, G1_MAP_ALL);
 		if (save->begin_data_write())
 		{
@@ -210,7 +212,7 @@ static li_object *record_toggle(li_object *o, li_environment *env)
 	return 0;
 }
 
-void g1_demo_script_add(char *command)
+void g1_demo_script_add(char * command)
 {
 	if (record_file)
 	{
@@ -222,10 +224,10 @@ void g1_demo_script_add(char *command)
 
 
 static li_object_pointer demo_script;
-static g1_object_class *wait_camera=0;
+static g1_object_class * wait_camera=0;
 
 
-static li_object *end_demo(li_object *o, li_environment *env)
+static li_object *end_demo(li_object * o, li_environment * env)
 {
 	if (record_file)
 	{
@@ -240,7 +242,7 @@ static li_object *end_demo(li_object *o, li_environment *env)
 	return 0;
 }
 
-static li_object *play_script(li_object *o, li_environment *env)
+static li_object *play_script(li_object * o, li_environment * env)
 {
 	demo_script=o;
 	wait_ticks=0;
@@ -250,10 +252,10 @@ static li_object *play_script(li_object *o, li_environment *env)
 }
 
 
-static li_object *load_level(li_object *o, li_environment *env)
+static li_object *load_level(li_object * o, li_environment * env)
 {
 	i4_bool load_res=li_get_bool(li_second(o,env),env);
-	char *fn=li_get_string(li_first(o,env),env);
+	char * fn=li_get_string(li_first(o,env),env);
 
 	if (!g1_load_level(fn, load_res, 0))
 	{
@@ -265,10 +267,11 @@ static li_object *load_level(li_object *o, li_environment *env)
 }
 
 
-static li_object *playback_input(li_object *o, li_environment *env)
+static li_object *playback_input(li_object * o, li_environment * env)
 {
-	char *fn=li_get_string(li_first(o,env),env);
-	i4_file_class *fp=i4_open(fn);
+	char * fn=li_get_string(li_first(o,env),env);
+	i4_file_class * fp=i4_open(fn);
+
 	if (!g1_human->playback_start(fp))
 	{
 		i4_warning("Couldn't load stream");
@@ -279,8 +282,8 @@ static li_object *playback_input(li_object *o, li_environment *env)
 		return li_true_sym;
 	}
 }
-extern g1_cwin_man_class *m1_maxtool_man;
-static li_object *play_demo(li_object *o, li_environment *env)
+extern g1_cwin_man_class * m1_maxtool_man;
+static li_object *play_demo(li_object * o, li_environment * env)
 {
 	if (o)
 	{
@@ -305,7 +308,7 @@ static li_object *play_demo(li_object *o, li_environment *env)
 	{
 		//if (loading_window.get())
 		//i4_kernel.delete_handler(loading_window.get());
-		i4_loader_class *lfp=i4_open_save_file(i4_open(demo_name));
+		i4_loader_class * lfp=i4_open_save_file(i4_open(demo_name));
 		if (lfp)
 		{
 			w32 off, size;
@@ -328,7 +331,7 @@ static li_object *play_demo(li_object *o, li_environment *env)
 
 			if (lfp->get_section_info("script", off, size))
 			{
-				i4_file_class *fp=new i4_sub_section_file(i4_open(demo_name), off,size);
+				i4_file_class * fp=new i4_sub_section_file(i4_open(demo_name), off,size);
 				li_load(fp);
 				delete fp;
 			}
@@ -363,7 +366,7 @@ void g1_demo_tick()
 {
 	if (wait_camera)
 	{
-		g1_object_class *c=g1_player_man.get_local()->get_commander();
+		g1_object_class * c=g1_player_man.get_local()->get_commander();
 		if (!c)
 		{
 			wait_camera=0;
@@ -381,13 +384,13 @@ void g1_demo_tick()
 	}
 	else
 	{
-		li_object *script_start=demo_script.get();
-		li_object *script=script_start;
+		li_object * script_start=demo_script.get();
+		li_object * script=script_start;
 
 		while (!wait_camera && !wait_ticks && script)
 		{
 
-			li_object *o=li_car(script, 0);
+			li_object * o=li_car(script, 0);
 			if (o->type()==LI_INT)
 			{
 				wait_ticks=li_get_int(o, 0);
@@ -416,7 +419,7 @@ void g1_demo_tick()
 	}
 }
 
-static li_object *wait_near(li_object *o, li_environment *env)
+static li_object *wait_near(li_object * o, li_environment * env)
 {
 	wait_camera=g1_find_named_camera(li_get_string(li_eval(li_first(o,env),env),env));
 	camera_dist=(float)li_get_float(li_eval(li_second(o,env), env),env);
@@ -435,13 +438,13 @@ static li_object *wait_near(li_object *o, li_environment *env)
    return 0;
    }*/
 
-static li_object *set_game_hz(li_object *o, li_environment *env)
+static li_object *set_game_hz(li_object * o, li_environment * env)
 {
 	G1_HZ=li_get_int(li_car(o,env),env);
 	return 0;
 }
 
-static li_object *quit(li_object *o, li_environment *env)
+static li_object *quit(li_object * o, li_environment * env)
 {
 	i4_error("FATAL: Fatal Error executing lisp-code, quitting.");
 	return 0;

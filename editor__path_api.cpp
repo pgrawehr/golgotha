@@ -25,6 +25,7 @@ int g1_block_map_class::max_fit_NS(int x, int y, g1_compass_direction dir, int m
 		   !is_blocked(x+k,y,dir))
 		k++;
 
+
 	return k;
 }
 
@@ -39,6 +40,7 @@ int g1_block_map_class::max_fit_WE(int x, int y, g1_compass_direction dir, int m
 		   y+k<height() &&
 		   !is_blocked(x,y+k,dir))
 		k++;
+
 
 	return k;
 }
@@ -282,6 +284,7 @@ i4_float g1_block_map_class::line_of_sight(i4_float _x1, i4_float _y1, i4_float 
 		   (max_fit = max_fit_NS(x1,y1-i,g1_compass_direction(xdir|ydir),max_fit))>=i)
 		i++;
 
+
 	max_fit=i-1;
 
 	// initial positions & fractions
@@ -300,6 +303,7 @@ i4_float g1_block_map_class::line_of_sight(i4_float _x1, i4_float _y1, i4_float 
 				while (max_fit_NS(x,y+sy*max_fit,ydir,max_fit)<max_fit)
 					max_fit--;
 
+
 				if (max_fit==0)
 				{
 					return 0;
@@ -312,6 +316,7 @@ i4_float g1_block_map_class::line_of_sight(i4_float _x1, i4_float _y1, i4_float 
 			{
 				while (max_fit_WE(x+sx*max_fit,y,xdir,max_fit)<max_fit)
 					max_fit--;
+
 
 				if (max_fit==0)
 				{
@@ -333,6 +338,7 @@ i4_float g1_block_map_class::line_of_sight(i4_float _x1, i4_float _y1, i4_float 
 				while(max_fit_WE(x+sx*max_fit,y,xdir,max_fit)<max_fit)
 					max_fit--;
 
+
 				if (max_fit==0)
 				{
 					return 0;
@@ -345,6 +351,7 @@ i4_float g1_block_map_class::line_of_sight(i4_float _x1, i4_float _y1, i4_float 
 			{
 				while(max_fit_NS(x,y+sy*max_fit,ydir,max_fit)<max_fit)
 					max_fit--;
+
 
 				if (max_fit==0)
 				{

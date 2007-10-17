@@ -12,16 +12,16 @@
 #include "image/context.h"
 #include <string.h>
 
-r1_render_api_class *r1_render_api_class_instance=0;
+r1_render_api_class * r1_render_api_class_instance=0;
 
 r1_shading_type r1_render_api_class::shade_mode=R1_SHADE_DISABLED;
 r1_alpha_type r1_render_api_class::alpha_mode=R1_ALPHA_DISABLED;
 r1_write_mask_type r1_render_api_class::write_mask=0;
 w32 r1_render_api_class::const_color=0;
-r1_miplevel_t *r1_render_api_class::last_node=0;
-r1_render_api_class *r1_render_api_class::first;
+r1_miplevel_t * r1_render_api_class::last_node=0;
+r1_render_api_class * r1_render_api_class::first;
 r1_filter_type r1_render_api_class::filter_mode=R1_NO_FILTERING;
-i4_draw_context_class *r1_render_api_class::context=0;
+i4_draw_context_class * r1_render_api_class::context=0;
 i4_float r1_render_api_class::r_tint_mul=0;
 i4_float r1_render_api_class::g_tint_mul=0;
 i4_float r1_render_api_class::b_tint_mul=0;
@@ -48,19 +48,20 @@ r1_color_tint_handle r1_render_api_class::register_color_tint(i4_float r, i4_flo
 }
 
 
-void r1_render_api_class::put_image(i4_image_class *im,
+void r1_render_api_class::put_image(i4_image_class * im,
 									int _x, int _y,             // position on screen
 									int x1, int y1,           // area of image to copy
 									int x2, int y2)
 {
 	i4_rect_list_class::area_iter cl;
+
 	if (!context)
 	{
 		copy_part(im, 0,0, 0,0,im->width()-1,im->height()-1);
 		return;
 	}
 
-	i4_rect_list_class *clip=&context->clip;
+	i4_rect_list_class * clip=&context->clip;
 	for (cl = clip->list.begin(); cl != clip->list.end(); ++cl)
 	{
 		int lx1,ly1,lx2,ly2,x=_x,y=_y;
@@ -154,13 +155,14 @@ void r1_render_api_class::set_color_tint(r1_color_tint_handle c)
 }
 
 
-r1_render_api_class *r1_create_api(i4_display_class *for_display, char *name)
+r1_render_api_class *r1_create_api(i4_display_class * for_display, char * name)
 {
 	// It seem to me that compiling order tells which is first
 	// so sometimes software is first, sometimes second
 	// This code is not time critical
-	r1_render_api_class *r=0;
+	r1_render_api_class * r=0;
 	i4_bool cont=i4_T;
+
 	i4_array<r1_render_api_class *> softrenderers(10,10);
 	for (r=r1_render_api_class::first; r; r=r->next)
 	{
@@ -210,7 +212,7 @@ r1_render_api_class *r1_create_api(i4_display_class *for_display, char *name)
 	return 0;
 }
 
-void r1_destroy_api(r1_render_api_class *r)
+void r1_destroy_api(r1_render_api_class * r)
 {
 	if (r)
 	{
@@ -223,7 +225,7 @@ void r1_destroy_api(r1_render_api_class *r)
 	}
 }
 
-i4_bool r1_render_api_class::init(i4_display_class *display)
+i4_bool r1_render_api_class::init(i4_display_class * display)
 {
 	// this should clear out the states and set to a default
 	//tmanagers.resize(0,10);//This could not be initialized until now (Runtime loader buggy?)
@@ -277,7 +279,7 @@ void r1_render_api_class::delete_tmanager(w32 index)
 }
 
 
-void r1_render_api_class::render_sprite(r1_vert *verts)
+void r1_render_api_class::render_sprite(r1_vert * verts)
 {
 	render_poly(4,verts);
 }
@@ -285,6 +287,7 @@ void r1_render_api_class::render_sprite(r1_vert *verts)
 void r1_render_api_class::clear_area(int x1, int y1, int x2, int y2, w32 color, float z)
 {
 	w32 old_const_color=get_constant_color();
+
 	set_constant_color(color);
 
 	r1_shading_type old_shade_mode=get_shade_mode();
@@ -323,7 +326,7 @@ void r1_render_api_class::clear_area(int x1, int y1, int x2, int y2, w32 color, 
 r1_vert tmp_render_poly_verts[128];
 
 // default method
-void r1_render_api_class::render_poly(int t_verts, r1_vert *verts, int *vertex_index)
+void r1_render_api_class::render_poly(int t_verts, r1_vert * verts, int * vertex_index)
 {
 	if (t_verts>128)
 	{
@@ -338,7 +341,7 @@ void r1_render_api_class::render_poly(int t_verts, r1_vert *verts, int *vertex_i
 	render_poly(t_verts, tmp_render_poly_verts);
 }
 
-void r1_render_api_class::render_poly(int t_verts, r1_vert *verts, w16 *vertex_index)
+void r1_render_api_class::render_poly(int t_verts, r1_vert * verts, w16 * vertex_index)
 {
 	if (t_verts>128)
 	{
@@ -359,10 +362,10 @@ i4_float r1_far_clip_z  = 100;
 #define R1_NEXT(i,j) ( (((i)+1)==(j)) ? (0) : ((i)+1) )
 #define R1_PREV(i,j) ( ((i)==(0)) ? ((j)-1) : ((i)-1) )
 
-r1_vert *r1_render_api_class::clip_poly(sw32 *initial_num_vertices,r1_vert *t_vertices,
-										w16 *indices,r1_vert *clip_buf_1,
-										r1_vert *clip_buf_2,
-										w8 flags)
+r1_vert * r1_render_api_class::clip_poly(sw32 * initial_num_vertices,r1_vert * t_vertices,
+										 w16 * indices,r1_vert * clip_buf_1,
+										 r1_vert * clip_buf_2,
+										 w8 flags)
 {
 
 	w32 ORCODE  = 0;
@@ -371,10 +374,10 @@ r1_vert *r1_render_api_class::clip_poly(sw32 *initial_num_vertices,r1_vert *t_ve
 	w32 bitmask;
 	i4_float /*ooz,*/ dx,dy,dz,ds,dt,dr,dg,db,da,t;
 
-	r1_vert *vertices          = clip_buf_1;
+	r1_vert * vertices          = clip_buf_1;
 	sw32 num_vertices      = *initial_num_vertices;
 
-	r1_vert *clip_vertices     = clip_buf_2;
+	r1_vert * clip_vertices     = clip_buf_2;
 	sw32 num_clip_vertices = 0;
 
 	r1_vert clip_point;
@@ -580,10 +583,10 @@ r1_vert *r1_render_api_class::clip_poly(sw32 *initial_num_vertices,r1_vert *t_ve
 	return vertices;
 }
 
-r1_vert *r1_render_api_class::clip_poly(sw32 *initial_num_vertices,r1_vert *t_vertices,
-										w32 *indices,r1_vert *clip_buf_1,
-										r1_vert *clip_buf_2,
-										w8 flags)
+r1_vert * r1_render_api_class::clip_poly(sw32 * initial_num_vertices,r1_vert * t_vertices,
+										 w32 * indices,r1_vert * clip_buf_1,
+										 r1_vert * clip_buf_2,
+										 w8 flags)
 {
 
 	w32 ORCODE  = 0;
@@ -592,10 +595,10 @@ r1_vert *r1_render_api_class::clip_poly(sw32 *initial_num_vertices,r1_vert *t_ve
 	w32 bitmask;
 	i4_float /*ooz,*/ dx,dy,dz,ds,dt,dr,dg,db,da,t;
 
-	r1_vert *vertices          = clip_buf_1;
+	r1_vert * vertices          = clip_buf_1;
 	sw32 num_vertices      = *initial_num_vertices;
 
-	r1_vert *clip_vertices     = clip_buf_2;
+	r1_vert * clip_vertices     = clip_buf_2;
 	sw32 num_clip_vertices = 0;
 
 	r1_vert clip_point;

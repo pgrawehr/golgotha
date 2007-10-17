@@ -27,8 +27,8 @@ class font_win :
 	public i4_window_class
 {
 public:
-	i4_graphical_style_class *style;
-	font_win(i4_graphical_style_class *style)
+	i4_graphical_style_class * style;
+	font_win(i4_graphical_style_class * style)
 		: i4_window_class(500,480),
 		  style(style)
 	{
@@ -37,7 +37,7 @@ public:
 
 	void draw(i4_draw_context_class &context)
 	{
-		i4_font_class *font=style->font_hint->normal_font;
+		i4_font_class * font=style->font_hint->normal_font;
 
 		local_image->clear(0,context);
 		font->set_color(0xffff00);
@@ -73,7 +73,7 @@ public:
 		i4_application_class::init();
 
 
-		i4_graphical_style_class *style=wm->get_style();
+		i4_graphical_style_class * style=wm->get_style();
 
 		wm->add_child(0,50, new font_win(style));
 		/*    i4_window_class *ti=new i4_text_input_class(style, i4_const_str("Testing"), 400, 500);
@@ -88,8 +88,9 @@ public:
 	}
 };
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	test_app test;
+
 	test.run();
 }

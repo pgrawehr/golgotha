@@ -38,6 +38,7 @@ g1_explode_model_def("explode_model");
 inline void check_on_map(const i4_3d_vector &v)
 {
 	int vx=i4_f_to_i(v.x), vy=i4_f_to_i(v.y);
+
 	if (vx<0 || vy<0 || vx>=g1_get_map()->width() || vy>=g1_get_map()->height())
 	{
 		i4_error("off map");
@@ -47,7 +48,7 @@ inline void check_on_map(const i4_3d_vector &v)
 
 
 g1_explode_model_class::g1_explode_model_class(g1_object_type id,
-											   g1_loader_class *fp)
+											   g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 	//does not save or load. too complicated and not really necessary
@@ -58,7 +59,7 @@ g1_explode_model_class::g1_explode_model_class(g1_object_type id,
 	num_faces = 0;
 }
 
-void g1_explode_model_class::save(g1_saver_class *fp)
+void g1_explode_model_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 }
@@ -77,9 +78,9 @@ g1_explode_model_class::~g1_explode_model_class()
 }
 
 
-void g1_explode_model_class::grab_model(g1_object_class *o, i4_3d_vector &obj_center)
+void g1_explode_model_class::grab_model(g1_object_class * o, i4_3d_vector &obj_center)
 {
-	g1_quad_object_class *base_m = o->draw_params.model;
+	g1_quad_object_class * base_m = o->draw_params.model;
 
 	//face/vertex setup. count all the faces and vertices in base and sub-objects
 
@@ -113,16 +114,16 @@ void g1_explode_model_class::grab_model(g1_object_class *o, i4_3d_vector &obj_ce
 	//copy information. this is ugly, has to use transforms
 	//to get everything into world space, etc..
 
-	i4_transform_class base_transform,mini_transform,spare_transform,*cur_transform;
+	i4_transform_class base_transform,mini_transform,spare_transform,* cur_transform;
 
 	//make sure there is a transform ready for the base model
 	o->calc_world_transform(g1_render.frame_ratio, &base_transform);
 
 	cur_transform = &base_transform;
 
-	g1_quad_object_class *m = base_m;
-	g1_explode_face_class *f = faces;
-	g1_explode_vertex_class *v = vertices;
+	g1_quad_object_class * m = base_m;
+	g1_explode_face_class * f = faces;
+	g1_explode_vertex_class * v = vertices;
 
 	sw32 vertex_count = 0;
 	sw32 k = 0;
@@ -132,7 +133,7 @@ void g1_explode_model_class::grab_model(g1_object_class *o, i4_3d_vector &obj_ce
 
 	//  while (m)
 	{
-		g1_vert_class *src_verts=m->get_verts(o->draw_params.animation, o->draw_params.frame);
+		g1_vert_class * src_verts=m->get_verts(o->draw_params.animation, o->draw_params.frame);
 
 		for (i=0; i<m->num_quad; i++, f++)
 		{
@@ -173,7 +174,7 @@ void g1_explode_model_class::grab_model(g1_object_class *o, i4_3d_vector &obj_ce
 	}
 }
 
-void g1_explode_model_class::setup(g1_object_class *source_obj,
+void g1_explode_model_class::setup(g1_object_class * source_obj,
 								   const i4_3d_vector &center,
 								   g1_explode_params &_params)
 {
@@ -232,7 +233,7 @@ void g1_explode_model_class::think()
 
 	for (int i=0; i<num_faces; i++)
 	{
-		g1_explode_face_class *face=faces+i;
+		g1_explode_face_class * face=faces+i;
 
 
 		if (params.stages[params.current_stage].type==G1_APPLY_SING || i==0)
@@ -288,9 +289,9 @@ i4_profile_class pf_exp_model_draw_get_ambient("explode_model_draw::get_ambient"
 
 r1_texture_ref g1_burnt_texture("solid_black");
 
-void fast_transform(i4_transform_class *t, const i4_3d_vector &src, r1_3d_point_class &dst);
+void fast_transform(i4_transform_class * t, const i4_3d_vector &src, r1_3d_point_class &dst);
 
-void g1_explode_model_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_explode_model_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	pf_exp_model_draw.start();
 
@@ -304,17 +305,17 @@ void g1_explode_model_class::draw(g1_draw_context_class *context, i4_3d_vector& 
 	i4_float scale_y = g1_render.scale_y;
 
 	g1_render.ensure_capacity(num_vertices);
-	r1_vert *t_vertices=g1_render.t_vertices;
+	r1_vert * t_vertices=g1_render.t_vertices;
 	//r1_vert clip_buf_1[64];
 	//r1_vert clip_buf_2[64];
 
-	g1_explode_vertex_class *src_v = vertices;
-	r1_vert *v                     = t_vertices;
+	g1_explode_vertex_class * src_v = vertices;
+	r1_vert * v                     = t_vertices;
 
 	w8 ANDCODE = 0xFF;
 	w8 ORCODE  = 0;
 
-	g1_explode_face_class *f = faces;
+	g1_explode_face_class * f = faces;
 
 	w8 vertex_count = 0;
 
@@ -340,8 +341,8 @@ void g1_explode_model_class::draw(g1_draw_context_class *context, i4_3d_vector& 
 		out.multiply(*context->transform,face_trans);
 
 		w8 face_and = 0xFF;
-		g1_explode_vertex_class *src_face_v = src_v;
-		r1_vert *face_v                     = v;
+		g1_explode_vertex_class * src_face_v = src_v;
+		r1_vert * face_v                     = v;
 
 		int tv=faces[i].num_verts();
 		for (j=0; j<tv; j++,src_v++,v++)
@@ -406,7 +407,7 @@ void g1_explode_model_class::draw(g1_draw_context_class *context, i4_3d_vector& 
 
 			for (j=0; j<tv; j++)
 			{
-				r1_vert *temp_vert = &t_vertices[f->indices[j]];
+				r1_vert * temp_vert = &t_vertices[f->indices[j]];
 
 				float ooz = temp_vert->w;
 
@@ -424,7 +425,7 @@ void g1_explode_model_class::draw(g1_draw_context_class *context, i4_3d_vector& 
 
 			r1_vert temp_buf_1[64];
 			r1_vert temp_buf_2[64];
-			r1_vert *clipped_poly;
+			r1_vert * clipped_poly;
 
 			clipped_poly = g1_render.r_api->clip_poly(&num_poly_verts,
 													  t_vertices,
@@ -437,7 +438,7 @@ void g1_explode_model_class::draw(g1_draw_context_class *context, i4_3d_vector& 
 			{
 				float nearest_w = 0;
 
-				r1_vert *temp_vert = clipped_poly;
+				r1_vert * temp_vert = clipped_poly;
 
 				for (j=0; j<num_poly_verts; j++, temp_vert++)
 				{

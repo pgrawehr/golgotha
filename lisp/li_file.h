@@ -20,9 +20,9 @@ class li_file :
 	public li_object
 {
 protected:
-	i4_file_class *fp;
+	i4_file_class * fp;
 public:
-	li_file(i4_file_class *f) :
+	li_file(i4_file_class * f) :
 		li_object(li_file_type),
 		fp(f)
 	{
@@ -38,7 +38,7 @@ public:
 	{
 		return fp;
 	}                                    //don't use references with files
-	void set(i4_file_class *f)
+	void set(i4_file_class * f)
 	{
 		delete fp;
 		fp=f;
@@ -47,7 +47,7 @@ public:
 	{
 		delete fp;
 	}
-	static li_file *get(li_object *o, li_environment *env)
+	static li_file *get(li_object * o, li_environment * env)
 	{
 		check_type(o, li_file_type, env);
 		return ((li_file *)o);

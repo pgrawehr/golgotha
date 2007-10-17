@@ -18,30 +18,30 @@ class i4_text_item_class :
 {
 protected:
 
-	i4_color_hint_class *color;
-	i4_font_class *font;
+	i4_color_hint_class * color;
+	i4_font_class * font;
 
-	i4_str *text;
-	i4_str *check_enable_fn;
+	i4_str * text;
+	i4_str * check_enable_fn;
 	w16 pad_lr;
 
 public:
 	w32 bg_color;
 	i4_text_item_class(
 		const i4_const_str &_text,
-		i4_graphical_style_class *style,
+		i4_graphical_style_class * style,
 
-		i4_color_hint_class *color_hint=0,
-		i4_font_class *font=0,
+		i4_color_hint_class * color_hint=0,
+		i4_font_class * font=0,
 
 
-		i4_event_reaction_class *press=0,
-		i4_event_reaction_class *depress=0,
-		i4_event_reaction_class *activate=0,
-		i4_event_reaction_class *deactivate=0,
+		i4_event_reaction_class * press=0,
+		i4_event_reaction_class * depress=0,
+		i4_event_reaction_class * activate=0,
+		i4_event_reaction_class * deactivate=0,
 		w16 pad_left_right=0,
 		w16 pad_up_down=0,
-		const char *_check_enable_fn=0
+		const char * _check_enable_fn=0
 	);
 	~i4_text_item_class()
 	{
@@ -49,13 +49,13 @@ public:
 		delete check_enable_fn;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"text_item");
 	}
 
 	virtual void parent_draw(i4_draw_context_class &context);
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 	void change_text(const i4_const_str &new_st);
 	i4_const_str get_text()
 	{
@@ -73,8 +73,8 @@ class i4_checkbox_images_class :
 {
 	friend class i4_checkbox_class;
 protected:
-	i4_image_class *checkbox;
-	i4_image_class *radiobox;
+	i4_image_class * checkbox;
+	i4_image_class * radiobox;
 	w32 maxwidth,maxheight;
 public:
 	i4_checkbox_images_class()
@@ -96,7 +96,7 @@ class i4_checkbox_class :
 protected:
 	w32 flags;    //Contains info about type of object (checkbox, radiobutton...)
 	w32 state;    //Checked, unchecked or overriden
-	i4_checkbox_images_class *images;    //reference to the static images
+	i4_checkbox_images_class * images;    //reference to the static images
 public:
 	enum {
 		NONE=0,    //visually same as parent class
@@ -116,20 +116,20 @@ public:
 	i4_checkbox_class(
 		const i4_const_str &_text,
 		w32 _flags,
-		i4_graphical_style_class *style,
+		i4_graphical_style_class * style,
 
-		i4_color_hint_class *color_hint=0,
-		i4_font_class *font=0,
+		i4_color_hint_class * color_hint=0,
+		i4_font_class * font=0,
 
 
-		i4_event_reaction_class *press=0,
-		i4_event_reaction_class *depress=0,
-		i4_event_reaction_class *activate=0,
-		i4_event_reaction_class *deactivate=0,
+		i4_event_reaction_class * press=0,
+		i4_event_reaction_class * depress=0,
+		i4_event_reaction_class * activate=0,
+		i4_event_reaction_class * deactivate=0,
 		w16 pad_left_right=0,
 		w16 pad_up_down=0
 	);
-	virtual void name(char *buffer)
+	virtual void name(char * buffer)
 	{
 		static_name(buffer,"Checkbox");
 	};
@@ -166,7 +166,7 @@ public:
 	}
 	virtual void parent_draw(i4_draw_context_class &context);
 	virtual void toggle_state();
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 	virtual i4_menu_item_class *copy()
 	{
 		return new i4_checkbox_class(*text, flags, hint, color, font,

@@ -15,7 +15,7 @@ class g1_buster_rocket_class :
 	public g1_guided_missile_class
 {
 public:
-	g1_buster_rocket_class(g1_object_type id, g1_loader_class *fp);
+	g1_buster_rocket_class(g1_object_type id, g1_loader_class * fp);
 
 	virtual void add_smoke();
 	virtual void update_smoke();

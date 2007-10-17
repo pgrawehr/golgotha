@@ -45,13 +45,14 @@ public:
 	w8 flags;
 	sw8 num_mip_levels;
 
-	void write(i4_file_class *f);
-	void read(i4_file_class *f);
+	void write(i4_file_class * f);
+	void read(i4_file_class * f);
 };
 
 inline sw32 tex_cache_header_disk_size()
 {
 	i4_pixel_format blah;
+
 	return (blah.write(0) * 3 + 4*4);
 }
 
@@ -75,9 +76,9 @@ public:
 	w32 flags;
 
 	//not written
-	tex_cache_entry_t *entries;
-	void read(i4_file_class *f);
-	void write(i4_file_class *f);
+	tex_cache_entry_t * entries;
+	void read(i4_file_class * f);
+	void write(i4_file_class * f);
 };
 
 #endif

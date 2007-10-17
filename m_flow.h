@@ -33,14 +33,14 @@ public:
 	enum {
 		CAMERA, TARGET, OBJECT, T_PATHS
 	};
-	i4_spline_class *paths[3];
+	i4_spline_class * paths[3];
 
 
 
 	w32 t_frames;            // frames in cut scene
 
-	i4_str *wave_file;       // sound effect to play at the begining of cut scene
-	i4_str *name;            // name of cut scene to show in editor
+	i4_str * wave_file;       // sound effect to play at the begining of cut scene
+	i4_str * name;            // name of cut scene to show in editor
 
 	void move(i4_float x_add, i4_float y_add, i4_float z_add);
 
@@ -55,7 +55,7 @@ public:
 
 	}
 
-	g1_cut_scene_class(g1_loader_class *fp, w16 ver);
+	g1_cut_scene_class(g1_loader_class * fp, w16 ver);
 
 	w32 total_frames()
 	{
@@ -88,7 +88,7 @@ public:
 		}
 	}
 
-	void save(g1_saver_class *fp);
+	void save(g1_saver_class * fp);
 
 };
 
@@ -100,7 +100,7 @@ class g1_movie_flow_class
 	enum {
 		MAX_SCORES=4
 	};                    // maximum streaming sounds that can be played at the same time
-	i4_stream_wav_player *scores[4];
+	i4_stream_wav_player * scores[4];
 
 	void poll_scores();   // called by advance_movie_with_time
 
@@ -112,7 +112,7 @@ public:
 		MESSAGE_FRAME_CHANGED, MESSAGE_SCENE_CHANGED, MESSAGE_MOVIE_STOPPED
 	};
 
-	g1_cut_scene_class **set;
+	g1_cut_scene_class * * set;
 
 	w32 t_cut_scenes;
 
@@ -148,7 +148,7 @@ public:
 
 	~g1_movie_flow_class();
 
-	void save(g1_saver_class *fp);
+	void save(g1_saver_class * fp);
 
 	enum advance_status {
 		DONE, NEXT_SCENE, PLAYING
@@ -159,11 +159,11 @@ public:
 	void stop();  // should be called whan a movie is done playing
 };
 
-g1_movie_flow_class *g1_load_movie_flow(g1_loader_class *fp);
+g1_movie_flow_class *g1_load_movie_flow(g1_loader_class * fp);
 
 
-extern i4_event_reaction_class *g1_frame_change_notify,
-*g1_scene_change_notify, *g1_movie_stop_notify;
+extern i4_event_reaction_class * g1_frame_change_notify,
+* g1_scene_change_notify, * g1_movie_stop_notify;
 
 
 #endif

@@ -20,7 +20,7 @@
 
 
 
-void write_header(i4_file_class *fp, i4_sound_info &fmt)
+void write_header(i4_file_class * fp, i4_sound_info &fmt)
 {
 	fp->write("RIFF",4);
 	fp->write_32(36+fmt.size);     // 36 + snd->size
@@ -44,13 +44,13 @@ void write_header(i4_file_class *fp, i4_sound_info &fmt)
 
 }
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	i4_init();
 
 
-	i4_file_class *in=i4_open("in.mp3");
-	i4_file_class *out=i4_open("out.wav", I4_WRITE);
+	i4_file_class * in=i4_open("in.mp3");
+	i4_file_class * out=i4_open("out.wav", I4_WRITE);
 
 	i4_sound_info fmt;
 //   fmt.channels=2;
@@ -61,7 +61,7 @@ void i4_main(w32 argc, i4_const_str *argv)
 	write_header(out, fmt);
 	int header_size=out->tell();
 
-	i4_status_class *status=i4_create_status("decoding");
+	i4_status_class * status=i4_create_status("decoding");
 
 	if (i4_load_mp3(in, out, fmt, status))
 	{

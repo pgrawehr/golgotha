@@ -24,12 +24,12 @@ static char THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNAMIC(COptionsheet, CPropertySheet)
 
-COptionsheet::COptionsheet(UINT nIDCaption, CWnd *pParentWnd, UINT iSelectPage)
+COptionsheet::COptionsheet(UINT nIDCaption, CWnd * pParentWnd, UINT iSelectPage)
 	: CPropertySheet(nIDCaption, pParentWnd, iSelectPage)
 {
 }
 
-COptionsheet::COptionsheet(LPCTSTR pszCaption, CWnd *pParentWnd, UINT iSelectPage)
+COptionsheet::COptionsheet(LPCTSTR pszCaption, CWnd * pParentWnd, UINT iSelectPage)
 	: CPropertySheet(pszCaption, pParentWnd, iSelectPage)
 {
 	AddPage(&graphics);
@@ -46,6 +46,7 @@ BOOL COptionsheet::OnInitDialog()
 {
 	//graphics.OnInitDialog();
 	BOOL bresult=CPropertySheet::OnInitDialog();
+
 	return bresult;
 }
 

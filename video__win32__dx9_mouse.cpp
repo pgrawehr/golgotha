@@ -24,7 +24,7 @@ dx9_mouse_class::dx9_mouse_class(i4_bool page_flipped)
 
 }
 
-void dx9_mouse_class::set_cursor(i4_cursor_class *c)
+void dx9_mouse_class::set_cursor(i4_cursor_class * c)
 {
 
 
@@ -33,7 +33,7 @@ void dx9_mouse_class::set_cursor(i4_cursor_class *c)
 		int cw=c->pict->width(), ch=c->pict->height();
 
 		i4_draw_context_class context(0,0, cw-1, ch-1);
-		i4_dx9_image_class *dx9_image=(i4_dx9_image_class *)cursor.pict;
+		i4_dx9_image_class * dx9_image=(i4_dx9_image_class *)cursor.pict;
 		if ((!cursor.pict)||(cw!=cursor.pict->width())||ch!=cursor.pict->height())
 		{
 			delete cursor.pict;
@@ -124,7 +124,7 @@ void dx9_mouse_class::save_and_draw(int x, int y)
 
 
 	RECT src;
-	i4_display_class *disp=i4_current_app->get_display();
+	i4_display_class * disp=i4_current_app->get_display();
 	//PG: Not having these two conditions allows the cursor
 	//to move all the way to the right or bottom of the screen,
 	//but may cause trouble with the BltFast operation
@@ -176,8 +176,8 @@ void dx9_mouse_class::save_and_draw(int x, int y)
 	{
 		w16 c16;
 		w32 c32;
-		w16 *d,*s;
-		w32 *d2,*s2;
+		w16 * d,* s;
+		w32 * d2,* s2;
 		if (sfcby==2)
 		{
 			for (xp=0; xp<cwidth; xp++)
@@ -250,9 +250,9 @@ void dx9_mouse_class::restore()
 		int yp;
 		for (yp=0; yp<cursor.pict->height(); yp++)
 		{
-			w8 *dest=yp*linelen+(w8 *)lock.pBits;
+			w8 * dest=yp*linelen+(w8 *)lock.pBits;
 			int bytes=sfcby*cursor.pict->width();
-			w8 *src=current.save_buffer->data+yp*bytes;
+			w8 * src=current.save_buffer->data+yp*bytes;
 			memcpy(dest,src,bytes);
 		}
 		//This code is for testing only.
@@ -270,10 +270,11 @@ void dx9_mouse_class::restore()
 	}
 }
 
-void dx9_mouse_class::add_dirty_area(i4_draw_context_class *context)
+void dx9_mouse_class::add_dirty_area(i4_draw_context_class * context)
 {
 	int mouse_x=current.x;
 	int mouse_y=current.y;
+
 	context->both_dirty->add_area(mouse_x,mouse_y,
 								  mouse_x+cursor.pict->width(),mouse_y+cursor.pict->height());
 	i4_rect_list_class::area_iter cl;

@@ -37,9 +37,9 @@
 #include "team_api.h"
 #include "transport/transport.h"
 
-void g1_map_class::save_objects(g1_saver_class *out)
+void g1_map_class::save_objects(g1_saver_class * out)
 {
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=make_object_list(olist, G1_MAX_OBJECTS), ttypes=0, i;
 
 	out->set_helpers(olist, t);
@@ -52,7 +52,7 @@ void g1_map_class::save_objects(g1_saver_class *out)
 	{
 		if (g1_object_type_array[i])
 		{
-			const char *name=g1_object_type_array[i]->name();
+			const char * name=g1_object_type_array[i]->name();
 			int len=strlen(name)+1;
 			out->write_16(len);
 			out->write((void *)name,len);
@@ -90,7 +90,7 @@ void g1_map_class::save_objects(g1_saver_class *out)
 	}
 }
 
-void g1_map_class::save(g1_saver_class *out, w32 sections)
+void g1_map_class::save(g1_saver_class * out, w32 sections)
 {
 	w32 i,tobjs=0;
 
@@ -101,8 +101,8 @@ void g1_map_class::save(g1_saver_class *out, w32 sections)
 		//Don't write first entry (is always 0)
 		for (i=1; i<g1_tile_man.total(); i++)
 		{
-			g1_tile_class *tile=g1_tile_man.get(i);
-			i4_const_str *name=g1_tile_man.get_name_from_tile(i);
+			g1_tile_class * tile=g1_tile_man.get(i);
+			i4_const_str * name=g1_tile_man.get_name_from_tile(i);
 			if (tile)
 			{
 				out->write_counted_str(*name);
@@ -184,7 +184,7 @@ void g1_map_class::save(g1_saver_class *out, w32 sections)
 		out->mark_section("golgotha selected verts");
 
 		int l=(w+1)*(h+1);
-		g1_map_vertex_class *v=verts;
+		g1_map_vertex_class * v=verts;
 
 		for (i=0; i<(w32)l; i++, v++)
 		{
@@ -253,7 +253,7 @@ void g1_map_class::save(g1_saver_class *out, w32 sections)
 		g1_cwin_man->save_views(out);
 	}
 
-	for (g1_map_data_class *md=g1_map_data_class::first; md; md=md->next)
+	for (g1_map_data_class * md=g1_map_data_class::first; md; md=md->next)
 	{
 		md->save(out, sections);
 	}
@@ -272,7 +272,7 @@ struct tile_matchup
 	w32 old_checksum;
 };
 
-int tile_matchup_compare(const void *a, const void *b)
+int tile_matchup_compare(const void * a, const void * b)
 {
 	if ( ((tile_matchup *)a)->old_checksum<((tile_matchup *)b)->old_checksum)
 	{
@@ -291,7 +291,7 @@ int tile_matchup_compare(const void *a, const void *b)
 // this will create a remap array which maps the tiles saved previously into the
 // currently tile, so we can added and remove tiles from our list without screwing
 // up previously saved maps
-static w16 *g1_map_get_tile_remap(g1_loader_class *fp)   // returns 0 on failure
+static w16 *g1_map_get_tile_remap(g1_loader_class * fp)   // returns 0 on failure
 {
 	if (!fp->goto_section(G1_SECTION_TILE_MATCHUP_V1))
 	{
@@ -299,7 +299,7 @@ static w16 *g1_map_get_tile_remap(g1_loader_class *fp)   // returns 0 on failure
 	}
 	w32 i,t=fp->read_32();  // how many tile types there were when sved
 
-	tile_matchup *tl=(tile_matchup *)I4_MALLOC(t*sizeof(tile_matchup), "tile matchup");
+	tile_matchup * tl=(tile_matchup *)I4_MALLOC(t*sizeof(tile_matchup), "tile matchup");
 	for (i=0; i<t; i++)
 	{
 		tl[i].old_tile_number=(w16)i;
@@ -309,7 +309,7 @@ static w16 *g1_map_get_tile_remap(g1_loader_class *fp)   // returns 0 on failure
 	// sort so we can do a binary search for faster matchup
 	qsort(tl,  t, sizeof(tile_matchup), tile_matchup_compare);
 
-	w16 *remap=(w16 *)I4_MALLOC(t*sizeof(w16), "tile remap");
+	w16 * remap=(w16 *)I4_MALLOC(t*sizeof(w16), "tile remap");
 	memset(remap, 0, t*sizeof(w16));
 	for (i=0; i< t; i++)
 	{
@@ -382,7 +382,7 @@ static w16 *g1_map_get_tile_remap(g1_loader_class *fp)   // returns 0 on failure
 	return remap;
 }
 
-i4_bool g1_map_class::load_sky(g1_loader_class *fp)
+i4_bool g1_map_class::load_sky(g1_loader_class * fp)
 {
 	if (sky_name)
 	{
@@ -397,7 +397,7 @@ i4_bool g1_map_class::load_sky(g1_loader_class *fp)
 	return i4_T;
 }
 
-void g1_map_class::save_sky(g1_saver_class *fp)
+void g1_map_class::save_sky(g1_saver_class * fp)
 {
 	fp->mark_section(G1_SECTION_SKY_V1);
 
@@ -410,11 +410,11 @@ void g1_map_class::save_sky(g1_saver_class *fp)
 
 struct g1_sorted_obj_struct
 {
-	const char *name;
+	const char * name;
 	w16 type;
 };
 
-int g1_sorted_obj_struct_compare(const g1_sorted_obj_struct *a, const g1_sorted_obj_struct *b)
+int g1_sorted_obj_struct_compare(const g1_sorted_obj_struct * a, const g1_sorted_obj_struct * b)
 {
 	return strcmp(a->name, b->name);
 }
@@ -423,13 +423,14 @@ int g1_sorted_obj_struct_compare(const g1_sorted_obj_struct *a, const g1_sorted_
 extern w32 g1_num_objs_in_view; // from map_fast
 
 //returns a list of objects
-g1_object_class **g1_map_class::load_objects(g1_loader_class *fp, w32 &tobjs)
+g1_object_class * * g1_map_class::load_objects(g1_loader_class * fp, w32 &tobjs)
 {
 	int i;
-	tobjs=0;
-	g1_object_class **obj_list=0;
 
-	g1_object_type *o_remap=0;
+	tobjs=0;
+	g1_object_class * * obj_list=0;
+
+	g1_object_type * o_remap=0;
 
 	for (i=0; i<G1_MAX_PLAYERS; i++)
 	{
@@ -524,7 +525,7 @@ g1_object_class **g1_map_class::load_objects(g1_loader_class *fp, w32 &tobjs)
 		{
 			//w16 bomber_type = g1_get_object_type("bomber"); //(OLI) bomber hack for demo
 
-			obj_list=(g1_object_class **)I4_MALLOC(sizeof(g1_object_class *) * tobjs, "tmp object list");
+			obj_list=(g1_object_class * *)I4_MALLOC(sizeof(g1_object_class *) * tobjs, "tmp object list");
 
 			fp->set_remap(tobjs);
 			if (fp->goto_section(G1_SECTION_OBJECT_BASE_V1))
@@ -539,9 +540,9 @@ g1_object_class **g1_map_class::load_objects(g1_loader_class *fp, w32 &tobjs)
 
 					if (obj_type>=0 && obj_type<=g1_last_object_type && g1_object_type_array[obj_type])
 					{
-						g1_object_class *o=g1_object_type_array[obj_type]->create_object(obj_type,fp);
+						g1_object_class * o=g1_object_type_array[obj_type]->create_object(obj_type,fp);
 
-						g1_map_piece_class *mp = g1_map_piece_class::cast(o);
+						g1_map_piece_class * mp = g1_map_piece_class::cast(o);
 
 						if (o->global_id==g1_global_id.invalid_id())
 						{
@@ -599,12 +600,13 @@ g1_object_class **g1_map_class::load_objects(g1_loader_class *fp, w32 &tobjs)
 }
 
 // returns the sections that were actually read
-w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
+w32 g1_map_class::load(g1_loader_class * fp, w32 sections)
 {
 	sw32 i, ret=0;
-	g1_object_class **obj_list=0;
+	g1_object_class * * obj_list=0;
 
-	g1_map_class *old_current=g1_current_map_PRIVATE;
+	g1_map_class * old_current=g1_current_map_PRIVATE;
+
 	g1_set_map(this);
 
 	w32 tobjs=0;
@@ -614,7 +616,7 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 
 	if (sections & G1_MAP_RES_FILENAME && fp->goto_section("golgotha map res filename"))
 	{
-		i4_str *res = fp->read_counted_str();
+		i4_str * res = fp->read_counted_str();
 		//(OLI) what do we do with this string?
 		delete res;
 	}
@@ -660,7 +662,7 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 	}
 
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t_old_objects=0;
 
 	if (cells) // if old cells in map get all the objects off the map before proceeding
@@ -693,7 +695,7 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 		memset(cells,0,a_size);
 		g1_cells=cells;
 
-		w16 *tile_remap=g1_map_get_tile_remap(fp);
+		w16 * tile_remap=g1_map_get_tile_remap(fp);
 		if (!tile_remap)
 		{
 			return i4_F;
@@ -754,7 +756,7 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 		int n;
 		for (n=0; n<G1_MAX_PLAYERS; n++)
 		{
-			i4_str *ai_name=fp->read_counted_str();
+			i4_str * ai_name=fp->read_counted_str();
 			char buf[200];
 			i4_os_string(*ai_name,buf,200);
 			g1_player_man.set_ai(n,buf);
@@ -844,7 +846,7 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 		{
 			if (obj_list[i])
 			{
-				g1_object_class *o=obj_list[i];
+				g1_object_class * o=obj_list[i];
 
 				o->occupy_location();
 				o->grab_old();  // is this ok?  currently, this is needed to get all ground
@@ -899,7 +901,7 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 		}
 	}
 
-	for (g1_map_data_class *md=g1_map_data_class::first; md; md=md->next)
+	for (g1_map_data_class * md=g1_map_data_class::first; md; md=md->next)
 	{
 		md->load(fp, sections);
 	}
@@ -912,7 +914,7 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 		}
 	}
 
-	g1_map_vertex_class *v[4];
+	g1_map_vertex_class * v[4];
 	i4_3d_vector v0,v1,v2,v3,vec1,vec2,vec3;
 	sw32 cx,cy;
 
@@ -920,7 +922,7 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 	{
 		for (cx=0; cx<width();  cx++)
 		{
-			g1_map_cell_class *cell = cells+cx+cy *width();
+			g1_map_cell_class * cell = cells+cx+cy *width();
 
 			v[0] = verts + cx + cy * (width()+1); //v[0]   v[1]
 			v[1] = v[0]+1;                     //v[3]   v[2]
@@ -979,10 +981,11 @@ w32 g1_map_class::load(g1_loader_class *fp, w32 sections)
 
 void g1_map_class::reload()
 {
-	i4_file_class *in=i4_open(*filename);
+	i4_file_class * in=i4_open(*filename);
+
 	if (in)
 	{
-		g1_loader_class *l=g1_open_save_file(in);
+		g1_loader_class * l=g1_open_save_file(in);
 		if (l)
 		{
 			load(l, G1_MAP_ALL);
@@ -991,10 +994,10 @@ void g1_map_class::reload()
 	}
 }
 
-void g1_map_class::save_critical_map(g1_saver_class *f)
+void g1_map_class::save_critical_map(g1_saver_class * f)
 {
 	int i,j;
-	g1_map_cell_class *c=cell(0,0);
+	g1_map_cell_class * c=cell(0,0);
 
 	for (j=0; j<height(); j++)
 	{
@@ -1005,10 +1008,11 @@ void g1_map_class::save_critical_map(g1_saver_class *f)
 	}
 }
 
-void g1_map_class::load_critical_map(g1_loader_class *f)
+void g1_map_class::load_critical_map(g1_loader_class * f)
 {
 	int i,j;
-	g1_map_cell_class *c=cell(0,0);
+	g1_map_cell_class * c=cell(0,0);
+
 	for (j=0; j<height(); j++)
 	{
 		for (i=0; i<width(); i++, c++)

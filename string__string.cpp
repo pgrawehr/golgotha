@@ -26,12 +26,12 @@
 
 i4_string_manager_class i4_string_man;
 
-i4_string_manager_class::node::node_allocator *i4_string_manager_class::node::nodes=0;
+i4_string_manager_class::node::node_allocator * i4_string_manager_class::node::nodes=0;
 w32 i4_string_manager_class::node::nodes_ref=0;        // number of string managers using 'nodes'
 
-i4_string_manager_class::array_node::node_allocator *i4_string_manager_class::array_node::nodes=0;
+i4_string_manager_class::array_node::node_allocator * i4_string_manager_class::array_node::nodes=0;
 
-static i4_const_str *null_string;
+static i4_const_str * null_string;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -57,12 +57,12 @@ i4_char i4_char::to_upper() const
 
 #undef new
 //#ifndef i4_NEW_CHECK
-void *i4_string_manager_class::node::operator new(size_t size)
+void * i4_string_manager_class::node::operator new(size_t size)
 {
 	return nodes->alloc();
 }
 
-void i4_string_manager_class::node::operator delete(void *ptr)
+void i4_string_manager_class::node::operator delete(void * ptr)
 {
 	nodes->free((node *)ptr);
 }
@@ -84,12 +84,12 @@ i4_string_manager_class::node::~node()
 
 
 //#ifndef i4_NEW_CHECK
-void *i4_string_manager_class::array_node::operator new(size_t size)
+void * i4_string_manager_class::array_node::operator new(size_t size)
 {
 	return nodes->alloc();
 }
 
-void i4_string_manager_class::array_node::operator delete(void *ptr)
+void i4_string_manager_class::array_node::operator delete(void * ptr)
 {
 	nodes->free((array_node *)ptr);
 }
@@ -112,6 +112,7 @@ i4_string_manager_class::array_node::~array_node()
 i4_const_str::iterator i4_const_str::strstr(const i4_const_str &needle_to_find) const
 {
 	iterator j=needle_to_find.begin();
+
 	for (iterator i=begin(); i!=end(); ++i)
 	{
 		iterator k=i;
@@ -131,10 +132,10 @@ i4_const_str::iterator i4_const_str::strstr(const i4_const_str &needle_to_find) 
 #ifdef _MANAGED
 #pragma unmanaged
 #endif
-i4_str *i4_const_str::vsprintf(w32 max_length, va_list &ap) const
+i4_str * i4_const_str::vsprintf(w32 max_length, va_list &ap) const
 {
-	i4_str *ns=new i4_str(*this,(w16)max_length);
-	char *fmt=ptr,*out=ns->ptr;
+	i4_str * ns=new i4_str(*this,(w16)max_length);
+	char * fmt=ptr,* out=ns->ptr;
 	int charsleft=max_length-1;
 	int l=length();
 
@@ -146,7 +147,7 @@ i4_str *i4_const_str::vsprintf(w32 max_length, va_list &ap) const
 			if (*fmt=='S')
 			{
 				l--;
-				i4_const_str *cs=va_arg(ap, i4_const_str *);
+				i4_const_str * cs=va_arg(ap, i4_const_str *);
 				if (cs)
 				{
 					i4_const_str::iterator it=cs->begin();
@@ -165,7 +166,7 @@ i4_str *i4_const_str::vsprintf(w32 max_length, va_list &ap) const
 			}
 			else
 			{
-				char fmt_str[10],*fs;
+				char fmt_str[10],* fs;
 				fs=fmt_str+1;
 				fmt_str[0]='%';
 				do
@@ -174,17 +175,18 @@ i4_str *i4_const_str::vsprintf(w32 max_length, va_list &ap) const
 					fs++;
 					fmt++;
 					l--;
-				} while (fmt[-1]!='s' &&
-						 fmt[-1]!='d' &&
-						 fmt[-1]!='f' &&
-						 fmt[-1]!='p' &&
-						 fmt[-1]!='g' &&
-						 fmt[-1]!='c' &&
-						 fmt[-1]!='i' &&
-						 fmt[-1]!='x' &&
-						 fmt[-1]!='u' &&
-						 fmt[-1]!='X' &&
-						 fmt[-1]!='o');
+				}
+				while (fmt[-1]!='s' &&
+					   fmt[-1]!='d' &&
+					   fmt[-1]!='f' &&
+					   fmt[-1]!='p' &&
+					   fmt[-1]!='g' &&
+					   fmt[-1]!='c' &&
+					   fmt[-1]!='i' &&
+					   fmt[-1]!='x' &&
+					   fmt[-1]!='u' &&
+					   fmt[-1]!='X' &&
+					   fmt[-1]!='o');
 				fmt--;
 				*fs=0;
 
@@ -220,7 +222,7 @@ i4_str *i4_const_str::vsprintf(w32 max_length, va_list &ap) const
 						break;
 					case 's':
 						{
-							char *s=va_arg(ap,char *);
+							char * s=va_arg(ap,char *);
 							int str_l=strlen(s);
 							if (charsleft<=str_l)
 							{
@@ -276,14 +278,15 @@ out_of_space:
 #pragma managed
 #endif
 
-i4_str *i4_const_str::sprintf(w32 max_length, ...) const
+i4_str * i4_const_str::sprintf(w32 max_length, ...) const
 {
 
 
 	va_list ap;
+
 	va_start(ap, max_length);
 
-	i4_str *ret=vsprintf(max_length,ap);
+	i4_str * ret=vsprintf(max_length,ap);
 
 	va_end(ap);
 
@@ -291,9 +294,10 @@ i4_str *i4_const_str::sprintf(w32 max_length, ...) const
 }
 
 
-w32 i4_const_str::iterator::read_ascii(char *buffer, w32 buffer_size)
+w32 i4_const_str::iterator::read_ascii(char * buffer, w32 buffer_size)
 {
 	w32 count=0;
+
 	iterator cur(*this);
 
 	while (cur.get().is_space())
@@ -315,7 +319,7 @@ w32 i4_const_str::iterator::read_ascii(char *buffer, w32 buffer_size)
 }
 
 
-i4_str *i4_const_str::iterator::read_string()
+i4_str * i4_const_str::iterator::read_string()
 {
 	iterator start(*this);
 
@@ -340,7 +344,7 @@ i4_str *i4_const_str::iterator::read_string()
 		++node;
 	}
 
-	i4_str *ret=new i4_str(start,cur,(w16)len+1);
+	i4_str * ret=new i4_str(start,cur,(w16)len+1);
 	return ret;
 }
 
@@ -413,6 +417,7 @@ double i4_const_str::iterator::read_float(i4_bool throwexception)
 {
 	while (get().is_space())
 		++ (*this);
+
 
 
 	double x=0;
@@ -528,7 +533,7 @@ void i4_str::init_from_string(const i4_const_str &str, w16 _buf_len)
 	len = (w16)((str.length() >= buf_len) ? buf_len : str.length());
 
 	i4_const_str::iterator p=str.begin();
-	char_type *c=ptr;
+	char_type * c=ptr;
 
 	for (w16 x=0 ; x<len; ++x)
 	{
@@ -540,9 +545,10 @@ void i4_str::init_from_string(const i4_const_str &str, w16 _buf_len)
 	*c=0;
 }
 
-i4_str::i4_str(const char *s)
+i4_str::i4_str(const char * s)
 {
 	w16 l=0;
+
 	if (s)
 	{
 		l=(w16) (strlen(s)>0xfff0 ? 0xfff0 : strlen(s));
@@ -572,7 +578,7 @@ i4_str::i4_str(const i4_const_str::iterator start,
 
 	len=0;
 
-	char_type *c=ptr;
+	char_type * c=ptr;
 	w16 count=buf_len;
 	i4_const_str::iterator s(start);
 
@@ -593,7 +599,7 @@ void i4_str::insert(i4_str::iterator p, const i4_char ch)
 {
 	if (len==buf_len&&buf_len<0xfff0) //increase buffer size by 4 characters
 	{
-		char *nptr=(char *)I4_REALLOC(ptr,sizeof(char_type)*(buf_len+4),"i4_str_bufexpand_char");
+		char * nptr=(char *)I4_REALLOC(ptr,sizeof(char_type)*(buf_len+4),"i4_str_bufexpand_char");
 		w32 diff=nptr-ptr;
 		buf_len=buf_len+4;
 		ptr=nptr;
@@ -634,6 +640,7 @@ void i4_str::insert(i4_str::iterator p, const i4_const_str &other)
 // insert other before p, adjust size of this
 {
 	w32 l=length()+other.length()+1;
+
 	if (l>0xfff0)
 	{
 		l=0xfff0;
@@ -650,7 +657,7 @@ void i4_str::insert(i4_str::iterator p, const i4_const_str &other)
 	if (l>buf_len) //increase buffer size
 	{
 
-		char *nptr=(char *)I4_REALLOC(ptr,sizeof(char_type)*(l+2),"i4_str_bufexpand");
+		char * nptr=(char *)I4_REALLOC(ptr,sizeof(char_type)*(l+2),"i4_str_bufexpand");
 		w32 diff=nptr-ptr; //realloc might change ptr,
 		//but the iterator still points to the old ptr
 		buf_len=(w16)(l+1);
@@ -726,6 +733,7 @@ void i4_str::remove(i4_str::iterator start, i4_str::iterator last)
 	sw32 rm_len=ptr_diff(last,end());
 
 	w16 cutlen=(w16)ptr_diff(start,last);
+
 	I4_ASSERT(cutlen>=0,"INTERNAL: i4_str::remove() attempt to delete less than 0 bytes");
 	len-=cutlen;
 
@@ -770,6 +778,7 @@ int i4_const_str::find(const i4_const_str &needle_to_find) const
 {
 	iterator j=needle_to_find.begin();
 	int pos=0;
+
 	for (iterator i=begin(); i!=end(); ++i)
 	{
 		iterator k=i;
@@ -797,6 +806,7 @@ int i4_const_str::find_first_of(const i4_const_str &str) const
 	i4_char ch;
 	w32 j;
 	int ip=0;
+
 	for (iterator i=begin(); i!=end(); i++,ip++)
 	{
 		ch=i.get();
@@ -817,6 +827,7 @@ int i4_const_str::find_first_not_of(const i4_const_str &str) const
 	w32 j;
 	int ip=0;
 	i4_bool found=i4_F;
+
 	for (iterator i=begin(); i!=end(); i++,ip++)
 	{
 		ch=i.get();
@@ -842,6 +853,7 @@ int i4_const_str::find_last_of(const i4_const_str &str) const
 	w32 j;
 	int ip=len-1;
 	iterator i=end();
+
 	--i;
 	for (; ip>=0; i--,ip--)
 	{
@@ -864,6 +876,7 @@ int i4_const_str::find_last_not_of(const i4_const_str &str) const
 	int ip=len-1;
 	i4_bool found=i4_F;
 	iterator i=end();
+
 	--i;
 	for (; ip>=0; i--,ip--)
 	{
@@ -909,14 +922,14 @@ i4_str i4_str::substr(int start, int &_len) const
 // String Manager Methods
 //
 
-const i4_const_str &i4_string_manager_class::get(const char *internal_name)
+const i4_const_str &i4_string_manager_class::get(const char * internal_name)
 {
 	if (!internal_name)
 	{
-		return *null_string;
+		return * null_string;
 	}
 
-	node *n=root;
+	node * n=root;
 	while (n)
 	{
 		int c=strcmp(internal_name,n->str_token);
@@ -938,7 +951,7 @@ const i4_const_str &i4_string_manager_class::get(const char *internal_name)
 	return *null_string;
 }
 
-void i4_string_manager_class::show_node(node *who)
+void i4_string_manager_class::show_node(node * who)
 {
 	if (who)
 	{
@@ -956,9 +969,10 @@ void i4_string_manager_class::show_nodes()
 	}
 }
 
-i4_const_str *i4_string_manager_class::get_array(const char *internal_name)
+i4_const_str * i4_string_manager_class::get_array(const char * internal_name)
 {
-	array_node *n=array_root;
+	array_node * n=array_root;
+
 	while (n)
 	{
 		int c=strcmp(internal_name,n->str_token);
@@ -973,8 +987,8 @@ i4_const_str *i4_string_manager_class::get_array(const char *internal_name)
 		else
 		{
 			w32 count=0,x;
-			char **c=n->value;
-			i4_const_str *ret;
+			char * * c=n->value;
+			i4_const_str * ret;
 
 			while (*c)
 			{
@@ -1073,19 +1087,21 @@ inline i4_bool space_char(char ch)
 
 
 
-char *i4_string_manager_class::alloc_str(char *string)
+char * i4_string_manager_class::alloc_str(char * string)
 {
 	w16 len=strlen(string)+1;
-	void *storage=string_heap->malloc(len,"string");
+	void * storage=string_heap->malloc(len,"string");
+
 	memcpy(storage,string,len);
 	return (char *)storage;
 }
 
 
 
-void i4_string_manager_class::add_node(char *token, char *string)
+void i4_string_manager_class::add_node(char * token, char * string)
 {
-	node **p=&root;
+	node * * p=&root;
+
 	while (*p)
 	{
 		if (strcmp(token,(*p)->str_token)<0)
@@ -1102,9 +1118,10 @@ void i4_string_manager_class::add_node(char *token, char *string)
 
 
 
-void i4_string_manager_class::add_array_node(char *token, char **array, w32 total)
+void i4_string_manager_class::add_array_node(char * token, char * * array, w32 total)
 {
-	array_node **p=&array_root;
+	array_node * * p=&array_root;
+
 	while (*p)
 	{
 		if (strcmp(token,(*p)->str_token)<0)
@@ -1117,9 +1134,9 @@ void i4_string_manager_class::add_array_node(char *token, char **array, w32 tota
 		}
 	}
 
-	char **new_array;
-	new_array = (char **)ALIGN_FORWARD( string_heap->malloc((total+1)*sizeof(char *) + sizeof(int) - 1,
-															"string_array") );
+	char * * new_array;
+	new_array = (char * *)ALIGN_FORWARD( string_heap->malloc((total+1)*sizeof(char *) + sizeof(int) - 1,
+															 "string_array") );
 	for (int i=0; i<(int)total; i++)
 	{
 		new_array[i]=array[i];
@@ -1134,7 +1151,8 @@ void i4_string_manager_class::add_array_node(char *token, char **array, w32 tota
 
 static void skip_white(char *&s, w32 &line_on)
 {
-	char *sl=s; // use local pointer so a register can be substituted
+	char * sl=s; // use local pointer so a register can be substituted
+
 	for(;;)
 	{
 		switch (*sl)
@@ -1155,6 +1173,7 @@ static void skip_white(char *&s, w32 &line_on)
 						while (*sl && *sl!='\n' && *sl!='\r')
 							sl++;
 
+
 					}
 					else
 					{
@@ -1170,18 +1189,18 @@ static void skip_white(char *&s, w32 &line_on)
 	}
 }
 
-static void *dump_file_buf;
+static void * dump_file_buf;
 static int dump_buf_len;
 
-void i4_string_manager_class::expand_macro(char *&s, char *&buf, w32 &line_on, char *error_prefix)
+void i4_string_manager_class::expand_macro(char *&s, char *&buf, w32 &line_on, char * error_prefix)
 {
-	char *sl=s+1,*start;
+	char * sl=s+1,* start;
 	w32 len;
 
 	skip_white(sl,line_on);
 	if (*sl!='{')
 	{
-		i4_file_class *fp=i4_open("dump.txt", I4_WRITE);
+		i4_file_class * fp=i4_open("dump.txt", I4_WRITE);
 		fp->write(dump_file_buf, dump_buf_len);
 		delete fp;
 		i4_error("%s:%d:expected { after $",error_prefix,line_on);
@@ -1218,7 +1237,7 @@ void i4_string_manager_class::expand_macro(char *&s, char *&buf, w32 &line_on, c
 }
 
 
-void i4_string_manager_class::get_char(char *&s, char *&buf, w32 &line_on, char *error_prefix)
+void i4_string_manager_class::get_char(char *&s, char *&buf, w32 &line_on, char * error_prefix)
 {
 	if (*s=='$')
 	{
@@ -1261,13 +1280,14 @@ void i4_string_manager_class::get_char(char *&s, char *&buf, w32 &line_on, char 
 
 
 void i4_string_manager_class::read_array(char *&s,
-										 char **array,
+										 char * * array,
 										 w32 &total,
 										 w32 &line_on,
-										 char *error_prefix,
-										 char *token_buf)
+										 char * error_prefix,
+										 char * token_buf)
 {
-	char *t1;
+	char * t1;
+
 	total=0;
 	while (*s)
 	{
@@ -1287,16 +1307,18 @@ void i4_string_manager_class::read_array(char *&s,
 
 
 
-void i4_string_manager_class::get_token(char *&s, char *&buf, w32 &line_on, char *error_prefix)
+void i4_string_manager_class::get_token(char *&s, char *&buf, w32 &line_on, char * error_prefix)
 
 {
-	char *sl=s;
+	char * sl=s;
+
 	skip_white(sl,line_on);
 	if (*sl=='"')
 	{
 		sl++;
 		while (*sl && *sl!='"')
 			get_char(sl,buf,line_on,error_prefix);
+
 
 		if (*sl==0)
 		{
@@ -1322,6 +1344,7 @@ void i4_string_manager_class::get_token(char *&s, char *&buf, w32 &line_on, char
 				   *sl!='=' && *sl!='}' && *sl!='{')
 				get_char(sl,buf,line_on,error_prefix);
 
+
 		}
 	}
 	s=sl;
@@ -1330,16 +1353,16 @@ void i4_string_manager_class::get_token(char *&s, char *&buf, w32 &line_on, char
 
 
 
-i4_bool i4_string_manager_class::load_buffer(void *internal_buffer, char *error_prefix)
+i4_bool i4_string_manager_class::load_buffer(void * internal_buffer, char * error_prefix)
 {
-	char *s=(char *)internal_buffer;
-	char *token1,*token2,*t1,*t2;
-	char **array;
+	char * s=(char *)internal_buffer;
+	char * token1,* token2,* t1,* t2;
+	char * * array;
 	w32 line_on=1;
 
 	token1 = (char *)I4_MALLOC(4000,"token1 buf");
 	token2 = (char *)I4_MALLOC(4000,"token2 buf");
-	array  = (char **)I4_MALLOC(1000*sizeof(char *),"array buf");
+	array  = (char * *)I4_MALLOC(1000*sizeof(char *),"array buf");
 
 
 	dump_file_buf=internal_buffer;
@@ -1435,9 +1458,10 @@ i4_bool i4_string_manager_class::load(const i4_const_str &filename)
 }
 
 
-i4_bool i4_string_manager_class::load(char *filename)
+i4_bool i4_string_manager_class::load(char * filename)
 {
-	i4_file_class *fp;
+	i4_file_class * fp;
+
 	i4_const_str tmp(filename);
 
 	fp=i4_open(tmp);
@@ -1450,7 +1474,7 @@ i4_bool i4_string_manager_class::load(char *filename)
 	else
 	{
 		w32 size=fp->size();
-		char *mem=(char *)I4_MALLOC(size+1,"tmp");
+		char * mem=(char *)I4_MALLOC(size+1,"tmp");
 		if (fp->read(mem,size)!=size)
 		{
 			delete fp;
@@ -1468,10 +1492,11 @@ i4_bool i4_string_manager_class::load(char *filename)
 
 
 
-char *i4_os_string(const i4_const_str &name, char *tmp_buf, int buflen)
+char *i4_os_string(const i4_const_str &name, char * tmp_buf, int buflen)
 {
 	i4_const_str::iterator p=name.begin();
-	char *s=tmp_buf;
+	char * s=tmp_buf;
+
 	while (p!=name.end() && buflen>1)
 	{
 		*s=(char)p.get().value();
@@ -1484,19 +1509,21 @@ char *i4_os_string(const i4_const_str &name, char *tmp_buf, int buflen)
 	return tmp_buf;
 }
 
-i4_str *i4_from_ascii(const char *buf)
+i4_str *i4_from_ascii(const char * buf)
 {
 	int l=strlen(buf);
-	i4_str *ret=new i4_str(l);
+	i4_str * ret=new i4_str(l);
+
 	ret->len=l;
 	memcpy(ret->ptr, buf, l);
 	return ret;
 }
 
 
-const i4_const_str &i4gets(char *str, i4_bool barf_on_error)
+const i4_const_str &i4gets(char * str, i4_bool barf_on_error)
 {
-	const i4_const_str *s=&i4_string_man.get(str);
+	const i4_const_str * s=&i4_string_man.get(str);
+
 	if (barf_on_error && s->null())
 	{
 		i4_error("Resource missing %s",str);
@@ -1504,9 +1531,10 @@ const i4_const_str &i4gets(char *str, i4_bool barf_on_error)
 	return *s;
 }
 
-int i4getn(char *str, i4_bool barf_on_error)
+int i4getn(char * str, i4_bool barf_on_error)
 {
 	i4_const_str::iterator i=i4gets(str, barf_on_error).begin();
+
 	return i.read_number();
 }
 

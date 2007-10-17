@@ -10,12 +10,12 @@
 #include "error/error.h"
 
 
-i4_init_class *i4_init_class::first_init=0;
+i4_init_class * i4_init_class::first_init=0;
 static i4_bool i4_inited=i4_F;
 
 void i4_show_init_list()
 {
-	for (i4_init_class *f=i4_init_class::first_init; f; f=f->next_init)
+	for (i4_init_class * f=i4_init_class::first_init; f; f=f->next_init)
 	{
 		i4_warning("%p\n",f);
 	}
@@ -32,7 +32,7 @@ void i4_init()
 
 	for (int t=0; t<=I4_INIT_TYPE_AFTER_ALL; t++)
 	{
-		i4_init_class *i=i4_init_class::first_init;
+		i4_init_class * i=i4_init_class::first_init;
 		Current_Init_Class=0;
 		for (; i; i=i->next_init)
 		{
@@ -63,7 +63,7 @@ void i4_uninit()
 
 	for (int t=I4_INIT_TYPE_AFTER_ALL; t>=0; t--)
 	{
-		i4_init_class *i=i4_init_class::first_init;
+		i4_init_class * i=i4_init_class::first_init;
 		for (; i; i=i->next_init)
 		{
 			if (i->init_type()==t)
@@ -79,7 +79,7 @@ void i4_uninit()
 
 i4_init_class::~i4_init_class()
 {
-	i4_init_class *last=0, *i=first_init;
+	i4_init_class * last=0, * i=first_init;
 
 	for (; i && i!=this;)
 	{

@@ -17,7 +17,7 @@
 #ifdef i4_MEM_CHECK
 static int i4_show_libc_mallocs=0;
 
-static char *str_alloc(char *s)
+static char *str_alloc(char * s)
 {
 	if (i4_show_libc_mallocs)
 	{
@@ -25,7 +25,7 @@ static char *str_alloc(char *s)
 	}
 
 	int l=strlen(s)+1;
-	char *t=(char *)::malloc(l);
+	char * t=(char *)::malloc(l);
 	if (!t)
 	{
 		i4_error("could not allocate memory for string on libc heap");
@@ -34,7 +34,7 @@ static char *str_alloc(char *s)
 	return t;
 }
 
-static void str_free(char *s)
+static void str_free(char * s)
 {
 	if (!s || s[0]==0)
 	{
@@ -51,19 +51,21 @@ static void str_free(char *s)
 
 #endif
 
-int i4_block_manager_class::valid_ptr(void *ptr)
+int i4_block_manager_class::valid_ptr(void * ptr)
 {
-	void *next=(void *)(*(((long *)ptr)-1));
+	void * next=(void *)(*(((long *)ptr)-1));
+
 	if (next && next<ptr)                      // small allocation
 	{
-		small_block *s=(small_block *)next;
+		small_block * s=(small_block *)next;
 		if (s->size<=0)
 		{
 			return 0;
 		}
 
-		small_block *c=sblocks[s->size];
+		small_block * c=sblocks[s->size];
 		while (c && c!=s) c=c->next;
+
 
 		if (!c)
 		{
@@ -72,9 +74,10 @@ int i4_block_manager_class::valid_ptr(void *ptr)
 		return 1;
 	}
 
-	memory_node *o=(memory_node *)(((char *)ptr)-sizeof(memory_node));
-	memory_node *f=sfirst;
+	memory_node * o=(memory_node *)(((char *)ptr)-sizeof(memory_node));
+	memory_node * f=sfirst;
 	while (f && f!=o) f=f->next;
+
 
 	if (f)
 	{
@@ -89,7 +92,8 @@ int i4_block_manager_class::valid_ptr(void *ptr)
 
 void i4_block_manager_class::inspect()
 {
-	memory_node *f=sfirst;
+	memory_node * f=sfirst;
+
 	for (; f; f=f->next)
 	{
 		;
@@ -98,15 +102,15 @@ void i4_block_manager_class::inspect()
 	int i,bit=1;
 	for (i=0; i<JM_SMALL_SIZE; i++)
 	{
-		for (small_block *s=sblocks[i]; s; s=s->next)
+		for (small_block * s=sblocks[i]; s; s=s->next)
 		{
-			char *addr=((char *)(s+1));
+			char * addr=((char *)(s+1));
 			bit = 1;
 			for (int j=0; j<32; j++)
 			{
 				if (s->alloc_list&bit)
 				{
-					void *next=(void *)(*(((long *)addr)));
+					void * next=(void *)(*(((long *)addr)));
 					if ((long)next!=(long)s)
 					{
 						i4_warning("inspect : bad pointer\n");
@@ -120,9 +124,10 @@ void i4_block_manager_class::inspect()
 	}
 }
 
-static char *check_allocation(char *s)
+static char *check_allocation(char * s)
 {
 	char tmp[200];
+
 	strcpy(tmp,s);
 		::free(s);
 	s=(char *)::malloc(strlen(tmp)+1);
@@ -130,11 +135,11 @@ static char *check_allocation(char *s)
 	return s;
 }
 
-void i4_block_manager_class::report(i4_file_class *fp)
+void i4_block_manager_class::report(i4_file_class * fp)
 {
 	fp->printf("************** Block size = %d ***************\n",block_size);
 	int i=0;
-	memory_node *f=sfirst;
+	memory_node * f=sfirst;
 	int f_total=0, a_total=0;
 
 	for (; f; f=f->next,i++)
@@ -163,11 +168,11 @@ void i4_block_manager_class::report(i4_file_class *fp)
 	}
 	for (i=0; i<JM_SMALL_SIZE; i++)
 	{
-		for (small_block *s=sblocks[i]; s; s=s->next)
+		for (small_block * s=sblocks[i]; s; s=s->next)
 		{
 			fp->printf("*** Small Block size = %d ***\n",i);
 			unsigned long bit=1;
-			char *addr=((char *)(s+1));
+			char * addr=((char *)(s+1));
 			for (int j=0; j<32; j++)
 			{
 				fp->printf("%p   ",addr);
@@ -193,10 +198,11 @@ void i4_block_manager_class::report(i4_file_class *fp)
 
 }
 
-long i4_block_manager_class::pointer_size(void *ptr)
+long i4_block_manager_class::pointer_size(void * ptr)
 {
 	long ret;
-	void *next=(void *)(*(((long *)ptr)-1));
+	void * next=(void *)(*(((long *)ptr)-1));
+
 	if (next>ptr)
 	{
 		ret=((memory_node *)(((char *)ptr)-sizeof(memory_node)))->size;
@@ -213,7 +219,8 @@ long i4_block_manager_class::pointer_size(void *ptr)
 long i4_block_manager_class::largest_free_block()
 {
 	long l=0;
-	memory_node *f;
+	memory_node * f;
+
 	for (f=sfirst; f; f=f->next)
 	{
 		if (-f->size>l)
@@ -228,7 +235,8 @@ long i4_block_manager_class::largest_free_block()
 long i4_block_manager_class::available()
 {
 	long size=0;
-	memory_node *f;
+	memory_node * f;
+
 	for (f=sfirst; f; f=f->next)
 	{
 		if (f->size<0)
@@ -243,7 +251,8 @@ long i4_block_manager_class::available()
 long i4_block_manager_class::allocated()
 {
 	long size=0;
-	memory_node *f;
+	memory_node * f;
+
 	for (f=sfirst; f; f=f->next)
 	{
 		if (f->size>0)
@@ -255,7 +264,7 @@ long i4_block_manager_class::allocated()
 	return size;
 }
 
-void i4_block_manager_class::init(void *block, long Block_size)
+void i4_block_manager_class::init(void * block, long Block_size)
 {
 	block_size=Block_size;
 	addr=block;
@@ -273,11 +282,11 @@ void i4_block_manager_class::init(void *block, long Block_size)
 
 }
 
-void *i4_block_manager_class::alloc(long size, char *name)
+void * i4_block_manager_class::alloc(long size, char * name)
 {
 	if (size<JM_SMALL_SIZE)
 	{
-		small_block *s=sblocks[size];
+		small_block * s=sblocks[size];
 		for (; s && s->alloc_list==0xffffffff; s=s->next)
 		{
 			;
@@ -296,14 +305,14 @@ void *i4_block_manager_class::alloc(long size, char *name)
 #ifdef i4_MEM_CHECK
 			s->name[0]=str_alloc(name);
 #endif
-			long *addr=(long *)(((char *)s)+sizeof(small_block));
+			long * addr=(long *)(((char *)s)+sizeof(small_block));
 			*addr=(long)s;
 			return (void *)(addr+1); // return first block
 		}
 		else
 		{
 			int bit=1,i=0;
-			char *addr=((char *)s)+sizeof(small_block);
+			char * addr=((char *)s)+sizeof(small_block);
 			while (1)  // we already know there is a bit free
 			{
 				if ((s->alloc_list&bit)==0)
@@ -324,7 +333,7 @@ void *i4_block_manager_class::alloc(long size, char *name)
 	}
 
 
-	memory_node *s=sfirst;
+	memory_node * s=sfirst;
 	if (!s)
 	{
 		return NULL;
@@ -341,7 +350,7 @@ void *i4_block_manager_class::alloc(long size, char *name)
 
 	if (s->size-size>sizeof(memory_node)+4) // is there enough space to split the block?
 	{
-		memory_node *p=(memory_node *)((char *)s+sizeof(memory_node)+size);
+		memory_node * p=(memory_node *)((char *)s+sizeof(memory_node)+size);
 		if (s==slast)
 		{
 			slast=p;
@@ -367,13 +376,14 @@ int i4_show_frees=0;
 /*    should be called to free a pointer in the static heap       */
 /*    i.e. begining of the heap                                   */
 /******************************************************************/
-void i4_block_manager_class::free(void *ptr)
+void i4_block_manager_class::free(void * ptr)
 {
 	// see if this was a small_block allocation
-	void *next=(void *)(*(((long *)ptr)-1));
+	void * next=(void *)(*(((long *)ptr)-1));
+
 	if (next && next<ptr) // small allocation
 	{
-		small_block *s=(small_block *)next;
+		small_block * s=(small_block *)next;
 		if (s->size<=0)
 		{
 			i4_warning("i4_free : bad pointer\n");
@@ -394,8 +404,8 @@ void i4_block_manager_class::free(void *ptr)
 		s->alloc_list&=(0xffffffff-(1<<field));
 		if (s->alloc_list==0)
 		{
-			small_block *l=NULL;
-			small_block *n=sblocks[s->size];
+			small_block * l=NULL;
+			small_block * n=sblocks[s->size];
 			for (; n!=s; n=n->next)
 			{
 				l=n;
@@ -419,7 +429,7 @@ void i4_block_manager_class::free(void *ptr)
 	}
 	else
 	{
-		memory_node *o=(memory_node *)(((char *)ptr)-sizeof(memory_node)),*last=NULL;
+		memory_node * o=(memory_node *)(((char *)ptr)-sizeof(memory_node)),* last=NULL;
 #ifdef i4_MEM_CHECK
 		if (i4_show_frees)
 		{
@@ -441,7 +451,7 @@ void i4_block_manager_class::free(void *ptr)
 			o->next=o->next->next;
 		}
 
-		memory_node *n=sfirst;
+		memory_node * n=sfirst;
 		for (; n && n!=o; n=n->next)
 		{
 			last=n;

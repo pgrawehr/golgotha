@@ -19,7 +19,7 @@ enum {
 	MAX_MATERIAL_OFFSET = 1024
 };
 
-extern char *gmod_sig;
+extern char * gmod_sig;
 
 extern ClassDesc *GetCrackUtilDesc();
 extern ClassDesc *GetCrackImportDesc();

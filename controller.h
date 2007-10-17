@@ -49,9 +49,9 @@ class g1_controller_global_id_reset_notifier :
 	public g1_global_id_reset_notifier
 {
 public:
-	g1_object_controller_class *for_who;
+	g1_object_controller_class * for_who;
 
-	g1_controller_global_id_reset_notifier(g1_object_controller_class *for_who)
+	g1_controller_global_id_reset_notifier(g1_object_controller_class * for_who)
 		: for_who(for_who)
 	{
 	}
@@ -77,7 +77,7 @@ protected:
 	// this is the object we are currently tracking with the camera
 	g1_player_piece_class *get_track();
 
-	g1_map_view_class *radar_view; // maintains the view of the map as seen on radar
+	g1_map_view_class * radar_view; // maintains the view of the map as seen on radar
 
 	enum flag_type {
 		KEY_FOCUS          =1, // if we have keyboard focus
@@ -115,8 +115,8 @@ protected:
 	i4_float last_x, last_y;
 
 
-	i4_menu_class *context_menu;
-	i4_graphical_style_class *style;
+	i4_menu_class * context_menu;
+	i4_graphical_style_class * style;
 	sw32 last_mouse_x, last_mouse_y; //making them signed avoids some
 	sw32 begin_dragx,begin_dragy; //troubles with subtractions
 
@@ -131,19 +131,19 @@ protected:
 	void delete_context_menu();
 
 
-	void set_track(g1_player_piece_class *new_track);
+	void set_track(g1_player_piece_class * new_track);
 
-	void draw_overhead(g1_draw_context_class *context);
+	void draw_overhead(g1_draw_context_class * context);
 
 	// Window Input
 	void get_keys();
 	void lose_keys();
 
-	void do_command_event(i4_do_command_event_class *ev);
-	void end_command_event(i4_end_command_event_class *ev);
+	void do_command_event(i4_do_command_event_class * ev);
+	void end_command_event(i4_end_command_event_class * ev);
 
-	void window_event(i4_window_message_class *wev);
-	void key_press(i4_key_press_event_class *ev);
+	void window_event(i4_window_message_class * wev);
+	void key_press(i4_key_press_event_class * ev);
 	void calc_camera_transform();
 
 	void change_mouse_mask(int new_mask);
@@ -235,7 +235,7 @@ public:
 
 	i4_fixed_que<spin_event,8> spin_events;   // list of models to spin up
 	spin_event current_spin;
-	virtual void reparent(i4_image_class *draw_area, i4_parent_window_class *parent);
+	virtual void reparent(i4_image_class * draw_area, i4_parent_window_class * parent);
 public:
 	void scroll_message(const i4_const_str &message, i4_color color=0xffffff);
 	void find_objects_in_rectangle(w32 x1,w32 y1, w32 x2, w32 y2, i4_bool cleartostart);
@@ -254,7 +254,7 @@ public:
 	void zoom(i4_float dist);
 	void roll(i4_float r);
 
-	i4_bool add_spin_event(char *model_name, w8 lost=0);
+	i4_bool add_spin_event(char * model_name, w8 lost=0);
 
 
 	i4_transform_class transform; // current transform to go world to screen space
@@ -302,18 +302,19 @@ public:
 		return style;
 	}
 	g1_object_controller_class(w16 w, w16 h,
-							   i4_graphical_style_class *style);
+							   i4_graphical_style_class * style);
 
 	virtual void editor_pre_draw(i4_draw_context_class &context);
 	virtual void editor_post_draw(i4_draw_context_class &context);
 
 	virtual void parent_draw(i4_draw_context_class &context);
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	virtual void show_self(w32 indent)
 	{
 		char fmt[50];
+
 		sprintf(fmt,"%%%ds object_controller_class",indent);
 		i4_warning(fmt," ");
 	}
@@ -327,7 +328,7 @@ public:
 	};
 	w8 mouse_mask;
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"g1_object_controller");
 	}
@@ -342,10 +343,10 @@ class g1_map_object_event_class :
 {
 public:
 	li_object_pointer msg,params,env,result;
-	g1_object_class *obj;
+	g1_object_class * obj;
 
-	g1_map_object_event_class(g1_object_class *obj,li_symbol *msg,
-							  li_object *params,li_environment *env)
+	g1_map_object_event_class(g1_object_class * obj,li_symbol * msg,
+							  li_object * params,li_environment * env)
 		: i4_object_message_event_class(0,G1_MAP_OBJECT_EVENT),
 		  msg(msg),
 		  params(params),
@@ -365,12 +366,12 @@ public:
 		env=0;
 		result=0;
 	};
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"Map object event");
 	};
-	void typed_get(li_symbol **_msg, li_object **_params,
-				   li_environment **_env)
+	void typed_get(li_symbol * * _msg, li_object * * _params,
+				   li_environment * * _env)
 	{
 		*_msg=(li_symbol *)msg.get();
 		*_params=params.get();

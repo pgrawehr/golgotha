@@ -37,7 +37,7 @@ int iDebugLogFile          = -1; // Not opened or error
 /*———————————————————————————————————————————————————————————————————————————*
 *  DIRECT DRAW ERRORS                                                       *
 *———————————————————————————————————————————————————————————————————————————*/
-char *dxerr_unknown = "DDERR_??? (UNKNOWN)";
+char * dxerr_unknown = "DDERR_??? (UNKNOWN)";
 static ERRLIST elDDErrors[] = {
 	{DDERR_ALREADYINITIALIZED,          "DDERR_ALREADYINITIALIZED"},            //   5
 	{DDERR_CANNOTATTACHSURFACE,         "DDERR_CANNOTATTACHSURFACE"},           //  10
@@ -509,11 +509,12 @@ int WriteDebugLogFile(LPSTR lpszComment)
 * Function: TRACE                                                         *
 * Purpose:                                                                *
 *—————————————————————————————————————————————————————————————————————————*/
-void DUMP_F(char *fmt, ...)
+void DUMP_F(char * fmt, ...)
 {
 	const int nBufferSize = 256;
 	char ach[nBufferSize + 8];
 	va_list va;
+
 	va_start( va, fmt );
 	_vsnprintf(ach, nBufferSize, fmt, va);
 	va_end( va );
@@ -529,7 +530,7 @@ void DUMP_F(char *fmt, ...)
 * Purpose:                                                                *
 *—————————————————————————————————————————————————————————————————————————*/
 #define __JJJG__    // MJ
-void DUMP_O(char *fmt, ...)
+void DUMP_O(char * fmt, ...)
 {
 #ifdef __JJJG__    // MJ
 	const int nBufferSize = 256;
@@ -573,6 +574,7 @@ void TR_DX(HRESULT hResult)
 LPSTR GetDirectXStatusString(HRESULT DDStatus)
 {
 	int i = 0;
+
 	// 1. Direct Draw Error
 	for(i = 0; i < ERRLISTLEN; i++)
 	{

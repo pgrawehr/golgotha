@@ -163,7 +163,7 @@
 g1_editor_class g1_editor_instance;
 
 
-int g1_controller_edit_class::get_current_splines(i4_spline_class **buffer, int buf_size)
+int g1_controller_edit_class::get_current_splines(i4_spline_class * * buffer, int buf_size)
 {
 	return g1_editor_instance.get_current_splines(buffer, buf_size);
 }
@@ -172,7 +172,7 @@ void g1_editor_class::create_radar()
 {
 	if (!radar_parent.get())
 	{
-		g1_map_class *map=g1_get_map();
+		g1_map_class * map=g1_get_map();
 		int maxw=map->width();
 		int maxh=map->height();
 
@@ -198,13 +198,13 @@ void g1_editor_class::create_radar()
 			}
 		}
 
-		i4_parent_window_class *mv=g1_create_radar_view(maxw, maxh,
-														G1_RADAR_CLICK_HOLDS_VIEW |
-														G1_RADAR_DRAW_ALL_PATHS);
+		i4_parent_window_class * mv=g1_create_radar_view(maxw, maxh,
+														 G1_RADAR_CLICK_HOLDS_VIEW |
+														 G1_RADAR_DRAW_ALL_PATHS);
 
 
 
-		i4_parent_window_class *p;
+		i4_parent_window_class * p;
 		int y=i4_current_app->get_window_manager()->height()-mv->height()-30;
 		p=i4_current_app->get_style()->create_mp_window(0, y,
 														mv->width(), mv->height(),
@@ -214,14 +214,14 @@ void g1_editor_class::create_radar()
 	}
 }
 
-int g1_editor_class::get_current_splines(i4_spline_class **buffer, int buf_size)
+int g1_editor_class::get_current_splines(i4_spline_class * * buffer, int buf_size)
 {
 	if (!have_map() || !get_map()->current_movie || !get_map()->current_movie->t_cut_scenes)
 	{
 		return 0;
 	}
 
-	g1_cut_scene_class *s=get_map()->current_movie->current();
+	g1_cut_scene_class * s=get_map()->current_movie->current();
 
 	if (s && buf_size>g1_cut_scene_class::T_PATHS)
 	{
@@ -323,7 +323,7 @@ void g1_editor_class::close_windows()
 {
 	scene_edit.hide();
 
-	for (g1_mode_creator *mc=g1_mode_creator::first; mc; mc=mc->next)
+	for (g1_mode_creator * mc=g1_mode_creator::first; mc; mc=mc->next)
 	{
 		mc->cleanup();
 	}
@@ -472,10 +472,10 @@ void g1_editor_class::save_as(const i4_const_str &fname)
 		g1_edit_state.hide_focus();
 		get_map()->recalc_static_stuff();
 
-		i4_file_class *out=i4_open(fname, I4_WRITE);
+		i4_file_class * out=i4_open(fname, I4_WRITE);
 		if (out)
 		{
-			g1_saver_class *save=new g1_saver_class(out);
+			g1_saver_class * save=new g1_saver_class(out);
 
 			get_map()->save(save, G1_MAP_ALL);
 
@@ -561,12 +561,12 @@ void g1_editor_class::do_command(w16 command_id)
 				//this (or other hack) is needed, as source may come from current dir
 				//(usually \golgotha). The sprintf then generates a "/filename.scm"
 				//source file, wich of course is incorrect.
-				i4_str *srcpath=i4_full_path(get_map()->get_filename());
+				i4_str * srcpath=i4_full_path(get_map()->get_filename());
 				i4_split_path(*srcpath,fsource);
 				i4_split_path(i4_const_str("savegame/quicksave.level"),ftarget);
 				i4_const_str fmt("%s/%s.scm");
-				i4_str *src=fmt.sprintf(300,fsource.path,fsource.filename);
-				i4_str *dst=fmt.sprintf(300,ftarget.path,ftarget.filename);
+				i4_str * src=fmt.sprintf(300,fsource.path,fsource.filename);
+				i4_str * dst=fmt.sprintf(300,ftarget.path,ftarget.filename);
 				if (!i4_copy_file(*src,*dst))
 				{
 					i4_error("ERROR: Could not copy SCM file. Source file corrupt? Permissions?");
@@ -665,7 +665,7 @@ void g1_editor_class::do_command(w16 command_id)
 					};
 
 					get_map()->get_critical_graph()->expand_critical_graph();
-					i4_image_class *img[MAX_NUM];
+					i4_image_class * img[MAX_NUM];
 
 					i4_const_str::iterator i1=get_editor_string("path_start").begin();
 					img[0] = g1_edit_state.get_icon(i1.read_number());
@@ -680,8 +680,8 @@ void g1_editor_class::do_command(w16 command_id)
 
 
 					// Create MPWindow
-					i4_parent_window_class *mpw;
-					i4_user_message_event_class *close=
+					i4_parent_window_class * mpw;
+					i4_user_message_event_class * close=
 						new i4_user_message_event_class(G1_EDITOR_AI_WINDOW_CLOSED);
 					mpw=style->
 							 create_mp_window(-1,-1,
@@ -692,13 +692,13 @@ void g1_editor_class::do_command(w16 command_id)
 					mpw->add_child(40,0, path_window);
 
 					// Create Toolbar
-					i4_const_str *nums;
-					i4_const_str *help_names[MAX_NUM];
+					i4_const_str * nums;
+					i4_const_str * help_names[MAX_NUM];
 					nums = get_editor_array("path_tool_win_icons");
 					if (nums)
 					{
 						int n=0;
-						for (i4_const_str *p=nums;  (!p->null() && n<MAX_NUM);  n++)
+						for (i4_const_str * p=nums;  (!p->null() && n<MAX_NUM);  n++)
 						{
 							i4_const_str::iterator i1=p->begin();
 							img[n] = g1_edit_state.get_icon(i1.read_number());
@@ -707,7 +707,7 @@ void g1_editor_class::do_command(w16 command_id)
 							++p;
 						}
 
-						g1_path_tool_window_class *path_tool =
+						g1_path_tool_window_class * path_tool =
 							new g1_path_tool_window_class(style, path_window, n, img, help_names );
 						mpw->add_child(0,0, path_tool);
 						mpw->resize_to_fit_children();
@@ -754,8 +754,8 @@ void g1_editor_class::do_command(w16 command_id)
 		case G1_EDITOR_PROFILE:
 			{
 				sw32 x=0, y=0;
-				i4_user_message_event_class *ue=new i4_user_message_event_class(G1_EDITOR_PROFILE_CLOSED);
-				i4_event_reaction_class *prof_closed;
+				i4_user_message_event_class * ue=new i4_user_message_event_class(G1_EDITOR_PROFILE_CLOSED);
+				i4_event_reaction_class * prof_closed;
 				prof_closed=new i4_event_reaction_class(this, ue);
 				i4_profile_watch(style, parent, x,y, 200,280,!profile_view, prof_closed);
 				profile_view=!profile_view;
@@ -771,8 +771,8 @@ void g1_editor_class::do_command(w16 command_id)
 				}
 				else
 				{
-					i4_user_message_event_class *ue=new i4_user_message_event_class(G1_EDITOR_LISP_CLOSED);
-					i4_event_reaction_class *lisp_closed;
+					i4_user_message_event_class * ue=new i4_user_message_event_class(G1_EDITOR_LISP_CLOSED);
+					i4_event_reaction_class * lisp_closed;
 					lisp_closed=new i4_event_reaction_class(this,ue);
 					i4_lisp_interaction_window(style,parent,x,y,w,h,1,lisp_closed);
 					lisp_interaction_view=1;
@@ -788,9 +788,9 @@ void g1_editor_class::do_command(w16 command_id)
 				}
 				else
 				{
-					i4_user_message_event_class *ue=
+					i4_user_message_event_class * ue=
 						new i4_user_message_event_class(G1_EDITOR_DEBUG_CLOSED);
-					i4_event_reaction_class *debug_closed=
+					i4_event_reaction_class * debug_closed=
 						new i4_event_reaction_class(this, ue);
 					g1_debug_open(style, parent, g1_ges("debug_title"), 3, debug_closed);
 					debug_view=1;
@@ -870,7 +870,7 @@ void g1_editor_class::close_modal()
 
 
 
-char *cmd_2_enum[]=
+char * cmd_2_enum[]=
 {
 	"File/New",                 // G1_EDITOR_NEW,
 	"File/Save",                // G1_EDITOR_SAVE,
@@ -931,7 +931,7 @@ char *cmd_2_enum[]=
 
 
 // these ID's are defined in mess_id.hh
-void g1_editor_class::receive_event(i4_event *ev)
+void g1_editor_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{
@@ -1032,14 +1032,15 @@ void g1_editor_class::receive_event(i4_event *ev)
 
 }
 
-i4_image_class *g1_editor_class::load_compatiable_image(const i4_const_str &fname)
+i4_image_class * g1_editor_class::load_compatiable_image(const i4_const_str &fname)
 {
-	i4_image_class *im=i4_load_image(fname);
+	i4_image_class * im=i4_load_image(fname);
+
 	if (im)
 	{
 		i4_draw_context_class c(0,0, im->width()-1, im->height()-1);
 
-		i4_image_class *i=g1_render.r_api->create_compatible_image(im->width(), im->height());
+		i4_image_class * i=g1_render.r_api->create_compatible_image(im->width(), im->height());
 		if (!i)
 		{
 			delete im;
@@ -1054,12 +1055,13 @@ i4_image_class *g1_editor_class::load_compatiable_image(const i4_const_str &fnam
 }
 
 
-li_object *g1_old_pull_menu_command(li_object *o, li_environment *env)
+li_object *g1_old_pull_menu_command(li_object * o, li_environment * env)
 {
-	char *cmd_name=li_symbol::get(env->current_function(),env)->name()->value();
+	char * cmd_name=li_symbol::get(env->current_function(),env)->name()->value();
 
 	int id=0;
-	for (char **cmd=cmd_2_enum; *cmd; cmd++, id++)
+
+	for (char * * cmd=cmd_2_enum; *cmd; cmd++, id++)
 	{
 		if (strcmp(*cmd, cmd_name)==0)
 		{
@@ -1081,22 +1083,22 @@ void g1_editor_class::redraw_all()
 	}
 }
 
-li_object *g1_editor_redraw_all(li_object *o, li_environment *env)
+li_object *g1_editor_redraw_all(li_object * o, li_environment * env)
 {
 	g1_editor_instance.redraw_all();
 	return 0;
 }
 
-void g1_editor_class::init(i4_parent_window_class *_parent,
-						   i4_graphical_style_class *_style,
-						   i4_image_class *_root_image,
-						   i4_display_class *display,
-						   i4_window_manager_class *wm)
+void g1_editor_class::init(i4_parent_window_class * _parent,
+						   i4_graphical_style_class * _style,
+						   i4_image_class * _root_image,
+						   i4_display_class * display,
+						   i4_window_manager_class * wm)
 
 {
 	li_add_function("redraw_all_views", g1_editor_redraw_all);
 
-	for (char **cmd=cmd_2_enum; *cmd; cmd++)
+	for (char * * cmd=cmd_2_enum; *cmd; cmd++)
 	{
 		li_add_function(*cmd, g1_old_pull_menu_command);
 	}
@@ -1138,7 +1140,7 @@ void g1_editor_class::uninit()
 
 	//i4_uninit_gui_status();
 
-	for (g1_mode_creator *mc=g1_mode_creator::first; mc; mc=mc->next)
+	for (g1_mode_creator * mc=g1_mode_creator::first; mc; mc=mc->next)
 	{
 		mc->cleanup();
 	}
@@ -1187,7 +1189,7 @@ void g1_controller_edit_class::changed()
 
 
 
-void g1_editor_class::set_tool_window(i4_window_class **window)
+void g1_editor_class::set_tool_window(i4_window_class * * window)
 {
 	if (tool_window && tool_window!=window)
 	{
@@ -1225,7 +1227,7 @@ void g1_controller_edit_class::move_selected_heights(sw32 z_change)
 
 
 	w32 w=(get_map()->width()+1), h=(get_map()->height()+1); //,c;
-	g1_map_vertex_class *v=get_map()->vertex(0,0);
+	g1_map_vertex_class * v=get_map()->vertex(0,0);
 
 	//Having a status window here is more anoying than helpfull
 	//because this is a short, but repeating operation
@@ -1307,7 +1309,8 @@ void g1_editor_class::select_all_verts()
 
 void g1_editor_class::open_anim()
 {
-	i4_str *start_dir=0;
+	i4_str * start_dir=0;
+
 	if (!start_dir)
 	{
 		start_dir=new i4_str(get_editor_string("open_anim_start_dir"));
@@ -1325,7 +1328,7 @@ void g1_editor_class::open_anim()
 
 void g1_editor_class::open_file()
 {
-	i4_str *start_dir=0;
+	i4_str * start_dir=0;
 
 	if (g1_map_is_loaded() && !g1_get_map()->get_filename().null())
 	{
@@ -1387,7 +1390,7 @@ void g1_editor_class::open_dll()
 }
 
 
-void g1_editor_class::open_anim_ok(i4_user_message_event_class *ev)
+void g1_editor_class::open_anim_ok(i4_user_message_event_class * ev)
 {
 	CAST_PTR(f, i4_file_open_message_class, ev);
 	char tmp[MAX_PATH];
@@ -1395,7 +1398,7 @@ void g1_editor_class::open_anim_ok(i4_user_message_event_class *ev)
 	li_load(tmp);
 }
 
-void g1_editor_class::open_file_ok(i4_user_message_event_class *ev)
+void g1_editor_class::open_file_ok(i4_user_message_event_class * ev)
 {
 	CAST_PTR(f, i4_file_open_message_class, ev);
 
@@ -1403,7 +1406,7 @@ void g1_editor_class::open_file_ok(i4_user_message_event_class *ev)
 
 }
 
-void g1_editor_class::open_dll_ok(i4_user_message_event_class *ev)
+void g1_editor_class::open_dll_ok(i4_user_message_event_class * ev)
 {
 	CAST_PTR(f, i4_file_open_message_class, ev);
 	if (f->filename)
@@ -1412,7 +1415,7 @@ void g1_editor_class::open_dll_ok(i4_user_message_event_class *ev)
 	}
 }
 
-void g1_editor_class::open_saveas_ok(i4_user_message_event_class *ev)
+void g1_editor_class::open_saveas_ok(i4_user_message_event_class * ev)
 {
 	if (have_map())
 	{
@@ -1423,12 +1426,12 @@ void g1_editor_class::open_saveas_ok(i4_user_message_event_class *ev)
 		//this (or other hack) is needed, as source may come from current dir
 		//(usually \golgotha). The sprintf then generates a "/filename.scm"
 		//source file, wich of course is incorrect.
-		i4_str *srcpath=i4_full_path(get_map()->get_filename());
+		i4_str * srcpath=i4_full_path(get_map()->get_filename());
 		i4_split_path(*srcpath,fsource);
 		i4_split_path(*f->filename,ftarget);
 		i4_const_str fmt("%s/%s.scm");
-		i4_str *src=fmt.sprintf(300,fsource.path,fsource.filename);
-		i4_str *dst=fmt.sprintf(300,ftarget.path,ftarget.filename);
+		i4_str * src=fmt.sprintf(300,fsource.path,fsource.filename);
+		i4_str * dst=fmt.sprintf(300,ftarget.path,ftarget.filename);
 		if (!i4_copy_file(*src,*dst))
 		{
 			i4_error("ERROR: Could not copy SCM file. Source file corrupt? Permissions?");
@@ -1446,11 +1449,11 @@ void g1_editor_class::open_saveas_ok(i4_user_message_event_class *ev)
 }
 
 
-i4_parent_window_class *g1_editor_class::create_modal(w32 w, w32 h, char *title_res)
+i4_parent_window_class * g1_editor_class::create_modal(w32 w, w32 h, char * title_res)
 {
 	close_modal();
 
-	i4_object_message_event_class *closed_modal;
+	i4_object_message_event_class * closed_modal;
 	closed_modal=new i4_object_message_event_class(this, G1_EDITOR_MODAL_CLOSED);
 
 
@@ -1467,7 +1470,7 @@ void g1_editor_class::mark_selected_verts_for_undo_save()
 	if (have_map())
 	{
 		int t=(get_map()->width()+1) * (get_map()->height()+1);
-		g1_map_vertex_class *v=get_map()->verts;
+		g1_map_vertex_class * v=get_map()->verts;
 
 		for (int i=0; i<t; i++, v++)
 		{
@@ -1483,7 +1486,7 @@ void g1_editor_class::mark_selected_verts_for_undo_save()
 void g1_editor_class::unmark_all_selected_verts_for_undo_save()
 {
 	int t=(get_map()->width()+1) * (get_map()->height()+1);
-	g1_map_vertex_class *v=get_map()->verts;
+	g1_map_vertex_class * v=get_map()->verts;
 
 	for (int i=0; i<t; i++, v++)
 	{
@@ -1494,7 +1497,7 @@ void g1_editor_class::unmark_all_selected_verts_for_undo_save()
 
 
 
-void g1_editor_class::save_views(g1_saver_class *fp)
+void g1_editor_class::save_views(g1_saver_class * fp)
 {
 	g1_cwin_man_class::save_views(fp);
 
@@ -1513,7 +1516,7 @@ void g1_editor_class::save_views(g1_saver_class *fp)
 	}
 }
 
-void g1_editor_class::load_views(g1_loader_class *fp)
+void g1_editor_class::load_views(g1_loader_class * fp)
 {
 	g1_cwin_man_class::load_views(fp);
 
@@ -1552,12 +1555,12 @@ void g1_editor_class::load_views(g1_loader_class *fp)
 }
 
 
-const i4_const_str &g1_ges(char *res)
+const i4_const_str &g1_ges(char * res)
 {
 	return g1_editor_instance.get_editor_string(res);
 }
 
-g1_controller_edit_class *g1_editor_class::get_current_view()
+g1_controller_edit_class * g1_editor_class::get_current_view()
 {
 	for (int i=0; i<MAX_VIEWS; i++)
 	{
@@ -1581,7 +1584,7 @@ g1_controller_edit_class *g1_editor_class::get_current_view()
 
 
 
-void g1_controller_edit_class::receive_event(i4_event *ev)
+void g1_controller_edit_class::receive_event(i4_event * ev)
 {
 
 
@@ -1726,20 +1729,20 @@ void g1_controller_edit_class::receive_event(i4_event *ev)
 
 
 
-i4_spline_class::point *g1_controller_edit_class::find_spline_point(sw32 mx, sw32 my,
-																	w32 instance)
+i4_spline_class::point * g1_controller_edit_class::find_spline_point(sw32 mx, sw32 my,
+																	 w32 instance)
 {
-	i4_spline_class *s[MAX_SPLINE_EDIT];
+	i4_spline_class * s[MAX_SPLINE_EDIT];
 	int t=get_current_splines(s,MAX_SPLINE_EDIT);
 
 
 	r1_vert rv;
-	i4_spline_class::point *first=0, *last=0;
+	i4_spline_class::point * first=0, * last=0;
 
 
 	for (w32 i=0; i<(w32)t; i++)
 	{
-		i4_spline_class::point *c=s[i]->begin();
+		i4_spline_class::point * c=s[i]->begin();
 		for (; c; c=c->next)
 		{
 			if (g1_render.project_point(i4_3d_point_class(c->x, c->y, c->z),
@@ -1770,10 +1773,10 @@ void g1_controller_edit_class::clear_selected_points()
 
 	g1_editor_instance.add_undo(G1_MAP_MOVIE);
 
-	i4_spline_class *s[MAX_SPLINE_EDIT];
+	i4_spline_class * s[MAX_SPLINE_EDIT];
 	int t=get_current_splines(s,MAX_SPLINE_EDIT);
 
-	i4_spline_class::point *c;
+	i4_spline_class::point * c;
 
 	for (int i=0; i<t; i++)
 	{
@@ -1853,7 +1856,7 @@ void g1_controller_edit_class::add_movie_control_point(int list_number)
 {
 	g1_editor_instance.add_undo(G1_MAP_MOVIE);
 
-	i4_spline_class *s[MAX_SPLINE_EDIT];
+	i4_spline_class * s[MAX_SPLINE_EDIT];
 	//w32 list_number_2;
 	int t=get_current_splines(s,MAX_SPLINE_EDIT);
 
@@ -1883,7 +1886,7 @@ void g1_controller_edit_class::add_movie_control_point(int list_number)
 
 			list_number_2 = g1_cut_scene_class::TARGET;
 
-			g1_player_piece_class *p;
+			g1_player_piece_class * p;
 			p=(g1_player_piece_class *)get_map()->find_object_by_id(g1_supertank_type,
 																	g1_default_player);
 			gx = p->x;
@@ -1949,7 +1952,7 @@ void g1_controller_edit_class::delete_selected_points()
 {
 	g1_editor_instance.add_undo(G1_MAP_MOVIE);
 
-	i4_spline_class *s[MAX_SPLINE_EDIT];
+	i4_spline_class * s[MAX_SPLINE_EDIT];
 	int t=get_current_splines(s,MAX_SPLINE_EDIT);
 	for (int i=0; i<t; i++)
 	{
@@ -1964,7 +1967,7 @@ void g1_controller_edit_class::insert_control_points()
 {
 	g1_editor_instance.add_undo(G1_MAP_MOVIE);
 
-	i4_spline_class *s[MAX_SPLINE_EDIT];
+	i4_spline_class * s[MAX_SPLINE_EDIT];
 	int t=get_current_splines(s,MAX_SPLINE_EDIT);
 
 	for (int i=0; i<t; i++)
@@ -1980,12 +1983,12 @@ void g1_controller_edit_class::move_selected_points(i4_float xa, i4_float ya, i4
 {
 	g1_editor_instance.add_undo(G1_MAP_MOVIE);
 
-	i4_spline_class *s[MAX_SPLINE_EDIT];
+	i4_spline_class * s[MAX_SPLINE_EDIT];
 	int t=get_current_splines(s,MAX_SPLINE_EDIT);
 
 	for (int i=0; i<t; i++)
 	{
-		i4_spline_class::point *c=s[i]->begin();
+		i4_spline_class::point * c=s[i]->begin();
 
 		for (; c; c=c->next)
 		{
@@ -2055,7 +2058,7 @@ void g1_controller_edit_class::setup_mode()
 
 
 	char buf[250];
-	for (g1_mode_creator *mc=g1_mode_creator::first; mc; mc=mc->next)
+	for (g1_mode_creator * mc=g1_mode_creator::first; mc; mc=mc->next)
 	{
 		mc->name(buf);
 		if (strcmp(g1_edit_state.major_mode, buf)==0)
@@ -2146,7 +2149,7 @@ void g1_controller_edit_class::focused()
 	set_cursor(g1_resources.big_cursors[cursor_state]);
 }
 
-void g1_replace_cell(g1_map_class *map,
+void g1_replace_cell(g1_map_class * map,
 					 g1_map_cell_class &original,
 					 g1_map_cell_class &new_cell)
 {
@@ -2154,7 +2157,7 @@ void g1_replace_cell(g1_map_class *map,
 
 	while (original.get_obj_list())
 	{
-		g1_object_class *o=original.object_list->object;
+		g1_object_class * o=original.object_list->object;
 		o->unoccupy_location();
 
 		old=original;
@@ -2172,7 +2175,7 @@ void g1_replace_cell(g1_map_class *map,
 
 }
 
-void g1_controller_edit_class::replace_cell(g1_map_class *map,
+void g1_controller_edit_class::replace_cell(g1_map_class * map,
 											g1_map_cell_class &original,
 											g1_map_cell_class &new_cell)
 {
@@ -2221,7 +2224,7 @@ class g1_map_fill_class :
 {
 
 public:
-	g1_map_class *map;
+	g1_map_class * map;
 	g1_map_class *get_map()
 	{
 		return map;
@@ -2241,6 +2244,7 @@ public:
 	i4_bool blocking(sw32 x, sw32 y)
 	{
 		w16 on_type=get_map()->cell((w16)x,(w16)y)->type;
+
 		if (on_type==block_type)
 		{
 			return i4_F;
@@ -2254,12 +2258,13 @@ public:
 	void fill_block(sw32 x, sw32 y, sw32 startx, sw32 starty)
 	{
 		g1_map_cell_class c;
+
 		c.init(type, rotation, mirror);
 
 		g1_replace_cell(map, *get_map()->cell((w16)x,(w16)y), c);
 	}
 
-	g1_map_fill_class(g1_map_class *map, w16 type,
+	g1_map_fill_class(g1_map_class * map, w16 type,
 					  g1_rotation_type rotation,
 					  i4_bool mirror,
 					  g1_player_type owner,
@@ -2326,8 +2331,8 @@ void g1_controller_edit_class::draw_3d_line(const i4_3d_point_class &p1,
 											const i4_3d_point_class &p2,
 											i4_color color1,
 											i4_color color2,
-											i4_image_class *local_image,
-											g1_draw_context_class *context)
+											i4_image_class * local_image,
+											g1_draw_context_class * context)
 {
 	g1_render.render_3d_line(p1, p2, color1, color2, context->transform);
 }
@@ -2336,10 +2341,11 @@ void g1_controller_edit_class::draw_3d_line(const i4_3d_point_class &p1,
 void g1_controller_edit_class::draw_3d_point(sw32 w,
 											 i4_color color,
 											 const i4_3d_point_class &p,
-											 i4_image_class *local_image,
-											 g1_draw_context_class *context)
+											 i4_image_class * local_image,
+											 g1_draw_context_class * context)
 {
 	r1_vert v;
+
 	if (g1_render.project_point(p, v, context->transform))
 	{
 		r1_clip_clear_area((sw32)v.px-w, (sw32)v.py-w,
@@ -2349,22 +2355,23 @@ void g1_controller_edit_class::draw_3d_point(sw32 w,
 }
 
 
-void g1_controller_edit_class::draw_spline(i4_image_class *local_image,
-										   g1_draw_context_class *g1_context,
+void g1_controller_edit_class::draw_spline(i4_image_class * local_image,
+										   g1_draw_context_class * g1_context,
 										   i4_color cpoint_color,
 										   i4_color line_color,
 										   i4_color spline_color,
-										   i4_spline_class *s,
+										   i4_spline_class * s,
 										   w32 cur_frame)
 {
 	sw32 i;
+
 	//i4_float lx,ly,x,y,z;
 	if (!s->total())
 	{
 		return;
 	}
 
-	i4_spline_class::point *p;
+	i4_spline_class::point * p;
 	i4_3d_point_class cur_p, last_p;
 
 	for (i=0; i<(sw32)s->total(); i++)
@@ -2423,7 +2430,7 @@ void g1_controller_edit_class::draw_spline(i4_image_class *local_image,
 	{
 		i4_3d_point_class q;
 
-		i4_spline_class::point *p=s->get_control_point(i);
+		i4_spline_class::point * p=s->get_control_point(i);
 
 		if (p->selected)
 		{
@@ -2441,26 +2448,27 @@ void g1_controller_edit_class::draw_spline(i4_image_class *local_image,
 
 }
 
-void g1_controller_edit_class_tile_post_cell_draw(sw32 x, sw32 y, void *context)
+void g1_controller_edit_class_tile_post_cell_draw(sw32 x, sw32 y, void * context)
 {
 	((g1_controller_edit_class *)context)->tile_cell_draw(x,y);
 }
 
 
-void g1_controller_edit_class_object_post_cell_draw(sw32 x, sw32 y, void *context)
+void g1_controller_edit_class_object_post_cell_draw(sw32 x, sw32 y, void * context)
 {
 	((g1_controller_edit_class *)context)->object_cell_draw(x,y);
 }
 
 void g1_controller_edit_class::object_cell_draw(sw32 x, sw32 y)
 {
-	g1_map_class *map=get_map();
+	g1_map_class * map=get_map();
 
 	int bgrade=-1;
+
 	//code for old maps only
 	for (int j=0; j<G1_GRADE_LEVELS; j++)
 	{
-		g1_block_map_class *bmap=map->get_block_map(j);
+		g1_block_map_class * bmap=map->get_block_map(j);
 		if (bmap && bmap->is_blocked((w16)x,(w16)y, G1_NORTH | G1_SOUTH | G1_WEST | G1_EAST))
 		{
 			bgrade=j;
@@ -2502,9 +2510,10 @@ void g1_controller_edit_class::object_cell_draw(sw32 x, sw32 y)
 void g1_controller_edit_class::tile_cell_draw(sw32 x, sw32 y)
 {
 	r1_vert rv;
-	g1_map_class *map=get_map();
+	g1_map_class * map=get_map();
 
-	g1_map_vertex_class *v[4];
+	g1_map_vertex_class * v[4];
+
 	v[0]=map->vertex(x,y);
 	v[1]=v[0]+1;
 	v[2]=v[0]+map->width()+1;
@@ -2520,7 +2529,7 @@ void g1_controller_edit_class::tile_cell_draw(sw32 x, sw32 y)
 	{
 		if (v[i]->is_selected())
 		{
-			i4_3d_point_class cp((float)vt[i *2],(float)vt[i *2+1],v[i]->get_height());
+			i4_3d_point_class cp((float)vt[i * 2],(float)vt[i * 2+1],v[i]->get_height());
 
 			if (g1_render.project_point(cp, rv, g1_context.transform))
 			{
@@ -2542,7 +2551,7 @@ void g1_controller_edit_class::editor_pre_draw(i4_draw_context_class &context)
 	if (g1_map_is_loaded() && active())
 	{
 		int w=(get_map()->width()+1) * (get_map()->height()+1);
-		g1_map_vertex_class *v=get_map()->vertex(0,0);
+		g1_map_vertex_class * v=get_map()->vertex(0,0);
 
 		for (int i=0; i<w; i++, v++)
 		{
@@ -2657,16 +2666,17 @@ void g1_controller_edit_class::process_input(i4_time_class tick_time)
 	   	} */
 }
 
-g1_map_vertex_class *g1_controller_edit_class::find_map_vertex(sw32 x, sw32 y,
-															   sw32 &vx, sw32 &vy)
+g1_map_vertex_class * g1_controller_edit_class::find_map_vertex(sw32 x, sw32 y,
+																sw32 &vx, sw32 &vy)
 {
 	sw32 sx,sy,ex,ey, tx,ty;
+
 	sx=(sw32)0;
 	sy=(sw32)0;
 	ex=(sw32)get_map()->width();
 	ey=(sw32)get_map()->height();
 
-	g1_map_vertex_class *mv=get_map()->vertex(0,0);
+	g1_map_vertex_class * mv=get_map()->vertex(0,0);
 
 	if (!g1_context.transform)
 	{
@@ -2710,7 +2720,7 @@ void g1_controller_edit_class::clear_selected_verts()
 		i4_bool change=i4_F;
 
 		sw32 w=(get_map()->width()+1)*(get_map()->height()+1);
-		g1_map_vertex_class *v=get_map()->vertex(0,0);
+		g1_map_vertex_class * v=get_map()->vertex(0,0);
 
 
 		for (w32 x=0; x<(w32)w; x++, v++)
@@ -2736,7 +2746,7 @@ void g1_controller_edit_class::select_verts_in_area(sw32 x1, sw32 y1,
 													g1_mode_handler::select_modifier mod)
 {
 	sw32 w=(get_map()->width()+1),h=(get_map()->height()+1),x,y;
-	g1_map_vertex_class *v=get_map()->vertex(0,0);
+	g1_map_vertex_class * v=get_map()->vertex(0,0);
 
 	i4_bool change=i4_F;
 
@@ -2799,7 +2809,7 @@ void g1_controller_edit_class::select_verts_in_area(sw32 x1, sw32 y1,
 
 
 g1_controller_edit_class::g1_controller_edit_class(w16 w, w16 h,
-												   i4_graphical_style_class *style)
+												   i4_graphical_style_class * style)
 	: g1_object_controller_class(w,h, style)
 {
 	focus_visible=i4_F;
@@ -2838,7 +2848,7 @@ g1_controller_edit_class::g1_controller_edit_class(w16 w, w16 h,
 
 g1_edit_state_class g1_edit_state;
 
-g1_controller_edit_class *g1_edit_state_class::current_focus()
+g1_controller_edit_class * g1_edit_state_class::current_focus()
 {
 	if (g1_editor_instance.in_editor() &&  g1_current_controller.get())
 	{
@@ -2867,17 +2877,17 @@ void g1_edit_state_class::show_focus()
 	}
 }
 
-i4_graphical_style_class *g1_edit_state_class::get_style()
+i4_graphical_style_class * g1_edit_state_class::get_style()
 {
 	return i4_current_app->get_style();
 }
 
 
-i4_button_class *g1_edit_state_class::create_button(char *res_name,
-													w32 evalue,
-													i4_bool popup,
-													i4_event_handler_class *send_to,
-													i4_event *send_event)
+i4_button_class * g1_edit_state_class::create_button(char * res_name,
+													 w32 evalue,
+													 i4_bool popup,
+													 i4_event_handler_class * send_to,
+													 i4_event * send_event)
 {
 	if (send_to==0)
 	{
@@ -2901,18 +2911,18 @@ i4_button_class *g1_edit_state_class::create_button(char *res_name,
 	}
 
 	// change this to an icon at some point
-	i4_image_window_class *t=new i4_image_window_class(icons[icon_num]);
+	i4_image_window_class * t=new i4_image_window_class(icons[icon_num]);
 
 	if (!send_event)
 	{
 		send_event=new i4_object_message_event_class(send_to, evalue);
 	}
 
-	i4_event_reaction_class *r=new i4_event_reaction_class(send_to, send_event);
+	i4_event_reaction_class * r=new i4_event_reaction_class(send_to, send_event);
 
 	char help[30];
 	sprintf(help,"%s_help",res_name);
-	i4_button_class *b=new i4_button_class(&g1_ges(help), t, get_style(), r);
+	i4_button_class * b=new i4_button_class(&g1_ges(help), t, get_style(), r);
 
 
 	if (popup)
@@ -2924,15 +2934,16 @@ i4_button_class *g1_edit_state_class::create_button(char *res_name,
 	return b;
 }
 
-void g1_edit_state_class::add_but(i4_button_box_class *box,
-								  char *res_name,
+void g1_edit_state_class::add_but(i4_button_box_class * box,
+								  char * res_name,
 								  w32 evalue,
 								  i4_bool down,
-								  i4_event *send_event)
+								  i4_event * send_event)
 {
 	char help[30];
+
 	sprintf(help,"%s_help",res_name);
-	i4_button_class *b=create_button(res_name, evalue, i4_F, 0, send_event);
+	i4_button_class * b=create_button(res_name, evalue, i4_F, 0, send_event);
 
 	box->add_button(0,0, b);
 
@@ -2944,15 +2955,16 @@ void g1_edit_state_class::add_but(i4_button_box_class *box,
 }
 
 
-i4_window_class *g1_edit_state_class::create_buttons(w32 height)
+i4_window_class * g1_edit_state_class::create_buttons(w32 height)
 {
-	i4_graphical_style_class *style=get_style();
+	i4_graphical_style_class * style=get_style();
 
-	i4_button_box_class *box=new i4_button_box_class(this);
+	i4_button_box_class * box=new i4_button_box_class(this);
 
 	int i=0;
-	g1_mode_creator *mc, *cur=0;
+	g1_mode_creator * mc, * cur=0;
 	char buf[250];
+
 	for (mc=g1_mode_creator::first; mc; mc=mc->next, i++)
 	{
 		mc->name(buf);
@@ -2968,13 +2980,13 @@ i4_window_class *g1_edit_state_class::create_buttons(w32 height)
 	{
 		box->arrange_right_down();
 
-		i4_parent_window_class *minor_container=new i4_color_window_class(0, (w16)height,
-																		  style->color_hint->neutral(),
-																		  style);
+		i4_parent_window_class * minor_container=new i4_color_window_class(0, (w16)height,
+																		   style->color_hint->neutral(),
+																		   style);
 		cur->create_buttons(minor_container);
 		minor_container->resize_to_fit_children();
 
-		i4_deco_window_class *d;
+		i4_deco_window_class * d;
 		d=new i4_deco_window_class(box->width() + minor_container->width(), (w16)height, i4_F, style);
 
 
@@ -2992,7 +3004,7 @@ i4_window_class *g1_edit_state_class::create_buttons(w32 height)
 	return 0;
 }
 
-void g1_edit_state_class::show_tools(i4_parent_window_class *p,
+void g1_edit_state_class::show_tools(i4_parent_window_class * p,
 									 w32 _win_h)
 {
 	win_h=_win_h;
@@ -3016,7 +3028,7 @@ void g1_edit_state_class::hide_tools()
 		parent=0;
 	}
 
-	for (g1_mode_creator *mc=g1_mode_creator::first; mc; mc=mc->next)
+	for (g1_mode_creator * mc=g1_mode_creator::first; mc; mc=mc->next)
 	{
 		mc->cleanup();
 	}
@@ -3070,10 +3082,11 @@ g1_edit_state_class::g1_edit_state_class()
 	parent=0;
 }
 
-g1_mode_creator *g1_edit_state_class::get_major_mode()
+g1_mode_creator * g1_edit_state_class::get_major_mode()
 {
 	char buf[250];
-	for (g1_mode_creator *mc=g1_mode_creator::first; mc; mc=mc->next)
+
+	for (g1_mode_creator * mc=g1_mode_creator::first; mc; mc=mc->next)
 	{
 
 		mc->name(buf);
@@ -3086,12 +3099,12 @@ g1_mode_creator *g1_edit_state_class::get_major_mode()
 	return 0;
 }
 
-i4_bool g1_edit_state_class::set_major_mode(char *mode_name)
+i4_bool g1_edit_state_class::set_major_mode(char * mode_name)
 {
 	hide_focus();
 
 	char buf[250];
-	for (g1_mode_creator *mc=g1_mode_creator::first; mc; mc=mc->next)
+	for (g1_mode_creator * mc=g1_mode_creator::first; mc; mc=mc->next)
 	{
 		mc->name(buf);
 		if (strcmp(mode_name, buf)==0)
@@ -3118,9 +3131,10 @@ i4_bool g1_edit_state_class::set_major_mode(char *mode_name)
 	return i4_F;
 }
 
-i4_bool g1_edit_state_class::set_minor_mode(char *major_mode_name, w32 minor_mode)
+i4_bool g1_edit_state_class::set_minor_mode(char * major_mode_name, w32 minor_mode)
 {
 	i4_bool ret;
+
 	hide_focus();
 
 
@@ -3145,7 +3159,7 @@ i4_bool g1_edit_state_class::set_minor_mode(char *major_mode_name, w32 minor_mod
 	return ret;
 }
 
-void g1_edit_state_class::receive_event(i4_event *ev)
+void g1_edit_state_class::receive_event(i4_event * ev)
 {
 	CAST_PTR(oev, i4_object_message_event_class, ev);
 
@@ -3173,7 +3187,7 @@ void g1_edit_state_class::load_icons()
 		return;
 	}
 
-	i4_const_str *e_cons=g1_editor_instance.get_editor_array("e_icons"), *e;
+	i4_const_str * e_cons=g1_editor_instance.get_editor_array("e_icons"), * e;
 	e=e_cons;
 
 	for (total_icons=0; !e->null(); total_icons++, e++)
@@ -3182,7 +3196,7 @@ void g1_edit_state_class::load_icons()
 	}
 	e=e_cons;
 
-	icons=(i4_image_class **)I4_MALLOC(sizeof(i4_image_class *) * total_icons, "icons");
+	icons=(i4_image_class * *)I4_MALLOC(sizeof(i4_image_class *) * total_icons, "icons");
 
 	for (w32 i=0; i<(w32)total_icons; i++, e++)
 	{
@@ -3254,7 +3268,7 @@ void g1_edit_state_class::context_help_struct::hide()
 	}
 }
 
-li_object *g1_edit_selected(li_object *o, li_environment *env)
+li_object *g1_edit_selected(li_object * o, li_environment * env)
 {
 	if (g1_edit_state.current_focus())
 	{
@@ -3289,14 +3303,14 @@ g1_camera_params g1_e_camera;
 
 void g1_camera_mode::edit_selected()
 {
-	i4_spline_class *s[g1_controller_edit_class::MAX_SPLINE_EDIT];
+	i4_spline_class * s[g1_controller_edit_class::MAX_SPLINE_EDIT];
 	int t=c->get_current_splines(s,g1_controller_edit_class::MAX_SPLINE_EDIT);
 
 	w32 cur_frame=0;
 
 	for (int i=0; i<t; i++)
 	{
-		i4_spline_class::point *sp=s[i]->begin();
+		i4_spline_class::point * sp=s[i]->begin();
 		for (; sp; sp=sp->next)
 		{
 			if (sp->selected)
@@ -3306,7 +3320,7 @@ void g1_camera_mode::edit_selected()
 		}
 	}
 
-	i4_parent_window_class *p=g1_create_time_edit_window(c->style, cur_frame);
+	i4_parent_window_class * p=g1_create_time_edit_window(c->style, cur_frame);
 	g1_e_camera.set_edit_window(c->parent->root_window(), lx() + c->x(), ly() + c->y());
 }
 
@@ -3343,7 +3357,7 @@ i4_bool g1_camera_mode::select_object(sw32 mx, sw32 my,
 									  i4_float &ox, i4_float &oy, i4_float &oz,
 									  select_modifier mod)
 {
-	i4_spline_class::point *sp=c->find_spline_point(mx, my, 0);
+	i4_spline_class::point * sp=c->find_spline_point(mx, my, 0);
 
 	if (sp)
 	{
@@ -3389,7 +3403,7 @@ void g1_camera_mode::move_selected(i4_float xc, i4_float yc, i4_float zc,
 
 void g1_camera_mode::post_draw(i4_draw_context_class &context)
 {
-	i4_spline_class *s[g1_controller_edit_class::MAX_SPLINE_EDIT];
+	i4_spline_class * s[g1_controller_edit_class::MAX_SPLINE_EDIT];
 	int t=c->get_current_splines(s,g1_controller_edit_class::MAX_SPLINE_EDIT);
 
 	i4_color pas_colors[3]={
@@ -3426,20 +3440,20 @@ void g1_camera_mode::select_objects_in_area(sw32 x1, sw32 y1, sw32 x2, sw32 y2,
 		c->clear_selected_points();
 	}
 
-	g1_movie_flow_class *flow=c->get_map()->current_movie;
+	g1_movie_flow_class * flow=c->get_map()->current_movie;
 
 	i4_bool change=i4_F;
 
 	r1_vert rv;
-	i4_spline_class::point *first=0, *last=0;
+	i4_spline_class::point * first=0, * last=0;
 
-	i4_spline_class *s[g1_controller_edit_class::MAX_SPLINE_EDIT];
+	i4_spline_class * s[g1_controller_edit_class::MAX_SPLINE_EDIT];
 	int t=c->get_current_splines(s,g1_controller_edit_class::MAX_SPLINE_EDIT);
 
 
 	for (w32 i=0; i<(w32)t; i++)
 	{
-		i4_spline_class::point *sp=s[i]->begin();
+		i4_spline_class::point * sp=s[i]->begin();
 
 		for (; sp; sp=sp->next)
 		{
@@ -3489,16 +3503,17 @@ g1_camera_params::g1_camera_params()
 
 
 
-void g1_camera_params::create_buttons(i4_parent_window_class *container)
+void g1_camera_params::create_buttons(i4_parent_window_class * container)
 {
-	i4_button_box_class *box=new i4_button_box_class(&g1_edit_state);
-	char *rn[]={
+	i4_button_box_class * box=new i4_button_box_class(&g1_edit_state);
+	char * rn[]={
 		"cROTATE", "cZOOM",
 		"cADD_CAMERA", "cADD_TARGET", "cADD_OBJECT",
 		"cMODIFY", "cSELECT", 0
 	};
 	w32 i=ROTATE;
-	for (char **a=rn; *a; a++, i++)
+
+	for (char * * a=rn; *a; a++, i++)
 	{
 		g1_edit_state.add_but(box, *a, 0, (i4_bool) i==minor_mode, new g1_set_minor_mode_event("CAMERA",(w8)i));
 	}
@@ -3519,7 +3534,7 @@ void g1_camera_params::cleanup()
 	}
 }
 
-void g1_camera_params::set_edit_window(i4_parent_window_class *p, sw32 x, sw32 y)
+void g1_camera_params::set_edit_window(i4_parent_window_class * p, sw32 x, sw32 y)
 {
 	cleanup();
 	edit_win=get_style()->create_mp_window((short)x,(short)y,
@@ -3546,16 +3561,17 @@ g1_mode_handler::state g1_light_mode::current_state()
 	w8 remap[]={
 		ROTATE, ZOOM, DRAG_SELECT, DRAG_SELECT, OTHER, OTHER
 	};
+
 	I4_ASSERT(g1_e_light.minor_mode<=sizeof(remap), "state too big");
 	return (g1_mode_handler::state)remap[g1_e_light.get_minor_mode()];
 }
 
-void g1_light_params::create_buttons(i4_parent_window_class *container)
+void g1_light_params::create_buttons(i4_parent_window_class * container)
 {
-	i4_button_box_class *box=new i4_button_box_class(&g1_edit_state);
-	char *rn[]={
+	i4_button_box_class * box=new i4_button_box_class(&g1_edit_state);
+	char * rn[]={
 		"lROTATE", "lZOOM", 0
-	}, **a;
+	}, * * a;
 	w32 i=ROTATE;
 
 	for (a=rn; *a; i++, a++)
@@ -3571,7 +3587,7 @@ void g1_light_params::create_buttons(i4_parent_window_class *container)
 	container->add_child(0,0,box);
 
 
-	char *indiv_buts[]={
+	char * indiv_buts[]={
 		"lGDARKEN", "lGBRIGHTEN", "lDDARKEN", "lDBRIGHTEN", "lAMBIENT", 0
 	};
 	int but_ids[]={
@@ -3587,7 +3603,7 @@ void g1_light_params::create_buttons(i4_parent_window_class *container)
 
 	for (i=0, a=indiv_buts; *a; i++, a++)
 	{
-		i4_button_class *b=g1_edit_state.create_button(*a, but_ids[i], i4_T, this);
+		i4_button_class * b=g1_edit_state.create_button(*a, but_ids[i], i4_T, this);
 		if (rep_ids[i])
 		{
 			b->set_repeat_down(i4_T, new i4_event_reaction_class(this, rep_ids[i]));
@@ -3599,9 +3615,10 @@ void g1_light_params::create_buttons(i4_parent_window_class *container)
 }
 
 
-void g1_light_params::receive_event(i4_event *ev)
+void g1_light_params::receive_event(i4_event * ev)
 {
 	int sub_type=-1;
+
 	if (ev->type()==i4_event::OBJECT_MESSAGE)
 	{
 		CAST_PTR(oev,i4_object_message_event_class,ev);
@@ -3677,7 +3694,7 @@ void g1_light_params::receive_event(i4_event *ev)
 						recalc=1;
 						li_call("add_undo", li_make_list(new li_int(G1_MAP_VERTS | G1_MAP_LIGHTS), 0));
 
-						i4_transform_class *t=&g1_current_controller->transform;
+						i4_transform_class * t=&g1_current_controller->transform;
 						i4_3d_vector cam1, cam2;
 						t->inverse_transform(i4_3d_vector(0,0,0), cam1);
 						t->inverse_transform(i4_3d_vector(0,0,1), cam2);
@@ -3729,7 +3746,7 @@ sw32 g1_mode_handler::y()
 }
 
 
-g1_mode_creator *g1_mode_creator::first=0;
+g1_mode_creator * g1_mode_creator::first=0;
 
 void g1_mode_handler::uninit()
 {
@@ -3755,8 +3772,8 @@ g1_mode_creator::~g1_mode_creator()
 	}
 	else
 	{
-		g1_mode_creator *last=0;
-		for (g1_mode_creator *f=first; f!=this;)
+		g1_mode_creator * last=0;
+		for (g1_mode_creator * f=first; f!=this;)
 		{
 			last=f;
 			f=f->next;
@@ -3766,17 +3783,17 @@ g1_mode_creator::~g1_mode_creator()
 }
 
 
-i4_graphical_style_class *g1_mode_creator::get_style()
+i4_graphical_style_class * g1_mode_creator::get_style()
 {
 	return i4_current_app->get_style();
 }
 
-i4_transform_class *g1_mode_handler::get_transform()
+i4_transform_class * g1_mode_handler::get_transform()
 {
 	return &c->transform;
 }
 
-g1_mode_handler::g1_mode_handler(g1_controller_edit_class *c)
+g1_mode_handler::g1_mode_handler(g1_controller_edit_class * c)
 	: c(c)
 {
 	mouse_down_flag=i4_F;
@@ -3821,7 +3838,7 @@ void g1_mode_handler::mouse_move(sw32 mx, sw32 my)
 			{
 				if (drag) // are we dragging game stuff around?
 				{
-					i4_transform_class *t=&c->transform;
+					i4_transform_class * t=&c->transform;
 
 					i4_3d_point_class control_point;
 
@@ -3979,7 +3996,7 @@ void g1_mode_handler::ungrab_mouse()
 	mouse_down_flag=i4_F;
 }
 
-void g1_mode_handler::do_command(i4_do_command_event_class *cmd)
+void g1_mode_handler::do_command(i4_do_command_event_class * cmd)
 {
 	if (!strcmp(cmd->command, "edit_selected"))
 	{
@@ -3987,7 +4004,7 @@ void g1_mode_handler::do_command(i4_do_command_event_class *cmd)
 	}
 }
 
-void g1_mode_handler::end_command(i4_end_command_event_class *cmd)
+void g1_mode_handler::end_command(i4_end_command_event_class * cmd)
 {
 
 }
@@ -4055,15 +4072,17 @@ i4_bool g1_mode_handler::pass_through_focus_click()
 		case ZOOM:
 		case ROTATE:
 			return i4_T;
+
 			break;
 	}
 	return i4_F;
 }
 
 
-li_object *g1_delete_selected(li_object *o, li_environment *env)
+li_object *g1_delete_selected(li_object * o, li_environment * env)
 {
-	g1_controller_edit_class *v=g1_editor_instance.get_current_view();
+	g1_controller_edit_class * v=g1_editor_instance.get_current_view();
+
 	if (v)
 	{
 		v->get_mode()->delete_selected();
@@ -4086,14 +4105,14 @@ li_automatic_add_function(g1_delete_selected, "Map/Delete Selected");
 
 
 static g1_typed_reference_class<g1_object_class> preselected_object;
-static li_symbol *g1_last_link_var=0;
+static li_symbol * g1_last_link_var=0;
 static g1_typed_reference_class<g1_object_class> editing_object;
 static li_symbol_ref path_object_type("path_object");
 
 g1_object_params g1_e_object;
 
 
-li_object *g1_object_changed(li_object *o, li_environment *env)
+li_object *g1_object_changed(li_object * o, li_environment * env)
 {
 	if (editing_object.get())
 	{
@@ -4102,9 +4121,9 @@ li_object *g1_object_changed(li_object *o, li_environment *env)
 			editing_object->vars=li_class::get(li_car(o,env),env);
 
 
-			g1_object_class *list[G1_MAX_OBJECTS];
+			g1_object_class * list[G1_MAX_OBJECTS];
 			int t=g1_get_map()->make_object_list(list, G1_MAX_OBJECTS);
-			li_class *old=li_class::get(li_second(o,env),env);
+			li_class * old=li_class::get(li_second(o,env),env);
 			for (int i=0; i<t; i++)
 			{
 				list[i]->object_changed_by_editor(editing_object.get(), old);
@@ -4191,7 +4210,7 @@ void g1_object_mode::show_focus()
 				if (add->id==g1_get_object_type("lightbulb"))
 				{
 					add->h+=2;
-					g1_light_object_class *l=g1_light_object_class::cast(add.get());
+					g1_light_object_class * l=g1_light_object_class::cast(add.get());
 					l->setup(add->x, add->y, add->h, 1,1,1,1);
 				}
 
@@ -4207,12 +4226,12 @@ void g1_object_mode::show_focus()
 				else
 				{
 
-					g1_object_class *list[G1_MAX_OBJECTS];
+					g1_object_class * list[G1_MAX_OBJECTS];
 					int t=g1_get_map()->make_object_list(list, G1_MAX_OBJECTS);
 
 					// if we are creating a path-object, and a path object was previously selected, form a
 					// link between the two
-					g1_path_object_class *po=g1_path_object_class::cast(add.get()), *p2;
+					g1_path_object_class * po=g1_path_object_class::cast(add.get()), * p2;
 					if (po)
 					{
 
@@ -4229,7 +4248,7 @@ void g1_object_mode::show_focus()
 								else
 								{
 									po->add_controlled_object(list[i]);
-									for (g1_factory_class *f=g1_factory_list.first(); f; f=f->next)
+									for (g1_factory_class * f=g1_factory_list.first(); f; f=f->next)
 									{
 										if (f==list[i])
 										{
@@ -4253,7 +4272,7 @@ void g1_object_mode::show_focus()
 								if (po)
 								{
 									po->add_controlled_object(add.get());
-									for (g1_factory_class *f=g1_factory_list.first(); f; f=f->next)
+									for (g1_factory_class * f=g1_factory_list.first(); f; f=f->next)
 									{
 										if (f==add.get())
 										{
@@ -4282,7 +4301,7 @@ void g1_object_mode::mouse_down()
 		g1_editor_instance.add_undo(G1_MAP_OBJECTS);
 		show_focus();
 
-		g1_object_class *list[G1_MAX_OBJECTS];
+		g1_object_class * list[G1_MAX_OBJECTS];
 		int t=g1_get_map()->make_object_list(list, G1_MAX_OBJECTS);
 		for (int i=0; i<t; i++)
 		{
@@ -4347,16 +4366,16 @@ void g1_object_mode::mouse_move(sw32 mx, sw32 my)
 
 static li_symbol_ref s_add_link("add_link"), s_remove_link("remove_link");
 
-li_object *g1_add_link(li_object *o, li_environment *env)
+li_object *g1_add_link(li_object * o, li_environment * env)
 {
 	if (preselected_object.get())
 	{
 		li_call("redraw");
 		li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-		g1_object_class *olist[G1_MAX_OBJECTS];
+		g1_object_class * olist[G1_MAX_OBJECTS];
 		int t = g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
-		li_g1_ref *who=new li_g1_ref(preselected_object.get()->global_id);
+		li_g1_ref * who=new li_g1_ref(preselected_object.get()->global_id);
 		for (int i=0; i<t; i++)
 		{
 			if (olist[i]->selected())
@@ -4371,16 +4390,16 @@ li_object *g1_add_link(li_object *o, li_environment *env)
 li_automatic_add_function(g1_add_link, "add_link");
 
 
-li_object *g1_remove_link(li_object *o, li_environment *env)
+li_object *g1_remove_link(li_object * o, li_environment * env)
 {
 	if (preselected_object.get())
 	{
 		li_call("redraw");
 		li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-		g1_object_class *olist[G1_MAX_OBJECTS];
+		g1_object_class * olist[G1_MAX_OBJECTS];
 		int t = g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
-		li_g1_ref *who=new li_g1_ref(preselected_object.get()->global_id);
+		li_g1_ref * who=new li_g1_ref(preselected_object.get()->global_id);
 		for (int i=0; i<t; i++)
 		{
 			if (olist[i]->selected())
@@ -4395,20 +4414,20 @@ li_object *g1_remove_link(li_object *o, li_environment *env)
 li_automatic_add_function(g1_remove_link, "remove_link");
 
 
-li_object *g1_fix_forward_link(li_object *o, li_environment *env)
+li_object *g1_fix_forward_link(li_object * o, li_environment * env)
 {
 	if (preselected_object.get())
 	{
 		li_call("redraw");
 		li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-		g1_object_class *olist[G1_MAX_OBJECTS];
+		g1_object_class * olist[G1_MAX_OBJECTS];
 		int t = g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 		for (int i=0; i<t; i++)
 		{
 			if (olist[i]->selected())
 			{
-				g1_map_piece_class *mp = g1_map_piece_class::cast(olist[i]);
+				g1_map_piece_class * mp = g1_map_piece_class::cast(olist[i]);
 				if (mp)
 				{
 					mp->fix_forward_link(preselected_object.get());
@@ -4422,20 +4441,20 @@ li_object *g1_fix_forward_link(li_object *o, li_environment *env)
 li_automatic_add_function(g1_fix_forward_link, "fix_forward_link");
 
 
-li_object *g1_fix_previous_link(li_object *o, li_environment *env)
+li_object *g1_fix_previous_link(li_object * o, li_environment * env)
 {
 	if (preselected_object.get())
 	{
 		li_call("redraw");
 		li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-		g1_object_class *olist[G1_MAX_OBJECTS];
+		g1_object_class * olist[G1_MAX_OBJECTS];
 		int t = g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 		for (int i=0; i<t; i++)
 		{
 			if (olist[i]->selected())
 			{
-				g1_map_piece_class *mp = g1_map_piece_class::cast(olist[i]);
+				g1_map_piece_class * mp = g1_map_piece_class::cast(olist[i]);
 				if (mp)
 				{
 					mp->fix_previous_link(preselected_object.get());
@@ -4449,23 +4468,23 @@ li_object *g1_fix_previous_link(li_object *o, li_environment *env)
 li_automatic_add_function(g1_fix_previous_link, "fix_previous_link");
 
 
-li_object *g1_fix_path_link(li_object *o, li_environment *env)
+li_object *g1_fix_path_link(li_object * o, li_environment * env)
 {
-	g1_path_object_class *p2 = g1_path_object_class::cast(preselected_object.get());
-	g1_map_piece_class *mp = 0;
-	g1_path_object_class *p1 = 0;
+	g1_path_object_class * p2 = g1_path_object_class::cast(preselected_object.get());
+	g1_map_piece_class * mp = 0;
+	g1_path_object_class * p1 = 0;
 
 	if (p2)
 	{
-		g1_object_class *olist[G1_MAX_OBJECTS];
+		g1_object_class * olist[G1_MAX_OBJECTS];
 		int t = g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 
 		for (int i=0; i<t; i++)
 		{
 			if (olist[i]->selected())
 			{
-				g1_map_piece_class *_mp = g1_map_piece_class::cast(olist[i]);
-				g1_path_object_class *_p1 = g1_path_object_class::cast(olist[i]);
+				g1_map_piece_class * _mp = g1_map_piece_class::cast(olist[i]);
+				g1_path_object_class * _p1 = g1_path_object_class::cast(olist[i]);
 				if (_mp)
 				{
 					mp = _mp;
@@ -4493,7 +4512,7 @@ li_object *g1_fix_path_link(li_object *o, li_environment *env)
 li_automatic_add_function(g1_fix_path_link, "fix_path_link");
 
 
-li_object *g1_fix_tick_count(li_object *o, li_environment *env)
+li_object *g1_fix_tick_count(li_object * o, li_environment * env)
 {
 	if (o)
 	{
@@ -4506,10 +4525,10 @@ li_object *g1_fix_tick_count(li_object *o, li_environment *env)
 li_automatic_add_function(g1_fix_tick_count, "fix_tick_count");
 
 
-void g1_object_mode::key_press(i4_key_press_event_class *kev)
+void g1_object_mode::key_press(i4_key_press_event_class * kev)
 {
 	int i,t;
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 
 	switch (kev->key)
 	{
@@ -4587,8 +4606,9 @@ void g1_object_mode::key_press(i4_key_press_event_class *kev)
 
 void g1_object_mode::delete_selected()
 {
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=c->get_map()->make_object_list(olist, G1_MAX_OBJECTS);
+
 	for (int i=0; i<t; i++)
 	{
 		if (olist[i]->selected())
@@ -4618,7 +4638,7 @@ void g1_object_mode::move_selected(i4_float xc, i4_float yc, i4_float zc,
 
 
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=c->get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 
 
@@ -4632,7 +4652,7 @@ void g1_object_mode::move_selected(i4_float xc, i4_float yc, i4_float zc,
 			{
 				case g1_object_params::MOVE:
 					{
-						g1_object_class *o=olist[i];
+						g1_object_class * o=olist[i];
 						o->x+=xc;
 						o->y+=yc;
 						o->h+=zc;
@@ -4680,7 +4700,7 @@ i4_bool g1_object_mode::select_object(sw32 mx, sw32 my,
 	//large maps and 2nd there are other things that are more important to
 	//be able to undo...
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=c->get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 	int i;
 	i4_bool ret=i4_F;
@@ -4764,7 +4784,7 @@ void g1_object_mode::select_objects_in_area(sw32 x1, sw32 y1, sw32 x2, sw32 y2,
 
 	g1_editor_instance.add_undo(G1_MAP_OBJECTS);
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=c->get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 
 	for (int i=0; i<t; i++)
@@ -4800,9 +4820,10 @@ li_symbol_ref dbug_objs("dbug_objects");
 
 void g1_object_mode::post_draw(i4_draw_context_class &context)
 {
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=c->get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 	int w=1;
+
 	for (int i=0; i<t; i++)
 	{
 		r1_vert rv;
@@ -4811,7 +4832,7 @@ void g1_object_mode::post_draw(i4_draw_context_class &context)
 		{
 			w32 color=norm_color;
 
-			li_object *dbug=li_get_value(dbug_objs.get());
+			li_object * dbug=li_get_value(dbug_objs.get());
 			for (; dbug; dbug=li_cdr(dbug,0))
 			{
 				if ((w32)li_get_int(li_car(dbug,0),0)==olist[i]->global_id)
@@ -4838,7 +4859,7 @@ void g1_object_mode::post_draw(i4_draw_context_class &context)
 	g1_mode_handler::post_draw(context);
 }
 
-g1_object_mode::g1_object_mode(g1_controller_edit_class *c) :
+g1_object_mode::g1_object_mode(g1_controller_edit_class * c) :
 	g1_mode_handler(c)
 {
 	add=0;
@@ -4849,7 +4870,7 @@ g1_object_mode::g1_object_mode(g1_controller_edit_class *c) :
 
 void g1_object_mode::edit_selected()
 {
-	g1_object_class *olist[G1_MAX_OBJECTS], *first=0;
+	g1_object_class * olist[G1_MAX_OBJECTS], * first=0;
 	sw32 t=c->get_map()->make_object_list(olist, G1_MAX_OBJECTS), tsel=0;
 
 	g1_e_object.close_edit_window();
@@ -4866,7 +4887,7 @@ void g1_object_mode::edit_selected()
 
 	if (tsel==1)
 	{
-		i4_window_class *w=g1_object_type_array[editing_object->id]->create_edit_dialog();
+		i4_window_class * w=g1_object_type_array[editing_object->id]->create_edit_dialog();
 		if (w)
 		{
 			g1_e_object.set_edit_window(w);
@@ -4880,7 +4901,7 @@ void g1_object_mode::edit_selected()
 
 void g1_object_mode::idle()
 {
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=c->get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 	int closest=-1, closest_d=10000;
 
@@ -4904,9 +4925,9 @@ void g1_object_mode::idle()
 
 	if (closest!=-1)
 	{
-		i4_str *help=olist[closest]->get_context_string();
+		i4_str * help=olist[closest]->get_context_string();
 
-		i4_str *h2=i4_const_str("gid=%d %S").sprintf(200,olist[closest]->global_id, help);
+		i4_str * h2=i4_const_str("gid=%d %S").sprintf(200,olist[closest]->global_id, help);
 		g1_edit_state.context_help.show(*h2, x()+lx(), y()+ly());
 
 		if (help)
@@ -4920,14 +4941,15 @@ void g1_object_mode::idle()
 
 
 
-void g1_object_params::create_buttons(i4_parent_window_class *containter)
+void g1_object_params::create_buttons(i4_parent_window_class * containter)
 {
-	i4_button_box_class *box=new i4_button_box_class(&g1_edit_state);
-	char *rn[]={
+	i4_button_box_class * box=new i4_button_box_class(&g1_edit_state);
+	char * rn[]={
 		"oROTATE", "oZOOM", "oADD", "oSELECT", "oMOVE", "oOBJECT_ROTATE", 0
 	};
 	w32 i=ROTATE;
-	for (char **a=rn; *a; a++, i++)
+
+	for (char * * a=rn; *a; a++, i++)
 	{
 		g1_edit_state.add_but(box, *a, 0, (i4_bool) i==minor_mode,
 							  new g1_set_minor_mode_event("OBJECT",(w8)i));
@@ -4964,7 +4986,7 @@ void g1_object_params::close_edit_window()
 	}
 }
 
-void g1_object_params::set_edit_window(i4_window_class *p)
+void g1_object_params::set_edit_window(i4_window_class * p)
 {
 	close_edit_window();
 	edit_win=get_style()->create_mp_window(0,0,
@@ -4983,38 +5005,38 @@ g1_object_params::g1_object_params()
 
 }
 
-g1_mode_handler *g1_object_params::create_mode_handler(g1_controller_edit_class *c)
+g1_mode_handler * g1_object_params::create_mode_handler(g1_controller_edit_class * c)
 {
 	return new g1_object_mode(c);
 }
 
 
 
-li_object *g1_join_objects(li_object *o, li_environment *env)
+li_object *g1_join_objects(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	int t = g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS),i,j;
 
 	for (i=0; i<t; i++)
 	{
 		if (olist[i]->get_flag(g1_object_class::SELECTED))
 		{
-			g1_path_object_class *p=g1_path_object_class::cast(olist[i]);
+			g1_path_object_class * p=g1_path_object_class::cast(olist[i]);
 			if (p)
 			{
 				for (j=0; j<t; j++)
 				{
 					if (j!=i && olist[j]->get_flag(g1_object_class::SELECTED))
 					{
-						g1_path_object_class *p2=g1_path_object_class::cast(olist[j]);
+						g1_path_object_class * p2=g1_path_object_class::cast(olist[j]);
 
 						if (!p2)
 						{
 							p->add_controlled_object(olist[j]);
 
-							for (g1_factory_class *f=g1_factory_list.first(); f; f=f->next)
+							for (g1_factory_class * f=g1_factory_list.first(); f; f=f->next)
 							{
 								if (f==olist[j])
 								{
@@ -5044,7 +5066,7 @@ li_object *g1_join_objects(li_object *o, li_environment *env)
 							else
 							{
 								i4_const_str s("Yes=Node %d to Node %d, No=Other way, Cancel=No Op");
-								i4_str *st=s.sprintf(200,p->global_id,p2->global_id);
+								i4_str * st=s.sprintf(200,p->global_id,p2->global_id);
 								w32 ans=i4_message_box("Choose Direction",*st,MSG_YES+MSG_NO+MSG_CANCEL);
 								delete st;
 								if (ans==MSG_CANCEL)
@@ -5076,32 +5098,32 @@ li_object *g1_join_objects(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_unjoin_objects(li_object *o, li_environment *env)
+li_object *g1_unjoin_objects(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	int t = g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS),i,j,k;
 
 	for (i=0; i<t; i++)
 	{
 		if (olist[i]->get_flag(g1_object_class::SELECTED))
 		{
-			g1_path_object_class *p=g1_path_object_class::cast(olist[i]);
+			g1_path_object_class * p=g1_path_object_class::cast(olist[i]);
 			if (p)
 			{
 				for (j=0; j<t; j++)
 				{
 					if (j!=i && olist[j]->get_flag(g1_object_class::SELECTED))
 					{
-						g1_path_object_class *p2=g1_path_object_class::cast(olist[j]);
+						g1_path_object_class * p2=g1_path_object_class::cast(olist[j]);
 
 						if (!p2)
 						{
 							p->remove_controlled_object(olist[j]);
 
 
-							for (g1_factory_class *f=g1_factory_list.first(); f; f=f->next)
+							for (g1_factory_class * f=g1_factory_list.first(); f; f=f->next)
 							{
 								if (f==olist[j])
 								{
@@ -5122,7 +5144,7 @@ li_object *g1_unjoin_objects(li_object *o, li_environment *env)
 							}
 							if (swap)
 							{
-								g1_path_object_class *tmp=p;
+								g1_path_object_class * tmp=p;
 								p=p2;
 								p2=tmp;
 							}
@@ -5142,12 +5164,12 @@ li_object *g1_unjoin_objects(li_object *o, li_environment *env)
 }
 
 
-li_object *g1_remove_all_paths(li_object *o, li_environment *env)
+li_object *g1_remove_all_paths(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	int t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS),i;
-	g1_path_object_class *p;
+	g1_path_object_class * p;
 	for (i=0; i<t; i++)
 	{
 		p=g1_path_object_class::cast(olist[i]);
@@ -5164,13 +5186,13 @@ li_object *g1_remove_all_paths(li_object *o, li_environment *env)
 
 li_automatic_add_function(g1_remove_all_paths,"remove_all_paths");
 
-li_object *g1_insert_path_object(li_object *o, li_environment *env)
+li_object *g1_insert_path_object(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	int t = g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS),i; //,j;
-	g1_path_object_class *p1=0, *p2=0;
+	g1_path_object_class * p1=0, * p2=0;
 
 	for (i=0; i<t; i++)
 	{
@@ -5206,12 +5228,12 @@ li_object *g1_insert_path_object(li_object *o, li_environment *env)
 
 		if (swap)
 		{
-			g1_path_object_class *t=p1;
+			g1_path_object_class * t=p1;
 			p1=p2;
 			p2=p1;
 		}
 
-		g1_path_object_class *newp;
+		g1_path_object_class * newp;
 		newp=(g1_path_object_class *)g1_create_object(g1_get_object_type(path_object_type.get()));
 		if (newp)
 		{
@@ -5256,8 +5278,9 @@ li_automatic_add_function(g1_insert_path_object, "insert_path_object");
 static float move_v=0;
 static void move_objs()
 {
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	int t = g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
+
 	for (int i=0; i<t; i++)
 	{
 		if (olist[i]->get_flag(g1_object_class::SELECTED))
@@ -5273,28 +5296,28 @@ static void move_objs()
 
 
 
-li_object *g1_move_object_up_start(li_object *o, li_environment *env)
+li_object *g1_move_object_up_start(li_object * o, li_environment * env)
 {
 	move_v+=0.05f;
 	move_objs();
 	return 0;
 }
 
-li_object *g1_move_object_up_end(li_object *o, li_environment *env)
+li_object *g1_move_object_up_end(li_object * o, li_environment * env)
 {
 	move_v=0;
 	return 0;
 }
 
 
-li_object *g1_move_object_down_start(li_object *o, li_environment *env)
+li_object *g1_move_object_down_start(li_object * o, li_environment * env)
 {
 	move_v-=0.05f;
 	move_objs();
 	return 0;
 }
 
-li_object *g1_move_object_down_end(li_object *o, li_environment *env)
+li_object *g1_move_object_down_end(li_object * o, li_environment * env)
 {
 	move_v=0;
 	return 0;
@@ -5321,7 +5344,7 @@ static li_object *set_team(int num)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 
 	for (int i=0; i<t; i++)
@@ -5341,43 +5364,43 @@ static li_object *set_team(int num)
 }
 
 
-static li_object *team_0(li_object *o, li_environment *env)
+static li_object *team_0(li_object * o, li_environment * env)
 {
 	return set_team(0);
 }
-static li_object *team_1(li_object *o, li_environment *env)
+static li_object *team_1(li_object * o, li_environment * env)
 {
 	return set_team(1);
 }
-static li_object *team_2(li_object *o, li_environment *env)
+static li_object *team_2(li_object * o, li_environment * env)
 {
 	return set_team(2);
 }
-static li_object *team_3(li_object *o, li_environment *env)
+static li_object *team_3(li_object * o, li_environment * env)
 {
 	return set_team(3);
 }
-static li_object *team_4(li_object *o, li_environment *env)
+static li_object *team_4(li_object * o, li_environment * env)
 {
 	return set_team(4);
 }
 
 
-static li_object *tint_none(li_object *o, li_environment *env)
+static li_object *tint_none(li_object * o, li_environment * env)
 {
 	g1_tint=G1_TINT_OFF;
 	li_call("redraw");
 	return 0;
 }
 
-static li_object *tint_polys(li_object *o, li_environment *env)
+static li_object *tint_polys(li_object * o, li_environment * env)
 {
 	g1_tint=G1_TINT_POLYS;
 	li_call("redraw");
 	return 0;
 }
 
-static li_object *tint_all(li_object *o, li_environment *env)
+static li_object *tint_all(li_object * o, li_environment * env)
 {
 	g1_tint=G1_TINT_ALL;
 	li_call("redraw");
@@ -5389,18 +5412,19 @@ static int team_editing;
 static li_string_class_member ai("ai");
 
 LI_HEADER(set_local_player) {
-	li_int *i=new li_int(g1_player_man.local_player);
+	li_int * i=new li_int(g1_player_man.local_player);
+
 	g1_player_man.local_player=li_int::get(li_first(o,env),env)->value();
 	return i;
 }
-li_object *g1_set_player(li_object *o, li_environment *env)
+li_object *g1_set_player(li_object * o, li_environment * env)
 {
 	if (!o)
 	{
 		//the window was closed using cancel.
 		return 0;
 	}
-	g1_player_info_class *p=g1_player_man.get(team_editing);
+	g1_player_info_class * p=g1_player_man.get(team_editing);
 	p->vars=li_car(o, env);
 
 	li_class_context c(li_class::get(p->vars.get(),env));
@@ -5410,7 +5434,7 @@ li_object *g1_set_player(li_object *o, li_environment *env)
 		//Not setting this doesn't work.
 		g1_player_man.local_player=team_editing;
 	}
-	g1_team_api_class *newai=g1_create_ai(ai(),0);
+	g1_team_api_class * newai=g1_create_ai(ai(),0);
 	p->set_ai(newai);
 	newai->init(); //we can immediatelly do this since we exspect the map to be loaded
 	return 0;
@@ -5431,23 +5455,23 @@ static li_object *edit_team(int num)
 	return 0;
 }
 
-li_object *edit_team_0(li_object *o, li_environment *env)
+li_object *edit_team_0(li_object * o, li_environment * env)
 {
 	return edit_team(0);
 }
-li_object *edit_team_1(li_object *o, li_environment *env)
+li_object *edit_team_1(li_object * o, li_environment * env)
 {
 	return edit_team(1);
 }
-li_object *edit_team_2(li_object *o, li_environment *env)
+li_object *edit_team_2(li_object * o, li_environment * env)
 {
 	return edit_team(2);
 }
-li_object *edit_team_3(li_object *o, li_environment *env)
+li_object *edit_team_3(li_object * o, li_environment * env)
 {
 	return edit_team(3);
 }
-li_object *edit_team_4(li_object *o, li_environment *env)
+li_object *edit_team_4(li_object * o, li_environment * env)
 {
 	return edit_team(4);
 }
@@ -5530,17 +5554,17 @@ void g1_tile_mode::mouse_down()
 	{
 		i4_const_str msg("Position (%i,%i), Texture %S rotated by %i deg%s. Characteristics: "
 						 "%s%sfriction %f, damage %i");
-		g1_map_cell_class *cell= c->get_map()->cell((w16)c->cell_x,(w16)c->cell_y);
-		i4_const_str *texname=0;
+		g1_map_cell_class * cell= c->get_map()->cell((w16)c->cell_x,(w16)c->cell_y);
+		i4_const_str * texname=0;
 		//It seems we don't need the remap here
 		//texname=g1_tile_man.get_name_from_tile(g1_tile_man.get_remap(cell->type));
 		texname=g1_tile_man.get_name_from_tile(cell->type);
-		g1_tile_class *tile=g1_tile_man.get(cell->type);
-		i4_str *m=msg.sprintf(500,(w32)c->cell_x,(w32)c->cell_y,texname,
-							  (w32)cell->get_rotation()*90,cell->mirrored() ? " and mirrored" : "",
-							  (tile->flags&g1_tile_class::BLOCKING) ? "blocking, " : "",
-							  (tile->flags&g1_tile_class::WAVE) ? "wave, " : "",
-							  tile->friction_fraction,(w32)(tile->damage));
+		g1_tile_class * tile=g1_tile_man.get(cell->type);
+		i4_str * m=msg.sprintf(500,(w32)c->cell_x,(w32)c->cell_y,texname,
+							   (w32)cell->get_rotation()*90,cell->mirrored() ? " and mirrored" : "",
+							   (tile->flags&g1_tile_class::BLOCKING) ? "blocking, " : "",
+							   (tile->flags&g1_tile_class::WAVE) ? "wave, " : "",
+							   tile->friction_fraction,(w32)(tile->damage));
 		//i4_warning(m);
 		i4_message_box("Tile Info",*m,MSG_OK);
 		delete texname;
@@ -5599,6 +5623,7 @@ g1_mode_handler::state g1_tile_mode::current_state()
 	w8 remap[]={
 		ROTATE, ZOOM, OTHER, OTHER, DRAG_SELECT, OTHER
 	};
+
 	I4_ASSERT(g1_e_tile.minor_mode<=sizeof(remap), "state too big");
 	return (g1_mode_handler::state)remap[g1_e_tile.get_minor_mode()];
 }
@@ -5610,6 +5635,7 @@ void g1_tile_mode::move_selected(i4_float xc, i4_float yc, i4_float zc,
 	double aequidist=((li_float *)li_call("get_height_aequidistance",0,0))->value();
 	//int z_int=(sw32)(vert_exact_z/(aequidist*10));
 	int z_diff=zc/aequidist;
+
 	if (zc>0 && z_diff==0)
 	{
 		z_diff=1;
@@ -5629,7 +5655,7 @@ i4_bool g1_tile_mode::select_object(sw32 mx, sw32 my,
 
 
 	sw32 x,y;
-	g1_map_vertex_class *v=c->find_map_vertex(mx, my, x, y);
+	g1_map_vertex_class * v=c->find_map_vertex(mx, my, x, y);
 
 	if (mod!=FOR_CURSOR_HINT)
 	{
@@ -5689,7 +5715,7 @@ void g1_tile_mode::select_objects_in_area(sw32 x1, sw32 y1, sw32 x2, sw32 y2,
 }
 
 
-void g1_tile_mode::key_press(i4_key_press_event_class *kev)
+void g1_tile_mode::key_press(i4_key_press_event_class * kev)
 {
 	switch (kev->key)
 	{
@@ -5697,7 +5723,7 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
 			{
 				hide_focus();
 				int lsize=g1_get_map()->width() *g1_get_map()->height();
-				g1_map_cell_class *c=g1_get_map()->cell(0,0);
+				g1_map_cell_class * c=g1_get_map()->cell(0,0);
 
 				for (int i=0; i<lsize; i++, c++)
 				{
@@ -5717,7 +5743,7 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
 			{
 				hide_focus();
 
-				g1_map_cell_class *cell=c->get_map()->cell((w16)c->cell_x, (w16)c->cell_y);
+				g1_map_cell_class * cell=c->get_map()->cell((w16)c->cell_x, (w16)c->cell_y);
 
 				g1_e_tile.set_cell_type(cell->type);
 				g1_e_tile.set_cell_rotation(cell->get_rotation());
@@ -5802,7 +5828,7 @@ void g1_tile_mode::key_press(i4_key_press_event_class *kev)
 	}
 }
 
-g1_tile_mode::g1_tile_mode(g1_controller_edit_class *c)
+g1_tile_mode::g1_tile_mode(g1_controller_edit_class * c)
 	: g1_mode_handler(c)
 {
 	c->cell_x=0;
@@ -5833,14 +5859,15 @@ void g1_tile_params::refresh_picker()
 }
 
 
-void g1_tile_params::create_buttons(i4_parent_window_class *container)
+void g1_tile_params::create_buttons(i4_parent_window_class * container)
 {
-	i4_button_box_class *box=new i4_button_box_class(&g1_edit_state);
-	char *rn[]={
+	i4_button_box_class * box=new i4_button_box_class(&g1_edit_state);
+	char * rn[]={
 		"tROTATE", "tZOOM", "tPLACE", "tFILL", "tHEIGHT", "tINFO", 0
 	};
 	w32 i=ROTATE;
-	for (char **a=rn; *a; a++, i++)
+
+	for (char * * a=rn; *a; a++, i++)
 	{
 		g1_edit_state.add_but(box, *a, 0, (i4_bool) i==minor_mode,
 							  new g1_set_minor_mode_event("TILE",(w8)i));
@@ -5871,7 +5898,7 @@ void g1_tile_params::open_picker()
 		picker=new g1_tile_picker_class(get_style(), &picker_info, 0,0);
 		picker->create_windows();
 
-		i4_parent_window_class *mpw;
+		i4_parent_window_class * mpw;
 		mpw=get_style()->create_mp_window(picker_info.win_x, picker_info.win_y,
 										  picker->width(), picker->height(),
 										  g1_ges("tile_pick_title"));
@@ -5902,7 +5929,7 @@ class g1_scene_change_order_event :
 {
 public:
 	sw32 o,n;
-	g1_scene_change_order_event(void *object,
+	g1_scene_change_order_event(void * object,
 								w32 sub_type,
 								w32 old_order,
 								w32 new_order)
@@ -5929,7 +5956,7 @@ class g1_delete_scene_event_class :
 {
 public:
 	sw32 sn;
-	g1_delete_scene_event_class(void *object,
+	g1_delete_scene_event_class(void * object,
 								w32 sub_type,
 								sw32 scene_number)
 		: i4_object_message_event_class(object, sub_type),
@@ -5954,14 +5981,14 @@ class g1_cut_scene_editor_class :
 {
 	sw32 scene_number, start_time;
 
-	g1_cut_scene_class *cs;
-	i4_graphical_style_class *style;
-	i4_text_input_class *scene_number_input;
-	i4_text_input_class *scene_name_input;
-	i4_text_input_class *scene_wav_input;
-	i4_event_handler_class *eh;
+	g1_cut_scene_class * cs;
+	i4_graphical_style_class * style;
+	i4_text_input_class * scene_number_input;
+	i4_text_input_class * scene_name_input;
+	i4_text_input_class * scene_wav_input;
+	i4_event_handler_class * eh;
 
-	i4_window_class *dialog_active;
+	i4_window_class * dialog_active;
 
 public:
 	enum {
@@ -5970,7 +5997,7 @@ public:
 		DELETE_NO
 	};
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"cut_scene_editor");
 	}
@@ -6014,7 +6041,7 @@ public:
 											  new i4_object_message_event_class(this, DELETE_NO));
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::OBJECT_MESSAGE)
 		{
@@ -6076,11 +6103,11 @@ public:
 		}
 	}
 
-	g1_cut_scene_editor_class(g1_cut_scene_class *cs,
+	g1_cut_scene_editor_class(g1_cut_scene_class * cs,
 							  sw32 scene_number,
 							  sw32 start_time,        // in frames
-							  i4_graphical_style_class *style,
-							  i4_event_handler_class *eh)
+							  i4_graphical_style_class * style,
+							  i4_event_handler_class * eh)
 		: cs(cs),
 		  scene_number(scene_number),
 		  start_time(start_time),
@@ -6093,10 +6120,10 @@ public:
 		w32 l,r,t,b,xon=0;
 		style->get_in_deco_size(l,t,r,b);
 
-		i4_font_class *f=style->font_hint->normal_font;
+		i4_font_class * f=style->font_hint->normal_font;
 		//resize(300, f->largest_height()+t+b+2);
 
-		i4_str *fn=g1_ges("frame_format").sprintf(10,scene_number);
+		i4_str * fn=g1_ges("frame_format").sprintf(10,scene_number);
 
 		scene_number_input=new i4_text_input_class(style,*fn,24,4, this);
 		add_child((short)xon,0, scene_number_input);
@@ -6113,7 +6140,7 @@ public:
 		add_child((short)xon, 0, scene_name_input);
 		xon+=scene_name_input->width();
 
-		i4_str *s=cs->wave_file;
+		i4_str * s=cs->wave_file;
 		if (!s)
 		{
 			scene_wav_input=new i4_text_input_class(style,g1_ges("null_string"),wav_width(), 100, this);
@@ -6126,13 +6153,13 @@ public:
 		xon+=scene_wav_input->width();
 
 		// delete button
-		i4_object_message_event_class *om;
+		i4_object_message_event_class * om;
 		om=new i4_object_message_event_class(this, DELETE_ME);
-		i4_image_class *del_icon=g1_editor_instance.delete_icon;
-		i4_button_class *del=new i4_button_class(&g1_ges("delete_scene_help"),
-												 new i4_image_window_class(del_icon),
-												 style,
-												 new i4_event_reaction_class(this, om));
+		i4_image_class * del_icon=g1_editor_instance.delete_icon;
+		i4_button_class * del=new i4_button_class(&g1_ges("delete_scene_help"),
+												  new i4_image_window_class(del_icon),
+												  style,
+												  new i4_event_reaction_class(this, om));
 		del->set_popup(i4_T);
 		add_child((short)xon, 0, del);
 		xon+=del->width();
@@ -6156,8 +6183,8 @@ public:
 						 style->color_hint->window.passive.medium,
 						 context);
 
-		i4_str *s=g1_ges("time_format").sprintf(30, t_sec, t_usec);
-		i4_font_class *f=style->font_hint->normal_font;
+		i4_str * s=g1_ges("time_format").sprintf(30, t_sec, t_usec);
+		i4_font_class * f=style->font_hint->normal_font;
 
 		f->set_color(style->color_hint->text_foreground);
 		f->put_string(local_image, (short)(x+l), (short)(y+top+1),  *s, context);
@@ -6178,9 +6205,9 @@ public:
 
 
 
-void g1_scene_editor_class::show(i4_parent_window_class *parent_window,
-								 g1_movie_flow_class *_movie,
-								 i4_graphical_style_class *_style)
+void g1_scene_editor_class::show(i4_parent_window_class * parent_window,
+								 g1_movie_flow_class * _movie,
+								 i4_graphical_style_class * _style)
 
 {
 	movie=_movie;
@@ -6191,21 +6218,21 @@ void g1_scene_editor_class::show(i4_parent_window_class *parent_window,
 		hide();
 	}
 
-	i4_color_window_class *holder=new i4_color_window_class(0,0,0, style);
+	i4_color_window_class * holder=new i4_color_window_class(0,0,0, style);
 
 	w32 t=0;
-	i4_window_class *addt=new i4_text_window_class(g1_ges("new"), style);
-	i4_event_reaction_class *add_reaction;
-	i4_event *add_event=new i4_object_message_event_class(this, ADD_SCENE);
+	i4_window_class * addt=new i4_text_window_class(g1_ges("new"), style);
+	i4_event_reaction_class * add_reaction;
+	i4_event * add_event=new i4_object_message_event_class(this, ADD_SCENE);
 	add_reaction=new i4_event_reaction_class(this, add_event);
-	i4_button_class *addb=new i4_button_class(0, addt, style, add_reaction);
+	i4_button_class * addb=new i4_button_class(0, addt, style, add_reaction);
 	addb->set_popup(i4_T);
 	holder->add_child(0,0, addb);
 
 
 	for (w32 i=0; i<movie->t_cut_scenes; i++)
 	{
-		g1_cut_scene_editor_class *ce=new g1_cut_scene_editor_class(movie->set[i], i+1,t, style, this);
+		g1_cut_scene_editor_class * ce=new g1_cut_scene_editor_class(movie->set[i], i+1,t, style, this);
 		t+=movie->set[i]->total_frames();
 
 		holder->add_child(0,0, ce);
@@ -6216,7 +6243,7 @@ void g1_scene_editor_class::show(i4_parent_window_class *parent_window,
 
 	w32 w=holder->width(), h=holder->height();
 
-	i4_event_reaction_class *re;
+	i4_event_reaction_class * re;
 	re=new i4_event_reaction_class(this, new i4_object_message_event_class(this, WINDOW_CLOSED));
 	parent=style->create_mp_window((short)wx, (short)wy, (w16)w,(w16)h, g1_ges("scene_win_title"), re);
 
@@ -6258,7 +6285,7 @@ void g1_scene_editor_class::last_scene()
 	}
 }
 
-void g1_scene_editor_class::receive_event(i4_event *ev)
+void g1_scene_editor_class::receive_event(i4_event * ev)
 {
 	CAST_PTR(oev, i4_object_message_event_class, ev);
 	if (ev->type()==i4_event::OBJECT_MESSAGE)
@@ -6271,7 +6298,7 @@ void g1_scene_editor_class::receive_event(i4_event *ev)
 					{
 						g1_editor_instance.add_undo(G1_MAP_MOVIE);
 
-						i4_parent_window_class *parent_window=0;
+						i4_parent_window_class * parent_window=0;
 
 						if (parent.get() && parent->get_parent() && parent->get_parent()->get_parent())
 						{
@@ -6279,7 +6306,7 @@ void g1_scene_editor_class::receive_event(i4_event *ev)
 						}
 
 						hide();
-						g1_cut_scene_class *cs=movie->add_cut_scene(g1_ges("new_scene"));
+						g1_cut_scene_class * cs=movie->add_cut_scene(g1_ges("new_scene"));
 						show(parent_window, movie, style);
 
 						g1_editor_instance.changed();
@@ -6294,7 +6321,7 @@ void g1_scene_editor_class::receive_event(i4_event *ev)
 					{
 						g1_editor_instance.add_undo(G1_MAP_MOVIE);
 
-						i4_parent_window_class *parent_window=0;
+						i4_parent_window_class * parent_window=0;
 						if (parent.get() && parent->get_parent() && parent->get_parent()->get_parent())
 						{
 							parent_window=parent->get_parent()->get_parent();
@@ -6316,7 +6343,7 @@ void g1_scene_editor_class::receive_event(i4_event *ev)
 						}
 
 						sw32 i;
-						g1_cut_scene_class *c=movie->set[co->o];
+						g1_cut_scene_class * c=movie->set[co->o];
 						for (i=co->o; i<(sw32)movie->t_cut_scenes-1; i++)
 						{
 							movie->set[i]=movie->set[i+1];
@@ -6338,7 +6365,7 @@ void g1_scene_editor_class::receive_event(i4_event *ev)
 					{
 						g1_editor_instance.add_undo(G1_MAP_MOVIE);
 
-						i4_parent_window_class *parent_window=0;
+						i4_parent_window_class * parent_window=0;
 						if (parent.get() && parent->get_parent() && parent->get_parent()->get_parent())
 						{
 							parent_window=parent->get_parent()->get_parent();
@@ -6350,7 +6377,7 @@ void g1_scene_editor_class::receive_event(i4_event *ev)
 						dev->sn--;
 
 						last_scene();
-						g1_cut_scene_class *c=movie->set[dev->sn];
+						g1_cut_scene_class * c=movie->set[dev->sn];
 
 						for (w32 i=dev->sn; i<movie->t_cut_scenes-1; i++)
 						{
@@ -6381,19 +6408,20 @@ void g1_scene_editor_class::receive_event(i4_event *ev)
 
 
 
-static i4_parent_window_class *g1_create_slider(i4_event_handler_class *notify,
+static i4_parent_window_class *g1_create_slider(i4_event_handler_class * notify,
 												w32 milli_delay,
 												w32 width,
 												w32 start,
 												const i4_const_str name,
-												i4_graphical_style_class *style)
+												i4_graphical_style_class * style)
 {
-	i4_slider_class *s=new i4_slider_class(width, start, notify, milli_delay, style);
-	i4_text_window_class *t=new i4_text_window_class(name, style);
+	i4_slider_class * s=new i4_slider_class(width, start, notify, milli_delay, style);
+	i4_text_window_class * t=new i4_text_window_class(name, style);
 
-	i4_parent_window_class *c=new i4_color_window_class((w16)width, s->height()+t->height(),
-														style->color_hint->neutral(),
-														style);
+	i4_parent_window_class * c=new i4_color_window_class((w16)width, s->height()+t->height(),
+														 style->color_hint->neutral(),
+														 style);
+
 	c->add_child(0,0,s);
 	c->add_child(0,s->height(), t);
 	c->resize_to_fit_children();
@@ -6406,7 +6434,7 @@ static i4_parent_window_class *g1_create_slider(i4_event_handler_class *notify,
 class g1_bulb_ewin :
 	public i4_color_window_class
 {
-	i4_parent_window_class *r,*g,*b, *c3;
+	i4_parent_window_class * r,* g,* b, * c3;
 	i4_float o_r,o_g,o_b,o_c3;
 
 	w32 selected_objects[G1_MAX_OBJECTS];
@@ -6415,17 +6443,18 @@ class g1_bulb_ewin :
 public:
 
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"bulb edit");
 	}
 
-	g1_bulb_ewin(i4_graphical_style_class *style,
-				 g1_object_class *def)
+	g1_bulb_ewin(i4_graphical_style_class * style,
+				 g1_object_class * def)
 
 		: i4_color_window_class(0,0,style->color_hint->neutral(), style)
 	{
-		g1_light_object_class *d=g1_light_object_class::cast(def);
+		g1_light_object_class * d=g1_light_object_class::cast(def);
+
 		if (d)
 		{
 			o_r=d->r;
@@ -6454,7 +6483,7 @@ public:
 
 	void update_lights()
 	{
-		g1_map_class *m=g1_editor_instance.get_map();
+		g1_map_class * m=g1_editor_instance.get_map();
 
 
 		g1_editor_instance.add_undo(G1_MAP_OBJECTS | G1_MAP_CELLS);
@@ -6463,7 +6492,7 @@ public:
 		{
 			if (g1_global_id.check_id(selected_objects[i]))
 			{
-				g1_light_object_class *l;
+				g1_light_object_class * l;
 
 				if ((l=g1_light_object_class::cast(g1_global_id.get(selected_objects[i])))!=0)
 				{
@@ -6477,7 +6506,7 @@ public:
 		li_call("redraw");
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::OBJECT_MESSAGE)
 		{
@@ -6513,8 +6542,8 @@ public:
 	}
 };
 
-i4_parent_window_class *g1_create_bulb_edit(i4_graphical_style_class *style,
-											g1_object_class *def)
+i4_parent_window_class *g1_create_bulb_edit(i4_graphical_style_class * style,
+											g1_object_class * def)
 {
 	return new g1_bulb_ewin(style, def);
 
@@ -6534,20 +6563,20 @@ i4_parent_window_class *g1_create_bulb_edit(i4_graphical_style_class *style,
 class g1_time_edit_window :
 	public i4_color_window_class
 {
-	i4_text_input_class *si, *mi;
+	i4_text_input_class * si, * mi;
 	w32 t_sec, t_msec;
 
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"time edit");
 	}
 
-	g1_time_edit_window(i4_graphical_style_class *style, w32 cur_frame)
+	g1_time_edit_window(i4_graphical_style_class * style, w32 cur_frame)
 		: i4_color_window_class(0,0,style->color_hint->neutral(), style)
 	{
-		i4_text_window_class *st,*mt;
-		i4_str *sec_str, *msec_str;
+		i4_text_window_class * st,* mt;
+		i4_str * sec_str, * msec_str;
 
 		st=new i4_text_window_class(g1_ges("sec"),style);
 		mt=new i4_text_window_class(g1_ges("msec"),style);
@@ -6576,14 +6605,14 @@ public:
 
 	void change_time()
 	{
-		i4_spline_class *s[g1_controller_edit_class::MAX_SPLINE_EDIT];
+		i4_spline_class * s[g1_controller_edit_class::MAX_SPLINE_EDIT];
 		int t=g1_editor_instance.get_current_splines(s,g1_controller_edit_class::MAX_SPLINE_EDIT);
 
 		int nf=t_sec*G1_MOVIE_HZ+t_msec*G1_MOVIE_HZ/60;
 
 		for (int i=0; i<t; i++)
 		{
-			i4_spline_class::point *sp=s[i]->begin(), *last=0;
+			i4_spline_class::point * sp=s[i]->begin(), * last=0;
 			for (; sp; sp=sp->next)
 			{
 				if (sp->selected)
@@ -6592,7 +6621,7 @@ public:
 					{
 						int advance=nf-sp->frame;
 
-						for (i4_spline_class::point *q=sp; q; q=q->next)
+						for (i4_spline_class::point * q=sp; q; q=q->next)
 						{
 							q->frame+=advance;
 						}
@@ -6603,7 +6632,7 @@ public:
 		}
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		CAST_PTR(tev, i4_text_change_notify_event, ev);
 
@@ -6627,7 +6656,7 @@ public:
 	}
 };
 
-i4_parent_window_class *g1_create_time_edit_window(i4_graphical_style_class *style,
+i4_parent_window_class *g1_create_time_edit_window(i4_graphical_style_class * style,
 												   w32 cur_frame)
 {
 	return new g1_time_edit_window(style, cur_frame);
@@ -6651,30 +6680,30 @@ class g1_debug_window_class :
 	public i4_parent_window_class
 {
 	i4_color fore,back;
-	char *screen;
+	char * screen;
 	sw32 cx, cy, starty;
 	sw32 cols, lines, col_width, line_height;
 
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	i4_bool need_clear;
 
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"debug_window");
 	}
 
-	g1_debug_window_class(i4_graphical_style_class *style,
+	g1_debug_window_class(i4_graphical_style_class * style,
 						  i4_color text_foreground,
 						  i4_color text_background,
 						  w16 width, w16 height, // in pixels
 						  sw32 starting_line = 0);
 	virtual ~g1_debug_window_class();
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 	void newline();
 	void putch(char ch);
-	void puts(char *string);
-	void putsxy(int x, int y, char *string);
+	void puts(char * string);
+	void putsxy(int x, int y, char * string);
 
 	virtual void parent_draw(i4_draw_context_class &context);
 };
@@ -6683,7 +6712,7 @@ i4_event_handler_reference_class<g1_debug_window_class> debug_window;
 i4_event_handler_reference_class<i4_parent_window_class> debug_mp;
 i4_debug_message_device_class i4_debug_dev;
 
-g1_debug_window_class::g1_debug_window_class(i4_graphical_style_class *style,
+g1_debug_window_class::g1_debug_window_class(i4_graphical_style_class * style,
 											 i4_color text_foreground,
 											 i4_color text_background,
 											 w16 width, w16 height,
@@ -6695,7 +6724,7 @@ g1_debug_window_class::g1_debug_window_class(i4_graphical_style_class *style,
 	  starty(starting_line),
 	  need_clear(i4_T)
 {
-	i4_font_class *fnt=style->font_hint->small_font;
+	i4_font_class * fnt=style->font_hint->small_font;
 
 	col_width   = fnt->largest_height()+1;
 	line_height = fnt->largest_width()+1;
@@ -6709,7 +6738,7 @@ g1_debug_window_class::g1_debug_window_class(i4_graphical_style_class *style,
 	i4_kernel.request_events(this,i4_device_class::FLAG_USER_MESSAGE);
 }
 
-void g1_debug_window_class::receive_event(i4_event *ev)
+void g1_debug_window_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{
@@ -6726,6 +6755,7 @@ void g1_debug_window_class::receive_event(i4_event *ev)
 g1_debug_window_class::~g1_debug_window_class()
 {
 	i4_kernel.unrequest_events(this,i4_device_class::FLAG_USER_MESSAGE);
+
 }
 
 void g1_debug_window_class::newline()
@@ -6755,7 +6785,7 @@ void g1_debug_window_class::putch(char ch)
 			newline();
 			break;
 		default:
-			screen[cy *cols+cx] = ch;
+			screen[cy * cols+cx] = ch;
 			if (++cx>=cols)
 			{
 				newline();
@@ -6769,14 +6799,15 @@ void g1_debug_window_class::putch(char ch)
 	}
 }
 
-void g1_debug_window_class::puts(char *s)
+void g1_debug_window_class::puts(char * s)
 {
 	while (*s)
 		putch(*s++);
 
+
 }
 
-void g1_debug_window_class::putsxy(int x, int y, char *s)
+void g1_debug_window_class::putsxy(int x, int y, char * s)
 {
 	while (*s && x<cols)
 		if (x<cols)
@@ -6792,7 +6823,7 @@ void g1_debug_window_class::putsxy(int x, int y, char *s)
 
 void g1_debug_window_class::parent_draw(i4_draw_context_class &context)
 {
-	i4_font_class *fnt=style->font_hint->small_font;
+	i4_font_class * fnt=style->font_hint->small_font;
 
 	if (!undrawn_area.empty())
 	{
@@ -6804,7 +6835,7 @@ void g1_debug_window_class::parent_draw(i4_draw_context_class &context)
 	local_image->clear(back, context);
 	fnt->set_color(fore);
 
-	char *p;
+	char * p;
 	for (sw16 y=0; y<lines; y++)
 	{
 		p = screen + cols*y;
@@ -6816,13 +6847,14 @@ void g1_debug_window_class::parent_draw(i4_draw_context_class &context)
 	i4_parent_window_class::parent_draw(context);
 }
 
-int g1_debug_printf(const char *s, ... )
+int g1_debug_printf(const char * s, ... )
 //{{{
 {
 	char buf[1000];
 	va_list arg;
 	int ret=0;
 	static int recursion=0; //this function is subject to recurse, but mustn't.
+
 	if (recursion==0)
 	{
 		//if (debug_window.get()==0)
@@ -6849,7 +6881,7 @@ public:
 	}
 } i4_debug_device_adder_instance;
 
-void i4_debug_message_device_class::broadcast_message(char *message)
+void i4_debug_message_device_class::broadcast_message(char * message)
 {
 	g1_send_debug_message_class msg(message);
 	send_event_to_agents(&msg,FLAG_USER_MESSAGE);
@@ -6861,13 +6893,14 @@ void i4_debug_message_device_class::broadcast_message(i4_const_str &message)
 	send_event_to_agents(&msg,FLAG_USER_MESSAGE);
 }
 
-int g1_debug_printfxy(int x,int y, const char *s, ...)
+int g1_debug_printfxy(int x,int y, const char * s, ...)
 {
 	//do not use this function
 	char buf[256];
 	va_list arg;
 	int ret=0;
 	static int recursion=0;
+
 	if (recursion==0)
 	{
 		if (debug_window.get()==0)
@@ -6883,11 +6916,11 @@ int g1_debug_printfxy(int x,int y, const char *s, ...)
 	return ret;
 }
 
-int g1_debug_open(i4_graphical_style_class *style,
-				  i4_parent_window_class *parent,
+int g1_debug_open(i4_graphical_style_class * style,
+				  i4_parent_window_class * parent,
 				  const i4_const_str &title,
 				  int status_lines,
-				  i4_event_reaction_class *debug_closed)
+				  i4_event_reaction_class * debug_closed)
 {
 	sw32 x=0, y=0, w = 600, h=60;
 
@@ -6903,7 +6936,7 @@ int g1_debug_open(i4_graphical_style_class *style,
 	return 1;
 }
 
-int g1_debug_close(i4_graphical_style_class *style)
+int g1_debug_close(i4_graphical_style_class * style)
 {
 	if (debug_mp.get()==0)
 	{
@@ -6931,11 +6964,11 @@ int g1_debug_close(i4_graphical_style_class *style)
 class g1_time_show :
 	public i4_window_class
 {
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	i4_event_handler_reference_class<g1_time_line> tl;
 public:
-	g1_time_show(i4_graphical_style_class *style,
-				 g1_time_line *tl)
+	g1_time_show(i4_graphical_style_class * style,
+				 g1_time_line * tl)
 		: i4_window_class(style->font_hint->normal_font->largest_width()*6,
 						  style->font_hint->normal_font->largest_height()),
 		  style(style)
@@ -6952,19 +6985,19 @@ public:
 			return;
 		}
 
-		i4_font_class *f=style->font_hint->normal_font;
+		i4_font_class * f=style->font_hint->normal_font;
 		f->set_color(style->color_hint->text_foreground);
 
 		i4_float t=tl->current_frame()/(i4_float)(G1_MOVIE_HZ);
 		sw32 sec=(sw32)t;
 		sw32 msec=(sw32)((t-sec)*100);
 
-		i4_str *out=g1_editor_instance.get_editor_string("time_format").sprintf(20, sec, msec);
+		i4_str * out=g1_editor_instance.get_editor_string("time_format").sprintf(20, sec, msec);
 		f->put_string(local_image, 0,0, *out, context);
 		delete out;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"time show");
 	}
@@ -6975,8 +7008,8 @@ class g1_frame_show :
 {
 	i4_event_handler_reference_class<g1_time_line> tl;
 public:
-	g1_frame_show(i4_graphical_style_class *style,
-				  g1_time_line *tl)
+	g1_frame_show(i4_graphical_style_class * style,
+				  g1_time_line * tl)
 		: i4_text_input_class(style,
 							  g1_editor_instance.get_editor_string("0"),
 							  50,
@@ -6989,10 +7022,11 @@ public:
 	{
 		i4_const_str::iterator i=st->begin();
 		w32 v=i.read_number();
+
 		i4_text_input_class::become_unactive();
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (!tl.get())
 		{
@@ -7011,7 +7045,7 @@ public:
 			{
 				g1_editor_instance.add_undo(G1_MAP_MOVIE);
 
-				i4_spline_class::point *p;
+				i4_spline_class::point * p;
 				w32 frame=tl->current_frame();
 				p=tl->selected_spline()->get_control_point_previous_to_frame(frame);
 
@@ -7039,14 +7073,15 @@ public:
 
 	void update()
 	{
-		i4_str *st;
+		i4_str * st;
+
 		if (!tl.get())
 		{
 			return;
 		}
 		if (tl->selected_spline())
 		{
-			i4_spline_class::point *p;
+			i4_spline_class::point * p;
 			w32 frame=tl->current_frame();
 			p=tl->selected_spline()->get_control_point_previous_to_frame(frame);
 
@@ -7069,7 +7104,7 @@ public:
 		delete st;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"time show");
 	}
@@ -7079,19 +7114,19 @@ class g1_time_scroller :
 	public i4_parent_window_class
 {
 	i4_event_handler_reference_class<g1_time_line> tl;
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	sw32 mx,my;
 	i4_bool mouse_down;
 
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"time sroller");
 	}
 
 	g1_time_scroller(w16 w, w16 h,
-					 i4_graphical_style_class *style,
-					 g1_time_line *tl)
+					 i4_graphical_style_class * style,
+					 g1_time_line * tl)
 		: i4_parent_window_class(w,h),
 		  style(style)
 	{
@@ -7147,7 +7182,7 @@ public:
 
 	}
 
-	void g1_time_scroller::receive_event(i4_event *ev)
+	void g1_time_scroller::receive_event(i4_event * ev)
 	{
 
 		switch (ev->type())
@@ -7192,40 +7227,41 @@ public:
 
 
 
-i4_button_class *g1_time_line::create_img_win(char *icon_res_name,
-											  w32 mess_id,
-											  i4_graphical_style_class *style)
+i4_button_class * g1_time_line::create_img_win(char * icon_res_name,
+											   w32 mess_id,
+											   i4_graphical_style_class * style)
 
 {
-	i4_image_class *im=i4_load_image(g1_editor_instance.get_editor_string(icon_res_name));
+	i4_image_class * im=i4_load_image(g1_editor_instance.get_editor_string(icon_res_name));
+
 	I4_ASSERT(im,"icon missing");
 
 	char help[30];
 	sprintf(help,"%s_help",icon_res_name);
 
-	i4_object_message_event_class *omes=new i4_object_message_event_class(this, mess_id);
-	i4_event_reaction_class *press=new i4_event_reaction_class(this, omes);
-	i4_button_class *b=new i4_button_class(&g1_ges(help),
-										   new i4_image_window_class(im, i4_T),
-										   style,
-										   press);
+	i4_object_message_event_class * omes=new i4_object_message_event_class(this, mess_id);
+	i4_event_reaction_class * press=new i4_event_reaction_class(this, omes);
+	i4_button_class * b=new i4_button_class(&g1_ges(help),
+											new i4_image_window_class(im, i4_T),
+											style,
+											press);
 	return b;
 }
 
-void g1_time_line::create_time_win(i4_graphical_style_class *style)
+void g1_time_line::create_time_win(i4_graphical_style_class * style)
 {
 	frame_show=new g1_frame_show(style, this);
 	frame_show->update();
 
 	i4_const_str next_str=g1_editor_instance.get_editor_string("next");
-	i4_window_class *frame_text=new i4_text_window_class(next_str, style);
+	i4_window_class * frame_text=new i4_text_window_class(next_str, style);
 
 	sec_win=new g1_time_show(style, this);
 
 	w32 w=frame_text->width()+10+frame_show->width();
 	w32 h=frame_show->height() + 2 + sec_win->height();
 
-	i4_deco_window_class *d=new i4_deco_window_class((w16)w,(w16)h, i4_F, style);
+	i4_deco_window_class * d=new i4_deco_window_class((w16)w,(w16)h, i4_F, style);
 	time_win=d;
 
 	w32 x1=d->get_x1(), y1=d->get_y1();
@@ -7286,12 +7322,13 @@ g1_time_line::~g1_time_line()
 	}
 }
 
-g1_time_line::g1_time_line(i4_parent_window_class *parent,
-						   i4_graphical_style_class *style,
-						   g1_edit_state_class *state)
+g1_time_line::g1_time_line(i4_parent_window_class * parent,
+						   i4_graphical_style_class * style,
+						   g1_edit_state_class * state)
 	: state(state)
 {
-	i4_object_message_event_class *o;
+	i4_object_message_event_class * o;
+
 	o=new i4_object_message_event_class(this,FRAME_CHANGED);
 	g1_frame_change_notify=new i4_event_reaction_class(this, o);
 
@@ -7304,7 +7341,7 @@ g1_time_line::g1_time_line(i4_parent_window_class *parent,
 	bbox=new i4_button_box_class(this, i4_F);
 
 
-	i4_button_class *left, *right, *rewind, *fforward;
+	i4_button_class * left, * right, * rewind, * fforward;
 	left=create_img_win("e_left", LAST_TIME, style);
 	left->set_repeat_down(i4_T);
 	left->set_popup(i4_T);
@@ -7314,7 +7351,7 @@ g1_time_line::g1_time_line(i4_parent_window_class *parent,
 	right->set_popup(i4_T);
 
 	play=create_img_win("e_play", PLAY, style);
-	i4_user_message_event_class *stop=new i4_user_message_event_class(G1_STOP_MOVIE);
+	i4_user_message_event_class * stop=new i4_user_message_event_class(G1_STOP_MOVIE);
 	play->send.depress=new i4_event_reaction_class(i4_current_app, stop);
 
 
@@ -7348,7 +7385,7 @@ g1_time_line::g1_time_line(i4_parent_window_class *parent,
 
 	i4_const_str fmt=g1_editor_instance.get_editor_string("frame_format");
 	w32 scene_d=current_movie() ? current_movie()->get_scene()+1 : 1;
-	i4_str *scene_number=fmt.sprintf(25, scene_d);
+	i4_str * scene_number=fmt.sprintf(25, scene_d);
 	scene_number_input=new i4_text_input_class(style,*scene_number, 40, 8, this);
 	delete scene_number;
 
@@ -7385,22 +7422,24 @@ void g1_time_line::update()
 	sec_win->request_redraw(i4_F);
 }
 
-i4_spline_class *g1_time_line::selected_spline()
+i4_spline_class * g1_time_line::selected_spline()
 {
 	return 0;
 }
 
 
-g1_movie_flow_class *g1_time_line::current_movie()
+g1_movie_flow_class * g1_time_line::current_movie()
 {
 	g1_get_current_movie_event gm;
+
 	i4_kernel.send_event(i4_current_app, &gm);
 	return gm.mflow;
 }
 
 void g1_time_line::set_current(w32 frame, i4_bool stop_play)
 {
-	g1_movie_flow_class *m=current_movie();
+	g1_movie_flow_class * m=current_movie();
+
 	if (m)
 	{
 		g1_editor_instance.add_undo(G1_MAP_MOVIE);
@@ -7421,7 +7460,8 @@ void g1_time_line::set_current(w32 frame, i4_bool stop_play)
 
 w32 g1_time_line::current_frame()
 {
-	g1_movie_flow_class *m=current_movie();
+	g1_movie_flow_class * m=current_movie();
+
 	if (m)
 	{
 		return m->get_frame();
@@ -7434,7 +7474,8 @@ w32 g1_time_line::current_frame()
 
 w32 g1_time_line::total_frames()
 {
-	g1_movie_flow_class *m=current_movie();
+	g1_movie_flow_class * m=current_movie();
+
 	if (m && m->current())
 	{
 		return m->current()->total_frames();
@@ -7447,10 +7488,11 @@ w32 g1_time_line::total_frames()
 
 void g1_time_line::update_scene()
 {
-	g1_movie_flow_class *m=current_movie();
+	g1_movie_flow_class * m=current_movie();
 
 	i4_const_str fmt=g1_editor_instance.get_editor_string("frame_format");
-	i4_str *scene_number=fmt.sprintf(30, m->get_scene()+1);
+	i4_str * scene_number=fmt.sprintf(30, m->get_scene()+1);
+
 	scene_number_input->change_text(*scene_number);
 	delete scene_number;
 }
@@ -7459,7 +7501,7 @@ void g1_time_line::set_current_scene(sw32 scene)
 {
 	g1_editor_instance.add_undo(G1_MAP_MOVIE);
 
-	g1_movie_flow_class *m=current_movie();
+	g1_movie_flow_class * m=current_movie();
 	m->set_scene(scene);
 	m->set_frame(0);
 
@@ -7477,9 +7519,9 @@ void g1_time_line::unpress_play()
 	}
 }
 
-void g1_time_line::receive_event(i4_event *ev)
+void g1_time_line::receive_event(i4_event * ev)
 {
-	g1_movie_flow_class *m=current_movie();
+	g1_movie_flow_class * m=current_movie();
 
 	CAST_PTR(oev, i4_object_message_event_class, ev);
 
@@ -7578,7 +7620,7 @@ void g1_3d_object_window::do_idle()
 	{
 		if (!context_help_window.get())
 		{
-			i4_graphical_style_class *style=i4_current_app->get_style();
+			i4_graphical_style_class * style=i4_current_app->get_style();
 			i4_const_str help_str=i4gets((char *)object->name(),i4_F);
 			if (!help_str.null())
 			{
@@ -7637,9 +7679,9 @@ g1_3d_object_window::g1_3d_object_window(w16 w, w16 h,
 										 g1_object_type obj_type,
 										 w16 _array_index,
 										 g1_3d_pick_window_camera_struct &camera,
-										 i4_image_class *active_back,
-										 i4_image_class *passive_back,
-										 i4_event_reaction_class *reaction)
+										 i4_image_class * active_back,
+										 i4_image_class * passive_back,
+										 i4_event_reaction_class * reaction)
 	:  g1_3d_pick_window(w,h,
 						 active_back, passive_back,
 						 camera,
@@ -7660,7 +7702,7 @@ g1_3d_object_window::~g1_3d_object_window()
 	}
 }
 
-void g1_3d_object_window_ambient(i4_transform_class *object_to_world,
+void g1_3d_object_window_ambient(i4_transform_class * object_to_world,
 								 i4_float &ar, i4_float &ag, i4_float &ab)
 {
 	ar = 1.0;
@@ -7669,11 +7711,11 @@ void g1_3d_object_window_ambient(i4_transform_class *object_to_world,
 }
 
 
-void g1_3d_object_window::draw_object(g1_draw_context_class *context)
+void g1_3d_object_window::draw_object(g1_draw_context_class * context)
 {
 	if (object.valid())
 	{
-		r1_render_api_class *render_api=g1_render.r_api;
+		r1_render_api_class * render_api=g1_render.r_api;
 
 		i4_transform_class spare_transform;
 		spare_transform.identity();
@@ -7752,7 +7794,7 @@ static int to_upper(int ch)
 	return ch>='a' && ch<='z' ? ch-'a' : ch;
 }
 
-int obj_name_compare(const g1_object_type *a, const g1_object_type *b)
+int obj_name_compare(const g1_object_type * a, const g1_object_type * b)
 {
 	return strcmp(g1_object_type_array[*a]->name(), g1_object_type_array[*b]->name());
 }
@@ -7760,9 +7802,9 @@ int obj_name_compare(const g1_object_type *a, const g1_object_type *b)
 class g1_object_picker_class :
 	public i4_color_window_class
 {
-	g1_3d_object_window *obj_view;
-	i4_scroll_bar *scrollbar;
-	i4_deco_window_class *deco;
+	g1_3d_object_window * obj_view;
+	i4_scroll_bar * scrollbar;
+	i4_deco_window_class * deco;
 
 	i4_array<g1_object_type> selectable;
 	i4_array<i4_text_item_class *> text;
@@ -7826,7 +7868,7 @@ public:
 		request_redraw(i4_T);
 	}
 
-	virtual void name(char *buffer)
+	virtual void name(char * buffer)
 	{
 		static_name(buffer,"object_picker_class");
 	}
@@ -7842,7 +7884,7 @@ public:
 
 		g1_3d_pick_window_camera_struct camera;
 
-		i4_graphical_style_class *style=i4_current_app->get_style();
+		i4_graphical_style_class * style=i4_current_app->get_style();
 
 
 		w32 l,t,r,b, ow, oh;
@@ -7856,7 +7898,7 @@ public:
 
 
 		// object view must reside in a render window
-		r1_render_window_class *rwin;
+		r1_render_window_class * rwin;
 		rwin=g1_render.r_api->create_render_window(ow, oh, R1_COPY_1x1);
 
 		obj_view=new g1_3d_object_window((w16)ow, (w16)oh,
@@ -7966,6 +8008,7 @@ public:
 		//invalid entry choosen, perhaps we should ask the user for a new object
 		//to add to the list
 		g1_object_type item=g1_create_deco_object(newobj.c_str(),0);
+
 		//to initialize the lisp vars and the defaults, we need to call init
 		//(normally done during g1_initialize_loaded_objects)
 		g1_object_type_array[item]->init();
@@ -7976,7 +8019,7 @@ public:
 		li_call("reload_main_textures");
 	}
 
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::USER_MESSAGE)
 		{
@@ -8071,9 +8114,10 @@ void g1_refresh_object_picker()
 }
 
 
-li_object *g1_toggle_object_picker(li_object *o, li_environment *env)
+li_object *g1_toggle_object_picker(li_object * o, li_environment * env)
 {
-	i4_graphical_style_class *style=i4_current_app->get_style();
+	i4_graphical_style_class * style=i4_current_app->get_style();
+
 	if (g1_object_picker.get())
 	{
 		style->close_mp_window(g1_object_picker.get());
@@ -8109,9 +8153,9 @@ class li_objref_change_button_class :
 	public i4_button_class
 {
 public:
-	i4_text_window_class *show_name;
+	i4_text_window_class * show_name;
 	w32 current_id;
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"objref_change_button");
 	}
@@ -8136,9 +8180,9 @@ public:
 
 
 	li_objref_change_button_class(const i4_const_str &help,
-								  i4_window_class *child,
-								  i4_graphical_style_class *style,
-								  i4_text_window_class *show_name,
+								  i4_window_class * child,
+								  i4_graphical_style_class * style,
+								  i4_text_window_class * show_name,
 								  w32 current_id)
 		: i4_button_class(&help, child, style),
 		  show_name(show_name),
@@ -8153,6 +8197,7 @@ public:
 	{
 		w32 selected_objects[G1_MAX_OBJECTS];
 		int t_sel=g1_get_map()->make_selected_objects_list(selected_objects, G1_MAX_OBJECTS);
+
 		if (t_sel)
 		{
 			current_id=selected_objects[0];
@@ -8173,7 +8218,7 @@ class li_objref_list_controls :
 	public i4_parent_window_class
 {
 public:
-	i4_text_window_class *show_name;
+	i4_text_window_class * show_name;
 
 	enum {
 		ADD, DEL, CLEAR
@@ -8191,12 +8236,13 @@ public:
 		return i4_current_app->get_style();
 	}
 
-	i4_button_class *create_but(char *name, int id)
+	i4_button_class *create_but(char * name, int id)
 	{
 		char help_name[50];
+
 		sprintf(help_name, "%s_help", name);
 
-		i4_button_class *b=0;
+		i4_button_class * b=0;
 		b=new i4_button_class(&g1_ges(help_name),
 							  new i4_text_window_class(g1_ges(name), style()),
 							  style(),
@@ -8205,15 +8251,15 @@ public:
 		return b;
 	}
 
-	li_objref_list_controls(li_g1_ref_list *o,
-							i4_text_window_class *show_name)
+	li_objref_list_controls(li_g1_ref_list * o,
+							i4_text_window_class * show_name)
 		: show_name(show_name),
 		  i4_parent_window_class(0,0)
 	{
 		c=new li_g1_ref_list;
 		for (int i=0; i<o->size(); i++)
 		{
-			g1_object_class *obj=o->value(i);
+			g1_object_class * obj=o->value(i);
 			if (obj)
 			{
 				get()->add(obj);
@@ -8228,7 +8274,7 @@ public:
 		resize_to_fit_children();
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::USER_MESSAGE)
 		{
@@ -8264,6 +8310,7 @@ public:
 						while (get()->size())
 							get()->remove(get()->get_id(0));
 
+
 					} break;
 			}
 
@@ -8279,7 +8326,7 @@ public:
 		}
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"objref_list_controls");
 	}
@@ -8292,11 +8339,11 @@ class li_object_reference_edit_class :
 public:
 
 	virtual int create_edit_controls(i4_str name,
-									 li_object *o,
-									 li_object *property_list,
-									 i4_window_class **windows,
+									 li_object * o,
+									 li_object * property_list,
+									 i4_window_class * * windows,
 									 int max_windows,
-									 li_environment *env)
+									 li_environment * env)
 	{
 		if (max_windows<3)
 		{
@@ -8309,10 +8356,10 @@ public:
 
 		windows[0]=new i4_text_window_class(name, i4_current_app->get_style());
 
-		i4_text_window_class *ti=new i4_text_window_class(buf, i4_current_app->get_style());
+		i4_text_window_class * ti=new i4_text_window_class(buf, i4_current_app->get_style());
 		windows[2]=ti;
 
-		i4_graphical_style_class *style=i4_current_app->get_style();
+		i4_graphical_style_class * style=i4_current_app->get_style();
 
 		w32 id=li_g1_ref::get(o,env)->id();
 		windows[1]=new li_objref_change_button_class(g1_ges("change_link_help"),
@@ -8324,10 +8371,10 @@ public:
 		return 3;
 	}
 
-	virtual li_object *apply_edit_controls(li_object *o,
-										   li_object *property_list,
-										   i4_window_class **windows,
-										   li_environment *env)
+	virtual li_object *apply_edit_controls(li_object * o,
+										   li_object * property_list,
+										   i4_window_class * * windows,
+										   li_environment * env)
 	{
 		return new li_g1_ref(((li_objref_change_button_class *)windows[1])->current_id);
 	}
@@ -8340,18 +8387,18 @@ class li_object_list_reference_edit_class :
 {
 public:
 	virtual int create_edit_controls(i4_str name,
-									 li_object *o,
-									 li_object *property_list,
-									 i4_window_class **windows,
+									 li_object * o,
+									 li_object * property_list,
+									 i4_window_class * * windows,
 									 int max_windows,
-									 li_environment *env)
+									 li_environment * env)
 	{
 		if (max_windows<3)
 		{
 			return 0;
 		}
 
-		li_g1_ref_list *r=li_g1_ref_list::get(o,env);
+		li_g1_ref_list * r=li_g1_ref_list::get(o,env);
 
 		char buf[200];
 		sprintf(buf, "%d : %s", r->size(), r->size() && r->value(0) ?
@@ -8359,10 +8406,10 @@ public:
 
 		windows[0]=new i4_text_window_class(name, i4_current_app->get_style());
 
-		i4_text_window_class *ti=new i4_text_window_class(buf, i4_current_app->get_style());
+		i4_text_window_class * ti=new i4_text_window_class(buf, i4_current_app->get_style());
 		windows[2]=ti;
 
-		i4_graphical_style_class *style=i4_current_app->get_style();
+		i4_graphical_style_class * style=i4_current_app->get_style();
 
 		windows[1]=new li_objref_list_controls(li_g1_ref_list::get(o,env),
 											   ti);
@@ -8370,10 +8417,10 @@ public:
 		return 3;
 	}
 
-	virtual li_object *apply_edit_controls(li_object *o,
-										   li_object *property_list,
-										   i4_window_class **windows,
-										   li_environment *env)
+	virtual li_object *apply_edit_controls(li_object * o,
+										   li_object * property_list,
+										   i4_window_class * * windows,
+										   li_environment * env)
 	{
 		return ((li_objref_list_controls *)windows[1])->get();
 	}
@@ -8440,7 +8487,7 @@ void g1_3d_pick_window::parent_draw(i4_draw_context_class &context)
 					g1_render.scale_x, g1_render.scale_y,
 					g1_render.ooscale_x, g1_render.ooscale_y);
 
-	r1_render_api_class *render_api=g1_render.r_api;
+	r1_render_api_class * render_api=g1_render.r_api;
 
 
 	render_api->default_state();
@@ -8501,7 +8548,7 @@ void g1_3d_pick_window::parent_draw(i4_draw_context_class &context)
 }
 
 
-void g1_3d_pick_window::receive_event(i4_event *ev)
+void g1_3d_pick_window::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::MOUSE_BUTTON_DOWN)
 	{
@@ -8686,14 +8733,14 @@ void g1_scroll_picker_class::create_windows()
 		while (x+obj_size<=info->max_object_size && !done)
 		{
 
-			i4_menu_item_class *w=create_window(obj_size, obj_size, on);
+			i4_menu_item_class * w=create_window(obj_size, obj_size, on);
 			if (!w)
 			{
 				done=1;
 			}
 			else
 			{
-				r1_render_window_class *rwin;
+				r1_render_window_class * rwin;
 				rwin=g1_render.r_api->create_render_window(obj_size, obj_size, R1_COPY_1x1);
 
 				windows.add(w);
@@ -8717,9 +8764,9 @@ void g1_scroll_picker_class::create_windows()
 	}
 }
 
-g1_scroll_picker_class::g1_scroll_picker_class(i4_graphical_style_class *style,
+g1_scroll_picker_class::g1_scroll_picker_class(i4_graphical_style_class * style,
 											   w32 option_flags,
-											   g1_scroll_picker_info *info,
+											   g1_scroll_picker_info * info,
 											   int total_objects)
 
 	: i4_color_window_class(0,0, style->color_hint->neutral(), style),
@@ -8803,14 +8850,14 @@ void g1_scroll_picker_class::parent_draw(i4_draw_context_class &context)
 {
 	i4_color_window_class::parent_draw(context);
 
-	r1_texture_manager_class *tman=g1_render.r_api->get_tmanager();
+	r1_texture_manager_class * tman=g1_render.r_api->get_tmanager();
 
 	g1_render.flush_vert_buffer();
 
 	tman->next_frame();
 }
 
-void g1_scroll_picker_class::receive_event(i4_event *ev)
+void g1_scroll_picker_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{
@@ -8970,7 +9017,7 @@ void g1_editor_class::create_sky_window()
 	if (get_map())
 	{
 		g1_sky_view::sky_scroll_offset=0;
-		g1_sky_picker_class *sp=new g1_sky_picker_class(i4_current_app->get_style());
+		g1_sky_picker_class * sp=new g1_sky_picker_class(i4_current_app->get_style());
 
 		create_modal(sp->width(), sp->height(), "set_sky_title");
 		modal_window.get()->add_child(0,0,sp);
@@ -9007,10 +9054,10 @@ void g1_editor_class::set_sky()
 
 
 
-g1_tile_picker_class::g1_tile_picker_class(i4_graphical_style_class *style,
-										   g1_scroll_picker_info *info,
-										   i4_image_class *active_back,
-										   i4_image_class *passive_back)
+g1_tile_picker_class::g1_tile_picker_class(i4_graphical_style_class * style,
+										   g1_scroll_picker_info * info,
+										   i4_image_class * active_back,
+										   i4_image_class * passive_back)
 	:
 	  g1_scroll_picker_class(style,
 							 (1<<ROTATE) | (1<<MIRROR) | (1<<GROW) |
@@ -9035,9 +9082,10 @@ int g1_tile_picker_class::total_objects()
 	return g1_tile_man.remap_size();
 }
 
-i4_menu_item_class *g1_tile_picker_class::create_window(w16 w, w16 h, int scroll_object_num)
+i4_menu_item_class * g1_tile_picker_class::create_window(w16 w, w16 h, int scroll_object_num)
 {
 	int t=g1_tile_man.remap_size();
+
 	if (scroll_object_num>=t)
 	{
 		return 0;
@@ -9046,7 +9094,7 @@ i4_menu_item_class *g1_tile_picker_class::create_window(w16 w, w16 h, int scroll
 	g1_3d_pick_window_camera_struct tile_state;
 	tile_state.init();
 
-	g1_3d_tile_window *neww;
+	g1_3d_tile_window * neww;
 
 	neww=new g1_3d_tile_window(w,h, scroll_object_num, tile_state,
 							   active_back, passive_back, 0);
@@ -9055,10 +9103,10 @@ i4_menu_item_class *g1_tile_picker_class::create_window(w16 w, w16 h, int scroll
 }
 
 
-void g1_tile_picker_class::change_window_object_num(i4_window_class *win,
+void g1_tile_picker_class::change_window_object_num(i4_window_class * win,
 													int new_scroll_object_num)
 {
-	g1_3d_tile_window *twin=((g1_3d_tile_window *)win);
+	g1_3d_tile_window * twin=((g1_3d_tile_window *)win);
 
 	//g1_3d_pick_window::camera_struct old_camera = twin->camera;  // JJ COmment not used
 
@@ -9091,28 +9139,29 @@ void g1_tile_picker_class::mirror()
 
 }
 
-i4_bool g1_tile_picker_class::remove(i4_menu_item_class *window)
+i4_bool g1_tile_picker_class::remove(i4_menu_item_class * window)
 {
 	// This is currently not supported -> Would cause mayor headaches,
 	// since we first had to make sure it's not used and then the handles
 	// for the remaining textures had to be changed all over the place.
-	g1_3d_tile_window *tile=(g1_3d_tile_window *)window;
+	g1_3d_tile_window * tile=(g1_3d_tile_window *)window;
 	int t=g1_tile_man.get_remap(tile->tile_num);
+
 	//g1_tile_man.get(t)->filename_checksum=0; //Mark as empty
 	//g1_tile_man.get(t)->texture=0;
 	return i4_F;
 }
 
-li_object *tile_edit_callback(li_object *o, li_environment *env)
+li_object *tile_edit_callback(li_object * o, li_environment * env)
 {
 	if (o==NULL)
 	{
 		return 0;
 	}
-	li_class *c=li_class::get(li_car(o, env),env);
+	li_class * c=li_class::get(li_car(o, env),env);
 	li_class_context ctx(c);
 	int t=g1_tile_man.get_remap(li_int::get(c->value("hidden_id"),0)->value());
-	g1_tile_class *tile=g1_tile_man.get(t);
+	g1_tile_class * tile=g1_tile_man.get(t);
 	tile->set_friction(li_float::get(c->value("friction_fraction"),0)->value());
 	tile->damage=li_int::get(c->value("damage"),0)->value();
 	tile->flags|=(c->value("wave")==li_true_sym) ? (g1_tile_class::WAVE): 0;
@@ -9129,22 +9178,23 @@ void g1_tile_picker_class::add(i4_str name)
 	}
 	li_call("reload_main_textures");
 }
-i4_bool g1_tile_picker_class::edit(i4_menu_item_class *window)
+i4_bool g1_tile_picker_class::edit(i4_menu_item_class * window)
 {
-	g1_3d_tile_window *tilewin=(g1_3d_tile_window *)window;
+	g1_3d_tile_window * tilewin=(g1_3d_tile_window *)window;
 	int t=g1_tile_man.get_remap(tilewin->tile_num);
-	g1_tile_class *tile=g1_tile_man.get(t);
+	g1_tile_class * tile=g1_tile_man.get(t);
 
-	li_class *dlg=(li_class *)li_new("tile_edit_dialog");
+	li_class * dlg=(li_class *)li_new("tile_edit_dialog");
+
 	li_class_context ctx(dlg);
 	dlg->set("friction_fraction",new li_float(tile->friction_fraction));
 	dlg->set("damage",new li_int(tile->damage));
-	li_object *v=(tile->flags&g1_tile_class::BLOCKING) ? li_true_sym : li_nil;
+	li_object * v=(tile->flags&g1_tile_class::BLOCKING) ? li_true_sym : li_nil;
 	dlg->set("block", v);
 	v=(tile->flags&g1_tile_class::WAVE) ? li_true_sym : li_nil;
 	dlg->set("wave",v);
 	dlg->set("hidden_id",new li_int(tilewin->tile_num));
-	i4_const_str *s=g1_tile_man.get_name_from_tile(t);
+	i4_const_str * s=g1_tile_man.get_name_from_tile(t);
 	if (s==NULL)
 	{
 		return i4_F;
@@ -9167,9 +9217,9 @@ i4_bool g1_tile_picker_class::edit(i4_menu_item_class *window)
 g1_3d_tile_window::g1_3d_tile_window(w16 w, w16 h,
 									 int tile_num,
 									 g1_3d_pick_window_camera_struct &camera,
-									 i4_image_class *active_back,
-									 i4_image_class *passive_back,
-									 i4_event_reaction_class *reaction)
+									 i4_image_class * active_back,
+									 i4_image_class * passive_back,
+									 i4_event_reaction_class * reaction)
 	:  g1_3d_pick_window(w,h,
 						 active_back, passive_back,
 						 camera,
@@ -9183,7 +9233,7 @@ g1_3d_tile_window::g1_3d_tile_window(w16 w, w16 h,
 }
 
 
-inline void g1_setup_vert(r1_vert *v, float px, float py, float z)
+inline void g1_setup_vert(r1_vert * v, float px, float py, float z)
 {
 	v->px=px;
 	v->py=py;
@@ -9230,15 +9280,15 @@ i4_bool g1_3d_tile_window::selected()
 	}
 }
 
-void g1_3d_tile_window::draw_object(g1_draw_context_class *context)
+void g1_3d_tile_window::draw_object(g1_draw_context_class * context)
 {
 	if (tile_num<g1_tile_man.remap_size())
 	{
-		i4_const_str *s=g1_tile_man.get_name_from_tile(g1_tile_man.get_remap(tile_num));
+		i4_const_str * s=g1_tile_man.get_name_from_tile(g1_tile_man.get_remap(tile_num));
 		set_context_help(s);
 		delete s;
 		r1_texture_handle han=g1_tile_man.get_texture(g1_tile_man.get_remap(tile_num));
-		r1_render_api_class *render_api=g1_render.r_api;
+		r1_render_api_class * render_api=g1_render.r_api;
 
 		if (active)
 		{
@@ -9285,9 +9335,9 @@ void g1_3d_tile_window::draw_object(g1_draw_context_class *context)
 
 
 
-li_object *g1_reload_map(li_object *o, li_environment *env)
+li_object *g1_reload_map(li_object * o, li_environment * env)
 {
-	i4_str *fname=new i4_str(g1_get_map()->get_filename());
+	i4_str * fname=new i4_str(g1_get_map()->get_filename());
 
 	g1_load_level(*fname, 0, G1_MAP_VIEW_POSITIONS);
 	delete fname;
@@ -9298,9 +9348,9 @@ li_object *g1_reload_map(li_object *o, li_environment *env)
 }
 
 
-li_object *g1_full_reload_map(li_object *o, li_environment *env)
+li_object *g1_full_reload_map(li_object * o, li_environment * env)
 {
-	i4_str *fname=new i4_str(g1_get_map()->get_filename());
+	i4_str * fname=new i4_str(g1_get_map()->get_filename());
 
 	g1_load_level(*fname, 1, G1_MAP_VIEW_POSITIONS);
 	delete fname;
@@ -9332,7 +9382,7 @@ void g1_flood_fill_class::fill(sw32 x, sw32 y)
 		return ;
 	}
 
-	fill_rec *recs=0,*r;
+	fill_rec * recs=0,* r;
 
 	sw32 startx=x,starty=y;
 	sw32 clip_x1, clip_y1, clip_x2, clip_y2;
@@ -9354,6 +9404,7 @@ void g1_flood_fill_class::fill(sw32 x, sw32 y)
 		{
 			while (x>clip_x1 && !blocking(x,y))
 				x--;
+
 
 
 			if (blocking(x,y) && x<clip_x2)
@@ -9388,7 +9439,8 @@ void g1_flood_fill_class::fill(sw32 x, sw32 y)
 				}
 
 				x++;
-			} while (!blocking(x,y) && x<clip_x2);
+			}
+			while (!blocking(x,y) && x<clip_x2);
 
 
 			x--;
@@ -9402,7 +9454,8 @@ void g1_flood_fill_class::fill(sw32 x, sw32 y)
 				recs=new fill_rec((short)x,(short)(y+1),recs);
 			}
 		}
-	} while (recs);
+	}
+	while (recs);
 }
 
 // commands/map_dump.cpp
@@ -9453,8 +9506,8 @@ public:
 
 	void draw(i4_draw_context_class &context)
 	{
-		r1_render_api_class *api=g1_render.r_api;
-		r1_texture_manager_class *tman=api->get_tmanager();
+		r1_render_api_class * api=g1_render.r_api;
+		r1_texture_manager_class * tman=api->get_tmanager();
 
 		do_it_again=i4_F;
 
@@ -9474,8 +9527,8 @@ public:
 			s=0;
 			for (x=ax1; x<ax2; x++, s+=s_step)
 			{
-				g1_map_cell_class *c=g1_cells + g1_map_width*y+x;
-				g1_map_vertex_class *v1=g1_verts + (g1_map_width+1)*y+x, *v2,*v3,*v4;
+				g1_map_cell_class * c=g1_cells + g1_map_width*y+x;
+				g1_map_vertex_class * v1=g1_verts + (g1_map_width+1)*y+x, * v2,* v3,* v4;
 				v2=v1+1;
 				v3=v2+g1_map_width+1; // order is: v1 -- v2
 				v4=v3-1;       //           |      |
@@ -9556,17 +9609,18 @@ public:
 		api->set_filter_mode(R1_BILINEAR_FILTERING);
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"map_renderer");
 	}
 };
 
-void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_image_class *image)
+void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_image_class * image)
 {
-	r1_render_api_class *api=g1_render.r_api;
-	r1_texture_manager_class *tman=api->get_tmanager();
+	r1_render_api_class * api=g1_render.r_api;
+	r1_texture_manager_class * tman=api->get_tmanager();
 	float s, t, s_step, t_step;
+
 	s_step=(im_w)/(float)(x2-x1); //t and s must be [0..256) ??
 	t_step=(im_h)/(float)(y2-y1);
 	int x,y;
@@ -9574,7 +9628,7 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 	float t_fract_step=i4_fract(t_step);
 	float s_fract_step=i4_fract(s_step);
 
-	i4_image_class *current_texture=0;
+	i4_image_class * current_texture=0;
 	w32 col=0;
 	i4_draw_context_class context(0,0,im_w-1, im_h-1);
 	sw32 act_w=0,act_h=0;
@@ -9588,8 +9642,8 @@ void render_map_to_image(int x1, int y1, int x2, int y2, int im_w, int im_h, i4_
 		G1_ROTATE_90,G1_ROTATE_180,G1_ROTATE_270,G1_ROTATE_0
 	};
 	g1_rotation_type rot;
-	g1_map_cell_class *c;
-	g1_tile_class *tile;
+	g1_map_cell_class * c;
+	g1_tile_class * tile;
 	w32 tile_color=0;
 	int texture;
 	//If the map is very huge, the lod image will contain less than one pixel per tile, such
@@ -9671,9 +9725,9 @@ i4_image_class *render_map_section(int x1, int y1, int x2, int y2, int im_w, int
 	fmt.default_format();
 	fmt.alpha_mask=0;
 	fmt.calc_shift();
-	const i4_pal *pal=i4_pal_man.register_pal(&fmt);
+	const i4_pal * pal=i4_pal_man.register_pal(&fmt);
 
-	i4_image_class *to=0;
+	i4_image_class * to=0;
 
 	to = i4_create_image(im_w, im_h, pal);
 	to->bar(0,0,im_w-1,im_h-1,0x0007000,context); //perhaps another color
@@ -9701,7 +9755,7 @@ struct area
 	}
 };
 
-static i4_array<area *> *list;
+static i4_array<area *> * list;
 
 static void split_gather(int x1, int y1, int x2, int y2, int level)
 {
@@ -9739,14 +9793,15 @@ static void split_gather(int x1, int y1, int x2, int y2, int level)
 	}
 }
 
-li_object *g1_dump_level(li_object *o, li_environment *env)
+li_object *g1_dump_level(li_object * o, li_environment * env)
 {
-	i4_file_class *fp=i4_open("dump_level.dat", I4_WRITE);
+	i4_file_class * fp=i4_open("dump_level.dat", I4_WRITE);
+
 	if (!fp)
 	{
 		return 0;
 	}
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	int w=map->width(), h=map->height(),i,x,y;
 	fp->write_32(0xabcf); // version
@@ -9754,14 +9809,14 @@ li_object *g1_dump_level(li_object *o, li_environment *env)
 	fp->write_16(h);
 
 	// save off a 1 pixel bitmap
-	g1_map_cell_class *c=g1_cells;
+	g1_map_cell_class * c=g1_cells;
 	for (y=0; y<h; y++)
 	{
 		for (x=0; x<w; x++, c++)
 		{
 			int type=g1_tile_man.get_texture(c->type);
 			w32 color= g1_render.r_api->get_tmanager()->average_texture_color(type, 0);
-			g1_map_vertex_class *v=g1_verts+x+y*(w+1);
+			g1_map_vertex_class * v=g1_verts+x+y*(w+1);
 
 			float tr,tg,tb;
 			v->get_rgb(tr,tg,tb, x,y);
@@ -9778,7 +9833,7 @@ li_object *g1_dump_level(li_object *o, li_environment *env)
 
 
 	// save vert hights and normals
-	g1_map_vertex_class *v=g1_verts;
+	g1_map_vertex_class * v=g1_verts;
 	for (y=0; y<=h; y++)
 	{
 		for (x=0; x<=w; x++, v++)
@@ -9808,7 +9863,7 @@ li_object *g1_dump_level(li_object *o, li_environment *env)
 	for (i=0; i<w*h; i++, c++)
 	{
 		int type=g1_tile_man.get_texture(c->type);
-		char *tname=g1_render.r_api->get_tmanager()->get_texture_name(type);
+		char * tname=g1_render.r_api->get_tmanager()->get_texture_name(type);
 		int len=strlen(tname)+1;
 		fp->write_16(len);
 		fp->write(tname,len);
@@ -9832,13 +9887,13 @@ li_object *g1_dump_level(li_object *o, li_environment *env)
 		int x1=mlist[i]->x1, y1=mlist[i]->y1, x2=mlist[i]->x2, y2=mlist[i]->y2;
 
 		//i4_warning("%d %d %d %d\n",x1,y1,x2,y2);
-		i4_image_class *to;
+		i4_image_class * to;
 
 		if ((to = render_map_section(x1,y1,x2,y2, 256,256))!=0)
 		{
 			char fn[MAX_PATH];
 			sprintf(fn,"mapdebug/%d.tga", i-2);
-			i4_file_class *mfp=i4_open(fn, I4_WRITE);
+			i4_file_class * mfp=i4_open(fn, I4_WRITE);
 			i4_write_tga(to, mfp);
 			delete mfp;
 			delete to;
@@ -9867,10 +9922,10 @@ li_automatic_add_function(g1_dump_level, "dump_level");
 
 
 
-li_object *g1_fog_map(li_object *, li_environment *env)
+li_object *g1_fog_map(li_object *, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_CELLS | G1_MAP_VERTS)));
-	g1_map_cell_class *c=g1_cells;
+	g1_map_cell_class * c=g1_cells;
 	int t=g1_map_width * g1_map_height, i;
 
 	for (i=0; i<t; i++, c++)
@@ -9879,7 +9934,7 @@ li_object *g1_fog_map(li_object *, li_environment *env)
 	}
 
 
-	g1_map_vertex_class *v=g1_verts;
+	g1_map_vertex_class * v=g1_verts;
 	t=(g1_map_width+1) * (g1_map_height+1);
 
 	for (i=0; i<t; i++, v++)
@@ -9893,10 +9948,10 @@ li_object *g1_fog_map(li_object *, li_environment *env)
 }
 
 
-li_object *g1_unfog_map(li_object *, li_environment *env)
+li_object *g1_unfog_map(li_object *, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_CELLS | G1_MAP_VERTS)));
-	g1_map_cell_class *c=g1_cells;
+	g1_map_cell_class * c=g1_cells;
 	int t=g1_map_width * g1_map_height, i;
 
 	for (i=0; i<t; i++, c++)
@@ -9905,7 +9960,7 @@ li_object *g1_unfog_map(li_object *, li_environment *env)
 	}
 
 
-	g1_map_vertex_class *v=g1_verts;
+	g1_map_vertex_class * v=g1_verts;
 	t=(g1_map_width+1) * (g1_map_height+1);
 
 	for (i=0; i<t; i++, v++)
@@ -9918,7 +9973,7 @@ li_object *g1_unfog_map(li_object *, li_environment *env)
 	return 0;
 }
 
-static void select_rest(g1_path_object_class *p, g1_team_type team)
+static void select_rest(g1_path_object_class * p, g1_team_type team)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
@@ -9936,11 +9991,11 @@ static void select_rest(g1_path_object_class *p, g1_team_type team)
 	}
 }
 
-li_object *g1_select_restof_path(li_object *o, li_environment *env)
+li_object *g1_select_restof_path(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	for (g1_path_object_class *p=g1_path_object_list.first(); p; p=p->next)
+	for (g1_path_object_class * p=g1_path_object_list.first(); p; p=p->next)
 	{
 		if (p->get_flag(g1_object_class::SELECTED))
 		{
@@ -9962,11 +10017,11 @@ li_object *g1_select_restof_path(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_add_cloud_shadow(li_object *o, li_environment *env)
+li_object *g1_add_cloud_shadow(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	g1_object_class *c=g1_create_object(g1_get_object_type("cloud_shadow"));
+	g1_object_class * c=g1_create_object(g1_get_object_type("cloud_shadow"));
 	c->x=(float)(g1_map_width/2);
 	c->y=(float)(g1_map_height/2);
 	c->h=(float)(g1_get_map()->terrain_height(c->x, c->y)+0.1);
@@ -9976,12 +10031,12 @@ li_object *g1_add_cloud_shadow(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_remove_cloud_shadow(li_object *o, li_environment *env)
+li_object *g1_remove_cloud_shadow(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
 	int type=g1_get_object_type("cloud_shadow");
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 	for (int i=0; i<t; i++)
 	{
@@ -10029,7 +10084,7 @@ void g1_editor_class::merge_terrain()
 
 }
 
-i4_bool g1_editor_class::merge_terrain_ok(i4_user_message_event_class *ev)
+i4_bool g1_editor_class::merge_terrain_ok(i4_user_message_event_class * ev)
 {
 	CAST_PTR(f, i4_file_open_message_class, ev);
 
@@ -10037,10 +10092,10 @@ i4_bool g1_editor_class::merge_terrain_ok(i4_user_message_event_class *ev)
 	i4_bool ret=i4_F;
 	if (get_map())
 	{
-		i4_file_class *in=i4_open(*f->filename);
+		i4_file_class * in=i4_open(*f->filename);
 		if (in)
 		{
-			g1_loader_class *l=g1_open_save_file(in);
+			g1_loader_class * l=g1_open_save_file(in);
 
 			if (l)
 			{
@@ -10069,7 +10124,7 @@ i4_bool g1_editor_class::merge_terrain_ok(i4_user_message_event_class *ev)
 
 
 
-li_object *g1_drop_selected(li_object *o, li_environment *env)
+li_object *g1_drop_selected(li_object * o, li_environment * env)
 {
 	if (!g1_map_is_loaded())
 	{
@@ -10078,7 +10133,7 @@ li_object *g1_drop_selected(li_object *o, li_environment *env)
 
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 
 	for (int i=0; i<t; i++)
@@ -10097,11 +10152,11 @@ li_object *g1_drop_selected(li_object *o, li_environment *env)
 
 
 
-li_object *g1_floor_selected(li_object *o, li_environment *env)
+li_object *g1_floor_selected(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	int t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS),i;
 
 	float lowest=1000;
@@ -10132,11 +10187,11 @@ li_object *g1_floor_selected(li_object *o, li_environment *env)
 
 
 
-li_object *g1_ceil_selected(li_object *o, li_environment *env)
+li_object *g1_ceil_selected(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	int t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS),i;
 
 	float heighest=0;
@@ -10165,11 +10220,11 @@ li_object *g1_ceil_selected(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_select_game_pieces(li_object *o, li_environment *env)
+li_object *g1_select_game_pieces(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	int t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS),i;
 	for (i=0; i<t; i++)
 	{
@@ -10189,14 +10244,14 @@ li_object *g1_select_game_pieces(li_object *o, li_environment *env)
 }
 
 
-li_object *g1_select_similar(li_object *o, li_environment *env)
+li_object *g1_select_similar(li_object * o, li_environment * env)
 {
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	int t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS),i;
 
-	w8 *sel_types=(w8 *)I4_MALLOC(g1_last_object_type,"");
+	w8 * sel_types=(w8 *)I4_MALLOC(g1_last_object_type,"");
 	memset(sel_types, 0, g1_last_object_type);
 	for (i=0; i<t; i++)
 	{
@@ -10246,8 +10301,8 @@ void g1_editor_class::open_new_level_window()
 	int uw=g1_map_is_loaded() ? get_map()->width() : 100;
 	int uh=g1_map_is_loaded() ? get_map()->height() : 100;
 
-	i4_color_window_class *cw=new i4_color_window_class(500,500,
-														style->color_hint->neutral(), style);
+	i4_color_window_class * cw=new i4_color_window_class(500,500,
+														 style->color_hint->neutral(), style);
 	i4_create_dialog(g1_ges("new_level_dialog"),
 					 cw,
 					 style,
@@ -10264,10 +10319,10 @@ void g1_editor_class::open_new_level_window()
 
 
 
-g1_map_class *g1_editor_class::create_default_map(int w, int h,
-												  const i4_const_str &name)
+g1_map_class * g1_editor_class::create_default_map(int w, int h,
+												   const i4_const_str &name)
 {
-	g1_map_class *map=new g1_map_class(i4gets("tmp_savename"));
+	g1_map_class * map=new g1_map_class(i4gets("tmp_savename"));
 
 
 	map->verts=(g1_map_vertex_class *)malloc((w+1) * (h+1) *
@@ -10288,7 +10343,7 @@ g1_map_class *g1_editor_class::create_default_map(int w, int h,
 	{
 		for (y=0; y<mh; y++)
 		{
-			g1_map_cell_class *c=map->cell((w16)x,(w16)y);
+			g1_map_cell_class * c=map->cell((w16)x,(w16)y);
 			c->init(default_tile_type, G1_ROTATE_0, i4_F);
 
 			if (x==0 || y==0 || x==mw-1 || y==mh-1)
@@ -10313,7 +10368,7 @@ g1_map_class *g1_editor_class::create_default_map(int w, int h,
 	map->current_movie=new g1_movie_flow_class;
 	map->current_movie->set_scene(0);
 
-	for (g1_map_data_class *md=g1_map_data_class::first; md; md=md->next)
+	for (g1_map_data_class * md=g1_map_data_class::first; md; md=md->next)
 	{
 		md->load(0, 0xffffffff);
 	}                       //set up the required instances
@@ -10349,7 +10404,7 @@ g1_map_class *g1_editor_class::create_default_map(int w, int h,
 	g1_object_type factory_pad=g1_get_object_type("mainbasepad");
 	if (factory_pad && w>25 && h>25)
 	{
-		g1_object_class *o;
+		g1_object_class * o;
 
 		o=g1_create_object(factory_pad);
 		if (o)
@@ -10379,6 +10434,7 @@ void g1_editor_class::new_level_from_dialog()
 	int w,h;
 
 	i4_str::iterator is=new_dialog.w->get_edit_string()->begin();
+
 	w=is.read_number();
 	is=new_dialog.h->get_edit_string()->begin();
 	h=is.read_number();
@@ -10406,7 +10462,7 @@ void g1_editor_class::new_level_from_dialog()
 		w32 mapuses=0,totalrec=0;
 		mapuses=sizeof(g1_map_class)+(sizeof(g1_map_cell_class)+sizeof(g1_map_vertex_class))*w*h;
 		totalrec=(mapuses+65536*1024)/(1024*1024);
-		i4_str *exp=txt.sprintf(300,mapuses,totalrec);
+		i4_str * exp=txt.sprintf(300,mapuses,totalrec);
 		w32 re=i4_message_box(g1_ges("bad_w_h_warning"),*exp,MSG_YES|MSG_NO);
 		delete exp;
 		if (re==MSG_NO)
@@ -10427,8 +10483,8 @@ void g1_editor_class::new_level_from_dialog()
 		g1_destroy_map();
 	}
 
-	i4_str *res_name=g1_get_res_filnename(*new_dialog.name->get_edit_string());
-	i4_file_class *fp=i4_open(*res_name);
+	i4_str * res_name=g1_get_res_filnename(*new_dialog.name->get_edit_string());
+	i4_file_class * fp=i4_open(*res_name);
 
 
 	if (fp)
@@ -10460,8 +10516,8 @@ void g1_editor_class::new_level_from_dialog()
 
 	g1_initialize_loaded_objects();
 
-	g1_map_class *map=create_default_map(w,h,
-										 *new_dialog.name->get_edit_string());
+	g1_map_class * map=create_default_map(w,h,
+										  *new_dialog.name->get_edit_string());
 
 
 	close_modal();
@@ -10477,9 +10533,9 @@ void g1_editor_class::new_level_from_dialog()
  ***********************************************************************/
 
 
-li_object *g1_full_health(li_object *o, li_environment *env)
+li_object *g1_full_health(li_object * o, li_environment * env)
 {
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
@@ -10501,15 +10557,16 @@ class g1_set_health_dialog_class :
 	public i4_color_window_class
 {
 protected:
-	i4_text_window_class *caption;
-	i4_text_input_class *input;
+	i4_text_window_class * caption;
+	i4_text_input_class * input;
 public:
-	g1_set_health_dialog_class(i4_graphical_style_class *style)
+	g1_set_health_dialog_class(i4_graphical_style_class * style)
 		: i4_color_window_class(300,50,style->color_hint->neutral(),style)
 	{
 		sw32 health = 0;
-		g1_object_class *olist[G1_MAX_OBJECTS];
+		g1_object_class * olist[G1_MAX_OBJECTS];
 		sw32 t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
+
 		for (int i=0; i<t; i++)
 		{
 			if (olist[i]->selected())
@@ -10527,12 +10584,12 @@ public:
 		add_child(100,5,input);
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"set health dialog");
 	}
 
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	{
 		switch (ev->type())
 		{
@@ -10544,7 +10601,7 @@ public:
 					i4_str::iterator p = tev->new_text->begin();
 					sw32 health = p.read_number();
 
-					g1_object_class *olist[G1_MAX_OBJECTS];
+					g1_object_class * olist[G1_MAX_OBJECTS];
 					sw32 t=g1_get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 
 					li_call("add_undo", li_make_list(new li_int(G1_MAP_OBJECTS)));
@@ -10571,11 +10628,11 @@ public:
 
 static i4_event_handler_reference_class<g1_set_health_dialog_class> g1_set_health_dialog;
 
-li_object *g1_set_health(li_object *o, li_environment *env)
+li_object *g1_set_health(li_object * o, li_environment * env)
 {
 	if (!g1_set_health_dialog.get())
 	{
-		i4_graphical_style_class *style = i4_current_app->get_style();
+		i4_graphical_style_class * style = i4_current_app->get_style();
 		g1_set_health_dialog = new g1_set_health_dialog_class(style);
 
 		style->create_mp_window(-1,-1,
@@ -10638,6 +10695,7 @@ void g1_editor_class::resize_level()
 	int w,h;
 
 	i4_str::iterator is=resize_dialog.w->get_edit_string()->begin();
+
 	w=is.read_number();
 	is=resize_dialog.h->get_edit_string()->begin();
 	h=is.read_number();
@@ -10664,7 +10722,7 @@ void g1_editor_class::resize_level()
 		w32 mapuses=0,totalrec=0;
 		mapuses=sizeof(g1_map_class)+(sizeof(g1_map_cell_class)+sizeof(g1_map_vertex_class))*w*h;
 		totalrec=(mapuses+65536*1024)/(1024*1024);
-		i4_str *exp=txt.sprintf(300,mapuses,totalrec);
+		i4_str * exp=txt.sprintf(300,mapuses,totalrec);
 		w32 re=i4_message_box(g1_ges("bad_w_h_warning"),*exp,MSG_YES|MSG_NO);
 		delete exp;
 		if (re==MSG_NO)
@@ -10766,14 +10824,14 @@ void g1_editor_class::resize_level()
 		}
 
 
-		g1_map_cell_class *ncells=(g1_map_cell_class *)malloc(w * h *sizeof(g1_map_cell_class));
+		g1_map_cell_class * ncells=(g1_map_cell_class *)malloc(w * h *sizeof(g1_map_cell_class));
 
-		g1_map_vertex_class *nverts=(g1_map_vertex_class *)malloc((w+1) * (h+1) *
-																  sizeof(g1_map_vertex_class)
-									 );
+		g1_map_vertex_class * nverts=(g1_map_vertex_class *)malloc((w+1) * (h+1) *
+																   sizeof(g1_map_vertex_class)
+									  );
 
 		// first initial all the new stuff
-		g1_map_cell_class *c1=ncells, *c2;
+		g1_map_cell_class * c1=ncells, * c2;
 		for (y=0; y<h; y++)
 		{
 			for (x=0; x<w; x++, c1++)
@@ -10790,7 +10848,7 @@ void g1_editor_class::resize_level()
 			}
 		}
 
-		g1_map_vertex_class *v1=nverts,*v2;
+		g1_map_vertex_class * v1=nverts,* v2;
 		for (i=0; i<(w+1)*(h+1); i++, v1++)
 		{
 			v1->init();
@@ -10824,11 +10882,11 @@ void g1_editor_class::resize_level()
 
 
 		// take objects off old map and move them
-		g1_object_class *olist[G1_MAX_OBJECTS];
+		g1_object_class * olist[G1_MAX_OBJECTS];
 		sw32 t=get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 		for (i=0; i<t; i++)
 		{
-			g1_object_class *o=olist[i];
+			g1_object_class * o=olist[i];
 			o->unoccupy_location();
 			o->x+=(dx1-sx1);
 			o->y+=(dy1-sy1);
@@ -10868,7 +10926,7 @@ void g1_editor_class::resize_level()
 		}
 
 		// move the movie
-		g1_movie_flow_class *movie=get_map()->current_movie;
+		g1_movie_flow_class * movie=get_map()->current_movie;
 		if (movie)
 		{
 			for (i=0; i<(sw16)movie->t_cut_scenes; i++)
@@ -10899,13 +10957,13 @@ int g1_rotate_remap[4]={
 	0, 1, 2, 3
 };
 
-li_object *g1_rotate_map_90(li_object *o, li_environment *env)
+li_object *g1_rotate_map_90(li_object * o, li_environment * env)
 {
 	if (!g1_map_is_loaded())
 	{
 		return 0;
 	}
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 
 	int ow=map->width(), oh=map->height(), nw=map->height(), nh=map->width(), size;
@@ -10917,7 +10975,7 @@ li_object *g1_rotate_map_90(li_object *o, li_environment *env)
 	//  return 0;
 	//}
 
-	g1_map_cell_class *ncells=(g1_map_cell_class *)malloc(size);
+	g1_map_cell_class * ncells=(g1_map_cell_class *)malloc(size);
 
 
 	size=sizeof(g1_map_vertex_class)*(nw+1)*(nh+1);
@@ -10927,11 +10985,11 @@ li_object *g1_rotate_map_90(li_object *o, li_environment *env)
 	//  i4_warning("not enough memory");
 	//  return 0;
 	//}
-	g1_map_vertex_class *nverts=(g1_map_vertex_class *)malloc(size);
+	g1_map_vertex_class * nverts=(g1_map_vertex_class *)malloc(size);
 
 	li_call("add_undo", li_make_list(new li_int(G1_MAP_ALL)));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	int t=map->make_object_list(olist, G1_MAX_OBJECTS), i,x,y;
 
 	for (i=0; i<t; i++)
@@ -10942,7 +11000,7 @@ li_object *g1_rotate_map_90(li_object *o, li_environment *env)
 
 
 	// move the cells
-	g1_map_cell_class *ocells=map->cell(0,0);
+	g1_map_cell_class * ocells=map->cell(0,0);
 	for (y=0; y<oh; y++)
 	{
 		for (x=0; x<ow; x++, ocells++)
@@ -10955,7 +11013,7 @@ li_object *g1_rotate_map_90(li_object *o, li_environment *env)
 	}
 
 	// move the vertexes
-	g1_map_vertex_class *overts=map->vertex(0,0);
+	g1_map_vertex_class * overts=map->vertex(0,0);
 	for (y=0; y<oh+1; y++)
 	{
 		for (x=0; x<ow+1; x++, overts++)
@@ -11021,9 +11079,9 @@ void g1_editor_class::flatten_terrain()
 
 	int t=0,x,y,i;
 
-	i4_status_class *status=i4_create_status(g1_ges("applying_flatten"));
+	i4_status_class * status=i4_create_status(g1_ges("applying_flatten"));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 to=get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 	for (i=0; i<to; i++)
 	{
@@ -11034,7 +11092,7 @@ void g1_editor_class::flatten_terrain()
 	{
 		for (x=0; x<w; x++)
 		{
-			g1_map_vertex_class *v=get_map()->vertex(x,y);
+			g1_map_vertex_class * v=get_map()->vertex(x,y);
 			if (v->is_selected())
 			{
 				if (v->get_height_value()<lowest)
@@ -11059,7 +11117,7 @@ void g1_editor_class::flatten_terrain()
 
 			for (x=0; x<w; x++)
 			{
-				g1_map_vertex_class *v=get_map()->vertex(x,y);
+				g1_map_vertex_class * v=get_map()->vertex(x,y);
 				if (v->is_selected())
 				{
 					get_map()->change_vert_height(x,y, (w8)lowest);
@@ -11100,9 +11158,9 @@ void g1_editor_class::smooth_terrain()
 
 	int t=0,x,y,i;
 
-	i4_status_class *status=i4_create_status(g1_ges("applying_smooth"));
+	i4_status_class * status=i4_create_status(g1_ges("applying_smooth"));
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 to=get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 	for (i=0; i<to; i++)
 	{
@@ -11118,7 +11176,7 @@ void g1_editor_class::smooth_terrain()
 		}
 		for (x=0; x<w; x++)
 		{
-			g1_map_vertex_class *v=get_map()->vertex(x,y);
+			g1_map_vertex_class * v=get_map()->vertex(x,y);
 			if (v->is_selected())
 			{
 				int t=1;
@@ -11210,10 +11268,10 @@ void g1_editor_class::noise_terrain_ok()
 	int am=i.read_number(),x,y;
 	int w=get_map()->width()+1, h=get_map()->height()+1, j;
 
-	i4_status_class *status=i4_create_status(g1_ges("applying_noise"));
+	i4_status_class * status=i4_create_status(g1_ges("applying_noise"));
 
 
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	sw32 to=get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 
 	for (j=0; j<to; j++)
@@ -11233,7 +11291,7 @@ void g1_editor_class::noise_terrain_ok()
 
 			for (x=0; x<w; x++)
 			{
-				g1_map_vertex_class *v=get_map()->vertex(x,y);
+				g1_map_vertex_class * v=get_map()->vertex(x,y);
 				if (v->is_selected())
 				{
 					int h=(int)v->get_height_value() + (i4_rand() % am) - am/2;
@@ -11313,14 +11371,14 @@ void g1_editor_class::save_height_bitmap()
 }
 
 
-void g1_editor_class::save_height_bitmap_ok(i4_event *ev)
+void g1_editor_class::save_height_bitmap_ok(i4_event * ev)
 {
 //  int i;
 	CAST_PTR(fo, i4_file_open_message_class, ev);
 
 	if (fo->filename && get_map())
 	{
-		i4_file_class *fp=i4_open(*fo->filename, I4_WRITE);
+		i4_file_class * fp=i4_open(*fo->filename, I4_WRITE);
 		if (!fp)
 		{
 			create_modal(500, 100, "save_height_bad_file_tile");
@@ -11333,14 +11391,14 @@ void g1_editor_class::save_height_bitmap_ok(i4_event *ev)
 			i4_pixel_format fmt;
 			fmt.default_format();
 
-			const i4_pal *pal=i4_pal_man.register_pal(&fmt);
+			const i4_pal * pal=i4_pal_man.register_pal(&fmt);
 
 			int mw=get_map()->width()+1, mh=get_map()->height()+1;
 
-			i4_image_class *im=i4_create_image(mw, mh, pal);
-			w32 *i32=(w32 *)im->data;
+			i4_image_class * im=i4_create_image(mw, mh, pal);
+			w32 * i32=(w32 *)im->data;
 
-			g1_map_vertex_class *v=get_map()->verts;
+			g1_map_vertex_class * v=get_map()->verts;
 			int x,y;
 			for (y=0; y<mh; y++)
 			{
@@ -11363,9 +11421,10 @@ void g1_editor_class::save_height_bitmap_ok(i4_event *ev)
 
 
 
-void g1_editor_class::load_height_bitmap_ok(i4_event *ev)
+void g1_editor_class::load_height_bitmap_ok(i4_event * ev)
 {
 	int i;
+
 	CAST_PTR(fo, i4_file_open_message_class, ev);
 
 	if (fo->filename && get_map())
@@ -11373,9 +11432,9 @@ void g1_editor_class::load_height_bitmap_ok(i4_event *ev)
 		int mw=get_map()->width()+1, mh=get_map()->height()+1;
 
 
-		i4_status_class *stat=i4_create_status(g1_ges("loading_terrain_bitmap"));
+		i4_status_class * stat=i4_create_status(g1_ges("loading_terrain_bitmap"));
 
-		i4_image_class *im=i4_load_image(*fo->filename, stat);
+		i4_image_class * im=i4_load_image(*fo->filename, stat);
 
 		if (stat)
 		{
@@ -11398,13 +11457,13 @@ void g1_editor_class::load_height_bitmap_ok(i4_event *ev)
 			}
 			else
 			{
-				i4_status_class *stat=i4_create_status(g1_ges("applying_terrain_map"));
+				i4_status_class * stat=i4_create_status(g1_ges("applying_terrain_map"));
 
-				const i4_pixel_format *fmt=&im->get_pal()->source;
+				const i4_pixel_format * fmt=&im->get_pal()->source;
 				i4_draw_context_class c(0,0,mw-1, mh-1);
-				g1_map_vertex_class *v=get_map()->verts;
+				g1_map_vertex_class * v=get_map()->verts;
 
-				g1_object_class *olist[G1_MAX_OBJECTS];
+				g1_object_class * olist[G1_MAX_OBJECTS];
 				sw32 t=get_map()->make_object_list(olist, G1_MAX_OBJECTS);
 				for (i=0; i<t; i++)
 				{
@@ -11482,6 +11541,7 @@ void g1_editor_class::load_height_bitmap_ok(i4_event *ev)
 void g1_editor_class::show_undo_state()
 {
 	int t=undo.tail, t_undos=0, t_redos=0, rt=undo.redo_tail;
+
 	while (t!=undo.head)
 	{
 		t_undos++;
@@ -11502,7 +11562,7 @@ void g1_editor_class::save_undo_info(w32 sections, i4_const_str &fname)
 
 	changed(); // note that map is about to be changed so the user can save if they want
 
-	i4_file_class *fp=i4_open(fname, I4_WRITE|I4_NO_ERROR);
+	i4_file_class * fp=i4_open(fname, I4_WRITE|I4_NO_ERROR);
 	if (!fp)
 	{
 		i4_mkdir(g1_ges("undo_dir"));
@@ -11511,7 +11571,7 @@ void g1_editor_class::save_undo_info(w32 sections, i4_const_str &fname)
 
 	if (fp)
 	{
-		g1_saver_class *sfp=new g1_saver_class(fp, i4_T);
+		g1_saver_class * sfp=new g1_saver_class(fp, i4_T);
 
 		sfp->mark_section(G1_SECTION_MAP_SECTIONS_V1);
 		sfp->write_32(sections);
@@ -11569,7 +11629,7 @@ void g1_editor_class::add_undo(w32 sections)
 
 		int cur_undo=undo.head;
 
-		i4_str *undo_file=g1_ges("undo_file").sprintf(100,cur_undo);
+		i4_str * undo_file=g1_ges("undo_file").sprintf(100,cur_undo);
 
 		save_undo_info(sections, *undo_file);
 
@@ -11589,15 +11649,16 @@ void g1_editor_class::add_undo(w32 sections)
 }
 
 
-li_object *g1_add_undo(li_object *o, li_environment *env)
+li_object *g1_add_undo(li_object * o, li_environment * env)
 {
 	g1_editor_instance.add_undo(li_get_int(li_eval(li_car(o,env),env),env));
 	return 0;
 }
 
-li_object *g1_set_undo(li_object *o, li_environment *env)
+li_object *g1_set_undo(li_object * o, li_environment * env)
 {
-	li_object *ob=li_eval(li_car(o,env),env);
+	li_object * ob=li_eval(li_car(o,env),env);
+
 	if (ob && ob->type()==LI_INT)
 	{
 		if (li_int::get(ob,env)->value()==0)
@@ -11626,22 +11687,22 @@ void g1_editor_class::do_undo()
 
 	if (g1_map_is_loaded() && undo.redo_tail!=undo.tail && !g1_editor_undo_disabled)
 	{
-		i4_str *old_name=new i4_str(g1_get_map()->get_filename());
+		i4_str * old_name=new i4_str(g1_get_map()->get_filename());
 
 		g1_edit_state.hide_focus();
 
 		undo.redo_tail=(undo.redo_tail + undo.max - 1) % undo.max;
 
-		i4_str *undo_file=g1_ges("undo_file").sprintf(100,undo.redo_tail);
-		i4_file_class *fp=i4_open(*undo_file);
+		i4_str * undo_file=g1_ges("undo_file").sprintf(100,undo.redo_tail);
+		i4_file_class * fp=i4_open(*undo_file);
 		if (fp)
 		{
-			g1_loader_class *lfp=g1_open_save_file(fp, i4_T);
+			g1_loader_class * lfp=g1_open_save_file(fp, i4_T);
 			if (lfp->goto_section(G1_SECTION_MAP_SECTIONS_V1))
 			{
 				w32 sections=lfp->read_32();
 
-				i4_str *redo_file=g1_ges("redo_file").sprintf(100,undo.redo_tail);
+				i4_str * redo_file=g1_ges("redo_file").sprintf(100,undo.redo_tail);
 				save_undo_info(sections, *redo_file);
 
 				delete redo_file;
@@ -11685,15 +11746,15 @@ void g1_editor_class::do_redo()
 {
 	if (g1_map_is_loaded() && undo.redo_tail!=undo.head)
 	{
-		i4_str *old_name=new i4_str(g1_get_map()->get_filename());
+		i4_str * old_name=new i4_str(g1_get_map()->get_filename());
 
 		g1_edit_state.hide_focus();
 
-		i4_str *redo_file=g1_ges("redo_file").sprintf(100,undo.redo_tail);
-		i4_file_class *fp=i4_open(*redo_file);
+		i4_str * redo_file=g1_ges("redo_file").sprintf(100,undo.redo_tail);
+		i4_file_class * fp=i4_open(*redo_file);
 		if (fp)
 		{
-			g1_loader_class *lfp=g1_open_save_file(fp, i4_T);
+			g1_loader_class * lfp=g1_open_save_file(fp, i4_T);
 			if (lfp)
 			{
 				if (lfp->goto_section(G1_SECTION_MAP_SECTIONS_V1))
@@ -11788,22 +11849,23 @@ enum {
 
 
 
-g1_path_tool_window_class::g1_path_tool_window_class(i4_graphical_style_class *style,
-													 i4_event_handler_class *send_to,
-													 int buttons, i4_image_class **img,
-													 i4_const_str **help_names)
+g1_path_tool_window_class::g1_path_tool_window_class(i4_graphical_style_class * style,
+													 i4_event_handler_class * send_to,
+													 int buttons, i4_image_class * * img,
+													 i4_const_str * * help_names)
 	: i4_button_box_class(send_to, i4_F)
 //{{{
 {
 	int x=0,y=0,ny=0;
+
 	for (int i=0; i<buttons; i++)
 	{
 		if (img[i])
 		{
-			i4_button_class *b;
+			i4_button_class * b;
 
-			i4_user_message_event_class *uev=new i4_user_message_event_class(i);
-			i4_event_reaction_class *re=new i4_event_reaction_class(send_to, uev);
+			i4_user_message_event_class * uev=new i4_user_message_event_class(i);
+			i4_event_reaction_class * re=new i4_event_reaction_class(send_to, uev);
 
 			b=new i4_button_class(help_names[i], new i4_image_window_class(img[i]), style, re);
 			b->set_popup(i4_T);
@@ -11824,26 +11886,28 @@ g1_path_tool_window_class::g1_path_tool_window_class(i4_graphical_style_class *s
 }
 //}}}
 
-w16 g1_path_window_class::map_size_x(g1_map_class *map)
+w16 g1_path_window_class::map_size_x(g1_map_class * map)
 {
 	w16 ret=map->width()*CELL_SIZE+RADAR_SIZEX+2;
+
 	if (ret>MAX_MAP_SIZE)
 	{
 		return MAX_MAP_SIZE;
 	}
 	return ret;
 }
-w16 g1_path_window_class::map_size_y(g1_map_class *map)
+w16 g1_path_window_class::map_size_y(g1_map_class * map)
 {
 	w16 ret=map->height()*CELL_SIZE>RADAR_SIZEY ? map->height()*CELL_SIZE : RADAR_SIZEY;
+
 	if (ret>MAX_MAP_SIZE)
 	{
 		return MAX_MAP_SIZE;
 	}
 	return ret;
 }
-g1_path_window_class::g1_path_window_class(g1_map_class *_map,
-										   i4_image_class **icons)
+g1_path_window_class::g1_path_window_class(g1_map_class * _map,
+										   i4_image_class * * icons)
 	: map(_map),
 	  critical_graph(_map->get_critical_graph()),
 	  i4_parent_window_class(map_size_x(_map),map_size_y(_map))
@@ -11873,7 +11937,7 @@ g1_path_window_class::g1_path_window_class(g1_map_class *_map,
 	solvegraph->set_graph(critical_graph);
 	solve_mode=SOLVEMODE_MAP;
 	solve();
-	i4_parent_window_class *radar_overview=
+	i4_parent_window_class * radar_overview=
 		g1_create_radar_view(RADAR_SIZEX,RADAR_SIZEY,
 							 G1_RADAR_NO_MAP_EVENTS|
 							 G1_RADAR_SUPRESS_STATUS|
@@ -11939,6 +12003,7 @@ void g1_path_window_class::map_position(w16& x_pos, w16& y_pos)
 	float map_scalex=((float)map->width()/(float)RADAR_SIZEX)*CELL_SIZE;
 	float map_scaley=((float)map->height()/(float)RADAR_SIZEY)*CELL_SIZE;
 	float map_scale=map_scaley<map_scalex ? map_scaley : map_scalex;
+
 	x_pos-=radar_x_pos;
 	x_pos*=map_scale;
 	y_pos*=map_scale;
@@ -12075,7 +12140,7 @@ void g1_path_window_class::draw_to_bitmap()
 	//w32 *block_pixel=bitmap->paddr(0,0);
 
 
-	g1_block_map_class *block_map = map->get_block_map((w8)grade);
+	g1_block_map_class * block_map = map->get_block_map((w8)grade);
 	for (ry=0; ry<mh; ry++)
 	{
 		y = mh-1-ry; // The map was upside down, but why?
@@ -12205,7 +12270,7 @@ void g1_path_window_class::draw_to_bitmap()
  */
 	for (j=1; j<critical_graph->criticals; j++)
 	{
-		g1_critical_graph_class::critical_point_class *crit = &critical_graph->critical[j];
+		g1_critical_graph_class::critical_point_class * crit = &critical_graph->critical[j];
 		for (i=0; i<crit->connections; i++)
 		{
 			if (crit->connection[i].size[grade])
@@ -12302,7 +12367,7 @@ void g1_path_window_class::parent_draw(i4_draw_context_class &context)
 	local_image->bar(radar_x_pos,RADAR_SIZEY,width(),height(),0x0,context);
 }
 
-void g1_path_window_class::receive_event(i4_event *ev)
+void g1_path_window_class::receive_event(i4_event * ev)
 {
 
 	switch (ev->type())
@@ -12482,7 +12547,7 @@ void g1_path_window_class::receive_event(i4_event *ev)
 						//{{{
 						{
 							int i,j,n;
-							g1_map_cell_class *c=map->cell(0,0);
+							g1_map_cell_class * c=map->cell(0,0);
 
 							int g1_takeover_pad_type=g1_get_object_type("takeover_pad");
 
@@ -12492,7 +12557,7 @@ void g1_path_window_class::receive_event(i4_event *ev)
 								//c=map->cell(0,j);
 								for (i=0; i<map->width(); i++, c++)
 								{
-									for (g1_object_chain_class *obj=c->get_obj_list(); obj; obj=obj->next)
+									for (g1_object_chain_class * obj=c->get_obj_list(); obj; obj=obj->next)
 									{
 										if (obj->object->id == g1_takeover_pad_type)
 										{
@@ -12540,7 +12605,7 @@ void g1_path_window_class::receive_event(i4_event *ev)
 						{
 							//Todo: Check this code, do the inverse.
 							int y,x,mw=map->width(),mh=map->height();
-							g1_map_cell_class *c;
+							g1_map_cell_class * c;
 							for (y=0; y<mh; y++)
 							{
 								c=map->cell(0,y);
@@ -12549,7 +12614,7 @@ void g1_path_window_class::receive_event(i4_event *ev)
 									c->flags|= g1_map_cell_class::FOGGED;
 								}
 							}
-							g1_map_vertex_class *v=map->vertex(0,0);
+							g1_map_vertex_class * v=map->vertex(0,0);
 							mh++; //one vertex per row more than cells
 							mw++;
 							for(y=0; y<mh; y++)
@@ -12565,7 +12630,7 @@ void g1_path_window_class::receive_event(i4_event *ev)
 					case P1_UNFOG_MAP:
 						{
 							int y,x,mw=map->width(),mh=map->height();
-							g1_map_cell_class *c;
+							g1_map_cell_class * c;
 							for (y=0; y<mh; y++)
 							{
 								c=map->cell(0,y);
@@ -12574,7 +12639,7 @@ void g1_path_window_class::receive_event(i4_event *ev)
 									c->flags&= ~g1_map_cell_class::FOGGED;
 								}
 							}
-							g1_map_vertex_class *v=map->vertex(0,0);
+							g1_map_vertex_class * v=map->vertex(0,0);
 							mh++; //one vertex per row more than cells
 							mw++;
 							for(y=0; y<mh; y++)

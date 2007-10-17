@@ -31,7 +31,7 @@ float interp(float c1, float c2, float r)
 class test_win_class :
 	public i4_window_class
 {
-	i4_image_class *cloud;
+	i4_image_class * cloud;
 	float cx,cy;
 public:
 
@@ -49,7 +49,7 @@ public:
 
 		float rx=(cx-(int)cx), ry=(cy-(int)cy);
 
-		w32 *d=(w32 *)cloud->data;
+		w32 * d=(w32 *)cloud->data;
 		int w=cloud->width(), h=cloud->height();
 
 		int dx=(int)cx, dy=(int)cy;
@@ -97,7 +97,7 @@ public:
 	}
 
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::USER_MESSAGE && ((i4_user_message_event_class *)ev)->sub_type==QUIT)
 		{
@@ -117,8 +117,9 @@ public:
 	}
 };
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	test_app test;
+
 	test.run();
 }

@@ -84,11 +84,11 @@ public:
 	static LPDIRECT3D9 pD3D9;
 	static D3DPRESENT_PARAMETERS present;
 	static DDPIXELFORMAT dd_fmt_565, dd_fmt_1555;
-	static IDirect3DSurface9 *back_surface, *front_surface;
+	static IDirect3DSurface9 * back_surface, * front_surface;
 	static i4_pixel_format i4_fmt_565, i4_fmt_1555;
 	static LPDIRECT3DDEVICE9 device;
 	//static LPDIRECTDRAWCLIPPER    lpddclipper;
-	CD3DEnumeration *d3denum;
+	CD3DEnumeration * d3denum;
 
 	dx9_common_class();
 	~dx9_common_class()
@@ -102,7 +102,7 @@ public:
 									  D3DFORMAT format=D3DFMT_UNKNOWN);
 
 
-	i4_bool get_surface_description(IDirect3DSurface9 *surface, D3DSURFACE_DESC &surface_desc)
+	i4_bool get_surface_description(IDirect3DSurface9 * surface, D3DSURFACE_DESC &surface_desc)
 	{
 		memset(&surface_desc,0,sizeof(D3DSURFACE_DESC));
 		//surface_desc.dwSize = sizeof(D3DSURFACE_DESC);
@@ -126,7 +126,7 @@ public:
 	//void free_driver_list(dx9_driver *list);
 	LPDIRECT3D9 initialize_driver();
 
-	LPDIRECT3DSURFACE9 get_surface(i4_image_class *im);
+	LPDIRECT3DSURFACE9 get_surface(i4_image_class * im);
 	i4_image_class *create_image(int w, int h, w32 surface_flags);
 
 	void cleanup();
@@ -137,7 +137,7 @@ class i4_dx9_image_class :
 	public i4_image_class
 {
 public:
-	IDirect3DSurface9 *surface;
+	IDirect3DSurface9 * surface;
 	i4_dx9_image_class(w16 w, w16 h, w32 surface_flags=DX9_SYSTEM_RAM);
 	~i4_dx9_image_class();
 
@@ -146,6 +146,7 @@ public:
 	{
 		w32 x1=x;
 		wptr target=0;
+
 		switch (pal->source.pixel_depth)
 		{
 			case I4_32BIT:
@@ -174,7 +175,7 @@ public:
 
 	void put_pixel(i4_coord x, i4_coord y, w32 color); //Put Pixel to surface
 
-	void put_part(i4_image_class *to, i4_coord x, i4_coord y, i4_coord x1,
+	void put_part(i4_image_class * to, i4_coord x, i4_coord y, i4_coord x1,
 				  i4_coord y1, i4_coord x2, i4_coord y2, i4_draw_context_class &context);
 
 

@@ -11,9 +11,10 @@
 #include "file/file.h"
 #include "palette/pal.h"
 
-i4_bool i4_write_tga(i4_image_class *im, const i4_const_str &name, i4_bool include_alpha)
+i4_bool i4_write_tga(i4_image_class * im, const i4_const_str &name, i4_bool include_alpha)
 {
-	i4_file_class *fp=i4_open(name,I4_WRITE);
+	i4_file_class * fp=i4_open(name,I4_WRITE);
+
 	if (fp)
 	{
 		i4_bool bret=i4_write_tga(im,fp,include_alpha);
@@ -28,7 +29,7 @@ i4_bool i4_write_tga(i4_image_class *im, const i4_const_str &name, i4_bool inclu
 	return i4_F;
 }
 
-i4_bool i4_write_tga(i4_image_class *im, i4_file_class *fp, int include_alpha)
+i4_bool i4_write_tga(i4_image_class * im, i4_file_class * fp, int include_alpha)
 {
 	fp->write_8(0); // no id field
 	fp->write_8(0); // no color map
@@ -68,7 +69,7 @@ i4_bool i4_write_tga(i4_image_class *im, i4_file_class *fp, int include_alpha)
 	w8 out[4];
 	i4_color color;
 
-	const i4_pal *pal=im->get_pal();
+	const i4_pal * pal=im->get_pal();
 	i4_pixel_format to;
 	to.default_format();
 

@@ -14,7 +14,7 @@
 #include "error/error.h"
 #include "palette/pal.h"
 
-static inline w32 read_color(i4_file_class *fp, w8 bpp)
+static inline w32 read_color(i4_file_class * fp, w8 bpp)
 {
 	w8 buf[4];
 
@@ -45,7 +45,7 @@ public:
 	{
 		return 17;
 	}
-	virtual i4_bool recognize_header(w8 *buf)
+	virtual i4_bool recognize_header(w8 * buf)
 	{
 		if (buf[1]==0 &&            // no colormap
 			buf[2]==2 || buf[2]==10 && // true color compressed or raw
@@ -62,8 +62,8 @@ public:
 
 
 	// assume fp is at the start of the file
-	virtual i4_image_class *load(i4_file_class *fp,
-								 i4_status_class *status)
+	virtual i4_image_class *load(i4_file_class * fp,
+								 i4_status_class * status)
 	{
 		unsigned char color_map,im_type;
 
@@ -77,6 +77,7 @@ public:
 		   i4_ram_file_class *fp = new i4_ram_file_class(file_buffer,fsize);
 		 */
 		w8 id_length=fp->read_8();
+
 		color_map=fp->read_8();
 		im_type=fp->read_8();
 
@@ -111,13 +112,13 @@ public:
 
 		fp->seek(fp->tell() + id_length);
 
-		w32 *data=new w32[w*h]; //(w32 *)I4_MALLOC(w*h*4,"targa image");
+		w32 * data=new w32[w*h]; //(w32 *)I4_MALLOC(w*h*4,"targa image");
 
 
 		int x,y;
 		unsigned char ctrl;
 
-		w32 c,*sl;
+		w32 c,* sl;
 
 		if (im_type==10) // type 10 is compressed
 		{
@@ -195,7 +196,7 @@ public:
 
 		if (bits & REVERSE_VERT)
 		{
-			w32 *s1=data, *s2=data+(h-1)*w;
+			w32 * s1=data, * s2=data+(h-1)*w;
 			for (y=0; y<h/2; y++)
 			{
 				for (x=0; x<w; x++)
@@ -211,7 +212,7 @@ public:
 
 		if (bits & REVERSE_HORZ)
 		{
-			w32 *s1=data, *s2=data+w-1;
+			w32 * s1=data, * s2=data+w-1;
 			for (y=0; y<h; y++)
 			{
 				for (x=0; x<w; x++)
@@ -235,12 +236,12 @@ public:
 			fmt.calc_shift();
 		}
 
-		i4_pal *pal=i4_pal_man.register_pal(&fmt);
+		i4_pal * pal=i4_pal_man.register_pal(&fmt);
 
-		i4_image_class *im=i4_create_image(w,h, // width & height
-										   pal, // palette (should be 32 bit by default)
-										   data,
-										   w*4); // bytes per line
+		i4_image_class * im=i4_create_image(w,h, // width & height
+											pal, // palette (should be 32 bit by default)
+											data,
+											w*4); // bytes per line
 
 		im->dont_free_data=i4_F;
 

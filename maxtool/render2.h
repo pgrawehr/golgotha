@@ -49,7 +49,7 @@ private:
 	//}}}
 
 	friend class m1_utility_state_class;
-	m1_utility_state_class *state;
+	m1_utility_state_class * state;
 
 	i4_bool animating;
 
@@ -67,10 +67,10 @@ private:
 		return 300;
 	}
 
-	i4_window_manager_class *wm;
-	r1_render_api_class *api;
+	i4_window_manager_class * wm;
+	r1_render_api_class * api;
 
-	void drop_files(int t_files, i4_str **filenames);
+	void drop_files(int t_files, i4_str * * filenames);
 public:
 
 	enum
@@ -94,15 +94,15 @@ public:
 	i4_transform_class transform;
 
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"m1_utility_window_class");
 	}
 
 	m1_utility_window_class(w16 window_width,
 							w16 window_height,
-							r1_render_api_class *api,
-							i4_window_manager_class *wm,
+							r1_render_api_class * api,
+							i4_window_manager_class * wm,
 							i4_float theta,
 							i4_float phi,
 							i4_float dist);
@@ -133,7 +133,7 @@ public:
 	}
 	//}}}
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	i4_bool project_point(const i4_3d_point_class &p, r1_vert &v);
 	void draw_3d_text(i4_3d_point_class p1, const i4_const_str &text,
@@ -160,7 +160,7 @@ public:
 	i4_bool find_hit(int mouse_x, int mouse_y);
 	void xlate_selected(int fromx, int fromy, int tox, int toy);
 
-	void set_state(m1_utility_state_class *_state)
+	void set_state(m1_utility_state_class * _state)
 	//{{{
 	{
 		state = _state;

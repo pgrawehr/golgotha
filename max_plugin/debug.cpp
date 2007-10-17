@@ -12,7 +12,7 @@
 
 m1_debugfile dbg;
 
-m1_debugfile::m1_debugfile(char *_name)
+m1_debugfile::m1_debugfile(char * _name)
 {
 	if (!_name)
 	{
@@ -39,7 +39,7 @@ void m1_debugfile::restart()
 	f = fopen(name,"wt");
 }
 
-void m1_debugfile::printf(char *format, ...)
+void m1_debugfile::printf(char * format, ...)
 {
 	va_list arg;
 	char str[40960];
@@ -51,7 +51,7 @@ void m1_debugfile::printf(char *format, ...)
 	va_end(arg);
 }
 
-void m1_debugfile::operator()(char *format,...)
+void m1_debugfile::operator()(char * format,...)
 {
 	va_list arg;
 	char str[40960];

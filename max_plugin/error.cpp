@@ -11,7 +11,7 @@
 #include "init/init.h"
 #include "string/string.h"
 
-const char *i4_error_file_on;
+const char * i4_error_file_on;
 int i4_error_line_on;
 
 
@@ -35,12 +35,12 @@ public:
 	{
 	}
 
-	virtual w32 read(void *buffer, w32 size)
+	virtual w32 read(void * buffer, w32 size)
 	{
 		return fread(buffer, size, 1, stdin);
 	}
 
-	virtual w32 write(const void *buffer, w32 size)
+	virtual w32 write(const void * buffer, w32 size)
 	{
 		return fwrite(buffer, size, 1, stdout);
 	}
@@ -60,10 +60,10 @@ public:
 };
 static i4_debug_file_class default_debug;
 
-i4_file_class *i4_debug=&default_debug;     // stream you can print debug messages to
-FILE *i4_error_mirror_file=0;
+i4_file_class * i4_debug=&default_debug;     // stream you can print debug messages to
+FILE * i4_error_mirror_file=0;
 
-int i4_default_error(const char *st)
+int i4_default_error(const char * st)
 {
 	static int died=0;
 
@@ -90,7 +90,7 @@ int i4_default_error(const char *st)
 }
 
 
-int i4_default_warning(const char *st)
+int i4_default_warning(const char * st)
 {
 	i4_debug->printf("Warning (%s:%d) : %s\n", i4_error_file_on, i4_error_line_on, st);
 
@@ -101,7 +101,7 @@ i4_error_function_type i4_error_function=i4_default_error;
 i4_error_function_type i4_warning_function=i4_default_warning;
 
 
-int i4_error_old(const char *format, ...)
+int i4_error_old(const char * format, ...)
 {
 	va_list ap;
 	char st[500];
@@ -117,7 +117,7 @@ int i4_error_old(const char *format, ...)
 
 
 
-int i4_warning_old(const char *format, ...)
+int i4_warning_old(const char * format, ...)
 {
 	va_list ap;
 	char st[500];
@@ -131,14 +131,14 @@ int i4_warning_old(const char *format, ...)
 	return ret;
 }
 
-i4_error_pointer_type i4_get_error_function_pointer(const char *file, int line)
+i4_error_pointer_type i4_get_error_function_pointer(const char * file, int line)
 {
 	i4_error_file_on=file;
 	i4_error_line_on=line;
 	return i4_error_old;
 }
 
-i4_error_pointer_type i4_get_warning_function_pointer(const char *file, int line)
+i4_error_pointer_type i4_get_warning_function_pointer(const char * file, int line)
 {
 	i4_error_file_on=file;
 	i4_error_line_on=line;

@@ -91,13 +91,14 @@ i4_bool i4_font_class::get_line(const i4_const_str &string,
 
 }
 
-void i4_font_class::put_line(i4_image_class *screen,
+void i4_font_class::put_line(i4_image_class * screen,
 							 i4_const_str::iterator s, i4_const_str::iterator e,
 							 int x, int y,
 							 float space_width,
 							 i4_draw_context_class &context)
 {
 	float fx=(float)x;
+
 	while (s!=e)
 	{
 		put_character(screen, (short)i4_f_to_i(fx), (short)y, s.get(), context);
@@ -113,7 +114,7 @@ void i4_font_class::put_line(i4_image_class *screen,
 	}
 }
 
-void i4_font_class::put_paragraph(i4_image_class *screen,
+void i4_font_class::put_paragraph(i4_image_class * screen,
 								  sw16 x, sw16 y,
 								  const i4_const_str &string,
 								  i4_draw_context_class &context,
@@ -201,9 +202,10 @@ i4_plain_font_class::~i4_plain_font_class()
 	delete bitmap;
 }
 
-i4_plain_font_class::i4_plain_font_class(i4_image_class *bitmap)
+i4_plain_font_class::i4_plain_font_class(i4_image_class * bitmap)
 {
 	i4_plain_font_class::bitmap=bitmap->copy();
+
 	w=bitmap->width()/32;
 	h=bitmap->height()/8;
 }
@@ -229,7 +231,7 @@ void i4_plain_font_class::set_color(i4_color color)
 	   return i4_T; */
 }
 
-void i4_plain_font_class::put_string(i4_image_class *screen,
+void i4_plain_font_class::put_string(i4_image_class * screen,
 									 sw16 x, sw16 y,
 									 const i4_const_str &string,
 									 i4_draw_context_class &context)
@@ -252,7 +254,7 @@ void i4_plain_font_class::put_string(i4_image_class *screen,
 	}
 }
 
-void i4_plain_font_class::put_character(i4_image_class *screen,
+void i4_plain_font_class::put_character(i4_image_class * screen,
 										sw16 x, sw16 y,
 										const i4_char &c,
 										i4_draw_context_class &context)
@@ -260,6 +262,7 @@ void i4_plain_font_class::put_character(i4_image_class *screen,
 	char ch=(char)c.value();
 	i4_coord x1=((ch)%32)*w;
 	i4_coord y1=((ch)/32)*h;
+
 	bitmap->put_part_trans(screen,x,y,x1,y1,x1+w-1,y1+h-1,0,context);
 }
 
@@ -296,7 +299,7 @@ static inline int i4_is_black(w32 c)
 	}
 }
 
-static inline int i4_scanline_empty(i4_image_class *im, int y)
+static inline int i4_scanline_empty(i4_image_class * im, int y)
 {
 	for (int x=0; x<im->width(); x++)
 	{
@@ -311,7 +314,7 @@ static inline int i4_scanline_empty(i4_image_class *im, int y)
 
 
 
-static inline int i4_colum_empty(i4_image_class *im, int x)
+static inline int i4_colum_empty(i4_image_class * im, int x)
 {
 	for (int y=0; y<im->height(); y++)
 	{
@@ -325,7 +328,7 @@ static inline int i4_colum_empty(i4_image_class *im, int x)
 }
 
 
-static inline int i4_image_has_alpha(i4_image_class *im)
+static inline int i4_image_has_alpha(i4_image_class * im)
 {
 	for (int y=0; y<im->height(); y++)
 	{
@@ -354,7 +357,8 @@ public:
 
 	virtual i4_image_class *copy()
 	{
-		i4_anti_image_class *i=new i4_anti_image_class(w,h);
+		i4_anti_image_class * i=new i4_anti_image_class(w,h);
+
 		memcpy(i->data, data, w*h);
 		return i;
 	}
@@ -403,7 +407,7 @@ public:
 
 };
 
-void i4_anti_proportional_font_class::put_string(i4_image_class *screen,
+void i4_anti_proportional_font_class::put_string(i4_image_class * screen,
 												 sw16 x, sw16 y,
 												 const i4_const_str &string,
 												 i4_draw_context_class &context)
@@ -434,13 +438,14 @@ void i4_anti_proportional_font_class::put_string(i4_image_class *screen,
 }
 
 
-void i4_anti_proportional_font_class::put_character(i4_image_class *screen,
+void i4_anti_proportional_font_class::put_character(i4_image_class * screen,
 													sw16 x, sw16 y,
 													const i4_char &c,
 													i4_draw_context_class &context)
 {
 	int ch=c.ascii_value();
 	int xo=offsets[ch];
+
 	if (xo)
 	{
 		aim->put_part(screen, x,y, xo,0,xo+widths[ch]-1,aim->height(), context);
@@ -448,7 +453,7 @@ void i4_anti_proportional_font_class::put_character(i4_image_class *screen,
 }
 
 
-i4_anti_proportional_font_class::i4_anti_proportional_font_class(i4_image_class *im,
+i4_anti_proportional_font_class::i4_anti_proportional_font_class(i4_image_class * im,
 																 int start_ch)
 {
 	memset(offsets, 0, sizeof(offsets));
@@ -467,6 +472,7 @@ i4_anti_proportional_font_class::i4_anti_proportional_font_class(i4_image_class 
 		y_top++;
 
 
+
 	if (y_top==y_bottom-1)
 	{
 		i4_error("image is empty");
@@ -476,6 +482,7 @@ i4_anti_proportional_font_class::i4_anti_proportional_font_class(i4_image_class 
 		y_bottom--;
 
 
+
 	int char_on=start_ch;
 	int x=1;
 
@@ -483,11 +490,13 @@ i4_anti_proportional_font_class::i4_anti_proportional_font_class(i4_image_class 
 	{
 		while (x1!=im->width() && i4_colum_empty(im, x1)) x1++;
 
+
 		if (x1<im->width())
 		{
 			x2=x1+1;
 			while (x2!=im->width() &&
 				   !(i4_colum_empty(im, x2) && i4_colum_empty(im, x2+1))) x2++;
+
 
 			widths[char_on]=x2-x1+1;
 			if (widths[char_on]>longest_w)
@@ -500,7 +509,8 @@ i4_anti_proportional_font_class::i4_anti_proportional_font_class(i4_image_class 
 			x1=x2+2;
 		}
 		char_on++;
-	} while (x1<im->width());
+	}
+	while (x1<im->width());
 
 	h=y_bottom-y_top+1;
 	aim=new i4_anti_image_class(x, h);
@@ -513,6 +523,7 @@ i4_anti_proportional_font_class::i4_anti_proportional_font_class(i4_image_class 
 	{
 		while (x1!=im->width() && i4_colum_empty(im, x1)) x1++;
 
+
 		if (x1<im->width())
 		{
 			x2=x1+1;
@@ -520,12 +531,14 @@ i4_anti_proportional_font_class::i4_anti_proportional_font_class(i4_image_class 
 				   !(i4_colum_empty(im, x2) && i4_colum_empty(im, x2+1))) x2++;
 
 
+
 			im->i4_image_class::put_part(aim, x, 0, x1, y_top, x2, y_bottom, context);
 			x+=x2-x1+1;
 			x1=x2+2;
 		}
 		char_on++;
-	} while (x1<im->width());
+	}
+	while (x1<im->width());
 }
 
 

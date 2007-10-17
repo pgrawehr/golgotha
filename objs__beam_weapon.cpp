@@ -27,7 +27,7 @@
 li_symbol_ref li_shrapnel("shrapnel"), beam("beam"), plasma("plasma");
 
 g1_beam_weapon_class::g1_beam_weapon_class(g1_object_type id,
-										   g1_loader_class *fp)
+										   g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 	set_flag(AERIAL | HIT_GROUND, 1);
@@ -38,7 +38,7 @@ g1_beam_weapon_class::g1_beam_weapon_class(g1_object_type id,
 
 void g1_beam_weapon_class::setup(const i4_3d_vector &pos,
 								 const i4_3d_vector &direction,
-								 g1_object_class *this_guy_fired_me,
+								 g1_object_class * this_guy_fired_me,
 								 float range)
 {
 	x=pos.x;
@@ -80,7 +80,7 @@ void g1_beam_weapon_class::setup(const i4_3d_vector &pos,
 
 	dir*=range;
 
-	g1_object_class *hit=0;
+	g1_object_class * hit=0;
 
 	if (g1_get_map()->check_non_player_collision(this,player_num,pos,dir,hit))
 	{
@@ -89,7 +89,7 @@ void g1_beam_weapon_class::setup(const i4_3d_vector &pos,
 			g1_apply_damage(this, this_guy_fired_me, hit, dir);
 		}
 
-		g1_shrapnel_class *shrapnel = NULL;
+		g1_shrapnel_class * shrapnel = NULL;
 		shrapnel = (g1_shrapnel_class *)g1_create_object(g1_get_object_type(li_shrapnel.get()));
 		i4_3d_vector pos=i4_3d_vector(x,y,h);
 		pos+=dir;
@@ -151,7 +151,7 @@ i4_bool g1_beam_weapon_class::occupy_location()
 		return i4_F;
 	}
 
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 	map->add_object(*new_occupied_square(), i4_f_to_i(x), i4_f_to_i(y));
 	map->add_object(*new_occupied_square(), i4_f_to_i(end_point.x), i4_f_to_i(end_point.y));
 
@@ -204,7 +204,7 @@ static void draw_sprite(const i4_3d_vector &p, r1_texture_handle tex, float spri
 	}
 }
 
-void g1_beam_weapon_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_beam_weapon_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	if (should_draw)
 	{
@@ -223,7 +223,7 @@ void g1_beam_weapon_class::draw(g1_draw_context_class *context, i4_3d_vector& vi
 		side.normalize();
 		side*=0.2f;
 
-		r1_render_api_class *api=g1_render.r_api;
+		r1_render_api_class * api=g1_render.r_api;
 
 		float cx=g1_render.center_x, cy=g1_render.center_y;
 

@@ -61,7 +61,7 @@ g1_mode_handler::state g1_ai_mode::current_state()
 }
 
 
-g1_ai_mode::g1_ai_mode(g1_controller_edit_class *c)
+g1_ai_mode::g1_ai_mode(g1_controller_edit_class * c)
 	: g1_mode_handler(c)
 {
 	sel_color=0xffff00;
@@ -71,10 +71,11 @@ g1_ai_mode::g1_ai_mode(g1_controller_edit_class *c)
 
 void g1_ai_mode::post_draw(i4_draw_context_class &context)
 {
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
+
 	if (map)
 	{
-		g1_critical_graph_class *graph=map->get_critical_graph();
+		g1_critical_graph_class * graph=map->get_critical_graph();
 		if (graph)
 		{
 			for (int i=1; i<graph->criticals; i++)
@@ -116,9 +117,10 @@ void g1_ai_mode::post_draw(i4_draw_context_class &context)
 	g1_mode_handler::post_draw(context);
 }
 
-g1_critical_graph_class *g1_ai_mode::get_graph()
+g1_critical_graph_class * g1_ai_mode::get_graph()
 {
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
+
 	if (map)
 	{
 		return map->get_critical_graph();
@@ -130,14 +132,14 @@ void g1_ai_mode::mouse_down()
 {
 	if (g1_e_ai.get_minor_mode()==g1_ai_params::CREATE)
 	{
-		g1_critical_graph_class *graph=get_graph();
+		g1_critical_graph_class * graph=get_graph();
 		i4_float gx,gy, dx,dy;
 		if (!c->view_to_game(lx(), ly(), gx,gy, dx,dy))
 		{
 			return;
 		}
 
-		g1_map_class *map=g1_get_map();
+		g1_map_class * map=g1_get_map();
 		g1_editor_instance.add_undo(G1_MAP_CRITICAL_POINTS);
 		if (map)
 		{
@@ -162,12 +164,12 @@ i4_bool g1_ai_mode::select_object(sw32 mx, sw32 my,
 
 	no_more_move_undos=i4_F;
 
-	g1_critical_graph_class *graph=get_graph();
+	g1_critical_graph_class * graph=get_graph();
 	if (!graph)
 	{
 		return i4_F;
 	}
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	if (mod!=FOR_CURSOR_HINT)
 	{
@@ -178,7 +180,7 @@ i4_bool g1_ai_mode::select_object(sw32 mx, sw32 my,
 	int t=graph->criticals;
 	for (int i=1; i<t && !ret; i++)
 	{
-		g1_critical_graph_class::critical_point_class *p=graph->critical+i;
+		g1_critical_graph_class::critical_point_class * p=graph->critical+i;
 		float x=((int)p->x)+0.5f, y=((int)p->y)+0.5f, z;
 		z=map->terrain_height(x,y)+0.01f;
 
@@ -231,19 +233,19 @@ void g1_ai_mode::select_objects_in_area(sw32 x1, sw32 y1, sw32 x2, sw32 y2,
 	no_more_move_undos=i4_F;
 
 
-	g1_critical_graph_class *graph=get_graph();
+	g1_critical_graph_class * graph=get_graph();
 	if (!graph)
 	{
 		return;
 	}
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	g1_editor_instance.add_undo(G1_MAP_CRITICAL_POINTS);
 
 	int t=graph->criticals;
 	for (int i=1; i<t; i++)
 	{
-		g1_critical_graph_class::critical_point_class *p=graph->critical+i;
+		g1_critical_graph_class::critical_point_class * p=graph->critical+i;
 		float x=p->x, y=p->y, z;
 		z=map->terrain_height(x,y)+0.01f;
 
@@ -272,12 +274,13 @@ void g1_ai_mode::select_objects_in_area(sw32 x1, sw32 y1, sw32 x2, sw32 y2,
 void g1_ai_mode::move_selected(i4_float xc, i4_float yc, i4_float zc,
 							   sw32 mouse_x, sw32 mouse_y)
 {
-	g1_critical_graph_class *graph=get_graph();
+	g1_critical_graph_class * graph=get_graph();
+
 	if (!graph)
 	{
 		return;
 	}
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	g1_editor_instance.add_undo(G1_MAP_CRITICAL_POINTS);
 	map->mark_for_recalc(G1_RECALC_CRITICAL_DATA);
@@ -285,7 +288,7 @@ void g1_ai_mode::move_selected(i4_float xc, i4_float yc, i4_float zc,
 	int t=graph->criticals;
 	for (int i=1; i<t; i++)
 	{
-		g1_critical_graph_class::critical_point_class *p=graph->critical+i;
+		g1_critical_graph_class::critical_point_class * p=graph->critical+i;
 		if (p->selected)
 		{
 			p->x+=xc;
@@ -312,12 +315,13 @@ void g1_ai_mode::move_selected(i4_float xc, i4_float yc, i4_float zc,
 
 void g1_ai_mode::delete_selected()
 {
-	g1_critical_graph_class *graph=get_graph();
+	g1_critical_graph_class * graph=get_graph();
+
 	if (!graph)
 	{
 		return;
 	}
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	g1_editor_instance.add_undo(G1_MAP_CRITICAL_POINTS);
 	map->mark_for_recalc(G1_RECALC_CRITICAL_DATA);
@@ -338,16 +342,16 @@ void g1_ai_mode::delete_selected()
 
 
 
-void g1_ai_params::create_buttons(i4_parent_window_class *container)
+void g1_ai_params::create_buttons(i4_parent_window_class * container)
 {
-	i4_button_box_class *box=new i4_button_box_class(&g1_edit_state);
-	char *rn[]={
+	i4_button_box_class * box=new i4_button_box_class(&g1_edit_state);
+	char * rn[]={
 		"aROTATE", "aZOOM", "aMOVE", "aSELECT", "aCREATE", 0
 	};
 	w32 i=ROTATE;
 
 
-	for (char **a=rn; *a; i++, a++)
+	for (char * * a=rn; *a; i++, a++)
 	{
 		g1_edit_state.add_but(box, *a, 0, (i4_bool) i==get_minor_mode(),
 							  new g1_set_minor_mode_event("AI",i));
@@ -355,9 +359,9 @@ void g1_ai_params::create_buttons(i4_parent_window_class *container)
 
 	box->arrange_right_down();
 
-	i4_button_class *create=g1_edit_state.create_button("aRECALC", RECALC, i4_T);
+	i4_button_class * create=g1_edit_state.create_button("aRECALC", RECALC, i4_T);
 
-	i4_graphical_style_class *s=get_style();
+	i4_graphical_style_class * s=get_style();
 	//i4_color_window_class *cw=new i4_color_window_class(box->width(),
 	//                                                    box->height()+create->height(),
 	//                                                    s->color_hint->window.passive.medium,
@@ -378,7 +382,7 @@ i4_bool g1_ai_params::set_minor_mode(w32 m)
 	}
 	if (m==RECALC)
 	{
-		g1_map_class *map=g1_get_map();
+		g1_map_class * map=g1_get_map();
 		if (map)
 		{
 			map->mark_for_recalc(0xffffffff);

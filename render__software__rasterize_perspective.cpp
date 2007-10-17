@@ -25,13 +25,13 @@ void tri_draw_perspective_lit(tri_edge &top_to_middle,tri_edge &top_to_bottom, t
 {
 	sw32 cur_y = start_y;
 
-	w16 *screen_line;
+	w16 * screen_line;
 
 	screen_line = r1_software_render_buffer_ptr + cur_y*r1_software_render_buffer_wpl;
 
-	tri_edge *left;
-	tri_edge *right;
-	tri_edge *last_left=0;
+	tri_edge * left;
+	tri_edge * right;
+	tri_edge * last_left=0;
 
 	perspective_span cps; //(cur_perspective_span)
 
@@ -167,13 +167,13 @@ void tri_draw_perspective_unlit(tri_edge &top_to_middle,tri_edge &top_to_bottom,
 {
 	sw32 cur_y = start_y;
 
-	w16 *screen_line;
+	w16 * screen_line;
 
 	screen_line = r1_software_render_buffer_ptr + cur_y*r1_software_render_buffer_wpl;
 
-	tri_edge *left;
-	tri_edge *right;
-	tri_edge *last_left=0;
+	tri_edge * left;
+	tri_edge * right;
+	tri_edge * last_left=0;
 
 	perspective_span cps; //(cur_perspective_span)
 
@@ -295,7 +295,7 @@ void tri_draw_perspective_unlit(tri_edge &top_to_middle,tri_edge &top_to_bottom,
 	}
 }
 
-void span_draw_perspective_lit(span_tri_info *tri)
+void span_draw_perspective_lit(span_tri_info * tri)
 {
 	r1_software_class_ptr->set_color_tint(tri->color_tint);
 
@@ -312,7 +312,7 @@ void span_draw_perspective_lit(span_tri_info *tri)
 	//dont forget the light
 	dldx_fixed = qftoi(tri->grads.dldx);
 
-	span_entry *s = &global_span_list[tri->span_list_head];
+	span_entry * s = &global_span_list[tri->span_list_head];
 
 	perspective_span left;
 	while (s!=global_span_list)
@@ -423,7 +423,7 @@ void span_draw_perspective_lit(span_tri_info *tri)
 	}
 }
 
-void span_draw_perspective_unlit(span_tri_info *tri)
+void span_draw_perspective_unlit(span_tri_info * tri)
 {
 	//setup some of the global variables
 	r1_software_texture_ptr    = tri->texture;
@@ -432,7 +432,7 @@ void span_draw_perspective_unlit(span_tri_info *tri)
 	r1_software_texture_height = tri->texture_height;
 	cur_grads                  = tri->grads;
 
-	span_entry *s = &global_span_list[tri->span_list_head];
+	span_entry * s = &global_span_list[tri->span_list_head];
 
 	s_mask = ((r1_software_texture_width -1)<<16) | 0xFFFF;
 	t_mask = ((r1_software_texture_height-1)<<16) | 0xFFFF;

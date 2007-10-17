@@ -17,8 +17,8 @@ class g1_map_class;
 class g1_critical_map_maker_class
 {
 protected:
-	g1_map_class *map;
-	g1_critical_graph_class *critical;
+	g1_map_class * map;
+	g1_critical_graph_class * critical;
 
 	enum {
 		queue_length=22500
@@ -48,7 +48,7 @@ public:
 	g1_graph_node get_critical(w16 x, w16 y, int n=0);
 
 	// returns false if canceled by user
-	i4_bool make_criticals(g1_map_class *_map, g1_critical_graph_class *_graph);
+	i4_bool make_criticals(g1_map_class * _map, g1_critical_graph_class * _graph);
 	g1_critical_map_maker_class()
 		: map(0),
 		  critical(0)

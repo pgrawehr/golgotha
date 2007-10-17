@@ -21,8 +21,8 @@ class g1_object_class;
 class g1_global_id_reset_notifier
 {
 public:
-	g1_global_id_reset_notifier *next;
-	static g1_global_id_reset_notifier *first;
+	g1_global_id_reset_notifier * next;
+	static g1_global_id_reset_notifier * first;
 	g1_global_id_reset_notifier();
 	virtual void reset() = 0;
 	~g1_global_id_reset_notifier();
@@ -64,7 +64,7 @@ public:
 	{
 public:
 		w32 num_ids_assigned;
-		i4_temp_file_class *lastpacket; //in case this needs resending
+		i4_temp_file_class * lastpacket; //in case this needs resending
 		//w8 *buf;
 		w32 flags;
 		w32 lastacked; //number of the packet that was last acknowledged
@@ -96,9 +96,9 @@ public:
 private:
 
 	//w32 obj_id[G1_MAX_OBJECTS];
-	w32 *obj_id;
+	w32 * obj_id;
 	//g1_object_class *obj[G1_MAX_OBJECTS];
-	g1_object_class **obj;
+	g1_object_class * * obj;
 	w32 first_free;
 	w32 num_reserved;
 	w32 netflags;
@@ -128,7 +128,7 @@ public:
 		return netflags&ID_NET_READY;
 	}
 
-	int receive_packet(i4_file_class *pkt); //called by the network object
+	int receive_packet(i4_file_class * pkt); //called by the network object
 
 	void claim_freespace();
 	void free_objects();
@@ -141,8 +141,8 @@ public:
 	}
 
 	i4_bool preassigned(w32 id) const;
-	void assign(w32 id, g1_object_class *for_who);
-	w32 alloc(g1_object_class *for_who);
+	void assign(w32 id, g1_object_class * for_who);
+	w32 alloc(g1_object_class * for_who);
 	void free(w32 id);
 	g1_object_class *get(w32 id)
 	{
@@ -162,10 +162,10 @@ public:
 	{
 protected:
 		friend class g1_global_id_manager_class;
-		g1_global_id_manager_class *gid;
-		w32 *map;
+		g1_global_id_manager_class * gid;
+		w32 * map;
 		// remapping functions
-		remapper(g1_global_id_manager_class *gid);
+		remapper(g1_global_id_manager_class * gid);
 		~remapper();
 public:
 		w32 &operator[](w32 id)
@@ -177,7 +177,7 @@ public:
 	{
 		return new remapper(this);
 	}
-	void free_remapping(remapper *mapper)
+	void free_remapping(remapper * mapper)
 	{
 		delete mapper;
 	}
@@ -213,7 +213,7 @@ public:
 		id(id)
 	{
 	}
-	g1_id_ref(g1_object_class *o);
+	g1_id_ref(g1_object_class * o);
 /*	  {
    	  if (o->get_flag(g1_object_class::EXT_GLOBAL_ID))
    	  {
@@ -223,7 +223,7 @@ public:
    		id=o->global_id;
    	  }
  */
-	g1_object_class *operator->() const
+	g1_object_class * operator->() const
 	{
 		return get();
 	}
@@ -237,7 +237,7 @@ public:
 		id=_id;
 		return *this;
 	}
-	g1_id_ref& operator=(g1_object_class *o);
+	g1_id_ref& operator=(g1_object_class * o);
 /*	  {
    	  if (o)
    		id=o->global_id;
@@ -247,15 +247,15 @@ public:
    	  return *this;
    	  }
  */
-	void save(g1_saver_class *fp)
+	void save(g1_saver_class * fp)
 	{
 		fp->write_global_id(id);
 	};
-	void load(g1_loader_class *fp)
+	void load(g1_loader_class * fp)
 	{
 		id=fp->read_global_id();
 	}
-	static void skip(g1_loader_class *fp)
+	static void skip(g1_loader_class * fp)
 	{
 		fp->read_global_id();
 	}

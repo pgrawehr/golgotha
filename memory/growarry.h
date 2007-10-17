@@ -19,9 +19,9 @@ class i4_grow_array
 //{{{
 {
 protected:
-	T *entry;
+	T * entry;
 	w32 used,entries,grow;
-	char *name;
+	char * name;
 public:
 
 	int size() const
@@ -34,7 +34,7 @@ public:
 		return entry[i];
 	}
 
-	i4_grow_array(w32 entries, char *name, w32 grow = 0)
+	i4_grow_array(w32 entries, char * name, w32 grow = 0)
 		: entries(entries),
 		  name(name),
 		  grow(grow),
@@ -58,7 +58,7 @@ public:
 			if (grow)
 			{
 				entries += grow;
-				T *new_entry = (T *)I4_REALLOC(entry, sizeof(T *)*entries, name);
+				T * new_entry = (T *)I4_REALLOC(entry, sizeof(T *)*entries, name);
 				entry = new_entry;
 			}
 			else

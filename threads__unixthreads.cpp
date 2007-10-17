@@ -56,11 +56,11 @@ struct thread_node
 {
 	pthread_t handle;
 	w32 thread_id;
-	thread_node *next;
-	void *base, *top;
+	thread_node * next;
+	void * base, * top;
 
-	thread_node(pthread_t handle, w32 thread_id, void *base, void *top,
-				thread_node *next) :
+	thread_node(pthread_t handle, w32 thread_id, void * base, void * top,
+				thread_node * next) :
 		handle(handle),
 		thread_id(thread_id),
 		next(next),
@@ -69,7 +69,7 @@ struct thread_node
 	}
 };
 
-static volatile thread_node *thread_list=0;
+static volatile thread_node * thread_list=0;
 //volatile thread_node *p=0;
 int i4_main_thread_id;
 static int i4_thread_size;
@@ -83,13 +83,14 @@ void i4_wait_threads()  // waits for all threads to terminate
 	while (i4_thread_count!=0)
 		i4_thread_yield();
 
+
 }
 
 void remove_thread(int id)
 {
 	i4_thread_start_lock.lock();
 
-	volatile thread_node *p=0;
+	volatile thread_node * p=0;
 	if (thread_list->thread_id==id)
 	{
 		p=thread_list;
@@ -97,7 +98,7 @@ void remove_thread(int id)
 	}
 	else
 	{
-		volatile thread_node *q;
+		volatile thread_node * q;
 		for (q=thread_list; q->next->thread_id!=id; q=q->next)
 		{
 			;
@@ -114,15 +115,16 @@ void remove_thread(int id)
 
 
 //Just an example thread for debugging.
-void *sleeping(void *arg)
+void *sleeping(void * arg)
 {
 	int sleep_time = (int)arg;
+
 	printf("thread %d sleeping %d seconds ...\n", thr_self(), sleep_time);
 	sleep(sleep_time);
 	printf("\nthread %d awakening\n", thr_self());
 	return (NULL);
 }
-void *i4_thread_starter(void *arg)
+void *i4_thread_starter(void * arg)
 {
 #ifdef SUN_THREAD_DEBUG
 	printf("Inside newly started thread.\n"); //i4_warning doesn't work yet at this moment
@@ -136,10 +138,10 @@ void *i4_thread_starter(void *arg)
 	w32 thread_id=pthread_self();
 
 	pthread_t handle=thread_id;
-	thread_node *p=new thread_node(handle, thread_id,
-								   (void *)&size,
-								   (void *)(((char *)&size)-size),
-								   (thread_node *) thread_list);
+	thread_node * p=new thread_node(handle, thread_id,
+									(void *)&size,
+									(void *)(((char *)&size)-size),
+									(thread_node *) thread_list);
 
 	thread_list=p;
 	i4_thread_start_lock.unlock();
@@ -159,10 +161,11 @@ void *i4_thread_starter(void *arg)
 	return 0;
 }
 
-void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void *arg_list)
+void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void * arg_list)
 {
 	while (i4_thread_to_start!=0)
 		i4_thread_yield();
+
 
 #ifdef SUN_THREAD_DEBUG
 	printf("Adding thread\n");
@@ -178,7 +181,7 @@ void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void *arg_list)
 #endif
 	pthread_t temphandle;
 	thread_t tid;
-	volatile thread_node *old=thread_list;
+	volatile thread_node * old=thread_list;
 	int retval=0;
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
@@ -236,6 +239,7 @@ int i4_exec(const i4_const_str &cmdline, const i4_bool modal,
 			const i4_const_str &title)
 {
 	int i;
+
 	i=fork();
 	char buf[MAX_PATH];
 	i4_os_string(cmdline,buf,MAX_PATH);
@@ -284,7 +288,7 @@ i4_bool i4_get_next_thread_id(int last_id, int &id)
 {
 	//i4_warning("Get next thread id");
 
-	for (volatile thread_node *p=thread_list; p; p=p->next)
+	for (volatile thread_node * p=thread_list; p; p=p->next)
 	{
 		if (p->thread_id==last_id)
 		{
@@ -310,7 +314,7 @@ void i4_suspend_other_threads()
 	i4_thread_start_lock.lock();
 
 	w32 thread_id=pthread_self();
-	for (volatile thread_node *p=thread_list; p; p=p->next)
+	for (volatile thread_node * p=thread_list; p; p=p->next)
 	{
 		if (p->thread_id!=thread_id)
 		{
@@ -332,7 +336,7 @@ void i4_resume_other_threads()
 	i4_thread_start_lock.lock();
 
 	w32 thread_id=pthread_self();
-	for (volatile thread_node *p=thread_list; p; p=p->next)
+	for (volatile thread_node * p=thread_list; p; p=p->next)
 	{
 		if (p->thread_id!=thread_id)
 		{
@@ -363,7 +367,7 @@ void i4_get_thread_stack(int thread_id, void *&base, void *&top)
 	}
 	else
 	{
-		for (volatile thread_node *p=thread_list; p; p=p->next)
+		for (volatile thread_node * p=thread_list; p; p=p->next)
 		{
 			if (p->thread_id==thread_id)
 			{
@@ -461,7 +465,7 @@ void i4_critical_section_class::unlock(void)
 
 //sem_t semaphore; //this is now included in the objects
 
-i4_signal_object::i4_signal_object(char *name, w32 dwMaxCount, w32 dwInitialCount)
+i4_signal_object::i4_signal_object(char * name, w32 dwMaxCount, w32 dwInitialCount)
 {
 	//i4_warning("Create non-default signal object");
 
@@ -475,7 +479,7 @@ i4_signal_object::i4_signal_object(char *name, w32 dwMaxCount, w32 dwInitialCoun
 	}
 }
 
-i4_signal_object::i4_signal_object(char *name)
+i4_signal_object::i4_signal_object(char * name)
 {
 	//i4_warning("Create signal object");
 

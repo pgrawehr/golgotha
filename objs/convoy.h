@@ -22,27 +22,27 @@ public:
 	enum {
 		DATA_VERSION=1
 	};
-	g1_convoy_class(g1_object_type id, g1_loader_class *fp);
+	g1_convoy_class(g1_object_type id, g1_loader_class * fp);
 	~g1_convoy_class();
-	void save(g1_saver_class *fp);
+	void save(g1_saver_class * fp);
 
 	i4_bool move(i4_float x_amount,i4_float y_amount);
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	i4_bool deploy_to(i4_float x, i4_float y, g1_path_handle ph); //needed to ensure the entire convoy takes the same route
 	void fire();
 	void think();
-	i4_bool can_attack(g1_object_class *who);
-	void add_object(g1_object_class *obj);
-	void remove_object(g1_object_class *obj);
+	i4_bool can_attack(g1_object_class * who);
+	void add_object(g1_object_class * obj);
+	void remove_object(g1_object_class * obj);
 	w8 mingrade(void);
 	void calcsize(void);
-	void damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir);
+	void damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir);
 	g1_map_solver_class *prefered_solver();
-	void setup(g1_object_class *firstobj);
+	void setup(g1_object_class * firstobj);
 	short get_single();
 };
 
-short single_sel_id(g1_object_class *s);
+short single_sel_id(g1_object_class * s);
 
 
 #endif

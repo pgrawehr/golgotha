@@ -37,7 +37,7 @@ g1_repairer_def("repairer", g1_object_definition_class::EDITOR_SELECTABLE|
 				g1_object_definition_class::TO_MAP_PIECE);
 
 g1_repairer_class::g1_repairer_class(g1_object_type id,
-									 g1_loader_class *fp)
+									 g1_loader_class * fp)
 	: g1_map_piece_class(id,fp)
 {
 	draw_params.setup("repair_base");
@@ -119,7 +119,7 @@ g1_repairer_class::g1_repairer_class(g1_object_type id,
 			 1);
 }
 
-void g1_repairer_class::save(g1_saver_class *fp)
+void g1_repairer_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -128,21 +128,21 @@ void g1_repairer_class::save(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_repairer_class::load(g1_loader_class *fp)
+void g1_repairer_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
 	fp->end_version(I4_LF);
 }
 
-void g1_repairer_class::skipload(g1_loader_class *fp)
+void g1_repairer_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->check_version(DATA_VERSION);
 	fp->end_version(I4_LF);
 };
 
-void g1_repairer_class::setup_flare(g1_object_class *_target)
+void g1_repairer_class::setup_flare(g1_object_class * _target)
 //{{{
 {
 
@@ -159,11 +159,11 @@ void g1_repairer_class::setup_flare(g1_object_class *_target)
 	}
 }
 
-i4_bool g1_repairer_class::can_attack(g1_object_class *who)
+i4_bool g1_repairer_class::can_attack(g1_object_class * who)
 {
 	if (who->player_num == player_num)
 	{
-		g1_map_piece_class *mp = g1_map_piece_class::cast(who);
+		g1_map_piece_class * mp = g1_map_piece_class::cast(who);
 		//this is odd: compiler complains about mp!=this because of const declarations...
 		return (mp
 				&& ((void *)mp)!=((void *)this)
@@ -257,7 +257,7 @@ void g1_repairer_class::think()
 	{
 		if (i4_rotate_to(tip->rotation.y,-i4_pi()/6.0f,0.1f)==0.0 && fire_delay==0)
 		{
-			g1_map_piece_class *mp = g1_map_piece_class::cast(attack_target.get());
+			g1_map_piece_class * mp = g1_map_piece_class::cast(attack_target.get());
 
 			if (mp->health<mp->get_max_health() && mp->health>0)
 			{
@@ -302,7 +302,7 @@ void g1_repairer_class::think()
 	request_think();
 }
 
-void g1_repairer_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_repairer_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	//g1_model_draw(this, draw_params, context);
 	g1_map_piece_class::draw(context, viewer_position);
@@ -326,6 +326,7 @@ void g1_repairer_class::copy_old_points()
 //{{{
 {
 	sw32 i;
+
 	for (i=0; i<NUM_ARCS; i++)
 	{
 		arc[i].lposition = arc[i].position;

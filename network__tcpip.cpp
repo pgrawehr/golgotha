@@ -95,9 +95,10 @@ extern i4_tcpip_protocol i4_tcpip_protocol_instance;
 static int i4_get_my_addr(sockaddr_in &host)
 {
 	char buf[256];
+
 	if (gethostname(buf, sizeof(buf))==0)
 	{
-		hostent *hp=gethostbyname(buf);
+		hostent * hp=gethostbyname(buf);
 		if (hp)
 		{
 			memset( (char *) &host,0, sizeof(host));
@@ -117,7 +118,8 @@ public:
 
 	virtual i4_net_address *copy()
 	{
-		i4_tcpip_address *a=new i4_tcpip_address;
+		i4_tcpip_address * a=new i4_tcpip_address;
+
 		a->addr=addr;
 		a->protocol=protocol;
 		return a;
@@ -128,9 +130,10 @@ public:
 		addr.sin_port = htons(port);
 	}
 
-	virtual i4_bool equals(i4_net_address *other)
+	virtual i4_bool equals(i4_net_address * other)
 	{
-		i4_tcpip_address *to=(i4_tcpip_address *)other;
+		i4_tcpip_address * to=(i4_tcpip_address *)other;
+
 		if (protocol==other->protocol && addr.sin_addr.s_addr==to->addr.sin_addr.s_addr)
 		{
 			return i4_T;
@@ -149,7 +152,7 @@ class i4_tcpip_sock :
 {
 	int fd;
 	i4_socket_type stype;
-	i4_net_protocol *protocol;
+	i4_net_protocol * protocol;
 	i4_tcpip_protocol *prot()
 	{
 		return (i4_tcpip_protocol *)protocol;
@@ -191,9 +194,9 @@ public:
 		return 1;
 	}
 
-	i4_bool connect(i4_net_address *addr)
+	i4_bool connect(i4_net_address * addr)
 	{
-		i4_tcpip_address *a = (i4_tcpip_address *)addr;
+		i4_tcpip_address * a = (i4_tcpip_address *)addr;
 
 		if ((i4_tcpip_protocol *)a->protocol==&i4_tcpip_protocol_instance)
 		{
@@ -212,7 +215,7 @@ public:
 	}
 
 	i4_tcpip_sock(i4_socket_type stype,
-				  i4_net_protocol *protocol)
+				  i4_net_protocol * protocol)
 		: protocol(protocol),
 		  stype(stype)
 	{
@@ -229,7 +232,7 @@ public:
 		}
 	}
 
-	i4_tcpip_sock(int fd, i4_socket_type stype, i4_net_protocol *protocol)
+	i4_tcpip_sock(int fd, i4_socket_type stype, i4_net_protocol * protocol)
 		: fd(fd),
 		  stype(stype),
 		  protocol(protocol)
@@ -242,6 +245,7 @@ public:
 		sockaddr_in a;
 		SIZE_TYPE size=sizeof(a);
 		int new_fd=::accept(fd, (sockaddr *)&a, &size);
+
 		if (new_fd==-1)
 		{
 			return i4_F;
@@ -262,23 +266,24 @@ public:
 		}
 	}
 
-	virtual w32 read_from(void *buffer, w32 size, i4_net_address *&addr)
+	virtual w32 read_from(void * buffer, w32 size, i4_net_address *&addr)
 	{
 		sockaddr_in a;
 		SIZE_TYPE as=sizeof(a);
 		int s=recvfrom(fd, (char *)buffer, size, 0, (sockaddr *)&a, &as);
+
 		addr=new i4_tcpip_address;
 		((i4_tcpip_address *)addr)->addr=a;
 		addr->protocol=protocol;
 		return s;
 	}
 
-	virtual w32 read(void *buffer, w32 size)
+	virtual w32 read(void * buffer, w32 size)
 	{
 		return recv(fd, (char *)buffer, size, 0);
 	}
 
-	virtual w32 write(const void *buffer, w32 size)
+	virtual w32 write(const void * buffer, w32 size)
 	{
 		return send(fd, (char *)buffer, size, 0);
 	}
@@ -289,6 +294,7 @@ public:
 		struct timeval tv={
 			0,0
 		};
+
 		FD_ZERO(&s);
 		FD_SET(fd, &s);
 
@@ -302,6 +308,7 @@ public:
 		struct timeval tv={
 			0,0
 		};
+
 		FD_ZERO(&s);
 		FD_SET(fd, &s);
 
@@ -316,6 +323,7 @@ public:
 		struct timeval tv={
 			0,0
 		};
+
 		FD_ZERO(&s);
 		FD_SET(fd, &s);
 
@@ -330,7 +338,7 @@ class i4_reply_str :
 	public i4_str
 {
 public:
-	i4_reply_str(char *buf, int _len)
+	i4_reply_str(char * buf, int _len)
 		: i4_str(_len)
 	{
 		len=_len;
@@ -354,7 +362,7 @@ class i4_tcpip_finder :
 
 	i4_time_class last_ping;
 
-	i4_net_protocol *protocol;
+	i4_net_protocol * protocol;
 public:
 	int er;
 
@@ -470,7 +478,7 @@ public:
 		return 1;
 	}
 
-	i4_tcpip_finder(int poll_port, int listen_port, i4_net_protocol *protocol)
+	i4_tcpip_finder(int poll_port, int listen_port, i4_net_protocol * protocol)
 		: replies(32, 64),
 		  listen_port(listen_port),
 		  poll_port(poll_port),
@@ -482,6 +490,7 @@ public:
 	void connect_to(w32 ipaddr) //currently assumes ipaddr has big-endian format already
 	{
 		sockaddr_in host;
+
 		memset( (char *) &host,0, sizeof(host));
 		host.sin_family = AF_INET;
 		host.sin_port = htons(poll_port);
@@ -505,6 +514,7 @@ public:
 	i4_bool poll()
 	{
 		fd_set read_set;
+
 		FD_ZERO(&read_set);
 		FD_SET(listen_fd, &read_set);
 		struct timeval tv={
@@ -637,6 +647,7 @@ public:
 	virtual int poll()
 	{
 		fd_set read_set;
+
 		FD_ZERO(&read_set);
 		FD_SET(fd, &read_set);
 		struct timeval tv={
@@ -666,14 +677,15 @@ public:
 #ifdef I4_UNIX
 
 // linux gethostname doesn't seem to be thread-safe, so I'm making a system call
-int linux_name_to_address(char *hostname, unsigned int &ip)
+int linux_name_to_address(char * hostname, unsigned int &ip)
 {
 	char buf[200];
+
 	sprintf(buf, "nslookup -ret=2 -timeout=2 %s", hostname);
 
 	fprintf(stderr,"\n*** %s **\n",buf);
 
-	FILE *fp=popen(buf, "rb");
+	FILE * fp=popen(buf, "rb");
 	fprintf(stderr,"\n*** popen done fp=%p**\n",fp);
 	if (!fp)
 	{
@@ -688,7 +700,7 @@ int linux_name_to_address(char *hostname, unsigned int &ip)
 			fgets(buf,200,fp);
 			buf[strlen(buf)-1]=0;
 
-			char *c;
+			char * c;
 			for (c=buf; *c!=':'; c++)
 			{
 				;
@@ -784,7 +796,7 @@ public:
 			return 0;
 		}
 
-		i4_tcpip_notifier *n=new i4_tcpip_notifier(port, notification_string);
+		i4_tcpip_notifier * n=new i4_tcpip_notifier(port, notification_string);
 		if (n->er)
 		{
 			delete n;
@@ -803,7 +815,7 @@ public:
 			return 0;
 		}
 
-		i4_tcpip_finder *f=new i4_tcpip_finder(poll_port, listen_port, this);
+		i4_tcpip_finder * f=new i4_tcpip_finder(poll_port, listen_port, this);
 		if (f->er)
 		{
 			delete f;
@@ -831,14 +843,14 @@ public:
 		//    if (linux_name_to_address(buf, host.sin_addr.s_addr))
 		// {
 
-		hostent *hp=gethostbyname(buf);
+		hostent * hp=gethostbyname(buf);
 		if (hp)
 		{
 			memcpy(&host.sin_addr,hp->h_addr,hp->h_length);
 
 			host.sin_family = AF_INET;
 
-			i4_tcpip_address *a=new i4_tcpip_address;
+			i4_tcpip_address * a=new i4_tcpip_address;
 			a->addr=host;
 			a->protocol=this;
 			return a;
@@ -847,7 +859,7 @@ public:
 
 	}
 
-	i4_net_socket *connect(i4_net_address *addr, i4_socket_type stype)
+	i4_net_socket *connect(i4_net_address * addr, i4_socket_type stype)
 	{
 		if (err)
 		{
@@ -855,7 +867,7 @@ public:
 		}
 		if (addr->protocol==this)
 		{
-			i4_tcpip_sock *s=new i4_tcpip_sock(stype, this);
+			i4_tcpip_sock * s=new i4_tcpip_sock(stype, this);
 			if (s->er || !s->connect((i4_tcpip_address *)addr))
 			{
 				delete s;
@@ -880,7 +892,7 @@ public:
 			return 0;
 		}
 
-		i4_tcpip_sock *s=new i4_tcpip_sock(stype, this);
+		i4_tcpip_sock * s=new i4_tcpip_sock(stype, this);
 		if (s->er || !s->listen(port))
 		{
 			delete s;
@@ -908,7 +920,7 @@ void i4_finder_socket::get_localhost(server &s)
 {
 	s.notification_string=new i4_str("localhost");
 	s.addr=new i4_tcpip_address();
-	i4_tcpip_address *temp=((i4_tcpip_address *)s.addr);
+	i4_tcpip_address * temp=((i4_tcpip_address *)s.addr);
 	temp->addr.sin_family=AF_INET;
 	temp->addr.sin_addr.s_addr=inet_addr("127.0.0.1");
 	s.addr->set_port(g1_resources.net_udp_port);
@@ -917,7 +929,8 @@ void i4_finder_socket::get_localhost(server &s)
 
 void i4_tcpip_sock::set_select_status(i4_bool read, i4_bool write, i4_bool error)
 {
-	i4_tcpip_protocol *p=prot();
+	i4_tcpip_protocol * p=prot();
+
 	if (read)
 	{
 		FD_SET(fd, &p->rfdset);
@@ -960,7 +973,7 @@ void i4_tcpip_sock::set_select_status(i4_bool read, i4_bool write, i4_bool error
  ***********************************************************************/
 
 
-i4_net_protocol *i4_net_protocol::first=0;
+i4_net_protocol * i4_net_protocol::first=0;
 
 i4_net_protocol::i4_net_protocol()
 {
@@ -971,7 +984,7 @@ i4_net_protocol::i4_net_protocol()
 
 i4_net_protocol *i4_get_typed_protocol(i4_protocol_type type)
 {
-	for (i4_net_protocol *p=i4_get_first_protocol(); p; p=p->next)
+	for (i4_net_protocol * p=i4_get_first_protocol(); p; p=p->next)
 	{
 		if (p->type()==type)
 		{
@@ -1002,7 +1015,7 @@ i4_str *i4_get_user_name()
 	DWORD s=sizeof(buf);
 	GetUserName(buf, &s);
 #else
-	char *gl=getlogin();
+	char * gl=getlogin();
 	if (gl)
 	{
 		strcpy(buf,gl);

@@ -16,7 +16,7 @@ class r1_render_window_class :
 	public i4_parent_window_class
 {
 protected:
-	r1_render_api_class *api;
+	r1_render_api_class * api;
 	r1_expand_type expand_type;
 
 public:
@@ -27,7 +27,7 @@ public:
 
 	r1_render_window_class(w16 w, w16 h,
 						   r1_expand_type expand_type,
-						   r1_render_api_class *api)
+						   r1_render_api_class * api)
 		: i4_parent_window_class(w,h),
 		  expand_type(expand_type),
 		  api(api)

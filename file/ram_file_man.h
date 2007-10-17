@@ -14,12 +14,12 @@
 class i4_openable_ram_file_info
 {
 public:
-	char *filename;
-	void *data;
+	char * filename;
+	void * data;
 	w32 data_size;
-	i4_openable_ram_file_info *next;
+	i4_openable_ram_file_info * next;
 
-	i4_openable_ram_file_info(char *filename, void *data, w32 data_size);
+	i4_openable_ram_file_info(char * filename, void * data, w32 data_size);
 };
 
 

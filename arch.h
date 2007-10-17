@@ -87,9 +87,9 @@ typedef long long sw64;
 //compile under linux.
 //these definitions are (C) Microsoft
 #define MAX_PATH        256
-typedef void *HINSTANCE;
+typedef void * HINSTANCE;
 typedef unsigned long HRESULT;
-typedef void *HWND;
+typedef void * HWND;
 typedef struct _GUID {
 	unsigned long Data1;
 	unsigned short Data2;
@@ -194,12 +194,12 @@ typedef sw32 swptr;
 #define CAST_PTR(var_name, type, source_obj) type *var_name=(type *)(source_obj)
 
 #ifdef I4_64BITCPU
-inline void *ALIGN_FORWARD(void *addr)
+inline void *ALIGN_FORWARD(void * addr)
 {
 	return (void *)(((w64)addr+7)&~7);
 }
 
-inline void *ALIGN_BACKWARD(void *addr)
+inline void *ALIGN_BACKWARD(void * addr)
 {
 	return (void *)(((w64)addr)&~7);
 }
@@ -207,12 +207,12 @@ inline void *ALIGN_BACKWARD(void *addr)
 #ifdef _WINDOWS
 #pragma warning(disable : 4311 4312) //pointer truncation for IA64.
 #endif
-inline void *ALIGN_FORWARD(void *addr)
+inline void *ALIGN_FORWARD(void * addr)
 {
 	return (void *)(((w32)addr+3)&~3);
 }
 
-inline void *ALIGN_BACKWARD(void *addr)
+inline void *ALIGN_BACKWARD(void * addr)
 {
 	return (void *)(((w32)addr)&~3);
 }

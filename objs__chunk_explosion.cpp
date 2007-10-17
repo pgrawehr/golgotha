@@ -20,14 +20,14 @@
 
 static i4_profile_class pf_chunk_explosion("chunk_explosion");
 
-g1_chunk_explosion_class::g1_chunk_explosion_class(g1_object_type id, g1_loader_class *fp)
+g1_chunk_explosion_class::g1_chunk_explosion_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 }
 
 void g1_chunk_explosion_class::setup(const i4_3d_vector &pos,
 									 const i4_3d_vector &rotations,
-									 g1_quad_object_class *model,
+									 g1_quad_object_class * model,
 									 const i4_3d_vector &_dir,
 									 int ticks_till_explode)
 
@@ -54,7 +54,7 @@ void g1_chunk_explosion_class::setup(const i4_3d_vector &pos,
 	request_think();
 }
 
-void g1_chunk_explosion_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_chunk_explosion_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	g1_model_draw(this, draw_params, context, viewer_position);
 }
@@ -72,7 +72,7 @@ void g1_chunk_explosion_class::think()
 
 	if (!ticks_left)
 	{
-		g1_explode_model_class *e;
+		g1_explode_model_class * e;
 		e=(g1_explode_model_class *)g1_create_object(g1_get_object_type(explode_model.get()));
 		g1_explode_params params;
 		params.stages[0].setup(1, jc_f, G1_APPLY_SING);
@@ -80,7 +80,7 @@ void g1_chunk_explosion_class::think()
 		params.t_stages=2;
 		e->setup(this, i4_3d_vector(0,0,0), params);
 
-		g1_explosion1_class *explosion;
+		g1_explosion1_class * explosion;
 		explosion=(g1_explosion1_class *)g1_create_object(g1_get_object_type(explosion1.get()));
 		explosion->setup(x,y,h);
 
@@ -91,7 +91,7 @@ void g1_chunk_explosion_class::think()
 	{
 		i4_3d_vector ray=dir;
 
-		g1_object_class *hit;
+		g1_object_class * hit;
 		if (g1_get_map()->check_non_player_collision(this,0xff, i4_3d_vector(x,y,h), ray, hit))
 		{
 			dir.z=-dir.z*0.75f;

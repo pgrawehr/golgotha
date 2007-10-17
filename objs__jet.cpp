@@ -57,7 +57,7 @@ g1_jet_def("jet",
 
 
 g1_jet_class::g1_jet_class(g1_object_type id,
-						   g1_loader_class *fp)
+						   g1_loader_class * fp)
 	: g1_map_piece_class(id, fp)
 {
 	radar_image=&radar_im;
@@ -170,7 +170,7 @@ g1_jet_class::g1_jet_class(g1_object_type id,
 
 }
 
-void g1_jet_class::save(g1_saver_class *fp)
+void g1_jet_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -185,7 +185,7 @@ void g1_jet_class::save(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_jet_class::load(g1_loader_class *fp)
+void g1_jet_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -194,7 +194,7 @@ void g1_jet_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-void g1_jet_class::skipload(g1_loader_class *fp)
+void g1_jet_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->check_version(DATA_VERSION);
@@ -315,7 +315,7 @@ void g1_jet_class::think()
 				i4_float dist, dtheta;
 				i4_3d_vector d;
 				suggest_air_move(dist, dtheta, d);
-				g1_object_class *blocking=0;
+				g1_object_class * blocking=0;
 				i4_float save_z=d.z;
 				if (check_move(d.x,d.y,d.z,blocking))
 				{
@@ -411,7 +411,7 @@ void g1_jet_class::think()
 
 				i4_float dist=0, dtheta=0;
 				suggest_air_move(dist, dtheta, d);
-				g1_object_class *blocking=0;
+				g1_object_class * blocking=0;
 				if (!controled())
 				{
 					d.z+=0.02f*(float)sin(i4_pi()*sway/15.0f);
@@ -508,7 +508,7 @@ void g1_jet_class::think()
 	request_think();
 }
 
-void g1_jet_class::damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir)
+void g1_jet_class::damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir)
 {
 	//we dont want to explode if ppl shoot us while we're dying.. we want to
 	//smash into the ground and create a nice explosion

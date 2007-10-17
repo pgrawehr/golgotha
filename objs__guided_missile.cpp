@@ -54,7 +54,7 @@ static li_float_class_member fuel("fuel");
 static li_symbol_ref light_type("lightbulb");
 
 g1_guided_missile_class::g1_guided_missile_class(g1_object_type id,
-												 g1_loader_class *fp)
+												 g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 	radar_type=G1_RADAR_WEAPON;
@@ -94,7 +94,7 @@ void g1_guided_missile_class::think()
 
 	if (fuel() > 0)
 	{
-		g1_object_class *track = track_object()->value();
+		g1_object_class * track = track_object()->value();
 
 		if (track)
 		{
@@ -207,8 +207,8 @@ void g1_guided_missile_class::think()
 
 void g1_guided_missile_class::setup(const i4_3d_vector &pos,
 									const i4_3d_vector &dir,
-									g1_object_class *this_guy_fired_me,
-									g1_object_class *track_me)
+									g1_object_class * this_guy_fired_me,
+									g1_object_class * track_me)
 {
 	li_class_context context(vars);
 
@@ -231,7 +231,7 @@ void g1_guided_missile_class::setup(const i4_3d_vector &pos,
 	vars->set(who_fired_me, new li_g1_ref(this_guy_fired_me));
 	player_num = this_guy_fired_me->player_num;
 
-	g1_damage_map_struct *dmap=get_type()->get_damage_map();
+	g1_damage_map_struct * dmap=get_type()->get_damage_map();
 	fuel() = dmap->range;
 
 	ltheta=theta = i4_atan2(dir.y, dir.x);
@@ -240,7 +240,7 @@ void g1_guided_missile_class::setup(const i4_3d_vector &pos,
 
 	request_think();
 
-	g1_player_info_class *player=g1_player_man.get(player_num);
+	g1_player_info_class * player=g1_player_man.get(player_num);
 
 	if (occupy_location())
 	{
@@ -264,7 +264,7 @@ void g1_guided_missile_class::start_sounds()
 void g1_guided_missile_class::add_smoke()
 {
 	int smoke_type=g1_get_object_type(li_smoke_trail.get());
-	g1_smoke_trail_class *st=(g1_smoke_trail_class *)g1_create_object(smoke_type);
+	g1_smoke_trail_class * st=(g1_smoke_trail_class *)g1_create_object(smoke_type);
 
 	vars->set(smoke_trail, new li_g1_ref(st));
 	if (st)
@@ -283,7 +283,7 @@ void g1_guided_missile_class::update_smoke()
 		return;
 	}
 
-	g1_smoke_trail_class *st=(g1_smoke_trail_class *) smoke_trail()->value();
+	g1_smoke_trail_class * st=(g1_smoke_trail_class *) smoke_trail()->value();
 	if (st)
 	{
 		st->update_head(x,y,h);
@@ -299,7 +299,7 @@ void g1_guided_missile_class::delete_smoke()
 		return;
 	}
 
-	g1_smoke_trail_class *st=(g1_smoke_trail_class *) smoke_trail()->value();
+	g1_smoke_trail_class * st=(g1_smoke_trail_class *) smoke_trail()->value();
 	if (st)
 	{
 		st->unoccupy_location();
@@ -310,9 +310,10 @@ void g1_guided_missile_class::delete_smoke()
 
 void g1_guided_missile_class::add_explode()
 {
-	g1_explosion1_class *explosion;
+	g1_explosion1_class * explosion;
 
 	int explosion_type=g1_get_object_type(li_explosion1.get());
+
 	explosion = (g1_explosion1_class *)g1_create_object(explosion_type);
 	if (explosion)
 	{
@@ -329,7 +330,7 @@ i4_bool g1_guided_missile_class::move(i4_float x_amount,
 									  i4_float z_amount)
 {
 	sw32 res;
-	g1_object_class *hit = NULL;
+	g1_object_class * hit = NULL;
 
 	i4_3d_vector pos(x,y,h),ray(x_amount, y_amount, z_amount);
 	res = g1_get_map()->check_non_player_collision(this,player_num,pos, ray, hit);

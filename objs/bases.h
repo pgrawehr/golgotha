@@ -19,7 +19,7 @@ class g1_path_object_class;
 struct g1_build_item
 {
 	int type;
-	g1_id_ref *path; // null terminated
+	g1_id_ref * path; // null terminated
 };
 
 class g1_building_class :
@@ -28,10 +28,10 @@ class g1_building_class :
 protected:
 	g1_structure_death_class death;
 public:
-	g1_building_class(g1_object_type id, g1_loader_class *fp);
+	g1_building_class(g1_object_type id, g1_loader_class * fp);
 	//void think();
-	void damage(g1_object_class *obj, int hp, i4_3d_vector damage_dir);
-	static g1_building_class *cast(g1_object_class *obj)
+	void damage(g1_object_class * obj, int hp, i4_3d_vector damage_dir);
+	static g1_building_class *cast(g1_object_class * obj)
 	{
 		if (!obj||!(obj->get_type()->get_flag(g1_object_definition_class::TO_BUILDING)))
 		{
@@ -50,20 +50,20 @@ protected:
 	//g1_structure_death_class death;
 	g1_map_piece_class *create_object(int type);
 public:
-	g1_factory_class *next;
+	g1_factory_class * next;
 	i4_fixed_que<g1_build_item, 50> deploy_que;
 
-	g1_factory_class(g1_object_type id, g1_loader_class *fp);
+	g1_factory_class(g1_object_type id, g1_loader_class * fp);
 	void think();
 	i4_bool occupy_location();
 	void unoccupy_location();
 	virtual g1_path_object_class *get_start();
-	virtual void set_start(g1_path_object_class *start);
+	virtual void set_start(g1_path_object_class * start);
 	virtual i4_bool build(int type);
 	virtual w32 get_path_color();
 	virtual w32 get_selected_path_color();
 	virtual void request_remove();
-	static g1_factory_class *cast(g1_object_class *obj)
+	static g1_factory_class *cast(g1_object_class * obj)
 	{
 		if (!obj||!(obj->get_type()->get_flag(g1_object_definition_class::TO_FACTORY)))
 		{

@@ -13,12 +13,12 @@
 
 real decwin[512+32];
 static real cos64[16],cos32[8],cos16[4],cos8[2],cos4[1];
-real *pnts[] = {
+real * pnts[] = {
 	cos64,cos32,cos16,cos8,cos4
 };
 
 static unsigned char conv16to8_buf[4096];
-unsigned char *conv16to8 = conv16to8_buf + 2048;
+unsigned char * conv16to8 = conv16to8_buf + 2048;
 
 static long intwinbase[] = {
 	0,    -1,    -1,    -1,    -1,    -1,    -1,    -2,    -2,    -2,
@@ -52,7 +52,7 @@ static long intwinbase[] = {
 void make_decode_tables(long scaleval)
 {
 	int i,j,k,kr,divv;
-	real *table,*costab;
+	real * table,* costab;
 
 
 	for(i=0; i<5; i++)
@@ -105,6 +105,7 @@ void make_conv16to8_table(int mode)
 {
 	int i;
 	unsigned char c;
+
 	if(mode == AUDIO_FORMAT_ULAW_8)
 	{
 		double m=127.0 / log(256.0);

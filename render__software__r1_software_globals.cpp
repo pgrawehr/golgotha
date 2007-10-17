@@ -16,7 +16,7 @@
 //global information about the current rendering buffer
 
 i4_bool r1_software_render_buffer_is_locked = i4_F;
-w16 *r1_software_render_buffer_ptr       = 0; //pointer to buffer memory
+w16 * r1_software_render_buffer_ptr       = 0; //pointer to buffer memory
 sw32 r1_software_render_buffer_bpl       = 0; //bytes per line
 sw32 r1_software_render_buffer_wpl       = 0; //words per line
 sw32 r1_software_render_buffer_height    = 0;
@@ -24,13 +24,13 @@ w8 r1_software_render_expand_type      = 0; //expanding type
 
 //the directdraw surface which "owns" the buffer
 #ifdef _WINDOWS
-IDirectDrawSurface3 *r1_software_render_surface = 0;
+IDirectDrawSurface3 * r1_software_render_surface = 0;
 #endif
 
 //global texturemap information (describes the current
 //texturemap being used to draw polygons)
 
-w16 *r1_software_texture_ptr    = 0;
+w16 * r1_software_texture_ptr    = 0;
 w8 r1_software_twidth_log2    = 0;
 sw32 r1_software_texture_width  = 0;
 sw32 r1_software_texture_height = 0;
@@ -39,7 +39,7 @@ sw32 r1_software_texture_height = 0;
 //rest of global variables
 //------------------------
 
-w32 *DEADBEEFPTR=0x0; //this pointer replaces the self-modification places
+w32 * DEADBEEFPTR=0x0; //this pointer replaces the self-modification places
 sw32 left_l;
 
 sw32 left_s;

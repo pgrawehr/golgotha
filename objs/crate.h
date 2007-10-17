@@ -55,14 +55,14 @@ public:
 	int added_chain();
 
 
-	g1_crate_class(g1_object_type id, g1_loader_class *fp);
+	g1_crate_class(g1_object_type id, g1_loader_class * fp);
 	i4_bool occupy_location();
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 
 	void setup(const i4_3d_vector &pos, ctype t, atype amount, int ticks=-1);
 	void think();
-	void object_changed_by_editor(g1_object_class *who, li_class *old_values);
-	void note_stank_near(g1_player_piece_class *s);
+	void object_changed_by_editor(g1_object_class * who, li_class * old_values);
+	void note_stank_near(g1_player_piece_class * s);
 	void go_away();
 
 };

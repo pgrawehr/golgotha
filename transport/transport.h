@@ -181,15 +181,15 @@ public:
 	double scalingx,scalingy,offsetx,offsety;
 	node *get_node(node_id id);
 	obj_ref_t *get_obj(node_id id);
-	node *add_node(node *newnode);
+	node *add_node(node * newnode);
 	i4_bool load_nodes(const i4_const_str &filename);
-	i4_bool load_nodes(i4_file_class *fp);
-	i4_bool save_nodes(i4_file_class *fp);
+	i4_bool load_nodes(i4_file_class * fp);
+	i4_bool save_nodes(i4_file_class * fp);
 	i4_bool save_nodes(const i4_const_str &filename);
-	void remove_node(node *rem);
+	void remove_node(node * rem);
 	void remove_node(node_id nid);
 	void reset();
-	void activate(g1_map_class *map);
+	void activate(g1_map_class * map);
 	w32 num_nodes()
 	{
 		return nodes.entries();
@@ -206,23 +206,23 @@ class link_manager
 	friend class node_manager;
 	friend class act_manager;
 protected:
-	node_manager *nman;
+	node_manager * nman;
 	i4_hashtable<g2_link> links;
 public:
 	g2_link *get_link(link_id id);
-	g2_link *add_link(g2_link *n);
-	void remove_link(g2_link *l);
-	link_manager(node_manager *_nman) :
+	g2_link *add_link(g2_link * n);
+	void remove_link(g2_link * l);
+	link_manager(node_manager * _nman) :
 		nman(_nman),
 		links(4000,0)
 	{
 	};
-	i4_bool load_links(const i4_const_str &filename,g1_loader_class *mainfp);
-	i4_bool load_links(i4_file_class *fp);
-	i4_bool save_links(const i4_const_str &filename,g1_saver_class *mainfp);
-	i4_bool save_links(i4_file_class *fp);
-	i4_bool save_qualitydata(g1_saver_class *fp);
-	i4_bool load_qualitydata(g1_loader_class *fp);
+	i4_bool load_links(const i4_const_str &filename,g1_loader_class * mainfp);
+	i4_bool load_links(i4_file_class * fp);
+	i4_bool save_links(const i4_const_str &filename,g1_saver_class * mainfp);
+	i4_bool save_links(i4_file_class * fp);
+	i4_bool save_qualitydata(g1_saver_class * fp);
+	i4_bool load_qualitydata(g1_loader_class * fp);
 	void reset();
 	~link_manager();
 
@@ -244,11 +244,11 @@ public:
 	act_manager();
 	//i4_array<waiting_car> cars; //solve with global i4_isl_list
 	i4_bool load_activities(const i4_const_str &filename);
-	i4_bool load_activities(i4_file_class *fp);
+	i4_bool load_activities(i4_file_class * fp);
 	void think();
-	i4_bool save(g1_saver_class *fp);
-	i4_bool load(g1_loader_class *fp);
-	void sort_car_list(int (*sortfun)(g2_car_object_class *const *a,g2_car_object_class *const *b));
+	i4_bool save(g1_saver_class * fp);
+	i4_bool load(g1_loader_class * fp);
+	void sort_car_list(int (* sortfun)(g2_car_object_class * const * a,g2_car_object_class * const * b));
 };
 
 node_manager *g2_node_man();

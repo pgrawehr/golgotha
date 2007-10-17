@@ -26,7 +26,7 @@
 
 class i4_font_class
 {
-	void put_line(i4_image_class *screen, i4_const_str::iterator s, i4_const_str::iterator e,
+	void put_line(i4_image_class * screen, i4_const_str::iterator s, i4_const_str::iterator e,
 				  int x, int y, float space_width, i4_draw_context_class &context);
 
 	i4_bool get_line(const i4_const_str &string,
@@ -38,7 +38,7 @@ public:
 	enum justification_type {
 		LEFT, RIGHT, CENTER, FULL
 	} ;
-	void put_paragraph(i4_image_class *screen,
+	void put_paragraph(i4_image_class * screen,
 					   sw16 x, sw16 y,
 					   const i4_const_str &string,
 					   i4_draw_context_class &context,
@@ -48,12 +48,12 @@ public:
 
 
 
-	virtual void put_string(i4_image_class *screen,
+	virtual void put_string(i4_image_class * screen,
 							sw16 x, sw16 y,
 							const i4_const_str &string,
 							i4_draw_context_class &context) = 0;
 
-	virtual void put_character(i4_image_class *screen,
+	virtual void put_character(i4_image_class * screen,
 							   sw16 x, sw16 y,
 							   const i4_char &c,
 							   i4_draw_context_class &context) = 0;

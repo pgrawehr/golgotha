@@ -16,20 +16,20 @@ class g1_turret_class :
 	public g1_map_piece_class
 {
 protected:
-	g1_mini_object *muzzle;
-	g1_mini_object *top;
+	g1_mini_object * muzzle;
+	g1_mini_object * top;
 	i4_float guard_angle, guard_pitch;
 	int guard_time;
 	int order;
 public:
-	g1_turret_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	virtual void load(g1_loader_class *fp);
-	virtual void skipload(g1_loader_class *fp);
+	g1_turret_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	virtual void load(g1_loader_class * fp);
+	virtual void skipload(g1_loader_class * fp);
 
 	virtual void fire();
 	virtual void think();
-	virtual void setup(i4_float x, i4_float y, g1_object_class *creator);
+	virtual void setup(i4_float x, i4_float y, g1_object_class * creator);
 };
 
 #endif

@@ -115,6 +115,7 @@ sw32 i4_time_class::milli_diff(const i4_time_class &past_time) const
 i4_time_class::i4_time_class(sw32 milli_sec)
 {
 	sw32 sec=milli_sec/1000;
+
 	time.unix_time.sec=sec;
 	milli_sec-=sec*1000;
 	time.unix_time.usec=milli_sec*1000;
@@ -125,6 +126,7 @@ w64 i4_get_system_clock()
 {
 	struct timeval tv;
 	struct timezone tz;
+
 	gettimeofday(&tv, &tz);
 	return( (w64)(tv.tv_sec)*1000000 + (w64)(tv.tv_usec) );
 }
@@ -140,6 +142,7 @@ int i4_get_clocks_per_second()
 
 		i4_time_class now,start;
 		while (now.milli_diff(start) < 1000) now.get();
+
 
 
 		w64 end = i4_get_system_clock();

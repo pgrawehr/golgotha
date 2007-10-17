@@ -15,7 +15,7 @@
 
 int done=0;
 
-void my_thread(void *arg)
+void my_thread(void * arg)
 {
 	i4_directory_struct dir;
 
@@ -24,7 +24,7 @@ void my_thread(void *arg)
 	done=1;
 }
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	i4_init();
 
@@ -32,6 +32,7 @@ void i4_main(w32 argc, i4_const_str *argv)
 	int count=0;
 	while (!done)
 		count++;
+
 
 
 	fprintf(stderr, "%d\n", count);

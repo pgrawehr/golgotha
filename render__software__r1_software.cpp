@@ -24,7 +24,7 @@
 
 static i4_profile_class pf_software_render_poly("software::render_poly");
 
-r1_software_class *r1_software_class_ptr=0;
+r1_software_class * r1_software_class_ptr=0;
 
 #define R1_ABS(x) ((x)>0) ? (x) : (-(x))
 
@@ -57,9 +57,10 @@ r1_software_class::~r1_software_class()
 //we bomb anyway.
 }
 
-r1_texture_manager_class *r1_software_class::install_new_tmanager(w32 &index)
+r1_texture_manager_class * r1_software_class::install_new_tmanager(w32 &index)
 {
-	r1_texture_manager_class *new_tman=0;
+	r1_texture_manager_class * new_tman=0;
+
 	new_tman= new r1_software_texture_class(tmanager->get_pal());
 	//use same parameters as default instance (must never be deleted)
 	new_tman->is_master_tman=i4_F;
@@ -144,15 +145,15 @@ void r1_software_class::use_texture(w32 tman_index, r1_texture_handle material_r
 
 	pf_software_select_texture.start();
 
-	r1_miplevel_t *mip = tmanagers[tman_index]->get_texture(material_ref, frame, desired_width, w,h);
+	r1_miplevel_t * mip = tmanagers[tman_index]->get_texture(material_ref, frame, desired_width, w,h);
 	if (!mip)
 	{
 		disable_texture();
 		return ;
 	}
 
-	r1_software_texture_class::used_node *n = (r1_software_texture_class::used_node *)mip->vram_handle;
-	r1_software_texture_class::free_node *f = (r1_software_texture_class::free_node *)n->node;
+	r1_software_texture_class::used_node * n = (r1_software_texture_class::used_node *)mip->vram_handle;
+	r1_software_texture_class::free_node * f = (r1_software_texture_class::free_node *)n->node;
 
 	r1_software_texture_ptr    = (w16 *)f->start;
 	r1_software_texture_width  = f->mip->width;
@@ -239,15 +240,15 @@ void r1_software_class::use_texture(r1_texture_handle material_ref, sw32 desired
 
 	pf_software_select_texture.start();
 
-	r1_miplevel_t *mip = tmanager->get_texture(material_ref, frame, desired_width, w,h);
+	r1_miplevel_t * mip = tmanager->get_texture(material_ref, frame, desired_width, w,h);
 	if (!mip)
 	{
 		disable_texture();
 		return ;
 	}
 
-	r1_software_texture_class::used_node *n = (r1_software_texture_class::used_node *)mip->vram_handle;
-	r1_software_texture_class::free_node *f = (r1_software_texture_class::free_node *)n->node;
+	r1_software_texture_class::used_node * n = (r1_software_texture_class::used_node *)mip->vram_handle;
+	r1_software_texture_class::free_node * f = (r1_software_texture_class::free_node *)n->node;
 
 	r1_software_texture_ptr    = (w16 *)f->start;
 	r1_software_texture_width  = f->mip->width;
@@ -341,12 +342,12 @@ void r1_software_class::set_z_range(i4_float near_z, i4_float far_z)
 
 //initialized during init_ctable
 
-void r1_software_class::prepare_verts(s_vert *s_verts, r1_vert *r1_verts, sw32 num_verts)
+void r1_software_class::prepare_verts(s_vert * s_verts, r1_vert * r1_verts, sw32 num_verts)
 {
 	sw32 i;
 
-	s_vert *s_v  = s_verts;
-	r1_vert *r1_v = r1_verts;
+	s_vert * s_v  = s_verts;
+	r1_vert * r1_v = r1_verts;
 
 	start_ceil(); //qftoi will use the ceil() function to convert floats to ints
 
@@ -487,8 +488,8 @@ void r1_software_class::prepare_verts(s_vert *s_verts, r1_vert *r1_verts, sw32 n
 
 	if (texture_mode)
 	{
-		s_vert *s_v  = s_verts;
-		r1_vert *r1_v = r1_verts;
+		s_vert * s_v  = s_verts;
+		r1_vert * r1_v = r1_verts;
 
 		for (i=0; i<num_verts; i++)
 		{
@@ -544,7 +545,7 @@ void r1_software_class::prepare_verts(s_vert *s_verts, r1_vert *r1_verts, sw32 n
 
 s_vert temp_s_verts[128];
 
-void r1_software_class::render_poly(int t_verts, r1_vert *verts)
+void r1_software_class::render_poly(int t_verts, r1_vert * verts)
 {
 	if (t_verts>128)
 	{
@@ -564,15 +565,15 @@ void r1_software_class::render_poly(int t_verts, r1_vert *verts)
 
 	prepare_verts(temp_s_verts,verts,t_verts);
 
-	s_vert *v0 = &temp_s_verts[0];
-	s_vert *v1 = &temp_s_verts[1];
-	s_vert *v2 = &temp_s_verts[2];
+	s_vert * v0 = &temp_s_verts[0];
+	s_vert * v1 = &temp_s_verts[1];
+	s_vert * v2 = &temp_s_verts[2];
 
 	sw32 i;
 
 	//make sure polys are valid
 	//compute the area of the whole polygon
-	tri_area_struct *t = triangle_info;
+	tri_area_struct * t = triangle_info;
 
 	total_poly_area = 0;
 
@@ -607,7 +608,7 @@ void r1_software_class::render_poly(int t_verts, r1_vert *verts)
 	pf_software_render_poly.stop();
 }
 
-void r1_software_class::render_sprite(r1_vert *verts)
+void r1_software_class::render_sprite(r1_vert * verts)
 {
 	if (!poly_setup_functions[small_poly_type])
 	{
@@ -618,13 +619,13 @@ void r1_software_class::render_sprite(r1_vert *verts)
 
 	prepare_verts(temp_s_verts,verts,4);
 
-	tri_area_struct *t = triangle_info;
+	tri_area_struct * t = triangle_info;
 
 	total_poly_area = 0;
 
-	s_vert *v0 = &temp_s_verts[0];
-	s_vert *v1 = &temp_s_verts[1];
-	s_vert *v2 = &temp_s_verts[2];
+	s_vert * v0 = &temp_s_verts[0];
+	s_vert * v1 = &temp_s_verts[1];
+	s_vert * v2 = &temp_s_verts[2];
 
 	sw32 i;
 
@@ -659,13 +660,13 @@ void r1_software_class::render_sprite(r1_vert *verts)
 	pf_software_render_poly.stop();
 }
 
-void r1_software_class::render_pixel(int tpoints, r1_vert *pixel)
+void r1_software_class::render_pixel(int tpoints, r1_vert * pixel)
 {
 	//This is unimplemented and currently not used because
 	//rendering of single pixels with dx5 doesn't work either.
 }
 
-void r1_software_class::render_lines(int t_lines, r1_vert *verts)
+void r1_software_class::render_lines(int t_lines, r1_vert * verts)
 {
 	if (num_buffered_lines>=max_soft_lines)
 	{
@@ -1066,7 +1067,7 @@ i4_bool r1_software_class::is_feature_on(w32 feature_bits)
 	return i4_F;
 }
 
-i4_bool r1_software_class::init(i4_display_class *display)
+i4_bool r1_software_class::init(i4_display_class * display)
 {
 	last_node=0;
 
@@ -1166,7 +1167,7 @@ i4_bool r1_software_class::expand_type_supported(r1_expand_type type)
 }
 
 r1_software_render_window_class::r1_software_render_window_class(w16 w,
-																 w16 h, r1_expand_type expand_type, r1_render_api_class *api)
+																 w16 h, r1_expand_type expand_type, r1_render_api_class * api)
 	: r1_render_window_class(w,h,expand_type,api)
 {
 };
@@ -1175,7 +1176,7 @@ r1_software_render_window_class::~r1_software_render_window_class()
 {
 };
 
-void r1_software_render_window_class::receive_event(i4_event *ev)
+void r1_software_render_window_class::receive_event(i4_event * ev)
 {
 	if (expand_type==R1_COPY_2x2 && ev->type()==i4_event::MOUSE_MOVE)
 	{

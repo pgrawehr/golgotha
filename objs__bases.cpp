@@ -47,16 +47,17 @@ static g1_team_icon_ref airbase_radar_im("bitmaps/radar/airbase.tga");
 static g1_team_icon_ref garage_radar_im("bitmaps/radar/garage.tga");
 static g1_team_icon_ref mainbasepad_radar_im("bitmaps/radar/base_golg.tga");
 
-void g1_factory_class::set_start(g1_path_object_class *_start)
+void g1_factory_class::set_start(g1_path_object_class * _start)
 {
 	li_class_context context(vars);
 	start();
 	vars->set_value(start.offset, new li_g1_ref(_start));
 }
 
-g1_path_object_class *g1_factory_class::get_start()
+g1_path_object_class * g1_factory_class::get_start()
 {
-	g1_object_class *o=li_g1_ref::get(vars->get(start),0)->value();
+	g1_object_class * o=li_g1_ref::get(vars->get(start),0)->value();
+
 	if (!o)
 	{
 		return 0;
@@ -77,11 +78,11 @@ w32 g1_factory_class::get_selected_path_color()
 }
 
 
-g1_factory_class::g1_factory_class(g1_object_type g1_ot_id, g1_loader_class *g1_lc_fp)
+g1_factory_class::g1_factory_class(g1_object_type g1_ot_id, g1_loader_class * g1_lc_fp)
 	: g1_building_class(g1_ot_id,g1_lc_fp) //, death(this) // JJ modification not to issue MSVC warning
 {
 	//death.SetG1_Object_Class(this); // JJ modification not to issue MSVC warning
-	char *n=name();
+	char * n=name();
 	char lod_n[256];
 
 	sprintf(lod_n, "%s_lod", n);
@@ -130,11 +131,11 @@ void g1_factory_class::unoccupy_location()
 	g1_factory_list.find_and_unlink(this);
 }
 
-g1_map_piece_class *g1_factory_class::create_object(int type)
+g1_map_piece_class * g1_factory_class::create_object(int type)
 {
 	if (start()->value())
 	{
-		g1_object_class *o=g1_object_type_array[type]->create_object(type,0);
+		g1_object_class * o=g1_object_type_array[type]->create_object(type,0);
 		if (o)
 		{
 			o->set_flag(NEEDS_SYNC,1);
@@ -142,7 +143,7 @@ g1_map_piece_class *g1_factory_class::create_object(int type)
 #ifdef NETWORK_INCLUDED
 			g1_network_time_man_ptr->updatecomplete(o->global_id,g1_tick_counter);
 #endif
-			g1_map_piece_class *mp=g1_map_piece_class::cast(o);
+			g1_map_piece_class * mp=g1_map_piece_class::cast(o);
 			if (!mp)
 			{
 				mp->request_remove();
@@ -171,15 +172,15 @@ i4_bool g1_factory_class::build(int type)
 {
 	li_class_context context(vars);
 
-	g1_path_object_class *startp=get_start();
+	g1_path_object_class * startp=get_start();
 	if (startp)
 	{
 		// is this a object type we can build?
 		int found=0;
-		for (li_object *blist=can_build(); !found && blist; blist=li_cdr(blist,0))
+		for (li_object * blist=can_build(); !found && blist; blist=li_cdr(blist,0))
 		{
-			li_object *val=li_get_value(li_symbol::get(li_car(blist,0),0));
-			li_int *anint=li_int::get(val,0);
+			li_object * val=li_get_value(li_symbol::get(li_car(blist,0),0));
+			li_int * anint=li_int::get(val,0);
 			if (anint&&anint->value()==type)
 			{
 				found=1;
@@ -204,7 +205,7 @@ i4_bool g1_factory_class::build(int type)
 			g1_build_item item;
 			item.type=type;
 
-			g1_path_object_class *list[400];
+			g1_path_object_class * list[400];
 
 			if (startp)
 			{
@@ -256,7 +257,7 @@ void g1_factory_class::think()
 	else if (!deploy_que.empty())
 	{
 
-		g1_object_chain_class *c=g1_get_map()->cell(x,y)->get_solid_list();
+		g1_object_chain_class * c=g1_get_map()->cell(x,y)->get_solid_list();
 		while (c)
 		{
 			if (c->object!=this)
@@ -273,7 +274,7 @@ void g1_factory_class::think()
 		g1_build_item item;
 		deploy_que.deque(item);
 
-		g1_map_piece_class *o=create_object(item.type);
+		g1_map_piece_class * o=create_object(item.type);
 		if (o)
 		{
 			o->set_path(item.path);
@@ -290,7 +291,7 @@ void g1_factory_class::think()
 	}
 }
 
-g1_building_class::g1_building_class(g1_object_type id, g1_loader_class *fp)
+g1_building_class::g1_building_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 	death.SetG1_Object_Class(this);
@@ -302,7 +303,7 @@ g1_building_class::g1_building_class(g1_object_type id, g1_loader_class *fp)
 //death.think();
 //	}
 
-void g1_building_class::damage(g1_object_class *obj, int hp, i4_3d_vector damage_dir)
+void g1_building_class::damage(g1_object_class * obj, int hp, i4_3d_vector damage_dir)
 {
 	death.damage(obj, hp, damage_dir);
 }

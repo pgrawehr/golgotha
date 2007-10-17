@@ -95,9 +95,9 @@ struct al_table
 };
 
 struct frame {
-	struct al_table *alloc;
-	int (*synth)(real *,int,unsigned char *);
-	int (*synth_mono)(real *,unsigned char *);
+	struct al_table * alloc;
+	int (* synth)(real *,int,unsigned char *);
+	int (* synth_mono)(real *,unsigned char *);
 	int stereo;
 	int jsbound;
 	int single;
@@ -108,7 +108,7 @@ struct frame {
 	int header_change;
 	int block_size;
 	int lay;
-	int (*do_layer)(struct frame *fr,int,struct audio_info_struct *);
+	int (* do_layer)(struct frame * fr,int,struct audio_info_struct *);
 	int error_protection;
 	int bitrate_index;
 	int sampling_frequency;
@@ -132,25 +132,25 @@ extern int quiet;
 extern int halfspeed;
 extern int usebuffer;
 extern int buffer_fd[2];
-extern txfermem *buffermem;
-extern char *prgName, *prgVersion;
+extern txfermem * buffermem;
+extern char * prgName, * prgVersion;
 
 /* ------ Declarations from "httpget.c" ------ */
 
-extern char *proxyurl;
+extern char * proxyurl;
 extern unsigned long proxyip;
-extern FILE *http_open(char *url);
+extern FILE *http_open(char * url);
 
 /* ------ Declarations from "common.c" ------ */
 
 extern void audio_flush(int, struct audio_info_struct *);
-extern void (*catchsignal(int signum, void (*handler)()))();
+extern void (* catchsignal(int signum, void (* handler)()))();
 
 extern void print_header(struct frame *);
 extern void print_header_compact(struct frame *);
 
 /* extern char *strndup(const char *src, int num); */
-extern int split_dir_file(const char *path, char **dname, char **fname);
+extern int split_dir_file(const char * path, char * * dname, char * * fname);
 
 extern unsigned int   get1bit(void);
 extern unsigned int   getbits(int);
@@ -158,7 +158,7 @@ extern unsigned int   getbits_fast(int);
 
 extern void set_pointer(long);
 
-extern unsigned char *pcm_sample;
+extern unsigned char * pcm_sample;
 extern int pcm_point;
 extern int audiobufsize;
 
@@ -189,8 +189,8 @@ struct III_sideinfo
 			unsigned preflag;
 			unsigned scalefac_scale;
 			unsigned count1table_select;
-			real *full_gain[3];
-			real *pow2gain;
+			real * full_gain[3];
+			real * pow2gain;
 		} gr[2];
 	} ch[2];
 };
@@ -199,13 +199,13 @@ extern void open_stream(char *,int fd);
 extern void close_stream(void);
 extern long tell_stream(void);
 extern void read_frame_init(void);
-extern int read_frame(struct frame *fr);
-extern int back_frame(struct frame *fr,int num);
-extern void play_frame(int init,struct frame *fr);
-extern int do_layer3(struct frame *fr,int,struct audio_info_struct *);
-extern int do_layer2(struct frame *fr,int,struct audio_info_struct *);
-extern int do_layer1(struct frame *fr,int,struct audio_info_struct *);
-extern void do_equalizer(real *bandPtr,int channel);
+extern int read_frame(struct frame * fr);
+extern int back_frame(struct frame * fr,int num);
+extern void play_frame(int init,struct frame * fr);
+extern int do_layer3(struct frame * fr,int,struct audio_info_struct *);
+extern int do_layer2(struct frame * fr,int,struct audio_info_struct *);
+extern int do_layer1(struct frame * fr,int,struct audio_info_struct *);
+extern void do_equalizer(real * bandPtr,int channel);
 extern int synth_1to1(real *,int,unsigned char *);
 extern int synth_1to1_8bit(real *,int,unsigned char *);
 extern int synth_2to1(real *,int,unsigned char *);
@@ -236,14 +236,14 @@ extern void make_decode_tables(long scale);
 extern void make_conv16to8_table(int);
 extern void dct64(real *,real *,real *);
 
-extern void control_sajber(struct frame *fr);
-extern void control_tk3play(struct frame *fr);
+extern void control_sajber(struct frame * fr);
+extern void control_tk3play(struct frame * fr);
 
-extern unsigned char *conv16to8;
+extern unsigned char * conv16to8;
 extern long freqs[7];
 extern real muls[27][64];
 extern real decwin[512+32];
-extern real *pnts[5];
+extern real * pnts[5];
 
 extern real equalizer[2][32];
 extern real equalizer_sum[2][32];

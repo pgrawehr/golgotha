@@ -47,19 +47,19 @@ class i4_opengl_display_class :
 	float oo_half_width;
 	float oo_half_height;
 
-	i4_draw_context_class *context;
+	i4_draw_context_class * context;
 
-	i4_cursor_class *mcursor;
-	i4_image_class *prev_mouse_save, *mouse_save1, *mouse_save2;
+	i4_cursor_class * mcursor;
+	i4_image_class * prev_mouse_save, * mouse_save1, * mouse_save2;
 	sw32 prev_mouse_x, prev_mouse_y;
 
 	void draw_cursor(sw32 x, sw32 y);
 	void save_cursor(sw32 x, sw32 y, i4_image_class *&save);
-	void remove_cursor(sw32 x, sw32 y, i4_image_class *mouse_save);
+	void remove_cursor(sw32 x, sw32 y, i4_image_class * mouse_save);
 
-	i4_image_class *fake_screen; // passed by get_screen()
-	i4_image_class *back_screen; // passed by lock_frame_buffer() for reading
-	i4_pal *back_pal;
+	i4_image_class * fake_screen; // passed by get_screen()
+	i4_image_class * back_screen; // passed by lock_frame_buffer() for reading
+	i4_pal * back_pal;
 	i4_rect_list_class next_frame_copy;
 	sw32 last_mouse_x, last_mouse_y;
 
@@ -68,7 +68,7 @@ protected:
 
 	// It will be up to the system-specific implementation to use the
 	// following mode variables.
-	mode *modes;
+	mode * modes;
 	int n_modes, mode_pointer;
 	virtual void setup_modes() = 0;
 	mode cur_mode; // will hold the current mode as passed to initialize_mode()
@@ -112,7 +112,7 @@ public:
 	{
 		return fake_screen;
 	}
-	i4_bool set_mouse_shape(i4_cursor_class *cursor);
+	i4_bool set_mouse_shape(i4_cursor_class * cursor);
 	virtual void flush();
 	virtual w16 width() const
 	{
@@ -129,7 +129,7 @@ public:
 	}
 	virtual mode *get_first_mode(int driver_id);
 	virtual mode *get_next_mode();
-	virtual i4_bool initialize_mode(mode *m);
+	virtual i4_bool initialize_mode(mode * m);
 	virtual i4_bool initialize_mode();
 	//{ return initialize_mode(&modes[0]); } // ?????!!!!!
 	virtual void init();
@@ -142,6 +142,6 @@ public:
 
 };
 
-extern i4_opengl_display_class *i4_opengl_display;
+extern i4_opengl_display_class * i4_opengl_display;
 
 #endif

@@ -63,12 +63,12 @@ g1_peon_tank_def("peon_tank",
 				 g1_peon_tank_init);
 
 
-static char *chunk_list[3]={
+static char * chunk_list[3]={
 	"chunk_peon_barrel", "chunk_peon_body", "chunk_peon_turret"
 };
 
 
-int g1_peon_tank_class::get_chunk_names(char **&list)
+int g1_peon_tank_class::get_chunk_names(char * *&list)
 {
 	list=chunk_list;
 	return 3;
@@ -76,7 +76,7 @@ int g1_peon_tank_class::get_chunk_names(char **&list)
 
 
 g1_peon_tank_class::g1_peon_tank_class(g1_object_type id,
-									   g1_loader_class *fp)
+									   g1_loader_class * fp)
 	: g1_map_piece_class(id, fp)
 {
 
@@ -154,7 +154,7 @@ g1_peon_tank_class::g1_peon_tank_class(g1_object_type id,
 	turret_kick = lturret_kick = 0;
 }
 
-void g1_peon_tank_class::load(g1_loader_class *fp)
+void g1_peon_tank_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -163,7 +163,7 @@ void g1_peon_tank_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-void g1_peon_tank_class::skipload(g1_loader_class *fp)
+void g1_peon_tank_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	float a,b,c;
@@ -172,7 +172,7 @@ void g1_peon_tank_class::skipload(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-void g1_peon_tank_class::save(g1_saver_class *fp)
+void g1_peon_tank_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -190,7 +190,8 @@ void g1_peon_tank_class::save(g1_saver_class *fp)
 
 void g1_peon_tank_class::fire()
 {
-	g1_object_class *target=attack_target.get();
+	g1_object_class * target=attack_target.get();
+
 	if (target)
 	{
 		fire_delay = defaults->fire_delay;
@@ -298,7 +299,7 @@ void g1_peon_tank_class::think()
 	}
 }
 
-void g1_peon_tank_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_peon_tank_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	turret->offset.x = i4_interpolate(lturret_kick, turret_kick, g1_render.frame_ratio);
 

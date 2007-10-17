@@ -33,8 +33,8 @@ typedef struct {
 	int readindex;  /* [R] next index to read */
 	int fd[2];
 	int wakeme[2];
-	byte *data;
-	byte *metadata;
+	byte * data;
+	byte * metadata;
 	int size;
 	int metasize;
 } txfermem;
@@ -44,24 +44,24 @@ typedef struct {
  *   All other entries are initialized once.
  */
 
-void xfermem_init(txfermem **xf, int bufsize, int msize);
-void xfermem_init_writer(txfermem *xf);
-void xfermem_init_reader(txfermem *xf);
+void xfermem_init(txfermem * * xf, int bufsize, int msize);
+void xfermem_init_writer(txfermem * xf);
+void xfermem_init_reader(txfermem * xf);
 
-int  xfermem_write(txfermem *xf, byte *data, int count);
-int  xfermem_read(txfermem *xf, byte *data, int count);
+int  xfermem_write(txfermem * xf, byte * data, int count);
+int  xfermem_read(txfermem * xf, byte * data, int count);
 
-int xfermem_get_freespace(txfermem *xf);
-int xfermem_get_usedspace(txfermem *xf);
+int xfermem_get_freespace(txfermem * xf);
+int xfermem_get_usedspace(txfermem * xf);
 #define XF_CMD_WAKEUP    0x02
 #define XF_CMD_TERMINATE 0x03
 #define XF_WRITER 0
 #define XF_READER 1
 int xfermem_getcmd(int fd, int block);
 int xfermem_putcmd(int fd, byte cmd);
-int xfermem_block(int fd, txfermem *xf);
+int xfermem_block(int fd, txfermem * xf);
 
-void xfermem_done(txfermem *xf);
+void xfermem_done(txfermem * xf);
 #define xfermem_done_writer xfermem_init_reader
 #define xfermem_done_reader xfermem_init_writer
 

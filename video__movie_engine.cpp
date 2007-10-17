@@ -22,14 +22,14 @@
 #include "main/win_main.h"
 #endif
 
-i4_movie_engine_class *i4_movie=0;
+i4_movie_engine_class * i4_movie=0;
 
 class i4_win32_movie_engine_class :
 	public i4_movie_engine_class,
 	public i4_init_class
 {
 protected:
-	i4_event_reaction_class *notify_who;
+	i4_event_reaction_class * notify_who;
 	i4_bool waitfornotify;
 public:
 	i4_win32_movie_engine_class() :
@@ -39,7 +39,7 @@ public:
 	{
 		waitfornotify=i4_F;
 	};
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"win32 movie engine");
 	};
@@ -73,6 +73,7 @@ public:
 		char ret[MAX_PATH*2];
 		DWORD error;
 		w32 retval=MOVIE_SUCCESS; //Assume everything fine.
+
 		i4_os_string(file,buf,MAX_PATH);
 		wsprintf(cmd,"open %s alias golgothaplaybackfile",buf);
 		i4_warning("Attempting to open %s for playback.",buf);
@@ -182,11 +183,12 @@ public:
 
 	}
 
-	virtual w32 background_play(i4_const_str &file, i4_event_reaction_class *notify_ev)
+	virtual w32 background_play(i4_const_str &file, i4_event_reaction_class * notify_ev)
 	{
 		char buf[MAX_PATH];
 		char cmd[MAX_PATH*2];
 		char ret[MAX_PATH*2];
+
 		if (notify_who)
 		{
 			return MOVIE_PLAYBACKINPROGRESS;
@@ -222,9 +224,10 @@ public:
 		}
 		notify_who=0;
 	}
-	virtual void receive_event(i4_event *ev) //gets messages from the windows message queue
+	virtual void receive_event(i4_event * ev) //gets messages from the windows message queue
 	{
 		int msg=0;
+
 		if (ev->type()==i4_event::USER_MESSAGE)
 		{
 			msg=((i4_user_message_event_class *)ev)->sub_type;
@@ -249,7 +252,7 @@ public:
 
 LI_HEADER(play_video) {
 	//This code is ANYTHING but time critical
-	char *path=li_get_string(li_first(o,env),env);
+	char * path=li_get_string(li_first(o,env),env);
 
 	if (i4_movie)
 	{

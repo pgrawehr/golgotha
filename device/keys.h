@@ -100,7 +100,7 @@ enum i4_key_modifer_state
 i4_str *i4_key_name(i4_key key, w16 state);
 // returns a ASCII string describing a key, i.e. "Up Arrow"
 
-char *i4_get_key_name(i4_key key, i4_key state, char *buffer);
+char *i4_get_key_name(i4_key key, i4_key state, char * buffer);
 // fills buffer with key name
 
 i4_bool i4_find_key(const i4_str& name, i4_key &key, w16 &mod);

@@ -27,7 +27,7 @@ class g1_bullet_class :
 	};
 protected:
 	void move_forward();
-	void done(i4_bool hit=i4_F,g1_object_class *hit_object=0);
+	void done(i4_bool hit=i4_F,g1_object_class * hit_object=0);
 
 	r1_texture_handle tex;
 public:
@@ -55,24 +55,24 @@ public:
 
 	virtual i4_bool move();
 
-	g1_bullet_class(g1_object_type id, g1_loader_class *fp);
+	g1_bullet_class(g1_object_type id, g1_loader_class * fp);
 
-	virtual void save(g1_saver_class *fp);
-	void load(g1_loader_class *fp);
-	void skipload(g1_loader_class *fp);
+	virtual void save(g1_saver_class * fp);
+	void load(g1_loader_class * fp);
+	void skipload(g1_loader_class * fp);
 
 
 	w32 bullet_flags;
 
 	virtual void setup(const i4_3d_vector &start_pos,
 					   const i4_3d_vector &vel,
-					   g1_object_class *this_guy_fired_me,
+					   g1_object_class * this_guy_fired_me,
 					   i4_float range,
 					   w32 flags=0,
 					   r1_texture_handle sprite_texture=0,
-					   g1_light_object_class *light=0);
+					   g1_light_object_class * light=0);
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 
 	virtual void think();
 };

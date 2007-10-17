@@ -34,7 +34,7 @@ public:
 	// Der Klassen-Assistent generiert virtuelle Funktionsüberschreibungen
 	//{{AFX_VIRTUAL(COptionSound)
 protected:
-	virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV-Unterstützung
+	virtual void DoDataExchange(CDataExchange * pDX);    // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
 
 // Implementierung

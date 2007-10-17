@@ -46,14 +46,14 @@ protected:
 	i4_array<r1_render_window_class *> render_windows;
 
 	int start_y, show_area_w;
-	i4_scroll_bar *scroll_bar;
-	g1_scroll_picker_info *info;
+	i4_scroll_bar * scroll_bar;
+	g1_scroll_picker_info * info;
 
 
 
 	// this should return 0 if scroll_object_num is too big
 	virtual i4_menu_item_class *create_window(w16 w, w16 h, int scroll_object_num) = 0;
-	virtual void change_window_object_num(i4_window_class *win, int new_scroll_object_num) = 0;
+	virtual void change_window_object_num(i4_window_class * win, int new_scroll_object_num) = 0;
 	virtual int total_objects() = 0;
 	virtual void rotate()
 	{
@@ -66,12 +66,12 @@ protected:
 	virtual void add(i4_str name)
 	{
 	}
-	virtual i4_bool remove(i4_menu_item_class *window)
+	virtual i4_bool remove(i4_menu_item_class * window)
 	{
 		return i4_F;
 	}
 	// Return i4_T if something changed.
-	virtual i4_bool edit(i4_menu_item_class *window)
+	virtual i4_bool edit(i4_menu_item_class * window)
 	{
 		return i4_F;
 	}
@@ -84,15 +84,15 @@ public:
 	void refresh(i4_bool list_has_changed=i4_F);
 	void create_windows();
 	// option_flags can include (1<<ROTATE) | (1<<MIRROR) | (1<<GROW) | (1<<SHRINK) | (1<<SCROLL))
-	g1_scroll_picker_class(i4_graphical_style_class *style,
+	g1_scroll_picker_class(i4_graphical_style_class * style,
 						   w32 option_flags,
-						   g1_scroll_picker_info *info,
+						   g1_scroll_picker_info * info,
 						   int total_objects);
 
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 	void parent_draw(i4_draw_context_class &context);
 	void change_current_select();
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"scroll_picker_class");
 	}

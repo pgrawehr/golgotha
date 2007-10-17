@@ -44,7 +44,7 @@ public:
 		return draw_params.extent();
 	}
 
-	g1_cobra_tank_class(g1_object_type id, g1_loader_class *fp)
+	g1_cobra_tank_class(g1_object_type id, g1_loader_class * fp)
 		: g1_map_piece_class(id,fp)
 	{
 		radar_type=G1_RADAR_VEHICLE;

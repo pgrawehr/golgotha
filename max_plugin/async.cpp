@@ -11,14 +11,14 @@
 #include "time/time.h"
 #include "error/error.h"
 
-i4_async_reader::i4_async_reader(char *name) :
+i4_async_reader::i4_async_reader(char * name) :
 	sig(name)
 {
 	emulation=i4_F;
 	stop=i4_F;
 }
 
-void i4_async_reader_thread_start(void *arg)
+void i4_async_reader_thread_start(void * arg)
 {
 	((i4_async_reader *)arg)->PRIVATE_thread();
 }
@@ -36,8 +36,9 @@ void i4_async_reader::uninit()
 {
 	if (i4_threads_supported())
 	{
-		while (stop==i4_T)   // wait to thread is read to be stopped
+		while (stop==i4_T)  // wait to thread is read to be stopped
 			i4_thread_yield();
+
 
 
 		stop=i4_T;
@@ -45,12 +46,13 @@ void i4_async_reader::uninit()
 		while (stop)
 			i4_thread_yield();
 
+
 	}
 }
 
-i4_bool i4_async_reader::start_read(int fd, void *buffer, w32 size,
+i4_bool i4_async_reader::start_read(int fd, void * buffer, w32 size,
 									i4_file_class::async_callback call,
-									void *context)
+									void * context)
 {
 	if (!i4_threads_supported())
 	{
@@ -118,6 +120,7 @@ void i4_async_reader::PRIVATE_thread()
 			}
 		}
 
-	} while (!stop);
+	}
+	while (!stop);
 	stop=i4_F;
 }

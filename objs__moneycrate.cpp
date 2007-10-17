@@ -35,7 +35,7 @@ g1_moneycrate_def("moneycrate",
 				  g1_moneycrate_init);
 
 g1_moneycrate_class::g1_moneycrate_class(g1_object_type id,
-										 g1_loader_class *fp)
+										 g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 	draw_params.setup(model_ref.id());
@@ -98,6 +98,7 @@ w32 g1_moneycrate_class::value() const
 void g1_moneycrate_class::think()
 {
 	i4_float vspeed = li_vspeed();
+
 	if (vspeed<=0.0)
 	{
 		i4_float height = g1_get_map()->map_height(x,y,h);

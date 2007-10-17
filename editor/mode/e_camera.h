@@ -37,7 +37,7 @@ public:
 
 	virtual void edit_selected();
 
-	g1_camera_mode(g1_controller_edit_class *c) :
+	g1_camera_mode(g1_controller_edit_class * c) :
 		g1_mode_handler(c)
 	{
 	}
@@ -49,7 +49,7 @@ class g1_camera_params :
 	public g1_mode_creator
 {
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"CAMERA");
 	}
@@ -66,7 +66,7 @@ public:
 		SELECT
 	};
 
-	void create_buttons(i4_parent_window_class *containter);
+	void create_buttons(i4_parent_window_class * containter);
 	i4_event_handler_reference_class<i4_parent_window_class> edit_win;
 
 
@@ -76,9 +76,9 @@ public:
 	}
 
 	void cleanup();
-	void set_edit_window(i4_parent_window_class *p, sw32 x, sw32 y);
+	void set_edit_window(i4_parent_window_class * p, sw32 x, sw32 y);
 
-	g1_mode_handler *create_mode_handler(g1_controller_edit_class *c)
+	g1_mode_handler *create_mode_handler(g1_controller_edit_class * c)
 	{
 		return new g1_camera_mode(c);
 	}

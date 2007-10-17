@@ -46,7 +46,7 @@ public:
 	int warning_level;
 	i4_bool user_warned;
 
-	g1_bomb_truck_class(g1_object_type id, g1_loader_class *fp)
+	g1_bomb_truck_class(g1_object_type id, g1_loader_class * fp)
 		: g1_map_piece_class(id,fp)
 	{
 		warning_level=0;
@@ -66,7 +66,7 @@ public:
 				 DANGEROUS, 1);
 	}
 
-	i4_bool can_attack(g1_object_class *who)
+	i4_bool can_attack(g1_object_class * who)
 	{
 		if (who==this)
 		{
@@ -83,7 +83,7 @@ public:
 		}
 		if (health<=0)
 		{
-			g1_shockwave_class *shock = NULL;
+			g1_shockwave_class * shock = NULL;
 			if (controled())
 			{
 				g1_current_controller->view.suggest_camera_mode(
@@ -116,7 +116,7 @@ public:
 
 
 
-	void damage(g1_object_class *who_is_hurting,
+	void damage(g1_object_class * who_is_hurting,
 				int how_much_hurt, i4_3d_vector damage_dir)
 	{
 
@@ -133,7 +133,7 @@ public:
 
 				if ((g1_rand((int)x) & 7)==0)
 				{
-					g1_crate_class *c=(g1_crate_class *)g1_create_object(g1_get_object_type("crate"));
+					g1_crate_class * c=(g1_crate_class *)g1_create_object(g1_get_object_type("crate"));
 
 					c->setup(i4_3d_vector(x,y,h),
 							 (g1_crate_class::ctype)(g1_rand((int)y) % g1_crate_class::MAX_TYPES),
@@ -167,9 +167,9 @@ public:
 	}
 
 
-	li_object *message(li_symbol *message_name,
-					   li_object *message_params,
-					   li_environment *env)
+	li_object *message(li_symbol * message_name,
+					   li_object * message_params,
+					   li_environment * env)
 	{
 		if (message_name==commands_ask.get())
 		{
@@ -196,10 +196,10 @@ public:
 		}
 		if (message_name==reached.get())
 		{
-			g1_object_class *who=li_g1_ref::get(message_params,env)->value();
+			g1_object_class * who=li_g1_ref::get(message_params,env)->value();
 			if (who)
 			{
-				g1_path_object_class *po=g1_path_object_class::cast(who);
+				g1_path_object_class * po=g1_path_object_class::cast(who);
 
 				if (po->bomb_warning_level()>warning_level)
 				{
@@ -251,15 +251,16 @@ public:
 
 void g1_bomb_truck_init()
 {
-	special_command_entry *sce=0;
+	special_command_entry * sce=0;
 	const w32 NUMCOMMANDS=5;
-	char *cmdnames[NUMCOMMANDS]={
+	char * cmdnames[NUMCOMMANDS]={
 		"command-stop",
 		"command-self_destruct",
 		"command-control",
 		"command-toggle_switch",
 		"command-to_far_switch"
 	};
+
 	for (int i=0; i<NUMCOMMANDS; i++)
 	{
 		li_get_symbol(cmdnames[i]); //to be sure the names pop up in the symbol table

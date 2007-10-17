@@ -15,11 +15,11 @@
 #include "math/pi.h"
 #include "math/angle.h"
 
-i4_bool g1_model_collide_polygonal_ex(g1_object_class *_this,
-									  g1_object_class *source,
+i4_bool g1_model_collide_polygonal_ex(g1_object_class * _this,
+									  g1_object_class * source,
 									  i4_3d_vector &ray,
 									  i4_3d_vector &hit_normal,
-									  i4_float *minimum_t)
+									  i4_float * minimum_t)
 {
 	if (!_this->get_flag(g1_object_class::BLOCKING))
 	{
@@ -27,7 +27,7 @@ i4_bool g1_model_collide_polygonal_ex(g1_object_class *_this,
 	}
 	const int nc=8;
 	const i4_float rad = 0.25;
-	g1_object_class *hit_obj=0;
+	g1_object_class * hit_obj=0;
 	i4_3d_vector oray=ray;
 	i4_bool ret=i4_F;
 	i4_3d_vector start;
@@ -75,19 +75,20 @@ i4_bool g1_model_collide_polygonal_ex(g1_object_class *_this,
 	return ret;
 }
 
-i4_bool g1_model_collide_polygonal(g1_object_class *_this,
+i4_bool g1_model_collide_polygonal(g1_object_class * _this,
 								   g1_model_draw_parameters &params,
 								   const i4_3d_vector &start,
 								   i4_3d_vector &ray,
 								   i4_3d_vector &hit_normal,
-								   i4_float *minimum_t)
+								   i4_float * minimum_t)
 {
 	i4_transform_class transform, mini_local;
 	i4_3d_vector istart, iray, normal;
 	i4_float t, min_t=1.0;
 	int poly;
 
-	g1_quad_object_class *model = params.model;
+	g1_quad_object_class * model = params.model;
+
 	if (!model)
 	{
 		return i4_F;
@@ -110,7 +111,7 @@ i4_bool g1_model_collide_polygonal(g1_object_class *_this,
 	i4_3d_vector mstart, mray;
 	for (int i=0; i<_this->num_mini_objects; i++)
 	{
-		g1_mini_object *mini = &_this->mini_objects[i];
+		g1_mini_object * mini = &_this->mini_objects[i];
 
 		if (mini->defmodeltype!=0xffff)
 		{
@@ -144,7 +145,7 @@ i4_bool g1_model_collide_polygonal(g1_object_class *_this,
 	return i4_F;
 }
 
-i4_bool g1_model_collide_radial(g1_object_class *_this,
+i4_bool g1_model_collide_radial(g1_object_class * _this,
 								g1_model_draw_parameters &params,
 								const i4_3d_vector &start,
 								i4_3d_vector &ray)

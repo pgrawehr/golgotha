@@ -36,7 +36,7 @@ COptionInfo::~COptionInfo()
 	cpu=0;
 }
 
-void COptionInfo::DoDataExchange(CDataExchange *pDX)
+void COptionInfo::DoDataExchange(CDataExchange * pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionInfo)
@@ -53,7 +53,7 @@ END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // Behandlungsroutinen für Nachrichten COptionInfo
-extern void GetDXVersion( DWORD *pdwDXVersion, DWORD *pdwDXPlatform );
+extern void GetDXVersion( DWORD * pdwDXVersion, DWORD * pdwDXPlatform );
 extern int GetOsVersion( LPSTR s);
 
 BOOL COptionInfo::OnInitDialog()
@@ -63,6 +63,7 @@ BOOL COptionInfo::OnInitDialog()
 	DWORD dwDXVersion;
 	DWORD dwDXPlatform;
 	DWORD dwlen;
+
 	if (!cpu)
 	{
 		cpu=new CProcessor();
@@ -148,7 +149,7 @@ BOOL COptionInfo::OnInitDialog()
 		int i;
 		const int VERFIRST=0;
 		const int VERLAST=12;
-		char *entry_names[VERLAST+1]=
+		char * entry_names[VERLAST+1]=
 		{
 			"Comments",
 			"CompanyName",
@@ -184,7 +185,7 @@ BOOL COptionInfo::OnInitDialog()
 			lstrcpy(szResult,entry_names[i]);
 			lstrcpy(&szGetName[cchRoot], szResult);
 
-			fRet = VerQueryValue(lpvMem, szGetName, (VOID **) &lszVer, &cchVer);
+			fRet = VerQueryValue(lpvMem, szGetName, (VOID * *) &lszVer, &cchVer);
 
 			if (fRet && cchVer && lszVer)
 			{

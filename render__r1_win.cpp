@@ -22,7 +22,7 @@ void r1_render_window_class::clip_with_z(i4_draw_context_class &context, i4_floa
 	i4_rect_list_class area_to_mask;
 
 	i4_rect_list_class::area_iter cl;
-	i4_rect_list_class *clip=&context.clip;
+	i4_rect_list_class * clip=&context.clip;
 
 	int dx1, dy1, dx2, dy2;
 	dx1=0;

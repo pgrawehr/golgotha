@@ -31,7 +31,7 @@ template <class T>
 class i4_array
 {
 protected:
-	T *entry;
+	T * entry;
 	int used,entries,grow;
 public:
 	//! Sets used to entries.
@@ -91,7 +91,7 @@ public:
 		}
 
 		entries = _entries;
-		T *new_entry = (T *)I4_REALLOC(entry, sizeof(T)*entries, "grow array");
+		T * new_entry = (T *)I4_REALLOC(entry, sizeof(T)*entries, "grow array");
 		I4_ASSERT(new_entry, "SEVERE: i4_array::resize(): Out of memory.");
 		entry = new_entry;
 	}
@@ -188,7 +188,7 @@ public:
 		{
 			entries += grow;
 
-			T *new_entry = (T *)I4_REALLOC(entry, sizeof(T)*entries, "grow array");
+			T * new_entry = (T *)I4_REALLOC(entry, sizeof(T)*entries, "grow array");
 
 			I4_ASSERT(new_entry, "SEVERE: i4_array::grow_bigger(): Out of memory");
 
@@ -222,7 +222,7 @@ public:
 			grow_bigger();
 		}
 
-		T *ret=entry+used;
+		T * ret=entry+used;
 		used++;
 		return ret;
 	}
@@ -233,21 +233,24 @@ public:
 			grow_bigger();
 
 
-		T *ret=entry+used;
+
+		T * ret=entry+used;
 		used+=num;
 		return ret;
 	}
 
 	int add_at(T item, int ref)
 	{
-		T *q=add_at(ref);
+		T * q=add_at(ref);
+
 		*q=item;
 		return ref;
 	}
 
 	int add(T item)
 	{
-		T *q=add();
+		T * q=add();
+
 		*q=item;
 		return used-1;
 	}
@@ -275,7 +278,7 @@ public:
 					entries += grow;
 				}
 
-				T *new_entry = (T *)realloc(entry, sizeof(T)*entries);
+				T * new_entry = (T *)realloc(entry, sizeof(T)*entries);
 
 				I4_ASSERT(new_entry, "INTERNAL: i4_array::add_array() out of memory");
 
@@ -319,14 +322,14 @@ public:
 		used = 0;
 	}
 
-	void sort(int (*compar)(const T *, const T *))
+	void sort(int (* compar)(const T *, const T *))
 	{
-		typedef int (*compare_type)(const void *x, const void *y);
+		typedef int (*compare_type)(const void * x, const void * y);
 
 		qsort(entry, used, sizeof(T), (compare_type)compar);
 	}
 
-	int binary_search(const T *find, int (*compar)(const T *a, const T *b))
+	int binary_search(const T * find, int (* compar)(const T * a, const T * b))
 	{
 		if (size()==0)
 		{

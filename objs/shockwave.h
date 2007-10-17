@@ -25,7 +25,7 @@ protected:
 	{
 		w32 color;
 		sw32 displacement;
-	} *vert_map;
+	} * vert_map;
 
 	float focal_radius;
 
@@ -40,11 +40,11 @@ protected:
 	void alloc_vert_map();
 public:
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	virtual void think();
 
-	g1_shockwave_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
+	g1_shockwave_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
 
 	//making these virtual doesn't make much sense as you call this
 	//function immediatelly after creation of the object
@@ -67,8 +67,8 @@ protected:
 	};
 public:
 	virtual void think();
-	g2_water_wave_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
+	g2_water_wave_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
 	void setup_wave(const i4_3d_vector &pos, float strength, w16 radius);
 	//~g2_water_wave_class();
 	virtual i4_bool occupy_location();

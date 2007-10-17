@@ -15,14 +15,14 @@ class m1_debugfile
 {
 public:
 	char name[256];
-	FILE *f;
+	FILE * f;
 
-	m1_debugfile(char *name = 0);
+	m1_debugfile(char * name = 0);
 	~m1_debugfile();
 
 	void restart();
-	void printf(char *format, ...);
-	void operator()(char *format,...);
+	void printf(char * format, ...);
+	void operator()(char * format,...);
 };
 
 extern m1_debugfile dbg;

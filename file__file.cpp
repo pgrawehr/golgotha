@@ -95,9 +95,10 @@ i4_temp_file_class::i4_temp_file_class(w32 startsize, w32 _incsize)
 	fs=0;
 }
 
-w32 i4_temp_file_class::read(void *buffer, w32 size)
+w32 i4_temp_file_class::read(void * buffer, w32 size)
 {
 	int bytesread=size;
+
 	if ((offset+size)>fs)
 	{
 		bytesread=fs-offset;
@@ -111,12 +112,13 @@ w32 i4_temp_file_class::read(void *buffer, w32 size)
 	return bytesread;
 }
 
-w32 i4_temp_file_class::write(const void *buffer, w32 size)
+w32 i4_temp_file_class::write(const void * buffer, w32 size)
 {
 	w32 newsize=offset+size;
+
 	if (newsize>bs)
 	{
-		w8 *nbuf;
+		w8 * nbuf;
 		int by=0;
 		if (newsize<(bs+incsize))
 		{
@@ -161,7 +163,7 @@ i4_temp_file_class::~i4_temp_file_class()
 	buf=0;
 }
 
-w32 i4_ram_file_class::read(void *buffer, w32 size)
+w32 i4_ram_file_class::read(void * buffer, w32 size)
 {
 	if (size>bs-offset)
 	{
@@ -172,7 +174,7 @@ w32 i4_ram_file_class::read(void *buffer, w32 size)
 	return size;
 }
 
-w32 i4_ram_file_class::write(const void *buffer, w32 size)
+w32 i4_ram_file_class::write(const void * buffer, w32 size)
 {
 	if (size>bs-offset)
 	{
@@ -183,7 +185,7 @@ w32 i4_ram_file_class::write(const void *buffer, w32 size)
 	return size;
 }
 
-i4_ram_file_class::i4_ram_file_class(void *buffer, int buffer_size)
+i4_ram_file_class::i4_ram_file_class(void * buffer, int buffer_size)
 	: buf((w8 *)buffer),
 	  bs(buffer_size),
 	  offset(0)
@@ -191,9 +193,9 @@ i4_ram_file_class::i4_ram_file_class(void *buffer, int buffer_size)
 	;
 }
 
-i4_bool i4_file_class::async_write(const void *buffer, w32 size,
+i4_bool i4_file_class::async_write(const void * buffer, w32 size,
 								   async_callback call,
-								   void *context)
+								   void * context)
 {
 	(*call)(write(buffer, size), context);
 
@@ -201,9 +203,9 @@ i4_bool i4_file_class::async_write(const void *buffer, w32 size,
 }
 
 
-i4_bool i4_file_class::async_read(void *buffer, w32 size,
+i4_bool i4_file_class::async_read(void * buffer, w32 size,
 								  async_callback call,
-								  void *context, w32 priority, int caller_id)
+								  void * context, w32 priority, int caller_id)
 {
 	(*call)(read(buffer, size), context);
 	return i4_T;
@@ -220,9 +222,10 @@ i4_bool i4_file_class::async_read(void *buffer, w32 size,
 //};
 
 
-i4_str *i4_file_class::read_str(w32 len)
+i4_str * i4_file_class::read_str(w32 len)
 {
-	i4_str *str=0;
+	i4_str * str=0;
+
 	if (len<256)
 	{
 		char buf[256];
@@ -232,7 +235,7 @@ i4_str *i4_file_class::read_str(w32 len)
 	}
 	else
 	{
-		char *buf2=(char *)malloc(len+1);
+		char * buf2=(char *)malloc(len+1);
 		read(buf2,len);
 		buf2[len]=0;
 		str=new i4_str(buf2);
@@ -242,9 +245,10 @@ i4_str *i4_file_class::read_str(w32 len)
 	return str;
 }
 
-i4_str *i4_file_class::read_counted_str()
+i4_str * i4_file_class::read_counted_str()
 {
 	w16 len = read_16();
+
 	return read_str(len);
 }
 
@@ -290,19 +294,21 @@ static inline int fmt_char(char c)
 }
 
 // same as fprintf, but with the addition %S is a i4_const_str *
-int i4_file_class::printf(char *fmt, ...)
+int i4_file_class::printf(char * fmt, ...)
 {
 	w32 start=tell();
 
 	va_list ap;
+
 	va_start(ap, fmt);
 
 	while (*fmt)
 	{
 		if (*fmt=='%')
 		{
-			char *fmt_end=fmt;
+			char * fmt_end=fmt;
 			while (!fmt_char(*fmt_end) && *fmt_end) fmt_end++;
+
 
 			char f[10], out[500];
 			memcpy(f, fmt, fmt_end-fmt+1);
@@ -313,12 +319,12 @@ int i4_file_class::printf(char *fmt, ...)
 			{
 				case 's':
 					{
-						char *str=va_arg(ap,char *);
+						char * str=va_arg(ap,char *);
 						write(str,strlen(str));
 					} break;
 				case 'S':
 					{
-						i4_const_str *s=va_arg(ap,i4_const_str *);
+						i4_const_str * s=va_arg(ap,i4_const_str *);
 						write_str(*s);
 					} break;
 				case 'd':
@@ -363,10 +369,11 @@ int i4_file_class::printf(char *fmt, ...)
 
 
 
-int i4_file_class::write_format(char *format, ...)
+int i4_file_class::write_format(char * format, ...)
 {
-	char *f=format;
+	char * f=format;
 	va_list ap;
+
 	va_start(ap, format);
 
 	int start=tell();
@@ -399,10 +406,11 @@ int i4_file_class::write_format(char *format, ...)
 
 
 // format is same as write_format, returns number of fields written
-int i4_file_class::read_format(char *format, ...)
+int i4_file_class::read_format(char * format, ...)
 {
-	char *f=format;
+	char * f=format;
 	va_list ap;
+
 	va_start(ap, format);
 
 	int start=tell();
@@ -438,9 +446,9 @@ int i4_file_class::read_format(char *format, ...)
 i4_file_class *i4_open(const i4_const_str &name, w32 flags)
 {
 	//Scans for the file using an iterator over file-Managers! Not over directories(?)
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
-		i4_file_class *fp=m->open(name,flags);
+		i4_file_class * fp=m->open(name,flags);
 		if (fp)
 		{
 			return fp;
@@ -453,7 +461,7 @@ i4_file_class *i4_open(const i4_const_str &name, w32 flags)
 // return i4_F on failure
 i4_bool i4_unlink(const i4_const_str &name)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
 		if (m->unlink(name))
 		{
@@ -468,7 +476,7 @@ i4_bool i4_unlink(const i4_const_str &name)
 i4_bool i4_get_status(const i4_const_str &filename,
 					  i4_file_status_struct &return_stat)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
 		if (m->get_status(filename, return_stat))
 		{
@@ -482,7 +490,7 @@ i4_bool i4_get_status(const i4_const_str &filename,
 // return i4_F on failure
 i4_bool i4_mkdir(const i4_const_str &name)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
 		if (m->mkdir(name))
 		{
@@ -496,18 +504,19 @@ i4_bool i4_mkdir(const i4_const_str &name)
 // returns i4_F on failure (disk full, target dir inexistent...)
 i4_bool i4_copy_file(const i4_const_str &source, const i4_const_str &dest)
 {
-	i4_file_class *src=i4_open(source,I4_READ);
+	i4_file_class * src=i4_open(source,I4_READ);
+
 	if (!src)
 	{
 		return i4_F;
 	}
-	i4_file_class *dst=i4_open(dest,I4_WRITE);
+	i4_file_class * dst=i4_open(dest,I4_WRITE);
 	if (!dst)
 	{
 		delete src;
 		return i4_F;
 	}
-	w8 *buf=new w8[2000];
+	w8 * buf=new w8[2000];
 	w32 inbytes=0;
 	w32 outbytes=0;
 	inbytes=src->read(buf,2000);
@@ -539,9 +548,9 @@ i4_bool i4_copy_file(const i4_const_str &source, const i4_const_str &dest)
 i4_bool i4_get_directory(const i4_const_str &path,
 						 i4_directory_struct &dir_struct,
 						 i4_bool get_status,
-						 i4_status_class *status)
+						 i4_status_class * status)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
 		if (m->get_directory(path, dir_struct, get_status, status))
 		{
@@ -555,7 +564,7 @@ i4_bool i4_get_directory(const i4_const_str &path,
 // returns i4_F if path cannot be split
 i4_bool i4_split_path(const i4_const_str &name, i4_filename_struct &fname_struct)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
 		if (m->split_path(name, fname_struct))
 		{
@@ -569,9 +578,9 @@ i4_bool i4_split_path(const i4_const_str &name, i4_filename_struct &fname_struct
 // return 0 if full path cannot be determined
 i4_str *i4_full_path(const i4_const_str &relative_name)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
-		i4_str *s=m->full_path(relative_name);
+		i4_str * s=m->full_path(relative_name);
 		if (s)
 		{
 			return s;
@@ -582,9 +591,9 @@ i4_str *i4_full_path(const i4_const_str &relative_name)
 }
 
 
-i4_file_manager_class *i4_file_manager_class::first=0;
+i4_file_manager_class * i4_file_manager_class::first=0;
 
-void i4_add_file_manager(i4_file_manager_class *fman, i4_bool add_front)
+void i4_add_file_manager(i4_file_manager_class * fman, i4_bool add_front)
 {
 	if (add_front)
 	{
@@ -593,7 +602,7 @@ void i4_add_file_manager(i4_file_manager_class *fman, i4_bool add_front)
 	}
 	else
 	{
-		i4_file_manager_class *last=0, *p=i4_file_manager_class::first;
+		i4_file_manager_class * last=0, * p=i4_file_manager_class::first;
 		while (p)
 		{
 			last=p;
@@ -612,9 +621,10 @@ void i4_add_file_manager(i4_file_manager_class *fman, i4_bool add_front)
 	}
 }
 
-void i4_remove_file_manger(i4_file_manager_class *fman)
+void i4_remove_file_manger(i4_file_manager_class * fman)
 {
-	i4_file_manager_class *last=0, *p=i4_file_manager_class::first;
+	i4_file_manager_class * last=0, * p=i4_file_manager_class::first;
+
 	while (p && p!=fman)
 	{
 		last=p;
@@ -641,10 +651,11 @@ void i4_remove_file_manger(i4_file_manager_class *fman)
 i4_bool i4_file_manager_class::split_path(const i4_const_str &name, i4_filename_struct &fn)
 {
 	char buf[512];
+
 	i4_os_string(name, buf, 512);
 
 
-	char *p=buf, *last_slash=0, *last_dot=0, *q;
+	char * p=buf, * last_slash=0, * last_dot=0, * q;
 
 	while (*p)
 	{
@@ -752,8 +763,8 @@ static char convert_slash(char c)
 
 i4_str *i4_relative_path(const i4_const_str &path)
 {
-	i4_str *full_path=i4_full_path(path);
-	i4_str *full_current=i4_full_path(i4_const_str("."));
+	i4_str * full_path=i4_full_path(path);
+	i4_str * full_current=i4_full_path(i4_const_str("."));
 
 	char full[512], current[512], ret[512];
 
@@ -814,7 +825,8 @@ i4_str *i4_relative_path(const i4_const_str &path)
 
 
 
-	char *c=current+start;
+
+	char * c=current+start;
 	if (*c==0)
 	{
 		return new i4_str(full+start+1);
@@ -844,8 +856,8 @@ i4_str *i4_relative_path(const i4_const_str &path)
    golgotha_source@usa.net (Subject should have "GOLG" in it)
  ***********************************************************************/
 
-int i4_async_priority_sorter(const i4_async_reader::read_request *a,
-							 const i4_async_reader::read_request *b)
+int i4_async_priority_sorter(const i4_async_reader::read_request * a,
+							 const i4_async_reader::read_request * b)
 {
 	if (a->prio < b->prio)
 	{
@@ -862,7 +874,7 @@ volatile w32 i4_async_reader::num_pending=0;
 i4_array<i4_async_reader *> i4_async_reader::readers(0,10);
 i4_critical_section_class i4_async_reader::static_pending_lock;
 
-i4_async_reader::i4_async_reader(char *name) :
+i4_async_reader::i4_async_reader(char * name) :
 	sig(name),
 	request_que(i4_async_priority_sorter)
 {
@@ -870,8 +882,8 @@ i4_async_reader::i4_async_reader(char *name) :
 	stop=i4_F;
 }
 
-i4_bool i4_async_reader::request_for_callback(void *buffer, w32 size,
-											  i4_file_class::async_callback call, void *context,
+i4_bool i4_async_reader::request_for_callback(void * buffer, w32 size,
+											  i4_file_class::async_callback call, void * context,
 											  w32 priority, int caller_id)
 {
 	if (readers.size()==0)
@@ -896,7 +908,7 @@ i4_bool i4_async_reader::request_for_callback(void *buffer, w32 size,
 	}
 }
 
-void i4_async_reader_thread_start(void *arg)
+void i4_async_reader_thread_start(void * arg)
 {
 	((i4_async_reader *)arg)->PRIVATE_thread();
 }
@@ -915,8 +927,9 @@ void i4_async_reader::uninit()
 {
 	if (i4_threads_supported())
 	{
-		while (stop==i4_T)   // wait to thread is read to be stopped
+		while (stop==i4_T)  // wait to thread is read to be stopped
 			i4_thread_yield();
+
 
 
 		stop=i4_T;
@@ -943,9 +956,9 @@ void i4_async_reader::uninit()
 	}
 }
 
-i4_bool i4_async_reader::start_read(int fd, void *buffer, w32 size,
+i4_bool i4_async_reader::start_read(int fd, void * buffer, w32 size,
 									i4_file_class::async_callback call,
-									void *context, w32 priority, int caller_id)
+									void * context, w32 priority, int caller_id)
 {
 	//if (!i4_threads_supported())
 	//  i4_error("FATAL: Threads are not supported in this OS. Check your makefile.");
@@ -992,6 +1005,7 @@ void i4_async_reader::PRIVATE_thread()
 {
 	read_request r;
 	sw32 amount;
+
 	stop=i4_F;
 #ifdef _WINDOWS
 	hPRIVATE_thread=GetCurrentThreadId();
@@ -1042,7 +1056,8 @@ void i4_async_reader::PRIVATE_thread()
 			}
 		}
 
-	} while (!stop);
+	}
+	while (!stop);
 #ifndef _WINDOWS
 	hPRIVATE_thread=0; //to signal the parent we quitted
 #endif
@@ -1069,9 +1084,10 @@ i4_bool i4_async_reader::is_idle()
 
 
 
-w32 i4_buffered_file_class::read(void *buffer, w32 size)
+w32 i4_buffered_file_class::read(void * buffer, w32 size)
 {
 	w32 total_read=0;
+
 	while (size)
 	{
 		if (offset>=buf_start && offset<buf_end)
@@ -1110,7 +1126,7 @@ w32 i4_buffered_file_class::read(void *buffer, w32 size)
 }
 
 
-w32 i4_buffered_file_class::write(const void *buffer, w32 size)
+w32 i4_buffered_file_class::write(const void * buffer, w32 size)
 {
 	w32 total_write=0;
 
@@ -1166,6 +1182,7 @@ w32 i4_buffered_file_class::write(const void *buffer, w32 size)
 w32 i4_buffered_file_class::seek(w32 offset)
 {
 	i4_buffered_file_class::offset=offset;
+
 	return offset;
 }
 
@@ -1194,7 +1211,7 @@ i4_buffered_file_class::~i4_buffered_file_class()
 }
 
 
-i4_buffered_file_class::i4_buffered_file_class(i4_file_class *from,
+i4_buffered_file_class::i4_buffered_file_class(i4_file_class * from,
 											   w32 buffer_size,
 											   w32 current_offset)
 	: from(from),
@@ -1210,9 +1227,9 @@ struct callback_context
 {
 	i4_bool in_use;
 	w32 prev_read;
-	void *prev_context;
+	void * prev_context;
 	i4_file_class::async_callback prev_callback;
-	i4_buffered_file_class *bfile;
+	i4_buffered_file_class * bfile;
 } ;
 
 
@@ -1223,14 +1240,15 @@ enum {
 static callback_context contexts[MAX_ASYNC_READS];
 static w32 t_callbacks_used=0;
 
-void i4_async_buf_read_callback(w32 count, void *context)
+void i4_async_buf_read_callback(w32 count, void * context)
 {
-	callback_context *c=(callback_context *)context;
+	callback_context * c=(callback_context *)context;
+
 	c->bfile->offset+=count;
 
 	i4_file_class::async_callback call=c->prev_callback;
 	count += c->prev_read;
-	void *ctext=c->prev_context;
+	void * ctext=c->prev_context;
 	c->in_use=i4_F;
 
 	t_callbacks_used--;
@@ -1240,9 +1258,9 @@ void i4_async_buf_read_callback(w32 count, void *context)
 
 
 
-i4_bool i4_buffered_file_class::async_read(void *buffer, w32 size,
+i4_bool i4_buffered_file_class::async_read(void * buffer, w32 size,
 										   async_callback call,
-										   void *context, w32 priority, int caller_id)
+										   void * context, w32 priority, int caller_id)
 {
 	if (!(offset>=buf_start && offset<buf_end))
 	{
@@ -1270,7 +1288,7 @@ i4_bool i4_buffered_file_class::async_read(void *buffer, w32 size,
 
 		if (avail_size < size)
 		{
-			callback_context *c=0;
+			callback_context * c=0;
 			for (w32 i=0; !c && i<MAX_ASYNC_READS; i++)
 			{
 				if (!contexts[i].in_use)
@@ -1328,7 +1346,7 @@ i4_bool i4_buffered_file_class::async_read(void *buffer, w32 size,
  ***********************************************************************/
 
 
-i4_openable_ram_file_info *i4_flist=0;
+i4_openable_ram_file_info * i4_flist=0;
 
 class i4_ram_file_manager_class :
 	public i4_file_manager_class
@@ -1342,7 +1360,7 @@ public:
 			char buf[256];
 			i4_os_string(name, buf, 256);
 //wo sucht der? Wirklich nur im aktuellen Verzeichnis?
-			for (i4_openable_ram_file_info *f=i4_flist; f; f=f->next)
+			for (i4_openable_ram_file_info * f=i4_flist; f; f=f->next)
 			{
 				if (strcmp(buf, f->filename)==0)
 				{
@@ -1365,7 +1383,7 @@ public:
 	}
 } i4_ram_file_manager_instance;
 
-i4_openable_ram_file_info::i4_openable_ram_file_info(char *filename, void *data, w32 data_size)
+i4_openable_ram_file_info::i4_openable_ram_file_info(char * filename, void * data, w32 data_size)
 	: filename(filename),
 	  data(data),
 	  data_size(data_size)
@@ -1384,7 +1402,7 @@ i4_openable_ram_file_info::i4_openable_ram_file_info(char *filename, void *data,
 
 
 
-w32 i4_sub_section_file::read(void *buffer, w32 rsize)
+w32 i4_sub_section_file::read(void * buffer, w32 rsize)
 {
 	if( foffset-fstart+rsize > (w32)fsize )
 	{
@@ -1397,7 +1415,7 @@ w32 i4_sub_section_file::read(void *buffer, w32 rsize)
 	return rs;
 }
 
-w32 i4_sub_section_file::write(const void *buffer, w32 size)
+w32 i4_sub_section_file::write(const void * buffer, w32 size)
 {
 	i4_error("don't write here");
 	return 0;
@@ -1427,7 +1445,7 @@ w32 i4_sub_section_file::tell()
 }
 
 
-i4_sub_section_file::i4_sub_section_file(i4_file_class *_fp, int start, int size)
+i4_sub_section_file::i4_sub_section_file(i4_file_class * _fp, int start, int size)
 {
 	fp=_fp;
 	if (!fp)
@@ -1450,9 +1468,9 @@ i4_sub_section_file::~i4_sub_section_file()
 }
 
 
-i4_bool i4_sub_section_file::async_read(void *buffer, w32 size,
+i4_bool i4_sub_section_file::async_read(void * buffer, w32 size,
 										async_callback call,
-										void *context, w32 priority, int caller_id)
+										void * context, w32 priority, int caller_id)
 {
 	if (foffset-fstart+size> (w32)fsize)
 	{
@@ -1489,13 +1507,14 @@ public:
 		return 0xFFFFFFFF;
 	};                                         //the maximum priority that is handled differently
 public:
-	i4_win32_async_reader(char *name) :
+	i4_win32_async_reader(char * name) :
 		i4_async_reader(name)
 	{
 	}
-	virtual w32 read(sw32 fd, void *buffer, w32 count)
+	virtual w32 read(sw32 fd, void * buffer, w32 count)
 	{
 		w32 res = _read(fd,buffer,count);
+
 		return res;
 	}
 } i4_win32_async_instance("hd_async_reader_2");
@@ -1508,7 +1527,7 @@ public:
 	{
 		return 100;
 	};
-	i4_win32_async_priority_reader(char *name) :
+	i4_win32_async_priority_reader(char * name) :
 		i4_win32_async_reader(name)
 	{
 	};
@@ -1523,7 +1542,7 @@ extern "C" {
 #ifndef __P         // glibc symbol
 #define __P(p) p
 #endif
-	extern char *realpath __P((__const char *__name, char *__resolved));
+	extern char * realpath __P((__const char * __name, char * __resolved));
 };
 #endif
 
@@ -1544,11 +1563,11 @@ public:
 	{
 		return 0xffffffff;
 	};
-	i4_unix_async_reader(char *name) :
+	i4_unix_async_reader(char * name) :
 		i4_async_reader(name)
 	{
 	}
-	virtual w32 read(sw32 fd, void *buffer, w32 count)
+	virtual w32 read(sw32 fd, void * buffer, w32 count)
 	{
 		return ::read(fd,buffer,count);
 	}
@@ -1563,7 +1582,7 @@ public:
 	{
 		return 100;
 	};
-	i4_unix_async_priority_reader(char *name) :
+	i4_unix_async_priority_reader(char * name) :
 		i4_unix_async_reader(name)
 	{
 	};
@@ -1589,7 +1608,7 @@ public:
 	{
 	}
 
-	w32 read(void *buffer, w32 size)
+	w32 read(void * buffer, w32 size)
 	{
 		pf_win32_read.start();
 		w32 res = _read(fd,buffer,size);
@@ -1597,7 +1616,7 @@ public:
 		return res;
 	}
 
-	w32 write(const void *buffer, w32 size)
+	w32 write(const void * buffer, w32 size)
 	{
 		pf_win32_write.start();
 		w32 res = _write(fd,buffer,size);
@@ -1647,9 +1666,9 @@ public:
 
 
 	// returns i4_F if an immediate error occured
-	i4_bool async_read(void *buffer, w32 size,
+	i4_bool async_read(void * buffer, w32 size,
 					   async_callback call,
-					   void *context, w32 priority, int caller_id)
+					   void * context, w32 priority, int caller_id)
 	{
 		if (i4_threads_supported())
 		{
@@ -1691,7 +1710,7 @@ public:
 	}
 
 
-	virtual i4_bool async_read(void *buffer, w32 size, async_callback call, void *context, w32 priority, int caller_id)
+	virtual i4_bool async_read(void * buffer, w32 size, async_callback call, void * context, w32 priority, int caller_id)
 	{
 
 		if (i4_threads_supported())
@@ -1716,9 +1735,10 @@ public:
 		return i4_T;
 	}
 
-	virtual w32 read(void *buffer, w32 size)
+	virtual w32 read(void * buffer, w32 size)
 	{
 		int ret=::read(fd,buffer,size);
+
 		if (ret<0)
 		{
 			ret=0;
@@ -1726,15 +1746,17 @@ public:
 		return ret;
 	}
 
-	virtual w32 write(const void *buffer, w32 size)
+	virtual w32 write(const void * buffer, w32 size)
 	{
 		w32 ret=::write(fd,buffer,size);
+
 		return ret;
 	}
 
 	virtual w32 seek(w32 offset)
 	{
 		w32 ret=lseek(fd,offset,SEEK_SET);
+
 		return ret;
 	}
 
@@ -1742,6 +1764,7 @@ public:
 	{
 		w32 cur=lseek(fd,0,SEEK_CUR);
 		w32 len=lseek(fd,0,SEEK_END);
+
 		lseek(fd,cur,SEEK_SET);
 		return len;
 	}
@@ -1749,6 +1772,7 @@ public:
 	virtual w32 tell()
 	{
 		w32 ret=lseek(fd,0,SEEK_CUR);
+
 		return ret;
 	}
 
@@ -1781,6 +1805,7 @@ public:
 	{
 		sw32 f=0;
 		i4_bool no_buffer=i4_F;
+
 		flags &= ~I4_SUPPORT_ASYNC; // don't have to do anything special for these
 
 		if (flags & I4_NO_BUFFER)
@@ -1794,7 +1819,7 @@ public:
 		char newbuf[256];
 		char drivebuf[5];
 		int res=0;
-		char *whatfor; //used for debugging.
+		char * whatfor; //used for debugging.
 		switch (flags&I4_OPEN_MASK)
 		{
 			case I4_READ:
@@ -1881,7 +1906,7 @@ public:
 					if (!(flags&I4_NO_ERROR))
 					{
 						i4_str msg("Unable to write to file %s. Check that you have appropriate permissions.");
-						i4_str *rmsg=msg.sprintf(200,name.c_str());
+						i4_str * rmsg=msg.sprintf(200,name.c_str());
 						i4_message_box("File system permission problem",
 									   *rmsg);
 						delete rmsg;
@@ -1917,7 +1942,8 @@ public:
 					}
 
 					fd=-1;
-				} while((get_next_cd_letter(drivebuf))!=0);
+				}
+				while((get_next_cd_letter(drivebuf))!=0);
 
 			}
 		}
@@ -1943,7 +1969,7 @@ public:
 		}
 #endif
 
-		i4_file_class *ret_fp;
+		i4_file_class * ret_fp;
 		if (!no_buffer)
 		{
 			ret_fp=new i4_buffered_file_class(new i4_win32_file_class(fd));
@@ -1961,6 +1987,7 @@ public:
 	virtual i4_bool unlink(const i4_const_str &name)
 	{
 		char buf[MAX_PATH];
+
 		return _unlink(i4_os_string(name,buf,sizeof(buf)))==0;
 	}
 
@@ -1968,6 +1995,7 @@ public:
 	virtual i4_bool mkdir(const i4_const_str &name)
 	{
 		char buf[MAX_PATH];
+
 		return ::_mkdir(i4_os_string(name,buf,sizeof(buf)))==0;
 	}
 
@@ -2002,11 +2030,12 @@ public:
 	virtual i4_bool get_directory(const i4_const_str &path,
 								  i4_directory_struct &dir_struct,
 								  i4_bool get_status,
-								  i4_status_class *status)
+								  i4_status_class * status)
 
 	{
 		_finddata_t fdat;
 		char os_str[512],buf[512];
+
 		sprintf(os_str,"%s/*.*",i4_os_string(path,buf,sizeof(buf)));
 
 		long handle=_findfirst(os_str,&fdat),done;
@@ -2023,13 +2052,13 @@ public:
 			if (fdat.attrib & _A_SUBDIR)
 			{
 				dir_struct.tdirs++;
-				dir_struct.dirs=(i4_str **)I4_REALLOC(dir_struct.dirs,
-													  sizeof(i4_str *)*dir_struct.tdirs,"dir list");
+				dir_struct.dirs=(i4_str * *)I4_REALLOC(dir_struct.dirs,
+													   sizeof(i4_str *)*dir_struct.tdirs,"dir list");
 				dir_struct.dirs[dir_struct.tdirs-1]=new i4_str(i4_const_str(fdat.name));
 			}
 			else
 			{
-				i4_file_status_struct *s=stats.add();
+				i4_file_status_struct * s=stats.add();
 				s->last_accessed=fdat.time_access;
 				s->last_modified=fdat.time_write;
 				s->created=fdat.time_create;
@@ -2037,20 +2066,21 @@ public:
 				s->size=fdat.size;
 
 				dir_struct.tfiles++;
-				dir_struct.files=(i4_str **)I4_REALLOC(dir_struct.files,
-													   sizeof(i4_str *)*dir_struct.tfiles,"dir list");
+				dir_struct.files=(i4_str * *)I4_REALLOC(dir_struct.files,
+														sizeof(i4_str *)*dir_struct.tfiles,"dir list");
 				dir_struct.files[dir_struct.tfiles-1]=new i4_str(i4_const_str(fdat.name));
 			}
 
 			done=_findnext(handle, &fdat);
-		} while (done!=-1);
+		}
+		while (done!=-1);
 
 		_findclose(handle);
 		if (get_status)
 		{
 			if (dir_struct.tfiles)
 			{
-				i4_file_status_struct *sa;
+				i4_file_status_struct * sa;
 				sa=(i4_file_status_struct *)I4_MALLOC(sizeof(i4_file_status_struct)*dir_struct.tfiles,"");
 				for (int j=0; j< (int)dir_struct.tfiles; j++)
 				{
@@ -2067,6 +2097,7 @@ public:
 	virtual i4_str *full_path(const i4_const_str &relative_name)
 	{
 		char buf[256], buf2[256];
+
 		buf2[0]=0;
 		i4_os_string(relative_name, buf, 256);
 		if (!::_fullpath(buf2, buf, 256))
@@ -2110,6 +2141,7 @@ public:
 		UINT t;
 		char s[5];
 		BOOL foundcd=false;
+
 		firstcd=2;
 		//Scan for Drive-Types
 		for(int i=0; i<=26; i++)
@@ -2130,7 +2162,7 @@ public:
 		}
 		currentcd=firstcd;
 	}
-	virtual int get_first_cd_letter(char *str)
+	virtual int get_first_cd_letter(char * str)
 	{
 		if (firstcd<3)
 		{
@@ -2140,9 +2172,10 @@ public:
 		currentcd=firstcd;
 		return true;
 	}
-	virtual int get_next_cd_letter(char *str)
+	virtual int get_next_cd_letter(char * str)
 	{
 		int i=currentcd+1;
+
 		while (i<=26)
 		{
 			if (Drives[i]==DRIVE_CDROM)
@@ -2167,6 +2200,7 @@ protected:
 i4_bool i4_rmdir(const i4_const_str &path)
 {
 	char p[256];
+
 	i4_os_string(path, p, 256);
 	if (_rmdir(p)==0)
 	{
@@ -2181,6 +2215,7 @@ i4_bool i4_rmdir(const i4_const_str &path)
 i4_bool i4_chdir(const i4_const_str &path)
 {
 	char p[256];
+
 	i4_os_string(path, p, 256);
 	if (_chdir(p)==0)
 	{
@@ -2195,9 +2230,10 @@ i4_bool i4_chdir(const i4_const_str &path)
 #else
 //UNIX File manager
 
-char *i4_linux_filename_filter(const i4_const_str &name, char *obuf, int olen)
+char *i4_linux_filename_filter(const i4_const_str &name, char * obuf, int olen)
 {
-	char buf[256], *s, *d;
+	char buf[256], * s, * d;
+
 	i4_os_string(name, buf, 256);
 	int changed=0;
 
@@ -2251,7 +2287,7 @@ public:
 	virtual i4_file_class *open(const i4_const_str &name, w32 flags=I4_READ)
 	{
 		char buf[256];
-		i4_file_class *fp=0;
+		i4_file_class * fp=0;
 
 		sw32 f=0;
 		i4_bool no_buffer=i4_F;
@@ -2318,7 +2354,7 @@ public:
 				if (!(flags&I4_NO_ERROR))
 				{
 					i4_str msg("Unable to write to file %s. Check that you have appropriate permissions.");
-					i4_str *rmsg=msg.sprintf(200,name.c_str());
+					i4_str * rmsg=msg.sprintf(200,name.c_str());
 					i4_message_box("File system permission problem",
 								   *rmsg);
 					delete rmsg;
@@ -2347,12 +2383,14 @@ public:
 	virtual i4_bool unlink(const i4_const_str &name)
 	{
 		char buf[MAX_PATH];
+
 		return ::unlink(i4_linux_filename_filter(name, buf, sizeof(buf)))==0;
 	}
 
 	virtual i4_bool mkdir(const i4_const_str &name)
 	{
 		char buf[MAX_PATH];
+
 		return ::mkdir(i4_linux_filename_filter(name,buf,sizeof(buf)),S_ALL)==0;
 	}
 
@@ -2388,22 +2426,22 @@ public:
 	virtual i4_bool get_directory(const i4_const_str &path,
 								  i4_directory_struct &dir_struct,
 								  i4_bool get_status,
-								  i4_status_class *status)
+								  i4_status_class * status)
 	{
 		char buf[256];
-		struct dirent *de;
+		struct dirent * de;
 
 		i4_linux_filename_filter(path,buf,sizeof(buf));
 		//buf[strlen(buf)+1]=0;
 		//buf[strlen(buf)]='/';
-		DIR *d=opendir(buf);
+		DIR * d=opendir(buf);
 		if (!d)
 		{
 			i4_warning("Cannot get contents of directory %s. Error %i.",buf,errno);
 			return i4_F;
 		}
 
-		i4_str **tlist=NULL;
+		i4_str * * tlist=NULL;
 		sw32 t=0;
 		char curdir[256];
 		getcwd(curdir,256);
@@ -2426,14 +2464,15 @@ public:
 			if (de && de->d_name[0])
 			{
 				t++;
-				tlist=(i4_str **)I4_REALLOC(tlist,sizeof(i4_str *)*t,"tmp file list");
+				tlist=(i4_str * *)I4_REALLOC(tlist,sizeof(i4_str *)*t,"tmp file list");
 				tlist[t-1]=new i4_str(de->d_name);
 			}
-		} while (de);
+		}
+		while (de);
 		closedir(d);
 		d=0;
 
-		i4_file_status_struct *sa=0;
+		i4_file_status_struct * sa=0;
 
 		if (t)
 		{
@@ -2455,16 +2494,16 @@ public:
 			if (S_ISDIR(s.st_mode))
 			{
 				dir_struct.tdirs++;
-				dir_struct.dirs=(i4_str **)I4_REALLOC(dir_struct.dirs,
-													  sizeof(i4_str *)*dir_struct.tdirs,"dir list");
+				dir_struct.dirs=(i4_str * *)I4_REALLOC(dir_struct.dirs,
+													   sizeof(i4_str *)*dir_struct.tdirs,"dir list");
 				dir_struct.dirs[dir_struct.tdirs-1]=tlist[i];
 			}
 			else
 			{
 				int on=dir_struct.tfiles++;
 
-				dir_struct.files=(i4_str **)I4_REALLOC(dir_struct.files,
-													   sizeof(i4_str *)*dir_struct.tfiles,"dir list");
+				dir_struct.files=(i4_str * *)I4_REALLOC(dir_struct.files,
+														sizeof(i4_str *)*dir_struct.tfiles,"dir list");
 				dir_struct.files[on]=tlist[i];
 
 				sa[on].last_accessed=s.st_atime;
@@ -2497,6 +2536,7 @@ public:
 	virtual i4_str *full_path(const i4_const_str &relative_name)
 	{
 		char buf[256], buf2[256];
+
 		realpath_lock.lock();
 			::realpath(i4_linux_filename_filter(relative_name, buf, 256), buf2);
 		realpath_lock.unlock();
@@ -2521,6 +2561,7 @@ public:
 i4_bool i4_rmdir(const i4_const_str &path)
 {
 	char p[256];
+
 	i4_os_string(path, p, 256);
 	if (rmdir(p)==0)
 	{
@@ -2535,6 +2576,7 @@ i4_bool i4_rmdir(const i4_const_str &path)
 i4_bool i4_chdir(const i4_const_str &path)
 {
 	char p[256];
+
 	i4_os_string(path, p, 256);
 	if (chdir(p)==0)
 	{

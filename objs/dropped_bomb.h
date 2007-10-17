@@ -38,17 +38,17 @@ public:
 	i4_float z_velocity;
 	i4_float speed;
 
-	g1_dropped_bomb_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	virtual void load(g1_loader_class *fp);
-	virtual void skipload(g1_loader_class *fp);
-	virtual void setup(const i4_3d_vector &pos, g1_object_class *this_guy_fired_me);
+	g1_dropped_bomb_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	virtual void load(g1_loader_class * fp);
+	virtual void skipload(g1_loader_class * fp);
+	virtual void setup(const i4_3d_vector &pos, g1_object_class * this_guy_fired_me);
 
 	virtual void think();
 
 	virtual i4_bool move(const i4_3d_vector &vel);
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 };
 
 #endif

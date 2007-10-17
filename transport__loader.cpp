@@ -23,9 +23,10 @@ extern g1_object_type car_type;
 // NODE MANAGER METHODS
 // ********************
 
-node *node_manager::get_node(node_id id)
+node * node_manager::get_node(node_id id)
 {
-	node *n=0;
+	node * n=0;
+
 	if (!use_active)
 	{
 		n=(node *)nodes.get(id);
@@ -42,7 +43,7 @@ node *node_manager::get_node(node_id id)
 	return n;
 }
 
-obj_ref_t *node_manager::get_obj(node_id id)
+obj_ref_t * node_manager::get_obj(node_id id)
 {
 	if (!use_active)
 	{
@@ -51,13 +52,13 @@ obj_ref_t *node_manager::get_obj(node_id id)
 	return (obj_ref_t *) nodes.get(id);
 }
 
-node *node_manager::add_node(node *newnode)
+node * node_manager::add_node(node * newnode)
 {
 	nodes.insert_if_single(newnode->id,newnode);
 	return newnode;
 };
 
-void node_manager::remove_node(node *rem)
+void node_manager::remove_node(node * rem)
 {
 	nodes.remove(rem->id);
 }
@@ -69,8 +70,9 @@ void node_manager::remove_node(node_id nid)
 
 i4_bool node_manager::load_nodes(const i4_const_str &filename)
 {
-	i4_file_class *f=i4_open(filename,I4_READ|I4_NO_BUFFER);
+	i4_file_class * f=i4_open(filename,I4_READ|I4_NO_BUFFER);
 	i4_bool ret=i4_F;
+
 	if (f)
 	{
 		ret=load_nodes(f);
@@ -94,16 +96,17 @@ node_manager::~node_manager()
 	reset();
 }
 
-i4_bool node_manager::load_nodes(i4_file_class *fp)
+i4_bool node_manager::load_nodes(i4_file_class * fp)
 {
-	char *buf;
-	char *index,*field;
+	char * buf;
+	char * index,* field;
 	long size=fp->size();
 	w32 r;
 	w32 id=0;
-	i4_status_class *stat=i4_create_status("Loading Nodes...");
+	i4_status_class * stat=i4_create_status("Loading Nodes...");
 	float x=0,y=0,h=0;
-	node *n;
+	node * n;
+
 	reset();
 	buf=new char[fp->size()+1];
 	fp->read(buf,fp->size());
@@ -112,6 +115,7 @@ i4_bool node_manager::load_nodes(i4_file_class *fp)
 	//r=sscanf(buf,"\t\t\t\t\n%n",&index);
 	r=1;
 	while ((*index)!='\n') index++;
+
 
 	index++; //we still point at the '\n'
 	while (r&&(index<buf+size))
@@ -123,6 +127,7 @@ i4_bool node_manager::load_nodes(i4_file_class *fp)
 		}
 		r=sscanf(index,"%d\t%f\t%f\t%f",&id,&x,&y,&h);
 		while ((*index)!='\n' && (*index!=0)) index++;
+
 
 		index++;
 		if (r)
@@ -158,12 +163,13 @@ i4_bool node_manager::load_nodes(i4_file_class *fp)
 i4_bool node_manager::save_nodes(const i4_const_str &filename)
 {
 	i4_file_status_struct retstat;
+
 	if (i4_get_status(filename,retstat)==i4_T)
 	{
 		i4_warning("Skipping nodes on save: Target file exists.");
 		return i4_F; //don't do anything if target file exists.
 	}
-	i4_file_class *f=i4_open(filename,I4_WRITE);
+	i4_file_class * f=i4_open(filename,I4_WRITE);
 	i4_bool ret=i4_F;
 	if (f)
 	{
@@ -173,16 +179,17 @@ i4_bool node_manager::save_nodes(const i4_const_str &filename)
 	return ret;
 }
 
-i4_bool node_manager::save_nodes(i4_file_class *fp)
+i4_bool node_manager::save_nodes(i4_file_class * fp)
 {
 	char buf[200];
-	char *head="ID\tEAST\tNORTH\tELEVAT\tNOTES\n";
+	char * head="ID\tEAST\tNORTH\tELEVAT\tNOTES\n";
 	w32 len=strlen(head);
+
 	fp->write(head,len);
 	i4_hashtable<void>::iterator it=nodes.get_iterator();
 	while (it.get())
 	{
-		g1_road_object_class *ro=(g1_road_object_class *)it.get();
+		g1_road_object_class * ro=(g1_road_object_class *)it.get();
 		w32 east=(ro->x/scalingx)-offsetx;
 		w32 north=(ro->y/scalingy)-offsety;
 		sprintf(buf,"%i\t%i\t%i\t%i\t  \n",ro->nid,east,north,0);
@@ -207,7 +214,7 @@ node_manager::node_manager() :
 
 };
 
-i4_bool g2_node_collect_fun(g1_object_class *obj)
+i4_bool g2_node_collect_fun(g1_object_class * obj)
 {
 	if (obj->id==g1_get_object_type("road_object"))
 	{
@@ -222,8 +229,8 @@ i4_bool g2_node_collect_fun(g1_object_class *obj)
 void node_manager::collect()
 {
 	reset();
-	g1_object_class **buf;
-	g1_road_object_class *r;
+	g1_object_class * * buf;
+	g1_road_object_class * r;
 	sw32 t;
 	t=g1_get_map()->make_object_list(buf,g2_node_collect_fun);
 	for (int i=0; i<t; i++)
@@ -233,7 +240,7 @@ void node_manager::collect()
 	}
 }
 
-void node_manager::activate(g1_map_class *map)
+void node_manager::activate(g1_map_class * map)
 {
 	if (use_active)
 	{
@@ -245,10 +252,10 @@ void node_manager::activate(g1_map_class *map)
 	scalingx=(map->width()-6)/(maxx-minx);
 	scalingy=(map->height()-6)/(maxy-miny);
 	i4_hashtable<void>::iterator i=nodes.get_iterator();
-	g1_road_object_class *road;
+	g1_road_object_class * road;
 	g1_object_type road_type=g1_get_object_type("road_object");
 
-	node *nod;
+	node * nod;
 	w32 toprocess=nodes.entries();
 	w32 processed=0;
 	float xp,yp,hp;
@@ -278,8 +285,8 @@ void node_manager::activate(g1_map_class *map)
 	//nodes.reset(i4_T);
 	use_active=i4_T;
 	i4_hashtable<g2_link>::iterator l=g2_link_man()->links.get_iterator();
-	g2_link *cl;
-	g1_road_object_class *startnode,*endnode;
+	g2_link * cl;
+	g1_road_object_class * startnode,* endnode;
 	while(cl=l.get())
 	{
 		node_id f=cl->from;
@@ -303,12 +310,12 @@ void node_manager::activate(g1_map_class *map)
 // LINK MANAGER METHODS
 // ********************
 
-g2_link *link_manager::get_link(link_id id)
+g2_link * link_manager::get_link(link_id id)
 {
 	return links.get(id);
 }
 
-g2_link *link_manager::add_link(g2_link *n)
+g2_link * link_manager::add_link(g2_link * n)
 {
 	if (!links.insert_if_single(n->id,n))
 	{
@@ -318,19 +325,20 @@ g2_link *link_manager::add_link(g2_link *n)
 	return n;
 }
 
-void link_manager::remove_link(g2_link *rem)
+void link_manager::remove_link(g2_link * rem)
 {
 	links.remove(rem->id);
 	nman->get_node(rem->from)->remove_out_link(rem->id);
 	nman->get_node(rem->to)->remove_in_link(rem->id);
 }
 
-i4_bool link_manager::load_links(const i4_const_str &filename,g1_loader_class *mainfp)
+i4_bool link_manager::load_links(const i4_const_str &filename,g1_loader_class * mainfp)
 {
 	//if (g2_act_man()==0)//is this a fresh load or just a restore?
 	//	{
-	i4_file_class *f=i4_open(filename,I4_READ|I4_NO_BUFFER);
+	i4_file_class * f=i4_open(filename,I4_READ|I4_NO_BUFFER);
 	i4_bool ret=i4_F;
+
 	if (f)
 	{
 		ret=load_links(f);
@@ -377,10 +385,10 @@ link_manager::~link_manager()
 	reset();
 }
 
-i4_bool link_manager::load_links(i4_file_class *fp)
+i4_bool link_manager::load_links(i4_file_class * fp)
 {
-	char *buf;
-	char *index;
+	char * buf;
+	char * index;
 	char token[200];
 	long size=fp->size();
 	w32 r;
@@ -390,8 +398,9 @@ i4_bool link_manager::load_links(i4_file_class *fp)
 	float length=0;
 	float cap=0;
 	float freespd=0;
-	char *skip=0;
-	g2_link *n;
+	char * skip=0;
+	g2_link * n;
+
 	reset();
 	buf=new char[fp->size()+1];
 	fp->read(buf,fp->size());
@@ -399,9 +408,10 @@ i4_bool link_manager::load_links(i4_file_class *fp)
 	index=buf;
 	//r=sscanf(buf,"\t\t\t\t\n%n",&index);
 	r=1;
-	i4_status_class *stat=i4_create_status("Loading links...");
-	li_environment *env=0;
+	i4_status_class * stat=i4_create_status("Loading links...");
+	li_environment * env=0;
 	while ((*index)!='\n') index++;
+
 
 	li_last_line=0;
 	//strcpy(li_last_file,"The_links_file");
@@ -453,6 +463,7 @@ i4_bool link_manager::load_links(i4_file_class *fp)
 		sscanf(token,"%f",&freespd);
 		while ((*index)!='\n') index++;
 
+
 		index++;
 		if (r)
 		{
@@ -474,7 +485,7 @@ i4_bool link_manager::load_links(i4_file_class *fp)
 
 }
 
-i4_bool link_manager::save_links(const i4_const_str &filename, g1_saver_class *mainfp)
+i4_bool link_manager::save_links(const i4_const_str &filename, g1_saver_class * mainfp)
 {
 	/*
 	   i4_filename_struct fnamest;
@@ -505,7 +516,7 @@ i4_bool link_manager::save_links(const i4_const_str &filename, g1_saver_class *m
 		i4_warning("Skipping links on save: Target file exists.");
 		return i4_F; //don't do anything if target file exists.
 	}
-	i4_file_class *f=i4_open(filename,I4_WRITE);
+	i4_file_class * f=i4_open(filename,I4_WRITE);
 	i4_bool ret=i4_F;
 	if (f)
 	{
@@ -515,18 +526,19 @@ i4_bool link_manager::save_links(const i4_const_str &filename, g1_saver_class *m
 	return ret;
 }
 
-i4_bool link_manager::save_links(i4_file_class *fp)
+i4_bool link_manager::save_links(i4_file_class * fp)
 {
 	char buf[1000];
-	char *head="ID\tNAME\tNODEA\tNODEB\tPERMLA\tPERMLB"
-			   "\tPCKTSA\tPCKTSB\tPCKTSA\tPCKTSB\tTWOWAYT\tLENGTH"
-			   "\tGRADE\tBACKA\tBACKB\tCAPA\tCAPB\tSLMTA\tSLMTB\tSPDA"
-			   "\tSPDB\tFUNCT\tTHRUA\tTHRUB\tCOLOR\tVEHICLE\tNOTES\n";
-	char *dat="%i\t%s\t%i\t%i\t%i\t%i"
-			  "\t0\t0\t0\t0\t0\t%f"
-			  "\t0\t0\t0\t%i\t%i\t%f\t%f\t%f"
-			  "\t%f\tOTHER\t%i\t%i\t%i\t%s\t%s\n";
+	char * head="ID\tNAME\tNODEA\tNODEB\tPERMLA\tPERMLB"
+				"\tPCKTSA\tPCKTSB\tPCKTSA\tPCKTSB\tTWOWAYT\tLENGTH"
+				"\tGRADE\tBACKA\tBACKB\tCAPA\tCAPB\tSLMTA\tSLMTB\tSPDA"
+				"\tSPDB\tFUNCT\tTHRUA\tTHRUB\tCOLOR\tVEHICLE\tNOTES\n";
+	char * dat="%i\t%s\t%i\t%i\t%i\t%i"
+			   "\t0\t0\t0\t0\t0\t%f"
+			   "\t0\t0\t0\t%i\t%i\t%f\t%f\t%f"
+			   "\t%f\tOTHER\t%i\t%i\t%i\t%s\t%s\n";
 	w32 len=strlen(head);
+
 	fp->write(head,len);
 	i4_hashtable<g2_link>::iterator it=links.get_iterator();
 	while (it.get())
@@ -547,7 +559,7 @@ i4_bool link_manager::save_links(i4_file_class *fp)
 #define QUALITY_DATA_VERSION 2
 #define QUALITY_DATA_STRING "Transport simulation quality data V2"
 
-i4_bool link_manager::save_qualitydata(g1_saver_class *fp)
+i4_bool link_manager::save_qualitydata(g1_saver_class * fp)
 {
 	i4_hashtable<g2_link>::iterator it=links.get_iterator();
 	//char *head="Golgotha transport simulation link quality data.\n"\
@@ -574,7 +586,7 @@ i4_bool link_manager::save_qualitydata(g1_saver_class *fp)
 	return i4_T;
 }
 
-i4_bool link_manager::load_qualitydata(g1_loader_class *fp)
+i4_bool link_manager::load_qualitydata(g1_loader_class * fp)
 {
 	//while (fp->read_8()!=0);
 	if (!fp->goto_section(QUALITY_DATA_STRING))
@@ -611,7 +623,7 @@ i4_bool link_manager::load_qualitydata(g1_loader_class *fp)
 
 // LINK METHODS
 // ************
-int qdtime_compare(const g2_link_quality *a, const g2_link_quality *b)
+int qdtime_compare(const g2_link_quality * a, const g2_link_quality * b)
 {
 	if (a->start<b->start)
 	{
@@ -682,8 +694,9 @@ i4_bool Nodes_Active=i4_F;
 
 i4_bool act_manager::load_activities(const i4_const_str &filename)
 {
-	i4_file_class *f=i4_open(filename,I4_READ|I4_NO_BUFFER);
+	i4_file_class * f=i4_open(filename,I4_READ|I4_NO_BUFFER);
 	i4_bool ret=i4_F;
+
 	if (f)
 	{
 		ret=load_activities(f);
@@ -696,7 +709,7 @@ i4_bool act_manager::load_activities(const i4_const_str &filename)
 	return ret;
 }
 
-int g2_car_start_time_sorter(g2_car_object_class *const *a,g2_car_object_class *const *b)
+int g2_car_start_time_sorter(g2_car_object_class * const * a,g2_car_object_class * const * b)
 {
 	if (((*a)->start_time)<((*b)->start_time))
 	{
@@ -718,7 +731,7 @@ int g2_car_start_time_sorter(g2_car_object_class *const *a,g2_car_object_class *
 
 }
 
-int g2_car_old_order_sorter(g2_car_object_class *const *a, g2_car_object_class *const *b)
+int g2_car_old_order_sorter(g2_car_object_class * const * a, g2_car_object_class * const * b)
 {
 	if (((w32)((*a)->vars)) < ((w32)((*b)->vars)))
 	{
@@ -730,7 +743,7 @@ int g2_car_old_order_sorter(g2_car_object_class *const *a, g2_car_object_class *
 	}
 }
 
-void act_manager::sort_car_list(int (*sortfun)(g2_car_object_class *const *a,g2_car_object_class *const *b))
+void act_manager::sort_car_list(int (* sortfun)(g2_car_object_class * const * a,g2_car_object_class * const * b))
 {
 	i4_isl_list<g2_car_object_class>::iterator reader=g2_car_object_list.begin();
 	i4_array<g2_car_object_class *> sorthelp(1000,1000);
@@ -752,13 +765,14 @@ void act_manager::sort_car_list(int (*sortfun)(g2_car_object_class *const *a,g2_
 	sorthelp.uninit();
 };
 
-i4_bool act_manager::load_activities(i4_file_class *fp)
+i4_bool act_manager::load_activities(i4_file_class * fp)
 {
 	int i;
 	char token[20][20];
-	char *buf,*index;
+	char * buf,* index;
 	int sz=fp->size();
-	i4_status_class *status=i4_create_status("Loading activities...");
+	i4_status_class * status=i4_create_status("Loading activities...");
+
 	buf=(char *) malloc(sz+10);
 	fp->read(buf,sz);
 	buf[sz]=0;
@@ -768,7 +782,7 @@ i4_bool act_manager::load_activities(i4_file_class *fp)
 	float start_hour,end_hour;
 	w32 start_link,end_link;
 
-	g2_car_object_class *last_car=0,*cur_car=0;
+	g2_car_object_class * last_car=0,* cur_car=0;
 	daytime=3600*24; //we haven't seen anything that starts earlier
 	day=1; //first day of simulation
 	w32 numcars=0;
@@ -783,6 +797,7 @@ i4_bool act_manager::load_activities(i4_file_class *fp)
 			li_read_token(index,token[i]);
 		}
 		while ( (*index) !='\n') index++;
+
 
 		index++;
 		cur_id=li_get_int(li_read_number_in_radix(10,token[0]),0);
@@ -885,10 +900,11 @@ act_manager::act_manager() :
 
 
 //this is mainly a method of act_manager because it inherits friendship
-i4_bool act_manager::save(g1_saver_class *fp)
+i4_bool act_manager::save(g1_saver_class * fp)
 {
-	node_manager *nman=g2_node_man();
-	link_manager *lman=g2_link_man();
+	node_manager * nman=g2_node_man();
+	link_manager * lman=g2_link_man();
+
 	union
 	{
 		w32 tdouble[2];
@@ -979,11 +995,11 @@ i4_bool act_manager::save(g1_saver_class *fp)
 	return i4_T;
 }
 
-extern node_manager *node_man;
-extern link_manager *link_man;
-extern act_manager *act_man;
+extern node_manager * node_man;
+extern link_manager * link_man;
+extern act_manager * act_man;
 
-i4_bool act_manager::load(g1_loader_class *fp)
+i4_bool act_manager::load(g1_loader_class * fp)
 {
 	li_class_context ctx(g1_map_vars.vars());
 	li_string_class_member nodes("traffic_sim_nodes");
@@ -1012,7 +1028,7 @@ i4_bool act_manager::load(g1_loader_class *fp)
 	w32 tempnext,tempoldest;
 	tempnext=fp->read_32();
 	tempoldest=fp->read_32();
-	i4_str *s=fp->read_counted_str(); //we don't need these right now
+	i4_str * s=fp->read_counted_str(); //we don't need these right now
 	delete s;
 	s=fp->read_counted_str();
 	delete s;
@@ -1060,8 +1076,8 @@ i4_bool act_manager::load(g1_loader_class *fp)
 		{
 			case 0xCABED:
 				{
-					g2_car_object_class *o=(g2_car_object_class *)
-											g1_object_type_array[ctype]->create_object(ctype,fp);
+					g2_car_object_class * o=(g2_car_object_class *)
+											 g1_object_type_array[ctype]->create_object(ctype,fp);
 					o->global_id=g1_global_id.alloc(o);
 					//we are abusing this field for sorting
 					//It's contents can be invalid outside the router.
@@ -1079,6 +1095,7 @@ i4_bool act_manager::load(g1_loader_class *fp)
 					while (tempit!=g2_car_object_list.end()
 						   && tempit->car_id!=caridpos)
 						tempit++;
+
 
 					if (tempit==g2_car_object_list.end())
 					{
@@ -1144,6 +1161,7 @@ char *stoh(double d)
 	int hour=(int) (d/3600);
 	//int min=((((int) d - (hour*3600)) / 3600) * 60);
 	int min=0;
+
 	min= (int) d%3600;
 	min= (min * 60) / 3600; //not assoziative!
 	sprintf(buf,"%i:%s%i",(int)(d/3600),min>=10 ? "" : "0",min);
@@ -1205,7 +1223,7 @@ void act_manager::think()
 		oldestwaiting++;
 		curwindowsize--;
 	}
-	g1_object_class *acar=0;
+	g1_object_class * acar=0;
 	if (oldestwaiting==g2_car_object_list.end())
 	{
 		acar=g1_get_map()->find_object_by_id(car_type,1);
@@ -1225,7 +1243,7 @@ void act_manager::think()
 		oldestwaiting=g2_car_object_list.begin();
 		day++;
 		i4_hashtable<g2_link>::iterator i=g2_link_man()->links.get_iterator();
-		g2_link *cl;
+		g2_link * cl;
 		w32 j;
 		float tqual,extime;
 		while (cl=i.get())

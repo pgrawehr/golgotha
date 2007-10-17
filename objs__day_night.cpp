@@ -30,15 +30,16 @@ g1_day_night_def("day_night_change",
 
 
 
-g1_mapsingle_class::g1_mapsingle_class(g1_object_type id, g1_loader_class *fp)
+g1_mapsingle_class::g1_mapsingle_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
-	g1_object_class *other=g1_get_map()->find_object_by_id(id,0);
+	g1_object_class * other=g1_get_map()->find_object_by_id(id,0);
+
 	needsdeleteonnexttick=i4_F;
 	if (other)
 	{
 		char buf[200];
-		g1_object_definition_class *def=other->get_type();
+		g1_object_definition_class * def=other->get_type();
 		sprintf(buf,"The map already contains an object of type %s "
 					"as ID %d (Location: x=%d y=%d). "
 					"Only one such object is allowed at once.",
@@ -62,12 +63,12 @@ void g1_mapsingle_class::think()
 	}
 };
 
-void g1_mapsingle_class::damage(g1_object_class *who_is_hurting,
+void g1_mapsingle_class::damage(g1_object_class * who_is_hurting,
 								int how_much_hurt, i4_3d_vector damage_dir)
 {
 };
 
-void g1_mapsingle_class::draw(g1_draw_context_class *context, i4_3d_vector &viewer_position)
+void g1_mapsingle_class::draw(g1_draw_context_class * context, i4_3d_vector &viewer_position)
 {
 	if (needsdeleteonnexttick==i4_F)
 	{
@@ -76,7 +77,7 @@ void g1_mapsingle_class::draw(g1_draw_context_class *context, i4_3d_vector &view
 }
 
 
-g1_day_night_class::g1_day_night_class(g1_object_type id, g1_loader_class *fp)
+g1_day_night_class::g1_day_night_class(g1_object_type id, g1_loader_class * fp)
 	: g1_mapsingle_class(id,fp)
 {
 	currentpos=0;
@@ -182,7 +183,7 @@ i4_bool g1_day_night_class::isday(int tick)
 	return i4_F;
 }
 
-void g1_day_night_class::object_changed_by_editor(g1_object_class *who, li_class *old_values)
+void g1_day_night_class::object_changed_by_editor(g1_object_class * who, li_class * old_values)
 {
 	if (who==this)
 	{

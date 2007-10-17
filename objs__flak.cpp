@@ -33,7 +33,7 @@ static r1_texture_ref flak("lil_flak");
 g1_object_definer<g1_flak_class>
 g1_flak_def("flak", 0);
 
-g1_flak_class::g1_flak_class(g1_object_type id, g1_loader_class *fp)
+g1_flak_class::g1_flak_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	time = 0;
@@ -71,9 +71,10 @@ void g1_flak_class::think()
 	}
 }
 
-void g1_flak_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_flak_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	i4_3d_vector screen_pos;
+
 	context->transform->transform(i4_3d_point_class(x,y,h), screen_pos);
 
 	i4_float center_x=g1_render.center_x, center_y=g1_render.center_y;

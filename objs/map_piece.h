@@ -40,11 +40,11 @@ class g1_map_piece_class :
 	public g1_object_class
 {
 public:
-	void fix_forward_link(g1_object_class *next)
+	void fix_forward_link(g1_object_class * next)
 	{
 		next_object = next;
 	}
-	void fix_previous_link(g1_object_class *prev)
+	void fix_previous_link(g1_object_class * prev)
 	{
 		prev_object = prev;
 	}
@@ -59,8 +59,8 @@ protected:
 	i4_float stagger;
 public:
 	void unlink();
-	void link(g1_object_class *origin);
-	i4_bool can_enter_link(g1_path_object_class *from, g1_path_object_class *to);
+	void link(g1_object_class * origin);
+	i4_bool can_enter_link(g1_path_object_class * from, g1_path_object_class * to);
 	g2_link *link_on();
 
 	g1_object_class *get_next_object()
@@ -79,7 +79,7 @@ public:
 		}
 		return 0;
 	}
-	g1_object_defaults_struct *defaults;
+	g1_object_defaults_struct * defaults;
 
 	i4_float speed;                  // current speed of the piece
 	i4_float vspeed;                 // vertical speed of the piece
@@ -87,7 +87,7 @@ public:
 	i4_float dest_z;                 // if it has a destination height
 	i4_float dest_theta;
 	w16 fire_delay;                  // number of game ticks before we can fire again
-	g1_id_ref *path_to_follow;        // null terminated array of global id's
+	g1_id_ref * path_to_follow;        // null terminated array of global id's
 	g1_id_ref next_path;
 
 	// calculated values
@@ -101,7 +101,7 @@ public:
 	//returns the prefered solver
 	virtual g1_map_solver_class *prefered_solver();
 	solve_flags solveparams;
-	g1_map_solver_class *my_solver; //use this one if you know what it is
+	g1_map_solver_class * my_solver; //use this one if you know what it is
 	// path information
 	enum {
 		NO_PATH, GAME_PATH, FINAL_POINT
@@ -113,9 +113,9 @@ public:
 
 	g1_typed_reference_class<g1_object_class> attack_target; // the thing its targeting
 
-	g1_map_piece_class(g1_object_type id, g1_loader_class *fp);
-	void load(g1_loader_class *fp);
-	void skipload(g1_loader_class *fp);
+	g1_map_piece_class(g1_object_type id, g1_loader_class * fp);
+	void load(g1_loader_class * fp);
+	void skipload(g1_loader_class * fp);
 
 	virtual ~g1_map_piece_class();
 
@@ -133,9 +133,9 @@ public:
 		return (((g1_tick_counter+global_id)&3)==0);
 	}
 	virtual void fire();
-	virtual void damage(g1_object_class *obj, int hp, i4_3d_vector damage_dir);
+	virtual void damage(g1_object_class * obj, int hp, i4_3d_vector damage_dir);
 	void lead_target(i4_3d_point_class &lead_point, i4_float shot_speed=-1);
-	virtual void save(g1_saver_class *fp);
+	virtual void save(g1_saver_class * fp);
 	/**
 	   Detection Range of this vehicle.
 	 */
@@ -174,26 +174,26 @@ public:
 	   @return True if ray was changed.
 	 */
 	virtual i4_bool check_collision(
-		g1_object_class *source,
+		g1_object_class * source,
 		const i4_3d_vector &start, i4_3d_vector &ray)
 	{
 		return g1_model_collide_radial(this, draw_params, start, ray);
 	}
 
-	virtual void calc_world_transform(i4_float ratio, i4_transform_class *transform=0);
+	virtual void calc_world_transform(i4_float ratio, i4_transform_class * transform=0);
 	virtual void calc_action_cam(g1_camera_info_struct &cam,
 								 float fr);
 
 	void set_as_controlled_object(g1_view_mode_type mode);
 
-	void set_path(g1_id_ref *path); // null terminated array of global id's
+	void set_path(g1_id_ref * path); // null terminated array of global id's
 
 	g1_rumble_type rumble_type;
 	void init_rumble_sound(g1_rumble_type type);
 	virtual void init();
 
 	virtual void think();
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	i4_bool check_turn_radius();
 
 	virtual void request_remove(); //remove me from map
@@ -244,6 +244,7 @@ public:
 	i4_bool occupy_location()
 	{
 		int ret=g1_object_class::occupy_location();
+
 		if (ret)
 		{
 			get_terrain_info();
@@ -277,7 +278,7 @@ public:
 	   g1_map_piece_class (instances of g1_map_piece_class itself cannot exist)
 	   @return 0 if cannot cast, obj casted to g1_map_piece_class* otherwise
 	 */
-	static g1_map_piece_class *cast(g1_object_class *obj)
+	static g1_map_piece_class *cast(g1_object_class * obj)
 
 	{
 		if (!obj || !(obj->get_type()->get_flag(g1_object_definition_class::TO_MAP_PIECE)))
@@ -287,16 +288,17 @@ public:
 		return (g1_map_piece_class *)obj;
 	};
 
-	virtual i4_bool can_attack(g1_object_class *who); //also used to ask: can we still attack this guy?
-	i4_bool in_range(g1_object_class *o) const
+	virtual i4_bool can_attack(g1_object_class * who); //also used to ask: can we still attack this guy?
+	i4_bool in_range(g1_object_class * o) const
 	{
 		float r=detection_range();
+
 		r*=r;
 		float d=(o->x-x)*(o->x-x) + (o->y-y)*(o->y-y);
 		return (d<=r);
 	};
 
-	li_object *message(li_symbol *message, li_object *message_param, li_environment *env);
+	li_object *message(li_symbol * message, li_object * message_param, li_environment * env);
 };
 
 #endif

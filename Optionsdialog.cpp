@@ -25,7 +25,7 @@
 // Dialogfeld OptionsDialog
 
 
-OptionsDialog::OptionsDialog(CWnd *pParent /*=NULL*/)
+OptionsDialog::OptionsDialog(CWnd * pParent /*=NULL*/)
 	: CPropertyPage(OptionsDialog::IDD)
 {
 	//{{AFX_DATA_INIT(OptionsDialog)
@@ -40,7 +40,7 @@ OptionsDialog::~OptionsDialog()
 	//Cleanup();
 }
 
-void OptionsDialog::DoDataExchange(CDataExchange *pDX)
+void OptionsDialog::DoDataExchange(CDataExchange * pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(OptionsDialog)
@@ -93,7 +93,7 @@ int OptionsDialog::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	return 0;
 }
-BOOL WINAPI EnumDDrawDevice( GUID FAR *lpGUID,
+BOOL WINAPI EnumDDrawDevice( GUID FAR * lpGUID,
 							LPSTR lpDriverDescription,
 							LPSTR lpDriverName,
 							LPVOID lpContext,
@@ -101,11 +101,12 @@ BOOL WINAPI EnumDDrawDevice( GUID FAR *lpGUID,
 {
 	LONG iIndex;
 	//HWND    hWnd = ( HWND )lpContext;
-	CComboBox *m=(CComboBox *)lpContext;
+	CComboBox * m=(CComboBox *)lpContext;
 	LPVOID lpDevice = NULL;
 	//lpDriverName=lpDriverName;//Disable Warning
 	char buf[500];
 	char tbuf[200];
+
 	strcpy(tbuf,"%s auf Monitor ID %i");
 	LoadString(i4_win32_instance,IDS_MONITORDESC,tbuf,200);
 	wsprintf(buf,tbuf,lpDriverDescription,hm);
@@ -152,9 +153,10 @@ BOOL WINAPI EnumDisplayModes( LPDDSURFACEDESC lpDDSurfaceDesc,
 	LONG iIndex;
 	char buff[256];
 	//HWND    hWnd = ( HWND )lpContext;
-	CListBox *m=(CListBox *)lpContext;
+	CListBox * m=(CListBox *)lpContext;
 	LPVOID lpDesc = NULL;
 	char templateb[200];
+
 	strcpy(templateb,"%dx%dx%d");
 	LoadString(i4_win32_instance,IDS_RESOLUTIONDESC,templateb,200);
 	wsprintf( buff, templateb, //"%dx%d, Farbtiefe %d Bit",
@@ -200,9 +202,10 @@ HRESULT WINAPI d3denumdevicescallback(LPGUID lpGuid,
 									  LPVOID lpUserArg
 )
 {
-	CComboBox *list=(CComboBox *)lpUserArg;
+	CComboBox * list=(CComboBox *)lpUserArg;
 	char buf[500];
 	int index=0;
+
 	sprintf(buf,"%s (%s)",lpDeviceDescription,lpDeviceName);
 	index=list->AddString(buf);
 	list->SetItemDataPtr(index,lpDeviceName);
@@ -321,7 +324,7 @@ void OptionsDialog::Apply()
 	else
 	{
 		i4_win32_startup_options.render=R1_RENDER_DIRECTX5_USER_SETTING;
-		char *dt=(char *)m_render_device.GetItemDataPtr(index);
+		char * dt=(char *)m_render_device.GetItemDataPtr(index);
 		int len=strlen(dt);
 		if (i4_win32_startup_options.render_data)
 		{
@@ -414,7 +417,7 @@ BOOL OptionsDialog::OnInitDialog()
 			tb=0;
 			i4_win32_startup_options.texture_bitdepth=0;
 		}
-		CWnd *hWndTex32=GetDlgItem(IDC_Tex32);
+		CWnd * hWndTex32=GetDlgItem(IDC_Tex32);
 		//::EnableWindow(hWndTex32,FALSE);
 		hWndTex32->EnableWindow(FALSE);
 	}
@@ -441,9 +444,10 @@ void OptionsDialog::OnBtnCreate()
 	UINT iIndex;
 	LPDIRECTDRAW lpDD=NULL;
 	LPDIRECTDRAW2 lpDD2=NULL;
+
 	for (int j=0; j<m_resolutions.GetCount(); j++)
 	{
-		void *p=m_resolutions.GetItemDataPtr(j);
+		void * p=m_resolutions.GetItemDataPtr(j);
 		if ((int)p>0x1000)
 		{
 			free(p);
@@ -590,7 +594,7 @@ void OptionsDialog::Cleanup()
 {
 	for (int i=0; i<m_devices.GetCount(); i++)
 	{
-		void *p=m_devices.GetItemDataPtr(i);
+		void * p=m_devices.GetItemDataPtr(i);
 		if ((int)p>0x1000)
 		{
 			free(p);
@@ -600,7 +604,7 @@ void OptionsDialog::Cleanup()
 	m_devices.ResetContent();
 	for (int j=0; j<m_resolutions.GetCount(); j++)
 	{
-		void *p=m_resolutions.GetItemDataPtr(j);
+		void * p=m_resolutions.GetItemDataPtr(j);
 		if ((int)p>0x1000)
 		{
 			free(p);
@@ -620,6 +624,7 @@ void OptionsDialog::OnSelchangeResolutions()
 {
 	LPDDSURFACEDESC lpdesc;
 	int isel=m_resolutions.GetCurSel();
+
 	if (isel<0)
 	{
 		return;
@@ -627,8 +632,8 @@ void OptionsDialog::OnSelchangeResolutions()
 	lpdesc=(LPDDSURFACEDESC) m_resolutions.GetItemData(isel);
 	w32 btd=lpdesc->ddpfPixelFormat.dwRGBBitCount;
 	CheckRadioButton(IDC_Tex16,IDC_TEXDEF,IDC_TEXDEF);
-	CWnd *hWndTex32=GetDlgItem(IDC_Tex32);
-	CWnd *hWndTex16=GetDlgItem(IDC_Tex16);
+	CWnd * hWndTex32=GetDlgItem(IDC_Tex32);
+	CWnd * hWndTex16=GetDlgItem(IDC_Tex16);
 	if (btd==16)
 	{
 		//::EnableWindow(hWndTex32,FALSE);
@@ -648,29 +653,32 @@ void OptionsDialog::OnSelchangeRenderDevice()
 	SetModified(TRUE);
 }
 
-void OptionsDialog::OnReleasedcaptureTextureQuality(NMHDR *pNMHDR, LRESULT *pResult)
+void OptionsDialog::OnReleasedcaptureTextureQuality(NMHDR * pNMHDR, LRESULT * pResult)
 {
 	// TODO: Code für die Behandlungsroutine der Steuerelement-Benachrichtigung hier einfügen
 	char s[20];
 	double d=m_texture_quality.GetPos();
+
 	d=pow(2.0,d);
 	m_texture_qual_text.SetWindowText(_itoa((int) d,s,10));
 	*pResult = 0;
 }
 
-void OptionsDialog::OnReleasedcaptureView(NMHDR *pNMHDR, LRESULT *pResult)
+void OptionsDialog::OnReleasedcaptureView(NMHDR * pNMHDR, LRESULT * pResult)
 {
 	// TODO: Code für die Behandlungsroutine der Steuerelement-Benachrichtigung hier einfügen
 	char s[20];
 	double d=m_view_range.GetPos();
+
 	m_view_range_text.SetWindowText(_itoa((int) d,s,10));
 	*pResult = 0;
 }
 
-void OptionsDialog::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar *pScrollBar)
+void OptionsDialog::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar * pScrollBar)
 {
 	char s[20];
 	double d;
+
 	if ((CSliderCtrl *)pScrollBar==&m_texture_quality)
 	{
 		d=pow(2,m_texture_quality.GetPos());

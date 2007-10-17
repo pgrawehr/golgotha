@@ -12,8 +12,8 @@
 #include "error/error.h"
 #include "status/status.h"
 
-i4_file_class *mp3_in=0;
-i4_file_class *mp3_out=0;
+i4_file_class * mp3_in=0;
+i4_file_class * mp3_out=0;
 
 
 
@@ -52,7 +52,7 @@ int supported_rates = 0;
 
 int outmode = DECODE_AUDIO;
 
-char *listname = NULL;
+char * listname = NULL;
 long outscale  = 32768;
 int checkrange = FALSE;
 int tryresync  = TRUE;
@@ -76,21 +76,21 @@ static struct audio_info_struct ai;
 
 static int init_output_done = FALSE;
 
-static FILE *listfile = NULL;
+static FILE * listfile = NULL;
 
-static void *synth_funcs[2][2][3][2] = {
+static void * synth_funcs[2][2][3][2] = {
 	{ { { synth_1to1, synth_1to1_mono2stereo },
 		{ synth_2to1, synth_2to1_mono2stereo },
 		{ synth_4to1, synth_4to1_mono2stereo } },
 	  { { synth_1to1_8bit, synth_1to1_8bit_mono2stereo },
-	  { synth_2to1_8bit, synth_2to1_8bit_mono2stereo },
-	  { synth_4to1_8bit, synth_4to1_8bit_mono2stereo } } },
+		{ synth_2to1_8bit, synth_2to1_8bit_mono2stereo },
+		{ synth_4to1_8bit, synth_4to1_8bit_mono2stereo } } },
 	{ { { synth_1to1_mono, synth_1to1_mono },
 		{ synth_2to1_mono, synth_2to1_mono },
 		{ synth_4to1_mono, synth_4to1_mono } },
 	  { { synth_1to1_8bit_mono, synth_1to1_8bit_mono },
-	  { synth_2to1_8bit_mono, synth_2to1_8bit_mono },
-	  { synth_4to1_8bit_mono, synth_4to1_8bit_mono } } }
+		{ synth_2to1_8bit_mono, synth_2to1_8bit_mono },
+		{ synth_4to1_8bit_mono, synth_4to1_8bit_mono } } }
 };
 
 void init_mpg123(void)
@@ -135,7 +135,7 @@ void init_mpg123(void)
 
 }
 
-void audio_info_struct_init(struct audio_info_struct *ai)
+void audio_info_struct_init(struct audio_info_struct * ai)
 {
 	ai->rate = -1;
 	ai->gain = -1;
@@ -145,7 +145,7 @@ void audio_info_struct_init(struct audio_info_struct *ai)
 	ai->format = -1;
 }
 
-void print_rheader(struct frame *fr);
+void print_rheader(struct frame * fr);
 
 void init_output(void)
 {
@@ -200,7 +200,7 @@ void init_output(void)
    }
  */
 
-void set_synth(char *arg)
+void set_synth(char * arg)
 {
 	if (*arg == '2')
 	{
@@ -213,13 +213,13 @@ void set_synth(char *arg)
 }
 
 #ifdef VARMODESUPPORT
-void set_varmode(char *arg)
+void set_varmode(char * arg)
 {
 	audiobufsize = ((audiobufsize >> 1) + 63) & 0xffffc0;
 }
 #endif
 
-void set_verbose(char *arg)
+void set_verbose(char * arg)
 {
 	verbose++;
 }
@@ -269,7 +269,7 @@ void reset_audio_samplerate(void)
  * play a frame read read_frame();
  * (re)initialize audio if necessary.
  */
-void play_frame(int init,struct frame *fr)
+void play_frame(int init,struct frame * fr)
 {
 	int clip;
 
@@ -310,11 +310,11 @@ void play_frame(int init,struct frame *fr)
 	 */
 }
 
-void set_synth_functions(struct frame *fr)
+void set_synth_functions(struct frame * fr)
 {
 
-	*((void **)(&fr->synth)) = synth_funcs[force_mono][force_8bit][fr->down_sample][0];
-	*((void **)(&fr->synth_mono)) = synth_funcs[force_mono][force_8bit][fr->down_sample][1];
+	*((void * *)(&fr->synth)) = synth_funcs[force_mono][force_8bit][fr->down_sample][0];
+	*((void * *)(&fr->synth_mono)) = synth_funcs[force_mono][force_8bit][fr->down_sample][1];
 	fr->block_size = 128 >> (force_mono+force_8bit+fr->down_sample);
 
 	if(force_8bit)
@@ -325,10 +325,10 @@ void set_synth_functions(struct frame *fr)
 }
 
 
-i4_bool i4_load_mp3(i4_file_class *in,  // open file at beginging of mp3 data (after header)
-					i4_file_class *out,    // open file ready to write raw data
+i4_bool i4_load_mp3(i4_file_class * in,  // open file at beginging of mp3 data (after header)
+					i4_file_class * out,    // open file ready to write raw data
 					i4_sound_info &actual_output,           // returned
-					i4_status_class *status)   // tells user what's going on
+					i4_status_class * status)   // tells user what's going on
 {
 	//int result;
 	long frameNum = 0;

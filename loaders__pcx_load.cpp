@@ -20,9 +20,10 @@ class i4_pcx_loader_class :
 	public i4_image_loader_class
 {
 public:
-	w16 get_short(w32 offset, void *data)
+	w16 get_short(w32 offset, void * data)
 	{
 		w8 buf[2];
+
 		buf[0]=*(((w8 *)data)+offset);
 		buf[1]=*(((w8 *)data)+offset+1);
 		return (buf[1]<<8)|buf[0];
@@ -34,7 +35,7 @@ public:
 		return 4;
 	}
 
-	virtual i4_bool recognize_header(w8 *buf)
+	virtual i4_bool recognize_header(w8 * buf)
 	{
 		if (buf[0]==10 && // manufacturer
 			buf[2]==1  && // encoding
@@ -50,10 +51,11 @@ public:
 	}
 
 
-	int read_PCX8_line(i4_file_class *fp, w8 *start, sw16 skip, w16 w)
+	int read_PCX8_line(i4_file_class * fp, w8 * start, sw16 skip, w16 w)
 	{
 		int n=0,i;
 		w8 c;
+
 		do
 		{
 			if (!fp->read(&c,1))
@@ -80,16 +82,18 @@ public:
 				start+=skip;
 				n++;
 			}
-		} while (n<w);
+		}
+		while (n<w);
 		return 1;
 	}
 
 
 
-	virtual i4_image_class *load(i4_file_class *fp,
-								 i4_status_class *status)
+	virtual i4_image_class *load(i4_file_class * fp,
+								 i4_status_class * status)
 	{
 		w8 header[128];
+
 		if (fp->read(header,128)!=128)
 		{
 			return 0;
@@ -102,9 +106,9 @@ public:
 		}
 
 
-		i4_image_class *im=i4_create_image(w,h, i4_pal_man.default_8());
+		i4_image_class * im=i4_create_image(w,h, i4_pal_man.default_8());
 		w16 bpl=im->bpl;
-		w8 *data=(w8 *)im->data;
+		w8 * data=(w8 *)im->data;
 
 		w16 y;
 		for (y=0; y<h; y++,data+=bpl)

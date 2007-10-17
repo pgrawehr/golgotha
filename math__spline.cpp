@@ -13,12 +13,12 @@
 #include "error/error.h"
 #include "file/file.h"
 
-i4_linear_allocator *i4_spline_class::p_alloc=0;
+i4_linear_allocator * i4_spline_class::p_alloc=0;
 w32 i4_spline_class::point_refs=0;
 
 void i4_spline_class::move(i4_float x_add, i4_float y_add, i4_float z_add)
 {
-	for (point *p=points; p; p=p->next)
+	for (point * p=points; p; p=p->next)
 	{
 		p->x+=x_add;
 		p->y+=y_add;
@@ -26,10 +26,10 @@ void i4_spline_class::move(i4_float x_add, i4_float y_add, i4_float z_add)
 	}
 }
 
-void i4_spline_class::save(i4_file_class *fp)
+void i4_spline_class::save(i4_file_class * fp)
 {
 	fp->write_32(t_points);
-	for (point *p=points; p; p=p->next)
+	for (point * p=points; p; p=p->next)
 	{
 		fp->write_32(p->frame);
 		fp->write_8(p->selected);
@@ -39,15 +39,15 @@ void i4_spline_class::save(i4_file_class *fp)
 	}
 }
 
-void i4_spline_class::load(i4_file_class *fp)
+void i4_spline_class::load(i4_file_class * fp)
 {
 	cleanup();
 	t_points=fp->read_32();
-	point *last=0;
+	point * last=0;
 
 	for (w32 i=0; i<t_points; i++)
 	{
-		point *p=(point *)p_alloc->alloc();
+		point * p=(point *)p_alloc->alloc();
 		p->frame=fp->read_32();
 		p->selected=fp->read_8();
 		p->x=fp->read_float();
@@ -106,6 +106,7 @@ public:
 		sw16 b[16]= {
 			-1,3,-3,1,3,-6,3,0,-3,0,3,0,1,4,1,0
 		};
+
 		for (w32 i=0; i<16; i++)
 		{
 			elt[i]=(i4_float)b[i];
@@ -115,6 +116,7 @@ public:
 	void transform(i4_1x4_vector &b, i4_1x4_vector &result)
 	{
 		i4_float vx,vy,vz,vt;
+
 		vx=b.x;
 		vy=b.y;
 		vz=b.z;
@@ -130,7 +132,8 @@ public:
 
 void i4_spline_class::delete_selected()
 {
-	point *p,*last=0;
+	point * p,* last=0;
+
 	for (p=points; p; )
 	{
 		if (p->selected)
@@ -143,7 +146,7 @@ void i4_spline_class::delete_selected()
 			{
 				points=p->next;
 			}
-			point *q=p;
+			point * q=p;
 			p=p->next;
 
 			p_alloc->free(q);
@@ -176,7 +179,7 @@ void i4_spline_class::cleanup()
 {
 	while (points)
 	{
-		point *q=points;
+		point * q=points;
 		points=points->next;
 
 		t_points--;
@@ -196,12 +199,13 @@ i4_spline_class::~i4_spline_class()
 	}
 }
 
-i4_spline_class::point *i4_spline_class::add_control_point(i4_float x,
-														   i4_float y,
-														   i4_float z,
-														   w32 frame)
+i4_spline_class::point * i4_spline_class::add_control_point(i4_float x,
+															i4_float y,
+															i4_float z,
+															w32 frame)
 {
-	point *p=points,*last=0;
+	point * p=points,* last=0;
+
 	while (p && p->frame<=frame)
 	{
 		last=p;
@@ -217,7 +221,7 @@ i4_spline_class::point *i4_spline_class::add_control_point(i4_float x,
 	}
 
 
-	point *n=(point *)p_alloc->alloc();
+	point * n=(point *)p_alloc->alloc();
 	n->x=x;
 	n->y=y;
 	n->z=z;
@@ -239,9 +243,10 @@ i4_spline_class::point *i4_spline_class::add_control_point(i4_float x,
 	return n;
 }
 
-i4_spline_class::point *i4_spline_class::get_control_point(w32 p)
+i4_spline_class::point * i4_spline_class::get_control_point(w32 p)
 {
-	point *q=points;
+	point * q=points;
+
 	while (p && q)
 	{
 		p--;
@@ -265,7 +270,7 @@ i4_bool i4_spline_class::get_point(w32 frame, i4_float &x, i4_float &y, i4_float
 		return i4_T;
 	}
 
-	point *l1=points, *l2=points, *l3=points, *l4=points;
+	point * l1=points, * l2=points, * l3=points, * l4=points;
 	while (l4->next && l2->frame<=frame)
 	{
 		l4=l3;
@@ -317,7 +322,7 @@ w32 i4_spline_class::last_frame()
 	{
 		return 0;
 	}
-	point *p;
+	point * p;
 
 	for (p=points; p->next; p=p->next)
 	{
@@ -329,11 +334,11 @@ w32 i4_spline_class::last_frame()
 
 void i4_spline_class::insert_control_points()
 {
-	for (point *p=points; p; p=p->next)
+	for (point * p=points; p; p=p->next)
 	{
 		if (p->selected && p->next && p->next->frame>p->frame+1)
 		{
-			point *n=(point *)p_alloc->alloc();
+			point * n=(point *)p_alloc->alloc();
 			n->x=(p->x + p->next->x)/2.0f;
 			n->y=(p->y + p->next->y)/2.0f;
 			n->z=(p->z + p->next->z)/2.0f;
@@ -348,9 +353,10 @@ void i4_spline_class::insert_control_points()
 	}
 }
 
-i4_spline_class::point *i4_spline_class::get_control_point_previous_to_frame(w32 frame)
+i4_spline_class::point * i4_spline_class::get_control_point_previous_to_frame(w32 frame)
 {
-	point *p=points;
+	point * p=points;
+
 	for (; p && p->frame<frame; p=p->next)
 	{
 		;

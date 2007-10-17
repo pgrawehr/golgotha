@@ -119,7 +119,7 @@ r1_software_gdi_class::~r1_software_gdi_class()
 	render_image=0;
 };
 
-i4_bool r1_software_dd_class::init(i4_display_class *display)
+i4_bool r1_software_dd_class::init(i4_display_class * display)
 {
 	if (display!=i4_dx5_display)
 	{
@@ -179,7 +179,7 @@ i4_bool r1_software_dd_class::init(i4_display_class *display)
 	return i4_T;
 }
 
-i4_bool r1_software_gdi_class::init(i4_display_class *display)
+i4_bool r1_software_gdi_class::init(i4_display_class * display)
 {
 	//The definition of win32_display_class is not available here,
 	//therefore the compiler doesn't know that they are related.
@@ -256,7 +256,7 @@ i4_bool r1_software_gdi_class::expand_type_supported(r1_expand_type type)
 
 
 r1_software_gdi_render_window_class::r1_software_gdi_render_window_class(
-	w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class *api)
+	w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class * api)
 	: r1_software_render_window_class(w,h,expand_type,api)
 {
 	//render target will be local_image, so it seems we don't need
@@ -272,7 +272,7 @@ r1_software_gdi_render_window_class::~r1_software_gdi_render_window_class()
 
 r1_software_dd_render_window_class::r1_software_dd_render_window_class(
 	w16 w, w16 h,r1_expand_type expand_type,
-	r1_render_api_class *api)
+	r1_render_api_class * api)
 	: r1_software_render_window_class(w,h,expand_type,api)
 {
 /*
@@ -326,10 +326,11 @@ r1_software_dd_render_window_class::r1_software_dd_render_window_class(
  */
 }
 
-r1_render_window_class *r1_software_dd_class::create_render_window(int w, int h,
-																   r1_expand_type expand_type)
+r1_render_window_class * r1_software_dd_class::create_render_window(int w, int h,
+																	r1_expand_type expand_type)
 {
-	r1_software_render_window_class *new_window;
+	r1_software_render_window_class * new_window;
+
 	if (w & 1)
 	{
 		w++;
@@ -342,11 +343,12 @@ r1_render_window_class *r1_software_dd_class::create_render_window(int w, int h,
 	return new_window;
 }
 
-r1_render_window_class *r1_software_gdi_class::create_render_window(int w,
-																	int h,
-																	r1_expand_type expand_type)
+r1_render_window_class * r1_software_gdi_class::create_render_window(int w,
+																	 int h,
+																	 r1_expand_type expand_type)
 {
-	r1_software_render_window_class *new_window;
+	r1_software_render_window_class * new_window;
+
 	if (w&1)
 	{
 		w++;
@@ -441,7 +443,7 @@ i4_bool r1_software_gdi_class::resize(w16 new_width,w16 new_height)
 	return i4_T;
 }
 
-void r1_software_gdi_class::copy_part(i4_image_class *im,
+void r1_software_gdi_class::copy_part(i4_image_class * im,
 									  int x, int y, int x1,
 									  int y1, int x2, int y2)
 {
@@ -449,7 +451,7 @@ void r1_software_gdi_class::copy_part(i4_image_class *im,
 	im->put_part(render_image,x,y,x1,y1,x2,y2,ctx);
 }
 
-void r1_software_dd_class::copy_part(i4_image_class *im,
+void r1_software_dd_class::copy_part(i4_image_class * im,
 									 int x, int y,          // position on screen
 									 int x1, int y1,        // area of image to copy
 									 int x2, int y2)
@@ -458,6 +460,7 @@ void r1_software_dd_class::copy_part(i4_image_class *im,
 
 
 	RECT srcRect;
+
 	srcRect.top     = y1;
 	srcRect.bottom  = y2+1;
 	srcRect.left    = x1;
@@ -558,7 +561,7 @@ void r1_software_gdi_render_window_class::draw(i4_draw_context_class &context)
 	//surface->QueryInterface(IID_IDirectDrawSurface3,(void **)&surface3);
 
 	i4_rect_list_class::area_iter cl;
-	i4_rect_list_class *clip=&context.clip;
+	i4_rect_list_class * clip=&context.clip;
 
 	//if (surface3)
 	switch (expand_type)
@@ -704,11 +707,11 @@ void r1_software_dd_render_window_class::draw(i4_draw_context_class &context)
 	pf_software_blt.start();
 
 
-	IDirectDrawSurface3 *surface3=r1_software_render_surface;
+	IDirectDrawSurface3 * surface3=r1_software_render_surface;
 	//surface->QueryInterface(IID_IDirectDrawSurface3,(void **)&surface3);
 
 	i4_rect_list_class::area_iter cl;
-	i4_rect_list_class *clip=&context.clip;
+	i4_rect_list_class * clip=&context.clip;
 
 	if (r1_software_dd_class_instance.expand_depth>2)
 	{
@@ -734,8 +737,8 @@ void r1_software_dd_render_window_class::draw(i4_draw_context_class &context)
 				//                             surface3,&srcRect,
 				//                             DDBLTFAST_NOCOLORKEY));
 				int ix,iy;
-				w16 *src;
-				w32 *dst;
+				w16 * src;
+				w32 * dst;
 				w32 srccol;
 				for (iy=cl->y1; iy<=cl->y2; iy++)
 				{
@@ -960,9 +963,10 @@ void r1_software_dd_class::clear_area(int x1, int y1, int x2, int y2, w32 color,
 
 }
 
-i4_image_class *r1_software_dd_class::create_compatible_image(w16 w, w16 h)
+i4_image_class * r1_software_dd_class::create_compatible_image(w16 w, w16 h)
 {
-	i4_image_class *a = dx5_common.create_image(w,h, DX5_VRAM);
+	i4_image_class * a = dx5_common.create_image(w,h, DX5_VRAM);
+
 	if (!dx5_common.get_surface(a))
 	{
 		delete a;
@@ -977,7 +981,7 @@ i4_image_class *r1_software_dd_class::create_compatible_image(w16 w, w16 h)
 	return a;
 }
 
-i4_image_class *r1_software_gdi_class::create_compatible_image(w16 w, w16 h)
+i4_image_class * r1_software_gdi_class::create_compatible_image(w16 w, w16 h)
 {
 	return i4_create_image(w,h,i4_pal_man.register_pal(&fmt));
 };

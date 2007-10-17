@@ -49,16 +49,16 @@ inline w32 pack_argb(int a, int r, int g, int b)
 	return (a<<24) | (r<<16) | (g<<8) | b;
 }
 
-void i4_dither_quantize(i4_image_class *source, i4_image_class *dest)
+void i4_dither_quantize(i4_image_class * source, i4_image_class * dest)
 {
 	int w=source->width(), h=source->height(), x,y;
 
 	I4_ASSERT(source && dest && w==dest->width() && h==dest->height(), "source size !=dest");
 
 	int size=(w+1)*(h+1)*4;
-	w32 *er_im=(w32 *)I4_MALLOC(size,"");
+	w32 * er_im=(w32 *)I4_MALLOC(size,"");
 	memset(er_im, 0, size);
-	w32 *cur_er=er_im;
+	w32 * cur_er=er_im;
 
 	i4_draw_context_class context(0,0, w-1, h-1);
 	for (y=0; y<h; y++)

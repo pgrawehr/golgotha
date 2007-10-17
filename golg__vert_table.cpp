@@ -41,6 +41,7 @@ static i4_bool g_bIsAequidistant=i4_T;
 
 LI_HEADER(restore_default_heights) {
 	i4_float val=0.0;
+
 	for (int i=0; i<256; i++)
 	{
 		g1_vert_height_table[i]=val;
@@ -52,6 +53,7 @@ LI_HEADER(restore_default_heights) {
 
 LI_HEADER(get_height_entry) {
 	w32 in=li_get_int(li_eval(li_first(o,env),env),env);
+
 	if (in<0||in>255)
 	{
 		li_error(env,"USER: The height table has only 256 entries (0-255).");
@@ -61,6 +63,7 @@ LI_HEADER(get_height_entry) {
 
 LI_HEADER(set_height_entry) {
 	w32 in=li_get_int(li_eval(li_first(o,env),env),env);
+
 	if (in<0||in>255)
 	{
 		li_error(env,"USER: The height table has only 256 entries (0-255).");
@@ -73,6 +76,7 @@ LI_HEADER(set_height_entry) {
 
 LI_HEADER(scale_heights_by) {
 	i4_float by=li_get_float(li_eval(li_first(o,env),env),env);
+
 	for (int i=0; i<255; i++)
 	{
 		g1_vert_height_table[i]*=by;
@@ -83,6 +87,7 @@ LI_HEADER(scale_heights_by) {
 LI_HEADER(set_height_aequidistance) {
 	i4_float val=0.0;
 	i4_float diff=li_get_float(li_eval(li_first(o,env),env),env);
+
 	for (int i=0; i<256; i++)
 	{
 		g1_vert_height_table[i]=val;
@@ -94,6 +99,7 @@ LI_HEADER(set_height_aequidistance) {
 
 LI_HEADER(get_height_aequidistance) {
 	i4_float diff=g1_vert_height_table[1]-g1_vert_height_table[0];
+
 	if (g_bIsAequidistant)
 	{
 		return new li_float(diff);

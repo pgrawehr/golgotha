@@ -22,12 +22,12 @@ i4_array<g1_object_defaults_struct> g1_obj_defaults(0,32);
 i4_array<g1_stank_ammo_type_struct> g1_stank_ammo_types(0,32);
 i4_array<g1_damage_map_struct>      g1_damage_maps(0,32);
 
-li_object *g1_defaults(li_object *i, li_environment *env)
+li_object *g1_defaults(li_object * i, li_environment * env)
 {
 	while (i)
 	{
-		g1_object_defaults_struct *d=g1_obj_defaults.add();
-		li_object *o=li_car(i,env);
+		g1_object_defaults_struct * d=g1_obj_defaults.add();
+		li_object * o=li_car(i,env);
 
 		strcpy(d->object_name, li_get_string(li_symbol::get(li_car(o,env),env)->name(),env));
 		o=li_cdr(o,env);
@@ -56,12 +56,12 @@ li_object *g1_defaults(li_object *i, li_environment *env)
 	return 0;
 }
 
-li_object *g1_add_stank_weapons(li_object *i, li_environment *env)
+li_object *g1_add_stank_weapons(li_object * i, li_environment * env)
 {
 	while (i)
 	{
-		li_object *o=li_car(i,env);
-		g1_stank_ammo_type_struct *a=g1_stank_ammo_types.add();
+		li_object * o=li_car(i,env);
+		g1_stank_ammo_type_struct * a=g1_stank_ammo_types.add();
 		a->weapon_type=li_symbol::get(li_car(o,env),env);
 		o=li_cdr(o,env);
 		a->max_amount=li_get_int(li_eval(li_car(o,env),env),env);
@@ -84,17 +84,17 @@ li_object *g1_add_stank_weapons(li_object *i, li_environment *env)
 	return 0;
 }
 
-li_object *g1_def_weapon_damage(li_object *i, li_environment *env)
+li_object *g1_def_weapon_damage(li_object * i, li_environment * env)
 {
 	while (i)
 	{
-		li_object *o=li_car(i,env), *c;
-		g1_damage_map_struct *a=g1_damage_maps.add();
+		li_object * o=li_car(i,env), * c;
+		g1_damage_map_struct * a=g1_damage_maps.add();
 
 		a->object_for=li_symbol::get(li_car(o,env),env);
 		o=li_cdr(o,env);
 
-		li_symbol *htype=li_symbol::get(li_car(o,env),env);
+		li_symbol * htype=li_symbol::get(li_car(o,env),env);
 		if (htype==li_sing.get())
 		{
 			a->hurt_type=g1_damage_map_struct::HURT_SINGLE_GUY;
@@ -150,6 +150,7 @@ li_object *g1_def_weapon_damage(li_object *i, li_environment *env)
 g1_damage_map_struct *g1_find_damage_map(int object_type)
 {
 	int t=g1_damage_maps.size();
+
 	for (int i=0; i<t; i++)
 	{
 		if (g1_get_object_type(g1_damage_maps[i].object_for)==object_type)
@@ -174,7 +175,7 @@ int g1_damage_map_struct::get_damage_for(int object_type)
 	return default_damage;
 }
 
-g1_stank_ammo_type_struct *g1_find_stank_ammo_type(li_symbol *sym)
+g1_stank_ammo_type_struct *g1_find_stank_ammo_type(li_symbol * sym)
 {
 	for (int i=0; i<g1_stank_ammo_types.size(); i++)
 	{
@@ -196,7 +197,7 @@ void g1_load_object_defaults()
 	li_load("scheme/balance.scm",0);
 }
 
-g1_object_defaults_struct *g1_get_object_defaults(const char *object_name,
+g1_object_defaults_struct *g1_get_object_defaults(const char * object_name,
 												  i4_bool barf_on_error)
 {
 	if (!g1_obj_defaults.size())

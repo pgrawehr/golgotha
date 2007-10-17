@@ -17,7 +17,7 @@
 #include "saver_id.h"
 #include "map_vert.h"
 
-g1_object_chain_class *g1_map_cell_class::get_solid_list()
+g1_object_chain_class * g1_map_cell_class::get_solid_list()
 {
 	if (!object_list || !object_list->object->get_flag(g1_object_class::BLOCKING))
 	{
@@ -30,12 +30,13 @@ g1_object_chain_class *g1_map_cell_class::get_solid_list()
 }
 
 
-g1_object_chain_class *g1_map_cell_class::get_non_solid_list()
+g1_object_chain_class * g1_map_cell_class::get_non_solid_list()
 {
-	g1_object_chain_class *p=object_list;
+	g1_object_chain_class * p=object_list;
 
 	while (p && p->object->get_flag(g1_object_class::BLOCKING))
 		p=p->next;
+
 
 
 	return p;
@@ -53,7 +54,7 @@ void g1_map_cell_class::add_object(g1_object_chain_class &o)
 	else
 	{
 		// add non solids after all solids
-		g1_object_chain_class *last=object_list, *p=object_list->next;
+		g1_object_chain_class * last=object_list, * p=object_list->next;
 		while (p && p->object->get_flag(g1_object_class::BLOCKING))
 		{
 			last=p;
@@ -73,7 +74,7 @@ i4_bool g1_map_cell_class::remove_object(g1_object_chain_class &o)
 	}
 	else
 	{
-		g1_object_chain_class *c=object_list, *last=0;
+		g1_object_chain_class * c=object_list, * last=0;
 		while (c && c!=&o)
 		{
 			last=c;
@@ -122,7 +123,7 @@ void g1_map_cell_class::recalc_top_left(int cx, int cy)
 	}                                              // normal = 0,0,1
 	else
 	{
-		g1_map_vertex_class *v=g1_get_map()->vertex(cx,cy);
+		g1_map_vertex_class * v=g1_get_map()->vertex(cx,cy);
 
 		float h0=v->get_height(), h2=v[mw+1].get_height(), h3=v[mw+1+1].get_height();
 
@@ -141,13 +142,14 @@ void g1_map_cell_class::recalc_top_left(int cx, int cy)
 void g1_map_cell_class::recalc_bottom_right(int cx, int cy)
 {
 	int mw=g1_get_map()->width(), mh=g1_get_map()->height();
+
 	if (cx>=mw || cy>=mh)
 	{
 		bottom_right_normal=(31) | (15<<5) | (15<<10);
 	}                                                  // normal = 0,0,1
 	else
 	{
-		g1_map_vertex_class *v=g1_get_map()->vertex(cx,cy);
+		g1_map_vertex_class * v=g1_get_map()->vertex(cx,cy);
 		float h0=v->get_height(), h1=v[1].get_height(), h3=v[mw+1+1].get_height();
 
 		i4_3d_vector v1(-1, 0, h0-h1), v2(0, 1, h3-h1);
@@ -162,10 +164,11 @@ void g1_map_cell_class::recalc_bottom_right(int cx, int cy)
 }
 
 
-void g1_save_map_cells(g1_map_cell_class *list,
-					   int lsize, i4_saver_class *fp)
+void g1_save_map_cells(g1_map_cell_class * list,
+					   int lsize, i4_saver_class * fp)
 {
 	int i; //,j;
+
 	i4_rle_class<w16> fp16(fp);
 
 	fp->mark_section("golgotha cell type v1");
@@ -199,10 +202,11 @@ void g1_save_map_cells(g1_map_cell_class *list,
 
 
 
-i4_bool g1_load_map_cells(g1_map_cell_class *list, int lsize,
-						  w16 *tile_remap, i4_loader_class *fp)
+i4_bool g1_load_map_cells(g1_map_cell_class * list, int lsize,
+						  w16 * tile_remap, i4_loader_class * fp)
 {
 	int i;
+
 	i4_rle_class<w16> fp16(fp);
 
 	//////////////////////////////////////////////////////////
@@ -306,7 +310,7 @@ i4_bool g1_load_map_cells(g1_map_cell_class *list, int lsize,
 ///////////////////// OLD LOAD CODE //////////////////////////
 
 
-void g1_map_cell_class::load_v2(i4_file_class *fp, w16 *tile_remap)
+void g1_map_cell_class::load_v2(i4_file_class * fp, w16 * tile_remap)
 {
 	object_list=0;
 	//  function_block=0xffff;
@@ -320,7 +324,7 @@ void g1_map_cell_class::load_v2(i4_file_class *fp, w16 *tile_remap)
 	bottom_right_normal=0x8000;
 }
 
-void g1_map_cell_class::load_v3(i4_file_class *fp, w16 *tile_remap)
+void g1_map_cell_class::load_v3(i4_file_class * fp, w16 * tile_remap)
 {
 	object_list=0;
 
@@ -335,7 +339,7 @@ void g1_map_cell_class::load_v3(i4_file_class *fp, w16 *tile_remap)
 	bottom_right_normal=0x8000;
 }
 
-void g1_map_cell_class::load_v4(i4_file_class *fp, w16 *tile_remap)
+void g1_map_cell_class::load_v4(i4_file_class * fp, w16 * tile_remap)
 {
 	object_list=0;
 
@@ -353,7 +357,7 @@ void g1_map_cell_class::load_v4(i4_file_class *fp, w16 *tile_remap)
 	bottom_right_normal=0x8000;
 }
 
-void g1_map_cell_class::load_v5(i4_file_class *fp, w16 *tile_remap)
+void g1_map_cell_class::load_v5(i4_file_class * fp, w16 * tile_remap)
 {
 	object_list=0;
 
@@ -374,7 +378,7 @@ void g1_map_cell_class::load_v5(i4_file_class *fp, w16 *tile_remap)
 	bottom_right_normal=0x8000;
 }
 
-void g1_map_cell_class::load_v6(i4_file_class *fp, w16 *tile_remap)
+void g1_map_cell_class::load_v6(i4_file_class * fp, w16 * tile_remap)
 {
 	object_list=0;
 	type     = tile_remap[fp->read_16()];
@@ -408,7 +412,7 @@ void g1_map_cell_class::load_v6(i4_file_class *fp, w16 *tile_remap)
 void g1_map_cell_class::unfog(int x, int y)
 {
 	flags&=~FOGGED;
-	g1_map_vertex_class *v=g1_verts+x+y*(g1_map_width+1);
+	g1_map_vertex_class * v=g1_verts+x+y*(g1_map_width+1);
 	v->set_flag(g1_map_vertex_class::FOGGED,0);
 	v++;
 	v->set_flag(g1_map_vertex_class::FOGGED,0);

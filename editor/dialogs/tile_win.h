@@ -20,7 +20,7 @@ class g1_quad_object_class;
 class g1_3d_tile_window :
 	public g1_3d_pick_window
 {
-	g1_quad_object_class *object;
+	g1_quad_object_class * object;
 
 public:
 	int tile_num;
@@ -34,14 +34,14 @@ public:
 	g1_3d_tile_window(w16 w, w16 h,
 					  int tile_num,
 					  g1_3d_pick_window_camera_struct &camera,
-					  i4_image_class *active_back,
-					  i4_image_class *passive_back,
-					  i4_event_reaction_class *reaction);
+					  i4_image_class * active_back,
+					  i4_image_class * passive_back,
+					  i4_event_reaction_class * reaction);
 
 	i4_bool selected();
 	void do_press();
 	void do_edit();
-	void draw_object(g1_draw_context_class *context);
+	void draw_object(g1_draw_context_class * context);
 	i4_menu_item_class *copy()
 	{
 		return new g1_3d_tile_window(width(), height(),
@@ -50,7 +50,7 @@ public:
 									 reaction->copy());
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"object window");
 	}

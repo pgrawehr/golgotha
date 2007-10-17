@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 /*
  * jmemnobs.c
@@ -26,7 +26,7 @@
 #define JPEG_INTERNALS
 #include "loaders/jpg/jinclude.h"
 #include "loaders/jpg/jpeglib.h"
-#include "loaders/jpg/jmemsys.h"		/* import the system-dependent declarations */
+#include "loaders/jpg/jmemsys.h"     /* import the system-dependent declarations */
 #include "memory/malloc.h"
 
 //#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare malloc(),free() */
@@ -41,15 +41,15 @@
  */
 
 GLOBAL(void *)
-jpeg_get_small (j_common_ptr cinfo, size_t sizeofobject)
+jpeg_get_small(j_common_ptr cinfo, size_t sizeofobject)
 {
-  return (void *) I4_MALLOC(sizeofobject, "jpeg_get_small");
+	return (void *) I4_MALLOC(sizeofobject, "jpeg_get_small");
 }
 
 GLOBAL(void)
-jpeg_free_small (j_common_ptr cinfo, void * object, size_t sizeofobject)
+jpeg_free_small(j_common_ptr cinfo, void * object, size_t sizeofobject)
 {
-  i4_free(object);
+	i4_free(object);
 }
 
 
@@ -61,15 +61,15 @@ jpeg_free_small (j_common_ptr cinfo, void * object, size_t sizeofobject)
  */
 
 GLOBAL(void FAR *)
-jpeg_get_large (j_common_ptr cinfo, size_t sizeofobject)
+jpeg_get_large(j_common_ptr cinfo, size_t sizeofobject)
 {
-  return (void FAR *) I4_MALLOC(sizeofobject, "jpeg_get_large");
+	return (void FAR *) I4_MALLOC(sizeofobject, "jpeg_get_large");
 }
 
 GLOBAL(void)
-jpeg_free_large (j_common_ptr cinfo, void FAR * object, size_t sizeofobject)
+jpeg_free_large(j_common_ptr cinfo, void FAR * object, size_t sizeofobject)
 {
-  i4_free(object);
+	i4_free(object);
 }
 
 
@@ -79,10 +79,10 @@ jpeg_free_large (j_common_ptr cinfo, void FAR * object, size_t sizeofobject)
  */
 
 GLOBAL(long)
-jpeg_mem_available (j_common_ptr cinfo, long min_bytes_needed,
-		    long max_bytes_needed, long already_allocated)
+jpeg_mem_available(j_common_ptr cinfo, long min_bytes_needed,
+				   long max_bytes_needed, long already_allocated)
 {
-  return max_bytes_needed;
+	return max_bytes_needed;
 }
 
 
@@ -93,10 +93,10 @@ jpeg_mem_available (j_common_ptr cinfo, long min_bytes_needed,
  */
 
 GLOBAL(void)
-jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
-			 long total_bytes_needed)
+jpeg_open_backing_store(j_common_ptr cinfo, backing_store_ptr info,
+						long total_bytes_needed)
 {
-  ERREXIT(cinfo, JERR_NO_BACKING_STORE);
+	ERREXIT(cinfo, JERR_NO_BACKING_STORE);
 }
 
 
@@ -106,13 +106,13 @@ jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
  */
 
 GLOBAL(long)
-jpeg_mem_init (j_common_ptr cinfo)
+jpeg_mem_init(j_common_ptr cinfo)
 {
-  return 0;			/* just set max_memory_to_use to 0 */
+	return 0;       /* just set max_memory_to_use to 0 */
 }
 
 GLOBAL(void)
-jpeg_mem_term (j_common_ptr cinfo)
+jpeg_mem_term(j_common_ptr cinfo)
 {
-  /* no work */
+	/* no work */
 }

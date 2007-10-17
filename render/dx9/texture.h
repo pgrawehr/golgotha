@@ -30,17 +30,17 @@ public:
 	{
 public:
 		R1_TEX_NO_HEAP_USED_NODE_DATA
-		IDirect3DTexture9 *tex;
+		IDirect3DTexture9 * tex;
 		//D3DTEXTUREHANDLE    texture_handle;
 		//used for async loading
-		w8 *data;
-		i4_file_class *async_fp;
-		r1_dx9_texture_class *self_tman; //Back reference to our tman.
+		w8 * data;
+		i4_file_class * async_fp;
+		r1_dx9_texture_class * self_tman; //Back reference to our tman.
 	};
 
-	r1_texture_no_heap_class *tex_no_heap;
+	r1_texture_no_heap_class * tex_no_heap;
 
-	r1_dx9_texture_class(const i4_pal *pal);
+	r1_dx9_texture_class(const i4_pal * pal);
 
 	~r1_dx9_texture_class()
 	{
@@ -68,21 +68,21 @@ public:
 	i4_image_class *get_texture_image(r1_texture_handle handle, int frame_counter, int desired_width);
 
 	//!Changes the given texture to the new image
-	int set_texture_image(r1_texture_handle handle, i4_image_class *im);
+	int set_texture_image(r1_texture_handle handle, i4_image_class * im);
 
 	i4_pal *MatchingPal(LPDDSURFACEDESC ddsd);
-	i4_pal *MatchingPal9(D3DSURFACE_DESC *ddsd);
+	i4_pal *MatchingPal9(D3DSURFACE_DESC * ddsd);
 
-	i4_bool immediate_mip_load(r1_mip_load_info *load_info);
-	i4_bool async_mip_load(r1_mip_load_info *load_info);
+	i4_bool immediate_mip_load(r1_mip_load_info * load_info);
+	i4_bool async_mip_load(r1_mip_load_info * load_info);
 
 	i4_critical_section_class array_lock;
 
 	i4_array<used_node *> finished_array;
 
-	void async_load_finished(used_node *u);
+	void async_load_finished(used_node * u);
 
-	void free_mip(void *vram_handle);
+	void free_mip(void * vram_handle);
 
 	void next_frame();
 

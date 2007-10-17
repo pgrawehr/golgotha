@@ -20,14 +20,14 @@ class g1_map_vertex_class;
 
 // these are mirrored from the current map, don't
 // change them directly
-extern g1_map_cell_class *g1_cells;
-extern g1_map_vertex_class *g1_verts;
+extern g1_map_cell_class * g1_cells;
+extern g1_map_vertex_class * g1_verts;
 extern int g1_map_width, g1_map_height;
 extern int g1_map_width_plus_one;
 
-extern g1_map_class *g1_current_map_PRIVATE;
+extern g1_map_class * g1_current_map_PRIVATE;
 
-void g1_set_map(g1_map_class *map);
+void g1_set_map(g1_map_class * map);
 
 /*! Returns true if a map is loaded
    	Many commands will fail if this returns i4_F, so be sure to always check this first.

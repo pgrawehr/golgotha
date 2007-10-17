@@ -25,10 +25,10 @@ class g1_camera_info_struct;
 class g1_draw_context_class;
 class i4_transform_class;
 
-void g1_draw_sky(i4_window_class *window,
+void g1_draw_sky(i4_window_class * window,
 				 g1_camera_info_struct &current_camera,
 				 i4_transform_class &transform,
-				 g1_draw_context_class *context);
+				 g1_draw_context_class * context);
 
 extern li_type_number li_g1_sky_type;
 class li_g1_sky :
@@ -36,9 +36,9 @@ class li_g1_sky :
 {
 	friend class li_g1_sky_function;
 protected:
-	li_string *name;
+	li_string * name;
 public:
-	li_g1_sky(li_string *_name) :
+	li_g1_sky(li_string * _name) :
 		li_object(li_g1_sky_type),
 		name(_name)
 	{
@@ -55,7 +55,7 @@ public:
 	{
 		name=new li_string(str);
 	}
-	li_g1_sky(const char *str) :
+	li_g1_sky(const char * str) :
 		li_object(li_g1_sky_type)
 	{
 		name=new li_string(str);
@@ -64,7 +64,7 @@ public:
 	{
 		return name;
 	}
-	static li_g1_sky *get(li_object *o, li_environment *env)
+	static li_g1_sky *get(li_object * o, li_environment * env)
 	{
 		check_type(o,li_g1_sky_type,env);
 		return (li_g1_sky *)o;
@@ -80,10 +80,10 @@ class g1_sky_view :
 {
 	int offset;
 	i4_bool active;
-	i4_event_handler_class *eh;
+	i4_event_handler_class * eh;
 public:
 	static int sky_scroll_offset;
-	g1_sky_view(w16 w, w16 h, int offset,i4_event_handler_class *handler)
+	g1_sky_view(w16 w, w16 h, int offset,i4_event_handler_class * handler)
 		: i4_window_class(w,h),
 		  offset(offset)
 	{
@@ -112,9 +112,9 @@ public:
 
 	void draw(i4_draw_context_class &context);
 
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"sky_view");
 	}
@@ -124,18 +124,18 @@ class r1_render_window_class;
 class g1_sky_picker_class :
 	public i4_color_window_class
 {
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	i4_array<r1_render_window_class *> render_windows;
-	i4_event_handler_class *eh;
+	i4_event_handler_class * eh;
 
 
 public:
-	g1_sky_picker_class(i4_graphical_style_class *style,
-						i4_event_handler_class *handler=0);
+	g1_sky_picker_class(i4_graphical_style_class * style,
+						i4_event_handler_class * handler=0);
 	~g1_sky_picker_class();
 
-	void receive_event(i4_event *ev);
-	void name(char *buffer)
+	void receive_event(i4_event * ev);
+	void name(char * buffer)
 	{
 		static_name(buffer,"sky picker");
 	}

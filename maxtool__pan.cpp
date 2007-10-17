@@ -38,7 +38,7 @@ public:
 
 static m1_pan_state_class pan;
 
-li_object *m1_pan(li_object *o, li_environment *env)
+li_object *m1_pan(li_object * o, li_environment * env)
 //{{{
 {
 	m1_render_window->set_state(&pan);

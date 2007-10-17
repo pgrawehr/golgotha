@@ -50,8 +50,8 @@ enum
 };
 extern int li_num_sys_functions;
 
-void *set_symbol_value(void *symbol, void *value, li_environment *env);
-void *symbol_value(void *symbol, li_environment *env);
+void *set_symbol_value(void * symbol, void * value, li_environment * env);
+void *symbol_value(void * symbol, li_environment * env);
 struct lisp_sys_function
 {
 	ltype type;

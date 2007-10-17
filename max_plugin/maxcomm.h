@@ -30,8 +30,8 @@ public:
 	int create(const i4_const_str &name);
 	int open(const i4_const_str &name);
 
-	w32 read(char *buff, w32 max_size);
-	w32 write(char *buff, w32 size);
+	w32 read(char * buff, w32 max_size);
+	w32 write(char * buff, w32 size);
 
 	int read_ready();
 };

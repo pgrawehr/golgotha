@@ -15,15 +15,16 @@
 #include "video/display.h"
 
 // this image is used if the correct image could not be loaded
-static i4_image_class *default_image=0;
+static i4_image_class * default_image=0;
 static int images_have_been_loaded=0;
 
 
-g1_image_ref *g1_image_ref::first=0;
+g1_image_ref * g1_image_ref::first=0;
 
-g1_image_ref::g1_image_ref(const char *filename)
+g1_image_ref::g1_image_ref(const char * filename)
 {
 	int l=strlen(filename)+1;
+
 	if (l>255)
 	{
 		i4_error("WARNING: The path to %s is to long.",filename);
@@ -48,9 +49,10 @@ g1_image_ref::~g1_image_ref()
 	}
 	else
 	{
-		g1_image_ref *f=first;
+		g1_image_ref * f=first;
 		while (f->next!=this)
 			f=f->next;
+
 
 		f->next=next;
 	}
@@ -67,7 +69,7 @@ void g1_image_ref::load()
 
 }
 
-void g1_image_ref::set_image(const char *filename)
+void g1_image_ref::set_image(const char * filename)
 {
 	cleanup();
 
@@ -110,7 +112,7 @@ void g1_load_images()
 	}
 
 
-	for (g1_image_ref *f=g1_image_ref::first; f; f=f->next)
+	for (g1_image_ref * f=g1_image_ref::first; f; f=f->next)
 	{
 		f->cleanup();
 		f->load();
@@ -123,7 +125,7 @@ void g1_load_images()
 
 void g1_unload_images()
 {
-	for (g1_image_ref *f=g1_image_ref::first; f; f=f->next)
+	for (g1_image_ref * f=g1_image_ref::first; f; f=f->next)
 	{
 		f->cleanup();
 	}
@@ -137,7 +139,7 @@ void g1_unload_images()
 }
 
 
-g1_team_icon_ref::g1_team_icon_ref(const char *filename)
+g1_team_icon_ref::g1_team_icon_ref(const char * filename)
 	: g1_image_ref(filename)
 {
 	for (int i=0; i<G1_MAX_PLAYERS; i++)
@@ -181,12 +183,12 @@ void g1_team_icon_ref::load()
 	g1_image_ref::load();
 
 
-	const i4_pal *pal=i4_current_app->get_display()->get_palette();
+	const i4_pal * pal=i4_current_app->get_display()->get_palette();
 
 	for (int i=0; i<G1_MAX_PLAYERS; i++)
 	{
 		int w=im->width(), h=im->height();
-		i4_image_class *out=i4_create_image(w,h, pal);
+		i4_image_class * out=i4_create_image(w,h, pal);
 
 		tr=g1_player_tint_data[i].r;
 		tg=g1_player_tint_data[i].g;

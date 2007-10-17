@@ -24,15 +24,15 @@
 
 i4_profile_class pf_sfx_update("sfx_update");
 
-s1_sfx_ref *s1_sfx_ref::first=0;
-s1_sound_handle *s1_sound_handle::first=0;
+s1_sfx_ref * s1_sfx_ref::first=0;
+s1_sound_handle * s1_sound_handle::first=0;
 int show_sfx=0;
 
 
 static char sfx_path[80];
 
 
-static void get_reg(char *var, char *buffer, int max_buffer, char *def)
+static void get_reg(char * var, char * buffer, int max_buffer, char * def)
 {
 	if (i4_get_registry(I4_REGISTRY_USER,
 						"SOFTWARE\\Crack dot Com\\Golgotha\\1.0",
@@ -41,7 +41,7 @@ static void get_reg(char *var, char *buffer, int max_buffer, char *def)
 		return ;
 	}
 
-	char *c=getenv(var);
+	char * c=getenv(var);
 	if (c)
 	{
 		strncpy(buffer, c, max_buffer);
@@ -64,7 +64,7 @@ char *s1_get_sfx_path()
 }
 
 
-static char *add_sfx_path(char *filename, char *buffer)
+static char *add_sfx_path(char * filename, char * buffer)
 {
 	sprintf(buffer, "%s/%s", s1_get_sfx_path(), filename);
 	return buffer;
@@ -74,7 +74,7 @@ s1_sound_handle::~s1_sound_handle()
 {
 	if (playing)
 	{
-		s1_end_looping(*this);
+		s1_end_looping(* this);
 	}
 }
 
@@ -96,7 +96,7 @@ static i4_voice_class *load_sfx(s1_sfx_ref &ref)
 		return 0;
 	}
 
-	i4_file_class *fp=i4_open(add_sfx_path(ref.name, buf));
+	i4_file_class * fp=i4_open(add_sfx_path(ref.name, buf));
 	if (!fp)
 	{
 		i4_warning("sfx missing %s (%s:%d)\n", ref.name,
@@ -133,10 +133,10 @@ static i4_voice_class *load_sfx(s1_sfx_ref &ref)
 		p.capable_3d=i4_T;
 	}
 
-	i4_voice_class *v = i4_sound_man->alloc(info.size, p);
+	i4_voice_class * v = i4_sound_man->alloc(info.size, p);
 	if (v)
 	{
-		void *b1,*b2;
+		void * b1,* b2;
 		w32 s1,s2;
 
 		v->lock(0, info.size, b1, s1, b2, s2);
@@ -150,7 +150,7 @@ static i4_voice_class *load_sfx(s1_sfx_ref &ref)
 
 
 
-s1_sfx_ref::s1_sfx_ref(char *filename, w8 flags, w8 priority, float dist, char *file, int line)
+s1_sfx_ref::s1_sfx_ref(char * filename, w8 flags, w8 priority, float dist, char * file, int line)
 	: flags(flags),
 	  name(filename),
 	  file_defined_in(file),
@@ -174,7 +174,7 @@ s1_sfx_ref::~s1_sfx_ref()
 	}
 	else
 	{
-		s1_sfx_ref *last=0, *p=first;
+		s1_sfx_ref * last=0, * p=first;
 		for (; p!=this && p;)
 		{
 			last=p;
@@ -194,10 +194,10 @@ s1_sfx_ref::~s1_sfx_ref()
 
 struct channel_info
 {
-	i4_stream_wav_player *stream;
-	i4_voice_class *voice;
-	s1_sfx_ref *originator;
-	s1_sound_handle *loop_handler;
+	i4_stream_wav_player * stream;
+	i4_voice_class * voice;
+	s1_sfx_ref * originator;
+	s1_sound_handle * loop_handler;
 
 	void free()
 	{
@@ -247,7 +247,7 @@ void s1_load()      // load all the referenced static & dynamic sounds
 		}
 	}
 
-	for (s1_sfx_ref *s=s1_sfx_ref::first; s; s=s->next)
+	for (s1_sfx_ref * s=s1_sfx_ref::first; s; s=s->next)
 	{
 		if ((s->flags&S1_STREAMED)==0 && !s->base_sfx)
 		{
@@ -268,7 +268,7 @@ void s1_load()      // load all the referenced static & dynamic sounds
 
 void s1_unload()
 {
-	for (s1_sfx_ref *s=s1_sfx_ref::first; s; s=s->next)
+	for (s1_sfx_ref * s=s1_sfx_ref::first; s; s=s->next)
 	{
 		if (s->base_sfx)
 		{
@@ -295,10 +295,10 @@ static float get_dist_sqrd(float x, float y, float z)
 		   (camera_pos.z-z)*(camera_pos.z-z);
 }
 
-int channel_compare(const void *va, const void *vb)
+int channel_compare(const void * va, const void * vb)
 {
-	const channel_info *a=(channel_info *)va;
-	const channel_info *b=(channel_info *)vb;
+	const channel_info * a=(channel_info *)va;
+	const channel_info * b=(channel_info *)vb;
 
 	if (a->originator->priority>b->originator->priority)
 	{
@@ -355,9 +355,10 @@ int channel_compare(const void *va, const void *vb)
 	}
 }
 
-int find_channel(s1_sfx_ref *ref, s1_sound_handle *h)
+int find_channel(s1_sfx_ref * ref, s1_sound_handle * h)
 {
 	int use=-1,i;
+
 	for (i=0; i<T_CHANNELS; i++)
 	{
 		if (!channels[i].voice)
@@ -384,7 +385,7 @@ int find_channel(s1_sfx_ref *ref, s1_sound_handle *h)
 	}
 
 	// the worst channel after sorting
-	channel_info *w=channels+T_CHANNELS-1;
+	channel_info * w=channels+T_CHANNELS-1;
 
 	if (ref->priority<w->originator->priority)
 	{
@@ -439,7 +440,7 @@ void s1_set_camera_pos(i4_transform_class &new_cam_transform)
 
 	i4_3d_vector last_pos=camera_pos;
 	new_cam_transform.inverse_transform(i4_3d_vector(0,0,0), camera_pos);
-	s1_sound_handle *s;
+	s1_sound_handle * s;
 
 
 	i4_3d_point_class temp,cfv,cuv;
@@ -484,7 +485,7 @@ void s1_set_camera_pos(i4_transform_class &new_cam_transform)
 			else if (channels[i].loop_handler)
 			{
 				// see if it has gone out of hearing range
-				s1_sound_handle *h=channels[i].loop_handler;
+				s1_sound_handle * h=channels[i].loop_handler;
 				float dist=h->dist_sqrd;
 
 				if (dist>h->originator->hearable_distance_sqrd)
@@ -518,12 +519,12 @@ void s1_set_camera_pos(i4_transform_class &new_cam_transform)
 		float dist_sqrd=s->dist_sqrd;
 		if (dist_sqrd<s->originator->hearable_distance_sqrd && s->channel_on==-1)
 		{
-			s1_sfx_ref *ref=s->originator;
+			s1_sfx_ref * ref=s->originator;
 
 			int c=find_channel(ref, s);
 			if (c!=-1 && ref->base_sfx)
 			{
-				i4_voice_class *v = i4_sound_man->duplicate_3d(ref->base_sfx);
+				i4_voice_class * v = i4_sound_man->duplicate_3d(ref->base_sfx);
 				if (v)
 				{
 					v->set_looping(i4_T);
@@ -551,10 +552,10 @@ void s1_set_camera_pos(i4_transform_class &new_cam_transform)
 	// now update any 3d sounds & velocities we are playing
 	for (i=0; i<T_CHANNELS; i++)
 	{
-		i4_voice_class *v=channels[i].voice;
+		i4_voice_class * v=channels[i].voice;
 		if (v)
 		{
-			s1_sound_handle *s=channels[i].loop_handler;
+			s1_sound_handle * s=channels[i].loop_handler;
 			if (s)
 			{
 				v->set_3d_position(-s->y, s->z, s->x,  i4_T);
@@ -609,7 +610,7 @@ void s1_end_looping(s1_sound_handle &handle)
 	}
 	else
 	{
-		s1_sound_handle *last=0, *p=s1_sound_handle::first;
+		s1_sound_handle * last=0, * p=s1_sound_handle::first;
 		for (; p;)
 		{
 			if (p==&handle)
@@ -645,7 +646,7 @@ void s1_sfx_ref::play(float x, float y, float z)
 	if (use!=-1)
 	{
 		int fail=0;
-		i4_voice_class *s=0;
+		i4_voice_class * s=0;
 
 		channels[use].stream=0;
 		if (flags&S1_STREAMED)
@@ -657,10 +658,10 @@ void s1_sfx_ref::play(float x, float y, float z)
 			}
 			else
 			{
-				i4_file_class *fp=i4_open(add_sfx_path(name,fn));
+				i4_file_class * fp=i4_open(add_sfx_path(name,fn));
 				if (fp)
 				{
-					i4_stream_wav_player *stream;
+					i4_stream_wav_player * stream;
 					stream=new i4_stream_wav_player(fp, 64*1024, i4_F, i4_T);
 					if (stream->load_failed())
 					{
@@ -712,12 +713,12 @@ void s1_sfx_ref::play(float x, float y, float z)
 }
 
 
-void s1_save_sfx_list(i4_file_class *fp)
+void s1_save_sfx_list(i4_file_class * fp)
 {
 
 	if (fp)
 	{
-		for (s1_sfx_ref *s=s1_sfx_ref::first; s; s=s->next)
+		for (s1_sfx_ref * s=s1_sfx_ref::first; s; s=s->next)
 		{
 			fp->printf("filename '%s', priority %d, defined at %s:%d ",
 					   s->name, s->priority, s->file_defined_in, s->line_defined_on);

@@ -111,7 +111,7 @@ void g1_supertank_init()
 }
 
 
-void g1_player_piece_class::save_base_info(g1_saver_class *fp)
+void g1_player_piece_class::save_base_info(g1_saver_class * fp)
 {
 	fp->start_version(BASE_DATA_VERSION);
 	fp->write_format("ffff44",
@@ -121,7 +121,7 @@ void g1_player_piece_class::save_base_info(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_player_piece_class::load_base_info(g1_loader_class *fp)
+void g1_player_piece_class::load_base_info(g1_loader_class * fp)
 {
 	if (fp && fp->check_version(BASE_DATA_VERSION))
 	{
@@ -142,7 +142,7 @@ void g1_player_piece_class::load_base_info(g1_loader_class *fp)
 }
 
 
-void g1_player_piece_class::save_mouse_look_info(g1_saver_class *fp)
+void g1_player_piece_class::save_mouse_look_info(g1_saver_class * fp)
 {
 	fp->start_version(MOUSE_LOOK_DATA_VERSION);
 
@@ -156,7 +156,7 @@ void g1_player_piece_class::save_mouse_look_info(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_player_piece_class::load_mouse_look_info(g1_loader_class *fp)
+void g1_player_piece_class::load_mouse_look_info(g1_loader_class * fp)
 {
 	if (fp && fp->check_version(MOUSE_LOOK_DATA_VERSION))
 	{
@@ -177,7 +177,7 @@ void g1_player_piece_class::load_mouse_look_info(g1_loader_class *fp)
 }
 
 
-void g1_player_piece_class::save_ammo_info(g1_saver_class *fp)
+void g1_player_piece_class::save_ammo_info(g1_saver_class * fp)
 {
 	fp->start_version(AMMO_DATA_VERSION);
 	for (int i=0; i<MAX_WEAPONS; i++)
@@ -187,7 +187,7 @@ void g1_player_piece_class::save_ammo_info(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_player_piece_class::load_ammo_info(g1_loader_class *fp)
+void g1_player_piece_class::load_ammo_info(g1_loader_class * fp)
 {
 	if (fp && fp->check_version(AMMO_DATA_VERSION))
 	{
@@ -199,7 +199,7 @@ void g1_player_piece_class::load_ammo_info(g1_loader_class *fp)
 	}
 }
 
-void g1_player_piece_class::save(g1_saver_class *fp)
+void g1_player_piece_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -218,7 +218,7 @@ void g1_player_piece_class::save(g1_saver_class *fp)
 }
 
 
-void g1_stank_ammo_info_struct::setup(li_symbol *sym)
+void g1_stank_ammo_info_struct::setup(li_symbol * sym)
 {
 	ammo_type=g1_find_stank_ammo_type(sym);
 	if (ammo_type)
@@ -238,7 +238,7 @@ void g1_stank_ammo_info_struct::setup(li_symbol *sym)
 i4_str g1_player_piece_class::frame_image_name(int &num_entries)
 {
 	num_entries=6;
-	g1_player_info_class *p=g1_player_man.get(player_num);
+	g1_player_info_class * p=g1_player_man.get(player_num);
 	int level=p->supertank_upgrade_level;
 	i4_str name="bitmaps/stank/status_stank_level_";
 	i4_char c(level+'0');
@@ -250,14 +250,15 @@ i4_str g1_player_piece_class::frame_image_name(int &num_entries)
 void g1_player_piece_class::frame_amount(int entry_number,
 										 int &current_amount,
 										 int &max_amount,
-										 g1_amount_display_class *window)
+										 g1_amount_display_class * window)
 {
 
-	g1_player_info_class *p=g1_player_man.get(player_num);
+	g1_player_info_class * p=g1_player_man.get(player_num);
 	int level=p->supertank_upgrade_level;
-	li_object *o,*a;
-	li_symbol *s;
-	g1_stank_ammo_type_struct *am;
+	li_object * o,* a;
+	li_symbol * s;
+	g1_stank_ammo_type_struct * am;
+
 	for (o=li_get_value("upgrade_levels"); o&&level; level--)
 	{
 		o=li_cdr(o,0);
@@ -310,6 +311,7 @@ void g1_player_piece_class::frame_amount(int entry_number,
 void g1_player_piece_class::find_weapons()
 {
 	int level=g1_player_man.get_local()->supertank_upgrade_level;
+
 	if (level<0)
 	{
 		level=0;
@@ -317,7 +319,7 @@ void g1_player_piece_class::find_weapons()
 	upgrade_level_when_built=level;
 
 
-	li_object *o;
+	li_object * o;
 	for (o=li_get_value("upgrade_levels"); o && li_cdr(o,0) && level; level--)
 	{
 		o=li_cdr(o,0);
@@ -337,7 +339,7 @@ void g1_player_piece_class::find_weapons()
 
 
 
-void g1_stank_ammo_info_struct::save(g1_saver_class *fp)
+void g1_stank_ammo_info_struct::save(g1_saver_class * fp)
 {
 	if (ammo_type)
 	{
@@ -356,9 +358,9 @@ void g1_stank_ammo_info_struct::save(g1_saver_class *fp)
 	fp->write_reference(last_fired_object);
 }
 
-void g1_stank_ammo_info_struct::load(g1_loader_class *fp)
+void g1_stank_ammo_info_struct::load(g1_loader_class * fp)
 {
-	li_symbol *wtype=li_symbol::get(li_load_object(fp, fp->li_remap, 0),0);
+	li_symbol * wtype=li_symbol::get(li_load_object(fp, fp->li_remap, 0),0);
 
 	ammo_type=g1_find_stank_ammo_type(wtype);
 	amount=fp->read_16();
@@ -368,7 +370,7 @@ void g1_stank_ammo_info_struct::load(g1_loader_class *fp)
 }
 
 
-void g1_player_piece_class::load(g1_loader_class *fp)
+void g1_player_piece_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	int size=fp->read_32();
@@ -384,7 +386,7 @@ void g1_player_piece_class::load(g1_loader_class *fp)
 	load_ammo_info(fp);
 };
 
-void g1_player_piece_class::skipload(g1_loader_class *fp)
+void g1_player_piece_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	int size= fp->read_32();
@@ -405,7 +407,7 @@ void g1_player_piece_class::skipload(g1_loader_class *fp)
 };
 
 g1_player_piece_class::g1_player_piece_class(g1_object_type id,
-											 g1_loader_class *fp)
+											 g1_loader_class * fp)
 	: g1_map_piece_class(id, fp),
 	  refuel_handle()
 {
@@ -480,7 +482,7 @@ g1_player_piece_class::g1_player_piece_class(g1_object_type id,
 
 }
 
-g1_map_solver_class *g1_player_piece_class::prefered_solver()
+g1_map_solver_class * g1_player_piece_class::prefered_solver()
 {
 	solveparams=SF_OK|SF_GRADE4|SF_FORCE_ASTAR;
 	return my_solver=g1_get_map()->get_astar_solver();
@@ -643,7 +645,7 @@ int g1_player_piece_class::move(i4_float x_amount, i4_float y_amount)
 
 	const int nc=8;
 	const i4_float rad = 0.25;
-	g1_object_class *hit_obj=0;
+	g1_object_class * hit_obj=0;
 	for (int i=0; i<nc; i++)
 	{
 		start.set(x+rad*(float)cos(2.0*i4_pi()*(0.5+i)/nc),y+rad*(float)sin(2.0*i4_pi()*(0.5+i)/nc),h+0.07f);
@@ -673,11 +675,11 @@ int g1_player_piece_class::move(i4_float x_amount, i4_float y_amount)
 		{
 			for (ix=x1; ix<=x2; ix++)
 			{
-				g1_object_chain_class *objlist = g1_get_map()->cell(ix,iy)->get_obj_list();
+				g1_object_chain_class * objlist = g1_get_map()->cell(ix,iy)->get_obj_list();
 
 				while (objlist)
 				{
-					g1_object_class *obj=objlist->object;
+					g1_object_class * obj=objlist->object;
 //          i4_float dist, dx,dy;
 
 					if (obj->get_flag(BLOCKING) && obj!=this)
@@ -745,12 +747,12 @@ int g1_player_piece_class::move(i4_float x_amount, i4_float y_amount)
 	{
 		y=(float)g1_get_map()->height()-2;
 	}
-	g1_map_vertex_class *wvert=g1_get_vertex((int)x,(int)y);
+	g1_map_vertex_class * wvert=g1_get_vertex((int)x,(int)y);
 	if (((g1_tick_counter&0x01f) ==0 ) &&
 		(wvert->get_flag(g1_map_vertex_class::APPLY_WAVE_FUNCTION))
 		&& speed != 0)
 	{
-		g2_water_wave_class *wv=(g2_water_wave_class *) g1_create_object(g1_get_object_type("water_wave"));
+		g2_water_wave_class * wv=(g2_water_wave_class *) g1_create_object(g1_get_object_type("water_wave"));
 		if (wv)
 		{
 			wv->setup_wave(i4_3d_vector(x,y,h),0.2f,10);
@@ -763,9 +765,10 @@ int g1_player_piece_class::move(i4_float x_amount, i4_float y_amount)
 
 void g1_player_piece_class::lead_target(i4_3d_point_class &lead, int slot_number)
 {
-	g1_stank_ammo_info_struct *a=ammo+slot_number;
+	g1_stank_ammo_info_struct * a=ammo+slot_number;
 
 	int wtype=g1_get_object_type(a->ammo_type->weapon_type);
+
 	if (wtype)
 	{
 		i4_float shot_speed = g1_object_type_array[wtype]->get_damage_map()->speed;
@@ -792,18 +795,19 @@ void g1_player_piece_class::check_if_turret_in_ground()
 		{
 			turret->rotation.y-=0.01f;
 		}
-	} while ((h<0) && (turret->rotation.y>-10));
+	}
+	while ((h<0) && (turret->rotation.y>-10));
 }
 
 
 void g1_player_piece_class::check_for_refuel()
 {
-	g1_object_chain_class *objlist = g1_get_map()->cell(i4_f_to_i(x), i4_f_to_i(y))->get_solid_list();
+	g1_object_chain_class * objlist = g1_get_map()->cell(i4_f_to_i(x), i4_f_to_i(y))->get_solid_list();
 	i4_bool on_base=i4_F;
 
 	while (objlist && !on_base)
 	{
-		g1_object_class *obj=objlist->object;
+		g1_object_class * obj=objlist->object;
 //    i4_float dist, dx,dy;
 
 		if (obj->id == main_base_type && obj->player_num==player_num)
@@ -903,9 +907,10 @@ void g1_player_piece_class::check_for_powerups()
 	int fog_rect_x1=10000, fog_rect_y1=10000,
 		fog_rect_x2=-1, fog_rect_y2=-1, ix,iy;
 
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	int x_left   = i4_f_to_i(v.x-r);
+
 	if (x_left<0)
 	{
 		x_left=0;
@@ -928,12 +933,12 @@ void g1_player_piece_class::check_for_powerups()
 
 	for (iy=y_top;  iy<=y_bottom; iy++)
 	{
-		g1_map_cell_class *c=map->cell(x_left,iy);
+		g1_map_cell_class * c=map->cell(x_left,iy);
 		for (ix=x_left; ix<=x_right;  ix++, c++)
 		{
-			for (g1_object_chain_class *o=c->get_obj_list(); o; o=o->next)
+			for (g1_object_chain_class * o=c->get_obj_list(); o; o=o->next)
 			{
-				g1_object_class *obj=o->object;
+				g1_object_class * obj=o->object;
 				if (!obj->get_flag(g1_object_class::SCRATCH_BIT))
 				{
 					obj->set_flag(g1_object_class::SCRATCH_BIT, 1);
@@ -946,10 +951,10 @@ void g1_player_piece_class::check_for_powerups()
 
 	for (iy=y_top;  iy<=y_bottom; iy++)
 	{
-		g1_map_cell_class *c=map->cell(x_left,iy);
+		g1_map_cell_class * c=map->cell(x_left,iy);
 		for (ix=x_left; ix<=x_right;  ix++, c++)
 		{
-			for (g1_object_chain_class *o=c->get_obj_list(); o; o=o->next)
+			for (g1_object_chain_class * o=c->get_obj_list(); o; o=o->next)
 			{
 				o->object->set_flag(g1_object_class::SCRATCH_BIT, 0);
 			}
@@ -1384,7 +1389,7 @@ void g1_player_piece_class::think()
 		// Auto-fire
 		if (attack_target.valid())
 		{
-			g1_object_class *mp = attack_target.get();
+			g1_object_class * mp = attack_target.get();
 
 			i4_float dx,dy,angle, dangle, dh, hangle, dist;
 
@@ -1445,7 +1450,7 @@ void g1_player_piece_class::think()
 	pf_stank_think.stop();
 }
 
-i4_bool g1_player_piece_class::can_attack(g1_object_class *who)
+i4_bool g1_player_piece_class::can_attack(g1_object_class * who)
 {
 	return (i4_bool)(who->get_team()!=get_team() &&  //is an enemy
 					 who->get_flag(TARGETABLE)  &&   //and is targetable
@@ -1488,14 +1493,15 @@ void g1_player_piece_class::track_base(i4_float desired_angle)
 //extern w32 g1_num_objs_in_view;
 //extern i4_array<g1_object_class*> g1_objs_in_view_dyn;
 
-g1_object_class *g1_player_piece_class::find_view_target(const i4_3d_vector &view_pos,
-														 const i4_3d_vector &view_dir,
-														 find_view_type type,
-														 float max_dist)
+g1_object_class * g1_player_piece_class::find_view_target(const i4_3d_vector &view_pos,
+														  const i4_3d_vector &view_dir,
+														  find_view_type type,
+														  float max_dist)
 {
 	sw32 i;
 	i4_float best;
 	i4_3d_vector vdir=view_dir;
+
 	vdir.normalize();
 
 
@@ -1508,7 +1514,7 @@ g1_object_class *g1_player_piece_class::find_view_target(const i4_3d_vector &vie
 		best = 0.0;
 	}
 
-	g1_object_class *fire_at_this = 0;
+	g1_object_class * fire_at_this = 0;
 
 	if (g1_objs_in_view_dyn.size()<= 0)
 	{
@@ -1519,7 +1525,7 @@ g1_object_class *g1_player_piece_class::find_view_target(const i4_3d_vector &vie
 	{
 		if (g1_objs_in_view_dyn[i])
 		{
-			g1_object_class *p = g1_objs_in_view_dyn[i];
+			g1_object_class * p = g1_objs_in_view_dyn[i];
 
 			if (can_attack(p) && p->get_flag(DANGEROUS) && p!=(g1_object_class *)this)
 			{
@@ -1543,7 +1549,7 @@ g1_object_class *g1_player_piece_class::find_view_target(const i4_3d_vector &vie
 }
 
 
-i4_bool g1_player_piece_class::in_range(int slot_number, g1_object_class *o) const
+i4_bool g1_player_piece_class::in_range(int slot_number, g1_object_class * o) const
 {
 	if (!o)
 	{
@@ -1565,7 +1571,8 @@ i4_bool g1_player_piece_class::in_range(int slot_number, g1_object_class *o) con
 
 i4_bool g1_player_piece_class::fire_weapon(int slot_number)
 {
-	g1_stank_ammo_info_struct *a=ammo+slot_number;
+	g1_stank_ammo_info_struct * a=ammo+slot_number;
+
 	if (a->delay_remaining)
 	{
 		a->delay_remaining--;
@@ -1584,7 +1591,7 @@ i4_bool g1_player_piece_class::fire_weapon(int slot_number)
 				range=g1_object_type_array[wtype]->get_damage_map()->range;
 			}
 
-			g1_object_class *fire_at=a->current_target.get();
+			g1_object_class * fire_at=a->current_target.get();
 
 #if 0
 			if (!fire_at)
@@ -1606,11 +1613,11 @@ i4_bool g1_player_piece_class::fire_weapon(int slot_number)
 			//  bdir.z += fire_at->occupancy_radius()/3;
 			//}
 
-			g1_object_class *weapon = g1_fire(a->ammo_type->weapon_type, this,
-											  fire_at,
-											  bpos,
-											  bdir,
-											  a->last_fired_object.get());
+			g1_object_class * weapon = g1_fire(a->ammo_type->weapon_type, this,
+											   fire_at,
+											   bpos,
+											   bdir,
+											   a->last_fired_object.get());
 			if (weapon)
 			{
 				a->amount--;
@@ -1633,7 +1640,7 @@ i4_bool g1_player_piece_class::fire_weapon(int slot_number)
 
 
 
-void fast_transform(i4_transform_class *t,const i4_3d_vector &src, r1_3d_point_class &dst);
+void fast_transform(i4_transform_class * t,const i4_3d_vector &src, r1_3d_point_class &dst);
 
 
 static r1_texture_ref target_cursor_sprite("target_cursor");
@@ -1645,12 +1652,13 @@ static g1_model_ref lock_on("lock_on"), lock_on_guns("lock_on_guns");
 
 void draw_spining_tris(float px, float py, float z,
 					   float theta,
-					   g1_quad_object_class *o,
+					   g1_quad_object_class * o,
 					   int ticks)
 {
-	g1_vert_class *v=o->get_verts(0,0);
+	g1_vert_class * v=o->get_verts(0,0);
 
 	i4_transform_class t;
+
 	t.identity();
 	t.mult_translate(px,py,0);
 
@@ -1662,6 +1670,7 @@ void draw_spining_tris(float px, float py, float z,
 		while (ticks--)
 			s*=1.1f;
 
+
 	}
 
 	t.mult_scale(s,s,1);
@@ -1670,7 +1679,7 @@ void draw_spining_tris(float px, float py, float z,
 
 
 
-	r1_render_api_class *api=g1_render.r_api;
+	r1_render_api_class * api=g1_render.r_api;
 
 
 	r1_vert tv[4];
@@ -1689,7 +1698,7 @@ void draw_spining_tris(float px, float py, float z,
 	{
 		i4_bool off=i4_F;
 
-		g1_quad_class *q=o->quad+i;
+		g1_quad_class * q=o->quad+i;
 		int t_verts=q->num_verts();
 		for (int j=0; j<t_verts; j++)
 		{
@@ -1713,12 +1722,13 @@ void draw_spining_tris(float px, float py, float z,
 }
 
 
-void g1_player_piece_class::draw_target_cursors(g1_draw_context_class *context)
+void g1_player_piece_class::draw_target_cursors(g1_draw_context_class * context)
 {
 	float z=r1_near_clip_z*1.1f;
 	float w_mult=z/g1_render.center_x;
 	static i4_float compass_pos=0.004f;
 	static i4_float compass_z=z;
+
 	g1_render.render_sprite(i4_3d_vector(0,0,z),
 							target_cursor_sprite.get(), 33 * w_mult, 33 * w_mult);
 
@@ -1737,7 +1747,7 @@ void g1_player_piece_class::draw_target_cursors(g1_draw_context_class *context)
 
 	if (ammo[1].current_target.get())
 	{
-		g1_object_class *t=ammo[1].current_target.get();
+		g1_object_class * t=ammo[1].current_target.get();
 		i4_3d_vector p=i4_3d_vector(t->x, t->y, t->h+ t->occupancy_radius()/3.0f);
 		i4_3d_vector lp=i4_3d_vector(t->lx, t->ly, t->lh+ t->occupancy_radius()/3.0f);
 		i4_3d_vector ip;
@@ -1754,7 +1764,7 @@ void g1_player_piece_class::draw_target_cursors(g1_draw_context_class *context)
 	ctheta+=0.4f;
 	if (ammo[2].current_target.get())
 	{
-		g1_object_class *t=ammo[2].current_target.get();
+		g1_object_class * t=ammo[2].current_target.get();
 
 		i4_3d_vector p=i4_3d_vector(t->x, t->y, t->h+ t->occupancy_radius()/3.0f);
 		i4_3d_vector lp=i4_3d_vector(t->lx, t->ly, t->lh+ t->occupancy_radius()/3.0f);
@@ -1799,7 +1809,7 @@ void g1_player_piece_class::look_for_targets()
 				range=g1_object_type_array[wtype]->get_damage_map()->range;
 			}
 
-			g1_object_class *t=find_view_target(bpos, bdir, i ? USE_SCREEN : USE_SLOP, range);
+			g1_object_class * t=find_view_target(bpos, bdir, i ? USE_SCREEN : USE_SLOP, range);
 
 			if (t==ammo[i].current_target.get())
 			{
@@ -1819,9 +1829,9 @@ void g1_player_piece_class::look_for_targets()
 	}
 }
 
-void g1_player_piece_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_player_piece_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
-	g1_player_piece_class *local_stank=g1_player_man.get_local()->get_commander();
+	g1_player_piece_class * local_stank=g1_player_man.get_local()->get_commander();
 
 	i4_bool in_local_stank=i4_F;
 
@@ -1857,7 +1867,7 @@ void g1_player_piece_class::draw(g1_draw_context_class *context, i4_3d_vector& v
 
 	g1_render.set_render_damage_level(damage_level);
 
-	g1_screen_box *bbox=0;
+	g1_screen_box * bbox=0;
 
 	if (get_flag(g1_object_class::SELECTABLE | g1_object_class::TARGETABLE))
 	{
@@ -1881,11 +1891,11 @@ void g1_player_piece_class::draw(g1_draw_context_class *context, i4_3d_vector& v
 
 
 	//draw with this model
-	g1_quad_object_class *model = draw_params.model;
+	g1_quad_object_class * model = draw_params.model;
 
 	//3d vectors
 	i4_transform_class out;
-	i4_transform_class *old = context->transform;
+	i4_transform_class * old = context->transform;
 	context->transform = &out;
 
 	out.multiply(*old, *world_transform);
@@ -2052,7 +2062,7 @@ g1_player_piece_class::~g1_player_piece_class()
 
 static int first_hurt=1;
 
-void g1_player_piece_class::damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir)
+void g1_player_piece_class::damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir)
 {
 	//int dowait=0;
 	if (player_num == g1_player_man.local_player)
@@ -2114,7 +2124,7 @@ void g1_player_piece_class::damage(g1_object_class *obj, int hp, i4_3d_vector _d
 
 }
 
-void g1_player_piece_class::notify_damage(g1_object_class *obj, sw32 hp)
+void g1_player_piece_class::notify_damage(g1_object_class * obj, sw32 hp)
 {
 	// did we kill this guy?
 	if (obj->health-hp<=0 && obj->get_flag(DANGEROUS))
@@ -2129,6 +2139,7 @@ void g1_player_piece_class::calc_action_cam(g1_camera_info_struct &cam,
 	i4_transform_class cam_transform;
 
 	i4_3d_vector interp_pos,tmp;
+
 	interp_pos.interpolate(i4_3d_vector(lx,ly,lh), i4_3d_vector(x,y,h), fr);
 
 	cam.ground_rotate = i4_interpolate_angle(turret->lrotation.z, turret->rotation.z, fr);

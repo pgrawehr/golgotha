@@ -14,7 +14,7 @@
 class i4_file_class;
 class i4_image_class;
 
-i4_bool i4_write_bmp(i4_image_class *im, i4_file_class *fp);
-i4_bool i4_write_bmp(i4_image_class *im, const i4_const_str &name);
+i4_bool i4_write_bmp(i4_image_class * im, i4_file_class * fp);
+i4_bool i4_write_bmp(i4_image_class * im, const i4_const_str &name);
 
 #endif

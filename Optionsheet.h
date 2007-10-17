@@ -17,8 +17,8 @@ class COptionsheet :
 
 // Konstruktion
 public:
-	COptionsheet(UINT nIDCaption, CWnd *pParentWnd = NULL, UINT iSelectPage = 0);
-	COptionsheet(LPCTSTR pszCaption, CWnd *pParentWnd = NULL, UINT iSelectPage = 0);
+	COptionsheet(UINT nIDCaption, CWnd * pParentWnd = NULL, UINT iSelectPage = 0);
+	COptionsheet(LPCTSTR pszCaption, CWnd * pParentWnd = NULL, UINT iSelectPage = 0);
 
 // Attribute
 public:

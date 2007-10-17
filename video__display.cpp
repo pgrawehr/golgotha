@@ -12,13 +12,13 @@
 #include "error/error.h"
 #include "init/init.h"
 
-i4_display_list_struct *i4_display_list=0;
+i4_display_list_struct * i4_display_list=0;
 
 
-void i4_display_list_struct::add_to_list(char *_name, int _driver_id,
+void i4_display_list_struct::add_to_list(char * _name, int _driver_id,
 										 int _priority,
-										 i4_display_class *_display,
-										 i4_display_list_struct *_next)
+										 i4_display_class * _display,
+										 i4_display_list_struct * _next)
 {
 	name=_name;
 	driver_id=_driver_id;
@@ -28,9 +28,10 @@ void i4_display_list_struct::add_to_list(char *_name, int _driver_id,
 	i4_display_list=this;
 }
 
-void i4_display_list_struct::remove_from_list(char *_name)
+void i4_display_list_struct::remove_from_list(char * _name)
 {
-	i4_display_list_struct *c,*n;
+	i4_display_list_struct * c,* n;
+
 	c=i4_display_list;
 	if (strcmp(c->name,_name)==0)
 	{
@@ -60,7 +61,8 @@ class i4_display_list_deleter :
 		//???? Why is this only for windows?
 		//FIX: Fixed.
 // #ifdef _WINDOWS
-		i4_display_list_struct *temp;
+		i4_display_list_struct * temp;
+
 		while (i4_display_list)
 		{
 			temp=i4_display_list;
@@ -75,7 +77,8 @@ class i4_display_list_deleter :
 	}
 	virtual void init()
 	{
-		i4_display_list_struct *iter;
+		i4_display_list_struct * iter;
+
 		iter=i4_display_list;
 		while(iter)
 		{

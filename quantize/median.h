@@ -16,8 +16,8 @@
 
 class i4_histogram_class;
 
-void i4_median_cut(i4_histogram_class *hist,
+void i4_median_cut(i4_histogram_class * hist,
 				   w32 skip_colors,
 				   w32 t_colors,
-				   w32 *return_palette);
+				   w32 * return_palette);
 #endif

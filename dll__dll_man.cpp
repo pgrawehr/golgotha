@@ -16,15 +16,16 @@
 i4_dll_manager_class i4_dll_man;
 
 #ifdef I4_UNIX
-char *i4_dll_dir="plugins";
+char * i4_dll_dir="plugins";
 #elif _WINDOWS
-char *i4_dll_dir="plugins";
+char * i4_dll_dir="plugins";
 #include <windows.h>
 #endif
 
 void i4_dll_manager_class::init()
 {
 	i4_directory_struct ds;
+
 	if (i4_get_directory(i4_const_str(i4_dll_dir), ds))
 	{
 
@@ -46,7 +47,7 @@ void i4_dll_manager_class::init()
 //#endif
 			)
 			{
-				i4_str *fullname = i4_const_str("%s/%S").sprintf(512, i4_dll_dir, ds.files[f]);
+				i4_str * fullname = i4_const_str("%s/%S").sprintf(512, i4_dll_dir, ds.files[f]);
 				load(*fullname);
 				delete fullname;
 			}
@@ -58,12 +59,12 @@ void i4_dll_manager_class::uninit()
 {
 	while (dll_list.begin()!=dll_list.end())
 	{
-		dll_node *i=&*dll_list.begin();
+		dll_node * i=&*dll_list.begin();
 
-		i4_init_class *old_first_init=i4_init_class::first_init;
+		i4_init_class * old_first_init=i4_init_class::first_init;
 		i4_init_class::first_init=i->init_list;
 
-		for (i4_init_class *f=i->init_list; f; f=f->next_init)
+		for (i4_init_class * f=i->init_list; f; f=f->next_init)
 		{
 			f->uninit();
 		}
@@ -81,13 +82,14 @@ i4_bool i4_dll_manager_class::load(const i4_const_str &filename, i4_bool prepend
 {
 	i4_const_str s=filename;
 	char tmp1[512],tmp2[512];
+
 	if (prepend_dll_dir)
 	{
 		sprintf(tmp2, "%s/%s",i4_dll_dir,i4_os_string(filename, tmp1, 512));
 		return load(i4_const_str(tmp2));
 	}
 
-	i4_str *full=i4_full_path(filename);
+	i4_str * full=i4_full_path(filename);
 
 	i4_alert(i4_const_str("Loading DLL [%S]"),512, full);
 
@@ -97,10 +99,10 @@ i4_bool i4_dll_manager_class::load(const i4_const_str &filename, i4_bool prepend
 	}
 
 	// add this to the dll list
-	dll_node *node=new dll_node;
+	dll_node * node=new dll_node;
 	node->name=full;
 
-	i4_init_class *old_first_init=i4_init_class::first_init;
+	i4_init_class * old_first_init=i4_init_class::first_init;
 	i4_init_class::first_init=0;
 
 	node->dll=i4_open_dll(*full);
@@ -114,7 +116,7 @@ i4_bool i4_dll_manager_class::load(const i4_const_str &filename, i4_bool prepend
 		return i4_F;
 	}
 
-	for (i4_init_class *f=node->init_list; f; f=f->next_init)
+	for (i4_init_class * f=node->init_list; f; f=f->next_init)
 	{
 		f->init();
 	}
@@ -142,7 +144,7 @@ i4_bool i4_dll_manager_class::unload(const i4_const_str &filename)
 	{
 		if (*i->name == filename)
 		{
-			for (i4_init_class *f=i->init_list; f; f=f->next_init)
+			for (i4_init_class * f=i->init_list; f; f=f->next_init)
 			{
 				f->uninit();
 			}
@@ -194,7 +196,7 @@ public:
 		FreeLibrary(handle);
 	}
 
-	virtual void *find_function(const char *name)
+	virtual void *find_function(const char * name)
 	{
 		return GetProcAddress(handle, name);
 	}
@@ -204,6 +206,7 @@ i4_dll_file *i4_open_dll(const i4_const_str &name)
 {
 	char buf[1024];
 	HINSTANCE handle=LoadLibrary(i4_os_string(name, buf, 1024));
+
 	if (handle)
 	{
 		return new i4_win32_dll_file(handle);

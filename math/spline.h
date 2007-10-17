@@ -20,7 +20,7 @@ class i4_spline_class
 	w32 t_points;
 
 
-	static i4_linear_allocator *p_alloc;
+	static i4_linear_allocator * p_alloc;
 	static w32 point_refs;
 
 	void cleanup();
@@ -33,11 +33,11 @@ public:
 		w32 frame;     // frame in time this point exsist, golgotha runs at 15hz
 
 		i4_bool selected;
-		point *next;
+		point * next;
 	};
 
 protected:
-	point *points;
+	point * points;
 public:
 	void move(i4_float x_add, i4_float y_add, i4_float z_add);
 
@@ -45,7 +45,7 @@ public:
 	{
 		return points;
 	}
-	i4_spline_class *next;
+	i4_spline_class * next;
 
 	w32 total()
 	{
@@ -67,8 +67,8 @@ public:
 	i4_spline_class();
 	~i4_spline_class();
 
-	void save(i4_file_class *fp);
-	void load(i4_file_class *fp);
+	void save(i4_file_class * fp);
+	void load(i4_file_class * fp);
 };
 
 

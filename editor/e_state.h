@@ -47,7 +47,7 @@ class g1_set_major_mode_event :
 public:
 	char name[30];
 
-	g1_set_major_mode_event(char *_name)
+	g1_set_major_mode_event(char * _name)
 		: i4_user_message_event_class(G1_SET_MAJOR_MODE)
 	{
 		strcpy(name, _name);
@@ -65,7 +65,7 @@ class g1_set_minor_mode_event :
 {
 public:
 	w32 minor_mode;
-	g1_set_minor_mode_event(char *major_mode_name, w32 minor_mode)
+	g1_set_minor_mode_event(char * major_mode_name, w32 minor_mode)
 		: g1_set_major_mode_event(major_mode_name),
 		  minor_mode(minor_mode)
 	{
@@ -86,13 +86,13 @@ class g1_edit_state_class :
 
 	i4_graphical_style_class *get_style();
 	i4_window_class *create_buttons(w32 height);
-	i4_window_class *tools;
+	i4_window_class * tools;
 
 	w32 win_h;
-	i4_parent_window_class *parent;
+	i4_parent_window_class * parent;
 
 
-	i4_image_class **icons;
+	i4_image_class * * icons;
 	int total_icons;
 	void load_icons();
 
@@ -122,15 +122,15 @@ public:
 		return icons[i];
 	}
 
-	i4_button_class *create_button(char *res_name, w32 evalue, i4_bool popup,
-								   i4_event_handler_class *send_to=0,
-								   i4_event *send_event=0);
+	i4_button_class *create_button(char * res_name, w32 evalue, i4_bool popup,
+								   i4_event_handler_class * send_to=0,
+								   i4_event * send_event=0);
 
-	void add_but(i4_button_box_class *box,
-				 char *res_name,
+	void add_but(i4_button_box_class * box,
+				 char * res_name,
 				 w32 evalue,
 				 i4_bool down,
-				 i4_event *send_event=0);
+				 i4_event * send_event=0);
 
 
 
@@ -138,18 +138,18 @@ public:
 	char major_mode[20];
 
 	g1_mode_creator *get_major_mode();
-	i4_bool set_major_mode(char *mode_name);
-	i4_bool set_minor_mode(char *major_mode_name, w32 minor_mode);
+	i4_bool set_major_mode(char * mode_name);
+	i4_bool set_minor_mode(char * major_mode_name, w32 minor_mode);
 
 	void set_current_team(int team_num);
 	g1_player_type current_team;
 
 	g1_edit_state_class();
 
-	void show_tools(i4_parent_window_class *parent,  w32 win_h);
+	void show_tools(i4_parent_window_class * parent,  w32 win_h);
 
 	void hide_tools();
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 
 	void uninit(); // free up memory at end of program
 
@@ -159,7 +159,7 @@ public:
 	w32 tools_width();
 
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"edit_state");
 	}

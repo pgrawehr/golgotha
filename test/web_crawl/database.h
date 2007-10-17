@@ -19,7 +19,7 @@ struct server_info
 	int files_failed;
 	int files_waiting;
 
-	server_info *next;
+	server_info * next;
 };
 
 
@@ -34,18 +34,18 @@ struct split_url
 	char page[100];
 	char extension[100];
 
-	split_url(char *url_name);
+	split_url(char * url_name);
 };
 
 
 struct url
 {
-	char *full_name;
-	server_info *server_for;
+	char * full_name;
+	server_info * server_for;
 
 	w32 checksum();
-	url(char *name,          // text name of url "http://crack.com:80/test.html"
-		url *server_from=0); // in case url is a relative path we need to know where it came from
+	url(char * name,          // text name of url "http://crack.com:80/test.html"
+		url * server_from=0); // in case url is a relative path we need to know where it came from
 
 	~url();                  // frees memory use allocated by constructor
 

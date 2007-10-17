@@ -17,7 +17,7 @@
 struct newhuff
 {
 	unsigned int linbits;
-	short *table;
+	short * table;
 };
 
 static short tab0[] =

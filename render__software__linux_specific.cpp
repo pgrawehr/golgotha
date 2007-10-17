@@ -76,7 +76,7 @@ void r1_software_x11_class::uninit()
 	r1_software_class::uninit();
 }
 
-i4_bool r1_software_x11_class::init(i4_display_class *display)
+i4_bool r1_software_x11_class::init(i4_display_class * display)
 {
 
 	//The definition of win32_display_class is not available here,
@@ -125,7 +125,7 @@ i4_bool r1_software_x11_class::expand_type_supported(r1_expand_type type)
 
 r1_software_x11_render_window_class::r1_software_x11_render_window_class(
 	w16 w, w16 h,r1_expand_type expand_type,
-	r1_render_api_class *api)
+	r1_render_api_class * api)
 	: r1_software_render_window_class(w,h,expand_type,api)
 {
 	// reference to backing store
@@ -140,10 +140,11 @@ r1_software_x11_render_window_class::~r1_software_x11_render_window_class()
 {
 	//nothing to do
 }
-r1_render_window_class *r1_software_x11_class::create_render_window(int w, int h,
-																	r1_expand_type expand_type)
+r1_render_window_class * r1_software_x11_class::create_render_window(int w, int h,
+																	 r1_expand_type expand_type)
 {
-	r1_render_window_class *new_window;
+	r1_render_window_class * new_window;
+
 	if (w & 1)
 	{
 		w++;
@@ -181,7 +182,7 @@ r1_render_window_class *r1_software_x11_class::create_render_window(int w, int h
    }
  */
 
-void r1_software_x11_class::copy_part(i4_image_class *im,
+void r1_software_x11_class::copy_part(i4_image_class * im,
 									  int x, int y,         // position on screen
 									  int x1, int y1,       // area of image to copy
 									  int x2, int y2)
@@ -236,7 +237,7 @@ void r1_software_x11_render_window_class::draw(i4_draw_context_class &context)
 	}
 	pf_software_blt.start();
 	i4_rect_list_class::area_iter cl;
-	i4_rect_list_class *clip=&context.clip;
+	i4_rect_list_class * clip=&context.clip;
 	switch (expand_type)
 	{
 		case R1_COPY_1x1_SCANLINE_SKIP:
@@ -414,7 +415,7 @@ void r1_software_x11_class::clear_area(int x1, int y1, int x2, int y2, w32 color
 
 }
 
-i4_image_class *r1_software_x11_class::create_compatible_image(w16 w, w16 h)
+i4_image_class * r1_software_x11_class::create_compatible_image(w16 w, w16 h)
 {
 	// generate a new X pixmap of dim. wxh
 	return i4_create_image(w,h,i4_pal_man.register_pal(&fmt));

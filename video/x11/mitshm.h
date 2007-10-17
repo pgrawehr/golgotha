@@ -47,8 +47,8 @@ class x11_shm_extension_class;
 class x11_shm_image_class
 {
 public:
-	w8 *data;
-	virtual i4_bool copy_part_to_vram(x11_shm_extension_class *use,
+	w8 * data;
+	virtual i4_bool copy_part_to_vram(x11_shm_extension_class * use,
 									  i4_coord x, i4_coord y,
 									  i4_coord x1, i4_coord y1,
 									  i4_coord x2, i4_coord y2) = 0;
@@ -65,16 +65,16 @@ public:
 
 	virtual void note_event(XEvent &ev) = 0;
 	x11_shm_extension_class();
-	virtual i4_bool available(Display *display, char *display_name) = 0;
-	virtual x11_shm_image_class *create_shm_image(Display *display,
+	virtual i4_bool available(Display * display, char * display_name) = 0;
+	virtual x11_shm_image_class *create_shm_image(Display * display,
 												  Window window,
 												  GC gc,
-												  Visual *X_visual,
+												  Visual * X_visual,
 												  int visual_depth,
 												  w16 &width, w16 &height) = 0;
 
-	virtual void destroy_shm_image(Display *display, x11_shm_image_class *im) = 0;
-	virtual void shutdown(Display *display) = 0;
+	virtual void destroy_shm_image(Display * display, x11_shm_image_class * im) = 0;
+	virtual void shutdown(Display * display) = 0;
 } ;
 
 x11_shm_extension_class *create_x11_shm_extension_class();

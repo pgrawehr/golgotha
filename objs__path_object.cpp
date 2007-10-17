@@ -65,7 +65,8 @@ int g1_path_object_class::bomb_warning_level()
 
 g1_path_object_class::bridge_status_type g1_path_object_class::get_bridge_status()
 {
-	li_symbol *s=vars->get(bridgeable_spot);
+	li_symbol * s=vars->get(bridgeable_spot);
+
 	if (s==yes.get())
 	{
 		return NO_BRIDGE;
@@ -90,12 +91,13 @@ int g1_path_object_class::total_links()
 	return link_index[G1_MAX_TEAMS]; //should (?) contain the end of the list
 }
 
-g1_path_object_class::g1_path_object_class(g1_object_type id, g1_loader_class *fp)
+g1_path_object_class::g1_path_object_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id, fp),
 	  link(8,16)
 {
 	int i;
 	w16 ver=0,data_size=0;
+
 	next=0;
 	if (fp)
 	{
@@ -119,7 +121,7 @@ g1_path_object_class::g1_path_object_class(g1_object_type id, g1_loader_class *f
 
 				for (i=0; i<link_index[G1_MAX_TEAMS]; i++)
 				{
-					link_class *l = link.add();
+					link_class * l = link.add();
 
 					l->path.load(fp);
 					l->object.load(fp);
@@ -141,7 +143,7 @@ g1_path_object_class::g1_path_object_class(g1_object_type id, g1_loader_class *f
 
 				for (i=0; i<link_index[G1_MAX_TEAMS]; i++)
 				{
-					link_class *l = link.add();
+					link_class * l = link.add();
 
 					l->path.load(fp);
 					l->object.load(fp);
@@ -179,7 +181,7 @@ void g1_path_object_class::validate()
 	{
 		for (int i=total_links((g1_team_type)a)-1; i>=0; i--)
 		{
-			link_class *l = &link[link_index[a]+i];
+			link_class * l = &link[link_index[a]+i];
 			if (!l->path.valid() || !l->object.valid())
 			{
 				link.remove(link_index[a] + i);
@@ -192,7 +194,7 @@ void g1_path_object_class::validate()
 	}
 }
 
-void g1_path_object_class::save(g1_saver_class *fp)
+void g1_path_object_class::save(g1_saver_class * fp)
 {
 	int i;
 
@@ -246,7 +248,7 @@ void g1_path_object_class::unoccupy_location()
 	}
 }
 
-void g1_path_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_path_object_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	if (g1_show_list)
 	{
@@ -254,10 +256,11 @@ void g1_path_object_class::draw(g1_draw_context_class *context, i4_3d_vector& vi
 		for (int i=0; i<link.size(); i++)
 		{
 			while (i>=link_index[a+1]) a++;
+
 			// determine team number
 			i4_float offs = a*0.2f-0.1f;
 			i4_color col = (a==0) ? 0xffff : 0xff00ff;
-			g1_object_class *o = link[i].get_object();
+			g1_object_class * o = link[i].get_object();
 			if (o)
 			{
 				g1_render.render_3d_line(i4_3d_point_class(x+offs,y+offs,h+0.1f),
@@ -279,10 +282,10 @@ void g1_path_object_class::draw(g1_draw_context_class *context, i4_3d_vector& vi
 }
 
 
-void g1_path_object_class::add_controlled_object(g1_object_class *o)
+void g1_path_object_class::add_controlled_object(g1_object_class * o)
 {
 	li_class_context context(vars);
-	li_g1_ref_list *list=controlled_objects()->clone();
+	li_g1_ref_list * list=controlled_objects()->clone();
 	vars->set_value(controlled_objects.offset, list);
 	if (list->find(o)<0)
 	{
@@ -290,10 +293,10 @@ void g1_path_object_class::add_controlled_object(g1_object_class *o)
 	}
 }
 
-void g1_path_object_class::remove_controlled_object(g1_object_class *o)
+void g1_path_object_class::remove_controlled_object(g1_object_class * o)
 {
 	li_class_context context(vars);
-	li_g1_ref_list *list=controlled_objects()->clone();
+	li_g1_ref_list * list=controlled_objects()->clone();
 	vars->set_value(controlled_objects.offset,list);
 	if (list->find(o)>=0)
 	{
@@ -301,11 +304,11 @@ void g1_path_object_class::remove_controlled_object(g1_object_class *o)
 	}
 }
 
-void g1_path_object_class::add_link(g1_team_type team, g1_path_object_class *o, link_id lid)
+void g1_path_object_class::add_link(g1_team_type team, g1_path_object_class * o, link_id lid)
 {
 	if (get_path_index(team, o)<0)
 	{
-		link_class *l = link.add_at(link_index[team+1]);
+		link_class * l = link.add_at(link_index[team+1]);
 		l->link_desc=lid;
 		l->path = o;
 		l->object = o;
@@ -316,9 +319,10 @@ void g1_path_object_class::add_link(g1_team_type team, g1_path_object_class *o, 
 	}
 }
 
-i4_bool g1_path_object_class::remove_link(g1_team_type team, g1_path_object_class *p)
+i4_bool g1_path_object_class::remove_link(g1_team_type team, g1_path_object_class * p)
 {
 	int loc = get_path_index(team, p);
+
 	if (loc>=0)
 	{
 		link.remove(link_index[team] + loc);
@@ -334,13 +338,15 @@ i4_bool g1_path_object_class::remove_link(g1_team_type team, g1_path_object_clas
 void g1_path_object_class::request_remove()
 {
 	int team=0;
+
 	for (int i=0; i<link.size(); i++)
 	{
 		while (i>=link_index[team+1]) team++;
+
 		// determine team number
 
-		g1_object_class *o = link[i].get_object();
-		g1_map_piece_class *mp;
+		g1_object_class * o = link[i].get_object();
+		g1_map_piece_class * mp;
 
 		while ((mp = g1_map_piece_class::cast(o))!=0)
 		{
@@ -355,7 +361,7 @@ void g1_path_object_class::request_remove()
 			mp->unlink();
 		}
 
-		g1_path_object_class *path = link[i].get_path();
+		g1_path_object_class * path = link[i].get_path();
 
 
 		I4_TEST(o == path, "Invalid Linked List!");
@@ -370,9 +376,9 @@ void g1_path_object_class::request_remove()
 
 }
 
-li_object *g1_path_object_class::message(li_symbol *message_name,
-										 li_object *message_params,
-										 li_environment *env)
+li_object * g1_path_object_class::message(li_symbol * message_name,
+										  li_object * message_params,
+										  li_environment * env)
 {
 	li_class_context context(vars);
 
@@ -382,8 +388,8 @@ li_object *g1_path_object_class::message(li_symbol *message_name,
 	}
 	else if (message_name==s_add_link.get())
 	{
-		g1_object_class *o=li_g1_ref::get(message_params,env)->value();
-		g1_path_object_class *path = g1_path_object_class::cast(o);
+		g1_object_class * o=li_g1_ref::get(message_params,env)->value();
+		g1_path_object_class * path = g1_path_object_class::cast(o);
 
 		if (path)
 		{
@@ -393,8 +399,8 @@ li_object *g1_path_object_class::message(li_symbol *message_name,
 	}
 	else if (message_name==s_remove_link.get())
 	{
-		g1_object_class *o=li_g1_ref::get(message_params,env)->value();
-		g1_path_object_class *path = g1_path_object_class::cast(o);
+		g1_object_class * o=li_g1_ref::get(message_params,env)->value();
+		g1_path_object_class * path = g1_path_object_class::cast(o);
 
 		if (path)
 		{
@@ -406,7 +412,7 @@ li_object *g1_path_object_class::message(li_symbol *message_name,
 	return 0;
 }
 
-int g1_path_object_class::get_path_index(g1_team_type team, g1_path_object_class *o) const
+int g1_path_object_class::get_path_index(g1_team_type team, g1_path_object_class * o) const
 {
 	for (int i=link_index[team]; i<link_index[team+1]; i++)
 	{
@@ -419,7 +425,7 @@ int g1_path_object_class::get_path_index(g1_team_type team, g1_path_object_class
 	return -1;
 }
 
-int g1_path_object_class::get_path_index(g1_path_object_class *o) const
+int g1_path_object_class::get_path_index(g1_path_object_class * o) const
 {
 	for (int i=0; i<link.size(); i++)
 	{
@@ -432,7 +438,7 @@ int g1_path_object_class::get_path_index(g1_path_object_class *o) const
 	return -1;
 }
 
-int g1_path_object_class::get_object_index(g1_object_class *o) const
+int g1_path_object_class::get_object_index(g1_object_class * o) const
 {
 	for (int i=0; i<link.size(); i++)
 	{
@@ -445,7 +451,7 @@ int g1_path_object_class::get_object_index(g1_object_class *o) const
 	return -1;
 }
 
-g1_path_object_class *g1_path_object_class::link_class::get_path()
+g1_path_object_class * g1_path_object_class::link_class::get_path()
 {
 	return g1_path_object_class::cast(path.get());
 	/*
@@ -486,10 +492,11 @@ g1_path_object_class *g1_path_object_class::link_class::get_path()
 }
 
 static g1_team_type g1_path_cur_team;
-int links_sorter(g1_path_object_class *const *a, g1_path_object_class *const *b)
+int links_sorter(g1_path_object_class * const * a, g1_path_object_class * const * b)
 {
 	//must define an ABSOLUTE order on the elements
-	g1_path_object_class *a1= *a,*b1= *b;
+	g1_path_object_class * a1= *a,* b1= *b;
+
 	if (a1->last_selected_tick[g1_path_cur_team]>
 		b1->last_selected_tick[g1_path_cur_team]) //meaning: a is more recent than b
 	{
@@ -515,21 +522,22 @@ int links_sorter(g1_path_object_class *const *a, g1_path_object_class *const *b)
 	}
 }
 
-g1_path_object_class *g1_path_object_class::get_recent_road(g1_team_type team,
-															g1_path_object_class *last_used)
+g1_path_object_class * g1_path_object_class::get_recent_road(g1_team_type team,
+															 g1_path_object_class * last_used)
 {
 	//Return any path that can be found
-	g1_path_object_class *best=0;
+	g1_path_object_class * best=0;
 	//w32 max_allowed=last_used ? last_used->last_selected_tick[team] : 0x7fffffff-1;
 
 	int t=total_links();
 	int best_tick=0;
+
 	//int past_it= last_used?0:1;//set to 1 if first evaluation for this node
 	i4_array<g1_path_object_class *> links(10,10);
 	int i;
 	for (i=0; i<t; i++)
 	{
-		g1_path_object_class *p=get_link(i);
+		g1_path_object_class * p=get_link(i);
 		if (p && !p->get_flag(SCRATCH_BIT))
 		{
 			links.add(p);
@@ -554,10 +562,10 @@ g1_path_object_class *g1_path_object_class::get_recent_road(g1_team_type team,
 	return best;
 }
 
-g1_path_object_class *g1_path_object_class::get_recent_link(g1_team_type team,
-															g1_path_object_class *last_used)
+g1_path_object_class * g1_path_object_class::get_recent_link(g1_team_type team,
+															 g1_path_object_class * last_used)
 {
-	g1_path_object_class *best=0;
+	g1_path_object_class * best=0;
 	//Fixed bug in the following line, Maximum was 0xffffffff casted to signed...
 	w32 max_allowed=last_used ? last_used->last_selected_tick[team] : 0x7fffffff-1;
 
@@ -567,7 +575,7 @@ g1_path_object_class *g1_path_object_class::get_recent_link(g1_team_type team,
 
 	for (int i=0; i<(int)t; i++)
 	{
-		g1_path_object_class *p=get_link(team,i);
+		g1_path_object_class * p=get_link(team,i);
 		if (p)
 		{
 			int tick=p->last_selected_tick[team];
@@ -596,10 +604,11 @@ g1_path_object_class *g1_path_object_class::get_recent_link(g1_team_type team,
 	return best;
 }
 
-link_id g1_path_object_class::link_to(g1_team_type team, g1_path_object_class *obj)
+link_id g1_path_object_class::link_to(g1_team_type team, g1_path_object_class * obj)
 {
 	//link_id ret=0;
 	int t=total_links(); //we actually ignore the team
+
 	//g1_path_object_class *c;
 	for (int i=0; i<t; i++)
 	{
@@ -616,20 +625,20 @@ int g1_path_object_class::total_controlled_objects()
 	return li_g1_ref_list::get(vars->get(controlled_objects),0)->size();
 }
 
-g1_object_class *g1_path_object_class::get_controlled_object(int object_num)
+g1_object_class * g1_path_object_class::get_controlled_object(int object_num)
 {
 	return li_g1_ref_list::get(vars->get(controlled_objects),0)->value(object_num);
 }
 
 // returns the total destinations found (banks & etc that are attached to the path)
-int g1_path_object_class::find_path_destinations(g1_object_class **list,
+int g1_path_object_class::find_path_destinations(g1_object_class * * list,
 												 int list_size,
 												 g1_team_type team)
 {
 	i4_array<g1_object_class *> objects_to_unmark(128,128);
 	i4_array<g1_path_object_class *> unvisited_nodes(128,128);
-	char *c1="links";
-	char *c2="enemy_links";
+	char * c1="links";
+	char * c2="enemy_links";
 	int off=vars->member_offset(team==G1_ALLY ? c1 : c2);
 	unvisited_nodes.add(this);
 	int unvisited_head=0;
@@ -637,18 +646,18 @@ int g1_path_object_class::find_path_destinations(g1_object_class **list,
 
 	while (unvisited_head<unvisited_nodes.size())
 	{
-		g1_path_object_class *p=unvisited_nodes[unvisited_head++];
+		g1_path_object_class * p=unvisited_nodes[unvisited_head++];
 
 		if (p && !p->get_flag(SCRATCH_BIT))
 		{
 			p->set_flag(SCRATCH_BIT, 1);
 			objects_to_unmark.add(p);
 
-			li_g1_ref_list *l=li_g1_ref_list::get(p->vars->value(off),0);
+			li_g1_ref_list * l=li_g1_ref_list::get(p->vars->value(off),0);
 			int t=l->size(), i;
 			for (i=0; i<t; i++)
 			{
-				g1_object_class *o=l->value(i);
+				g1_object_class * o=l->value(i);
 				if (o)
 				{
 					unvisited_nodes.add(g1_path_object_class::cast(o));
@@ -672,11 +681,12 @@ int g1_path_object_class::find_path_destinations(g1_object_class **list,
 
 
 int g1_path_object_class::find_path(g1_team_type team,
-									g1_path_object_class **stack,
+									g1_path_object_class * * stack,
 									int stack_size)
 {
 	int t=0;
-	g1_path_object_class *o=this;
+	g1_path_object_class * o=this;
+
 	//int numlinks=0;
 	do
 	{
@@ -686,7 +696,8 @@ int g1_path_object_class::find_path(g1_team_type team,
 		{
 			o=o->get_recent_link(team, 0);
 		}
-	} while (o && t<stack_size);
+	}
+	while (o && t<stack_size);
 
 	if (t<2) //can't go that way, try the other
 	{
@@ -707,7 +718,8 @@ int g1_path_object_class::find_path(g1_team_type team,
 			{
 				o=o->get_recent_link(team,0);
 			}
-		} while (o && t<stack_size);
+		}
+		while (o && t<stack_size);
 	}
 	I4_ASSERT(t<stack_size, "ERROR: Either paths are too long or path loop encountered!");
 
@@ -715,11 +727,11 @@ int g1_path_object_class::find_path(g1_team_type team,
 }
 
 
-int g1_path_object_class::find_path(g1_team_type team, g1_path_object_class *dest,
-									g1_path_object_class **stack,
+int g1_path_object_class::find_path(g1_team_type team, g1_path_object_class * dest,
+									g1_path_object_class * * stack,
 									int stack_size)
 {
-	g1_path_object_class *visited[25000];
+	g1_path_object_class * visited[25000];
 	w32 most_recently_selected[2000];
 
 	I4_ASSERT(stack_size<=2000, "WARNING: Can't find paths greater than 2000.  bump this up, if needed.");
@@ -738,7 +750,7 @@ int g1_path_object_class::find_path(g1_team_type team, g1_path_object_class *des
 	//g1_team_type curteam=team;
 	do
 	{
-		g1_path_object_class *o = stack[depth]->get_recent_link(team, stack[depth+1]);
+		g1_path_object_class * o = stack[depth]->get_recent_link(team, stack[depth+1]);
 		//if (!o&&curteam==team)
 		//	{
 		//	if (team==G1_ALLY) team==G1_ENEMY; else team==G1_ALLY;
@@ -757,7 +769,8 @@ int g1_path_object_class::find_path(g1_team_type team, g1_path_object_class *des
 		{
 			depth--;
 		}
-	} while (depth>=0 && stack[depth]!=dest && depth+1<stack_size);
+	}
+	while (depth>=0 && stack[depth]!=dest && depth+1<stack_size);
 
 	for (int i=0; i<num_visited; i++)
 	{
@@ -773,7 +786,7 @@ int g1_path_object_class::find_path(g1_team_type team, g1_path_object_class *des
 	{
 		while (stack[depth] && depth<stack_size-2) // whatsthis? && stack[depth]->total_links(type)>0)
 		{
-			g1_path_object_class *o = stack[depth]->get_recent_link(team, 0);
+			g1_path_object_class * o = stack[depth]->get_recent_link(team, 0);
 			stack[++depth] = o;
 		}
 
@@ -797,9 +810,10 @@ bool g1_path_object_class::repair(int how_much)
 	//objects to full health (ignoring the argument, since capturing them also restores
 	//them)
 	int t=total_controlled_objects();
+
 	for (int i=0; i<t; i++)
 	{
-		g1_object_class *o=get_controlled_object(i);
+		g1_object_class * o=get_controlled_object(i);
 		if (o && o->player_num==player_num)
 		{
 			o->repair(o->get_max_health());
@@ -814,7 +828,7 @@ void g1_path_object_class::change_player_num(int new_player)
 	int t=total_controlled_objects();
 	for (int i=0; i<t; i++)
 	{
-		g1_object_class *o=get_controlled_object(i);
+		g1_object_class * o=get_controlled_object(i);
 		if (o && o->player_num!=new_player)
 		{
 			char msg[100];
@@ -838,21 +852,22 @@ void g1_path_object_class::change_player_num(int new_player)
 	}
 }
 
-g1_path_object_class *g1_path_object_class::find_next(g1_team_type team,
-													  g1_path_object_class *dest)
+g1_path_object_class * g1_path_object_class::find_next(g1_team_type team,
+													   g1_path_object_class * dest)
 {
-	g1_path_object_class *path[256];
+	g1_path_object_class * path[256];
 
 	find_path(team, dest, path, 256);
 	return path[1];
 }
 
-void g1_path_object_class::editor_draw(g1_draw_context_class *context)
+void g1_path_object_class::editor_draw(g1_draw_context_class * context)
 {
 	int i;
+
 	for (i=0; i<total_links(G1_ALLY); i++)
 	{
-		g1_object_class *o = get_link(G1_ALLY,i);
+		g1_object_class * o = get_link(G1_ALLY,i);
 		if (o)
 		{
 			g1_render.render_3d_line(i4_3d_point_class(x,y,h+0.1f),
@@ -863,7 +878,7 @@ void g1_path_object_class::editor_draw(g1_draw_context_class *context)
 
 	for (i=0; i<total_links(G1_ENEMY); i++)
 	{
-		g1_object_class *o = get_link(G1_ENEMY,i);
+		g1_object_class * o = get_link(G1_ENEMY,i);
 		if (o)
 		{
 			g1_render.render_3d_line(i4_3d_point_class(o->x, o->y, o->h+0.1f),
@@ -886,10 +901,11 @@ g1_road_object_def("road_object",
 
 const int ROAD_DATA_VERSION=1;
 
-g1_road_object_class::g1_road_object_class(g1_object_type id, g1_loader_class *fp)
+g1_road_object_class::g1_road_object_class(g1_object_type id, g1_loader_class * fp)
 	: g1_path_object_class(id,fp)
 {
 	w16 version,data_size;
+
 	ref=0;
 	rlen=0;
 	if (fp)
@@ -920,7 +936,7 @@ g1_road_object_class::g1_road_object_class(g1_object_type id, g1_loader_class *f
 
 }
 
-void g1_road_object_class::save(g1_saver_class *fp)
+void g1_road_object_class::save(g1_saver_class * fp)
 {
 	g1_path_object_class::save(fp);
 	fp->start_version(ROAD_DATA_VERSION);
@@ -965,12 +981,12 @@ i4_bool g1_road_object_class::occupy_location()
 	return g1_path_object_class::occupy_location();
 }
 
-void g1_road_object_class::editor_draw(g1_draw_context_class *context)
+void g1_road_object_class::editor_draw(g1_draw_context_class * context)
 {
 
 }
 
-void g1_road_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_road_object_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	//g1_path_object_class::draw(context);
 	//editor_draw(context);
@@ -978,8 +994,9 @@ void g1_road_object_class::draw(g1_draw_context_class *context, i4_3d_vector& vi
 	int i;
 
 	r1_vert v[2];
+
 	i4_3d_point_class p(x,y,h);
-	g1_object_class *o;
+	g1_object_class * o;
 	if (g1_render.project_point(p, v[0], context->transform))
 	{
 		if ((v[0].v.z * v[0].v.z)>g1_resources.lod_disappear_dist)
@@ -1057,7 +1074,7 @@ void g1_road_object_class::draw(g1_draw_context_class *context, i4_3d_vector& vi
 	//todo: add code to draw all cars on the outgoing links
 }
 
-int g1_road_object_class::find_path(g1_team_type team, g1_path_object_class *dest, g1_path_object_class **stack,
+int g1_road_object_class::find_path(g1_team_type team, g1_path_object_class * dest, g1_path_object_class * * stack,
 									int stack_size)
 {
 	int res;
@@ -1162,13 +1179,13 @@ i4_bool g1_road_object_class::build(int type)
 }
 
 int g1_road_object_class::find_path(g1_team_type team,
-									g1_path_object_class **stack,
+									g1_path_object_class * * stack,
 									int stack_size)
 {
 	//return the recently used path, but don't return any path loops
 	int t=0,cl;
 
-	g1_path_object_class *o=this,*next;
+	g1_path_object_class * o=this,* next;
 
 	//int numlinks=0;
 	do
@@ -1190,12 +1207,14 @@ int g1_road_object_class::find_path(g1_team_type team,
 				{
 					next=0;
 				}            //no more usable paths
-			} while (next && next->get_flag(SCRATCH_BIT));
+			}
+			while (next && next->get_flag(SCRATCH_BIT));
 			o=next;
 
 		}
 
-	} while (o && t<(stack_size-1));
+	}
+	while (o && t<(stack_size-1));
 	int th=0;
 	for (; th<t; th++)
 	{
@@ -1237,8 +1256,8 @@ g1_road_object_class::~g1_road_object_class()
    	return 0;
    }*/
 
-int road_compare_nodes(const g2_breadth_first_road_solver_class::solve_node *a,
-					   const g2_breadth_first_road_solver_class::solve_node *b)
+int road_compare_nodes(const g2_breadth_first_road_solver_class::solve_node * a,
+					   const g2_breadth_first_road_solver_class::solve_node * b)
 {
 	// smallest length last
 	if (b->length > a->length)
@@ -1255,7 +1274,7 @@ int road_compare_nodes(const g2_breadth_first_road_solver_class::solve_node *a,
 	}
 }
 
-i4_bool g2_breadth_first_road_solver_class::add_node(g1_road_object_class *node, g1_road_object_class *from,
+i4_bool g2_breadth_first_road_solver_class::add_node(g1_road_object_class * node, g1_road_object_class * from,
 													 i4_float len)
 {
 	if (node->ref && node->rlen <len)
@@ -1305,10 +1324,10 @@ i4_bool g2_breadth_first_road_solver_class::get_next_node(g1_road_object_class *
 	return i4_T;
 };
 
-int g2_breadth_first_road_solver_class::path_solve(g1_team_type team, g1_road_object_class *start, g1_road_object_class *dest,
-												   g1_path_object_class **path, w32 stack_size)
+int g2_breadth_first_road_solver_class::path_solve(g1_team_type team, g1_road_object_class * start, g1_road_object_class * dest,
+												   g1_path_object_class * * path, w32 stack_size)
 {
-	g1_road_object_class *node;
+	g1_road_object_class * node;
 	i4_float len; //actually we now use exspected time
 
 	clear_heap();
@@ -1320,7 +1339,7 @@ int g2_breadth_first_road_solver_class::path_solve(g1_team_type team, g1_road_ob
 	}
 
 	add_node(start, 0, 0);
-	link_manager *lman=g2_link_man();
+	link_manager * lman=g2_link_man();
 	len=0;
 	w32 starttime=(w32)g2_act_man()->daytime;
 	while (get_next_node(node, len))
@@ -1328,7 +1347,7 @@ int g2_breadth_first_road_solver_class::path_solve(g1_team_type team, g1_road_ob
 		//g1_road_object_class *c =0;
 		for (int i=0; i<node->total_links(G1_ALLY); i++) //ally means outgoing
 		{
-			g2_link *l=lman->get_link(node->get_link_id(G1_ALLY,i));
+			g2_link * l=lman->get_link(node->get_link_id(G1_ALLY,i));
 			i4_float extime=l->quratio(starttime,len);
 			//i4_float extime=l->get_length()/l->get_freespeed();
 			add_node((g1_road_object_class *)node->get_link(G1_ALLY,i), node,
@@ -1367,9 +1386,10 @@ int g2_breadth_first_road_solver_class::path_solve(g1_team_type team, g1_road_ob
 
 void g2_breadth_first_road_solver_class::clear_solve()
 {
-	g1_object_class *olist[G1_MAX_OBJECTS];
+	g1_object_class * olist[G1_MAX_OBJECTS];
 	w32 num=g1_get_map()->make_object_list(olist,G1_MAX_OBJECTS);
 	w32 road_id=g1_get_object_type("road_object");
+
 	for (int i=0; i<num; i++)
 	{
 		if (olist[i]->id==road_id)
@@ -1383,8 +1403,8 @@ g2_breadth_first_road_solver_class::~g2_breadth_first_road_solver_class()
 {
 };
 
-int road_compare_weighted_nodes(const g2_breadth_first_road_solver_class::solve_node *a,
-								const g2_breadth_first_road_solver_class::solve_node *b)
+int road_compare_weighted_nodes(const g2_breadth_first_road_solver_class::solve_node * a,
+								const g2_breadth_first_road_solver_class::solve_node * b)
 {
 	// smallest length last
 	if (b->weight > a->weight)
@@ -1401,7 +1421,7 @@ int road_compare_weighted_nodes(const g2_breadth_first_road_solver_class::solve_
 	}
 }
 
-i4_bool g2_astar_road_solver_class::add_weighted_node(g1_road_object_class *node, g1_road_object_class *from,
+i4_bool g2_astar_road_solver_class::add_weighted_node(g1_road_object_class * node, g1_road_object_class * from,
 													  i4_float len)
 {
 	if (node->ref && node->rlen <len)
@@ -1459,10 +1479,10 @@ i4_bool g2_astar_road_solver_class::get_next_weighted_node(g1_road_object_class 
 	return i4_T;
 };
 
-int g2_astar_road_solver_class::path_solve(g1_team_type team, g1_road_object_class *start, g1_road_object_class *dest,
-										   g1_path_object_class **path, w32 stack_size)
+int g2_astar_road_solver_class::path_solve(g1_team_type team, g1_road_object_class * start, g1_road_object_class * dest,
+										   g1_path_object_class * * path, w32 stack_size)
 {
-	g1_road_object_class *node;
+	g1_road_object_class * node;
 	i4_float len; //actually we now use exspected time
 
 	clear_heap();
@@ -1476,7 +1496,7 @@ int g2_astar_road_solver_class::path_solve(g1_team_type team, g1_road_object_cla
 	destx=dest->x;
 	desty=dest->y;
 	add_node(start, 0, 0);
-	link_manager *lman=g2_link_man();
+	link_manager * lman=g2_link_man();
 	len=0;
 	w32 starttime=(w32)g2_act_man()->daytime;
 	while (get_next_node(node, len))
@@ -1488,7 +1508,7 @@ int g2_astar_road_solver_class::path_solve(g1_team_type team, g1_road_object_cla
 		}
 		for (int i=0; i<node->total_links(G1_ALLY); i++) //ally means outgoing
 		{
-			g2_link *l=lman->get_link(node->get_link_id(G1_ALLY,i));
+			g2_link * l=lman->get_link(node->get_link_id(G1_ALLY,i));
 			i4_float extime=l->quratio(starttime,len);
 			//i4_float extime=l->get_length()/l->get_freespeed();
 			add_node((g1_road_object_class *)node->get_link(G1_ALLY,i), node,

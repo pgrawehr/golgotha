@@ -14,7 +14,7 @@ class ai_builder :
 	public g1_team_api_class
 {
 public:
-	ai_builder(g1_loader_class *f=0)
+	ai_builder(g1_loader_class * f=0)
 	{
 	}
 
@@ -28,7 +28,7 @@ class ai_neutral :
 	public g1_team_api_class
 {
 public:
-	ai_neutral(g1_loader_class *f=0)
+	ai_neutral(g1_loader_class * f=0)
 	{
 	};
 	virtual void think()
@@ -41,7 +41,7 @@ class ai_remote_player :
 	public g1_team_api_class
 {
 public:
-	ai_remote_player(g1_loader_class *f=0)
+	ai_remote_player(g1_loader_class * f=0)
 	{
 	};
 	virtual void think()

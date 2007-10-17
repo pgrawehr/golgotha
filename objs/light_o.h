@@ -20,7 +20,7 @@ class g1_light_object_class :
 	public g1_object_class
 {
 public:
-	static g1_light_object_class *cast(g1_object_class *obj)
+	static g1_light_object_class *cast(g1_object_class * obj)
 	{
 		if (!obj || obj->id != g1_lightbulb_type)
 		{
@@ -36,19 +36,19 @@ public:
 	// light atenuation formula = min(1/(c1 + c2*d + c3*d*d),1)
 	i4_float c1,c2,c3;                 // 0..1 light antenuation values
 
-	g1_light_object_class *next; // next point source light in list
+	g1_light_object_class * next; // next point source light in list
 
 	sw32 change_radius;
-	w32 *add_intensities;
+	w32 * add_intensities;
 
 
 	enum {
 		DATA_VERSION=0
 	};
 
-	g1_light_object_class(g1_object_type id, g1_loader_class *fp);
+	g1_light_object_class(g1_object_type id, g1_loader_class * fp);
 
-	void save(g1_saver_class *fp);
+	void save(g1_saver_class * fp);
 
 	virtual i4_bool occupy_location();
 	virtual void unoccupy_location();
@@ -61,7 +61,7 @@ public:
 
 	void move(float new_x, float new_y, float new_h);
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	virtual void think();
 	~g1_light_object_class();
 };

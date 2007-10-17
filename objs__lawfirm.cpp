@@ -36,12 +36,12 @@ public:
 		DATA_VERSION=1
 	};
 	g1_lawfirm_class(g1_object_type id,
-					 g1_loader_class *fp);
+					 g1_loader_class * fp);
 	void think();
 	void change_player_num(int new_player_num);
-	void save(g1_saver_class *fp);
-	void skipload(g1_loader_class *fp);
-	void load(g1_loader_class *fp);
+	void save(g1_saver_class * fp);
+	void skipload(g1_loader_class * fp);
+	void load(g1_loader_class * fp);
 };
 
 g1_object_definer<g1_lawfirm_class>
@@ -49,7 +49,7 @@ g1_lawfirm_def("lawfirm",g1_object_definition_class::EDITOR_SELECTABLE|
 			   g1_object_definition_class::TO_BUILDING);
 
 g1_lawfirm_class::g1_lawfirm_class(g1_object_type id,
-								   g1_loader_class *fp) :
+								   g1_loader_class * fp) :
 	g1_building_class(id,fp)
 {
 	radar_image=&radar_iml;
@@ -74,14 +74,14 @@ g1_lawfirm_class::g1_lawfirm_class(g1_object_type id,
 
 }
 
-void g1_lawfirm_class::save(g1_saver_class *fp)
+void g1_lawfirm_class::save(g1_saver_class * fp)
 {
 	g1_building_class::save(fp);
 	fp->start_version(DATA_VERSION);
 	fp->end_version();
 }
 
-void g1_lawfirm_class::load(g1_loader_class *fp)
+void g1_lawfirm_class::load(g1_loader_class * fp)
 {
 	g1_building_class::load(fp);
 	w16 v,ds;
@@ -89,7 +89,7 @@ void g1_lawfirm_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 }
 
-void g1_lawfirm_class::skipload(g1_loader_class *fp)
+void g1_lawfirm_class::skipload(g1_loader_class * fp)
 {
 	g1_building_class::skipload(fp);
 	w16 v,ds;
@@ -105,7 +105,7 @@ void g1_lawfirm_class::think()
 	}
 	if (health<=0)
 	{
-		g1_shrapnel_class *shrapnel = NULL;
+		g1_shrapnel_class * shrapnel = NULL;
 
 		short shrapnel_type = g1_get_object_type("shrapnel");
 		shrapnel = (g1_shrapnel_class *)g1_create_object(shrapnel_type);

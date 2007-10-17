@@ -12,7 +12,7 @@
 
 #ifdef _DEBUG
 
-i4_bool i4_dx5_check_lineinfo(HRESULT res, char *f, int line)
+i4_bool i4_dx5_check_lineinfo(HRESULT res, char * f, int line)
 {
 	if (res==DD_OK)
 	{

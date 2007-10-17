@@ -180,7 +180,7 @@ void dx_threaded_mouse_class::thread()
 }
 
 
-void directx_mouse_thread_start(void *arg)
+void directx_mouse_thread_start(void * arg)
 {
 	((dx_threaded_mouse_class *)arg)->thread();
 	_endthread();
@@ -277,7 +277,7 @@ void dx_threaded_mouse_class::init_mouse(HWND hwnd)
 
 }
 
-dx_threaded_mouse_class::dx_threaded_mouse_class(const i4_pal *screen_pal,
+dx_threaded_mouse_class::dx_threaded_mouse_class(const i4_pal * screen_pal,
 												 HWND window_handle,
 												 sw32 clip_x1, sw32 clip_y1,
 												 sw32 clip_x2, sw32 clip_y2)
@@ -323,8 +323,10 @@ void dx_threaded_mouse_class::set_active(i4_bool act)
 dx_threaded_mouse_class::~dx_threaded_mouse_class()
 {
 	stop = i4_T;
+
 	while (stop)
 		Sleep(0);
+
 
 
 	if (cursor.pict)

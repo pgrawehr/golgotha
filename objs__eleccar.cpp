@@ -69,7 +69,7 @@ g1_electric_car_def("electric_car",
 
 
 g1_electric_car_class::g1_electric_car_class(g1_object_type id,
-											 g1_loader_class *fp)
+											 g1_loader_class * fp)
 	: g1_map_piece_class(id,fp)
 {
 	draw_params.setup(model_ref.id(),shadow_ref.id(), lod_ref.id());
@@ -236,7 +236,7 @@ g1_electric_car_class::~g1_electric_car_class()
 }
 
 
-void g1_electric_car_class::save(g1_saver_class *fp)
+void g1_electric_car_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -285,7 +285,7 @@ void g1_electric_car_class::save(g1_saver_class *fp)
 	fp->end_version();
 }
 
-void g1_electric_car_class::load(g1_loader_class *fp)
+void g1_electric_car_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -334,7 +334,7 @@ void g1_electric_car_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 }
 
-void g1_electric_car_class::skipload(g1_loader_class *fp)
+void g1_electric_car_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->check_version(DATA_VERSION);
@@ -342,7 +342,7 @@ void g1_electric_car_class::skipload(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 }
 
-void g1_electric_car_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_electric_car_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	g1_map_piece_class::draw(context, viewer_position);
 
@@ -374,6 +374,7 @@ void g1_electric_car_class::draw(g1_draw_context_class *context, i4_3d_vector& v
 void g1_electric_car_class::copy_old_points()
 {
 	sw32 i;
+
 	for (i=0; i<NUM_ARC_POINTS; i++)
 	{
 		arc_points1[i].lposition = arc_points1[i].position;
@@ -542,7 +543,7 @@ void g1_electric_car_class::post_think()
 		return;
 	}
 
-	g1_object_class *target=attack_target.get();
+	g1_object_class * target=attack_target.get();
 	if (target)
 	{
 		request_think();
@@ -599,7 +600,7 @@ void g1_electric_car_class::die()
 
 
 
-i4_bool g1_electric_car_class::can_attack(g1_object_class *who)
+i4_bool g1_electric_car_class::can_attack(g1_object_class * who)
 {
 	if (g1_map_piece_class::can_attack(who))
 	{

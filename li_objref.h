@@ -30,7 +30,7 @@ public:
 		_global_id=global_id;
 	}
 
-	li_g1_ref(g1_object_class *o);
+	li_g1_ref(g1_object_class * o);
 
 	w32 id()
 	{
@@ -48,13 +48,13 @@ public:
 		}
 	}
 
-	static li_g1_ref *get(li_object *o, li_environment *env)
+	static li_g1_ref *get(li_object * o, li_environment * env)
 	{
 		check_type(o, li_g1_ref_type_number, env);
 		return ((li_g1_ref *)o);
 	}
 
-	void draw(g1_object_class *start, w32 color, g1_draw_context_class *context);
+	void draw(g1_object_class * start, w32 color, g1_draw_context_class * context);
 } ;
 
 li_g1_ref *li_g1_null_ref();
@@ -68,7 +68,7 @@ class li_g1_ref_list :
 	public li_object
 {
 	friend class li_g1_ref_list_function;
-	w32 *list;
+	w32 * list;
 	void free();
 public:
 	li_g1_ref_list *clone();
@@ -95,45 +95,45 @@ public:
 	g1_object_class *value(int list_num);
 
 	void add(w32 id);
-	void add(g1_object_class *obj);
+	void add(g1_object_class * obj);
 
 	void remove(w32 id);
-	void remove(g1_object_class *o);
+	void remove(g1_object_class * o);
 
 	// gets rid of invalid object id's that might be in the list
 	void compact();
 
 	int find(w32 id);           // return -1 if not found in list, else returns position
-	int find(g1_object_class *o); // return -1 if not found in list, else returns position
+	int find(g1_object_class * o); // return -1 if not found in list, else returns position
 
-	static li_g1_ref_list *get(li_object *o, li_environment *env)
+	static li_g1_ref_list *get(li_object * o, li_environment * env)
 	{
 		check_type(o, li_g1_ref_list_type_number, env);
 		return ((li_g1_ref_list *)o);
 	}
 
-	void draw(g1_object_class *start, w32 color, g1_draw_context_class *context);
+	void draw(g1_object_class * start, w32 color, g1_draw_context_class * context);
 } ;
 
 struct li_g1_ref_class_member : public li_class_member
 {
-	li_g1_ref_class_member(char *name) :
+	li_g1_ref_class_member(char * name) :
 		li_class_member(name) {
 	}
-	li_g1_ref *operator()()
+	li_g1_ref * operator()()
 	{
-		return li_g1_ref::get(li_this->get(*this),0);
+		return li_g1_ref::get(li_this->get(* this),0);
 	}
 };
 
 struct li_g1_ref_list_class_member : public li_class_member
 {
-	li_g1_ref_list_class_member(char *name) :
+	li_g1_ref_list_class_member(char * name) :
 		li_class_member(name) {
 	}
-	li_g1_ref_list *operator()()
+	li_g1_ref_list * operator()()
 	{
-		return li_g1_ref_list::get(li_this->get(*this),0);
+		return li_g1_ref_list::get(li_this->get(* this),0);
 	}
 };
 

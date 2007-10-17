@@ -23,7 +23,7 @@ class g1_takeover_pad_class :
 	public g1_object_class
 {
 public:
-	g1_takeover_pad_class(g1_object_type id, g1_loader_class *fp)
+	g1_takeover_pad_class(g1_object_type id, g1_loader_class * fp)
 		: g1_object_class(id,fp)
 	{
 		draw_params.setup("takeover_pad");
@@ -38,16 +38,16 @@ public:
 	{
 		li_class_context c(vars);
 
-		g1_object_class *turret=li_g1_ref::get(me_turret(),0)->value();
+		g1_object_class * turret=li_g1_ref::get(me_turret(),0)->value();
 		if (!turret)
 		{
 			g1_object_class::change_player_num(new_team);
 
-			li_g1_ref_list *list=li_g1_ref_list::get(target(),0);
+			li_g1_ref_list * list=li_g1_ref_list::get(target(),0);
 			int list_size=list->size();
 			for (int i=0; i<list_size; i++)
 			{
-				g1_object_class *tar=list->value(i);
+				g1_object_class * tar=list->value(i);
 				if (tar)
 				{
 					tar->request_think();
@@ -55,7 +55,7 @@ public:
 				}
 			}
 
-			g1_object_class *t = g1_create_object(g1_get_object_type(turret_obj.get()));
+			g1_object_class * t = g1_create_object(g1_get_object_type(turret_obj.get()));
 			if (t)
 			{
 				t->x = x;

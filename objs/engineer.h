@@ -15,23 +15,23 @@ class g1_engineer_class :
 	public g1_map_piece_class
 {
 protected:
-	g1_mini_object *back_wheels;
-	g1_mini_object *front_wheels;
+	g1_mini_object * back_wheels;
+	g1_mini_object * front_wheels;
 
 
 public:
-	g1_engineer_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	virtual void load(g1_loader_class *fp);
-	virtual void skipload(g1_loader_class *fp);
+	g1_engineer_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	virtual void load(g1_loader_class * fp);
+	virtual void skipload(g1_loader_class * fp);
 
 	virtual void think();
 
-	virtual i4_bool can_attack(g1_object_class *who);
+	virtual i4_bool can_attack(g1_object_class * who);
 
-	virtual li_object *message(li_symbol *message_name,
-							   li_object *message_params,
-							   li_environment *env);
+	virtual li_object *message(li_symbol * message_name,
+							   li_object * message_params,
+							   li_environment * env);
 };
 
 #endif

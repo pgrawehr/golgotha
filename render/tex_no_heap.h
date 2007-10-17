@@ -15,7 +15,7 @@ extern i4_profile_class pf_tex_no_heap_alloc;
 extern i4_profile_class pf_tex_no_heap_free;
 extern i4_profile_class pf_tex_no_heap_cleanup;
 
-#define R1_TEX_NO_HEAP_USED_NODE_DATA r1_miplevel_t *mip; r1_tex_no_heap_used_node *next; r1_tex_no_heap_used_node *last;
+#define R1_TEX_NO_HEAP_USED_NODE_DATA r1_miplevel_t *mip; r1_tex_no_heap_used_node * next; r1_tex_no_heap_used_node * last;
 
 #define R1_TEX_NO_HEAP_DONT_LIST 1
 
@@ -28,12 +28,12 @@ public:
 class r1_texture_no_heap_class
 {
 public:
-	r1_tex_no_heap_used_node *first_used;
-	r1_tex_no_heap_used_node *oldest_used;
+	r1_tex_no_heap_used_node * first_used;
+	r1_tex_no_heap_used_node * oldest_used;
 
-	i4_linear_allocator *used_node_alloc;
+	i4_linear_allocator * used_node_alloc;
 
-	r1_texture_no_heap_class(r1_texture_manager_class *tman, w32 used_node_size, w32 *frame_count)
+	r1_texture_no_heap_class(r1_texture_manager_class * tman, w32 used_node_size, w32 * frame_count)
 	{
 		tmanager = tman;
 
@@ -55,7 +55,7 @@ public:
 	~r1_texture_no_heap_class()
 	{
 		//kill the used list
-		r1_tex_no_heap_used_node *u,*next_used;
+		r1_tex_no_heap_used_node * u,* next_used;
 
 		u = first_used;
 		while (u)
@@ -74,8 +74,8 @@ public:
 		used_node_alloc=0;
 	}
 
-	r1_texture_manager_class *tmanager;
-	w32 *frame_count_ptr;
+	r1_texture_manager_class * tmanager;
+	w32 * frame_count_ptr;
 	w32 num_ram_misses;
 	sw32 max_fail_size;
 
@@ -87,8 +87,8 @@ public:
 
 		w32 total_freed = 0;
 
-		r1_tex_no_heap_used_node *u = oldest_used;
-		r1_tex_no_heap_used_node *last;
+		r1_tex_no_heap_used_node * u = oldest_used;
+		r1_tex_no_heap_used_node * last;
 
 		while (u && total_freed < (w32)max_fail_size)
 		{
@@ -116,7 +116,7 @@ public:
 
 	r1_tex_no_heap_used_node *alloc(w8 flags=0)
 	{
-		r1_tex_no_heap_used_node *u = (r1_tex_no_heap_used_node *)used_node_alloc->alloc();
+		r1_tex_no_heap_used_node * u = (r1_tex_no_heap_used_node *)used_node_alloc->alloc();
 
 		if (flags & R1_TEX_NO_HEAP_DONT_LIST)
 		{
@@ -146,13 +146,13 @@ public:
 		//we know how much memory we need, now try to find an old texture of the same or greater size
 
 		//no memory large enough. dig through and see if there is a used chunk that we can free
-		r1_tex_no_heap_used_node *u = oldest_used;
+		r1_tex_no_heap_used_node * u = oldest_used;
 
 		while (u)
 		{
 			if (u->mip->width*u->mip->height*2 >= (sw32)need_size)
 			{
-				r1_miplevel_t *m = u->mip;
+				r1_miplevel_t * m = u->mip;
 				if (m->last_frame_used < (sw32)(*frame_count_ptr - 2))
 				{
 					if (m->flags & R1_MIPLEVEL_IS_LOADING)
@@ -205,7 +205,7 @@ public:
 		}
 	}
 
-	void update_usage(r1_tex_no_heap_used_node *u)
+	void update_usage(r1_tex_no_heap_used_node * u)
 	{
 		if ((u->mip->last_frame_used) != -1)
 		{
@@ -266,7 +266,7 @@ public:
 		}
 	}
 
-	void free(r1_tex_no_heap_used_node *u)
+	void free(r1_tex_no_heap_used_node * u)
 	{
 		if (!u)
 		{

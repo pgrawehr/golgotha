@@ -25,21 +25,21 @@ g1_selection_list::g1_selection_list()
 	t=0;
 }
 
-void g1_selection_list::add(g1_object_class *o)
+void g1_selection_list::add(g1_object_class * o)
 {
 	if (t==list_size)
 	{
 		list_size+=64;
-		list=(g1_object_class **)I4_REALLOC(list,
-											list_size * sizeof(g1_object_class *),
-											"selection list");
+		list=(g1_object_class * *)I4_REALLOC(list,
+											 list_size * sizeof(g1_object_class *),
+											 "selection list");
 	}
 
 	list[t++]=o;
 	o->flags |= (~g1_object_class::SELECTED);
 }
 
-void g1_selection_list::remove(g1_object_class *o)
+void g1_selection_list::remove(g1_object_class * o)
 {
 	for (w32 i=0; i<t; i++)
 	{

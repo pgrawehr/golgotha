@@ -8,9 +8,10 @@
 
 #include "pch.h"
 
-w32 i4_check_sum32(const void *buf, w32 buf_len)
+w32 i4_check_sum32(const void * buf, w32 buf_len)
 {
 	w8 c1=0,c2=0,c3=0,c4=0;
+
 	while (buf_len)
 	{
 		c1+=*((w8 *)buf);
@@ -23,7 +24,7 @@ w32 i4_check_sum32(const void *buf, w32 buf_len)
 	return (c1|(c2<<8)|(c3<<16)|(c4<<24));
 }
 
-w16 i4_check_sum16(const void *buf, w32 buf_len)
+w16 i4_check_sum16(const void * buf, w32 buf_len)
 {
 	w8 c1=0,c2=0;
 

@@ -16,16 +16,16 @@ class g1_popup_turret_class :
 	public g1_map_piece_class
 {
 protected:
-	g1_mini_object *mount,*barrel;
+	g1_mini_object * mount,* barrel;
 public:
-	g1_popup_turret_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	void load(g1_loader_class *fp);
-	void skipload(g1_loader_class *fp);
+	g1_popup_turret_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	void load(g1_loader_class * fp);
+	void skipload(g1_loader_class * fp);
 
 	virtual void fire();
 	virtual void think();
-	virtual void setup(i4_float x, i4_float y, g1_object_class *creator);
+	virtual void setup(i4_float x, i4_float y, g1_object_class * creator);
 };
 
 #endif

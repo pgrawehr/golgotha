@@ -8,13 +8,13 @@
 
 
 
-Point3 DllExport operator *(const Matrix3& A, const Point3& V)
+Point3 DllExport operator * (const Matrix3& A, const Point3& V)
 {
 	return 0;
 }
 // Transform Point with matrix
 
-Point3 DllExport operator *(const Point3& V,const Matrix3& A)
+Point3 DllExport operator * (const Point3& V,const Matrix3& A)
 {
 	return 0;
 }

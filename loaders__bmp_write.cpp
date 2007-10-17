@@ -18,9 +18,10 @@ inline void i4_32bpp_to_rgb(w32 color, w8 &r, w8 &g, w8 &b)
 	b=(w8)(color&0xff);
 }
 
-i4_bool i4_write_bmp(i4_image_class *im, const i4_const_str &name)
+i4_bool i4_write_bmp(i4_image_class * im, const i4_const_str &name)
 {
-	i4_file_class *fp=i4_open(name,I4_WRITE);
+	i4_file_class * fp=i4_open(name,I4_WRITE);
+
 	if (fp)
 	{
 		i4_bool bret=i4_write_bmp(im,fp);
@@ -35,9 +36,9 @@ i4_bool i4_write_bmp(i4_image_class *im, const i4_const_str &name)
 	return i4_F;
 }
 
-i4_bool i4_write_bmp(i4_image_class *im, i4_file_class *fp)
+i4_bool i4_write_bmp(i4_image_class * im, i4_file_class * fp)
 {
-	const i4_pal *pal=im->get_pal();
+	const i4_pal * pal=im->get_pal();
 
 	if (pal->source.pixel_depth==I4_8BIT)
 	{
@@ -73,7 +74,7 @@ i4_bool i4_write_bmp(i4_image_class *im, i4_file_class *fp)
 		fp->write_32(256);
 		fp->write_32(256);
 
-		w32 *p=pal->source.lookup;
+		w32 * p=pal->source.lookup;
 		for (i=0; i<256; i++)
 		{
 			w8 r,g,b;
@@ -93,7 +94,7 @@ i4_bool i4_write_bmp(i4_image_class *im, i4_file_class *fp)
 		buf[2]=0;
 
 
-		w8 *data=(w8 *)im->data;
+		w8 * data=(w8 *)im->data;
 		for (i=h; i; i--)
 		{
 			fp->write(data, w);

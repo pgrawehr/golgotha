@@ -35,7 +35,7 @@ protected:
 
 	w32 current_offset, last_version_start, current_skip;
 
-	i4_file_class *out;
+	i4_file_class * out;
 	i4_bool close_on_delete;
 
 	i4_array<w16>                    skips;
@@ -44,21 +44,21 @@ protected:
 	int marker_on;
 
 public:
-	i4_saver_class(i4_file_class *out, i4_bool close_on_delete=i4_T);
+	i4_saver_class(i4_file_class * out, i4_bool close_on_delete=i4_T);
 
 	int mark_size();
 	void end_mark_size(int marker_number);
 
 	void mark_section(w32 section_id);
-	void mark_section(char *section_name); // calls above with checksum of name
+	void mark_section(char * section_name); // calls above with checksum of name
 
 	void start_version(w16 version);
 	void end_version();
 
 	i4_bool begin_data_write();        // returns false if error occured
 
-	virtual w32 read(void *buffer, w32 size);
-	virtual w32 write(const void *buffer, w32 size);
+	virtual w32 read(void * buffer, w32 size);
+	virtual w32 write(const void * buffer, w32 size);
 
 	virtual w32 seek(w32 offset)
 	{

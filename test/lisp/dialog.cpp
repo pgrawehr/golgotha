@@ -13,7 +13,7 @@
 #include "error/error.h"
 
 
-li_object *test_quit(li_object *o, li_environment *env)
+li_object *test_quit(li_object * o, li_environment * env)
 {
 	i4_debug->printf("the new value is ");
 	lip(li_car(o,env));
@@ -46,8 +46,9 @@ public:
 	}
 };
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	dialog_app test;
+
 	test.run();
 }

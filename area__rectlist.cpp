@@ -19,7 +19,7 @@
 #define min(x,y) (((x)>(y)) ? (y) : (x))
 #endif
 
-i4_rect_list_class::area::area_allocator *i4_rect_list_class::area::area_alloc=0;
+i4_rect_list_class::area::area_allocator * i4_rect_list_class::area::area_alloc=0;
 
 
 //! This class is used to ensure area_alloc is created after the memory manager is installed.
@@ -31,6 +31,7 @@ public:
 	{
 		i4_rect_list_class::area::area_alloc=
 			new i4_linear_allocator(sizeof(i4_rect_list_class::area),0,300,"areas");
+
 	}
 	virtual void uninit()
 	{
@@ -40,7 +41,7 @@ public:
 
 static area_allocator_initter instance;
 
-void i4_rect_list_class::swap(i4_rect_list_class *other)
+void i4_rect_list_class::swap(i4_rect_list_class * other)
 {
 	other->list.swap(list);
 }
@@ -459,7 +460,7 @@ i4_bool i4_rect_list_class::clipped_away(i4_coord x1, i4_coord y1, i4_coord x2, 
 }
 
 
-i4_rect_list_class::i4_rect_list_class(i4_rect_list_class *copy_from, i4_coord xoff, i4_coord yoff)
+i4_rect_list_class::i4_rect_list_class(i4_rect_list_class * copy_from, i4_coord xoff, i4_coord yoff)
 {
 	i4_isl_list<area>::iterator a=copy_from->list.begin(),last,q;
 	if (a!=copy_from->list.end())
@@ -479,9 +480,10 @@ i4_rect_list_class::i4_rect_list_class(i4_rect_list_class *copy_from, i4_coord x
 
 }
 
-void i4_rect_list_class::intersect_list(i4_rect_list_class *other)                                 // reduces area list to that which intersects this area list
+void i4_rect_list_class::intersect_list(i4_rect_list_class * other)                                 // reduces area list to that which intersects this area list
 {
 	i4_rect_list_class intersection;
+
 	i4_isl_list<area>::iterator a,b;
 
 	for (b=other->list.begin(); b!=other->list.end(); ++b)

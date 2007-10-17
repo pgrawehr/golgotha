@@ -36,21 +36,21 @@ pf_dx9_lock("dx9::lock");
 
 i4_dx9_display_class i4_dx9_display_class_instance;
 
-i4_dx9_display_class *i4_dx9_display=0;
+i4_dx9_display_class * i4_dx9_display=0;
 
 struct gr_buf_status_type9
 {
 	sw8 state;           // -1 = not locked, else
 						 //    I4_FRAME_BUFFER_READ,
 						 // or I4_FRAME_BUFFER_WRITE
-	i4_image_class *im;
+	i4_image_class * im;
 
 
 } dx9_buf[2];    // I4_FRONT_FRAME_BUFFER=0, I4_BACK_FRAME_BUFFER=1
 
 
 
-int dx9_error_function(const char *str)
+int dx9_error_function(const char * str)
 {
 	dx9_common.cleanup();
 	i4_dx9_display->error_handler.old_error_handler(str);
@@ -70,8 +70,8 @@ i4_refresh_type i4_dx9_display_class::update_model()
 
 }
 
-i4_image_class *i4_dx9_display_class::lock_frame_buffer(i4_frame_buffer_type type,
-														i4_frame_access_type access)
+i4_image_class * i4_dx9_display_class::lock_frame_buffer(i4_frame_buffer_type type,
+														 i4_frame_access_type access)
 {
 	if (access==dx9_buf[type].state)
 	{
@@ -88,8 +88,8 @@ i4_image_class *i4_dx9_display_class::lock_frame_buffer(i4_frame_buffer_type typ
 	//memset(&cur_dx9_lock_info,0,sizeof(DDSURFACEDESC));
 	//cur_dx9_lock_info.dwSize = sizeof(DDSURFACEDESC);
 
-	IDirect3DSurface9 *surf=type==I4_FRONT_FRAME_BUFFER ?
-							 dx9_common.front_surface : dx9_common.back_surface;
+	IDirect3DSurface9 * surf=type==I4_FRONT_FRAME_BUFFER ?
+							  dx9_common.front_surface : dx9_common.back_surface;
 
 	int flags=access==I4_FRAME_BUFFER_READ ? D3DLOCK_READONLY : 0;
 	//  DDLOCK_WRITEONLY;
@@ -117,8 +117,8 @@ i4_image_class *i4_dx9_display_class::lock_frame_buffer(i4_frame_buffer_type typ
 
 void i4_dx9_display_class::unlock_frame_buffer(i4_frame_buffer_type type)
 {
-	IDirect3DSurface9 *surf=type==I4_FRONT_FRAME_BUFFER ?
-							 dx9_common.front_surface : dx9_common.back_surface;
+	IDirect3DSurface9 * surf=type==I4_FRONT_FRAME_BUFFER ?
+							  dx9_common.front_surface : dx9_common.back_surface;
 
 	if (surf)
 	{
@@ -157,7 +157,7 @@ i4_dx9_display_class::i4_dx9_display_class() :
 }
 
 
-i4_image_class *i4_dx9_display_class::get_screen()
+i4_image_class * i4_dx9_display_class::get_screen()
 {
 	return fake_screen;
 }
@@ -174,7 +174,7 @@ void i4_dx9_display_class::uninit()
 	i4_display_class::uninit();
 }
 
-li_object *show_gdi_surface9(li_object *o, li_environment *env)
+li_object *show_gdi_surface9(li_object * o, li_environment * env)
 {
 	i4_dx9_display_class_instance.FlipToGDISurface();
 	return 0;
@@ -184,18 +184,19 @@ li_object *show_gdi_surface9(li_object *o, li_environment *env)
 void i4_dx9_display_class::init()
 {
 	int id=0;
+
 	screen_is_gdi=i4_T;
 	//actually returns the list of adaptors
 	dx9_common.initialize_driver();
-	CArrayList *list=dx9_common.get_driver_list();
-	char *n=name_buffer;
-	D3DAdapterInfo *d;
+	CArrayList * list=dx9_common.get_driver_list();
+	char * n=name_buffer;
+	D3DAdapterInfo * d;
 	for (UINT i=0; i<list->Count(); i++)
 	{
 		d=(D3DAdapterInfo *)list->GetPtr(i);
 		sprintf(n, "DirectX9 %s: HAL device %s", d->AdapterIdentifier.Description,
 				d->AdapterIdentifier.DeviceName);
-		i4_display_list_struct *s=new i4_display_list_struct;
+		i4_display_list_struct * s=new i4_display_list_struct;
 		s->add_to_list(n, id | 0x8000, 250, this, i4_display_list);
 		n+=strlen(n)+1;
 		sprintf(n, "DirectX9 %s: Reference device %s", d->AdapterIdentifier.Description,
@@ -208,9 +209,10 @@ void i4_dx9_display_class::init()
 }
 
 // find the driver, then get it's modes and return the first one
-i4_display_class::mode *i4_dx9_display_class::get_first_mode(int driver_id)
+i4_display_class::mode * i4_dx9_display_class::get_first_mode(int driver_id)
 {
 	int find_id = (driver_id & (~0x8001))/2;  // top bit indicates hardware accelerated
+
 	//driver_id/2 is the adaptor id.
 	dx9_common.initialize_driver();
 
@@ -238,6 +240,7 @@ i4_dx9_display_class::~i4_dx9_display_class()
 void bitmask_2_format(D3DFORMAT d3dfmt,i4_pixel_format &fmt)
 {
 	int bitspixel=16;
+
 	if ((d3dfmt==D3DFMT_A8R8G8B8)||(d3dfmt==D3DFMT_X8R8G8B8))
 	{
 		bitspixel=32;
@@ -299,14 +302,14 @@ void bitmask_2_format(D3DFORMAT d3dfmt,i4_pixel_format &fmt)
 	fmt.calc_shift();
 }
 
-i4_display_class::mode *i4_dx9_display_class::get_next_mode()
+i4_display_class::mode * i4_dx9_display_class::get_next_mode()
 {
 	if (!mode_list)
 	{
 		return 0;
 	}
 
-	D3DDISPLAYMODE *mode=(D3DDISPLAYMODE *)mode_list->GetPtr(amode.mode_id);
+	D3DDISPLAYMODE * mode=(D3DDISPLAYMODE *)mode_list->GetPtr(amode.mode_id);
 
 	int bitspixel=16;
 	if (mode->Format==D3DFMT_A8R8G8B8)
@@ -391,7 +394,7 @@ i4_bool i4_dx9_display_class::initialize_mode()
 	{
 		return i4_F;
 	}
-	D3DDISPLAYMODE *mode=(D3DDISPLAYMODE *)mode_list->GetPtr(last_mode.mode_id);
+	D3DDISPLAYMODE * mode=(D3DDISPLAYMODE *)mode_list->GetPtr(last_mode.mode_id);
 
 	D3DFORMAT format;
 	format=mode->Format;
@@ -726,7 +729,7 @@ i4_bool i4_dx9_display_class::close()
 }
 
 
-i4_bool i4_dx9_display_class::set_mouse_shape(i4_cursor_class *cursor)
+i4_bool i4_dx9_display_class::set_mouse_shape(i4_cursor_class * cursor)
 {
 	if (mouse)
 	{
@@ -749,6 +752,7 @@ extern w32 g1_disable_all_drawing;
 void i4_dx9_display_class::flush()
 {
 	RECT src;
+
 	if (g1_disable_all_drawing>1)
 	{
 		return;
@@ -825,7 +829,7 @@ void i4_dx9_display_class::flush()
 	// Step 1 : copy middle buffer information to the back-buffer
 
 	i4_rect_list_class::area_iter a,b;
-	i4_rect_list_class *use_list;
+	i4_rect_list_class * use_list;
 
 	// if page flipped we need to make add the current dirty to the stuff left over from last frame
 //#ifdef DX9_NOREALPAGEFLIP
@@ -980,7 +984,7 @@ void i4_dx9_display_class::DisableDialogBoxMode()
 	}
 }
 
-li_object *dx9_disabledialogboxes(li_object *o, li_environment *env)
+li_object *dx9_disabledialogboxes(li_object * o, li_environment * env)
 {
 	i4_dx9_display_class_instance.DisableDialogBoxMode();
 	return 0;

@@ -19,7 +19,7 @@ protected:
 	w8 mode;
 
 	i4_float target_height;
-	g1_mini_object *engines;
+	g1_mini_object * engines;
 
 	w32 sway;
 public:
@@ -30,10 +30,10 @@ public:
 
 	// modes for jet
 
-	g1_jet_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	virtual void load(g1_loader_class *fp);
-	virtual void skipload(g1_loader_class *fp);
+	g1_jet_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	virtual void load(g1_loader_class * fp);
+	virtual void skipload(g1_loader_class * fp);
 
 	i4_bool move(i4_float x_amount, i4_float y_amount, i4_float z_amount);
 
@@ -43,7 +43,7 @@ public:
 	//virtual void note_leave_range(g1_object_class *who,
 	//                              g1_fire_range_type _range) {}
 
-	void damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir);
+	void damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir);
 };
 
 #endif

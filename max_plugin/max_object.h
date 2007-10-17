@@ -15,7 +15,7 @@
 #include "loaders/dir_save.h"
 
 class i4_grow_heap_class;
-extern i4_grow_heap_class *m1_object_heap;
+extern i4_grow_heap_class * m1_object_heap;
 
 // derive off of g1 quad so we can store the string texture name name
 class m1_quad_class :
@@ -34,10 +34,10 @@ public:
 
 	i4_bool set(w16 a, w16 b, w16 c, w16 d=0xffff);
 
-	void set_texture(char *name);
+	void set_texture(char * name);
 	void calc_texture(int reverse,
 					  i4_array<g1_vert_class> &verts, w16 vert_off,
-					  char *texture_name);
+					  char * texture_name);
 
 	void calc_texture_scale(i4_array<g1_vert_class> &verts, w16 vert_off);
 };
@@ -49,7 +49,7 @@ class m1_animation_class :
 	public g1_quad_object_class::animation_class
 {
 public:
-	i4_str *animation_name;
+	i4_str * animation_name;
 	i4_array<g1_vert_class>                     vertex_a;
 
 	void set_name(const i4_const_str &animation_n)
@@ -85,10 +85,10 @@ public:
 class m1_mount_point_class
 {
 public:
-	i4_str *name;
+	i4_str * name;
 	i4_3d_vector offset;
 
-	m1_mount_point_class(i4_str *name, const i4_3d_vector &offset) :
+	m1_mount_point_class(i4_str * name, const i4_3d_vector &offset) :
 		name(name),
 		offset(offset)
 	{
@@ -106,10 +106,10 @@ public:
 class m1_poly_object_class :
 	public g1_quad_object_class
 {
-	void save_quads(i4_saver_class *fp);
-	void save_texture_names(i4_saver_class *fp);
-	void save_vert_animations(i4_saver_class *fp);
-	void save_mount_points(i4_saver_class *fp);
+	void save_quads(i4_saver_class * fp);
+	void save_texture_names(i4_saver_class * fp);
+	void save_vert_animations(i4_saver_class * fp);
+	void save_mount_points(i4_saver_class * fp);
 
 	void calc_quad_normal(i4_array<g1_vert_class> &v,
 						  m1_quad_class &q);
@@ -120,7 +120,7 @@ public:
 	i4_array<m1_mount_point_class *> mount_a;
 
 	void cleanup();
-	void save(i4_saver_class *fp);
+	void save(i4_saver_class * fp);
 
 	m1_poly_object_class() :
 		quad_a(256,10),

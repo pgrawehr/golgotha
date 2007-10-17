@@ -12,7 +12,7 @@
 
 #include "render/tex_id.h"
 
-r1_texture_handle g1_get_texture(char *texture_name);
+r1_texture_handle g1_get_texture(char * texture_name);
 
 
 

@@ -57,18 +57,18 @@ static li_int_class_member think_delay("think_delay");
 
 static li_float_class_member range("range");
 
-g1_goal_class::g1_goal_class(g1_object_type id, g1_loader_class *fp)
+g1_goal_class::g1_goal_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	draw_params.setup("lightbulb");
 }
 
-void g1_goal_class::save(g1_saver_class *fp)
+void g1_goal_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 }
 
-void g1_goal_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_goal_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	g1_editor_model_draw(this, draw_params, context, viewer_position);
 }
@@ -94,7 +94,7 @@ void g1_goal_class::think()
 
 //    while (!p.end())
 //#else
-		g1_object_class *objs[1024], **p;
+		g1_object_class * objs[1024], * * p;
 
 		int num = g1_get_map()->get_objects_in_range(x, y, range(),
 													 objs, 1024, g1_object_class::DANGEROUS);
@@ -102,7 +102,7 @@ void g1_goal_class::think()
 		for (int i=0; i<num; i++)
 //#endif
 		{
-			g1_object_class *o = *p;
+			g1_object_class * o = *p;
 			int n= o->player_num;
 
 			if (o->id == stank)

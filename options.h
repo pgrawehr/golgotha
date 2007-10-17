@@ -22,13 +22,13 @@ class i4_const_str;
 class g1_option_window :
 	public i4_parent_window_class
 {
-	i4_graphical_style_class *style;
-	i4_image_class *options_background;
+	i4_graphical_style_class * style;
+	i4_image_class * options_background;
 	i4_event_handler_reference_class<i4_image_window_class> shadow_image_win, sound_image_win;
 
 	i4_button_class *create_button(const i4_const_str &help,
 								   int im,
-								   i4_event_handler_reference_class<i4_image_window_class> *win_ref,
+								   i4_event_handler_reference_class<i4_image_window_class> * win_ref,
 								   int mess_id);
 	void add_buttons();
 
@@ -40,7 +40,7 @@ class g1_option_window :
 
 	int get_correction();
 	int slide_speed, slide_left, slide_correction;
-	i4_event_handler_class *notify;
+	i4_event_handler_class * notify;
 
 public:
 	enum
@@ -63,11 +63,11 @@ public:
 	~g1_option_window();
 	void parent_draw(i4_draw_context_class &context);
 	void forget_redraw();
-	g1_option_window(i4_graphical_style_class *style);
-	g1_option_window(w16 w, w16 h,i4_event_handler_class *notify,
-					 i4_graphical_style_class *style);
-	void receive_event(i4_event *ev);
-	void name(char *buffer)
+	g1_option_window(i4_graphical_style_class * style);
+	g1_option_window(w16 w, w16 h,i4_event_handler_class * notify,
+					 i4_graphical_style_class * style);
+	void receive_event(i4_event * ev);
+	void name(char * buffer)
 	{
 		static_name(buffer,"g1_option_window");
 	}

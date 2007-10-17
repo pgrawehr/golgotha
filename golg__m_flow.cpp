@@ -16,17 +16,18 @@
 #include "music/stream.h"
 
 
-i4_event_reaction_class *g1_frame_change_notify=0,
-*g1_scene_change_notify=0, *g1_movie_stop_notify=0;
+i4_event_reaction_class * g1_frame_change_notify=0,
+* g1_scene_change_notify=0, * g1_movie_stop_notify=0;
 
 
-g1_cut_scene_class *g1_movie_flow_class::add_cut_scene(const i4_const_str &name)
+g1_cut_scene_class * g1_movie_flow_class::add_cut_scene(const i4_const_str &name)
 {
 	w32 i=t_cut_scenes;
+
 	t_cut_scenes++;
-	set=(g1_cut_scene_class **)I4_REALLOC(set,
-										  sizeof(g1_cut_scene_class *)*t_cut_scenes,
-										  "cut_scene list");
+	set=(g1_cut_scene_class * *)I4_REALLOC(set,
+										   sizeof(g1_cut_scene_class *)*t_cut_scenes,
+										   "cut_scene list");
 
 
 	set[i]=new g1_cut_scene_class(name);
@@ -59,7 +60,7 @@ g1_movie_flow_class::g1_movie_flow_class()
 }
 
 
-void g1_cut_scene_class::save(g1_saver_class *fp)
+void g1_cut_scene_class::save(g1_saver_class * fp)
 {
 	fp->start_version(DATA_VERSION_2);
 
@@ -95,7 +96,7 @@ void g1_cut_scene_class::save(g1_saver_class *fp)
 }
 
 // note : data version check has already been done by the time load is called
-g1_cut_scene_class::g1_cut_scene_class(g1_loader_class *fp, w16 ver)
+g1_cut_scene_class::g1_cut_scene_class(g1_loader_class * fp, w16 ver)
 {
 	t_frames=fp->read_32();
 	paths[0]=new i4_spline_class();
@@ -122,9 +123,10 @@ g1_cut_scene_class::g1_cut_scene_class(g1_loader_class *fp, w16 ver)
 	name=fp->read_counted_str();
 }
 
-static g1_cut_scene_class *g1_load_cut_scene(g1_loader_class *fp)
+static g1_cut_scene_class *g1_load_cut_scene(g1_loader_class * fp)
 {
 	w16 ver,size;
+
 	fp->get_version(ver,size);
 
 	if (ver==g1_cut_scene_class::DATA_VERSION_1 ||
@@ -141,7 +143,7 @@ static g1_cut_scene_class *g1_load_cut_scene(g1_loader_class *fp)
 
 
 
-void g1_movie_flow_class::save(g1_saver_class *fp)
+void g1_movie_flow_class::save(g1_saver_class * fp)
 {
 	fp->start_version(DATA_VERSION);
 	fp->write_16((w16)t_cut_scenes);
@@ -158,7 +160,7 @@ void g1_movie_flow_class::save(g1_saver_class *fp)
 	fp->end_version();
 }
 
-g1_movie_flow_class *g1_load_movie_flow(g1_loader_class *fp)
+g1_movie_flow_class *g1_load_movie_flow(g1_loader_class * fp)
 {
 	w16 ver,size;
 
@@ -171,11 +173,11 @@ g1_movie_flow_class *g1_load_movie_flow(g1_loader_class *fp)
 		w32 t_cut=fp->read_16();
 		w32 cframe=fp->read_32();
 
-		g1_cut_scene_class **set;
+		g1_cut_scene_class * * set;
 		if (t_cut)
 		{
-			set=(g1_cut_scene_class **)I4_MALLOC(sizeof(g1_cut_scene_class *)*t_cut,
-												 "cut_scenes");
+			set=(g1_cut_scene_class * *)I4_MALLOC(sizeof(g1_cut_scene_class *)*t_cut,
+												  "cut_scenes");
 		}
 		else
 		{
@@ -205,7 +207,7 @@ g1_movie_flow_class *g1_load_movie_flow(g1_loader_class *fp)
 			return 0;
 		}
 
-		g1_movie_flow_class *ret=new g1_movie_flow_class;
+		g1_movie_flow_class * ret=new g1_movie_flow_class;
 		ret->t_cut_scenes=t_cut;
 		ret->set=set;
 		ret->set_scene(fp->read_16());
@@ -251,10 +253,11 @@ void g1_movie_flow_class::stop()
 
 void g1_movie_flow_class::start()
 {
-	i4_str *wf=current()->wave_file;
+	i4_str * wf=current()->wave_file;
+
 	if (wf&&wf->length()>0)
 	{
-		i4_stream_wav_player **slot=0;
+		i4_stream_wav_player * * slot=0;
 		for (w32 i=0; i<MAX_SCORES && !slot; i++)
 		{
 			if (!scores[i])
@@ -265,7 +268,7 @@ void g1_movie_flow_class::start()
 
 		if (slot)
 		{
-			i4_file_class *fp=i4_open(*wf, I4_READ | I4_SUPPORT_ASYNC);
+			i4_file_class * fp=i4_open(*wf, I4_READ | I4_SUPPORT_ASYNC);
 			if (fp)
 			{
 				*slot=new i4_stream_wav_player(fp,
@@ -318,7 +321,8 @@ g1_movie_flow_class::advance_status g1_movie_flow_class::advance_movie_with_time
 							return DONE;
 						}
 
-					} while (current()->total_frames()==0);
+					}
+					while (current()->total_frames()==0);
 				}
 				else
 				{
@@ -326,7 +330,8 @@ g1_movie_flow_class::advance_status g1_movie_flow_class::advance_movie_with_time
 					return DONE;
 				}
 			}
-		} while (md>(1000/G1_MOVIE_HZ));
+		}
+		while (md>(1000/G1_MOVIE_HZ));
 	}
 	return stat;
 }

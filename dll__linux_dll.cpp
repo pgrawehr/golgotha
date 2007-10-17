@@ -34,9 +34,9 @@
 class i4_linux_dll_file :
 	public i4_dll_file
 {
-	void *handle;
+	void * handle;
 public:
-	i4_linux_dll_file(void *handle) :
+	i4_linux_dll_file(void * handle) :
 		handle(handle)
 	{
 	}
@@ -46,7 +46,7 @@ public:
 
 	}
 
-	virtual void *find_function(const char *name)
+	virtual void *find_function(const char * name)
 	{
 		return NULL;
 	}

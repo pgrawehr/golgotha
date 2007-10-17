@@ -42,7 +42,7 @@
 #include "version.h"
 
 
-x11_input_class *x11_input_class_ptr=0; //used to reference the
+x11_input_class * x11_input_class_ptr=0; //used to reference the
 //handler when displaying the error window
 
 i4_bool x11_input_class::open_display()
@@ -56,7 +56,7 @@ i4_bool x11_input_class::open_display()
 	char ds_name[512];
 	memset(ds_name,0,512);
 
-	char *ds_env = getenv("DISPLAY");
+	char * ds_env = getenv("DISPLAY");
 
 	if (ds_env)
 	{
@@ -137,9 +137,9 @@ x11_input_class::~x11_input_class()
 	close_display();
 }
 
-XVisualInfo *x11_input_class::find_visual_with_depth(int depth)
+XVisualInfo * x11_input_class::find_visual_with_depth(int depth)
 {
-	XVisualInfo vis_info, *v;
+	XVisualInfo vis_info, * v;
 	int items;
 
 	if (!display && !open_display())
@@ -187,7 +187,7 @@ XVisualInfo *x11_input_class::find_visual_with_depth(int depth)
 
 
 // makes a null cursor
-static Cursor x11_CreateNullCursor(Display *display, Window root)
+static Cursor x11_CreateNullCursor(Display * display, Window root)
 {
 	Pixmap cursormask;
 	XGCValues xgc;
@@ -209,11 +209,12 @@ static Cursor x11_CreateNullCursor(Display *display, Window root)
 	return cursor;
 }
 
-void x11_input_class::draw_error(Display *disp, const char *error_msg,int width, int height, int screen_e_num)
+void x11_input_class::draw_error(Display * disp, const char * error_msg,int width, int height, int screen_e_num)
 {
 	//draw the error message to the window errorwin.
 	XGCValues values;
 	GC mgc=XCreateGC(disp,errorwin,0,&values);
+
 	XSetBackground(display,mgc,WhitePixel(display,screen_e_num));
 	XSetForeground(display,mgc,BlackPixel(display,screen_e_num));
 	//XDrawRectangle(display,errorwin,mgc,0,0,width,height);
@@ -238,10 +239,11 @@ void x11_input_class::draw_error(Display *disp, const char *error_msg,int width,
 	XFreeGC(display,mgc);
 }
 
-int x11_input_class::create_error_window(const char *error_msg)
+int x11_input_class::create_error_window(const char * error_msg)
 {
 	XVisualInfo vinfo;
 	bool is_fatal=false;
+
 	if (error_msg[0]=='F' && error_msg[1]=='A' && error_msg[2]=='T')
 	{
 		is_fatal=true;
@@ -262,7 +264,7 @@ int x11_input_class::create_error_window(const char *error_msg)
 	//PG: Need to look up required parameters, probably, (display,0,0,0)
 	//since we just want ANY visual for this.
 	int novis=0;
-	XVisualInfo *visual=XGetVisualInfo(display, 0, &vinfo, &novis);
+	XVisualInfo * visual=XGetVisualInfo(display, 0, &vinfo, &novis);
 
 	int screen_e_num  = DefaultScreen(display);
 
@@ -335,7 +337,8 @@ int x11_input_class::create_error_window(const char *error_msg)
 	do
 	{
 		XNextEvent(display, &report);
-	} while (report.type!= Expose);   // wait for our window to pop up
+	}
+	while (report.type!= Expose);     // wait for our window to pop up
 
 	//i4_kernel.add_device(this);
 
@@ -455,7 +458,8 @@ int x11_input_class::create_error_window(const char *error_msg)
 			default:
 				break;
 		}
-	} while(!closed);
+	}
+	while(!closed);
 	XDestroyWindow(display,errorwin);
 	XNextEvent(display, &report);
 	errorwin=0;
@@ -475,16 +479,16 @@ int x11_input_class::create_error_window(const char *error_msg)
 }
 
 i4_bool x11_input_class::create_window(sw32 x, sw32 y, w32 w, w32 h,
-									   i4_display_class *_i4_display,
+									   i4_display_class * _i4_display,
 									   i4_bool takeup_fullscreen,
-									   XVisualInfo *visual)
+									   XVisualInfo * visual)
 {
 	i4_display=_i4_display;
 	was_exposed=i4_T;
 	XTextProperty windowName;
 	XTextProperty iconName;
-	char *listn[2];
-	char *listicon[2];
+	char * listn[2];
+	char * listicon[2];
 	XTextProperty tprop;
 
 	if (!open_display())
@@ -563,7 +567,8 @@ i4_bool x11_input_class::create_window(sw32 x, sw32 y, w32 w, w32 h,
 	do
 	{
 		XNextEvent(display, &report);
-	} while (report.type!= Expose);   // wait for our window to pop up
+	}
+	while (report.type!= Expose);     // wait for our window to pop up
 
 	i4_kernel.add_device(this);
 
@@ -1197,7 +1202,7 @@ i4_bool x11_input_class::process_events()
 	return i4_F;
 }
 
-int showerror(const char *msg)
+int showerror(const char * msg)
 {
 	if (x11_input_class_ptr)
 	{

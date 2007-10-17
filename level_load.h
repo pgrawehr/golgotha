@@ -17,7 +17,7 @@ i4_bool g1_load_level(const i4_const_str &filename,
 					  int load_res_stuff=1,
 					  w32 exclude_flags=0);
 class g1_loader_class;
-w32 g1_load_res_info(g1_loader_class *map_file, i4_file_class *fp,w32 exclude_flags);
+w32 g1_load_res_info(g1_loader_class * map_file, i4_file_class * fp,w32 exclude_flags);
 i4_str *g1_get_res_filnename(const i4_const_str &map_filename);
 
 

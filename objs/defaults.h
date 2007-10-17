@@ -20,7 +20,7 @@ public:
 	class entry
 	{
 public:
-		li_symbol *key;
+		li_symbol * key;
 		sw16 damage;
 	};
 	i4_array<entry> map;
@@ -40,7 +40,7 @@ struct g1_object_defaults_struct
 
 	float detection_range;
 
-	li_symbol *fire_type;
+	li_symbol * fire_type;
 };
 
 
@@ -50,10 +50,10 @@ struct g1_stank_ammo_type_struct
 	w16 max_amount;       // when refueling, this is the max we can get
 	w16 refuel_delay;     // ticks to refuel completely
 	w16 fire_delay;       // delay after each shot
-	li_symbol *weapon_type; // name of projectile fired (passed to g1_fire)
+	li_symbol * weapon_type; // name of projectile fired (passed to g1_fire)
 
-	i4_image_class *icon;     // used to draw the weapon on the status bar
-	i4_image_class *dark_icon;
+	i4_image_class * icon;     // used to draw the weapon on the status bar
+	i4_image_class * dark_icon;
 };
 
 
@@ -61,7 +61,7 @@ struct g1_stank_ammo_type_struct
 class g1_damage_map_struct
 {
 public:
-	li_symbol *object_for;   // which object does this apply to?
+	li_symbol * object_for;   // which object does this apply to?
 	int special_damage;      // radius of effect or ticks to apply damage
 	int default_damage;      // how much damage is done by default (if not in exception list)
 	float speed;             // speed at which weapon travels
@@ -70,9 +70,9 @@ public:
 
 	struct map
 	{
-		li_symbol *object_type; // who this exception is for
+		li_symbol * object_type; // who this exception is for
 		int damage;          // how much damage to do to them
-	} *maps;
+	} * maps;
 
 	int get_damage_for(int object_type);
 	enum {
@@ -86,9 +86,9 @@ g1_damage_map_struct *g1_find_damage_map(int object_type);
 
 
 
-g1_stank_ammo_type_struct *g1_find_stank_ammo_type(li_symbol *sym);
+g1_stank_ammo_type_struct *g1_find_stank_ammo_type(li_symbol * sym);
 
-g1_object_defaults_struct *g1_get_object_defaults(const char *object_name,
+g1_object_defaults_struct *g1_get_object_defaults(const char * object_name,
 												  i4_bool barf_on_error=i4_T);
 void g1_unload_object_defaults();     // call at end of game to clean up memory
 

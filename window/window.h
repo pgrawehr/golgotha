@@ -54,7 +54,7 @@ protected:
 	/// Data members you need not worry about.
 	/// Pointer to the image associated with the display we draw on.
 	/// This usually points somewhere into the gfx driver.
-	i4_image_class *global_image;
+	i4_image_class * global_image;
 
 	/// Position of the window relative to the screen.
 	i4_coord global_x,global_y, // returned by x() & y()
@@ -72,22 +72,22 @@ protected:
 	   plus when drawing is done from draw()
 	   proper clipping for your window is setup beforehand
 	 */
-	i4_image_class *local_image;
+	i4_image_class * local_image;
 	/// Pointer to the parent window.
 	/// This may be NULL (but in general, it should only be NULL for the root level window)
-	i4_parent_window_class *parent;
-	i4_cursor_class *cursor;
+	i4_parent_window_class * parent;
+	i4_cursor_class * cursor;
 
 public:
 
 	/// next pointer is used by i4_parent_window_class's isl_list
-	i4_window_class *next;
+	i4_window_class * next;
 
 	/// The most important virtual method of any window.
 	/// This method receives any event sent to the window.
 	/// If you don't handle a specific event, you should pass it to the parent
 	/// handler.
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	/// Initially when a window is created it has no parent
 	i4_window_class(w16 w, w16 h);
@@ -202,7 +202,7 @@ public:
 	/// Give a window a new parent.
 	/// Can be called with both parameters = NULL to remove the window
 	/// from the parent's draw list.
-	virtual void reparent(i4_image_class *draw_area, i4_parent_window_class *parent);
+	virtual void reparent(i4_image_class * draw_area, i4_parent_window_class * parent);
 
 	/// Resize will change the width and height of our window and notify our parent of the change.
 	virtual void resize(w16 new_width, w16 new_height);
@@ -222,7 +222,7 @@ public:
 	/// the shadowed receive_event or the cursor will not change.
 	/// If cursor is 0, then the cursor will not change
 	/// shape when it enters this window.
-	virtual void set_cursor(i4_cursor_class *cursor);
+	virtual void set_cursor(i4_cursor_class * cursor);
 
 	/// Virtual destructor.
 	/// Destroys a window and all its children.
@@ -232,7 +232,7 @@ public:
 	virtual ~i4_window_class();
 	void show_context(i4_draw_context_class &context);
 
-	i4_bool isa_parent(i4_window_class *who);
+	i4_bool isa_parent(i4_window_class * who);
 
 	/// Returns the pointer to the root window (the display)
 	virtual i4_parent_window_class *root_window();
@@ -243,7 +243,7 @@ public:
 		return i4_F;
 	}
 	/// A descriptive name of the class, used for debugging.
-	virtual void name(char *buffer)
+	virtual void name(char * buffer)
 	{
 		static_name(buffer,"i4_window_class");
 	}
@@ -266,7 +266,7 @@ class i4_parent_window_class :
 private:
 	i4_bool mouse_focus_grabbed, have_mouse_focus;
 	i4_bool child_rerequested_redraw;
-	void send_event_to_child(i4_window_class *w, i4_event *ev);
+	void send_event_to_child(i4_window_class * w, i4_event * ev);
 
 protected:
 	i4_bool child_need_redraw;
@@ -289,13 +289,13 @@ protected:
 
 
 	// These functions shouldn't really be needed by derived classes
-	void change_key_focus(i4_window_class *new_focus);
-	void change_mouse_focus(i4_window_class *new_focus);
+	void change_key_focus(i4_window_class * new_focus);
+	void change_mouse_focus(i4_window_class * new_focus);
 	void redraw_area(i4_coord x1, i4_coord y1, i4_coord x2, i4_coord y2); // in local coordinates
 	win_iter find_window(i4_coord mouse_x, i4_coord mouse_y);
 
-	void drag_drop_move(i4_event *ev);
-	void mouse_move(i4_event *ev);
+	void drag_drop_move(i4_event * ev);
+	void mouse_move(i4_event * ev);
 
 public:
 	i4_bool has_mouse_focus()
@@ -303,7 +303,7 @@ public:
 		return have_mouse_focus;
 	}
 	virtual i4_bool find_new_mouse_focus(); // return true if focus changed
-	virtual void name(char *buffer)
+	virtual void name(char * buffer)
 	{
 		static_name(buffer,"i4_parent_window_class");
 	};
@@ -311,7 +311,7 @@ public:
 	virtual i4_parent_window_class *root_window();
 
 	virtual void resize(w16 new_width, w16 new_height);
-	virtual void reparent(i4_image_class *draw_area, i4_parent_window_class *parent);
+	virtual void reparent(i4_image_class * draw_area, i4_parent_window_class * parent);
 
 	/// Key focus overridables.
 	/// These functions are called when REQUEST_NEXT_FOCUS, etc. events are recieved
@@ -349,7 +349,7 @@ public:
 	///   } else i4_parent_window_class::receive_event(ev);
 	/// }
 	/// \endcode
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	/// Called by the parent if redraw is not needed.
 	///  forget redraw is called by a parent if the child had ask for a redraw but
@@ -361,16 +361,16 @@ public:
 	i4_parent_window_class(w16 w, w16 h);
 
 	// x & y are relative to parent x,y (added to end of window list)
-	virtual void add_child(i4_coord x, i4_coord y, i4_window_class *child);
+	virtual void add_child(i4_coord x, i4_coord y, i4_window_class * child);
 
 	/// x & y are relative to parent x,y (added to front of window list)
-	virtual void add_child_front(i4_coord x, i4_coord y, i4_window_class *child);
+	virtual void add_child_front(i4_coord x, i4_coord y, i4_window_class * child);
 
 	/// does not delete the child, simply removes and request redraw under its area
-	virtual void remove_child(i4_window_class *child);
+	virtual void remove_child(i4_window_class * child);
 
 	/// removes all children from self and addes them into other_parent
-	void transfer_children(i4_parent_window_class *other_parent,
+	void transfer_children(i4_parent_window_class * other_parent,
 						   i4_coord x_offset, i4_coord y_offset);
 
 	/// arranges child windows from left to right then down
@@ -400,7 +400,7 @@ public:
 
 	virtual i4_window_class *get_nth_window(w32 win_num);
 
-	i4_bool isa_child(i4_window_class *w);
+	i4_bool isa_child(i4_window_class * w);
 
 	virtual ~i4_parent_window_class();
 	virtual void debug_show();
@@ -411,7 +411,7 @@ public:
 			parent->bring_to_front(this);
 		}
 	}
-	virtual void bring_to_front(i4_window_class *wnd);
+	virtual void bring_to_front(i4_window_class * wnd);
 };
 
 #endif

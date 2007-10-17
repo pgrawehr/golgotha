@@ -7,4 +7,4 @@
  ***********************************************************************/
 
 class i4_pull_menu_class;
-i4_pull_menu_class *li_create_pull_menu(char *filename);
+i4_pull_menu_class *li_create_pull_menu(char * filename);

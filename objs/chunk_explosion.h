@@ -16,7 +16,7 @@ class g1_chunk_explosion_class :
 	public g1_object_class
 {
 public:
-	g1_chunk_explosion_class(g1_object_type id, g1_loader_class *fp);
+	g1_chunk_explosion_class(g1_object_type id, g1_loader_class * fp);
 
 	i4_3d_vector dir;
 	i4_3d_vector avel;
@@ -24,10 +24,10 @@ public:
 	int ticks_left;
 	void setup(const i4_3d_vector &pos,
 			   const i4_3d_vector &rotations,
-			   g1_quad_object_class *model,
+			   g1_quad_object_class * model,
 			   const i4_3d_vector &dir,
 			   int ticks_till_explode);
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	void think();
 };
 

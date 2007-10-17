@@ -68,21 +68,21 @@ public:
 		}
 	};
 protected:
-	typedef T *entry_type;
+	typedef T * entry_type;
 	class i4_hashtable_entry;
-	i4_hashtable_entry **master_table;
+	i4_hashtable_entry * * master_table;
 	//i4_array<i4_hashtable<T> *> sub_tables;//not used yet
 	w32 master_size;    //for general case, we need to use a real MOD instead of AND
 	w32 sub_size;
 	w32 master_flags;
-	i4_hashtable_entry *current;    //temporary value for next();
+	i4_hashtable_entry * current;    //temporary value for next();
 	class i4_hashtable_entry
 	{
 protected:
 		w32 key;
 		entry_type entry;
 		w32 flags;
-		i4_hashtable_entry *next;
+		i4_hashtable_entry * next;
 		friend class i4_hashtable<T>;
 		friend class iterator;
 		i4_hashtable_entry()
@@ -102,7 +102,7 @@ protected:
 		~i4_hashtable_entry()
 		{
 		};                      //don't do something weird here
-		void set_next(i4_hashtable_entry *n)
+		void set_next(i4_hashtable_entry * n)
 		{
 			next=n;
 		};
@@ -118,7 +118,7 @@ public:
 	{
 protected:
 		w32 current_slot;
-		i4_hashtable_entry *cu;
+		i4_hashtable_entry * cu;
 		i4_hashtable<T> *_this;
 		void find_next_nonempty_slot()
 		{
@@ -126,7 +126,8 @@ protected:
 			do
 			{
 				current_slot++;
-			} while (current_slot<_this->master_size && _this->master_table[current_slot]->flags==INVALID);
+			}
+			while (current_slot<_this->master_size && _this->master_table[current_slot]->flags==INVALID);
 			if (current_slot>=_this->master_size)
 			{
 				return;
@@ -163,7 +164,7 @@ protected:
 			}              //end of iteration
 		}
 public:
-		iterator(i4_hashtable<T> *ref)
+		iterator(i4_hashtable<T> * ref)
 		{
 			_this=ref;
 			current_slot=0;
@@ -215,7 +216,7 @@ public:
 			return get()==p.get();
 		}
 	};
-	typedef i4_hashtable_entry *LP_HASHTABLE_ENTRY;
+	typedef i4_hashtable_entry * LP_HASHTABLE_ENTRY;
 protected:
 	//i4_array<i4_hashtable_entry *> master_table;
 
@@ -293,9 +294,10 @@ public:
 	};
 
 	//replaces old entry with new. Works only if table doesn't contain duplicates
-	void replace(w32 key, T *newobj,i4_bool deleteold)
+	void replace(w32 key, T * newobj,i4_bool deleteold)
 	{
-		T *act=remove(key);
+		T * act=remove(key);
+
 		if (deleteold)
 		{
 			delete act;
@@ -303,7 +305,7 @@ public:
 		insert(key,newobj);
 	}
 
-	void insert(w32 key, T *o) //will insert duplicates
+	void insert(w32 key, T * o) //will insert duplicates
 	{
 		actual_entries++;
 		w32 s=get_slot(key);
@@ -316,14 +318,14 @@ public:
 			master_table[s]->next=0;
 			return;
 		}
-		i4_hashtable_entry *e=master_table[s],*last;
+		i4_hashtable_entry * e=master_table[s],* last;
 		last=0;
 		while (e->next&&e->key<=key) //sort buckets increasing
 		{
 			last=e;
 			e=e->next;
 		}
-		i4_hashtable_entry *f=new i4_hashtable_entry(key,o,0);
+		i4_hashtable_entry * f=new i4_hashtable_entry(key,o,0);
 		if (e->key>key)
 		{
 			//we'll insert after this entry
@@ -346,15 +348,16 @@ public:
 	{
 		return i4_str_checksum(st);
 	}
-	void insert(const i4_const_str &st, T *o) //generates key itself
+	void insert(const i4_const_str &st, T * o) //generates key itself
 	{
 		insert(string_hash(st),o);
 	};
 
-	i4_bool insert_if_single(w32 key, T *o) //won't do anything if key already present
+	i4_bool insert_if_single(w32 key, T * o) //won't do anything if key already present
 	{
 		//return i4_T if really inserted
 		w32 s=get_slot(key);
+
 		if (master_table[s]->flags==INVALID)
 		{
 			master_table[s]->flags=0;
@@ -364,7 +367,7 @@ public:
 			actual_entries++;
 			return i4_T;
 		}
-		i4_hashtable_entry *e=master_table[s],*last;
+		i4_hashtable_entry * e=master_table[s],* last;
 		last=0; //needed if using second element;
 		while (e->next&&e->key<key) //sort buckets increasing
 		{
@@ -375,7 +378,7 @@ public:
 		{
 			return i4_F;
 		}
-		i4_hashtable_entry *f=new i4_hashtable_entry(key,o,0);
+		i4_hashtable_entry * f=new i4_hashtable_entry(key,o,0);
 		if (e->key>key)
 		{
 			//we'll insert before this entry
@@ -429,7 +432,8 @@ public:
 	T *get(w32 key) //gets element for key
 	{
 		w32 s=get_slot(key);
-		i4_hashtable_entry *e=master_table[s];
+		i4_hashtable_entry * e=master_table[s];
+
 		if (e->flags&INVALID)
 		{
 			return 0;
@@ -458,7 +462,7 @@ public:
 		actual_entries=0;
 		for (w32 i=0; i<master_size; i++)
 		{
-			i4_hashtable_entry *s=master_table[i],*t=0;
+			i4_hashtable_entry * s=master_table[i],* t=0;
 			if (delete_referenced_values)
 			{
 				delete s->entry;
@@ -487,7 +491,8 @@ public:
 	T *remove(w32 key) //removes first occurence of key and returns it
 	{
 		w32 s=get_slot(key);
-		i4_hashtable_entry *e=master_table[s],*last=0;
+		i4_hashtable_entry * e=master_table[s],* last=0;
+
 		if (e->flags&INVALID)
 		{
 			return 0;
@@ -500,7 +505,7 @@ public:
 		if (e->flags!=INVALID&&e->key==key)
 		{
 			current=0;
-			T *o=e->entry;
+			T * o=e->entry;
 
 			if (e==master_table[s])
 			{
@@ -541,7 +546,8 @@ public:
 
 	void removeall(w32 key, i4_bool delete_referenced_values) //removes all occurences of key
 	{
-		T *o;
+		T * o;
+
 		actual_entries=0;
 		while((o=remove(key))!=0)
 		{

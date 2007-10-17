@@ -98,24 +98,24 @@ public:
 	{
 public:
 		w16 num_frames;
-		g1_vert_class *vertex;    // num_vert * num_frame entries
+		g1_vert_class * vertex;    // num_vert * num_frame entries
 	};
 	w16 num_vertex;
 
 	//These pointers are used in the object heap. That heap is
 	//cleared at a whole when the level is removed from memory,
 	//so we don't need to free them in the destructor.
-	g1_quad_class *quad;
+	g1_quad_class * quad;
 	w16 num_quad;
 
-	animation_class *animation;
+	animation_class * animation;
 	w16 num_animations;
 
-	w32 *mount_id;
-	i4_3d_vector *mount;
+	w32 * mount_id;
+	i4_3d_vector * mount;
 	w16 num_mounts;
 
-	g1_texture_animation *special;
+	g1_texture_animation * special;
 	w16 num_special;
 
 	//BSPCODE
@@ -125,9 +125,9 @@ public:
 	//be shure that the pointer is NULL if no bsp tree is available
 	//and that it is cleared up in in the destructor!
 
-	g1_octree *octree;
+	g1_octree * octree;
 
-	i4_bool get_mount_point(char *name, i4_3d_vector& vect) const;
+	i4_bool get_mount_point(char * name, i4_3d_vector& vect) const;
 
 	g1_vert_class *get_verts(int anim, int frame)
 	//{{{
@@ -143,7 +143,7 @@ public:
 
 	void calc_extents(void);
 	void calc_vert_normals();
-	static void calc_quad_normal(g1_vert_class *v, g1_quad_class &q);
+	static void calc_quad_normal(g1_vert_class * v, g1_quad_class &q);
 
 	void init()
 	{
@@ -171,9 +171,9 @@ public:
 	i4_bool intersect(const i4_3d_vector &point,
 					  const i4_3d_vector &ray,
 					  int anim, int frame,
-					  i4_float *t=0,
-					  int *poly_hit=0,
-					  i4_3d_vector *normal_hit=0);
+					  i4_float * t=0,
+					  int * poly_hit=0,
+					  i4_3d_vector * normal_hit=0);
 
 	void update(i4_float frame);
 };
@@ -182,7 +182,7 @@ class i4_loader_class;
 class g1_base_object_loader_class
 {
 public:
-	g1_quad_object_class *obj;
+	g1_quad_object_class * obj;
 
 	virtual g1_quad_object_class *allocate_object() = 0;
 
@@ -197,11 +197,11 @@ public:
 	}
 
 	virtual void set_num_quads(w16 num_quads) = 0;
-	virtual void create_quad(w16 quad, int verts, w16 *ref, w32 flags) = 0;
+	virtual void create_quad(w16 quad, int verts, w16 * ref, w32 flags) = 0;
 	virtual void store_texture_name(w32 quad, const i4_const_str &name)
 	{
 	}
-	virtual void store_texture_params(w32 quad, i4_float scale, i4_float *u, i4_float *v)
+	virtual void store_texture_params(w32 quad, i4_float scale, i4_float * u, i4_float * v)
 	{
 	}
 	virtual void store_quad_normal(w16 quad, const i4_3d_vector& v)
@@ -231,7 +231,7 @@ public:
 	{
 	}
 
-	virtual g1_quad_object_class *load(i4_loader_class *fp);
+	virtual g1_quad_object_class *load(i4_loader_class * fp);
 };
 
 #endif

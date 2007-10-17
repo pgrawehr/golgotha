@@ -20,7 +20,7 @@ public:
 	w16 frame;
 	w32 anim_length;
 
-	g1_sprite_object_class(g1_object_type id, g1_loader_class *fp);
+	g1_sprite_object_class(g1_object_type id, g1_loader_class * fp);
 
 	virtual void init();
 	virtual void think();

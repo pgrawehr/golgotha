@@ -16,22 +16,22 @@ class i4_image_class;
 class g1_image_ref
 {
 public:
-	static g1_image_ref *first;
-	g1_image_ref *next;
+	static g1_image_ref * first;
+	g1_image_ref * next;
 	//i4_const_str image_name;//don't wan't to use this, because this
 	//class is heavily used before the memory manager is available
 	char image_name[256];
-	i4_image_class *im;
+	i4_image_class * im;
 
 	virtual void cleanup();
 	virtual void load();
 
-	g1_image_ref(const char *filename);
+	g1_image_ref(const char * filename);
 	virtual ~g1_image_ref();
 
 	// this will delete the old image (if present)
 	// and load up a new one
-	void set_image(const char *filename);
+	void set_image(const char * filename);
 	i4_image_class *get()
 	{
 		return im;
@@ -44,8 +44,8 @@ class g1_team_icon_ref :
 public:
 	void load();
 
-	i4_image_class *tinted_icons[G1_MAX_PLAYERS];
-	g1_team_icon_ref(const char *filename);
+	i4_image_class * tinted_icons[G1_MAX_PLAYERS];
+	g1_team_icon_ref(const char * filename);
 	~g1_team_icon_ref();
 	void cleanup();
 };

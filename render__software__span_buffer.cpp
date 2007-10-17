@@ -22,11 +22,11 @@
 //Because the arrays can be very large (and for performance reasons,
 //we don't want dynamic arrays here) we allocate the space only when
 //the software renderer is actually used.
-span_tri_info *global_tri_list=0; //[MAX_TRIS];
-span_entry *global_span_list=0; //[MAX_SPANS];
-span_edge *global_edges=0; //[MAX_NUM_EDGES];
-span_edge *new_edges[MAX_VERTICAL_RESOLUTION];
-span_edge *remove_edges[MAX_VERTICAL_RESOLUTION];
+span_tri_info * global_tri_list=0; //[MAX_TRIS];
+span_entry * global_span_list=0; //[MAX_SPANS];
+span_edge * global_edges=0; //[MAX_NUM_EDGES];
+span_edge * new_edges[MAX_VERTICAL_RESOLUTION];
+span_edge * remove_edges[MAX_VERTICAL_RESOLUTION];
 
 int num_global_tris  = 0;
 int num_global_spans = 1; //span #0 is a sentinel, unused
@@ -38,10 +38,10 @@ span_tri_info tri_stack;
 span_edge active_list_head;
 span_edge active_list_tail;
 
-span_edge *compare_here;
-span_edge *temp_edge,*t1;
+span_edge * compare_here;
+span_edge * temp_edge,* t1;
 
-inline void sort_in_new_edges(span_edge *first)
+inline void sort_in_new_edges(span_edge * first)
 {
 	compare_here = &active_list_head;
 
@@ -77,16 +77,16 @@ inline void sort_in_new_edges(span_edge *first)
 	}
 }
 
-span_entry *next_new_span;
-span_tri_info *cur_stack;
-span_tri_info *temp_stack;
-span_tri_info *e_tri;
+span_entry * next_new_span;
+span_tri_info * cur_stack;
+span_tri_info * temp_stack;
+span_tri_info * e_tri;
 i4_bool everything_transparent;
 sw32 span_buff_x,span_buff_y,span_length;
-w16 *cur_scanline;
+w16 * cur_scanline;
 
-span_edge **new_edge_list = new_edges;
-span_edge **remove_edge_list = remove_edges;
+span_edge * * new_edge_list = new_edges;
+span_edge * * remove_edge_list = remove_edges;
 
 float fx_fy[2];
 
@@ -98,7 +98,7 @@ float ooz_compare;
 
 i4_bool on_top;
 
-inline void intel_depth_at_pixel(tri_gradients *grads, float *result)
+inline void intel_depth_at_pixel(tri_gradients * grads, float * result)
 {
 #ifdef USE_ASM
 	_asm
@@ -125,7 +125,7 @@ inline void intel_depth_at_pixel(tri_gradients *grads, float *result)
 
 i4_bool intel_build_triangle_span_lists()
 {
-	register span_edge *e;
+	register span_edge * e;
 
 	new_edge_list    = new_edges;
 	remove_edge_list = remove_edges;
@@ -311,7 +311,8 @@ i4_bool intel_build_triangle_span_lists()
 							intel_depth_at_pixel(&cur_stack->grads, &cur_stack->cur_span_start_ooz);
 							// = cur_stack->grads.oozat00 + (cur_stack->grads.doozdy * fy) + (cur_stack->grads.doozdx * fx);
 
-						} while (cur_stack->type > SPAN_TRI_SEE_THRU);
+						}
+						while (cur_stack->type > SPAN_TRI_SEE_THRU);
 					}
 				}
 				else
@@ -322,6 +323,7 @@ i4_bool intel_build_triangle_span_lists()
 
 					while (temp_stack->type>SPAN_TRI_SEE_THRU)
 						temp_stack = temp_stack->last_stack;
+
 
 
 					//did we make it past everything in the stack?
@@ -378,7 +380,8 @@ i4_bool intel_build_triangle_span_lists()
 
 								intel_depth_at_pixel(&temp_stack->grads, &temp_stack->cur_span_start_ooz);
 
-							} while (temp_stack->type > SPAN_TRI_SEE_THRU);
+							}
+							while (temp_stack->type > SPAN_TRI_SEE_THRU);
 						}
 					}
 				}
@@ -419,6 +422,7 @@ i4_bool intel_build_triangle_span_lists()
 					compare_here = compare_here->last_active;
 
 
+
 				//get temp_edge out of its current spot
 				temp_edge->last_active->next_active = temp_edge->next_active;
 				temp_edge->next_active->last_active = temp_edge->last_active;
@@ -442,9 +446,9 @@ i4_bool intel_build_triangle_span_lists()
 	return i4_T;
 }
 
-void span_draw_solid_color(span_tri_info *tri)
+void span_draw_solid_color(span_tri_info * tri)
 {
-	span_entry *s = &global_span_list[tri->span_list_head];
+	span_entry * s = &global_span_list[tri->span_list_head];
 	//w16 *start_pixel;
 
 	solid_blend_span left;
@@ -519,7 +523,7 @@ void flush_spans() //set all pointers in the scanline list to 0
 	}
 
 	sw32 i;
-	span_tri_info *t;
+	span_tri_info * t;
 
 	//reset these pointers incase they got messed with
 	active_list_head.next_active = &active_list_tail;

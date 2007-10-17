@@ -74,7 +74,7 @@ public:
 		return (unsigned long)i4_win32_window_handle;
 	}
 
-	i4_win32_opengl_display_class(char *message) :
+	i4_win32_opengl_display_class(char * message) :
 		input(message)
 	{
 	}

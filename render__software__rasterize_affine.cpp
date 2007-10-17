@@ -19,13 +19,13 @@ void tri_draw_affine_lit(tri_edge &top_to_middle,tri_edge &top_to_bottom, tri_ed
 {
 	sw32 cur_y = start_y;
 
-	w16 *screen_line;
+	w16 * screen_line;
 
 	screen_line = r1_software_render_buffer_ptr + cur_y*r1_software_render_buffer_wpl;
 
-	tri_edge *left;
-	tri_edge *right;
-	tri_edge *last_left = 0;
+	tri_edge * left;
+	tri_edge * right;
+	tri_edge * last_left = 0;
 
 	affine_span cas; //cur_affine_span
 
@@ -159,13 +159,13 @@ void tri_draw_affine_unlit(tri_edge &top_to_middle,tri_edge &top_to_bottom, tri_
 {
 	sw32 cur_y = start_y;
 
-	w16 *screen_line;
+	w16 * screen_line;
 
 	screen_line = r1_software_render_buffer_ptr + cur_y*r1_software_render_buffer_wpl;
 
-	tri_edge *left;
-	tri_edge *right;
-	tri_edge *last_left = 0;
+	tri_edge * left;
+	tri_edge * right;
+	tri_edge * last_left = 0;
 
 	affine_span cas; //cur_affine_span
 
@@ -287,7 +287,7 @@ void tri_draw_affine_unlit(tri_edge &top_to_middle,tri_edge &top_to_bottom, tri_
 	}
 }
 
-void span_draw_affine_unlit(span_tri_info *tri)
+void span_draw_affine_unlit(span_tri_info * tri)
 {
 	//setup some of the global variables
 	r1_software_texture_ptr   = tri->texture;
@@ -305,7 +305,7 @@ void span_draw_affine_unlit(span_tri_info *tri)
 	dsdx_frac = (temp_dsdx<<16);
 	dtdx_frac = (temp_dtdx<<16);
 
-	span_entry *s = &global_span_list[tri->span_list_head];
+	span_entry * s = &global_span_list[tri->span_list_head];
 
 	affine_span left;
 	while (s!=global_span_list)
@@ -324,7 +324,7 @@ void span_draw_affine_unlit(span_tri_info *tri)
 	}
 }
 
-void span_draw_affine_lit(span_tri_info *tri)
+void span_draw_affine_lit(span_tri_info * tri)
 {
 	//setup some of the global variables
 	r1_software_class_ptr->set_color_tint(tri->color_tint);
@@ -347,7 +347,7 @@ void span_draw_affine_lit(span_tri_info *tri)
 	//dont forget the light
 	dldx_fixed = qftoi(tri->grads.dldx);
 
-	span_entry *s = &global_span_list[tri->span_list_head];
+	span_entry * s = &global_span_list[tri->span_list_head];
 
 	affine_span left;
 	while (s!=global_span_list)

@@ -63,7 +63,7 @@ public:
 		return vert+t_verts-1;
 	}
 
-	i4_vertex_class *add_vert(i4_vertex_class *src_vert)
+	i4_vertex_class *add_vert(i4_vertex_class * src_vert)
 	{
 		I4_ASSERT(t_verts<V_BUF_SIZE, "vert buffer full");
 

@@ -8,7 +8,7 @@
 
 #include "string.h"
 
-char *form(char *form, ... )
+char *form(char * form, ... )
 {
 	va_list args;
 	char buf[1024];

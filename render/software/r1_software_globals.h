@@ -10,7 +10,7 @@
 #define R1_SOFTWARE_GLOBALS
 
 extern i4_bool r1_software_render_buffer_is_locked;
-extern w16 *r1_software_render_buffer_ptr;
+extern w16 * r1_software_render_buffer_ptr;
 extern w8 r1_software_render_expand_type;
 extern sw32 r1_software_render_buffer_bpl;
 extern sw32 r1_software_render_buffer_wpl;
@@ -18,16 +18,16 @@ extern sw32 r1_software_render_buffer_height;
 
 #ifdef _WINDOWS
 struct IDirectDrawSurface3;
-extern IDirectDrawSurface3 *r1_software_render_surface;
+extern IDirectDrawSurface3 * r1_software_render_surface;
 #endif
-extern w16 *r1_software_texture_ptr;
+extern w16 * r1_software_texture_ptr;
 extern w8 r1_software_twidth_log2;
 extern sw32 r1_software_texture_width;
 extern sw32 r1_software_texture_height;
 
 //for the ASM and C texturemappers
 
-extern w32 *DEADBEEFPTR;
+extern w32 * DEADBEEFPTR;
 extern float left_z;
 extern sw32 left_s;
 extern sw32 left_t;

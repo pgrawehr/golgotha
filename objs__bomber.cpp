@@ -60,7 +60,7 @@ g1_bomber_def("bomber",
 
 
 g1_bomber_class::g1_bomber_class(g1_object_type id,
-								 g1_loader_class *fp)
+								 g1_loader_class * fp)
 	: g1_map_piece_class(id, fp)
 //{{{
 {
@@ -111,7 +111,7 @@ g1_bomber_class::g1_bomber_class(g1_object_type id,
 }
 //}}}
 
-void g1_bomber_class::save(g1_saver_class *fp)
+void g1_bomber_class::save(g1_saver_class * fp)
 //{{{
 {
 	g1_map_piece_class::save(fp);
@@ -127,7 +127,7 @@ void g1_bomber_class::save(g1_saver_class *fp)
 }
 //}}}
 
-void g1_bomber_class::load(g1_loader_class *fp)
+void g1_bomber_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -135,7 +135,7 @@ void g1_bomber_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-void g1_bomber_class::skipload(g1_loader_class *fp)
+void g1_bomber_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->check_version(DATA_VERSION);
@@ -190,9 +190,10 @@ i4_bool g1_bomber_class::move(i4_float x_amount, i4_float y_amount)
 }
 //}}}
 
-i4_bool g1_bomber_class::can_attack(g1_object_class *who)
+i4_bool g1_bomber_class::can_attack(g1_object_class * who)
 {
 	i4_float dx,dy,angle,dtheta;
+
 	if (who==last_target.get())
 	{
 		return i4_F;
@@ -433,7 +434,7 @@ void g1_bomber_class::think()
 }
 //}}}
 
-void g1_bomber_class::damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir)
+void g1_bomber_class::damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir)
 //{{{
 {
 	//we dont want to explode if ppl shoot us while we're dying.. we want to

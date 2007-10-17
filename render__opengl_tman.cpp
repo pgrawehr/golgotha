@@ -41,7 +41,7 @@
 //singleton elements with texture managers are no more allowed
 //r1_opengl_texture_manager_class *r1_opengl_texture_manager_class_instance=0;
 
-r1_opengl_texture_manager_class::r1_opengl_texture_manager_class(const i4_pal *pal)
+r1_opengl_texture_manager_class::r1_opengl_texture_manager_class(const i4_pal * pal)
 	: r1_texture_manager_class(pal),
 	  finished_array(16,16)
 {
@@ -116,10 +116,10 @@ void r1_opengl_texture_manager_class::uninit()
 }
 
 
-r1_opengl_texture_manager_class::used_node *r1_opengl_texture_manager_class::make_new_used_node(r1_mip_load_info *&load_info,
-																								w8 node_alloc_flags)
+r1_opengl_texture_manager_class::used_node * r1_opengl_texture_manager_class::make_new_used_node(r1_mip_load_info *&load_info,
+																								 w8 node_alloc_flags)
 {
-	r1_miplevel_t *mip = load_info->dest_mip;
+	r1_miplevel_t * mip = load_info->dest_mip;
 
 	w8 texformatflags = 0;
 
@@ -132,7 +132,7 @@ r1_opengl_texture_manager_class::used_node *r1_opengl_texture_manager_class::mak
 		texformatflags |= R1_OPENGL_TEXFORMAT_ALPHA;
 	}
 
-	used_node *new_used = (used_node *)tex_no_heap->alloc(node_alloc_flags);
+	used_node * new_used = (used_node *)tex_no_heap->alloc(node_alloc_flags);
 
 	if (!new_used)
 	{
@@ -149,7 +149,7 @@ r1_opengl_texture_manager_class::used_node *r1_opengl_texture_manager_class::mak
 }
 
 
-i4_bool r1_opengl_texture_manager_class::immediate_mip_load(r1_mip_load_info *load_info)
+i4_bool r1_opengl_texture_manager_class::immediate_mip_load(r1_mip_load_info * load_info)
 {
 	if (no_of_textures_loaded > 0)
 	{
@@ -160,9 +160,9 @@ i4_bool r1_opengl_texture_manager_class::immediate_mip_load(r1_mip_load_info *lo
 		}
 	}
 
-	r1_miplevel_t *mip = load_info->dest_mip;
+	r1_miplevel_t * mip = load_info->dest_mip;
 
-	used_node *new_used = make_new_used_node(load_info);
+	used_node * new_used = make_new_used_node(load_info);
 	if (!new_used)
 	{
 		return i4_F;
@@ -183,8 +183,8 @@ i4_bool r1_opengl_texture_manager_class::immediate_mip_load(r1_mip_load_info *lo
 		if (load_info->flags & R1_MIPFLAGS_SRC32)
 		{
 			w32 co=0,r=0,g=0,b=0;
-			w16 *tex=(w16 *)(new_used->data);
-			const i4_pal *p=i4_pal_man.default_no_alpha_32();
+			w16 * tex=(w16 *)(new_used->data);
+			const i4_pal * p=i4_pal_man.default_no_alpha_32();
 			for (int i=0; i<mip->width*mip->height; i++)
 			{
 				//The order here is a bit strange (argb backwards).
@@ -238,9 +238,9 @@ i4_bool r1_opengl_texture_manager_class::immediate_mip_load(r1_mip_load_info *lo
 	return i4_T;
 }
 
-void opengl_async_callback(w32 count, void *context)
+void opengl_async_callback(w32 count, void * context)
 {
-	r1_opengl_texture_manager_class::used_node *u = (r1_opengl_texture_manager_class::used_node *)context;
+	r1_opengl_texture_manager_class::used_node * u = (r1_opengl_texture_manager_class::used_node *)context;
 
 	//if (u->async_fp) {
 	//	delete u->async_fp;//should later delay this until texture is loaded
@@ -251,17 +251,17 @@ void opengl_async_callback(w32 count, void *context)
 	u->self_tman->async_load_finished(u);
 }
 
-void r1_opengl_texture_manager_class::async_load_finished(used_node *u)
+void r1_opengl_texture_manager_class::async_load_finished(used_node * u)
 {
 	if (u->mip->flags & R1_MIPLEVEL_LOAD_JPG)
 	{
-		i4_file_class *asf=u->async_fp;
-		i4_ram_file_class *rp=new i4_ram_file_class(
+		i4_file_class * asf=u->async_fp;
+		i4_ram_file_class * rp=new i4_ram_file_class(
 			u->data,
 			asf->size()
-							   );
+								);
 		//i4_thread_sleep(10);
-		i4_image_class *im=i4_load_image(rp,NULL);
+		i4_image_class * im=i4_load_image(rp,NULL);
 		delete rp;
 		delete u->data;
 		delete u->async_fp;
@@ -282,7 +282,7 @@ void r1_opengl_texture_manager_class::async_load_finished(used_node *u)
 		u->mip->flags &=~R1_MIPLEVEL_LOAD_JPG;
 
 		array_lock.lock();
-		r1_image_list_struct *ils=image_list.add();
+		r1_image_list_struct * ils=image_list.add();
 		ils->init();
 		ils->usage=30;
 		ils->image=im;
@@ -298,14 +298,15 @@ void r1_opengl_texture_manager_class::async_load_finished(used_node *u)
 	array_lock.unlock();
 }
 
-i4_image_class *r1_opengl_texture_manager_class::get_texture_image(
+i4_image_class * r1_opengl_texture_manager_class::get_texture_image(
 	r1_texture_handle handle, int frame_counter, int desired_width)
 {
 	sw32 act_w=0,act_h=0;
 	w32 tid=registered_tnames[handle].id;
 	//get the best one currently loaded
-	r1_miplevel_t *best=get_texture(handle,frame_counter,desired_width,act_w,act_h);
-	used_node *u=(used_node *)best->vram_handle;
+	r1_miplevel_t * best=get_texture(handle,frame_counter,desired_width,act_w,act_h);
+	used_node * u=(used_node *)best->vram_handle;
+
 	for (int i=0; i<memory_images.size(); i++)
 	{
 		if (memory_images[i].id==tid)
@@ -315,7 +316,7 @@ i4_image_class *r1_opengl_texture_manager_class::get_texture_image(
 	}
 	float bla_1,bla_2;
 	select_texture(best->vram_handle,bla_1,bla_2);
-	i4_image_class *ima=0;
+	i4_image_class * ima=0;
 	GLenum format,type;
 	if (u->texformatflags==0)
 	{
@@ -345,10 +346,11 @@ i4_image_class *r1_opengl_texture_manager_class::get_texture_image(
 
 }
 //this function currently assumes that the new texture has the same size as the old
-int r1_opengl_texture_manager_class::set_texture_image(r1_texture_handle handle, i4_image_class *im)
+int r1_opengl_texture_manager_class::set_texture_image(r1_texture_handle handle, i4_image_class * im)
 {
 	w32 tid=registered_tnames[handle].id;
-	i4_image_class *memim;
+	i4_image_class * memim;
+
 	for (int i=0; i<memory_images.size(); i++)
 	{
 		if (memory_images[i].id==tid)
@@ -357,8 +359,8 @@ int r1_opengl_texture_manager_class::set_texture_image(r1_texture_handle handle,
 			memory_images[i].image=im->copy(); //replace saved memory image with new copy
 
 			sw32 act_w=0,act_h=0;
-			r1_miplevel_t *mip=get_texture(handle,0,max_texture_dimention,act_w,act_h);
-			used_node *u=(used_node *) mip->vram_handle;
+			r1_miplevel_t * mip=get_texture(handle,0,max_texture_dimention,act_w,act_h);
+			used_node * u=(used_node *) mip->vram_handle;
 			float b1,b2;
 			select_texture(u,b1,b2);
 			u->data=im->data;
@@ -370,7 +372,7 @@ int r1_opengl_texture_manager_class::set_texture_image(r1_texture_handle handle,
 	return i4_F;
 }
 
-i4_bool r1_opengl_texture_manager_class::async_mip_load(r1_mip_load_info *load_info)
+i4_bool r1_opengl_texture_manager_class::async_mip_load(r1_mip_load_info * load_info)
 {
 	if (bytes_loaded > 150000 || no_of_textures_loaded > 16)
 	{
@@ -381,9 +383,9 @@ i4_bool r1_opengl_texture_manager_class::async_mip_load(r1_mip_load_info *load_i
 		}
 	}
 
-	r1_miplevel_t *mip = load_info->dest_mip;
+	r1_miplevel_t * mip = load_info->dest_mip;
 
-	used_node *new_used = make_new_used_node(load_info, R1_TEX_NO_HEAP_DONT_LIST);
+	used_node * new_used = make_new_used_node(load_info, R1_TEX_NO_HEAP_DONT_LIST);
 
 	if (!new_used)
 	{
@@ -501,7 +503,7 @@ i4_bool r1_opengl_texture_manager_class::async_mip_load(r1_mip_load_info *load_i
 			}
 		}
 		array_lock.unlock();
-		i4_const_str *n=NULL;
+		i4_const_str * n=NULL;
 		n=r1_get_texture_name(mip->entry->id);
 		char buf[100],buf2[150];
 		i4_os_string(*n,buf,100);
@@ -555,9 +557,9 @@ i4_bool r1_opengl_texture_manager_class::async_mip_load(r1_mip_load_info *load_i
 }
 
 
-void r1_opengl_texture_manager_class::free_mip(void *vram_handle)
+void r1_opengl_texture_manager_class::free_mip(void * vram_handle)
 {
-	used_node *u = (used_node *)vram_handle;
+	used_node * u = (used_node *)vram_handle;
 
 	if (u->gltexname)
 	{
@@ -583,7 +585,8 @@ void r1_opengl_texture_manager_class::free_mip(void *vram_handle)
 void r1_opengl_texture_manager_class::select_texture(r1_local_texture_handle_type handle,
 													 float &smul, float &tmul)
 {
-	used_node *u = (used_node *)handle;
+	used_node * u = (used_node *)handle;
+
 	glBindTexture(GL_TEXTURE_2D, u->gltexname);
 
 	smul = 1.0;
@@ -591,14 +594,15 @@ void r1_opengl_texture_manager_class::select_texture(r1_local_texture_handle_typ
 }
 
 
-r1_miplevel_t *r1_opengl_texture_manager_class::get_texture(r1_texture_handle handle,
-															w32 frame_counter,
-															sw32 desired_width,
-															sw32 &w, sw32 &h)
+r1_miplevel_t * r1_opengl_texture_manager_class::get_texture(r1_texture_handle handle,
+															 w32 frame_counter,
+															 sw32 desired_width,
+															 sw32 &w, sw32 &h)
 {
-	r1_miplevel_t *mip = r1_texture_manager_class::get_texture(handle,frame_counter,desired_width,w,h);
+	r1_miplevel_t * mip = r1_texture_manager_class::get_texture(handle,frame_counter,desired_width,w,h);
 
-	used_node *u = (used_node *)mip->vram_handle;
+	used_node * u = (used_node *)mip->vram_handle;
+
 	tex_no_heap->update_usage((r1_tex_no_heap_used_node *)u);
 
 	return mip;
@@ -615,15 +619,15 @@ void r1_opengl_texture_manager_class::next_frame()
 	}
 
 	array_lock.lock();
-	i4_image_class *im=NULL;
+	i4_image_class * im=NULL;
 
 	// get texture names
-	GLuint *texnames = (GLuint *)I4_MALLOC(finished_array.size() * sizeof(GLuint),"failure calling i4_malloc");
+	GLuint * texnames = (GLuint *)I4_MALLOC(finished_array.size() * sizeof(GLuint),"failure calling i4_malloc");
 	glGenTextures(finished_array.size(), texnames);
 
 	for (sw32 i=0; i<finished_array.size(); i++)
 	{
-		used_node *u = finished_array[i];
+		used_node * u = finished_array[i];
 
 		// put it in vram
 		u->mip->vram_handle = u;
@@ -699,7 +703,7 @@ void r1_opengl_texture_manager_class::next_frame()
 // used_node, taking into account the texformatflags data member.
 // Scratch space should be zero if we must allocate it
 //
-void r1_opengl_texture_manager_class::teximage2d(used_node *u)
+void r1_opengl_texture_manager_class::teximage2d(used_node * u)
 {
 
 	GLenum intformat, format, type;

@@ -76,7 +76,7 @@ static void g1_moneyplane_init()
 }
 
 g1_moneyplane_class::g1_moneyplane_class(g1_object_type id,
-										 g1_loader_class *fp)
+										 g1_loader_class * fp)
 	: g1_map_piece_class(id, fp)
 {
 	draw_params.setup(model_ref.id(), 0, lod_ref.id());
@@ -92,13 +92,13 @@ g1_moneyplane_class::g1_moneyplane_class(g1_object_type id,
 
 }
 
-g1_moneycrate_class *g1_moneyplane_class::crate()
+g1_moneycrate_class * g1_moneyplane_class::crate()
 {
 	li_class_context c(vars);
 	return (g1_moneycrate_class *)(li_crate()->value());
 }
 
-void g1_moneyplane_class::set_crate(g1_moneycrate_class *c)
+void g1_moneyplane_class::set_crate(g1_moneycrate_class * c)
 {
 	vars->set(li_crate, new li_g1_ref(c));
 }
@@ -131,7 +131,7 @@ i4_bool g1_moneyplane_class::move(const i4_3d_vector &d)
 	return i4_T;
 }
 
-void g1_moneyplane_class::damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir)
+void g1_moneyplane_class::damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir)
 {
 	li_class_context c(vars);
 
@@ -360,7 +360,7 @@ void g1_moneyplane_class::think()
 
 				if (ok)
 				{
-					g1_bank_class *bank = (g1_bank_class *)attack_target.get();
+					g1_bank_class * bank = (g1_bank_class *)attack_target.get();
 					set_crate(bank->crate());
 					bank->detach_crate();
 
@@ -372,7 +372,7 @@ void g1_moneyplane_class::think()
 			{
 				if (h<height+DROP_HEIGHT)
 				{
-					i4_3d_vector d(0,0,VSPEED *0.2f);
+					i4_3d_vector d(0,0,VSPEED * 0.2f);
 					pitch += (0.4f - pitch)*0.1f;
 					move(d);
 				}

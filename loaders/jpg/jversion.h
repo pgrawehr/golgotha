@@ -10,8 +10,8 @@
 #ifndef __JVERSION__H__
 #define __JVERSION__H__
 
-#define JVERSION	"6a  7-Feb-96"
+#define JVERSION    "6a  7-Feb-96"
 
-#define JCOPYRIGHT	"Copyright (C) 1996, Thomas G. Lane"
+#define JCOPYRIGHT  "Copyright (C) 1996, Thomas G. Lane"
 
-#endif// WRAP ADDED BY JJ
+#endif // WRAP ADDED BY JJ

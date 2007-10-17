@@ -40,27 +40,27 @@ class i4_list_pick :
 {
 protected:
 	w32 total_items;
-	i4_window_class **items;
+	i4_window_class * * items;
 	i4_color background;
 	w32 length;
 	w32 scroll_event_id;
 	sw32 start,end;
 	i4_bool need_draw_all, free_items;
-	i4_scroll_bar *scrollbar;
+	i4_scroll_bar * scrollbar;
 
 public:
 	enum {
 		LB_SCROLLSELF=0x80000000,
 
 	};
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"list_pick");
 	}
 
 	i4_list_pick(w16 width, w16 height,
 				 w32 total_items,
-				 i4_window_class **items,
+				 i4_window_class * * items,
 				 w32 scroll_event_id, //if MSB is 1, the list generates the scrollbar itself
 				 //with the given id (may be 0)
 				 i4_color background,
@@ -68,7 +68,7 @@ public:
 
 	~i4_list_pick();
 
-	virtual void update(w32 new_total_items,i4_window_class **new_items);
+	virtual void update(w32 new_total_items,i4_window_class * * new_items);
 
 	virtual void reposition_start(sw32 new_start);
 
@@ -94,7 +94,7 @@ public:
 	//It even seems that the implemented draw is aequivalent to its parent's.
 	//virtual void draw(i4_draw_context_class &context);
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 };
 
 //similar to parent, but copies the list to an internal buffer
@@ -104,7 +104,7 @@ class i4_list_pick_cpitems :
 public:
 	i4_list_pick_cpitems(w16 width, w16 height,
 						 w32 _total_items,
-						 i4_window_class **_items,
+						 i4_window_class * * _items,
 						 w32 scroll_event_id,
 						 i4_color background)
 		: i4_list_pick(width,height,
@@ -145,8 +145,8 @@ public:
 		total_items=0;
 		free_items=i4_F;
 	}
-	void receive_event(i4_event *ev);
-	void update(w32 new_total_items, i4_window_class **new_items);
+	void receive_event(i4_event * ev);
+	void update(w32 new_total_items, i4_window_class * * new_items);
 
 };
 

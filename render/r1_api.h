@@ -110,25 +110,25 @@ class r1_render_window_class;      // defined in r1_win.hh
 class r1_render_api_class
 {
 protected:
-	friend r1_render_api_class *r1_get_api(i4_display_class *for_display);
-	friend r1_render_api_class *r1_create_api(i4_display_class *for_display, char *name);
+	friend r1_render_api_class *r1_get_api(i4_display_class * for_display);
+	friend r1_render_api_class *r1_create_api(i4_display_class * for_display, char * name);
 	//Friendship of related base classes. The subclasses often also
 	//declare this friendship.
 	friend class r1_render_window_class;
 
-	friend void r1_destroy_api(r1_render_api_class *r);
+	friend void r1_destroy_api(r1_render_api_class * r);
 
-	r1_texture_manager_class *tmanager; //the first one
+	r1_texture_manager_class * tmanager; //the first one
 	i4_array<r1_texture_manager_class *> tmanagers; //if there's more than one
 
 	// make these global so they can be accessed without pointer indirection (faster)
-	static r1_miplevel_t *last_node;
+	static r1_miplevel_t * last_node;
 	static r1_shading_type shade_mode;
 	static r1_alpha_type alpha_mode;
 	static r1_write_mask_type write_mask;
 	static w32 const_color;
 	static r1_filter_type filter_mode;
-	static r1_render_api_class *first;
+	static r1_render_api_class * first;
 
 	static i4_float r_tint_mul;
 	static i4_float g_tint_mul;
@@ -142,7 +142,7 @@ protected:
 	static r1_color_tint color_tint_list[MAX_COLOR_TINTS];
 	static sw8 num_color_tints;
 
-	r1_render_api_class *next;
+	r1_render_api_class * next;
 
 	//currently the only flag is R1_SOFTWARE
 	w32 render_device_flags;
@@ -155,14 +155,14 @@ protected:
 	/// \return True if successfull, false if not. Reasons of failure are:
 	/// Wrong display driver for this renderer, insufficient memory,
 	/// missing hardware support.
-	virtual i4_bool init(i4_display_class *display);
+	virtual i4_bool init(i4_display_class * display);
 
 	/// Deinitialize the renderer.
 	/// this will delete the texture manager (and free textures associated with) created by init
 	virtual void uninit();
 
 	/// Copy an image to the screen.
-	virtual void copy_part(i4_image_class *im,
+	virtual void copy_part(i4_image_class * im,
 						   int x, int y,           // position on screen
 						   int x1, int y1,         // area of image to copy
 						   int x2, int y2) = 0;
@@ -206,7 +206,7 @@ public:
 	virtual i4_bool resize(w16 newx, w16 newy);
 	virtual i4_bool redepth(w16 new_bitdepth);
 
-	static i4_draw_context_class *context;
+	static i4_draw_context_class * context;
 
 	virtual i4_bool pixel_double()
 	{
@@ -260,6 +260,7 @@ public:
 	void use_default_texture(w32 tman_index=-1)
 	{
 		r1_texture_handle mat=0;
+
 		if (tman_index==0xFFFFFFFF)
 		{
 			mat=get_tmanager()->null_texture_handle;
@@ -344,17 +345,17 @@ public:
 	 * TRIANGLE_FAN's this number must be 3 or larger.
 	 * \param verts The pointer to the transformed and lit vertices.
 	 */
-	virtual void render_poly(int t_verts, r1_vert *verts)                               = 0;
+	virtual void render_poly(int t_verts, r1_vert * verts)                               = 0;
 	/// Render polygons , indexed.
 	/// This does the same as the 2-parameter version, except that the
 	/// indices must not be in order.
-	void render_poly(int t_verts, r1_vert *verts, int *vertex_index);
-	void render_poly(int t_verts, r1_vert *verts, w16 *vertex_index);
+	void render_poly(int t_verts, r1_vert * verts, int * vertex_index);
+	void render_poly(int t_verts, r1_vert * verts, w16 * vertex_index);
 	virtual void flush_vert_buffer() //Only used for dx right now
 	{
 	};
 	//this had better be a rectangle
-	virtual void render_sprite(r1_vert *verts);
+	virtual void render_sprite(r1_vert * verts);
 
 	/// Renders single pixels.
 	/// This method uses the corresponding method of the underlying
@@ -363,7 +364,7 @@ public:
 	/// \param t_points The number of poinst to draw.
 	/// \param pixel The array of vertices. Must be at least as long as t_points.
 	/// Use screen-coordinates.
-	virtual void render_pixel(int t_points, r1_vert *pixel)                             = 0;
+	virtual void render_pixel(int t_points, r1_vert * pixel)                             = 0;
 	/// Renders lines as line-strips.
 	/// Not properly supported by all HAL layers, but might be emulated
 	/// using triangle strips (the only primitive required to be fully supported
@@ -373,7 +374,7 @@ public:
 	/// render_poly(), this method takes the number of lines, not points to draw!
 	/// \param verts The vertices of the corners of the polylines.
 	/// The array must be one larger than t_lines.
-	virtual void render_lines(int t_lines, r1_vert *verts )                             = 0;
+	virtual void render_lines(int t_lines, r1_vert * verts )                             = 0;
 
 	/// Writtes a rectangle of the given color to the screen.
 	/// Color is standard argb, (z should be within range specifed by set_z_range)
@@ -390,18 +391,18 @@ public:
 	virtual i4_image_class *create_compatible_image(w16 w, w16 h)                       = 0;
 
 	// these should be called for an image before drawing to them
-	virtual void lock_image(i4_image_class *im)
+	virtual void lock_image(i4_image_class * im)
 	{
 		;
 	}
-	virtual void unlock_image(i4_image_class *im)
+	virtual void unlock_image(i4_image_class * im)
 	{
 		;
 	}
 
 	/// Put an image to the screen.
 	/// this function does clipping (based on context) and calls copy_part
-	virtual void put_image(i4_image_class *im,
+	virtual void put_image(i4_image_class * im,
 						   int x, int y,           // position on screen
 						   int x1, int y1,         // area of image to copy
 						   int x2, int y2);
@@ -418,11 +419,11 @@ public:
 	/// R1_CLIP_NO_CALC_OUTCODE is currently the only supported flag. It
 	/// is used when the outcode has already been calculated on the vertices.
 	/// \return Either clip_buf_1 or clip_buf_2, depending on the result.
-	virtual r1_vert *clip_poly(sw32 *num_clip_verts,
-							   r1_vert *t_vertices,
-							   w16 *indices,
-							   r1_vert *clip_buf_1,
-							   r1_vert *clip_buf_2,
+	virtual r1_vert *clip_poly(sw32 * num_clip_verts,
+							   r1_vert * t_vertices,
+							   w16 * indices,
+							   r1_vert * clip_buf_1,
+							   r1_vert * clip_buf_2,
 							   w8 flags);
 
 	/// Clip polygons to make them suitable for rendering.
@@ -437,11 +438,11 @@ public:
 	/// R1_CLIP_NO_CALC_OUTCODE is currently the only supported flag. It
 	/// is used when the outcode has already been calculated on the vertices.
 	/// \return Either clip_buf_1 or clip_buf_2, depending on the result.
-	virtual r1_vert *clip_poly(sw32 *num_clip_verts, //how many verts in this polygon
-							   r1_vert *t_vertices, //pointer to the vertices
-							   w32 *indices,       //pointer to the indices
-							   r1_vert *clip_buf_1, //pointer to clip buffer 1
-							   r1_vert *clip_buf_2, //pointer to clip buffer 2
+	virtual r1_vert *clip_poly(sw32 * num_clip_verts, //how many verts in this polygon
+							   r1_vert * t_vertices, //pointer to the vertices
+							   w32 * indices,       //pointer to the indices
+							   r1_vert * clip_buf_1, //pointer to clip buffer 1
+							   r1_vert * clip_buf_2, //pointer to clip buffer 2
 							   w8 flags);          //flags to be considered when clipping
 
 	/// Create a render window.
@@ -485,13 +486,13 @@ public:
 	virtual char *name() = 0;
 };
 
-extern r1_render_api_class *r1_render_api_class_instance;
+extern r1_render_api_class * r1_render_api_class_instance;
 
 /// Creates the rendering api by iterating over all registered apis.
-r1_render_api_class *r1_create_api(i4_display_class *for_display, char *api_name=0);
+r1_render_api_class *r1_create_api(i4_display_class * for_display, char * api_name=0);
 
 /// Destroys the api.
-void r1_destroy_api(r1_render_api_class *render_api);
+void r1_destroy_api(r1_render_api_class * render_api);
 
 /// Inverts the z value.
 /// Used for projection.

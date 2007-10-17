@@ -21,11 +21,11 @@ class i4_draggable_window_class :
 			 current_mouse_x,
 			 current_mouse_y;
 
-	i4_drag_frame_class *drag_frame;
+	i4_drag_frame_class * drag_frame;
 public:
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 	i4_draggable_window_class(w16 w, w16 h);
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"drag_frame");
 	}

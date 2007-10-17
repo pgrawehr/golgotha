@@ -17,6 +17,7 @@
 inline i4_angle i4_angle_diff(i4_angle angle1, i4_angle angle2)
 {
 	i4_angle d;
+
 	if (angle1>angle2)
 	{
 		d=angle1-angle2;
@@ -51,6 +52,7 @@ inline i4_angle i4_angle_minus(i4_angle angle1, i4_angle angle2)
 inline i4_angle i4_interpolate_angle(i4_angle from, i4_angle to, i4_float fraction)
 {
 	i4_angle diff=i4_angle_diff(from, to) * fraction;
+
 	if (i4_angle_minus(to, from)>=i4_pi())
 	{
 		return from-diff;
@@ -65,7 +67,9 @@ inline void i4_normalize_angle(i4_float &angle)
 {
 	while (angle<0) angle += (i4_2pi());
 
+
 	while (angle>=i4_2pi()) angle -= (i4_2pi());
+
 
 }
 

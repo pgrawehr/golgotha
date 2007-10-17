@@ -65,18 +65,18 @@ protected:
 	sw32 last_mx, last_my;
 
 	i4_bool grabl, grabr;
-	i4_image_class *act,*pass;
+	i4_image_class * act,* pass;
 	i4_time_class start;
-	i4_event_reaction_class *reaction;
+	i4_event_reaction_class * reaction;
 	g1_3d_pick_window_camera_struct camera;
 public:
 
 
 	g1_3d_pick_window(w16 w, w16 h,
-					  i4_image_class *active_back,
-					  i4_image_class *passive_back,
+					  i4_image_class * active_back,
+					  i4_image_class * passive_back,
 					  g1_3d_pick_window_camera_struct &camera,
-					  i4_event_reaction_class *reaction)
+					  i4_event_reaction_class * reaction)
 
 		: i4_menu_item_class(0,0,w,h),
 		  camera(camera),
@@ -122,11 +122,11 @@ public:
 	}
 
 	virtual void parent_draw(i4_draw_context_class &context);
-	virtual void draw_object(g1_draw_context_class *context) = 0;
+	virtual void draw_object(g1_draw_context_class * context) = 0;
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"object window");
 	}

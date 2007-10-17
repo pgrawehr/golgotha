@@ -34,11 +34,11 @@
 
 //static li_object *g1_ignore(li_object *o, li_environment *env) {  return 0;}
 
-li_object *li_get_all_tile_names(li_object *o, li_environment *env)
+li_object *li_get_all_tile_names(li_object * o, li_environment * env)
 {
 	for (w32 i=0; i<g1_tile_man.total(); i++)
 	{
-		i4_const_str *name=g1_tile_man.get_name_from_tile(i);
+		i4_const_str * name=g1_tile_man.get_name_from_tile(i);
 		if (name)
 		{
 			i4_warning(name->c_str());
@@ -57,6 +57,7 @@ li_automatic_add_function(li_get_all_tile_names,"get_all_tile_names");
 i4_str *g1_get_res_filnename(const i4_const_str &map_filename)
 {
 	i4_filename_struct fn;
+
 	i4_split_path(map_filename, fn);
 
 	char res_name[256];
@@ -64,6 +65,7 @@ i4_str *g1_get_res_filnename(const i4_const_str &map_filename)
 	int len=strlen(fn.filename);
 	while (len && (fn.filename[len-1]>='0' && fn.filename[len-1]<='9'))
 		len--;
+
 
 	res_name[len]=0;
 
@@ -88,17 +90,18 @@ i4_str *g1_get_res_filnename(const i4_const_str &map_filename)
 //! \param fp The .scm file belonging to the map
 //! \param exclude_flags A flag word indicating which elements should not be reloaded. Use with care.
 //! \return 0 (Side Effect: Models and textures have been loaded)
-w32 g1_load_res_info(g1_loader_class *map_file, i4_file_class *fp, w32 exclude_flags)
+w32 g1_load_res_info(g1_loader_class * map_file, i4_file_class * fp, w32 exclude_flags)
 {
 	//li_environment *local_env=new li_environment(0,i4_T);
 	//li_environment *local_env=0;//I don't think loading these not globaly is a good idea
 	//is ok, applies only to functions
 	w32 include_flags=~exclude_flags;
+
 	i4_array<i4_str *> tlist(512,512), mlist(512,512);
 
 //  li_list *scheme_list;
 	int t_tiles;
-	r1_texture_manager_class *tman=g1_render.r_api->get_tmanager();
+	r1_texture_manager_class * tman=g1_render.r_api->get_tmanager();
 
 	if (include_flags & G1_MAP_TEXTURES)
 	{
@@ -106,9 +109,9 @@ w32 g1_load_res_info(g1_loader_class *map_file, i4_file_class *fp, w32 exclude_f
 	}
 	;
 
-	i4_file_class *fp_list[1];
+	i4_file_class * fp_list[1];
 	fp_list[0]=fp;
-	li_object *post_load=0;
+	li_object * post_load=0;
 
 	// get a list of models and textures we need to load for this level
 	// with the last parameter set to 0, won't actually touch any files.
@@ -130,7 +133,7 @@ w32 g1_load_res_info(g1_loader_class *map_file, i4_file_class *fp, w32 exclude_f
 		g1_model_list_man.reset( mlist, tman);
 	}
 
-	li_object *f=li_car(post_load,0),*g;
+	li_object * f=li_car(post_load,0),* g;
 
 	while (f && f!=li_nil)
 	{
@@ -165,7 +168,7 @@ w32 g1_load_res_info(g1_loader_class *map_file, i4_file_class *fp, w32 exclude_f
 		}
 		f=li_cdr(f,0);
 	}
-	li_object *li_tex_list=li_car(li_cdr(li_cdr(li_cdr(post_load,0),0),0),0);
+	li_object * li_tex_list=li_car(li_cdr(li_cdr(li_cdr(post_load,0),0),0),0);
 
 	//li_add_function("models", g1_ignore, local_env);
 	//li_add_function("textures", g1_add_textures, local_env);
@@ -177,7 +180,7 @@ w32 g1_load_res_info(g1_loader_class *map_file, i4_file_class *fp, w32 exclude_f
 	{
 		for (int k=0; k<t_tiles; k++)
 		{
-			li_object *obj=li_car(li_tex_list,0);
+			li_object * obj=li_car(li_tex_list,0);
 			li_tex_list=li_cdr(li_tex_list,0);
 			I4_ASSERT(obj&&obj!=li_nil,"INTERNAL: Number of textures to load does not match elements in list");
 			g1_tile_man.add(obj,0);
@@ -211,7 +214,7 @@ i4_bool g1_load_level(const i4_const_str &filename, int reload_textures_and_mode
 					  w32 exclude_flags)
 {
 //  int i;
-	i4_file_class *fp=i4_open(filename);
+	i4_file_class * fp=i4_open(filename);
 
 	if (!fp)
 	{
@@ -222,7 +225,7 @@ i4_bool g1_load_level(const i4_const_str &filename, int reload_textures_and_mode
 		return 0;
 	}
 
-	g1_loader_class *load=g1_open_save_file(fp);
+	g1_loader_class * load=g1_open_save_file(fp);
 	if (!load)
 	{
 		if (g1_map_is_loaded())
@@ -240,7 +243,7 @@ i4_bool g1_load_level(const i4_const_str &filename, int reload_textures_and_mode
 		}
 
 		w32 off,size;
-		i4_file_class *res_file=0;
+		i4_file_class * res_file=0;
 		if (load->get_section_info("resources", off, size))
 		{
 			res_file=new i4_sub_section_file(i4_open(filename),off,size);
@@ -248,7 +251,7 @@ i4_bool g1_load_level(const i4_const_str &filename, int reload_textures_and_mode
 
 		if (!res_file)
 		{
-			i4_str *res_name=g1_get_res_filnename(filename);
+			i4_str * res_name=g1_get_res_filnename(filename);
 			res_file=i4_open(*res_name);
 			delete res_name;
 		}
@@ -267,7 +270,7 @@ i4_bool g1_load_level(const i4_const_str &filename, int reload_textures_and_mode
 			i4_error("WARNING: Cannot find scm file for current level. Strange things might happen.");
 			li_load("scheme/map_init.scm");
 			//Load a default scm file (it's actually the same as for test.level)
-			i4_str *rn=new i4_str("scheme/empty.scm");
+			i4_str * rn=new i4_str("scheme/empty.scm");
 			res_file=i4_open(*rn);
 			g1_load_res_info(load,res_file,exclude_flags);
 			delete res_file;
@@ -277,7 +280,7 @@ i4_bool g1_load_level(const i4_const_str &filename, int reload_textures_and_mode
 
 	g1_initialize_loaded_objects();
 
-	g1_map_class *map;
+	g1_map_class * map;
 	if (g1_map_is_loaded())
 	{
 		map=g1_get_map();

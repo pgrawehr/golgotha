@@ -77,9 +77,9 @@ public:
 
 	virtual void update_head(i4_float nx, i4_float ny, i4_float nh);
 
-	g1_smoke_trail_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	g1_smoke_trail_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	virtual void think();
 };
 

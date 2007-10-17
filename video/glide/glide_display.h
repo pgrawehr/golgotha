@@ -20,7 +20,7 @@ class i4_glide_display_class :
 	public i4_display_class
 {
 protected:
-	i4_draw_context_class *context;
+	i4_draw_context_class * context;
 
 	class glide_mode_class :
 		public i4_display_class::mode
@@ -30,20 +30,20 @@ public:
 	};
 
 	glide_mode_class tmp, cur_mode;
-	i4_cursor_class *mcursor;
+	i4_cursor_class * mcursor;
 
 
 	sw32 last_mouse_x, last_mouse_y;
 
-	i4_image_class *bbuf,  // backbuffer
-	*mouse_save1,          // save of screen under mouse
-	*mouse_save2,
-	*prev_mouse_save;      // pointer to mouse_save1 or 2, depending on which saved last
+	i4_image_class * bbuf,  // backbuffer
+	* mouse_save1,          // save of screen under mouse
+	* mouse_save2,
+	* prev_mouse_save;      // pointer to mouse_save1 or 2, depending on which saved last
 
-	void remove_cursor(sw32 x, sw32 y, i4_image_class *mouse_save);
+	void remove_cursor(sw32 x, sw32 y, i4_image_class * mouse_save);
 	void save_and_draw_cursor(sw32 x, sw32 y, i4_image_class *&mouse_save);
 
-	i4_image_class *fake_screen;
+	i4_image_class * fake_screen;
 	i4_bool detected;
 	i4_rect_list_class next_frame_copy;
 
@@ -103,7 +103,7 @@ public:
 	virtual i4_bool close();
 
 	virtual i4_bool lock_mouse_in_place(i4_bool yes_no) = 0;
-	virtual i4_bool set_mouse_shape(i4_cursor_class *cursor);
+	virtual i4_bool set_mouse_shape(i4_cursor_class * cursor);
 	void begin_render_mode();
 	void end_render_mode();
 
@@ -114,6 +114,6 @@ public:
 };
 
 
-extern i4_glide_display_class *i4_glide_display;
+extern i4_glide_display_class * i4_glide_display;
 
 #endif

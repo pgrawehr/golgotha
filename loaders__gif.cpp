@@ -97,7 +97,7 @@ LOCAL WORD navail_bytes = 0;              /* # bytes left in block */
 LOCAL WORD nbits_left = 0;                /* # bits left in current byte */
 LOCAL UTINY b1;                           /* Current byte */
 LOCAL UTINY byte_buff[257];               /* Current block */
-LOCAL UTINY *pbytes;                      /* Pointer to next byte in block */
+LOCAL UTINY * pbytes;                      /* Pointer to next byte in block */
 
 LOCAL LONG code_mask[13] = {
 	0,
@@ -231,8 +231,8 @@ LOCAL UWORD prefix[MAX_CODES + 1];           /* Prefix linked list */
 WORD decoder(linewidth)
 WORD linewidth;
 {
-	FAST UTINY *sp, *bufptr;
-	UTINY *buf;
+	FAST UTINY * sp, * bufptr;
+	UTINY * buf;
 	FAST WORD code, fc, oc, bufcnt;
 	WORD c, size, ret;
 
@@ -298,6 +298,7 @@ WORD linewidth;
 			 */
 			while ((c = get_next_code()) == clear)
 				;
+
 
 
 			/* If we get an ending code immediately after a clear code

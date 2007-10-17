@@ -18,7 +18,7 @@ void g1_critical_map_maker_class::clear_critical_map()
 //{{{
 {
 	int i,j;
-	g1_map_cell_class *c=map->cell(0,0);
+	g1_map_cell_class * c=map->cell(0,0);
 
 	for (j=0; j<map->height(); j++)
 	{
@@ -42,7 +42,8 @@ g1_graph_node g1_critical_map_maker_class::get_critical(w16 x, w16 y, int n)
 i4_bool g1_critical_map_maker_class::critical_full(w16 x, w16 y, g1_graph_node crit)
 //{{{
 {
-	w8 *p = map->cell(x,y)->nearest_critical[grade][tofrom];
+	w8 * p = map->cell(x,y)->nearest_critical[grade][tofrom];
+
 	if (p[G1_CRITICALS_PER_CELL-1]!=g1_map_cell_class::NO_CRITICAL)
 	{
 		return i4_T;
@@ -65,9 +66,10 @@ void g1_critical_map_maker_class::set_critical(w16 x, w16 y, g1_graph_node criti
 	I4_ASSERT(critical!=g1_map_cell_class::NO_CRITICAL, "can't set critical point to blank");
 	I4_ASSERT(!critical_full(x,y,critical), "Adding too many critical points to one spot");
 
-	w8 *p = map->cell(x,y)->nearest_critical[grade][tofrom];
+	w8 * p = map->cell(x,y)->nearest_critical[grade][tofrom];
 	while (*p!=g1_map_cell_class::NO_CRITICAL)
 		p++;
+
 
 	*p = critical;
 }
@@ -129,10 +131,10 @@ i4_bool g1_critical_map_maker_class::make_critical_graph()
 //{{{
 {
 	w32 i,j,g;
-	g1_critical_graph_class::connection_class *c;
+	g1_critical_graph_class::connection_class * c;
 	int add;
 
-	i4_status_class *status=i4_create_status(i4gets("make_crit_graph"),1);
+	i4_status_class * status=i4_create_status(i4gets("make_crit_graph"),1);
 
 	critical->clear_critical_graph();
 
@@ -151,7 +153,7 @@ i4_bool g1_critical_map_maker_class::make_critical_graph()
 		}
 
 
-		g1_critical_graph_class::critical_point_class *crit = &critical->critical[j];
+		g1_critical_graph_class::critical_point_class * crit = &critical->critical[j];
 		for (i=1; i<critical->criticals && !canceled; i++)
 		{
 			if (i==j)
@@ -166,7 +168,7 @@ i4_bool g1_critical_map_maker_class::make_critical_graph()
 				canceled=1;
 			}
 
-			g1_critical_graph_class::critical_point_class *crit2 = &critical->critical[i];
+			g1_critical_graph_class::critical_point_class * crit2 = &critical->critical[i];
 			for (g=0; g<G1_GRADE_LEVELS; g++)
 			{
 				size[g] = (w8)(64.0*map->block[g].line_of_sight(crit->x, crit->y, crit2->x, crit2->y));
@@ -222,7 +224,7 @@ i4_bool g1_critical_map_maker_class::make_critical_map()
 	w32 x,y;
 	g1_graph_node c;
 
-	i4_status_class *stat = i4_create_status(i4gets("make_critical_map"), 1);
+	i4_status_class * stat = i4_create_status(i4gets("make_critical_map"), 1);
 	int canceled=0;
 
 	clear_critical_map();
@@ -327,8 +329,8 @@ i4_bool g1_critical_map_maker_class::make_critical_map()
 //}}}
 
 
-i4_bool g1_critical_map_maker_class::make_criticals(g1_map_class *_map,
-													g1_critical_graph_class *graph)
+i4_bool g1_critical_map_maker_class::make_criticals(g1_map_class * _map,
+													g1_critical_graph_class * graph)
 //{{{
 {
 	map = _map;

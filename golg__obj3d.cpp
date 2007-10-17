@@ -29,10 +29,10 @@ void g1_quad_object_class::scale(i4_float value)
 {
 	for (int j=0; j<num_animations; j++)
 	{
-		g1_vert_class *p=animation[j].vertex;
+		g1_vert_class * p=animation[j].vertex;
 		for (int i=0; i<animation[j].num_frames; i++)
 		{
-			g1_vert_class *p=get_verts(j,i);
+			g1_vert_class * p=get_verts(j,i);
 			for (int k=0; k<num_vertex; k++)
 			{
 				p[k].v*=value;
@@ -64,11 +64,11 @@ void g1_quad_object_class::translate(i4_float xadd, i4_float yadd, i4_float zadd
 {
 	for (int j=0; j<num_animations; j++)
 	{
-		g1_vert_class *p=animation[j].vertex;
+		g1_vert_class * p=animation[j].vertex;
 
 		for (int i=0; i<animation[j].num_frames; i++)
 		{
-			g1_vert_class *p=get_verts(j,i);
+			g1_vert_class * p=get_verts(j,i);
 			for (int k=0; k<num_vertex; k++)
 			{
 				p[k].v += i4_3d_point_class(xadd, yadd, zadd);
@@ -131,8 +131,8 @@ void g1_quad_object_class::update(i4_float time)
 {
 	for (int i=0; i<num_special; i++)
 	{
-		g1_texture_animation *t = &special[i];
-		g1_quad_class *q = &quad[t->quad_number];
+		g1_texture_animation * t = &special[i];
+		g1_quad_class * q = &quad[t->quad_number];
 		int max_frames = t->max_frames;
 
 		if (max_frames==0)
@@ -172,14 +172,15 @@ void g1_quad_object_class::update(i4_float time)
 i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
 										const i4_3d_vector &ray,
 										int anim, int frame,
-										i4_float *intersect_t,
-										int *hit_poly,
-										i4_3d_vector *normal)
+										i4_float * intersect_t,
+										int * hit_poly,
+										i4_3d_vector * normal)
 {
-	g1_vert_class *verts;
+	g1_vert_class * verts;
+
 	verts = get_verts(anim, frame);
 
-	g1_quad_class *q = quad;
+	g1_quad_class * q = quad;
 	i4_bool hit = i4_F;
 	i4_float new_t = 1.0;
 	i4_float d,num,den,t;
@@ -190,7 +191,7 @@ i4_bool g1_quad_object_class::intersect(const i4_3d_vector &point,
 	int inside;
 	i4_3d_vector new_ray,new_point,abs_normal;
 	int j, u,v,i;
-	g1_octree *curnode;
+	g1_octree * curnode;
 	i4_array<g1_octree *> nodes(0,30);
 	if (octree)
 	{
@@ -500,7 +501,7 @@ next_loop:
 
 }
 
-i4_bool g1_quad_object_class::get_mount_point(char *name, i4_3d_vector& vect) const
+i4_bool g1_quad_object_class::get_mount_point(char * name, i4_3d_vector& vect) const
 {
 	w32 id = i4_check_sum32(name, strlen(name));
 
@@ -516,7 +517,7 @@ i4_bool g1_quad_object_class::get_mount_point(char *name, i4_3d_vector& vect) co
 }
 
 
-void g1_quad_object_class::calc_quad_normal(g1_vert_class *v,
+void g1_quad_object_class::calc_quad_normal(g1_vert_class * v,
 											g1_quad_class &q)
 //{{{
 {
@@ -637,7 +638,7 @@ static i4_profile_class pf_load_tanim("models:load_tanim");
 
 
 
-g1_quad_object_class *g1_base_object_loader_class::load(i4_loader_class *fp)
+g1_quad_object_class * g1_base_object_loader_class::load(i4_loader_class * fp)
 {
 	int i,j,k;
 

@@ -24,16 +24,17 @@
 #include "controller.h"
 #include "time/time.h"
 
-void read_playback_checker(i4_file_class *fp)
+void read_playback_checker(i4_file_class * fp)
 {
 	int x=fp->read_32();
+
 	if (x!=(int)g1_tick_counter)
 	{
 		i4_warning("demo check off is");
 	}
 }
 
-void write_playback_checker(i4_file_class *fp)
+void write_playback_checker(i4_file_class * fp)
 {
 	fp->write_32(g1_tick_counter);
 }
@@ -54,20 +55,20 @@ g1_team_api_class::g1_team_api_class()
 }
 //}}}
 
-g1_player_piece_class *g1_team_api_class::commander() const
+g1_player_piece_class * g1_team_api_class::commander() const
 //{{{
 {
 	return player->get_commander();
 }
 //}}}
 
-g1_map_piece_class *g1_team_api_class::controlled() const
+g1_map_piece_class * g1_team_api_class::controlled() const
 {
 	if (!g1_current_controller.get())
 	{
 		return 0;
 	}
-	g1_map_piece_class *obj=
+	g1_map_piece_class * obj=
 		g1_map_piece_class::cast(
 		g1_global_id.checked_get(g1_current_controller->view.get_following_object()));
 	if (obj==commander())
@@ -128,7 +129,8 @@ w16 g1_team_api_class::ammo2() const
 i4_bool g1_team_api_class::full0() const
 //{{{
 {
-	g1_player_piece_class *stank=player->get_commander();
+	g1_player_piece_class * stank=player->get_commander();
+
 	if (!stank ||stank->ammo[0].ammo_type)
 	{
 		return 0;
@@ -143,7 +145,8 @@ i4_bool g1_team_api_class::full0() const
 i4_bool g1_team_api_class::full1() const
 //{{{
 {
-	g1_player_piece_class *stank=player->get_commander();
+	g1_player_piece_class * stank=player->get_commander();
+
 	if (!stank ||stank->ammo[1].ammo_type)
 	{
 		return 0;
@@ -158,7 +161,8 @@ i4_bool g1_team_api_class::full1() const
 i4_bool g1_team_api_class::full2() const
 //{{{
 {
-	g1_player_piece_class *stank=player->get_commander();
+	g1_player_piece_class * stank=player->get_commander();
+
 	if (!stank ||stank->ammo[2].ammo_type)
 	{
 		return 0;
@@ -173,7 +177,8 @@ i4_bool g1_team_api_class::full2() const
 i4_bool g1_team_api_class::in_range0() const
 //{{{
 {
-	g1_player_piece_class *stank=player->get_commander();
+	g1_player_piece_class * stank=player->get_commander();
+
 	if (!stank)
 	{
 		return i4_F;
@@ -185,7 +190,8 @@ i4_bool g1_team_api_class::in_range0() const
 i4_bool g1_team_api_class::in_range1() const
 //{{{
 {
-	g1_player_piece_class *stank=player->get_commander();
+	g1_player_piece_class * stank=player->get_commander();
+
 	if (!stank)
 	{
 		return i4_F;
@@ -197,7 +203,8 @@ i4_bool g1_team_api_class::in_range1() const
 i4_bool g1_team_api_class::in_range2() const
 //{{{
 {
-	g1_player_piece_class *stank=player->get_commander();
+	g1_player_piece_class * stank=player->get_commander();
+
 	if (!stank)
 	{
 		return i4_F;
@@ -206,7 +213,7 @@ i4_bool g1_team_api_class::in_range2() const
 }
 //}}}
 
-void g1_team_api_class::turn(i4_float angle, g1_map_piece_class *forwho)
+void g1_team_api_class::turn(i4_float angle, g1_map_piece_class * forwho)
 //{{{
 {
 	if (record)
@@ -233,7 +240,7 @@ void g1_team_api_class::turn(i4_float angle, g1_map_piece_class *forwho)
 }
 //}}}
 
-void g1_team_api_class::accelerate(i4_float ratio,g1_map_piece_class *forwho)
+void g1_team_api_class::accelerate(i4_float ratio,g1_map_piece_class * forwho)
 //{{{
 {
 	if (record)
@@ -260,7 +267,7 @@ void g1_team_api_class::accelerate(i4_float ratio,g1_map_piece_class *forwho)
 
 void g1_team_api_class::strafe(i4_float strafe_right,
 							   i4_float strafe_up,
-							   g1_map_piece_class *forwho)
+							   g1_map_piece_class * forwho)
 //{{{
 {
 	if (record)
@@ -288,7 +295,7 @@ void g1_team_api_class::strafe(i4_float strafe_right,
 }
 //}}}
 
-void g1_team_api_class::look(i4_float dax, i4_float day,g1_map_piece_class *forwho)
+void g1_team_api_class::look(i4_float dax, i4_float day,g1_map_piece_class * forwho)
 //{{{
 {
 	if (record)
@@ -318,7 +325,7 @@ void g1_team_api_class::look(i4_float dax, i4_float day,g1_map_piece_class *forw
 }
 //}}}
 
-i4_bool g1_team_api_class::fire0(g1_map_piece_class *forwho)
+i4_bool g1_team_api_class::fire0(g1_map_piece_class * forwho)
 //{{{
 {
 	if (record)
@@ -363,7 +370,7 @@ i4_bool g1_team_api_class::continue_game()
 }
 
 
-i4_bool g1_team_api_class::fire1(g1_map_piece_class *forwho)
+i4_bool g1_team_api_class::fire1(g1_map_piece_class * forwho)
 //{{{
 {
 	if (forwho)
@@ -387,7 +394,7 @@ i4_bool g1_team_api_class::fire1(g1_map_piece_class *forwho)
 //}}}
 
 
-i4_bool g1_team_api_class::fire2(g1_map_piece_class *forwho)
+i4_bool g1_team_api_class::fire2(g1_map_piece_class * forwho)
 //{{{
 {
 	if (forwho)
@@ -424,7 +431,7 @@ sw32 g1_team_api_class::money() const
 }
 //}}}
 
-g1_map_class *g1_team_api_class::map() const
+g1_map_class * g1_team_api_class::map() const
 //{{{
 {
 	//(OLI) should get rid of this one sometime... add real map interface
@@ -467,7 +474,7 @@ i4_bool g1_team_api_class::is_building() const
 }
 //}}}
 
-w16 g1_team_api_class::object_type(const char *name) const
+w16 g1_team_api_class::object_type(const char * name) const
 //{{{
 {
 	return g1_get_object_type(name);
@@ -492,7 +499,7 @@ i4_bool g1_team_api_class::deploy_unit(w32 id, i4_float x, i4_float y)
 
 	if (g1_global_id.check_id(id))
 	{
-		g1_object_class *obj=g1_global_id.get(id);
+		g1_object_class * obj=g1_global_id.get(id);
 
 		if (obj->player_num==team())
 		{
@@ -517,7 +524,7 @@ i4_bool g1_team_api_class::set_current_target(w32 global_id)
 		record->write_32(global_id);
 	}
 
-	g1_path_object_class *target=g1_path_object_class::cast(g1_global_id.get(global_id));
+	g1_path_object_class * target=g1_path_object_class::cast(g1_global_id.get(global_id));
 
 	if (!target)
 	{
@@ -526,14 +533,14 @@ i4_bool g1_team_api_class::set_current_target(w32 global_id)
 
 	int player_num=team();
 
-	for (g1_factory_class *f=g1_factory_list.first(); f; f=f->next)
+	for (g1_factory_class * f=g1_factory_list.first(); f; f=f->next)
 	{
 		if (f->player_num==player_num)
 		{
-			g1_path_object_class *o=f->get_start();
+			g1_path_object_class * o=f->get_start();
 			if (o)
 			{
-				g1_path_object_class *path[2000];
+				g1_path_object_class * path[2000];
 				int t=o->find_path(player->get_team(), target, path, 2000);
 				for (int j=0; j<t; j++)
 				{
@@ -558,7 +565,7 @@ int g1_team_api_class::build_unit(g1_object_type type)
 	}
 	int ret=G1_BUILD_INVALID_OBJECT;
 	int player_num=team();
-	for (g1_factory_class *f=g1_factory_list.first(); f; f=f->next)
+	for (g1_factory_class * f=g1_factory_list.first(); f; f=f->next)
 	{
 		if (f->player_num==player_num)
 		{
@@ -572,11 +579,14 @@ int g1_team_api_class::build_unit(g1_object_type type)
 	return ret;
 }
 
-int g1_team_api_class::build_unit(g1_object_type type, g1_object_class* factory)
+int g1_team_api_class::build_unit(g1_object_type type, g1_object_class * factory)
 {
-	g1_factory_class* f=g1_factory_class::cast(factory);
+	g1_factory_class * f=g1_factory_class::cast(factory);
+
 	if (f==NULL)
 		return G1_BUILD_INVALID_OBJECT;
+
+
 	if (record)
 	{
 		write_playback_checker(record);
@@ -593,10 +603,11 @@ int g1_team_api_class::build_unit(g1_object_type type, g1_object_class* factory)
 	if (factory!=NULL)
 		ret=factory->build(type);
 
+
 	return ret;
 }
 
-i4_bool g1_team_api_class::record_start(char *name)
+i4_bool g1_team_api_class::record_start(char * name)
 {
 	record = i4_open(name, I4_WRITE);
 	return (record!=0);
@@ -617,7 +628,7 @@ void g1_team_api_class::record_end()
 static int demo_start_time=i4_F;
 static i4_time_class demo_start;
 
-i4_bool g1_team_api_class::playback_start(i4_file_class *fp)
+i4_bool g1_team_api_class::playback_start(i4_file_class * fp)
 {
 
 	playback = fp;
@@ -739,7 +750,8 @@ i4_bool g1_team_api_class::playback_think()
 				com = G1_COMMAND_END;
 				break;
 		}
-	} while (com!=G1_COMMAND_END);
+	}
+	while (com!=G1_COMMAND_END);
 
 	return i4_T;
 }
@@ -767,9 +779,9 @@ g1_team_api_class::~g1_team_api_class()
 
 //  Team API definition class
 
-g1_team_api_definition_class *g1_team_api_definition_class::first=0;
+g1_team_api_definition_class * g1_team_api_definition_class::first=0;
 
-g1_team_api_definition_class::g1_team_api_definition_class(const char *name)
+g1_team_api_definition_class::g1_team_api_definition_class(const char * name)
 	: _name(name)
 //{{{
 {
@@ -781,8 +793,8 @@ g1_team_api_definition_class::g1_team_api_definition_class(const char *name)
 g1_team_api_definition_class::~g1_team_api_definition_class()
 //{{{
 {
-	g1_team_api_definition_class *p = first;
-	g1_team_api_definition_class **ref = &first;
+	g1_team_api_definition_class * p = first;
+	g1_team_api_definition_class * * ref = &first;
 
 	while (p && p!=this)
 	{
@@ -799,14 +811,15 @@ g1_team_api_definition_class::~g1_team_api_definition_class()
 }
 //}}}
 
-g1_team_api_class *g1_team_api_definition_class::create(const char *name,
-														g1_loader_class *f)
+g1_team_api_class * g1_team_api_definition_class::create(const char * name,
+														 g1_loader_class * f)
 //{{{
 {
-	g1_team_api_definition_class *p=first;
+	g1_team_api_definition_class * p=first;
 
 	while (p && strcmp(name, p->name()))
 		p = p->next;
+
 
 
 	if (!p)
@@ -815,7 +828,7 @@ g1_team_api_class *g1_team_api_definition_class::create(const char *name,
 		p=first;
 	}
 
-	g1_team_api_class *r=p->create(f);
+	g1_team_api_class * r=p->create(f);
 	if (r->name)
 	{
 		delete r->name;

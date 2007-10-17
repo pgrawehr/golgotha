@@ -13,12 +13,12 @@
 #include "loaders/dir_load.h"
 #include "loaders/dir_save.h"
 
-char *data_file="load_save.data";
+char * data_file="load_save.data";
 
-void save(li_object *o)
+void save(li_object * o)
 {
-	i4_file_class *fp=i4_open(data_file, I4_WRITE);
-	i4_saver_class *saver_fp=new i4_saver_class(fp);
+	i4_file_class * fp=i4_open(data_file, I4_WRITE);
+	i4_saver_class * saver_fp=new i4_saver_class(fp);
 
 	// save type info about objects
 	li_save_type_info(saver_fp,0);
@@ -38,16 +38,17 @@ void save(li_object *o)
 
 li_object *load()
 {
-	i4_file_class *fp=i4_open(data_file);
+	i4_file_class * fp=i4_open(data_file);
+
 	if (fp)
 	{
-		i4_loader_class *loader=new i4_loader_class(fp);
+		i4_loader_class * loader=new i4_loader_class(fp);
 
 		// remap remaps li_ type numbers to the current types available
-		li_type_number *remap=li_load_type_info(loader,0);
+		li_type_number * remap=li_load_type_info(loader,0);
 
 		// load the object
-		li_object *ret=li_load_object(loader,remap,0);
+		li_object * ret=li_load_object(loader,remap,0);
 
 		delete loader;
 		return ret;
@@ -56,18 +57,18 @@ li_object *load()
 }
 
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	i4_init();
 
 	// allocate a new li_string
-	li_string *li_str=new li_string("Testing,  1... 2... 3..,  Testing");
+	li_string * li_str=new li_string("Testing,  1... 2... 3..,  Testing");
 
 	// save the object to disk
 	save(li_str);
 
 	// load an object up
-	li_object *loaded_object=load();
+	li_object * loaded_object=load();
 
 	// print out the object
 	lip(loaded_object);

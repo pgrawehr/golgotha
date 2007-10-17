@@ -82,7 +82,7 @@ public:
 	{
 	}
 
-	int DoImport(const TCHAR *name, ImpInterface *im, Interface *gi);
+	int DoImport(const TCHAR * name, ImpInterface * im, Interface * gi);
 };
 
 class m1_import_descriptor_class :
@@ -125,13 +125,13 @@ class m1_loader :
 //{{{
 {
 public:
-	ImpInterface *im;
-	i4_loader_class *loader;
-	i4_file_class *f;
-	TriObject *obj;
-	Mesh *mesh;
-	ImpNode *node;
-	const TCHAR *name;
+	ImpInterface * im;
+	i4_loader_class * loader;
+	i4_file_class * f;
+	TriObject * obj;
+	Mesh * mesh;
+	ImpNode * node;
+	const TCHAR * name;
 
 	w16 quads;
 	char texture_list[800][256];
@@ -208,7 +208,7 @@ public:
 		mesh->setNumFaces(quads*2);
 	}
 
-	virtual void create_quad(w16 quad, int verts, w16 *ref, w32 flags)
+	virtual void create_quad(w16 quad, int verts, w16 * ref, w32 flags)
 	{
 		if (ref[3]!=0xffff)
 		{
@@ -236,7 +236,7 @@ public:
 		i4_os_string(name, texture_list[quad+1], sizeof(texture_list[0]));
 	}
 
-	virtual void store_texture_params(w32 quad, i4_float scale, i4_float *u, i4_float *v)
+	virtual void store_texture_params(w32 quad, i4_float scale, i4_float * u, i4_float * v)
 	{
 		sprintf(&texture_list[quad+1][strlen(texture_list[quad+1])]," %f %f %f %f %f %f %f %f\r\n",
 				u[0], v[0], u[1], v[1], u[2], v[2], u[3], v[3]);
@@ -253,9 +253,9 @@ public:
 	virtual void create_mount_point(w32 index, const i4_const_str &name, const i4_3d_vector &off)
 	{
 		// create a point helper
-		HelperObject *help = (HelperObject *)CreateInstance(HELPER_CLASS_ID,
-															Class_ID(POINTHELP_CLASS_ID,0));
-		ImpNode *node = im->CreateNode();
+		HelperObject * help = (HelperObject *)CreateInstance(HELPER_CLASS_ID,
+															 Class_ID(POINTHELP_CLASS_ID,0));
+		ImpNode * node = im->CreateNode();
 
 		if (help && node)
 		{
@@ -321,16 +321,18 @@ public:
 		node->SetTransform(0,tm);
 
 		dbg("Building Texture List\n");
-		char *buff = texture_list[0], *q=buff;
+		char * buff = texture_list[0], * q=buff;
 		sprintf(buff, "%s\r\n", gmod_sig);
 		while (*q) q++;
 
 
+
 		for (int i=0; i<quads; i++)
 		{
-			char *p = texture_list[i+1];
+			char * p = texture_list[i+1];
 			while (*p)
 				*q++ = *p++;
+
 
 		}
 		*q = 0;
@@ -357,7 +359,7 @@ public:
 		node = 0;
 	}
 
-	int load(const TCHAR *_name, ImpInterface *_im)
+	int load(const TCHAR * _name, ImpInterface * _im)
 	{
 		im = _im;
 		name = _name;
@@ -389,7 +391,7 @@ public:
 };
 //}}}
 
-int m1_import_class::DoImport(const TCHAR *name, ImpInterface *im, Interface *gi)
+int m1_import_class::DoImport(const TCHAR * name, ImpInterface * im, Interface * gi)
 {
 	dbg.restart();
 

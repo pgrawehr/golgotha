@@ -33,18 +33,18 @@ protected:
 	//  g1_voice_class *fire_sound; sfxfix
 	int idle_ticks, should_draw;
 public:
-	g1_beam_weapon_class(g1_object_type id, g1_loader_class *fp);
+	g1_beam_weapon_class(g1_object_type id, g1_loader_class * fp);
 
 	virtual void setup(const i4_3d_vector &pos,
 					   const i4_3d_vector &dir,
-					   g1_object_class *this_guy_fired_me,
+					   g1_object_class * this_guy_fired_me,
 					   float range);
 
 	virtual void think();
 	void unoccupy_location();
 	i4_bool occupy_location();
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 
 };
 

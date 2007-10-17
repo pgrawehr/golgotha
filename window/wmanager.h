@@ -21,10 +21,10 @@ class i4_window_manager_class :
 	public i4_parent_window_class
 {
 private:
-	i4_display_class *display;
+	i4_display_class * display;
 	i4_device_class::device_flags devices_present;
-	i4_graphical_style_class *style;
-	i4_cursor_class *default_cursor;
+	i4_graphical_style_class * style;
+	i4_cursor_class * default_cursor;
 	i4_bool no_cursor_installed; // set to true when cursor is not the default cursor
 	i4_bool drag_dropping;
 	i4_color background_color;
@@ -34,8 +34,8 @@ private:
 	{
 		i4_bool active;
 		w32 reference_id;
-		void *further_info;
-		i4_window_class *originator;
+		void * further_info;
+		i4_window_class * originator;
 	} drag_drop;
 
 public:
@@ -55,7 +55,7 @@ public:
 		return (key_modifiers_pressed & I4_MODIFIER_SHIFT) ? i4_T : i4_F;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"window_manager");
 	}
@@ -65,20 +65,20 @@ public:
 	virtual void parent_draw(i4_draw_context_class &context);
 
 	virtual void root_draw();   // call from application, will call everyone else's draw function
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
 	i4_window_manager_class();   // if style cannot be found the first available on is used instead
 
-	i4_menu_class *create_menu(i4_color_hint_class *hint, i4_bool hide_on_pick)
+	i4_menu_class *create_menu(i4_color_hint_class * hint, i4_bool hide_on_pick)
 	{
 		return style->create_menu(hide_on_pick);
 	}
 
-	void set_default_cursor(i4_cursor_class *cursor);
+	void set_default_cursor(i4_cursor_class * cursor);
 
-	void prepare_for_mode(i4_display_class *display, i4_display_class::mode *mode);
+	void prepare_for_mode(i4_display_class * display, i4_display_class::mode * mode);
 
-	i4_color i4_read_color_from_resource(char *resource);
+	i4_color i4_read_color_from_resource(char * resource);
 
 	~i4_window_manager_class();
 };

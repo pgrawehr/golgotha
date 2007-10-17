@@ -23,8 +23,8 @@ extern "C" {
 //
 //  Return: Converted string
 //
-const char *WINAPI DXGetErrorString9A(HRESULT hr);
-const WCHAR *WINAPI DXGetErrorString9W(HRESULT hr);
+const char * WINAPI DXGetErrorString9A(HRESULT hr);
+const WCHAR * WINAPI DXGetErrorString9W(HRESULT hr);
 
 #ifdef UNICODE
 #define DXGetErrorString9 DXGetErrorString9W
@@ -43,8 +43,8 @@ const WCHAR *WINAPI DXGetErrorString9W(HRESULT hr);
 //
 //  Return: String description
 //
-const char *WINAPI DXGetErrorDescription9A(HRESULT hr);
-const WCHAR *WINAPI DXGetErrorDescription9W(HRESULT hr);
+const char * WINAPI DXGetErrorDescription9A(HRESULT hr);
+const WCHAR * WINAPI DXGetErrorDescription9W(HRESULT hr);
 
 #ifdef UNICODE
     #define DXGetErrorDescription9 DXGetErrorDescription9W
@@ -68,8 +68,8 @@ const WCHAR *WINAPI DXGetErrorDescription9W(HRESULT hr);
 //
 //  Return: The hr that was passed in.
 //
-HRESULT WINAPI DXTraceA( const char *strFile, DWORD dwLine, HRESULT hr, const char *strMsg, BOOL bPopMsgBox );
-HRESULT WINAPI DXTraceW( const char *strFile, DWORD dwLine, HRESULT hr, const WCHAR *strMsg, BOOL bPopMsgBox );
+HRESULT WINAPI DXTraceA( const char * strFile, DWORD dwLine, HRESULT hr, const char * strMsg, BOOL bPopMsgBox );
+HRESULT WINAPI DXTraceW( const char * strFile, DWORD dwLine, HRESULT hr, const WCHAR * strMsg, BOOL bPopMsgBox );
 
 #ifdef UNICODE
 #define DXTrace DXTraceW

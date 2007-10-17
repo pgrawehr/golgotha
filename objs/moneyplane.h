@@ -17,13 +17,13 @@ class g1_moneyplane_class :
 	public g1_map_piece_class
 {
 public:
-	g1_moneyplane_class(g1_object_type id, g1_loader_class *fp);
+	g1_moneyplane_class(g1_object_type id, g1_loader_class * fp);
 
 	g1_moneycrate_class *crate();
-	void set_crate(g1_moneycrate_class *cr);
+	void set_crate(g1_moneycrate_class * cr);
 
 	i4_bool move(const i4_3d_vector &d);
-	virtual void damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir);
+	virtual void damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir);
 
 	virtual void think();
 	short get_min_health()

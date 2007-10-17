@@ -22,7 +22,7 @@ class i4_slider_event :
 {
 public:
 	w32 x, divisor;
-	i4_slider_event(void *object, w32 x, w32 divisor)
+	i4_slider_event(void * object, w32 x, w32 divisor)
 		: i4_object_message_event_class(object),
 		  x(x),
 		  divisor(divisor)
@@ -32,7 +32,7 @@ public:
 	{
 		return new i4_slider_event(object,x,divisor);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"slide event");
 	}
@@ -41,34 +41,34 @@ public:
 class i4_slider_class :
 	public i4_window_class
 {
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	sw32 off, lx,ly;
 	i4_bool grab, active, need_cancel;
 	sw32 bw, milli_delay;                // button width
 
 
 	i4_time_device_class::id t_event;
-	i4_event_handler_class *notify;
+	i4_event_handler_class * notify;
 
 	void set_off_from_mouse();
 	void send_change();
 
 public:
-	void set_notify(i4_event_handler_class *n)
+	void set_notify(i4_event_handler_class * n)
 	{
 		notify=n;
 	}
 
 	i4_slider_class(sw32 width,
 					sw32 initial_start,
-					i4_event_handler_class *notify,
+					i4_event_handler_class * notify,
 					w32 milli_delay,
-					i4_graphical_style_class *style);
+					i4_graphical_style_class * style);
 	~i4_slider_class();
 
 	void draw(i4_draw_context_class &context);
-	void receive_event(i4_event *ev);
-	void name(char *buffer)
+	void receive_event(i4_event * ev);
+	void name(char * buffer)
 	{
 		static_name(buffer,"slider");
 	}

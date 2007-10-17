@@ -26,7 +26,7 @@
 // merge test 2.5
 
 
-r1_render_api_class *api=0;
+r1_render_api_class * api=0;
 
 
 class test_win_class :
@@ -42,7 +42,7 @@ public:
 	{
 		xr=yr=zr=0;
 
-		r1_texture_manager_class *tman=api->get_tmanager();
+		r1_texture_manager_class * tman=api->get_tmanager();
 		texture=tman->register_image(i4_load_image("texture.tga"));
 	}
 
@@ -111,7 +111,7 @@ public:
 		i4_3d_point_class transformed_points[8];
 		for (i=0; i<8; i++)
 		{
-			i4_3d_point_class p(cube_points[i *3], cube_points[i *3+1], cube_points[i *3+2]);
+			i4_3d_point_class p(cube_points[i * 3], cube_points[i * 3+1], cube_points[i * 3+2]);
 			matrix.transform(p, transformed_points[i]);
 		}
 
@@ -185,21 +185,21 @@ public:
 		int w=wm->width()/2, h=wm->height()/2;
 
 		// wm has a "style" associated with it that controlls the way the gui looks
-		i4_graphical_style_class *style=wm->get_style();
+		i4_graphical_style_class * style=wm->get_style();
 
 		// you can get the window manager's style by calling get_style()
 		// a mp_window (--meta physical--) is a framed draggable window
-		i4_parent_window_class *p1=style->create_mp_window(-1,-1, w,h,
-														   i4_const_str("Test window 1"), 0);
+		i4_parent_window_class * p1=style->create_mp_window(-1,-1, w,h,
+															i4_const_str("Test window 1"), 0);
 
 		// all rendering must reside in render_window so the render api can initialize
 		// the context before and after the drawing operations (like x/y window offset,
 		// clipping rectangles, etc).
-		r1_render_window_class *rwin = api->create_render_window(p1->width(), p1->height());
+		r1_render_window_class * rwin = api->create_render_window(p1->width(), p1->height());
 
 		// render_area_width() & height may be different from width() if you are
 		// using double pixel or interlaced mode
-		i4_window_class *test_win;
+		i4_window_class * test_win;
 		test_win=new test_win_class(rwin->render_area_width(), rwin->render_area_height());
 
 		// this adds the test window into the render_api's render_window
@@ -209,16 +209,16 @@ public:
 		// to your desktop by create_mp_window)
 		p1->add_child(0,0,rwin);
 
-		i4_button_class *quit=new i4_button_class(0,
-												  new i4_text_window_class(i4_const_str("Quit"),
-																		   style),
-												  style,
-												  new i4_event_reaction_class(this, QUIT));
+		i4_button_class * quit=new i4_button_class(0,
+												   new i4_text_window_class(i4_const_str("Quit"),
+																			style),
+												   style,
+												   new i4_event_reaction_class(this, QUIT));
 		wm->add_child(0,0, quit);
 	}
 
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		if (ev->type()==i4_event::USER_MESSAGE && ((i4_user_message_event_class *)ev)->sub_type==QUIT)
 		{
@@ -246,8 +246,9 @@ public:
 	}
 };
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	test_app test;
+
 	test.run();
 }

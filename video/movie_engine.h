@@ -30,9 +30,9 @@ public:
 	};
 
 	virtual w32 play(const i4_const_str &file)=0; //wait until playback has finished (useful for movies)
-	virtual w32 background_play(i4_const_str &file, i4_event_reaction_class *notify_ev)=0; //return immediatelly
+	virtual w32 background_play(i4_const_str &file, i4_event_reaction_class * notify_ev)=0; //return immediatelly
 	virtual void background_stop()=0;
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	{
 		i4_event_handler_class::receive_event(ev);
 	};
@@ -40,4 +40,4 @@ public:
 
 
 
-extern i4_movie_engine_class *i4_movie;
+extern i4_movie_engine_class * i4_movie;

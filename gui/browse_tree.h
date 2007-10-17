@@ -20,20 +20,20 @@ class i4_browse_window_class :
 	public i4_parent_window_class
 {
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"browse_window");
 	}
 
 	i4_bool expanded;
-	i4_parent_window_class *title_area;
-	i4_window_class *child_object, *toggle_button;
+	i4_parent_window_class * title_area;
+	i4_window_class * child_object, * toggle_button;
 
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 
-	i4_browse_window_class(i4_graphical_style_class *style,
-						   i4_window_class *title_object,
-						   i4_window_class *child_object,
+	i4_browse_window_class(i4_graphical_style_class * style,
+						   i4_window_class * title_object,
+						   i4_window_class * child_object,
 						   i4_bool show_plus_minus,
 						   i4_bool expanded);
 
@@ -42,10 +42,10 @@ public:
 	virtual void expand();
 
 
-	void add_arranged_child(i4_window_class *child);
-	virtual void replace_object(i4_window_class *object);
+	void add_arranged_child(i4_window_class * child);
+	virtual void replace_object(i4_window_class * object);
 	virtual sw32 x_start();
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 	virtual void parent_draw(i4_draw_context_class &context);
 };
 
@@ -56,12 +56,12 @@ class i4_vertical_compact_window_class :
 	i4_color color;
 	i4_bool center;
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"vertical_compact");
 	}
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 	virtual void parent_draw(i4_draw_context_class &context);
 	void compact();
 	i4_vertical_compact_window_class(i4_color color, i4_bool center=i4_F)
@@ -70,7 +70,7 @@ public:
 		  center(center)
 	{
 	}
-	virtual void remove_child(i4_window_class *child)
+	virtual void remove_child(i4_window_class * child)
 	{
 		i4_parent_window_class::remove_child(child);
 		compact();
@@ -83,12 +83,12 @@ class i4_horizontal_compact_window_class :
 	i4_color color;
 	i4_bool center;
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"vertical_compact");
 	}
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 	virtual void parent_draw(i4_draw_context_class &context);
 	void compact();
 	i4_horizontal_compact_window_class(i4_color color, i4_bool center=i4_F)
@@ -97,7 +97,7 @@ public:
 		  center(center)
 	{
 	}
-	virtual void remove_child(i4_window_class *child)
+	virtual void remove_child(i4_window_class * child)
 	{
 		i4_parent_window_class::remove_child(child);
 		compact();

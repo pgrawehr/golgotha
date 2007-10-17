@@ -55,7 +55,7 @@ public:
 	int max_texture_quality;
 	int max_view_distance;
 	int render;
-	char *render_data;
+	char * render_data;
 	int render_data_size;
 	int texture_bitdepth; //0= Choose wisely
 	char stereo;
@@ -89,8 +89,8 @@ public:
 	}
 	~i4_win32_startup_options_struct();
 
-	void check_option(char *opt); //changes are applied (from registry or command-line)
-	void check_option(w32 argc,i4_const_str *argv);
+	void check_option(char * opt); //changes are applied (from registry or command-line)
+	void check_option(w32 argc,i4_const_str * argv);
 	int save_option(void); //write changes to registry
 };
 

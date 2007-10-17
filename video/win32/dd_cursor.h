@@ -20,14 +20,14 @@ class ddraw_thread_cursor_class :
 {
 public:
 
-	i4_image_class *mouse_save;
+	i4_image_class * mouse_save;
 	int cursor_version;
-	ddraw_thread_cursor_class(const i4_pal *screen_pal,
+	ddraw_thread_cursor_class(const i4_pal * screen_pal,
 							  HWND window_handle,
 							  sw32 clip_x1, sw32 clip_y1,
 							  sw32 clip_x2, sw32 clip_y2);
 
-	void set_cursor(i4_cursor_class *cursor);
+	void set_cursor(i4_cursor_class * cursor);
 
 	i4_bool use_back_buffer;
 

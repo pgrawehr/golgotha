@@ -35,8 +35,8 @@ enum i4_socket_type {
 class i4_net_protocol
 {
 public:
-	static i4_net_protocol *first; // protocols are kept in a list
-	i4_net_protocol *next;
+	static i4_net_protocol * first; // protocols are kept in a list
+	i4_net_protocol * next;
 
 	i4_net_protocol();
 
@@ -56,7 +56,7 @@ public:
 	virtual i4_net_address *name_to_address(const i4_const_str &name) = 0;
 
 	// try to make a connection to a remote server
-	virtual i4_net_socket *connect(i4_net_address *addr,
+	virtual i4_net_socket *connect(i4_net_address * addr,
 								   i4_socket_type type=I4_CONTINOUS_STREAM) = 0;
 
 	// creates a socket that listens to a port, see network/net_sock.hh

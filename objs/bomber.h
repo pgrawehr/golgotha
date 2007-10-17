@@ -22,19 +22,19 @@ protected:
 	g1_typed_reference_class<g1_object_class> last_target;
 	w32 ticks_still_bombing;
 public:
-	g1_bomber_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	void load(g1_loader_class *fp);
-	void skipload(g1_loader_class *fp);
+	g1_bomber_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	void load(g1_loader_class * fp);
+	void skipload(g1_loader_class * fp);
 
 	i4_bool move(i4_float x_amount, i4_float y_amount);
 
 	virtual void fire();
 	virtual void think();
 
-	i4_bool can_attack(g1_object_class *who);
+	i4_bool can_attack(g1_object_class * who);
 
-	void damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir);
+	void damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir);
 };
 
 #endif

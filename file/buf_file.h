@@ -18,26 +18,26 @@ class i4_buffered_file_class :
 	public i4_file_class
 {
 protected:
-	friend void i4_async_buf_read_callback(w32 count, void *context);
-	i4_file_class *from;
-	void *buf;
+	friend void i4_async_buf_read_callback(w32 count, void * context);
+	i4_file_class * from;
+	void * buf;
 	w32 buf_size,buf_start,buf_end,offset;
 	i4_bool write_file;
 public:
-	i4_buffered_file_class(i4_file_class *from,
+	i4_buffered_file_class(i4_file_class * from,
 						   w32 buffer_size=0x10000,
 						   w32 current_offset=0);
 
 
-	virtual w32 read(void *buffer, w32 size);
-	virtual w32 write(const void *buffer, w32 size);
+	virtual w32 read(void * buffer, w32 size);
+	virtual w32 write(const void * buffer, w32 size);
 	virtual w32 seek(w32 offset);
 	virtual w32 size();
 	virtual w32 tell();
 
-	virtual i4_bool async_read(void *buffer, w32 size,
+	virtual i4_bool async_read(void * buffer, w32 size,
 							   async_callback call,
-							   void *context, w32 priority, int caller_id);
+							   void * context, w32 priority, int caller_id);
 
 	~i4_buffered_file_class();
 };

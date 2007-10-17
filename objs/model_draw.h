@@ -27,9 +27,9 @@ struct g1_model_draw_parameters
 
 	};
 
-	g1_quad_object_class *model;
-	g1_quad_object_class *shadow_model;
-	g1_quad_object_class *lod_model;
+	g1_quad_object_class * model;
+	g1_quad_object_class * shadow_model;
+	g1_quad_object_class * lod_model;
 
 	w16 frame;         // current animation frame
 	w16 animation;     // current animation number in model
@@ -44,7 +44,7 @@ struct g1_model_draw_parameters
 		flags           = 0;
 	}
 
-	void setup(char *model_name, char *shadow_model_name=0, char *lod_model_name=0);
+	void setup(char * model_name, char * shadow_model_name=0, char * lod_model_name=0);
 	void setup(w16 model_id, w16 shadow_model=0, w16 lod_model=0);
 	void setup(g1_quad_object_class *model,
 			   g1_quad_object_class *shadow_model=0,
@@ -53,15 +53,15 @@ struct g1_model_draw_parameters
 	float extent() const;   // gets extents of model_id from model_draw
 };
 
-void g1_model_draw(g1_object_class *_this,
+void g1_model_draw(g1_object_class * _this,
 				   g1_model_draw_parameters &params,
-				   g1_draw_context_class *context,
+				   g1_draw_context_class * context,
 				   i4_3d_vector& viewer_position);
 
 
-void g1_editor_model_draw(g1_object_class *_this,
+void g1_editor_model_draw(g1_object_class * _this,
 						  g1_model_draw_parameters &params,
-						  g1_draw_context_class *context,
+						  g1_draw_context_class * context,
 						  i4_3d_vector& viewer_position);    // calls model draw if in edit mode
 
 #endif

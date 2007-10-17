@@ -13,7 +13,7 @@
 #include "lisp/li_types.h"
 #include "objs/structure_death.h"
 
-g1_object_type g1_create_deco_object(char *name, w32 decoflags);
+g1_object_type g1_create_deco_object(char * name, w32 decoflags);
 
 class g1_deco_definition_class;
 
@@ -28,10 +28,11 @@ public:
 	}
 	void uninit();
 
-	char *find_name(const char *name);
-	void add_type(g1_deco_definition_class *def)
+	char *find_name(const char * name);
+	void add_type(g1_deco_definition_class * def)
 	{
 		int i;
+
 		for (i=0; i<deco_objs.size() && deco_objs[i]; i++)
 		{
 			;
@@ -47,7 +48,7 @@ public:
 		}
 	}
 
-	void remove_type(g1_deco_definition_class *def)
+	void remove_type(g1_deco_definition_class * def)
 	{
 		for (int i=0; i<deco_objs.size(); i++)
 		{
@@ -83,9 +84,9 @@ public:
 		DECO_HASOWNER=8,      ///< The owner of this object can change.
 		DECO_FORCE_DWORD=0xffffffff  //this enumeration is 32 bits wide
 	};
-	char *model_name;
+	char * model_name;
 
-	static g1_deco_object_class *cast(g1_object_class *o)
+	static g1_deco_object_class *cast(g1_object_class * o)
 	{
 		if (o->get_type()->get_flag(g1_object_definition_class::TO_DECO_OBJECT))
 		{
@@ -97,15 +98,15 @@ public:
 		}
 	}
 
-	g1_deco_object_class(g1_object_type id, g1_loader_class *fp);
+	g1_deco_object_class(g1_object_type id, g1_loader_class * fp);
 
 	i4_bool check_collision(
-		g1_object_class *source,
+		g1_object_class * source,
 		const i4_3d_vector &start,
 		i4_3d_vector &ray);
 
 
-	void save(g1_saver_class *fp);
+	void save(g1_saver_class * fp);
 
 //   void occupy_location()
 //   {
@@ -129,7 +130,7 @@ public:
 
 	virtual void think();
 
-	virtual void damage(g1_object_class *who_is_hurting,
+	virtual void damage(g1_object_class * who_is_hurting,
 						int how_much_hurt, i4_3d_vector damage_dir);
 };
 

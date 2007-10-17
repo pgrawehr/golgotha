@@ -1,10 +1,10 @@
 /********************************************************************** <BR>
-  This file is part of Crack dot Com's free source code release of
-  Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
-  information about compiling & licensing issues visit this URL</a> 
-  <PRE> If that doesn't help, contact Jonathan Clark at 
-  golgotha_source@usa.net (Subject should have "GOLG" in it) 
-***********************************************************************/
+   This file is part of Crack dot Com's free source code release of
+   Golgotha. <a href="http://www.crack.com/golgotha_release"> <BR> for
+   information about compiling & licensing issues visit this URL</a>
+   <PRE> If that doesn't help, contact Jonathan Clark at
+   golgotha_source@usa.net (Subject should have "GOLG" in it)
+ ***********************************************************************/
 
 #ifndef __MATRIX_HPP_
 #define __MATRIX_HPP_
@@ -16,316 +16,401 @@
 #define G1_WIN32_TRANSFORM_ASM
 #endif
 
-class i4_transform_class 
+class i4_transform_class
 {
 public:
-  i4_3d_vector x,y,z,t;
+	i4_3d_vector x,y,z,t;
 
-  i4_3d_vector& operator[](int pos) const
-  { 
-    return (i4_3d_vector&)(((i4_3d_vector*)(&x))[pos]);
-  }
-  
-  i4_transform_class() {}
-  i4_transform_class(const i4_transform_class &m)
-  {
-    memcpy(this,&m,sizeof(i4_transform_class));
-  }
-  i4_transform_class& operator=(const i4_transform_class &m)
-  {
-    memcpy(this,&m,sizeof(i4_transform_class));
+	i4_3d_vector& operator[](int pos) const
+	{
+		return (i4_3d_vector&)(((i4_3d_vector *)(&x))[pos]);
+	}
 
-    return *this;
-  }
+	i4_transform_class() {
+	}
+	i4_transform_class(const i4_transform_class &m)
+	{
+		memcpy(this,&m,sizeof(i4_transform_class));
+	}
+	i4_transform_class& operator=(const i4_transform_class &m)
+	{
+		memcpy(this,&m,sizeof(i4_transform_class));
 
-  i4_transform_class& operator+(const i4_transform_class &a)
-	  {
-	  x.x+=a.x.x;x.y+=a.x.y;x.z+=a.x.z;
-	  y.x+=a.y.x;y.y+=a.y.y;y.z+=a.y.z;
-	  z.x+=a.z.x;z.y+=a.z.y;z.z+=a.z.z;
-	  t.x+=a.t.x;t.y+=a.t.y;t.z+=a.t.z;
-	  };
-  i4_transform_class& operator-(const i4_transform_class &a)
-	  {
-	  x.x-=a.x.x;x.y-=a.x.y;x.z-=a.x.z;
-	  y.x-=a.y.x;y.y-=a.y.y;y.z-=a.y.z;
-	  z.x-=a.z.x;z.y-=a.z.y;z.z-=a.z.z;
-	  t.x-=a.t.x;t.y-=a.t.y;t.z-=a.t.z;
-	  }
-  friend i4_transform_class operator/(const i4_transform_class &a, i4_float b)
-	  {
-	  i4_transform_class tmp;
-	  tmp.x.x=a.x.x/b;
-	  tmp.x.y=a.x.y/b;
-	  tmp.x.z=a.x.z/b;
-	  tmp.y.x=a.y.x/b;
-	  tmp.y.y=a.y.y/b;
-	  tmp.y.z=a.y.z/b;
-	  tmp.z.x=a.z.x/b;
-	  tmp.z.y=a.z.y/b;
-	  tmp.z.z=a.z.z/b;
-	  tmp.t.x=a.t.x/b;
-	  tmp.t.y=a.t.y/b;
-	  tmp.t.z=a.t.z/b;
-	  return tmp;
-	  }
+		return *this;
+	}
 
-  friend i4_transform_class operator*(const i4_transform_class &a, i4_float b)
-	  {
-	  i4_transform_class tmp;
-	  tmp.x.x=a.x.x*b;
-	  tmp.x.y=a.x.y*b;
-	  tmp.x.z=a.x.z*b;
-	  tmp.y.x=a.y.x*b;
-	  tmp.y.y=a.y.y*b;
-	  tmp.y.z=a.y.z*b;
-	  tmp.z.x=a.z.x*b;
-	  tmp.z.y=a.z.y*b;
-	  tmp.z.z=a.z.z*b;
-	  tmp.t.x=a.t.x*b;
-	  tmp.t.y=a.t.y*b;
-	  tmp.t.z=a.t.z*b;
-	  return tmp;
-	  }
-  friend i4_transform_class operator*(const i4_transform_class &a, 
-	  const i4_transform_class &b)
-	  {
-	  i4_transform_class result;
-	  result.multiply(a,b);
-	  return result;
-	  }
-  static i4_transform_class GetIdentity()
-	  {
-	  i4_transform_class x;
-	  x.identity();
-	  return x;
-	  }
-  
-  i4_transform_class& multiply(const i4_transform_class &a, const i4_transform_class &b);  
-  i4_transform_class& identity()
-  {
-    return uniscale(i4_float(1));
-  }
-  i4_transform_class& translate(const i4_3d_vector& offset);  
-  i4_transform_class& mult_translate(const i4_3d_vector& offset);
+	i4_transform_class& operator+(const i4_transform_class &a)
+	{
+		x.x+=a.x.x;
+		x.y+=a.x.y;
+		x.z+=a.x.z;
+		y.x+=a.y.x;
+		y.y+=a.y.y;
+		y.z+=a.y.z;
+		z.x+=a.z.x;
+		z.y+=a.z.y;
+		z.z+=a.z.z;
+		t.x+=a.t.x;
+		t.y+=a.t.y;
+		t.z+=a.t.z;
+	};
+	i4_transform_class& operator-(const i4_transform_class &a)
+	{
+		x.x-=a.x.x;
+		x.y-=a.x.y;
+		x.z-=a.x.z;
+		y.x-=a.y.x;
+		y.y-=a.y.y;
+		y.z-=a.y.z;
+		z.x-=a.z.x;
+		z.y-=a.z.y;
+		z.z-=a.z.z;
+		t.x-=a.t.x;
+		t.y-=a.t.y;
+		t.z-=a.t.z;
+	}
+	friend i4_transform_class operator/(const i4_transform_class &a, i4_float b)
+	{
+		i4_transform_class tmp;
 
-  i4_transform_class& translate(i4_float tx, i4_float ty, i4_float tz)
-  {
-    return translate(i4_3d_vector(tx,ty,tz));
-  }
-  i4_transform_class& mult_translate(i4_float tx, i4_float ty, i4_float tz)
-  {
-    return mult_translate(i4_3d_vector(tx,ty,tz));
-  }
+		tmp.x.x=a.x.x/b;
+		tmp.x.y=a.x.y/b;
+		tmp.x.z=a.x.z/b;
+		tmp.y.x=a.y.x/b;
+		tmp.y.y=a.y.y/b;
+		tmp.y.z=a.y.z/b;
+		tmp.z.x=a.z.x/b;
+		tmp.z.y=a.z.y/b;
+		tmp.z.z=a.z.z/b;
+		tmp.t.x=a.t.x/b;
+		tmp.t.y=a.t.y/b;
+		tmp.t.z=a.t.z/b;
+		return tmp;
+	}
 
-  i4_transform_class& rotate_x_y_z(i4_float x, i4_float y, i4_float z,i4_bool use_lookup=i4_F);
+	friend i4_transform_class operator*(const i4_transform_class &a, i4_float b)
+	{
+		i4_transform_class tmp;
 
-  i4_transform_class& rotate_z(i4_angle th);
-  i4_transform_class& mult_rotate_z(i4_angle th);
-  i4_transform_class& rotate_y(i4_angle th);
-  i4_transform_class& mult_rotate_y(i4_angle th);
-  i4_transform_class& rotate_x(i4_angle th);
-  i4_transform_class& mult_rotate_x(i4_angle th);  
-  i4_transform_class& scale(const i4_3d_vector& scale);
-  
-  i4_transform_class& mult_scale(const i4_3d_vector& scale)
-  {
-    x *= scale.x;
-    y *= scale.y;
-    z *= scale.z;
+		tmp.x.x=a.x.x*b;
+		tmp.x.y=a.x.y*b;
+		tmp.x.z=a.x.z*b;
+		tmp.y.x=a.y.x*b;
+		tmp.y.y=a.y.y*b;
+		tmp.y.z=a.y.z*b;
+		tmp.z.x=a.z.x*b;
+		tmp.z.y=a.z.y*b;
+		tmp.z.z=a.z.z*b;
+		tmp.t.x=a.t.x*b;
+		tmp.t.y=a.t.y*b;
+		tmp.t.z=a.t.z*b;
+		return tmp;
+	}
+	friend i4_transform_class operator*(const i4_transform_class &a,
+										const i4_transform_class &b)
+	{
+		i4_transform_class result;
 
-    return *this;
-  }
-  i4_transform_class& scale(i4_float tx, i4_float ty, i4_float tz)
-  {
-    return scale(i4_3d_vector(tx,ty,tz));
-  }
-  i4_transform_class& mult_scale(i4_float tx, i4_float ty, i4_float tz)
-  {
-    return mult_scale(i4_3d_vector(tx,ty,tz));
-  }
-  i4_transform_class& uniscale(i4_float scale)
-  {
-    x.set( scale,       i4_float(0), i4_float(0) );
-    y.set( i4_float(0), scale,       i4_float(0) );
-    z.set( i4_float(0), i4_float(0), scale       );
-    t.set( i4_float(0), i4_float(0), i4_float(0) );
+		result.multiply(a,b);
+		return result;
+	}
+	static i4_transform_class GetIdentity()
+	{
+		i4_transform_class x;
 
-    return *this;
-  }
-  static i4_float det_2x2(i4_float a1,i4_float a2,i4_float b1,i4_float b2)
-	  {
-	  return (a1*b2)-(a2*b1);
-	  };
-  i4_float det_3x3()
-	  {
-	  return (x.x*det_2x2(y.y,z.y,y.z,z.z)-x.y*det_2x2(x.y,z.y,x.z,z.z)
-		  +x.z*det_2x2(x.y,y.y,x.z,y.z));
-	  }
-  i4_transform_class normalize_3x3()
-	  {
-	  i4_transform_class tmp(*this);
-	  i4_float det=tmp.det_3x3();
-	  tmp=tmp/det;
-	  return tmp;
-	  }
-  i4_transform_class& mult_uniscale(i4_float scale)
-  {
-    x *= scale;
-    y *= scale;
-    z *= scale;
+		x.identity();
+		return x;
+	}
 
-    return *this;
-  }
-  
-  // this version of multiple store the result in this
-  i4_transform_class& multiply(const i4_transform_class &b)
-  {
-    i4_transform_class tmp(*this);
-    multiply(tmp, b);
+	i4_transform_class& multiply(const i4_transform_class &a, const i4_transform_class &b);
+	i4_transform_class& identity()
+	{
+		return uniscale(i4_float(1));
+	}
+	i4_transform_class& translate(const i4_3d_vector& offset);
+	i4_transform_class& mult_translate(const i4_3d_vector& offset);
 
-    return *this;
-  }
-  
-  i4_3d_vector& transform(const i4_3d_vector& src, i4_3d_vector& dst)
-  {
+	i4_transform_class& translate(i4_float tx, i4_float ty, i4_float tz)
+	{
+		return translate(i4_3d_vector(tx,ty,tz));
+	}
+	i4_transform_class& mult_translate(i4_float tx, i4_float ty, i4_float tz)
+	{
+		return mult_translate(i4_3d_vector(tx,ty,tz));
+	}
+
+	i4_transform_class& rotate_x_y_z(i4_float x, i4_float y, i4_float z,i4_bool use_lookup=i4_F);
+
+	i4_transform_class& rotate_z(i4_angle th);
+	i4_transform_class& mult_rotate_z(i4_angle th);
+	i4_transform_class& rotate_y(i4_angle th);
+	i4_transform_class& mult_rotate_y(i4_angle th);
+	i4_transform_class& rotate_x(i4_angle th);
+	i4_transform_class& mult_rotate_x(i4_angle th);
+	i4_transform_class& scale(const i4_3d_vector& scale);
+
+	i4_transform_class& mult_scale(const i4_3d_vector& scale)
+	{
+		x *= scale.x;
+		y *= scale.y;
+		z *= scale.z;
+
+		return *this;
+	}
+	i4_transform_class& scale(i4_float tx, i4_float ty, i4_float tz)
+	{
+		return scale(i4_3d_vector(tx,ty,tz));
+	}
+	i4_transform_class& mult_scale(i4_float tx, i4_float ty, i4_float tz)
+	{
+		return mult_scale(i4_3d_vector(tx,ty,tz));
+	}
+	i4_transform_class& uniscale(i4_float scale)
+	{
+		x.set( scale,       i4_float(0), i4_float(0) );
+		y.set( i4_float(0), scale,       i4_float(0) );
+		z.set( i4_float(0), i4_float(0), scale       );
+		t.set( i4_float(0), i4_float(0), i4_float(0) );
+
+		return *this;
+	}
+	static i4_float det_2x2(i4_float a1,i4_float a2,i4_float b1,i4_float b2)
+	{
+		return (a1*b2)-(a2*b1);
+	};
+	i4_float det_3x3()
+	{
+		return (x.x*det_2x2(y.y,z.y,y.z,z.z)-x.y*det_2x2(x.y,z.y,x.z,z.z)
+				+x.z*det_2x2(x.y,y.y,x.z,y.z));
+	}
+	i4_transform_class normalize_3x3()
+	{
+		i4_transform_class tmp(*this);
+		i4_float det=tmp.det_3x3();
+		tmp=tmp/det;
+		return tmp;
+	}
+	i4_transform_class& mult_uniscale(i4_float scale)
+	{
+		x *= scale;
+		y *= scale;
+		z *= scale;
+
+		return *this;
+	}
+
+	// this version of multiple store the result in this
+	i4_transform_class& multiply(const i4_transform_class &b)
+	{
+		i4_transform_class tmp(*this);
+		multiply(tmp, b);
+
+		return *this;
+	}
+
+	i4_3d_vector& transform(const i4_3d_vector& src, i4_3d_vector& dst)
+	{
 #ifdef G1_WIN32_TRANSFORM_ASM
-    trans_4x3(src, dst);
+		trans_4x3(src, dst);
 #else
-    dst.x = x.x*src.x + y.x*src.y + z.x*src.z + t.x;
-    dst.y = x.y*src.x + y.y*src.y + z.y*src.z + t.y;
-    dst.z = x.z*src.x + y.z*src.y + z.z*src.z + t.z;
+		dst.x = x.x*src.x + y.x*src.y + z.x*src.z + t.x;
+		dst.y = x.y*src.x + y.y*src.y + z.y*src.z + t.y;
+		dst.z = x.z*src.x + y.z*src.y + z.z*src.z + t.z;
 #endif
-    return dst;
-  }
-  
-  i4_3d_vector& transform_3x3(const i4_3d_vector& src, i4_3d_vector& dst)
-  {
+		return dst;
+	}
+
+	i4_3d_vector& transform_3x3(const i4_3d_vector& src, i4_3d_vector& dst)
+	{
 #ifdef G1_WIN32_TRANSFORM_ASM
-    trans_3x3(src, dst);
+		trans_3x3(src, dst);
 #else
-    dst.x = x.x*src.x + y.x*src.y + z.x*src.z;
-    dst.y = x.y*src.x + y.y*src.y + z.y*src.z;
-    dst.z = x.z*src.x + y.z*src.y + z.z*src.z;
+		dst.x = x.x*src.x + y.x*src.y + z.x*src.z;
+		dst.y = x.y*src.x + y.y*src.y + z.y*src.z;
+		dst.z = x.z*src.x + y.z*src.y + z.z*src.z;
 #endif
-    return dst;
-  }
-  
-  i4_3d_vector& inverse_transform(const i4_3d_vector& src, i4_3d_vector& dst) const
-  {
-    i4_3d_vector tmp = src;
+		return dst;
+	}
 
-    tmp -= t;
-    dst.x = tmp.dot(x);
-    dst.y = tmp.dot(y);
-    dst.z = tmp.dot(z);
+	i4_3d_vector& inverse_transform(const i4_3d_vector& src, i4_3d_vector& dst) const
+	{
+		i4_3d_vector tmp = src;
 
-    return dst;
-  }
+		tmp -= t;
+		dst.x = tmp.dot(x);
+		dst.y = tmp.dot(y);
+		dst.z = tmp.dot(z);
 
-  i4_3d_vector& inverse_transform_3x3(const i4_3d_vector &src, i4_3d_vector &dst) const
-  {
-    i4_3d_vector tmp = src;
+		return dst;
+	}
 
-    dst.x = tmp.dot(x);
-    dst.y = tmp.dot(y);
-    dst.z = tmp.dot(z);
+	i4_3d_vector& inverse_transform_3x3(const i4_3d_vector &src, i4_3d_vector &dst) const
+	{
+		i4_3d_vector tmp = src;
 
-    return dst;
-  }
-  
+		dst.x = tmp.dot(x);
+		dst.y = tmp.dot(y);
+		dst.z = tmp.dot(z);
+
+		return dst;
+	}
+
 #ifdef G1_WIN32_TRANSFORM_ASM
-  void trans_4x3(const i4_3d_vector &src_vector, i4_3d_vector &dst_vector)
-  { 
-    _asm 
-    {
-      mov     eax, this
-      mov     ecx, src_vector
-      mov     edx, dst_vector
+	void trans_4x3(const i4_3d_vector &src_vector, i4_3d_vector &dst_vector)
+	{
+		_asm
+		{
+			mov eax, this
+			mov ecx, src_vector
+			mov edx, dst_vector
 
-      ;optimized transformation: 34 cycles                
-      fld dword ptr  [ecx+0]     ;starts & ends on cycle 0
-      fmul dword ptr [eax+0]     ;starts on cycle 1       
-      fld dword ptr  [ecx+0]     ;starts & ends on cycle 2
-      fmul dword ptr [eax+4]     ;starts on cycle 3        
-      fld dword ptr  [ecx+0]     ;starts & ends on cycle 4
-      fmul dword ptr [eax+8]     ;starts on cycle 5        
-      fld dword ptr  [ecx+4]     ;starts & ends on cycle 6
-      fmul dword ptr [eax+12]    ;starts on cycle 7      
-      fld dword ptr  [ecx+4]     ;starts & ends on cycle 8
-      fmul dword ptr [eax+16]    ;starts on cycle 9       
-      fld dword ptr  [ecx+4]     ;starts & ends on cycle 10
-      fmul dword ptr [eax+20]    ;starts on cycle 11  
-      fxch           st(2)       ;no cost             
-      faddp          st(5),st(0) ;starts on cycle 12  
-      faddp          st(3),st(0) ;starts on cycle 13  
-      faddp          st(1),st(0) ;starts on cycle 14  
-      fld dword ptr  [ecx+8]     ;starts & ends on cycle 15
-      fmul dword ptr [eax+24]    ;starts on cycle 16      
-      fld dword ptr  [ecx+8]     ;starts & ends on cycle 17
-      fmul dword ptr [eax+28]    ;starts on cycle 18       
-      fld dword ptr  [ecx+8]     ;starts & ends on cycle 19
-      fmul dword ptr [eax+32]    ;starts on cycle 20       
-      fxch           st(2)       ;no cost                  
-      faddp          st(5),st(0) ;starts on cycle 21       
-      faddp          st(3),st(0) ;starts on cycle 22       
-      faddp          st(1),st(0) ;starts on cycle 23       
-      fxch           st(2)       ;no cost                  
-      fadd dword ptr [eax+36]    ;starts on cycle 24       
-      fxch           st(1)       ;starts on cycle 25       
-      fadd dword ptr [eax+40]    ;starts on cycle 26       
-      fxch           st(2)       ;no cost                  
-      fadd dword ptr [eax+44]    ;starts on cycle 27       
-      fxch           st(1)       ;no cost                  
-      fstp dword ptr [edx+0]     ;starts on cycle 28, ends on cycle 29
-      fstp dword ptr [edx+8]     ;starts on cycle 30, ends on cycle 31
-      fstp dword ptr [edx+4]     ;starts on cycle 32, ends on cycle 33
-    }  
-  }
+			;
+			optimized transformation : 34 cycles
+			fld dword ptr  [ecx+0]     ;
+			starts & ends on cycle 0
+			fmul dword ptr [eax+0]     ;
+			starts on cycle 1
+			fld dword ptr  [ecx+0]     ;
+			starts & ends on cycle 2
+			fmul dword ptr [eax+4]     ;
+			starts on cycle 3
+			fld dword ptr  [ecx+0]     ;
+			starts & ends on cycle 4
+			fmul dword ptr [eax+8]     ;
+			starts on cycle 5
+			fld dword ptr  [ecx+4]     ;
+			starts & ends on cycle 6
+			fmul dword ptr [eax+12]    ;
+			starts on cycle 7
+			fld dword ptr  [ecx+4]     ;
+			starts & ends on cycle 8
+			fmul dword ptr [eax+16]    ;
+			starts on cycle 9
+			fld dword ptr  [ecx+4]     ;
+			starts & ends on cycle 10
+			fmul dword ptr [eax+20]    ;
+			starts on cycle 11
+			fxch           st(2)       ;
+			no cost
+			faddp          st(5),st(0) ;
+			starts on cycle 12
+			faddp          st(3),st(0) ;
+			starts on cycle 13
+			faddp          st(1),st(0) ;
+			starts on cycle 14
+			fld dword ptr  [ecx+8]     ;
+			starts & ends on cycle 15
+			fmul dword ptr [eax+24]    ;
+			starts on cycle 16
+			fld dword ptr  [ecx+8]     ;
+			starts & ends on cycle 17
+			fmul dword ptr [eax+28]    ;
+			starts on cycle 18
+			fld dword ptr  [ecx+8]     ;
+			starts & ends on cycle 19
+			fmul dword ptr [eax+32]    ;
+			starts on cycle 20
+			fxch           st(2)       ;
+			no cost
+			faddp          st(5),st(0) ;
+			starts on cycle 21
+			faddp          st(3),st(0) ;
+			starts on cycle 22
+			faddp          st(1),st(0) ;
+			starts on cycle 23
+			fxch           st(2)       ;
+			no cost
+			fadd dword ptr [eax+36]    ;
+			starts on cycle 24
+			fxch           st(1)       ;
+			starts on cycle 25
+			fadd dword ptr [eax+40]    ;
+			starts on cycle 26
+			fxch           st(2)       ;
+			no cost
+			fadd dword ptr [eax+44]    ;
+			starts on cycle 27
+			fxch           st(1)       ;
+			no cost
+			fstp dword ptr [edx+0]     ;
+			starts on cycle 28, ends on cycle 29
+			fstp dword ptr [edx+8]     ;
+			starts on cycle 30, ends on cycle 31
+			fstp dword ptr [edx+4]     ;
+			starts on cycle 32, ends on cycle 33
+		}
+	}
 
-  void trans_3x3(const i4_3d_vector &src_vector, i4_3d_vector &dst_vector)
-  { 
-    _asm 
-    {
-      mov     eax, this
-      mov     ecx, src_vector
-      mov     edx, dst_vector
+	void trans_3x3(const i4_3d_vector &src_vector, i4_3d_vector &dst_vector)
+	{
+		_asm
+		{
+			mov eax, this
+			mov ecx, src_vector
+			mov edx, dst_vector
 
-      ;optimized transformation: 34 cycles                
-      fld dword ptr  [ecx+0]     ;starts & ends on cycle 0
-      fmul dword ptr [eax+0]     ;starts on cycle 1       
-      fld dword ptr  [ecx+0]     ;starts & ends on cycle 2
-      fmul dword ptr [eax+4]     ;starts on cycle 3        
-      fld dword ptr  [ecx+0]     ;starts & ends on cycle 4
-      fmul dword ptr [eax+8]     ;starts on cycle 5        
-      fld dword ptr  [ecx+4]     ;starts & ends on cycle 6
-      fmul dword ptr [eax+12]    ;starts on cycle 7      
-      fld dword ptr  [ecx+4]     ;starts & ends on cycle 8
-      fmul dword ptr [eax+16]    ;starts on cycle 9       
-      fld dword ptr  [ecx+4]     ;starts & ends on cycle 10
-      fmul dword ptr [eax+20]    ;starts on cycle 11  
-      fxch           st(2)       ;no cost             
-      faddp          st(5),st(0) ;starts on cycle 12  
-      faddp          st(3),st(0) ;starts on cycle 13  
-      faddp          st(1),st(0) ;starts on cycle 14  
-      fld dword ptr  [ecx+8]     ;starts & ends on cycle 15
-      fmul dword ptr [eax+24]    ;starts on cycle 16      
-      fld dword ptr  [ecx+8]     ;starts & ends on cycle 17
-      fmul dword ptr [eax+28]    ;starts on cycle 18       
-      fld dword ptr  [ecx+8]     ;starts & ends on cycle 19
-      fmul dword ptr [eax+32]    ;starts on cycle 20       
-      fxch           st(2)       ;no cost                  
-      faddp          st(5),st(0) ;starts on cycle 21       
-      faddp          st(3),st(0) ;starts on cycle 22       
-      faddp          st(1),st(0) ;starts on cycle 23       
-      fxch           st(2)       ;no cost                  
-      fstp dword ptr [edx+0]
-      fstp dword ptr [edx+4]
-      fstp dword ptr [edx+8]
-    }  
-  }
+			;
+			optimized transformation : 34 cycles
+			fld dword ptr  [ecx+0]     ;
+			starts & ends on cycle 0
+			fmul dword ptr [eax+0]     ;
+			starts on cycle 1
+			fld dword ptr  [ecx+0]     ;
+			starts & ends on cycle 2
+			fmul dword ptr [eax+4]     ;
+			starts on cycle 3
+			fld dword ptr  [ecx+0]     ;
+			starts & ends on cycle 4
+			fmul dword ptr [eax+8]     ;
+			starts on cycle 5
+			fld dword ptr  [ecx+4]     ;
+			starts & ends on cycle 6
+			fmul dword ptr [eax+12]    ;
+			starts on cycle 7
+			fld dword ptr  [ecx+4]     ;
+			starts & ends on cycle 8
+			fmul dword ptr [eax+16]    ;
+			starts on cycle 9
+			fld dword ptr  [ecx+4]     ;
+			starts & ends on cycle 10
+			fmul dword ptr [eax+20]    ;
+			starts on cycle 11
+			fxch           st(2)       ;
+			no cost
+			faddp          st(5),st(0) ;
+			starts on cycle 12
+			faddp          st(3),st(0) ;
+			starts on cycle 13
+			faddp          st(1),st(0) ;
+			starts on cycle 14
+			fld dword ptr  [ecx+8]     ;
+			starts & ends on cycle 15
+			fmul dword ptr [eax+24]    ;
+			starts on cycle 16
+			fld dword ptr  [ecx+8]     ;
+			starts & ends on cycle 17
+			fmul dword ptr [eax+28]    ;
+			starts on cycle 18
+			fld dword ptr  [ecx+8]     ;
+			starts & ends on cycle 19
+			fmul dword ptr [eax+32]    ;
+			starts on cycle 20
+			fxch           st(2)       ;
+			no cost
+			faddp          st(5),st(0) ;
+			starts on cycle 21
+			faddp          st(3),st(0) ;
+			starts on cycle 22
+			faddp          st(1),st(0) ;
+			starts on cycle 23
+			fxch           st(2)       ;
+			no cost
+			fstp dword ptr [edx+0]
+			fstp dword ptr [edx+4]
+			fstp dword ptr [edx+8]
+		}
+	}
 #endif
 };
 
 #endif
-

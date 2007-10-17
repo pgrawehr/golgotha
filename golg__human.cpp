@@ -25,11 +25,11 @@
 #include "light.h"
 #include "render/r1_clip.h"
 
-g1_human_class *g1_human = 0;
+g1_human_class * g1_human = 0;
 
 static li_symbol_ref li_convoy("convoy");
 
-void g1_human_class::load(g1_loader_class *fp)
+void g1_human_class::load(g1_loader_class * fp)
 {
 }
 
@@ -44,7 +44,7 @@ public:
 		g1_human_class_references=0;
 	}
 
-	virtual g1_team_api_class *create(g1_loader_class *f)
+	virtual g1_team_api_class *create(g1_loader_class * f)
 	{
 		if (!g1_human)
 		{
@@ -56,7 +56,7 @@ public:
 	}
 } g1_human_def;
 
-g1_human_class::g1_human_class(g1_loader_class *f)
+g1_human_class::g1_human_class(g1_loader_class * f)
 {
 	mouse_look_increment_x = 0;
 	mouse_look_increment_y = 0;
@@ -68,8 +68,10 @@ g1_human_class::g1_human_class(g1_loader_class *f)
 g1_human_class::~g1_human_class()
 {
 	g1_human = 0;
+
 	if (prepared_building)
 		delete prepared_building;
+
 }
 
 void g1_human_class::send_selected_units(i4_float x, i4_float y)
@@ -86,7 +88,7 @@ static li_symbol_ref supergun("supergun");
 static li_symbol_ref engineer("engineer");
 static li_symbol_ref takeover_pad("takeover_pad");
 
-void g1_human_class::clicked_on_object(g1_object_class *o)
+void g1_human_class::clicked_on_object(g1_object_class * o)
 {
 	if (o && g1_path_object_class::cast(o))
 	{
@@ -94,7 +96,7 @@ void g1_human_class::clicked_on_object(g1_object_class *o)
 	}
 }
 
-w8 g1_human_class::determine_cursor(g1_object_class *object_mouse_is_on)
+w8 g1_human_class::determine_cursor(g1_object_class * object_mouse_is_on)
 {
 	if (object_mouse_is_on)
 	{
@@ -157,21 +159,21 @@ i4_bool g1_human_class::select_path(float gx,float gy)
 {
 	if (gx>=0 && gy>=0 && gx<g1_get_map()->width() && gy<g1_get_map()->height())
 	{
-		g1_path_object_class *best=0, *best2=0;
+		g1_path_object_class * best=0, * best2=0;
 		float best_dist=10000;
-		for (g1_path_object_class *o=g1_path_object_list.first(); o; o=o->next)
+		for (g1_path_object_class * o=g1_path_object_list.first(); o; o=o->next)
 		{
 			int t=o->total_links(player->get_team());
 			for (int i=0; i<t; i++)
 			{
-				g1_path_object_class *o2=o->get_link(player->get_team(), i);
+				g1_path_object_class * o2=o->get_link(player->get_team(), i);
 				if (o2 && !o2->get_flag(g1_object_class::SCRATCH_BIT))
 				{
 					i4_2d_vector p1(o->x, o->y), p2(o2->x, o2->y);
 					i4_2d_vector a=p2-p1;
 					i4_2d_vector x=i4_2d_vector(gx,gy);
 
-					g1_path_object_class *use1=0, *use2=0;
+					g1_path_object_class * use1=0, * use2=0;
 					float dist;
 
 					float alen=a.length();
@@ -213,7 +215,7 @@ i4_bool g1_human_class::select_path(float gx,float gy)
 	return i4_F;
 }
 
-void g1_human_class::attack_unit(g1_object_class *o,i4_float x, i4_float y)
+void g1_human_class::attack_unit(g1_object_class * o,i4_float x, i4_float y)
 {
 	if (!selected_object.valid())
 	{
@@ -221,7 +223,7 @@ void g1_human_class::attack_unit(g1_object_class *o,i4_float x, i4_float y)
 	}
 	if (selected_object->can_attack(o))
 	{
-		g1_map_piece_class *mp=g1_map_piece_class::cast(selected_object.get());
+		g1_map_piece_class * mp=g1_map_piece_class::cast(selected_object.get());
 		if (mp)
 		{
 			mp->attack_target=o;
@@ -256,34 +258,34 @@ class special_command_entry_cleanup_class :
 static li_g1_ref_list_class_member units("units");
 static li_symbol_ref commands_ask("commands-ask");
 
-w32 g1_human_class::show_selection(g1_object_controller_class *for_who,
+w32 g1_human_class::show_selection(g1_object_controller_class * for_who,
 								   i4_transform_class &transform,
-								   g1_draw_context_class *context)
+								   g1_draw_context_class * context)
 {
 
 	if (!selected_object.valid() || selected_object->id!=g1_get_object_type("convoy"))
 	{
 		return 0;
 	}
-	g1_convoy_class *c=(g1_convoy_class *) selected_object.get();
+	g1_convoy_class * c=(g1_convoy_class *) selected_object.get();
 	li_class_context ctx(c->vars);
 	int i;
 	w32 j;
 	int nums=units()->size();
-	g1_screen_box *b=0,*thisbb=0;
+	g1_screen_box * b=0,* thisbb=0;
 	//doesn't work because i4_array cannot correctly handle the garbage collector
 	//i4_array<li_object *> special_commands(10,10);
 
-	li_object *lians=0,*liobj;
-	li_symbol *lisym;
-	char *cmdname;
-	special_command_entry *sce=0;
+	li_object * lians=0,* liobj;
+	li_symbol * lisym;
+	char * cmdname;
+	special_command_entry * sce=0;
 	//we should probably optimize this if nums and/or selectables is big.
 	if (nums<1)
 	{
 		return 0;
 	}
-	g1_object_class *o=0;
+	g1_object_class * o=0;
 	for (i=0; i<nums; i++)
 	{
 		o=units()->value(i);
@@ -366,7 +368,7 @@ w32 g1_human_class::show_selection(g1_object_controller_class *for_who,
 	return nums;
 }
 
-void g1_human_class::draw_button_model(char *buttoncmd, i4_float posx, i4_float posy, i4_float posz, g1_object_class *forobj)
+void g1_human_class::draw_button_model(char * buttoncmd, i4_float posx, i4_float posy, i4_float posz, g1_object_class * forobj)
 {
 	//i4_3d_vector pos(posx/10,posy/10,0.3f);
 	i4_float w=0.5f*r1_near_clip_z; //defines the size of the model
@@ -375,7 +377,8 @@ void g1_human_class::draw_button_model(char *buttoncmd, i4_float posx, i4_float 
 	//i4_float maxyof=(g1_render.center_y)*r1_near_clip_z/g1_render.center_y;
 	w16 button_model=g1_model_list_man.find_handle(buttoncmd);
 
-	g1_quad_object_class *model=g1_model_list_man.get_model(button_model);
+	g1_quad_object_class * model=g1_model_list_man.get_model(button_model);
+
 	if (!model)
 	{
 		return;
@@ -403,7 +406,7 @@ void g1_human_class::draw_button_model(char *buttoncmd, i4_float posx, i4_float 
 	//transform.mult_translate(pos);
 
 	i4_float save_ambient = g1_lights.ambient_intensity;
-	g1_screen_box *bbox=0;
+	g1_screen_box * bbox=0;
 	if (g1_render.current_selectable_list)
 	{
 		bbox=g1_render.current_selectable_list->add();
@@ -429,9 +432,10 @@ void g1_human_class::draw_button_model(char *buttoncmd, i4_float posx, i4_float 
 };
 
 //for most cases, this takes world coordinates, but not always!!!
-void g1_human_class::player_clicked(g1_object_class *obj, float gx, float gy,w32 command)
+void g1_human_class::player_clicked(g1_object_class * obj, float gx, float gy,w32 command)
 {
 	g1_object_type convoy_type=g1_get_object_type(li_convoy.get());
+
 	switch (command)
 	{
 		case DEFAULT:
@@ -447,7 +451,7 @@ void g1_human_class::player_clicked(g1_object_class *obj, float gx, float gy,w32
 					else
 					{
 
-						g1_convoy_class *c=(g1_convoy_class *)g1_object_type_array[convoy_type]->create_object(convoy_type,0);
+						g1_convoy_class * c=(g1_convoy_class *)g1_object_type_array[convoy_type]->create_object(convoy_type,0);
 						c->setup(obj);
 						c->player_num=team();
 						selected_object=c;
@@ -483,14 +487,14 @@ void g1_human_class::player_clicked(g1_object_class *obj, float gx, float gy,w32
 				//single objects can be selected, even if they don't
 				//belong to the local user
 				if (!obj/*||obj->player_num!=team()
-				   ||!obj->get_flag(g1_object_class::SELECTABLE) */)
+						||!obj->get_flag(g1_object_class::SELECTABLE) */)
 				{
 					break;
 				}
 
 				clear_selected();
 
-				g1_convoy_class *c=(g1_convoy_class *)g1_create_object(convoy_type);
+				g1_convoy_class * c=(g1_convoy_class *)g1_create_object(convoy_type);
 				c->player_num=obj->player_num;
 				if (!obj->get_flag(g1_object_class::SELECTABLE))
 				{
@@ -515,7 +519,7 @@ void g1_human_class::player_clicked(g1_object_class *obj, float gx, float gy,w32
 				}
 				if (!selected_object.valid())
 				{
-					g1_convoy_class *cn=(g1_convoy_class *) g1_create_object(convoy_type);
+					g1_convoy_class * cn=(g1_convoy_class *) g1_create_object(convoy_type);
 					cn->player_num=team();
 					cn->setup(obj);
 					selected_object=cn;
@@ -565,12 +569,13 @@ bool g1_human_class::prepare_to_build_building(g1_object_type type)
 {
 	if (prepared_building)
 		delete prepared_building;
+
 	prepared_building=NULL;
-	g1_object_class *o=g1_object_type_array[type]->create_object(type,0);
+	g1_object_class * o=g1_object_type_array[type]->create_object(type,0);
 	if (o)
 	{
-		//call o->set_flag(NEES_SYNC,1); and o->request_think(); when the object is actually 
-		//going to be used. 
+		//call o->set_flag(NEES_SYNC,1); and o->request_think(); when the object is actually
+		//going to be used.
 		prepared_building=o;
 	}
 	return false;
@@ -600,7 +605,7 @@ void g1_human_class::think()
 	}
 
 
-	g1_player_piece_class *stank = commander();
+	g1_player_piece_class * stank = commander();
 	if ((g1_current_controller->view.get_view_mode()!=G1_ACTION_MODE &&
 		 g1_current_controller->view.get_view_mode()!=G1_FOLLOW_MODE))
 	{
@@ -693,7 +698,7 @@ void g1_human_class::think()
 			mouse_look_increment_x += heh;
 			g1_border->clear_mouse_move();
 		}
-		g1_map_piece_class *whofor=controlled();
+		g1_map_piece_class * whofor=controlled();
 
 
 		sw32

@@ -31,12 +31,12 @@ protected:
 	i4_float damping_fraction;
 	g1_typed_reference_class<g1_light_object_class> light;
 public:
-	g1_guided_missile_class(g1_object_type id, g1_loader_class *fp);
+	g1_guided_missile_class(g1_object_type id, g1_loader_class * fp);
 
 	virtual void setup(const i4_3d_vector &pos,
 					   const i4_3d_vector &dir,
-					   g1_object_class *this_guy_fired_me,
-					   g1_object_class *track_me);
+					   g1_object_class * this_guy_fired_me,
+					   g1_object_class * track_me);
 
 	virtual void start_sounds();
 

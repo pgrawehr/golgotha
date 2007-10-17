@@ -15,9 +15,9 @@
 #include "gui/smp_dial.h"
 
 #if 0
-li_object *m1_do(li_object *o, li_environment *env)
+li_object *m1_do(li_object * o, li_environment * env)
 {
-	char buff[1024], *p=buff;
+	char buff[1024], * p=buff;
 
 	printf("> ");
 	fgets(buff, sizeof(buff), stdin);
@@ -27,7 +27,7 @@ li_automatic_add_function(m1_do, "command");
 
 #endif
 
-li_object *m1_distribute_selected(li_object *o, li_environment *env)
+li_object *m1_distribute_selected(li_object * o, li_environment * env)
 {
 	int i;
 	int num_sel=0;
@@ -56,7 +56,7 @@ li_object *m1_distribute_selected(li_object *o, li_environment *env)
 
 	for (i=0; i<m1_info.obj->num_quad; i++)
 	{
-		g1_quad_class *q = &m1_info.obj->quad[i];
+		g1_quad_class * q = &m1_info.obj->quad[i];
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			nx = x+1.0f/num_sel;
@@ -80,17 +80,17 @@ li_object *m1_distribute_selected(li_object *o, li_environment *env)
 }
 li_automatic_add_function(m1_distribute_selected, "distribute_sel");
 
-li_object *m1_swap_selected(li_object *o, li_environment *env)
+li_object *m1_swap_selected(li_object * o, li_environment * env)
 {
 	int i;
 	int num_sel=0;
-	g1_quad_class *first=0;
+	g1_quad_class * first=0;
 
 	i4_float u[4],v[4],t;
 
 	for (i=0; i<m1_info.obj->num_quad; i++)
 	{
-		g1_quad_class *q = &m1_info.obj->quad[i];
+		g1_quad_class * q = &m1_info.obj->quad[i];
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			if (!first)
@@ -129,10 +129,10 @@ li_object *m1_swap_selected(li_object *o, li_environment *env)
 }
 li_automatic_add_function(m1_swap_selected, "swap_sel");
 
-li_object *m1_add_pan_selected(li_object *o, li_environment *env)
+li_object *m1_add_pan_selected(li_object * o, li_environment * env)
 {
 	int i; //,num_sel;
-	m1_poly_object_class *obj = m1_info.obj;
+	m1_poly_object_class * obj = m1_info.obj;
 
 	if (!obj)
 	{
@@ -141,11 +141,11 @@ li_object *m1_add_pan_selected(li_object *o, li_environment *env)
 
 	for (i=0; i<obj->num_quad; i++)
 	{
-		g1_quad_class *q = &obj->quad[i];
+		g1_quad_class * q = &obj->quad[i];
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			int sp = obj->add_special(i);
-			g1_texture_animation *t = &obj->special[sp];
+			g1_texture_animation * t = &obj->special[sp];
 
 			t->quad_number = i;
 			t->max_frames = 0;
@@ -166,11 +166,11 @@ li_object *m1_add_pan_selected(li_object *o, li_environment *env)
 
 li_automatic_add_function(m1_add_pan_selected, "pan_texture_sel");
 
-li_object *m1_add_anim_selected(li_object *o, li_environment *env)
+li_object *m1_add_anim_selected(li_object * o, li_environment * env)
 {
 	//adds a texture animation to currently selected quads
 	int i; //,num_sel;
-	m1_poly_object_class *obj = m1_info.obj;
+	m1_poly_object_class * obj = m1_info.obj;
 
 	if (!obj)
 	{
@@ -179,11 +179,11 @@ li_object *m1_add_anim_selected(li_object *o, li_environment *env)
 
 	for (i=0; i<obj->num_quad; i++)
 	{
-		g1_quad_class *q = &obj->quad[i];
+		g1_quad_class * q = &obj->quad[i];
 		if (q->get_flags(g1_quad_class::SELECTED))
 		{
 			int sp = obj->add_special(i);
-			g1_texture_animation *t = &obj->special[sp];
+			g1_texture_animation * t = &obj->special[sp];
 
 			t->quad_number = i;
 			t->max_frames = 1;
@@ -205,10 +205,10 @@ li_object *m1_add_anim_selected(li_object *o, li_environment *env)
 }
 li_automatic_add_function(m1_add_anim_selected, "animate_texture_sel");
 
-li_object *m1_create_plane(li_object *o, li_environment *env)
+li_object *m1_create_plane(li_object * o, li_environment * env)
 {
 	//Creates a new object (a single square with white texture)
-	m1_poly_object_class *obj = new m1_poly_object_class;
+	m1_poly_object_class * obj = new m1_poly_object_class;
 
 	if (obj)
 	{

@@ -19,7 +19,7 @@
 
 int loptind = 1;    /* index in argv[] */
 int loptchr = 0;    /* index in argv[loptind] */
-char *loptarg;      /* points to argument if present, else to option */
+char * loptarg;      /* points to argument if present, else to option */
 static char shortopt[2] = {
 	0, 0
 };
@@ -33,9 +33,9 @@ void init_getlopt(void)
 }
 
 #if defined (ultrix) || defined (ULTRIX)
-char *strdup(char *src)
+char *strdup(char * src)
 {
-	char *dest;
+	char * dest;
 
 	if (!(dest = (char *) malloc(strlen(src)+1)))
 	{
@@ -45,7 +45,7 @@ char *strdup(char *src)
 }
 #endif
 
-topt *findopt(int islong, char *opt, topt *opts)
+topt *findopt(int islong, char * opt, topt * opts)
 {
 	if (!opts)
 	{
@@ -70,7 +70,7 @@ topt *findopt(int islong, char *opt, topt *opts)
 	return (0);
 }
 
-int performoption(int argc, char *argv[], topt *opt)
+int performoption(int argc, char * argv[], topt * opt)
 {
 	int result = GLO_CONTINUE;
 
@@ -108,7 +108,7 @@ int performoption(int argc, char *argv[], topt *opt)
 			if (opt->flags & 2)
 			{
 				/* var is *char */
-				*((char **) opt->var) = strdup(loptarg);
+				*((char * *) opt->var) = strdup(loptarg);
 			}
 			else
 			{
@@ -127,10 +127,10 @@ int performoption(int argc, char *argv[], topt *opt)
 	return (result);
 }
 
-int getsingleopt(int argc, char *argv[], topt *opts)
+int getsingleopt(int argc, char * argv[], topt * opts)
 {
-	char *thisopt;
-	topt *opt;
+	char * thisopt;
+	topt * opt;
 
 	if (loptind >= argc)
 	{
@@ -193,11 +193,12 @@ int getsingleopt(int argc, char *argv[], topt *opts)
 	}
 }
 
-int getlopt(int argc, char *argv[], topt *opts)
+int getlopt(int argc, char * argv[], topt * opts)
 {
 	int result;
 
 	while ((result = getsingleopt(argc, argv, opts)) == GLO_CONTINUE) ;
+
 
 	return (result);
 }

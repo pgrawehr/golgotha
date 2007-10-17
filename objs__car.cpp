@@ -71,7 +71,7 @@ void g1_car_init()
 
 
 
-g2_car_object_class::g2_car_object_class(g1_object_type id, g1_loader_class *fp)
+g2_car_object_class::g2_car_object_class(g1_object_type id, g1_loader_class * fp)
 	: g1_map_piece_class(id,fp)
 {
 	player_num=g1_player_man.local_player;
@@ -139,8 +139,8 @@ g2_car_object_class::g2_car_object_class(g1_object_type id, g1_loader_class *fp)
 							//the node manager is available, but not the remap table
 							node_id n=fp->read_32();
 
-							g1_road_object_class *rl=(g1_road_object_class *)
-													  g1_path_object_class::cast((g1_object_class *)g2_node_man()->get_obj(n));
+							g1_road_object_class * rl=(g1_road_object_class *)
+													   g1_path_object_class::cast((g1_object_class *)g2_node_man()->get_obj(n));
 							last_route[i]=rl->global_id;
 						}
 					}
@@ -194,7 +194,7 @@ g2_car_object_class::g2_car_object_class(g1_object_type id, g1_loader_class *fp)
 	g2_car_object_list.insert(*this);
 }
 
-void g2_car_object_class::save(g1_saver_class *fp)
+void g2_car_object_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 	fp->start_version(CAR_DATA_VERSION);
@@ -206,7 +206,7 @@ void g2_car_object_class::save(g1_saver_class *fp)
 					 &act_link_start_time,&linked);
 	if (last_route)
 	{
-		g1_id_ref *r;
+		g1_id_ref * r;
 		int t=0;
 		for (r=last_route; r->id; r++, t++)
 		{
@@ -224,7 +224,7 @@ void g2_car_object_class::save(g1_saver_class *fp)
 			//it's ok for linked objects, these have the remap info.
 			else
 			{
-				g1_road_object_class *rs=(g1_road_object_class *)g1_path_object_class::cast(r->get());
+				g1_road_object_class * rs=(g1_road_object_class *)g1_path_object_class::cast(r->get());
 				fp->write_32(rs->nid);
 			}
 		}
@@ -253,8 +253,9 @@ void g2_car_object_class::think()
 	   	speed=speed+1.0f;//this happens if we are about to go
 	   //over crossroads, I think.
 	 */
-	g2_link *lk=link_on();
-	g1_object_class *oldnext=next_path.get();
+	g2_link * lk=link_on();
+	g1_object_class * oldnext=next_path.get();
+
 	if (lk)
 	{
 		float maxspeed=lk->get_freespeed();
@@ -323,9 +324,10 @@ void g2_car_object_class::think()
 	}
 }
 
-i4_str *g2_car_object_class::get_context_string()
+i4_str * g2_car_object_class::get_context_string()
 {
 	char buf[101];
+
 	i4_ram_file_class rf(buf,100);
 	rf.printf("%s, id %i, speed %f, path_pos %f, path_len %f", name(),car_id,speed,path_pos,path_len);
 
@@ -347,6 +349,7 @@ w32 g2_car_object_class::calc_new_start_time(w32 olds,w32 reqarr,w32 actarr)
 	w32 best=olds;
 	w32 i=0,besti=0;
 	w32 testt,ttrip=actarr-olds;
+
 	for(; i<top; i++)
 	{
 		//what to do with the i?
@@ -398,18 +401,18 @@ i4_bool g2_car_object_class::start(w32 current_time, link_id for_dest)
 	pf_car_start.start();
 	//start_time=current_time;//doesn't make sense with activity start
 	//time replaning
-	g2_link *lst=g2_link_man()->get_link(start_link);
+	g2_link * lst=g2_link_man()->get_link(start_link);
 	dest_link=for_dest;
 	node_id stid=lst->get_from();
-	g2_link *ldst=g2_link_man()->get_link(dest_link);
+	g2_link * ldst=g2_link_man()->get_link(dest_link);
 	node_id dstid=ldst->get_to();
 	//we currently ignore the fact that the link might be full
 	//baaaad: Causes the link to fill up with waiting cars and
 	//denies other cars entry to this road at the given node.
 	//this would simulate the cars leaving their parking space beeing
 	//always priorized over those already on the road. Strange rule!
-	g1_road_object_class *s=(g1_road_object_class *)g2_node_man()->get_obj(stid),
-	*d=(g1_road_object_class *)g2_node_man()->get_obj(dstid);
+	g1_road_object_class * s=(g1_road_object_class *)g2_node_man()->get_obj(stid),
+	* d=(g1_road_object_class *)g2_node_man()->get_obj(dstid);
 	//for the sake of simplicity (We don't jet know which outgoing link
 	//we will use and I don't want to calculate the path before the
 	//actual start of the voyage) I suggest the following behaviour:
@@ -418,7 +421,7 @@ i4_bool g2_car_object_class::start(w32 current_time, link_id for_dest)
 	//If none are available, we wait.
 	int tot=s->total_links(G1_ALLY),i;
 	i4_float proba=0;
-	g1_path_object_class *path;
+	g1_path_object_class * path;
 	link_id linkid;
 	for (i=0; i<tot; i++)
 	{
@@ -448,8 +451,8 @@ i4_bool g2_car_object_class::start(w32 current_time, link_id for_dest)
 		pf_car_start.stop();
 		return i4_F;
 	}
-	g1_path_object_class *stack[G1_MAX_OBJECTS];
-	g1_id_ref *way=0;
+	g1_path_object_class * stack[G1_MAX_OBJECTS];
+	g1_id_ref * way=0;
 	if (get_flag(SCRATCH_BIT)||!last_route)
 	{
 		//w32 oldstarttime=start_time;
@@ -475,7 +478,7 @@ i4_bool g2_car_object_class::start(w32 current_time, link_id for_dest)
 			way[t-i-1]=stack[i];
 		}
 		way[t].id=0;
-		g1_id_ref *last_way=(g1_id_ref *)I4_MALLOC((t+1)*sizeof(g1_id_ref),"way2");
+		g1_id_ref * last_way=(g1_id_ref *)I4_MALLOC((t+1)*sizeof(g1_id_ref),"way2");
 		memcpy(last_way,way,(t+1)*sizeof(g1_id_ref));
 		if (last_route)
 		{
@@ -486,7 +489,7 @@ i4_bool g2_car_object_class::start(w32 current_time, link_id for_dest)
 	else
 	{
 		//we choose to use the same path as yesterday
-		g1_id_ref *rc;
+		g1_id_ref * rc;
 		int t=1; //one element more to copy
 		for (rc=last_route; rc->id; rc++, t++)
 		{
@@ -512,10 +515,11 @@ i4_bool g2_car_object_class::start(w32 current_time, link_id for_dest)
 	return i4_T;
 }
 
-void g2_car_object_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g2_car_object_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	//todo: draw a point
 	r1_vert v[2];
+
 	i4_3d_point_class p(x,y,h);
 	//g1_object_class *o;
 	w32 c;
@@ -600,7 +604,7 @@ void g2_car_object_class::request_remove()
 	g1_map_piece_class::request_remove();
 };
 
-li_object *g2_car_object_class::message(li_symbol *name, li_object *params, li_environment *env)
+li_object * g2_car_object_class::message(li_symbol * name, li_object * params, li_environment * env)
 {
 	return g1_map_piece_class::message(name,params,env);
 }

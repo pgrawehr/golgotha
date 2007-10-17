@@ -21,12 +21,12 @@ class i4_file_class;
 
 class i4_stream_wav_player
 {
-	i4_voice_class *voice;
+	i4_voice_class * voice;
 
-	void *locked_buffer_start; // used by lock
+	void * locked_buffer_start; // used by lock
 	w32 locked_buffer_size;  // used by lock
 
-	void *unused1;
+	void * unused1;
 	w32 unused2;
 
 	enum {
@@ -35,7 +35,7 @@ class i4_stream_wav_player
 
 	volatile i4_bool wait_read; // if an async_read has not completed yet
 
-	i4_file_class *fp; // file we are reading wav from
+	i4_file_class * fp; // file we are reading wav from
 
 	w32 buf_size, start_file_offset, prev_total, finish_pos;
 
@@ -61,7 +61,7 @@ public:
 		return voice;
 	}
 
-	i4_stream_wav_player(i4_file_class *fp,
+	i4_stream_wav_player(i4_file_class * fp,
 						 w32 buffer_size,
 						 i4_bool loop,
 						 i4_bool first_load_is_async=i4_T,

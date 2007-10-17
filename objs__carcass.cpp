@@ -27,12 +27,12 @@ class g1_carcass_class :
 {
 public:
 	int time_left;
-	i4_const_str *model_name; //used to keep the model across saves/loads
+	i4_const_str * model_name; //used to keep the model across saves/loads
 	enum {
 		DATA_VERSION=2
 	};
 
-	g1_carcass_class(g1_object_type id, g1_loader_class *fp)
+	g1_carcass_class(g1_object_type id, g1_loader_class * fp)
 		: g1_object_class(id, fp)
 	{
 		model_name=0; //just in case...
@@ -67,7 +67,7 @@ public:
 		delete model_name;
 	}
 
-	void save(g1_saver_class *fp)
+	void save(g1_saver_class * fp)
 	{
 		g1_object_class::save(fp);
 		fp->start_version(DATA_VERSION);
@@ -76,7 +76,7 @@ public:
 		fp->end_version();
 	};
 
-	void load(g1_loader_class *fp)
+	void load(g1_loader_class * fp)
 	{
 		g1_object_class::load(fp);
 		fp->check_version(DATA_VERSION);
@@ -85,32 +85,32 @@ public:
 		model_name=fp->read_counted_str();
 		fp->end_version(I4_LF);
 	}
-	void skipload(g1_loader_class *fp)
+	void skipload(g1_loader_class * fp)
 	{
 		g1_object_class::skipload(fp);
 		fp->check_version(DATA_VERSION);
 		fp->read_32();
-		i4_str *temp=fp->read_counted_str();
+		i4_str * temp=fp->read_counted_str();
 		delete temp;
 		fp->end_version(I4_LF);
 	}
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 	{
 		g1_model_draw(this, draw_params, context, viewer_position);
 		flags|=TARGETABLE | GROUND | BLOCKING | CAN_DRIVE_ON;
 	};
 
-	void setup(g1_object_class *from,
-			   g1_quad_object_class *model,
+	void setup(g1_object_class * from,
+			   g1_quad_object_class * model,
 			   const i4_const_str &model_n,
 			   int ticks,
 			   int ticks_to_smoke,
-			   g1_quad_object_class *lod_model)
+			   g1_quad_object_class * lod_model)
 	{
 		if (ticks_to_smoke>0)
 		{
-			g1_particle_emitter_class *smoke=
+			g1_particle_emitter_class * smoke=
 				(g1_particle_emitter_class *)g1_create_object(g1_get_object_type(part_emit.get()));
 
 			g1_particle_emitter_params params;
@@ -175,14 +175,15 @@ public:
 g1_object_definer<g1_carcass_class>
 g1_carcass_def("carcass", g1_object_definition_class::EDITOR_SELECTABLE);
 
-g1_object_class *g1_create_carcass(g1_object_class *from,
-								   g1_quad_object_class *model,
+g1_object_class *g1_create_carcass(g1_object_class * from,
+								   g1_quad_object_class * model,
 								   const i4_const_str &model_n,
 								   int ticks,
 								   int ticks_to_smoke,
-								   g1_quad_object_class *lod_model)
+								   g1_quad_object_class * lod_model)
 {
-	g1_carcass_class *c=(g1_carcass_class *)g1_create_object(g1_carcass_def.type);
+	g1_carcass_class * c=(g1_carcass_class *)g1_create_object(g1_carcass_def.type);
+
 	c->setup(from, model, model_n, ticks, ticks_to_smoke, lod_model);
 	//new definiton: setup must call occupy_location().
 	//c->occupy_location();

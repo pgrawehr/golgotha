@@ -37,8 +37,8 @@ private:
 protected:
 	typedef struct _mount_entry {
 		w32 index;
-		i4_const_str *caption; //the generated caption visible to the user
-		i4_const_str *name; //the name part
+		i4_const_str * caption; //the generated caption visible to the user
+		i4_const_str * name; //the name part
 		i4_3d_vector v; //the actual data
 		_mount_entry() :
 			v(0,0,0) {
@@ -50,12 +50,12 @@ protected:
 	} mount_entry;
 	i4_array<mount_entry> mount_array;
 	i4_array<i4_window_class *> items; //the references to the gui-objects.
-	i4_window_class *msg;
-	i4_list_pick *list;
-	i4_graphical_style_class *style;
+	i4_window_class * msg;
+	i4_list_pick * list;
+	i4_graphical_style_class * style;
 	w32 sel_elem;
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"m1_mount_window_class");
 	}
@@ -67,12 +67,13 @@ public:
 
 	void update()
 	{
-		m1_poly_object_class *obj = m1_info.obj;
+		m1_poly_object_class * obj = m1_info.obj;
+
 		if (!obj)
 		{
 			return;
 		}
-		mount_entry *m=0;
+		mount_entry * m=0;
 		sw16 sizex,sizey;
 
 		if (msg)
@@ -147,9 +148,9 @@ public:
 	{
 		sw16 x1=0,y1=1,x2=20,y2=20;
 
-		i4_image_class *add_icon=0;
-		i4_image_window_class *icon=0;
-		i4_button_class *add=0;
+		i4_image_class * add_icon=0;
+		i4_image_window_class * icon=0;
+		i4_button_class * add=0;
 
 		add_icon=i4_load_image("bitmaps/editor/mountadd.bmp",0);
 		icon=new i4_image_window_class(add_icon,i4_T,i4_T);
@@ -183,12 +184,12 @@ public:
 
 		y1=add->height()+2; //only required once
 		list_ystart=y1; //save this for later use.
-		m1_poly_object_class *obj = m1_info.obj;
+		m1_poly_object_class * obj = m1_info.obj;
 		if (!obj)
 		{
 			return;
 		}
-		mount_entry *m=0;
+		mount_entry * m=0;
 		//i4_window_class *mw=0;
 		if (obj->num_mounts==0)
 		{
@@ -247,7 +248,7 @@ public:
 	}
 	//}}}
 
-	m1_mount_window_class(i4_graphical_style_class *style)
+	m1_mount_window_class(i4_graphical_style_class * style)
 		: i4_color_window_class(400,200,style->color_hint->neutral(),style),
 		  mount_array(10,10),
 		  style(style),
@@ -271,6 +272,7 @@ public:
 		   	}
 		   msg=0;*/
 		int i;
+
 		for (i=0; i<mount_array.size(); i++)
 		{
 			//items[i]->call_stack_counter++;
@@ -284,7 +286,7 @@ public:
 		//i4_color_window_class::~i4_color_window_class();
 	}
 
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	//{{{
 	{
 		switch (ev->type())
@@ -327,7 +329,7 @@ public:
 						{
 							return;
 						}
-						m1_poly_object_class *obj=m1_info.obj;
+						m1_poly_object_class * obj=m1_info.obj;
 						i4_str newname("newname");
 						if (i4_input_box("Name","Mount Name",*obj->mount_names[sel_elem],
 										 newname,MSG_OK+MSG_CANCEL)==MSG_CANCEL)
@@ -339,8 +341,8 @@ public:
 						i4_str strvectout("out");
 						i4_const_str afl("( %f , %f , %f )");
 						i4_3d_vector &v=obj->mount_store[sel_elem];
-						i4_str *strvectin=afl.sprintf(100,v.x,
-													  v.y,v.z);
+						i4_str * strvectin=afl.sprintf(100,v.x,
+													   v.y,v.z);
 
 						if (i4_input_box("Vector","Enter components of vector",*strvectin,
 										 strvectout,MSG_OK+MSG_CANCEL)==MSG_CANCEL)
@@ -396,7 +398,7 @@ public:
 
 static i4_event_handler_reference_class<m1_mount_window_class> m1_mount_dialog;
 
-li_object *m1_show_mount(li_object *o, li_environment *env)
+li_object *m1_show_mount(li_object * o, li_environment * env)
 //{{{
 {
 	if (!m1_info.obj)
@@ -409,7 +411,7 @@ li_object *m1_show_mount(li_object *o, li_environment *env)
 	}
 	else
 	{
-		i4_graphical_style_class *style = i4_current_app->get_style();
+		i4_graphical_style_class * style = i4_current_app->get_style();
 		m1_mount_dialog = new m1_mount_window_class(style);
 
 		style->create_mp_window(-1,-1,

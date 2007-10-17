@@ -9,6 +9,6 @@
 #ifndef __G1_FILE_HH_
 #define __G1_FILE_HH_
 
-void g1_set_cd_image(char *filename);
+void g1_set_cd_image(char * filename);
 
 #endif

@@ -18,17 +18,17 @@ class i4_net_socket :
 	public i4_file_class
 {
 public:
-	virtual i4_bool connect(i4_net_address *addr)
+	virtual i4_bool connect(i4_net_address * addr)
 	{
 		return i4_F;
 	}
 
 	virtual i4_bool accept(i4_net_socket *&sock, i4_net_address *&addr) = 0;
 
-	virtual w32 read_from(void *buffer, w32 size, i4_net_address *&addr) = 0;
+	virtual w32 read_from(void * buffer, w32 size, i4_net_address *&addr) = 0;
 
-	virtual w32 read(void *buffer, w32 size) = 0;
-	virtual w32 write(const void *buffer, w32 size) = 0;
+	virtual w32 read(void * buffer, w32 size) = 0;
+	virtual w32 write(const void * buffer, w32 size) = 0;
 
 	virtual i4_bool ready_to_read() = 0;
 	virtual i4_bool ready_to_write() = 0;

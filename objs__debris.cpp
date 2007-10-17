@@ -51,7 +51,7 @@ g1_object_definer<g1_debris_class> g1_debris_def("debris",
 												 g1_debris_init);
 
 
-g1_debris_class::g1_debris_class(g1_object_type id, g1_loader_class *fp)
+g1_debris_class::g1_debris_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	w16 ver,data_size;
@@ -77,20 +77,20 @@ g1_debris_class::g1_debris_class(g1_object_type id, g1_loader_class *fp)
 	strength = 2.0;
 }
 
-void g1_debris_class::save(g1_saver_class *fp)
+void g1_debris_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 	fp->start_version(DATA_VERSION);
 	fp->end_version();
 }
 
-void g1_debris_class::load(g1_loader_class *fp)
+void g1_debris_class::load(g1_loader_class * fp)
 {
 	g1_object_class::load(fp);
 	fp->check_version(DATA_VERSION);
 	fp->end_version(I4_LF);
 }
-void g1_debris_class::skipload(g1_loader_class *fp)
+void g1_debris_class::skipload(g1_loader_class * fp)
 {
 	g1_object_class::skipload(fp);
 	fp->check_version(DATA_VERSION);
@@ -99,7 +99,7 @@ void g1_debris_class::skipload(g1_loader_class *fp)
 
 void g1_debris_class::setup(i4_float sx, i4_float sy, i4_float sz, int _type)
 {
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 
 	if (sx<1)
 	{
@@ -204,11 +204,11 @@ void g1_debris_class::think()
 	request_think();
 }
 
-void g1_debris_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_debris_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	sw32 i,j;
 
-	r1_render_api_class *r_api = g1_render.r_api;
+	r1_render_api_class * r_api = g1_render.r_api;
 
 	i4_transform_class tmp,trans = *context->transform;
 	r1_vert p, vert[3];

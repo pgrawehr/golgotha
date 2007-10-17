@@ -68,7 +68,7 @@ g1_object_definer<g1_popup_turret_class>
 g1_popup_turret_def("popup_turret", g1_object_definition_class::EDITOR_SELECTABLE,
 					g1_popup_turret_init);
 
-void g1_popup_turret_class::setup(i4_float _x, i4_float _y, g1_object_class *creator)
+void g1_popup_turret_class::setup(i4_float _x, i4_float _y, g1_object_class * creator)
 {
 	x = x;
 	y = y;
@@ -79,7 +79,7 @@ void g1_popup_turret_class::setup(i4_float _x, i4_float _y, g1_object_class *cre
 }
 
 g1_popup_turret_class::g1_popup_turret_class(g1_object_type id,
-											 g1_loader_class *fp)
+											 g1_loader_class * fp)
 	: g1_map_piece_class(id,fp)
 {
 
@@ -126,7 +126,7 @@ g1_popup_turret_class::g1_popup_turret_class(g1_object_type id,
 	barrel->grab_old();
 }
 
-void g1_popup_turret_class::save(g1_saver_class *fp)
+void g1_popup_turret_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 
@@ -137,7 +137,7 @@ void g1_popup_turret_class::save(g1_saver_class *fp)
 
 	fp->end_version();
 }
-void g1_popup_turret_class::load(g1_loader_class *fp)
+void g1_popup_turret_class::load(g1_loader_class * fp)
 {
 	g1_map_piece_class::load(fp);
 	fp->check_version(DATA_VERSION);
@@ -145,7 +145,7 @@ void g1_popup_turret_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 };
 
-void g1_popup_turret_class::skipload(g1_loader_class *fp)
+void g1_popup_turret_class::skipload(g1_loader_class * fp)
 {
 	g1_map_piece_class::skipload(fp);
 	fp->check_version(DATA_VERSION);

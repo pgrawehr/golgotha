@@ -33,7 +33,7 @@ class g1_stank_factory_class :
 	public g1_factory_class
 {
 public:
-	g1_stank_factory_class(g1_object_type id, g1_loader_class *fp)
+	g1_stank_factory_class(g1_object_type id, g1_loader_class * fp)
 		: g1_factory_class(id,fp)
 	{
 		//flags|=THINKING;
@@ -62,7 +62,7 @@ public:
 		}
 
 		request_think();
-		g1_player_info_class *pl=g1_player_man.get(player_num);
+		g1_player_info_class * pl=g1_player_man.get(player_num);
 		if (!pl->get_commander()
 			/*&&
 			   !pl->continue_wait*/)
@@ -71,8 +71,8 @@ public:
 			if (pl->num_stank_lives()
 				&& pl->get_ai()->ai_name()->strncmp("ai_remote",9))
 			{
-				g1_object_class *o=g1_create_object(g1_get_object_type(stank.get()));
-				g1_player_piece_class *stank=g1_player_piece_class::cast(o);
+				g1_object_class * o=g1_create_object(g1_get_object_type(stank.get()));
+				g1_player_piece_class * stank=g1_player_piece_class::cast(o);
 				if (stank)
 				{
 					pl->num_stank_lives()--;

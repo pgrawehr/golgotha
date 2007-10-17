@@ -19,11 +19,11 @@ class i4_pull_menu_class;
 class g1_editor_key_item;
 
 
-i4_pull_menu_class *g1_create_editor_menu(i4_graphical_style_class *style,
+i4_pull_menu_class *g1_create_editor_menu(i4_graphical_style_class * style,
 										  const i4_pal_handle_class &pal,
-										  i4_parent_window_class *root_window,
+										  i4_parent_window_class * root_window,
 										  i4_string_manager_class &st,
-										  g1_editor_key_item **command_key_list);
+										  g1_editor_key_item * * command_key_list);
 enum
 {
 	G1_EDITOR_NEW,
@@ -88,9 +88,9 @@ public:
 	w16 command_id;
 	g1_editor_key_item(
 		const i4_const_str &_text,
-		i4_color_hint_class *color_hint,
-		i4_font_hint_class *font_hint,
-		i4_graphical_style_class *style,
+		i4_color_hint_class * color_hint,
+		i4_font_hint_class * font_hint,
+		i4_graphical_style_class * style,
 		w16 key,
 		w16 modifiers,
 		w16 command_id,
@@ -98,7 +98,7 @@ public:
 		w16 pad_up_down
 	);
 	virtual void action();
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"editor_key_item");
 	}

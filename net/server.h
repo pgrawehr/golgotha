@@ -19,7 +19,7 @@
 
 #define PACKET(PACKET,R) w8 PACKET[MAX_PACKET_SIZE]; i4_ram_file_class R(PACKET,sizeof(PACKET));
 
-extern i4_temp_file_class *network_file;
+extern i4_temp_file_class * network_file;
 #define NE_ERROR_OK 0
 #define NE_ERROR_NOTREADY -1
 #define NE_ERROR_PAUSED -2
@@ -38,7 +38,7 @@ public:
 };
 
 class g1_network_time_manager_class;
-extern g1_network_time_manager_class *g1_network_time_man_ptr;
+extern g1_network_time_manager_class * g1_network_time_man_ptr;
 class g1_network_time_manager_class :
 	public i4_init_class
 {
@@ -77,7 +77,7 @@ public:
 class g1_server_class
 {
 	friend class g1_server_start_window;
-	friend int i4_network_send(w8 *buf, i4_file_class *fp, int send_to);
+	friend int i4_network_send(w8 * buf, i4_file_class * fp, int send_to);
 	enum {
 		NONE=0,
 		READY=1
@@ -85,11 +85,11 @@ class g1_server_class
 
 	struct client
 	{
-		i4_net_address *addr;
+		i4_net_address * addr;
 		i4_time_class last_data;
-		i4_str *username;
+		i4_str * username;
 		int remote_player_num;
-		i4_net_socket *send;
+		i4_net_socket * send;
 		w32 flags;
 
 		void cleanup();
@@ -97,7 +97,7 @@ class g1_server_class
 
 	client clients[G1_MAX_PLAYERS]; // network address of each client
 
-	i4_net_socket *udp_port;
+	i4_net_socket * udp_port;
 	enum {
 		WAITING_FOR_PLAYERS,
 		LOADING,
@@ -106,18 +106,18 @@ class g1_server_class
 		QUITING
 	} state;
 
-	i4_net_protocol *protocol;
+	i4_net_protocol * protocol;
 	int local_player_num;
 	void send_player_joined(int client_num);
-	void process_client_packet(w8 *packet, int packet_length, int client_num);
-	i4_str *map_name;
+	void process_client_packet(w8 * packet, int packet_length, int client_num);
+	i4_str * map_name;
 	i4_bool list_changed;
 
 public:
-	g1_server_class(int use_port, i4_net_protocol *protocol);
+	g1_server_class(int use_port, i4_net_protocol * protocol);
 	void start_game();
-	void send_to(w8 *buf, i4_file_class *f, int client_id);
-	void send_to_all(w8 *buf, i4_file_class *f);
+	void send_to(w8 * buf, i4_file_class * f, int client_id);
+	void send_to_all(w8 * buf, i4_file_class * f);
 	int prepare_command(int command);
 	int prepare_thinking(int for_who );
 	int done_thinking();
@@ -134,7 +134,7 @@ int i4_network_prepare_command(int command);
 
 //send_to is ignored if we are a client
 //if we are the server, -1 sends to all clients
-int i4_network_send(w8 *buf, i4_file_class *fp, int send_to);
+int i4_network_send(w8 * buf, i4_file_class * fp, int send_to);
 
 extern class g1_server_class *g1_server;
 

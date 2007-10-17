@@ -19,22 +19,22 @@ class dsound_buffer_class :
 {
 public:
 	DWORD flags;
-	IDirectSoundBuffer *pDSB;
-	IDirectSound3DBuffer *p3DSB;
-	IDirectSoundNotify *pNotify;
-	i4_stream_wav_player *stream_man;
+	IDirectSoundBuffer * pDSB;
+	IDirectSound3DBuffer * p3DSB;
+	IDirectSoundNotify * pNotify;
+	i4_stream_wav_player * stream_man;
 	float hearable_distance;
 
 	i4_stream_wav_player *stream_manager()
 	{
 		return stream_man;
 	}
-	void set_stream_manager(i4_stream_wav_player *s)
+	void set_stream_manager(i4_stream_wav_player * s)
 	{
 		stream_man = s;
 	}
 
-	dsound_buffer_class(IDirectSoundBuffer *_pDSB,
+	dsound_buffer_class(IDirectSoundBuffer * _pDSB,
 						DWORD _flags, w32 _buffer_size);
 
 	~dsound_buffer_class();
@@ -52,8 +52,8 @@ public:
 					  void *&block1, w32 &block1_size,
 					  void *&block2, w32 &block2_size);
 
-	virtual void unlock(void *block1, w32 block1_size,
-						void *block2, w32 block2_size);
+	virtual void unlock(void * block1, w32 block1_size,
+						void * block2, w32 block2_size);
 
 	//returns whether or not the sound is playing
 	virtual i4_bool is_playing();
@@ -85,7 +85,7 @@ class direct_sound_class :
 protected:
 	LPDIRECTSOUND lpDirectSound;
 	//IA3d *lpA3D;
-	IDirectSoundBuffer *lpPrimary;
+	IDirectSoundBuffer * lpPrimary;
 
 	void init();
 	void uninit();
@@ -101,7 +101,7 @@ public:
 	i4_3d_vector listener_position;
 	i4_transform_class listener_transform;
 
-	IDirectSound3DListener *lpListener;
+	IDirectSound3DListener * lpListener;
 
 	direct_sound_class()
 	{
@@ -116,15 +116,15 @@ public:
 
 	i4_voice_class *alloc(w32 buffer_size, sound_parameters &description);
 
-	i4_voice_class *duplicate_2d(i4_voice_class *voice);
-	i4_voice_class *duplicate_3d(i4_voice_class *voice);
+	i4_voice_class *duplicate_2d(i4_voice_class * voice);
+	i4_voice_class *duplicate_3d(i4_voice_class * voice);
 
 	void set_listener_orientation(i4_float f_x,i4_float f_y,i4_float f_z,
 								  i4_float u_x,i4_float u_y,i4_float u_z);
 
 	void commit_3d_changes();
 
-	void free_voice(i4_voice_class *voice);
+	void free_voice(i4_voice_class * voice);
 
 	//i4_bool sound_is_enabled(){return enabled;};
 

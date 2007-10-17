@@ -13,8 +13,8 @@
 class i4_window_manager_class;
 class i4_display_class;
 
-void i4_init_gui_status(i4_window_manager_class *wm,
-						i4_display_class *display);
+void i4_init_gui_status(i4_window_manager_class * wm,
+						i4_display_class * display);
 
 void i4_uninit_gui_status();
 

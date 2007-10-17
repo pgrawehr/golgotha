@@ -15,10 +15,11 @@
 #include "math/pi.h"
 #include "gui/smp_dial.h"
 
-li_object *m1_frame_add(li_object *o, li_environment *env)
+li_object *m1_frame_add(li_object * o, li_environment * env)
 //{{{
 {
-	m1_poly_object_class *obj = m1_info.obj;
+	m1_poly_object_class * obj = m1_info.obj;
+
 	obj->add_frame(m1_info.current_animation, m1_info.current_frame);
 	m1_info.current_frame++; //choose as the current frame
 	m1_render_window->request_redraw();
@@ -27,10 +28,11 @@ li_object *m1_frame_add(li_object *o, li_environment *env)
 }
 //}}}
 
-li_object *m1_frame_remove(li_object *o, li_environment *env)
+li_object *m1_frame_remove(li_object * o, li_environment * env)
 //{{{
 {
-	m1_poly_object_class *obj = m1_info.obj;
+	m1_poly_object_class * obj = m1_info.obj;
+
 	if (!obj)
 	{
 		return 0;
@@ -47,7 +49,7 @@ li_object *m1_frame_remove(li_object *o, li_environment *env)
 }
 //}}}
 
-li_object *m1_frame_rewind(li_object *o, li_environment *env)
+li_object *m1_frame_rewind(li_object * o, li_environment * env)
 //{{{
 {
 	m1_info.current_frame = 0;
@@ -60,10 +62,10 @@ li_object *m1_frame_rewind(li_object *o, li_environment *env)
 }
 //}}}
 
-li_object *m1_frame_advance(li_object *o, li_environment *env)
+li_object *m1_frame_advance(li_object * o, li_environment * env)
 //{{{
 {
-	m1_poly_object_class *obj = m1_info.obj;
+	m1_poly_object_class * obj = m1_info.obj;
 
 	if (++m1_info.current_frame==obj->animation[m1_info.current_animation].num_frames)
 	{
@@ -79,10 +81,10 @@ li_object *m1_frame_advance(li_object *o, li_environment *env)
 }
 //}}}
 
-li_object *m1_frame_back(li_object *o, li_environment *env)
+li_object *m1_frame_back(li_object * o, li_environment * env)
 //{{{
 {
-	m1_poly_object_class *obj = m1_info.obj;
+	m1_poly_object_class * obj = m1_info.obj;
 
 	if (--m1_info.current_frame<0)
 	{
@@ -99,7 +101,7 @@ li_object *m1_frame_back(li_object *o, li_environment *env)
 }
 //}}}
 
-li_object *m1_toggle_animation(li_object *o, li_environment *env)
+li_object *m1_toggle_animation(li_object * o, li_environment * env)
 //{{{
 {
 	m1_render_window->set_animation(!m1_render_window->is_animating());

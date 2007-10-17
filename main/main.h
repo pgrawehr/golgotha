@@ -11,13 +11,13 @@
 
 #include "arch.h"
 class i4_const_str;
-extern void *i4_stack_base;   // bottom of stack when program started
+extern void * i4_stack_base;   // bottom of stack when program started
 
 extern w32 i4_global_argc;
-extern i4_const_str *i4_global_argv;
+extern i4_const_str * i4_global_argv;
 
 
-extern void i4_main(w32 argc, i4_const_str *argv);
+extern void i4_main(w32 argc, i4_const_str * argv);
 
 
 #endif

@@ -19,8 +19,8 @@ public:
 	{
 		return (w8 *)data;
 	}
-	i4_image8(w16 w, w16 h, const i4_pal *pal);
-	i4_image8(w16 w, w16 h, const i4_pal *pal, void *data, int bpl);
+	i4_image8(w16 w, w16 h, const i4_pal * pal);
+	i4_image8(w16 w, w16 h, const i4_pal * pal, void * data, int bpl);
 	i4_color get_pixel(i4_coord x, i4_coord y);
 	void put_pixel(i4_coord x, i4_coord y, w32 color);
 

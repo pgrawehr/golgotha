@@ -35,10 +35,10 @@ void init_decode_2to1(void)
 	bo = 1;
 }
 
-int synth_2to1_8bit(real *bandPtr,int channel,unsigned char *samples)
+int synth_2to1_8bit(real * bandPtr,int channel,unsigned char * samples)
 {
 	short samples_tmp[32];
-	short *tmp1 = samples_tmp + channel;
+	short * tmp1 = samples_tmp + channel;
 	int i,ret;
 
 	samples += channel;
@@ -54,10 +54,10 @@ int synth_2to1_8bit(real *bandPtr,int channel,unsigned char *samples)
 	return ret;
 }
 
-int synth_2to1_8bit_mono(real *bandPtr,unsigned char *samples)
+int synth_2to1_8bit_mono(real * bandPtr,unsigned char * samples)
 {
 	short samples_tmp[32];
-	short *tmp1 = samples_tmp;
+	short * tmp1 = samples_tmp;
 	int i,ret;
 
 	ret = synth_2to1(bandPtr,0,(unsigned char *) samples_tmp);
@@ -72,10 +72,10 @@ int synth_2to1_8bit_mono(real *bandPtr,unsigned char *samples)
 }
 
 
-int synth_2to1_8bit_mono2stereo(real *bandPtr,unsigned char *samples)
+int synth_2to1_8bit_mono2stereo(real * bandPtr,unsigned char * samples)
 {
 	short samples_tmp[32];
-	short *tmp1 = samples_tmp;
+	short * tmp1 = samples_tmp;
 	int i,ret;
 
 	ret = synth_2to1(bandPtr,0,(unsigned char *) samples_tmp);
@@ -90,10 +90,10 @@ int synth_2to1_8bit_mono2stereo(real *bandPtr,unsigned char *samples)
 	return ret;
 }
 
-int synth_2to1_mono(real *bandPtr,unsigned char *samples)
+int synth_2to1_mono(real * bandPtr,unsigned char * samples)
 {
 	short samples_tmp[32];
-	short *tmp1 = samples_tmp;
+	short * tmp1 = samples_tmp;
 	int i,ret;
 
 	ret = synth_2to1(bandPtr,0,(unsigned char *) samples_tmp);
@@ -109,9 +109,10 @@ int synth_2to1_mono(real *bandPtr,unsigned char *samples)
 	return ret;
 }
 
-int synth_2to1_mono2stereo(real *bandPtr,unsigned char *samples)
+int synth_2to1_mono2stereo(real * bandPtr,unsigned char * samples)
 {
 	int i,ret = synth_2to1(bandPtr,0,samples);
+
 	for(i=0; i<16; i++)
 	{
 		((short *)samples)[1] = ((short *)samples)[0];
@@ -120,13 +121,13 @@ int synth_2to1_mono2stereo(real *bandPtr,unsigned char *samples)
 	return ret;
 }
 
-int synth_2to1(real *bandPtr,int channel,unsigned char *out)
+int synth_2to1(real * bandPtr,int channel,unsigned char * out)
 {
 	static real buffs[2][2][0x110];
 	static const int step = 2;
-	short *samples = (short *) out;
+	short * samples = (short *) out;
 
-	real *b0,(*buf)[0x110];
+	real * b0,(* buf)[0x110];
 	int clip = 0;
 	int bo1;
 
@@ -162,7 +163,7 @@ int synth_2to1(real *bandPtr,int channel,unsigned char *out)
 
 	{
 		register int j;
-		real *window = decwin + 16 - bo1;
+		real * window = decwin + 16 - bo1;
 
 		for (j=8; j; j--,b0+=0x10,window+=0x30)
 		{

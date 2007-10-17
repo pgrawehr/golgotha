@@ -17,8 +17,8 @@ class g1_flood_fill_class
 	{
 public:
 		short x,y;
-		fill_rec *last;
-		fill_rec(short X, short Y, fill_rec *Last)
+		fill_rec * last;
+		fill_rec(short X, short Y, fill_rec * Last)
 		{
 			x=X;
 			y=Y;

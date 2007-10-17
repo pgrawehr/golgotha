@@ -42,19 +42,19 @@ public:
 						g1_object_type obj_type,
 						w16 array_index,
 						g1_3d_pick_window_camera_struct &camera,
-						i4_image_class *active_back,
-						i4_image_class *passive_back,
-						i4_event_reaction_class *reaction);
+						i4_image_class * active_back,
+						i4_image_class * passive_back,
+						i4_event_reaction_class * reaction);
 
 	~g1_3d_object_window();
-	void draw_object(g1_draw_context_class *context);
+	void draw_object(g1_draw_context_class * context);
 
 	i4_bool selected();
 	void do_press();
 
 	void do_idle();
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"object window");
 	}

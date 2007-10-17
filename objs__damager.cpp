@@ -39,13 +39,13 @@ class g1_damager_class :
 {
 public:
 
-	g1_damager_class(g1_object_type id, g1_loader_class *fp)
+	g1_damager_class(g1_object_type id, g1_loader_class * fp)
 		: g1_object_class(id, fp)
 	{
 		draw_params.setup("trigger");
 	}
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 	{
 		if (smoke_type()==acid.get())
 		{
@@ -64,8 +64,9 @@ public:
 
 	void think()
 	{
-		g1_object_class *hurt_this_guy = li_g1_ref::get(person_being_damaged(),0)->value();
-		g1_object_class *this_guys_hurting_him = li_g1_ref::get(person_giving_damage(),0)->value();
+		g1_object_class * hurt_this_guy = li_g1_ref::get(person_being_damaged(),0)->value();
+		g1_object_class * this_guys_hurting_him = li_g1_ref::get(person_giving_damage(),0)->value();
+
 		if (!this_guys_hurting_him)
 		{
 			this_guys_hurting_him=this;
@@ -108,11 +109,12 @@ g1_damager_def("damager", g1_object_definition_class::EDITOR_SELECTABLE);
 
 g1_object_class *g1_create_damager_object(const i4_3d_vector &pos,
 										  int _damage_per_tick, int _ticks,
-										  g1_object_class *_person_giving_damage,
-										  g1_object_class *_person_being_damaged,
-										  li_symbol *_smoke_type)
+										  g1_object_class * _person_giving_damage,
+										  g1_object_class * _person_being_damaged,
+										  li_symbol * _smoke_type)
 {
-	g1_damager_class *d=(g1_damager_class *)g1_create_object(g1_damager_def.type);
+	g1_damager_class * d=(g1_damager_class *)g1_create_object(g1_damager_def.type);
+
 	if (!d)
 	{
 		return 0;

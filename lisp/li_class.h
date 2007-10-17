@@ -20,12 +20,12 @@ struct sym_var;
 
 struct li_class_member
 {
-	const char *name;
+	const char * name;
 	int offset;
 	li_type_number class_type;
-	li_symbol *sym;
+	li_symbol * sym;
 
-	li_class_member(const char *name) :
+	li_class_member(const char * name) :
 		name(name),
 		sym(0),
 		class_type(0) {
@@ -34,15 +34,15 @@ struct li_class_member
 
 struct li_string_class_member : public li_class_member
 {
-	li_string_class_member(const char *name) :
+	li_string_class_member(const char * name) :
 		li_class_member(name) {
 	}
-	char *operator()();
+	char * operator()();
 };
 
 struct li_int_class_member : public li_class_member
 {
-	li_int_class_member(const char *name) :
+	li_int_class_member(const char * name) :
 		li_class_member(name) {
 	}
 	int &operator()();
@@ -51,7 +51,7 @@ struct li_int_class_member : public li_class_member
 
 struct li_float_class_member : public li_class_member
 {
-	li_float_class_member(const char *name) :
+	li_float_class_member(const char * name) :
 		li_class_member(name) {
 	}
 	float &operator()();
@@ -60,7 +60,7 @@ struct li_float_class_member : public li_class_member
 
 struct li_symbol_class_member : public li_class_member
 {
-	li_symbol_class_member(const char *name) :
+	li_symbol_class_member(const char * name) :
 		li_class_member(name) {
 	}
 	li_symbol *&operator()();
@@ -69,7 +69,7 @@ struct li_symbol_class_member : public li_class_member
 
 struct li_object_class_member : public li_class_member
 {
-	li_object_class_member(const char *name) :
+	li_object_class_member(const char * name) :
 		li_class_member(name) {
 	}
 	li_object *&operator()();
@@ -81,7 +81,7 @@ struct li_object_class_member : public li_class_member
 class li_class :
 	public li_object
 {
-	void **values;
+	void * * values;
 	li_class_type *get_type() const
 	{
 		return (li_class_type *)li_get_type(type());
@@ -89,21 +89,21 @@ class li_class :
 public:
 	void mark(int set);
 
-	void save(i4_saver_class *fp, li_environment *env);
-	void load(i4_loader_class *fp, li_type_number *type_remap, li_environment *env);
-	void print(i4_file_class *fp);
+	void save(i4_saver_class * fp, li_environment * env);
+	void load(i4_loader_class * fp, li_type_number * type_remap, li_environment * env);
+	void print(i4_file_class * fp);
 
-	li_class(li_type_number class_type, li_object *params=0, li_environment *env=0);
+	li_class(li_type_number class_type, li_object * params=0, li_environment * env=0);
 
 	void free();
 
 	//the following two functions are not inlined because of circular dependencies
-	int member_offset(const char *sym) const;
+	int member_offset(const char * sym) const;
 	//{
 	//return get_type()->get_var_offset(li_get_symbol(sym), 0);
 	//};    // does not type check
-	int member_offset(char *sym) const;
-	int member_offset(li_symbol *sym) const;
+	int member_offset(char * sym) const;
+	int member_offset(li_symbol * sym) const;
 	//{
 	//return get_type()->get_var_offset(sym, 0);
 	//};    // does not type check
@@ -166,14 +166,14 @@ public:
 	}
 	li_symbol *&symbol_value(int member)
 	{
-		return *((li_symbol **)(values+member));
+		return * ((li_symbol * *)(values+member));
 	}
 	li_object *&object_value(int member)
 	{
-		return *((li_object **)(values+member));
+		return * ((li_object * *)(values+member));
 	}
 	li_object *object_itself(int member);
-	li_object **object_place(int member);
+	li_object * *object_place(int member);
 	//warn: Don't even think of modifying the following functions!
 	//Even a small change as inserting a const in the wrong place
 	//can screw everything up!
@@ -197,7 +197,7 @@ public:
 	{
 		return object_value(member_offset(c));
 	}
-	li_object *get_member(const char *member)
+	li_object *get_member(const char * member)
 	{
 		return value(member);
 	}
@@ -207,32 +207,32 @@ public:
 	}
 	//WARN: The following function will give wrong results if used
 	//on ints or floats.
-	li_object *&get(const char *member)
+	li_object *&get(const char * member)
 	{
 		return object_value(member_offset(member));
 	}
 
 
-	li_object *value(const char *member_name);
-	li_object *value(char *member_name);
+	li_object *value(const char * member_name);
+	li_object *value(char * member_name);
 	li_object *value(int member);
-	void set_value(int member, li_object *value);
-	void set(li_class_member &c, li_object *value)
+	void set_value(int member, li_object * value);
+	void set(li_class_member &c, li_object * value)
 	{
 		set_value(member_offset(c), value);
 	}
-	li_object *set(char *member_name, li_object *value); // slow, but easy way to access data
+	li_object *set(char * member_name, li_object * value); // slow, but easy way to access data
 
 
 #ifdef _DEBUG
-	static li_class *get(li_object *o, li_environment *env);
-	static li_class *get_all(li_object *o, li_environment *env);
+	static li_class *get(li_object * o, li_environment * env);
+	static li_class *get_all(li_object * o, li_environment * env);
 #else
-	static li_class *get(li_object *o, li_environment *env)
+	static li_class *get(li_object * o, li_environment * env)
 	{
 		return (li_class *)o;
 	}
-	static li_class *get_all(li_object *o, li_environment *env)
+	static li_class *get_all(li_object * o, li_environment * env)
 	{
 		if (li_get_type(o->type())->type==0)
 		{
@@ -246,35 +246,35 @@ public:
 
 };
 
-li_object *li_def_class(li_object *fields, li_environment *env);
+li_object *li_def_class(li_object * fields, li_environment * env);
 
 int li_class_total_members(li_type_number type);
 li_symbol *li_class_get_symbol(li_type_number type, int member_number);
-li_object *li_class_get_default(li_type_number type, li_symbol *sym);
-li_object *li_class_get_property_list(li_type_number type, li_symbol *sym);
-void li_set_class_editor(li_type_edit_class *editor);
+li_object *li_class_get_default(li_type_number type, li_symbol * sym);
+li_object *li_class_get_property_list(li_type_number type, li_symbol * sym);
+void li_set_class_editor(li_type_edit_class * editor);
 
-extern li_class *li_this;
+extern li_class * li_this;
 
-inline char *li_string_class_member::operator()()
+inline char * li_string_class_member::operator()()
 {
-	return li_this->get((li_string_class_member &) *this);
+	return li_this->get((li_string_class_member &) * this);
 }
 inline int &li_int_class_member::operator()()
 {
-	return li_this->get(*this);
+	return li_this->get(* this);
 }
 inline float &li_float_class_member::operator()()
 {
-	return li_this->get(*this);
+	return li_this->get(* this);
 }
 inline li_symbol *&li_symbol_class_member::operator()()
 {
-	return li_this->get(*this);
+	return li_this->get(* this);
 }
 inline li_object *&li_object_class_member::operator()()
 {
-	return li_this->get(*this);
+	return li_this->get(* this);
 }
 
 //just create an instance of this class (in the current stack frame)
@@ -283,9 +283,9 @@ inline li_object *&li_object_class_member::operator()()
 class li_class_context
 {
 protected:
-	li_class *old_context;
+	li_class * old_context;
 public:
-	li_class_context(li_class *current_context)
+	li_class_context(li_class * current_context)
 	{
 		old_context=li_this;
 		li_this=current_context;
@@ -307,14 +307,14 @@ class li_ext_class_context :
 	public li_class_context
 {
 protected:
-	li_environment *n_env;    //we need to save it so that
+	li_environment * n_env;    //we need to save it so that
 	//we can use it in the destructor
-	g1_object_class *obj;
+	g1_object_class * obj;
 	i4_bool pos_changes_allowed;
 public:
 	//Hint: This constructor changes the value of the environment
 	//parameter passed. Just drop it if the function leaves scope.
-	li_ext_class_context(li_class *current_context,
+	li_ext_class_context(li_class * current_context,
 						 li_environment *&env)
 		: li_class_context(current_context)
 	{
@@ -330,12 +330,12 @@ public:
 	//the member variables
 	~li_ext_class_context();
 
-	void write_back(li_environment *env, g1_object_class *to_obj);
+	void write_back(li_environment * env, g1_object_class * to_obj);
 	//special case if an object is present
 	//declared in objs__def_object.cpp, since it logically belongs there
-	li_ext_class_context(li_class *current_context,
+	li_ext_class_context(li_class * current_context,
 						 li_environment *&env,
-						 g1_object_class *for_obj,
+						 g1_object_class * for_obj,
 						 i4_bool pos_changes_allowed=i4_F);
 };
 #endif

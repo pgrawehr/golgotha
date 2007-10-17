@@ -31,7 +31,7 @@
 #include "array_tree.h"
 
 
-char *link_file="c:\\tmp\\link.lk";
+char * link_file="c:\\tmp\\link.lk";
 
 mk_options_struct mk_options;
 
@@ -47,9 +47,9 @@ list files_to_clean;
 list files_to_backup;
 
 #ifdef _WINDOWS
-int my_system(const char *command, int force=0)
+int my_system(const char * command, int force=0)
 {
-	char *argv[4];
+	char * argv[4];
 
 	if (current_build_type==BUILD_DEBUG ||
 		current_build_type==BUILD_OPT ||
@@ -86,7 +86,7 @@ int my_system(const char *command, int force=0)
 #else
 
 
-int my_system(const char *command, int force=0)
+int my_system(const char * command, int force=0)
 {
 	if (current_build_type==BUILD_DEBUG ||
 		current_build_type==BUILD_OPT ||
@@ -108,7 +108,7 @@ int my_system(const char *command, int force=0)
 		}
 		if (pid == 0)
 		{
-			char *argv[4];
+			char * argv[4];
 			argv[0] = "sh";
 			argv[1] = "-c";
 			argv[2] = (char *) command;
@@ -120,7 +120,8 @@ int my_system(const char *command, int force=0)
 		{
 			wait(&status);
 			return status;
-		} while(1);
+		}
+		while(1);
 	}
 	return 0;
 }
@@ -128,9 +129,10 @@ int my_system(const char *command, int force=0)
 #endif
 
 
-void extract(char *fn)
+void extract(char * fn)
 {
-	FILE *in=fopen(fn,"rb");
+	FILE * in=fopen(fn,"rb");
+
 	while (1)
 	{
 		unsigned char l,s1,s2,s3,s4;
@@ -142,7 +144,7 @@ void extract(char *fn)
 
 		char fn[256],buf[4096];
 		fread(fn, 1,l,in);
-		FILE *out=fopen(fn,"wb");
+		FILE * out=fopen(fn,"wb");
 		if (!out)
 		{
 			for (int i=0; i<l; i++)
@@ -183,9 +185,10 @@ void extract(char *fn)
 	}
 }
 
-void mk_options_struct::get(int argc, char **argv)
+void mk_options_struct::get(int argc, char * * argv)
 {
 	int i;
+
 	quiet=1;
 
 	for (i=1; i<argc; i++)
@@ -334,10 +337,10 @@ void mk_options_struct::get(int argc, char **argv)
 enum {
 	BUF_SIZE=1024*1000
 };
-char *buf=0;
+char * buf=0;
 int boff=0;
 
-char *buf_alloc(char *p, int len)
+char *buf_alloc(char * p, int len)
 {
 	if (!buf || boff+len>BUF_SIZE)
 	{
@@ -351,12 +354,12 @@ char *buf_alloc(char *p, int len)
 }
 
 
-char *get_abs_path(char *filename, int force=0);
+char *get_abs_path(char * filename, int force=0);
 
 
-void add_to_backup(char *fname)
+void add_to_backup(char * fname)
 {
-	char *full_name=get_abs_path(fname,1); // force a full name
+	char * full_name=get_abs_path(fname,1); // force a full name
 
 	if (files_to_backup.find(full_name)==-1)
 	{
@@ -368,18 +371,20 @@ void add_to_backup(char *fname)
 void pcwd()
 {
 	char buf[100];
+
 	getcwd(buf, 100);
 	printf("cwd = %s\n",buf);
 }
 
 char start_path[256];
 
-void set_abs_path(char *filename)
+void set_abs_path(char * filename)
 {
 	char tmp[MAX_LEN];
+
 	strcpy(tmp, filename);
 
-	char *last_slash=0, *p=tmp, *q;
+	char * last_slash=0, * p=tmp, * q;
 	for (; *p; p++)
 	{
 		if (*p=='/' || *p=='\\')
@@ -402,7 +407,7 @@ void set_abs_path(char *filename)
 
 }
 
-char *get_abs_path(char *filename, int force)
+char *get_abs_path(char * filename, int force)
 {
 	if (mk_options.no_tmp && !force)
 	{
@@ -413,7 +418,7 @@ char *get_abs_path(char *filename, int force)
 
 		char tmp[MAX_LEN];
 		strcpy(tmp, abs_path);
-		char *s, *d;
+		char * s, * d;
 
 		if ((filename[0]=='/' || filename[0]=='\\') || (filename[1]==':'))
 		{
@@ -486,7 +491,7 @@ enum {
 };
 
 
-void show_command(char *cmd, int force=0)
+void show_command(char * cmd, int force=0)
 {
 	if (current_build_type==BUILD_DEBUG ||
 		current_build_type==BUILD_OPT ||
@@ -503,7 +508,7 @@ void show_command(char *cmd, int force=0)
 			{
 				if ((*cmd=='/' || *cmd=='\\') || (cmd[0]=='_' && cmd[1]=='_'))
 				{
-					char *start=cmd, *c, *d;
+					char * start=cmd, * c, * d;
 					for (c=cmd; *c && *c!=' '; c++)
 					{
 						if (*c=='/' || *c=='\\')
@@ -534,9 +539,9 @@ void show_command(char *cmd, int force=0)
 	}
 }
 
-char *make_out_name(char *filename, int ext_type=-1, int use_full_path=1, char *outdir=0)
+char *make_out_name(char * filename, int ext_type=-1, int use_full_path=1, char * outdir=0)
 {
-	char tmp[MAX_LEN], *s, *d;
+	char tmp[MAX_LEN], * s, * d;
 
 	if (ext_type==-1)
 	{
@@ -570,7 +575,7 @@ char *make_out_name(char *filename, int ext_type=-1, int use_full_path=1, char *
 	if (mk_options.no_tmp)
 	{
 		d=tmp;
-		char *start=filename;
+		char * start=filename;
 		for (s=filename; *s && *s!='.'; s++)
 		{
 			;
@@ -602,7 +607,7 @@ char *make_out_name(char *filename, int ext_type=-1, int use_full_path=1, char *
 			}
 			else
 			{
-				char *t=getenv("I4_TMP");
+				char * t=getenv("I4_TMP");
 				if (t)
 				{
 					sprintf(tmp,"%s%c", t, mk_options.slash_char);
@@ -626,7 +631,7 @@ char *make_out_name(char *filename, int ext_type=-1, int use_full_path=1, char *
 
 		if (!use_full_path)
 		{
-			char *start=filename;
+			char * start=filename;
 			for (s=filename; *s; s++)
 			{
 				if (*s=='\\' || *s=='/' || *s==':')
@@ -746,11 +751,11 @@ char *make_out_name(char *filename, int ext_type=-1, int use_full_path=1, char *
 	}
 
 
-	char *ret=buf_alloc(tmp, strlen(tmp)+1);
+	char * ret=buf_alloc(tmp, strlen(tmp)+1);
 
 	if (current_build_type==BUILD_CLEAN)
 	{
-		char *full_name=get_abs_path(ret,1); // force a full name
+		char * full_name=get_abs_path(ret,1); // force a full name
 		if (files_to_clean.find(full_name)==-1)
 		{
 			files_to_clean.add(full_name);
@@ -762,9 +767,10 @@ char *make_out_name(char *filename, int ext_type=-1, int use_full_path=1, char *
 
 
 
-unsigned long check_sum32(void *buf, int buf_len)
+unsigned long check_sum32(void * buf, int buf_len)
 {
 	unsigned char c1=0,c2=0,c3=0,c4=0;
+
 	while (buf_len)
 	{
 		c1+=*((unsigned char *)buf);
@@ -806,7 +812,7 @@ public:
 i4_array_tree<mk_file_mod_node, 5000> mod_tree;
 
 
-void set_mod_time(char *filename, int time_to_set)
+void set_mod_time(char * filename, int time_to_set)
 {
 	mk_file_mod_node n(check_sum32(filename,strlen(filename)));
 	int i=mod_tree.find(n);
@@ -821,7 +827,7 @@ void set_mod_time(char *filename, int time_to_set)
 
 }
 
-int get_mod_time(char *filename, int force_stat=0)
+int get_mod_time(char * filename, int force_stat=0)
 {
 	mk_file_mod_node n(check_sum32(filename,strlen(filename)));
 	int i=mod_tree.find(n);
@@ -873,9 +879,10 @@ enum {
 	NO_MORE_TARGETS
 };
 
-void clean_file(char *outname)
+void clean_file(char * outname)
 {
 	char cmd[200];
+
 	if (outname[strlen(outname)-1]!='*')
 	{
 #ifdef _WINDOWS
@@ -891,12 +898,13 @@ void clean_file(char *outname)
 	}
 }
 
-int build_file(char *filename,
+int build_file(char * filename,
 			   mk_target_struct &target,
 			   mk_target_struct &top_target)
 
 {
-	char *p=filename, *last_dot=0, cmd[MAX_LEN], inc[MAX_LEN], def[MAX_LEN];
+	char * p=filename, * last_dot=0, cmd[MAX_LEN], inc[MAX_LEN], def[MAX_LEN];
+
 	inc[0]=0;
 	def[0]=0;
 	int i;
@@ -913,9 +921,9 @@ int build_file(char *filename,
 	{
 		if (strcmp(last_dot,".cc")==0)
 		{
-			char *source_name=get_abs_path(filename);
+			char * source_name=get_abs_path(filename);
 
-			char *outname=make_out_name(source_name,EXT_O);
+			char * outname=make_out_name(source_name,EXT_O);
 			if (failed_targets.find(outname)!=-1)
 			{
 				return BUILD_ERROR;
@@ -926,7 +934,7 @@ int build_file(char *filename,
 				case BUILD_BACKUP:
 					{
 						add_to_backup(source_name);
-						list *dep=get_deps(source_name, &target.inc);
+						list * dep=get_deps(source_name, &target.inc);
 						if (dep)
 						{
 							for (i=0; i<dep->size(); i++)
@@ -945,7 +953,7 @@ int build_file(char *filename,
 					int m1=get_mod_time(outname);
 					if (m1)
 					{
-						list *dep=get_deps(source_name, &target.inc);
+						list * dep=get_deps(source_name, &target.inc);
 						if (mk_options.show_includes && dep)
 						{
 							printf( "%s\n",filename);
@@ -995,7 +1003,7 @@ int build_file(char *filename,
 								sprintf(def+strlen(def), "-D%s ", mk_global_defines[i]);
 							}
 
-							char *sym_string;
+							char * sym_string;
 							sym_string = const_cast<char *>(mk_options.no_syms ? "" : "-g ");
 
 							sprintf(cmd, "g++ %s%s%s%s-c %s -o %s",
@@ -1022,7 +1030,7 @@ int build_file(char *filename,
 								sprintf(def+strlen(def), "/D%s ",mk_global_defines[i]);
 							}
 
-							char *dll_def=0;
+							char * dll_def=0;
 							//dll_def=const_cast<char *>((strcmp(target.target_type,const_cast<char *>("dll"))==0 ||
 							//               strcmp(target.target_type,const_cast<char
 							//	     *>("plugin"))==0) ? "/DBUILDING_DLL " : "");
@@ -1087,9 +1095,9 @@ int build_file(char *filename,
 		else if (strcmp(last_dot,".rc")==0)
 		{
 			add_to_backup(filename);
-			char *source_name=get_abs_path(filename);
+			char * source_name=get_abs_path(filename);
 
-			char *outname=make_out_name(source_name,EXT_RC_RES);
+			char * outname=make_out_name(source_name,EXT_RC_RES);
 			if (failed_targets.find(outname)!=-1)
 			{
 				return BUILD_ERROR;
@@ -1167,8 +1175,8 @@ int build_lib(int object_files_have_changed,
 
 
 
-	char *lname=make_out_name(get_abs_path(target.target),
-							  dll ? EXT_DLL : EXT_LIB, 1, target.outdir);
+	char * lname=make_out_name(get_abs_path(target.target),
+							   dll ? EXT_DLL : EXT_LIB, 1, target.outdir);
 
 	if (failed_targets.find(lname)!=-1)
 	{
@@ -1196,7 +1204,7 @@ int build_lib(int object_files_have_changed,
 
 	if (mk_options.os==OS_LINUX)
 	{
-		char *sym_string = const_cast<char *>(mk_options.no_syms ? "" : "-g ");
+		char * sym_string = const_cast<char *>(mk_options.no_syms ? "" : "-g ");
 		char shared_string[100];
 
 		if (mk_options.unix_libs_are_shared)
@@ -1220,10 +1228,10 @@ int build_lib(int object_files_have_changed,
 			sprintf(tmp, "ar rucs %s ", lname);
 		}
 
-		char *d=tmp+strlen(tmp);
+		char * d=tmp+strlen(tmp);
 		for (i=0; i<target.src.size(); i++)
 		{
-			char *oname=make_out_name(get_abs_path(target.src[i]));
+			char * oname=make_out_name(get_abs_path(target.src[i]));
 			sprintf(d, "%s ", oname);
 			if (!object_files_have_changed && get_mod_time(oname)>ltime)
 			{
@@ -1253,12 +1261,12 @@ int build_lib(int object_files_have_changed,
 			sprintf(tmp, "lib /nologo /OUT:%s @%s%s", lname, link_file,
 					mk_options.quiet ? "> c:\\tmp\\null" : "");
 		}
-		FILE *fp=fopen(link_file, "wb");
+		FILE * fp=fopen(link_file, "wb");
 
 
 		for (i=0; i<target.src.size(); i++)
 		{
-			char *oname=make_out_name(get_abs_path(target.src[i]));
+			char * oname=make_out_name(get_abs_path(target.src[i]));
 			fprintf(fp, "%s\n", oname);
 
 			if (!object_files_have_changed && get_mod_time(oname)>ltime)
@@ -1277,7 +1285,7 @@ int build_lib(int object_files_have_changed,
 		{
 			for (i=0; i<target.libs.size(); i++)
 			{
-				char *oname=target.libs[i];
+				char * oname=target.libs[i];
 				fprintf(fp, "%s\n", oname);
 
 
@@ -1351,17 +1359,18 @@ int build_exe(int deps_have_changed, mk_target_struct &target)
 	char tmp[50000];
 	int i;
 
-	char *ename=make_out_name(get_abs_path(target.target), EXT_EXE, 0, target.outdir);
+	char * ename=make_out_name(get_abs_path(target.target), EXT_EXE, 0, target.outdir);
 	int etime=get_mod_time(ename);
+
 	if (!etime)
 	{
 		deps_have_changed=1;
 	}
 
-	FILE *fp;
+	FILE * fp;
 	if (mk_options.os==OS_LINUX)
 	{
-		char *sym_str=const_cast<char *>(mk_options.no_syms ? "" : "-g ");
+		char * sym_str=const_cast<char *>(mk_options.no_syms ? "" : "-g ");
 
 
 		sprintf(tmp, "g++ -rdynamic %s%s-o %s ",
@@ -1387,11 +1396,11 @@ int build_exe(int deps_have_changed, mk_target_struct &target)
 	}
 
 
-	char *d=tmp+strlen(tmp);
+	char * d=tmp+strlen(tmp);
 
 	for (i=0; i<target.src.size(); i++)
 	{
-		char *oname=make_out_name(get_abs_path(target.src[i]));
+		char * oname=make_out_name(get_abs_path(target.src[i]));
 		if (!deps_have_changed && get_mod_time(oname)>etime)
 		{
 			if (mk_options.show_deps)
@@ -1500,7 +1509,7 @@ int build_target(mk_target_struct &target,
 		{
 			for (i=0; i<target.src.size(); i++)
 			{
-				char *fname=get_abs_path(target.src[i]);
+				char * fname=get_abs_path(target.src[i]);
 				if (top_target.src.find(fname)==-1)
 				{
 					top_target.src.add(fname);
@@ -1545,7 +1554,7 @@ int build_target(mk_target_struct &target,
 			{
 				for (i=0; i<target.src.size(); i++)
 				{
-					char *fname=get_abs_path(target.src[i]);
+					char * fname=get_abs_path(target.src[i]);
 					if (top_target.libs.find(fname)==-1)
 					{
 						top_target.libs.add(fname);
@@ -1558,6 +1567,7 @@ int build_target(mk_target_struct &target,
 				{
 					case BUILD_ERROR:
 						return BUILD_ERROR;
+
 						break;
 					case CHANGED:
 						change=1;
@@ -1572,6 +1582,7 @@ int build_target(mk_target_struct &target,
 			{
 				case BUILD_ERROR:
 					return BUILD_ERROR;
+
 					break;
 				case CHANGED:
 					change=1;
@@ -1586,6 +1597,7 @@ int build_target(mk_target_struct &target,
 			{
 				case BUILD_ERROR:
 					return BUILD_ERROR;
+
 					break;
 				case CHANGED:
 					change=1;
@@ -1599,6 +1611,7 @@ int build_target(mk_target_struct &target,
 			{
 				case BUILD_ERROR:
 					return BUILD_ERROR;
+
 					break;
 				case CHANGED:
 					change=1;
@@ -1630,6 +1643,7 @@ char skip_white(char *&p)
 		{
 			while (*p && *p!='\n')
 				p++;
+
 
 		}
 		else if (*p==' ' || *p=='\r' || *p=='\t' || *p==28)
@@ -1674,7 +1688,7 @@ char *get_token(char *&p)
 		else if (p[0]=='"')
 		{
 			int len=0;
-			char *c=tmp;
+			char * c=tmp;
 			p++;
 
 			while (*p && *p!='"')
@@ -1692,7 +1706,7 @@ char *get_token(char *&p)
 		else if (token_char(*p))
 		{
 			int len=0;
-			char *c=tmp;
+			char * c=tmp;
 
 			while (*p && token_char(*p))
 			{
@@ -1719,6 +1733,7 @@ char *get_token(char *&p)
 void next_line(char *&p)
 {
 	int l=line_on;
+
 	while (l==line_on)
 	{
 		skip_white(p);
@@ -1730,10 +1745,10 @@ void next_line(char *&p)
 }
 
 
-int build_ram_file(char *name, char *out_name, mk_target_struct &top_target)
+int build_ram_file(char * name, char * out_name, mk_target_struct &top_target)
 {
-	char *data_name=get_abs_path(name);
-	char *cc_name=make_out_name(data_name, EXT_RAM_FILE, 1);
+	char * data_name=get_abs_path(name);
+	char * cc_name=make_out_name(data_name, EXT_RAM_FILE, 1);
 
 	if (top_target.src.find(cc_name)==-1)
 	{
@@ -1745,7 +1760,7 @@ int build_ram_file(char *name, char *out_name, mk_target_struct &top_target)
 	{
 		show_command(form("Generating ram file .cc %s", cc_name));
 
-		FILE *fp=fopen(data_name, "rb");
+		FILE * fp=fopen(data_name, "rb");
 		if (!fp)
 		{
 			printf( "%s : Unable to open file to genertate ram file\n", data_name);
@@ -1756,7 +1771,7 @@ int build_ram_file(char *name, char *out_name, mk_target_struct &top_target)
 		int fsize=ftell(fp);
 		fseek(fp, 0, SEEK_SET);
 
-		unsigned char *buf=(unsigned char *)malloc(fsize);
+		unsigned char * buf=(unsigned char *)malloc(fsize);
 		fread(buf, fsize, 1, fp);
 
 		fclose(fp);
@@ -1796,11 +1811,12 @@ int build_ram_file(char *name, char *out_name, mk_target_struct &top_target)
 	}
 }
 
-char *load_file(char *fn, int set_current_file)
+char *load_file(char * fn, int set_current_file)
 {
-	char *abs_filename=get_abs_path(fn);
+	char * abs_filename=get_abs_path(fn);
 
-	FILE *fp=fopen(abs_filename, "rb");
+	FILE * fp=fopen(abs_filename, "rb");
+
 	if (!fp)
 	{
 		return 0;
@@ -1810,7 +1826,7 @@ char *load_file(char *fn, int set_current_file)
 	int fsize=ftell(fp);
 	fseek(fp, 0, SEEK_SET);
 
-	char *buf=(char *)malloc(fsize+1);
+	char * buf=(char *)malloc(fsize+1);
 	fread(buf, fsize, 1, fp);
 	buf[fsize]=0;
 
@@ -1829,12 +1845,13 @@ char *load_file(char *fn, int set_current_file)
 int get_target(mk_target_struct &target,
 			   mk_target_struct &top_target,
 			   char *&p,
-			   char *target_name_to_match=0)
+			   char * target_name_to_match=0)
 {
 	int ret=ALREADY_UP_TO_DATE;
+
 	while (1)
 	{
-		char *left_brace=get_token(p);
+		char * left_brace=get_token(p);
 		if (left_brace)
 		{
 			if (strcmp(left_brace, "["))
@@ -1868,7 +1885,7 @@ int get_target(mk_target_struct &target,
 				skip_white(p);
 				while (*p && *p!='[')
 				{
-					char *t=get_token(p);
+					char * t=get_token(p);
 
 					if (strcmp(t, "win32")==0)
 					{
@@ -1936,17 +1953,18 @@ int get_target(mk_target_struct &target,
 					}
 					else if (strcmp(t, "target_dir")==0)
 					{
-						char *dir=get_token(p);
+						char * dir=get_token(p);
 						MKDIR(dir);
 						target.outdir=form("%s/",dir);
 					}
 					else if (strcmp(t, "add_to_plugin")==0)
 					{
-						char *fn=get_token(p);
+						char * fn=get_token(p);
 
-						char *file=get_abs_path(fn);
-						char *d=file+strlen(file);
+						char * file=get_abs_path(fn);
+						char * d=file+strlen(file);
 						while (d>file && *d!='.') d--;
+
 
 
 						if (strcmp(top_target.target_type,"plugin")==0)
@@ -1978,11 +1996,12 @@ int get_target(mk_target_struct &target,
 					}
 					else if (strcmp(t, "add_to_executable")==0)
 					{
-						char *fn=get_token(p);
+						char * fn=get_token(p);
 
-						char *file=get_abs_path(fn);
-						char *d=file+strlen(file);
+						char * file=get_abs_path(fn);
+						char * d=file+strlen(file);
 						while (d>file && *d!='.') d--;
+
 
 
 						if (strcmp(top_target.target_type,"executable")==0 ||
@@ -2015,12 +2034,12 @@ int get_target(mk_target_struct &target,
 					}
 					else if (strcmp(t,"backup")==0)
 					{
-						char *fname=get_token(p);
+						char * fname=get_token(p);
 						add_to_backup(fname);
 					}
 					else if (strcmp(t,"add_include_directory")==0)
 					{
-						char *i=get_abs_path(get_token(p), 1);
+						char * i=get_abs_path(get_token(p), 1);
 
 						if (target.inc.find(i)==-1)
 						{
@@ -2036,7 +2055,7 @@ int get_target(mk_target_struct &target,
 					}
 					else if (strcmp(t,"add_define")==0)
 					{
-						char *i=get_token(p);
+						char * i=get_token(p);
 
 						if (target.defines.find(i)==-1)
 						{
@@ -2047,7 +2066,7 @@ int get_target(mk_target_struct &target,
 					}
 					else if (strcmp(t,"add_global_define")==0)
 					{
-						char *i=get_token(p);
+						char * i=get_token(p);
 
 						if (mk_global_defines.find(i)==-1)
 						{
@@ -2058,7 +2077,7 @@ int get_target(mk_target_struct &target,
 					}
 					else if (strcmp(t, "ram_file")==0)
 					{
-						char *in_name=get_token(p);
+						char * in_name=get_token(p);
 						int l=line_on;
 						skip_white(p);
 
@@ -2088,7 +2107,7 @@ int get_target(mk_target_struct &target,
 					{
 
 						t=get_token(p);
-						char *use_file=0;
+						char * use_file=0;
 
 
 						if (strcmp(t,"file")==0)
@@ -2108,11 +2127,11 @@ int get_target(mk_target_struct &target,
 
 						mk_target_struct tar;
 						int cur_line=line_on; // save current line & file info
-						char *cur_file=file_on;
-						char *cur_contents=file_contents;
+						char * cur_file=file_on;
+						char * cur_contents=file_contents;
 
 						char old_abs[MAX_LEN];
-						char *f;
+						char * f;
 						if (use_file)
 						{
 							f=load_file(use_file, 1);
@@ -2179,16 +2198,16 @@ void backup()
 {
 	if (files_to_backup.size())
 	{
-		FILE *out=fopen("backup.i4", "wb");
+		FILE * out=fopen("backup.i4", "wb");
 		if (out)
 		{
 			int t_files=0;
 			for (int i=0; i<files_to_backup.size(); i++)
 			{
-				FILE *in=fopen(files_to_backup[i], "rb");
+				FILE * in=fopen(files_to_backup[i], "rb");
 				if (in)
 				{
-					char *fn=files_to_backup[i];
+					char * fn=files_to_backup[i];
 					if (fn[1]==':')
 					{
 						fn+=2;
@@ -2220,7 +2239,8 @@ void backup()
 					{
 						rsize=fread(buf, 1, 4096, in);
 						fwrite(buf, rsize, 1, out);
-					} while (rsize);
+					}
+					while (rsize);
 					t_files++;
 					fclose(in);
 
@@ -2241,7 +2261,7 @@ void backup()
 	}
 }
 
-int i4_make_main(int argc, char **argv)
+int i4_make_main(int argc, char * * argv)
 {
 	setbuf(stdout, 0);
 
@@ -2266,7 +2286,7 @@ int i4_make_main(int argc, char **argv)
 
 	mk_options.get(argc, argv);
 
-	char *file_start=load_file(mk_options.project_file, 1), *b;
+	char * file_start=load_file(mk_options.project_file, 1), * b;
 	if (!file_start)
 	{
 		mk_error("Project file not found : '%s'", mk_options.project_file);
@@ -2347,7 +2367,7 @@ int i4_make_main(int argc, char **argv)
 }
 
 
-int main(int argc, char **argv)
+int main(int argc, char * * argv)
 {
 	return i4_make_main(argc, argv);
 }

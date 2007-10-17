@@ -46,7 +46,7 @@ protected:
 	sw32 y();
 
 	i4_bool mouse_down_flag;
-	g1_controller_edit_class *c;
+	g1_controller_edit_class * c;
 	i4_bool active();
 
 public:
@@ -69,8 +69,8 @@ public:
 	virtual void mouse_move(sw32 mx, sw32 my);
 	virtual void mouse_down();
 	virtual void mouse_up();
-	virtual void do_command(i4_do_command_event_class *cmd);
-	virtual void end_command(i4_end_command_event_class *cmd);
+	virtual void do_command(i4_do_command_event_class * cmd);
+	virtual void end_command(i4_end_command_event_class * cmd);
 
 	virtual i4_bool select_object(sw32 mx, sw32 my,
 								  i4_float &ox, i4_float &oy, i4_float &oz,
@@ -103,7 +103,7 @@ public:
 
 	virtual void post_draw(i4_draw_context_class &context);
 
-	virtual void key_press(i4_key_press_event_class *kev)
+	virtual void key_press(i4_key_press_event_class * kev)
 	{
 		;
 	}
@@ -127,9 +127,9 @@ public:
 	virtual void update_cursor();
 	virtual void uninit();
 
-	g1_mode_handler(g1_controller_edit_class *c);
+	g1_mode_handler(g1_controller_edit_class * c);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"mode handler");
 	}
@@ -143,8 +143,8 @@ protected:
 public:
 	w32 minor_mode;
 
-	static g1_mode_creator *first;
-	g1_mode_creator *next;
+	static g1_mode_creator * first;
+	g1_mode_creator * next;
 
 	i4_graphical_style_class *get_style();
 
@@ -161,13 +161,13 @@ public:
 	}
 
 	// these buttons will be placed on the right of the major mode buttons
-	virtual void create_buttons(i4_parent_window_class *container) = 0;
+	virtual void create_buttons(i4_parent_window_class * container) = 0;
 
 	// the name is used to find the major button, & major mode button help
-	void name(char *buffer)=0;
+	void name(char * buffer)=0;
 
 	// creates on of the above which handles mouse & keys for this mode
-	virtual g1_mode_handler *create_mode_handler(g1_controller_edit_class *c) = 0;
+	virtual g1_mode_handler *create_mode_handler(g1_controller_edit_class * c) = 0;
 
 	// will be called when the editor cleans up, should free all memory associated with mode
 	virtual void cleanup()

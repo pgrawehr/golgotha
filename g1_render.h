@@ -91,15 +91,15 @@ class i4_draw_context_class;
 class i4_font_class;
 class g1_vert_class;
 
-typedef g1_quad_class *(*g1_tint_modify_function_type)(g1_quad_class *in, g1_player_type player);
-typedef void (*g1_get_ambient_function_type)(i4_transform_class *object_to_world,
+typedef g1_quad_class * (*g1_tint_modify_function_type)(g1_quad_class * in, g1_player_type player);
+typedef void (*g1_get_ambient_function_type)(i4_transform_class * object_to_world,
 											 i4_float &ar, i4_float &ag, i4_float &ab);
 
 // this is the default function for handling tinted polygons
-g1_quad_class *g1_tint_modify_function(g1_quad_class *in, g1_player_type player);
+g1_quad_class *g1_tint_modify_function(g1_quad_class * in, g1_player_type player);
 
 // default method for getting ambient lighting, reads from the map
-void g1_get_ambient_function(i4_transform_class *object_to_world,
+void g1_get_ambient_function(i4_transform_class * object_to_world,
 							 i4_float &ar, i4_float &ag, i4_float &ab);
 
 enum {
@@ -115,8 +115,8 @@ class g1_render_class :
 	public i4_init_class
 {
 public:
-	g1_selectable_list *current_selectable_list;
-	g1_selectable_list *last_selectable_list;
+	g1_selectable_list * current_selectable_list;
+	g1_selectable_list * last_selectable_list;
 
 	enum {
 		WIREFRAME, TEXTURED, SOLID
@@ -131,14 +131,14 @@ public:
 	static i4_float scale_x, scale_y, ooscale_x, ooscale_y,
 					center_x, center_y;
 
-	static r1_render_api_class *r_api;
+	static r1_render_api_class * r_api;
 
 	// this number will be >0 && <=1, it use to interpolate object position on fast frame
 	// rates i.e. draw_x = (lx-x)*frame_ration + lx
 	float frame_ratio;
 
 
-	i4_font_class *rendered_font;
+	i4_font_class * rendered_font;
 
 	g1_tint_modify_function_type tint_modify;
 	g1_get_ambient_function_type get_ambient;
@@ -151,17 +151,17 @@ public:
 		render_damage_level = level;
 	}
 
-	void render_object(g1_quad_object_class *obj,
-					   i4_transform_class *object_to_view,
-					   i4_transform_class *object_to_world = 0,
+	void render_object(g1_quad_object_class * obj,
+					   i4_transform_class * object_to_view,
+					   i4_transform_class * object_to_world = 0,
 					   i4_float texture_scale = 1.0,
 					   int player_num = -1,                        // -1 is no player
 					   sw32 current_frame = 0,
-					   g1_screen_box *outline = 0,
+					   g1_screen_box * outline = 0,
 					   w32 option_flags = 0);
 
-	void render_object_polys(g1_quad_object_class *obj,
-							 i4_transform_class *object_to_view,
+	void render_object_polys(g1_quad_object_class * obj,
+							 i4_transform_class * object_to_view,
 							 sw32 current_frame = 0);
 
 
@@ -181,16 +181,16 @@ public:
 						const i4_3d_point_class &v2,
 						i4_color color1,
 						i4_color color2,
-						i4_transform_class *t,
+						i4_transform_class * t,
 						i4_bool draw_in_front_of_everything=i4_F);
 
 	void render_3d_point(const i4_3d_point_class &v,
 						 i4_color color,
-						 i4_transform_class *t);
+						 i4_transform_class * t);
 
 	void render_2d_point(int px, int py, i4_color color);
 
-	void draw_outline(g1_screen_box *outline, g1_object_class *for_who);
+	void draw_outline(g1_screen_box * outline, g1_object_class * for_who);
 
 	void post_draw_quads();
 
@@ -215,8 +215,8 @@ public:
 		add_post_draw_vert(a);
 	}
 
-	void add_translucent_trail(i4_transform_class *t,
-							   i4_3d_point_class *spots, int t_spots,
+	void add_translucent_trail(i4_transform_class * t,
+							   i4_3d_point_class * spots, int t_spots,
 							   float start_width, float end_width,
 							   float start_alpha, float end_alpha,
 							   w32 sc, w32 ec);
@@ -235,14 +235,14 @@ public:
 
 
 	// this routine transform all 4 verts (in place) and clip the resulting quad and render it
-	void clip_render_quad(g1_quad_class *q, r1_vert *verts,
-						  i4_transform_class *t,
+	void clip_render_quad(g1_quad_class * q, r1_vert * verts,
+						  i4_transform_class * t,
 						  int current_frame);
 
 	void install_font();
 	void uninstall_font();
 
-	r1_vert *t_vertices;
+	r1_vert * t_vertices;
 	int max_t_vertices;
 
 	g1_quadlist quad_object_list;
@@ -265,27 +265,27 @@ public:
 		quad_object_list.uninit();
 	}
 
-	i4_bool project_point(const i4_3d_point_class &p, r1_vert &v, i4_transform_class *transform);
+	i4_bool project_point(const i4_3d_point_class &p, r1_vert &v, i4_transform_class * transform);
 
 	i4_bool point_in_frustrum(const i4_3d_point_class &p,
-							  i4_transform_class *transform);
-	w8 point_classify(const i4_3d_point_class &p, i4_transform_class *transform);
+							  i4_transform_class * transform);
+	w8 point_classify(const i4_3d_point_class &p, i4_transform_class * transform);
 	i4_bool sphere_in_frustrum(const i4_3d_point_class center, i4_float size,
-							   i4_transform_class *transform);
+							   i4_transform_class * transform);
 
 	i4_bool cube_in_frustrum(const i4_3d_point_class center, i4_float xsize,
 							 i4_float ysize, i4_float zsize,
-							 i4_transform_class *transform);
+							 i4_transform_class * transform);
 
 	void cube_in_frustrum(const i4_3d_point_class center, i4_float xsize,
-						  i4_float ysize, i4_float zsize, i4_transform_class *transform,
+						  i4_float ysize, i4_float zsize, i4_transform_class * transform,
 						  w8 &ANDCODE, w8 &ORCODE);
 
 	i4_bool g1_render_class::prepare_octree_rendering(i4_array<g1_quad_class *> &qif,
-													  g1_quad_object_class *obj,
-													  g1_vert_class *src_vert,
-													  i4_transform_class *tf,
-													  i4_transform_class *object_to_world,
+													  g1_quad_object_class * obj,
+													  g1_vert_class * src_vert,
+													  i4_transform_class * tf,
+													  i4_transform_class * object_to_world,
 													  w8 &ANDCODE,
 													  w8 &ORCODE);
 
@@ -300,7 +300,7 @@ public:
 	//	  r1_vert* v, g1_quad_class *quad, i4_transform_class *transform);
 };
 
-void g1_setup_tri_texture_coords(r1_vert *tri1, r1_vert *tri2,
+void g1_setup_tri_texture_coords(r1_vert * tri1, r1_vert * tri2,
 								 int cell_rotation, int cell_is_mirrored);
 
 extern g1_render_class g1_render;

@@ -65,8 +65,8 @@ public:
 	{
 		defaults();
 	}
-	void load(g1_loader_class *fp);
-	void save(g1_saver_class *fp);
+	void load(g1_loader_class * fp);
+	void save(g1_saver_class * fp);
 
 };
 
@@ -87,9 +87,9 @@ extern int stereoport; //The default port address for lpt1
 
 class g1_view_state_class
 {
-	friend li_object *g1_set_camera_params(li_object *o, li_environment *env);
-	friend li_object *g1_edit_camera_params(li_object *o, li_environment *env);
-	friend li_object *g1_toggle_glasses(li_object *o, li_environment *env);
+	friend li_object *g1_set_camera_params(li_object * o, li_environment * env);
+	friend li_object *g1_edit_camera_params(li_object * o, li_environment * env);
+	friend li_object *g1_toggle_glasses(li_object * o, li_environment * env);
 public:
 	enum {
 		DATA_VERSION=1
@@ -184,8 +184,8 @@ public:
 	// returns the sqaured distance to the camera
 	float dist_sqrd(const i4_3d_vector &v);
 
-	void load(g1_loader_class *fp);
-	void save(g1_saver_class *fp);
+	void load(g1_loader_class * fp);
+	void save(g1_saver_class * fp);
 
 	g1_view_state_class();
 	g1_camera_info_struct *get_camera();  // calculates current and returns a pointer to it

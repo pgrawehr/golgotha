@@ -88,7 +88,7 @@ public:
 	w16 x1,y1,x2,y2;                              // bounding box for this LOD node
 	i4_float z1,z2;
 	i4_float metric;                              // metric for determining LOD "importance"
-	lod_node *child[2];                           // orthogonal BSP children
+	lod_node * child[2];                           // orthogonal BSP children
 	w8 texture_context;                           // which texture context to use or 0 for 1x1
 
 	w8 flags;
@@ -123,21 +123,21 @@ public:
 	int num_context, last_context;
 
 	// LOD tree
-	lod_node *root;
+	lod_node * root;
 
 	// breadth first ordering of the lod_nodes
 	enum {
 		MAX_QUEUE_LENGTH=(150*100*2)
 	};
-	lod_node *queue[MAX_QUEUE_LENGTH*2];
+	lod_node * queue[MAX_QUEUE_LENGTH*2];
 	int num_queued, front;
 
 	// lod_nodes submitted for drawing
-	lod_node *quad[MAX_QUEUE_LENGTH];
+	lod_node * quad[MAX_QUEUE_LENGTH];
 	int num_quads;
 
 	// current controller
-	g1_object_controller_class *cont;
+	g1_object_controller_class * cont;
 	i4_3d_vector pos;
 
 	g1_lod_context_class() :
@@ -175,7 +175,7 @@ public:
 			y1 = i4_f_to_i(map_texture[i].y1);
 			x2 = x1 + i4_f_to_i(1.0f/map_texture[i].sx + 0.5f);
 			y2 = y1 + i4_f_to_i(1.0f/map_texture[i].sy + 0.5f);
-			i4_image_class *im = render_map_section(x1,y1,x2,y2, 256,256);
+			i4_image_class * im = render_map_section(x1,y1,x2,y2, 256,256);
 			map_texture[i].texture = g1_render.r_api->get_tmanager()->register_image(im);
 			delete im;
 		}
@@ -191,7 +191,7 @@ public:
 			y1 = i4_f_to_i(map_texture[i].y1);
 			x2 = x1 + i4_f_to_i(1.0f/map_texture[i].sx + 0.5f);
 			y2 = y1 + i4_f_to_i(1.0f/map_texture[i].sy + 0.5f);
-			i4_image_class *im = render_map_section(x1,y1,x2,y2, 256,256);
+			i4_image_class * im = render_map_section(x1,y1,x2,y2, 256,256);
 			//map_texture[i].texture = g1_render.r_api->get_tmanager()->register_image(im);
 			g1_render.r_api->get_tmanager()->set_texture_image(map_texture[i].texture,im);
 			delete im;
@@ -203,14 +203,14 @@ public:
 		delete_lod_tree(root);
 	}
 
-	void use_controller(g1_object_controller_class *_cont)
+	void use_controller(g1_object_controller_class * _cont)
 	{
 		cont = _cont;
 	}
 
 	i4_float max_fly_height;
 	i4_bool show_all;
-	int test_clip(lod_node *p)
+	int test_clip(lod_node * p)
 	// test bounding region of lod_node against the view frustrum
 	{
 		//const i4_float MAX_FLY_HEIGHT=3.0;
@@ -227,7 +227,7 @@ public:
 		return clip>=0;
 	}
 
-	void make_lod_node(lod_node **pp, lod_node *parent, int x1, int y1, int x2, int y2, int level=0)
+	void make_lod_node(lod_node * * pp, lod_node * parent, int x1, int y1, int x2, int y2, int level=0)
 	{
 		int dx = x2-x1, dy = y2-y1;
 		int mx = (x1+x2)/2, my = (y1+y2)/2;
@@ -237,7 +237,7 @@ public:
 			return;
 		}
 
-		lod_node *p;
+		lod_node * p;
 		*pp = p = new lod_node(x1,y1,x2,y2);
 
 		// hack to get texture contexts
@@ -317,7 +317,7 @@ public:
 		}
 	}
 
-	void delete_lod_tree(lod_node *p)
+	void delete_lod_tree(lod_node * p)
 	{
 		if (!p)
 		{
@@ -328,7 +328,7 @@ public:
 		delete p;
 	}
 
-	void calculate_lod(lod_node *p)
+	void calculate_lod(lod_node * p)
 	{
 //     cont->view.get_camera_pos(pos);
 		cont->get_pos(pos);
@@ -394,7 +394,7 @@ public:
 				queue[num_queued++] = p->child[1];
 
 				// count & mark t splits
-				lod_node *q = p->child[0];
+				lod_node * q = p->child[0];
 				if (p->flags & lod_node::V_SPLIT)
 				{
 					g1_get_vertex(q->x2,q->y1)->flags ^= g1_map_vertex_class::T_INTERSECTION;
@@ -408,7 +408,7 @@ public:
 			}
 			else
 			{
-				g1_map_vertex_class *v11, *v12, *v21, *v22;
+				g1_map_vertex_class * v11, * v12, * v21, * v22;
 
 				v11 =  g1_get_vertex(x1,y1);
 				v21 =  g1_get_vertex(x2,y1);
@@ -507,7 +507,7 @@ void g1_map_class::init_lod()
 	g1_lod.init_lod();
 }
 
-void g1_map_class::calc_map_lod(g1_object_controller_class *cont)
+void g1_map_class::calc_map_lod(g1_object_controller_class * cont)
 {
 	pf_calc_map_lod.start();
 
@@ -541,7 +541,7 @@ class transform_killer_class :
 static r1_texture_handle last_texture=0;
 static sw32 last_texture_size=0;
 static w32 num_terrain_polys=0;
-static i4_bool g1_draw_tri(r1_vert *points,
+static i4_bool g1_draw_tri(r1_vert * points,
 						   w16 a, w16 b, w16 c,
 						   r1_texture_handle texture, w16 clip=1)
 //{{{
@@ -553,11 +553,11 @@ static i4_bool g1_draw_tri(r1_vert *points,
 	num_terrain_polys++;
 
 	i4_bool ret = i4_F;
-	r1_render_api_class *api = g1_render.r_api;
+	r1_render_api_class * api = g1_render.r_api;
 	i4_float size=0;
 	sw32 num_poly_verts = 3;
-	r1_vert *clipped_poly, *v;
-	w16 *clipped_refs;
+	r1_vert * clipped_poly, * v;
+	w16 * clipped_refs;
 	static w16 clipping_refs[16] = {
 		0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
 	};
@@ -673,9 +673,9 @@ static void gather_objects(int x1, int y1, int x2, int y2)
 {
 	pf_gather_objects.start();
 	int y,x;
-	g1_map_cell_class *map_cell;
-	g1_object_class *obj;
-	g1_object_chain_class *o;
+	g1_map_cell_class * map_cell;
+	g1_object_class * obj;
+	g1_object_chain_class * o;
 	for (y=y1; y<y2; y++)
 	{
 		map_cell=g1_get_cell(x1,y);
@@ -728,12 +728,13 @@ static void gather_objects(int x1, int y1, int x2, int y2)
 
 
 static i4_transform_class comp_t;
-int object_compare(const w32 *a, const w32 *b)
+int object_compare(const w32 * a, const w32 * b)
 {
 	//g1_object_class
 	//  *oa = g1_global_id.get(*((w32*)a)),
 	//  *ob = g1_global_id.get(*((w32*)b));
-	g1_object_class *oa,*ob;
+	g1_object_class * oa,* ob;
+
 	oa=g1_global_id.get(*a);
 	ob=g1_global_id.get(*b);
 
@@ -774,13 +775,13 @@ int object_compare(const w32 *a, const w32 *b)
 	}
 }
 
-void g1_map_class::fast_draw_cells(g1_draw_context_class *context)
+void g1_map_class::fast_draw_cells(g1_draw_context_class * context)
 {
 	pf_map_fast.start();
 	//This code is HIGHLY time critical
 	//avoid unessesary stack operations be pre-declaring all variables
 	//optimize for SPEEEEED.
-	r1_render_api_class *api = g1_render.r_api;
+	r1_render_api_class * api = g1_render.r_api;
 	i4_transform_class t(*context->transform);
 	//we corrently don't need this one.
 	//context->dtransform=new i4_dtransform_class(*context->transform);
@@ -799,11 +800,11 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class *context)
 	}
 
 	int i=0,j,k,l;
-	g1_map_vertex_class *vt[4];
-	g1_map_vertex_class *v=verts;
-	lod_node *p;
+	g1_map_vertex_class * vt[4];
+	g1_map_vertex_class * v=verts;
+	lod_node * p;
 	int x1,y1,x2,y2,clip;
-	g1_map_cell_class *map_cell;
+	g1_map_cell_class * map_cell;
 	const float u_s[4]={
 		0,1,1,0
 	},v_s[4]={
@@ -817,10 +818,10 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class *context)
 	i4_3d_vector mid;
 	r1_vert poly[4];
 	int uv_on,uv_dir;
-	texture_context *tc=0;
+	texture_context * tc=0;
 
-	g1_object_class *o=0;
-	li_class *old_this=li_this;
+	g1_object_class * o=0;
+	li_class * old_this=li_this;
 	comp_t = *context->transform;
 	g1_lod.last_context=0;
 	float scale_x=g1_render.scale_x;
@@ -999,7 +1000,7 @@ void g1_map_class::fast_draw_cells(g1_draw_context_class *context)
 	//this will iterate zero times in the rare cases ALL visible objects
 	//have alpha.
 	//this solution is not entirelly correct if multiple alpha objects overlap
-	g1_object_class *temp;
+	g1_object_class * temp;
 	for (i=0; i<last_non_alpha; i++)
 	{
 		if (g1_objs_in_view_dyn[i]->get_type()->get_flag(g1_object_definition_class::HAS_ALPHA))

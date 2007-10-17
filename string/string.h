@@ -187,7 +187,7 @@ class i4_const_str
 {
 protected:
 	typedef char char_type; ///< The base type of the string elements
-	char_type *ptr; ///< The pointer to the string, 0 if empty.
+	char_type * ptr; ///< The pointer to the string, 0 if empty.
 	w16 len; ///< The length of the string (excluding the terminal 0, if any)
 
 	friend class i4_string_manager_class;
@@ -203,7 +203,7 @@ public:
 	   @param ptr A string value.
 
 	 */
-	i4_const_str(const char *ptr) :
+	i4_const_str(const char * ptr) :
 		ptr(const_cast<char *>(ptr))
 	{
 		if (ptr)
@@ -224,7 +224,7 @@ public:
 	};
 
 	/** A special-purpose constructor, use only if you know what you're doing! */
-	i4_const_str(char *ptr, w16 len) :
+	i4_const_str(char * ptr, w16 len) :
 		ptr(ptr),
 		len(len)
 	{
@@ -249,7 +249,7 @@ public:
 		friend class i4_const_str;
 		friend class i4_str;
 protected:
-		char_type *node; ///< The "node" (character) this iterator points to.
+		char_type * node; ///< The "node" (character) this iterator points to.
 public:
 
 		/** default constructor, don't use directly */
@@ -269,7 +269,7 @@ public:
 		}
 
 		/** Creates an iterator that points to the given location of a string */
-		iterator(char_type *p) :
+		iterator(char_type * p) :
 			node(p)
 		{
 		}
@@ -301,6 +301,7 @@ public:
 		iterator operator++(int)
 		{
 			iterator it=*this;
+
 			node++;
 			return it;
 		}
@@ -312,6 +313,7 @@ public:
 		iterator operator--(int)
 		{
 			iterator it=*this;
+
 			node--;
 			return it;
 		}
@@ -358,7 +360,7 @@ public:
 		i4_str *read_string();
 
 		/** Returns a C-string */
-		w32 read_ascii(char *buffer, w32 buffer_size);  // returns bytes read
+		w32 read_ascii(char * buffer, w32 buffer_size);  // returns bytes read
 
 		/** Attempts to convert the string to a number.
 
@@ -554,7 +556,7 @@ public:
 class i4_str :
 	public i4_const_str
 {
-	friend i4_str *i4_from_ascii(const char *buf);
+	friend i4_str *i4_from_ascii(const char * buf);
 protected:
 	w16 buf_len;
 
@@ -584,7 +586,7 @@ public:
 			i4_const_str::iterator(p,i)
 		{
 		}
-		iterator(char_type *p) :
+		iterator(char_type * p) :
 			i4_const_str::iterator((char_type *)p)
 		{
 		}
@@ -618,7 +620,7 @@ public:
 	{
 		init_from_string(str, _len);
 	}
-	i4_str(const char *s);
+	i4_str(const char * s);
 	i4_str(const char c);
 	// copies from start to end-1 characters (does not include end)
 	i4_str(const i4_const_str::iterator start, const i4_const_str::iterator end, w16 buf_len);
@@ -744,26 +746,26 @@ class i4_string_manager_class :
 	public i4_init_class
 {
 private:
-	i4_grow_heap_class *string_heap;
-	char *alloc_str(char *string);
-	void add_node(char *token, char *string);
-	void add_array_node(char *token, char **array, w32 total);
+	i4_grow_heap_class * string_heap;
+	char *alloc_str(char * string);
+	void add_node(char * token, char * string);
+	void add_array_node(char * token, char * * array, w32 total);
 	friend class i4_string_manager_saver_class;
 	class node
 	{
 public:
 		typedef i4_linear_allocator node_allocator;
-		static node_allocator *nodes;
+		static node_allocator * nodes;
 		static w32 nodes_ref;       // number of string managers using 'nodes'
-		char *str_token;
+		char * str_token;
 		i4_const_str value;
-		node *left,*right;
+		node * left,* right;
 
 //#ifndef i4_NEW_CHECK
-		void *operator new(size_t size);
-		void operator delete(void *ptr);
+		void * operator new(size_t size);
+		void operator delete(void * ptr);
 //#endif
-		node(char *token, const i4_const_str &value) :
+		node(char * token, const i4_const_str &value) :
 			str_token(token),
 			value(value)
 		{
@@ -772,18 +774,19 @@ public:
 		}
 		~node();
 	};
-	node *root;
+	node * root;
 #ifdef __MAC__
-	node *new_node(char *token, const i4_const_str &value)
+	node *new_node(char * token, const i4_const_str &value)
 	{
-		node *p = (node *)node::nodes->alloc();
+		node * p = (node *)node::nodes->alloc();
+
 		p->str_token = token;
 		p->value = value;
 		p->left = 0;
 		p->right = 0;
 		return p;
 	}
-	void delete_node(node *n)
+	void delete_node(node * n)
 	{
 		if (n->left)
 		{
@@ -796,11 +799,11 @@ public:
 		node::nodes->free(n);
 	}
 #else
-	node *new_node(char *token, const i4_const_str &value)
+	node *new_node(char * token, const i4_const_str &value)
 	{
 		return new node(token,value);
 	}
-	void delete_node(node *n)
+	void delete_node(node * n)
 	{
 		delete n;
 	}
@@ -809,16 +812,16 @@ public:
 	{
 public:
 		typedef i4_linear_allocator node_allocator;
-		static node_allocator *nodes;
+		static node_allocator * nodes;
 
-		char *str_token;
-		char **value;
-		array_node *left,*right;
+		char * str_token;
+		char * * value;
+		array_node * left,* right;
 //#ifndef i4_NEW_CHECK
-		void *operator new(size_t size);
-		void operator delete(void *ptr);
+		void * operator new(size_t size);
+		void operator delete(void * ptr);
 //#endif
-		array_node(char *token, char **value) :
+		array_node(char * token, char * * value) :
 			str_token(token),
 			value(value)
 		{
@@ -829,9 +832,10 @@ public:
 	} *array_root;
 
 #ifdef __MAC__
-	array_node *new_array_node(char *token, char **value)
+	array_node *new_array_node(char * token, char * * value)
 	{
-		array_node *p = (array_node *)array_node::nodes->alloc();
+		array_node * p = (array_node *)array_node::nodes->alloc();
+
 		p->str_token = token;
 		p->value = value;
 		p->left = 0;
@@ -839,7 +843,7 @@ public:
 		return p;
 	}
 
-	void delete_array_node(array_node *n)
+	void delete_array_node(array_node * n)
 	{
 		if (n->left)
 		{
@@ -852,27 +856,27 @@ public:
 		array_node::nodes->free(n);
 	}
 #else
-	array_node *new_array_node(char *token, char **value)
+	array_node *new_array_node(char * token, char * * value)
 	{
 		return new array_node(token,value);
 	}
-	void delete_array_node(array_node *n)
+	void delete_array_node(array_node * n)
 	{
 		delete n;
 	}
 #endif
-	void get_token(char *&s, char *&buf, w32 &line_on, char *error_prefix);
-	void expand_macro(char *&s, char *&buf, w32 &line_on, char *error_prefix);
+	void get_token(char *&s, char *&buf, w32 &line_on, char * error_prefix);
+	void expand_macro(char *&s, char *&buf, w32 &line_on, char * error_prefix);
 	void read_array(char *&s,
-					char **array,
+					char * * array,
 					w32 &total,
 					w32 &line_on,
-					char *error_prefix,
-					char *token_buf);
+					char * error_prefix,
+					char * token_buf);
 
-	void get_char(char *&s, char *&buf, w32 &line_on, char *error_prefix);
+	void get_char(char *&s, char *&buf, w32 &line_on, char * error_prefix);
 
-	void show_node(node *who);
+	void show_node(node * who);
 	void show_nodes();
 public:
 	i4_string_manager_class();
@@ -884,14 +888,14 @@ public:
 	void init();
 	void uninit();
 
-	i4_bool       load(char *filename);
+	i4_bool       load(char * filename);
 	i4_bool       load(const i4_const_str &filename);
-	i4_bool       load_buffer(void *internal_buffer, char *error_prefix);
+	i4_bool       load_buffer(void * internal_buffer, char * error_prefix);
 
-	const i4_const_str &get(const char *internal_name);
+	const i4_const_str &get(const char * internal_name);
 	const i4_const_str &get(const i4_const_str &internal_name);
 
-	i4_const_str *get_array(const char *internal_name);
+	i4_const_str *get_array(const char * internal_name);
 	i4_const_str *get_array(const i4_const_str &internal_name);
 };
 
@@ -899,15 +903,15 @@ public:
 // "the" main string manager for a program
 extern i4_string_manager_class i4_string_man;
 
-const i4_const_str &i4gets(char *str, i4_bool barf_on_error=i4_T);
-int i4getn(char *str, i4_bool barf_on_error=i4_T);
+const i4_const_str &i4gets(char * str, i4_bool barf_on_error=i4_T);
+int i4getn(char * str, i4_bool barf_on_error=i4_T);
 
 // converts an i4_const_str to an 8 bit ascii string (where possible)
-extern char *i4_os_string(const i4_const_str &name, char *buffer, int buflen);
+extern char *i4_os_string(const i4_const_str &name, char * buffer, int buflen);
 
 // converts from an ascii string to an i4_str
 
-extern i4_str *i4_from_ascii(const char *buf);
+extern i4_str *i4_from_ascii(const char * buf);
 
 #include "memory/new.h"
 #endif

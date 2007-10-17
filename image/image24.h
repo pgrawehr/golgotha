@@ -21,12 +21,12 @@ public:
 	}
 
 
-	i4_image24(w16 w, w16 h, const i4_pal *pal);
-	i4_image24(w16 w, w16 h, const i4_pal *pal, void *data, int bpl);
+	i4_image24(w16 w, w16 h, const i4_pal * pal);
+	i4_image24(w16 w, w16 h, const i4_pal * pal, void * data, int bpl);
 	i4_color get_pixel(i4_coord x, i4_coord y);
 	void put_pixel(i4_coord x, i4_coord y, w32 color);
 
-	i4_image_class *quantize(const i4_pal *pal,
+	i4_image_class *quantize(const i4_pal * pal,
 							 w32 skip_colors,
 							 i4_coord x1, i4_coord y1,
 							 i4_coord x2, i4_coord y2);

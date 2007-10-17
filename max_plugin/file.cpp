@@ -32,9 +32,9 @@ static i4_profile_class pf_read("File Read");
 static i4_profile_class pf_con_buf("::buffered file");
 
 
-i4_bool i4_file_class::async_write(const void *buffer, w32 size,
+i4_bool i4_file_class::async_write(const void * buffer, w32 size,
 								   async_callback call,
-								   void *context)
+								   void * context)
 {
 	(*call)(write(buffer, size), context);
 
@@ -42,9 +42,9 @@ i4_bool i4_file_class::async_write(const void *buffer, w32 size,
 }
 
 
-i4_bool i4_file_class::async_read(void *buffer, w32 size,
+i4_bool i4_file_class::async_read(void * buffer, w32 size,
 								  async_callback call,
-								  void *context)
+								  void * context)
 {
 	(*call)(read(buffer, size), context);
 	return i4_T;
@@ -71,18 +71,20 @@ public:
 };
 
 
-i4_str *i4_file_class::read_str(w32 len)
+i4_str * i4_file_class::read_str(w32 len)
 {
-	file_string *str = new file_string((w16)len);
+	file_string * str = new file_string((w16)len);
+
 	len = read(str->buffer(),len);
 	str->set_len((w16)len);
 
 	return str;
 }
 
-i4_str *i4_file_class::read_counted_str()
+i4_str * i4_file_class::read_counted_str()
 {
 	w16 len = read_16();
+
 	return read_str(len);
 }
 
@@ -100,7 +102,7 @@ public:
 
 w32 i4_file_class::write_str(const i4_const_str &str)
 {
-	file_write_string *s = (file_write_string *)&str;
+	file_write_string * s = (file_write_string *)&str;
 
 	return write(s->buffer(), s->length());
 }
@@ -132,19 +134,21 @@ static inline int fmt_char(char c)
 }
 
 // same as fprintf, but with the addition %S is a i4_const_str *
-int i4_file_class::printf(char *fmt, ...)
+int i4_file_class::printf(char * fmt, ...)
 {
 	w32 start=tell();
 
 	va_list ap;
+
 	va_start(ap, fmt);
 
 	while (*fmt)
 	{
 		if (*fmt=='%')
 		{
-			char *fmt_end=fmt;
+			char * fmt_end=fmt;
 			while (!fmt_char(*fmt_end) && *fmt_end) fmt_end++;
+
 
 			char f[10], out[500];
 			memcpy(f, fmt, fmt_end-fmt+1);
@@ -155,12 +159,12 @@ int i4_file_class::printf(char *fmt, ...)
 			{
 				case 's':
 					{
-						char *str=va_arg(ap,char *);
+						char * str=va_arg(ap,char *);
 						write(str,strlen(str));
 					} break;
 				case 'S':
 					{
-						i4_const_str *s=va_arg(ap,i4_const_str *);
+						i4_const_str * s=va_arg(ap,i4_const_str *);
 						write_str(*s);
 					} break;
 				case 'd':
@@ -205,10 +209,11 @@ int i4_file_class::printf(char *fmt, ...)
 
 
 
-int i4_file_class::write_format(char *format, ...)
+int i4_file_class::write_format(char * format, ...)
 {
-	char *f=format;
+	char * f=format;
 	va_list ap;
+
 	va_start(ap, format);
 
 	int start=tell();
@@ -241,10 +246,11 @@ int i4_file_class::write_format(char *format, ...)
 
 
 // format is same as write_format, returns number of fields written
-int i4_file_class::read_format(char *format, ...)
+int i4_file_class::read_format(char * format, ...)
 {
-	char *f=format;
+	char * f=format;
 	va_list ap;
+
 	va_start(ap, format);
 
 	int start=tell();
@@ -279,9 +285,9 @@ int i4_file_class::read_format(char *format, ...)
 // returns NULL if unable to open file
 i4_file_class *i4_open(const i4_const_str &name, w32 flags)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
-		i4_file_class *fp=m->open(name,flags);
+		i4_file_class * fp=m->open(name,flags);
 		if (fp)
 		{
 			return fp;
@@ -294,7 +300,7 @@ i4_file_class *i4_open(const i4_const_str &name, w32 flags)
 // return i4_F on failure
 i4_bool i4_unlink(const i4_const_str &name)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
 		if (m->unlink(name))
 		{
@@ -309,7 +315,7 @@ i4_bool i4_unlink(const i4_const_str &name)
 i4_bool i4_get_status(const i4_const_str &filename,
 					  i4_file_status_struct &return_stat)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
 		if (m->get_status(filename, return_stat))
 		{
@@ -323,7 +329,7 @@ i4_bool i4_get_status(const i4_const_str &filename,
 // return i4_F on failure
 i4_bool i4_mkdir(const i4_const_str &name)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
 		if (m->mkdir(name))
 		{
@@ -342,9 +348,9 @@ i4_bool i4_mkdir(const i4_const_str &name)
 i4_bool i4_get_directory(const i4_const_str &path,
 						 i4_directory_struct &dir_struct,
 						 i4_bool get_status,
-						 i4_status_class *status)
+						 i4_status_class * status)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
 		if (m->get_directory(path, dir_struct, get_status, status))
 		{
@@ -358,7 +364,7 @@ i4_bool i4_get_directory(const i4_const_str &path,
 // returns i4_F if path cannot be split
 i4_bool i4_split_path(const i4_const_str &name, i4_filename_struct &fname_struct)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
 		if (m->split_path(name, fname_struct))
 		{
@@ -372,9 +378,9 @@ i4_bool i4_split_path(const i4_const_str &name, i4_filename_struct &fname_struct
 // return 0 if full path cannot be determined
 i4_str *i4_full_path(const i4_const_str &relative_name)
 {
-	for (i4_file_manager_class *m=i4_file_manager_class::first; m; m=m->next)
+	for (i4_file_manager_class * m=i4_file_manager_class::first; m; m=m->next)
 	{
-		i4_str *s=m->full_path(relative_name);
+		i4_str * s=m->full_path(relative_name);
 		if (s)
 		{
 			return s;
@@ -385,9 +391,9 @@ i4_str *i4_full_path(const i4_const_str &relative_name)
 }
 
 
-i4_file_manager_class *i4_file_manager_class::first=0;
+i4_file_manager_class * i4_file_manager_class::first=0;
 
-void i4_add_file_manager(i4_file_manager_class *fman, i4_bool add_front)
+void i4_add_file_manager(i4_file_manager_class * fman, i4_bool add_front)
 {
 	if (add_front)
 	{
@@ -396,7 +402,7 @@ void i4_add_file_manager(i4_file_manager_class *fman, i4_bool add_front)
 	}
 	else
 	{
-		i4_file_manager_class *last=0, *p=i4_file_manager_class::first;
+		i4_file_manager_class * last=0, * p=i4_file_manager_class::first;
 		while (p)
 		{
 			last=p;
@@ -415,9 +421,10 @@ void i4_add_file_manager(i4_file_manager_class *fman, i4_bool add_front)
 	}
 }
 
-void i4_remove_file_manger(i4_file_manager_class *fman)
+void i4_remove_file_manger(i4_file_manager_class * fman)
 {
-	i4_file_manager_class *last=0, *p=i4_file_manager_class::first;
+	i4_file_manager_class * last=0, * p=i4_file_manager_class::first;
+
 	while (p && p!=fman)
 	{
 		last=p;
@@ -444,10 +451,11 @@ void i4_remove_file_manger(i4_file_manager_class *fman)
 i4_bool i4_file_manager_class::split_path(const i4_const_str &name, i4_filename_struct &fn)
 {
 	char buf[512];
+
 	i4_os_string(name, buf, 512);
 
 
-	char *p=buf, *last_slash=0, *last_dot=0, *q;
+	char * p=buf, * last_slash=0, * last_dot=0, * q;
 
 	while (*p)
 	{
@@ -555,8 +563,8 @@ static char convert_slash(char c)
 
 i4_str *i4_relative_path(const i4_const_str &path)
 {
-	i4_str *full_path=i4_full_path(path);
-	i4_str *full_current=i4_full_path(i4_const_str("."));
+	i4_str * full_path=i4_full_path(path);
+	i4_str * full_current=i4_full_path(i4_const_str("."));
 
 	char full[512], current[512], ret[512];
 
@@ -587,7 +595,8 @@ i4_str *i4_relative_path(const i4_const_str &path)
 
 
 
-	char *c=current+start;
+
+	char * c=current+start;
 	if (*c==0)
 	{
 		return new i4_str(full+start+1);

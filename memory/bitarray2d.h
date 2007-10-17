@@ -53,7 +53,7 @@ public:
 
 	const ArrayProxy operator[](unsigned pos) const
 	{
-		return ArrayProxy(const_cast<BitArray2D &>(*this), pos);
+		return ArrayProxy(const_cast<BitArray2D &>(* this), pos);
 	}
 
 	bool operator==(const BitArray2D &that) const
@@ -117,19 +117,19 @@ public:
 	// Set the bit at position pos to true.
 	void SetBit(unsigned pos1, unsigned pos2)
 	{
-		super::SetBit(pos1 *mWidth + pos2);
+		super::SetBit(pos1 * mWidth + pos2);
 	}
 
 	// Set the bit at position pos to false.
 	void ClearBit(unsigned pos1, unsigned pos2)
 	{
-		super::ClearBit(pos1 *mWidth + pos2);
+		super::ClearBit(pos1 * mWidth + pos2);
 	}
 
 	// Toggle the bit at position pos.
 	void FlipBit(unsigned pos1, unsigned pos2)
 	{
-		super::FlipBit(pos1 *mWidth + pos2);
+		super::FlipBit(pos1 * mWidth + pos2);
 	}
 
 	// Set the bit at position pos to the given value.

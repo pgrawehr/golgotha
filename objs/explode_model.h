@@ -78,7 +78,7 @@ struct g1_explode_params
 class g1_explode_model_class :
 	public g1_object_class
 {
-	void grab_model(g1_object_class *o, i4_3d_vector &obj_center);
+	void grab_model(g1_object_class * o, i4_3d_vector &obj_center);
 public:
 	g1_explode_params params;
 
@@ -87,7 +87,7 @@ public:
 	};
 	i4_3d_vector center;
 
-	g1_explode_model_class(g1_object_type id, g1_loader_class *fp);
+	g1_explode_model_class(g1_object_type id, g1_loader_class * fp);
 	~g1_explode_model_class();
 
 	i4_float occupancy_radius() const
@@ -95,18 +95,18 @@ public:
 		return 0.f;
 	}
 
-	g1_explode_vertex_class *vertices;
+	g1_explode_vertex_class * vertices;
 	sw16 num_vertices;
 
-	g1_explode_face_class *faces;
+	g1_explode_face_class * faces;
 	sw16 num_faces;
 
-	virtual void setup(g1_object_class *source_obj,
+	virtual void setup(g1_object_class * source_obj,
 					   const i4_3d_vector &center,
 					   g1_explode_params &params);
 
-	virtual void save(g1_saver_class *fp);
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void save(g1_saver_class * fp);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 	virtual void think();
 };
 

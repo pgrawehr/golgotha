@@ -110,7 +110,7 @@ DEFINE_A3D_GUID(IID_IA3d,
 #undef INTERFACE
 #define INTERFACE IA3d
 
-typedef struct IA3d *LPIA3D;
+typedef struct IA3d * LPIA3D;
 
 DECLARE_INTERFACE_(IA3d, IUnknown) {
 	// IUnknown
@@ -138,7 +138,7 @@ DECLARE_INTERFACE_(IA3d, IUnknown) {
 
 #define A3D_OK          1   // A3dCreate returns this upon detection of A3D enabled hardware.
 
-_declspec(dllexport) HRESULT WINAPI A3dCreate(const GUID *lpGUID, LPDIRECTSOUND *ppDS, IUnknown FAR *pUnkOuter );
+_declspec(dllexport) HRESULT WINAPI A3dCreate(const GUID * lpGUID, LPDIRECTSOUND * ppDS, IUnknown FAR * pUnkOuter );
 
 
 // Usefull Macros for C folks.

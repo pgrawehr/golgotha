@@ -9,13 +9,13 @@
 #include "render/software/r1_software.h"
 #include "render/software/r1_software_globals.h"
 
-w32 *color_modify_list_low[128];
+w32 * color_modify_list_low[128];
 sw32 num_color_modifies_low=0;
 
-w32 *color_modify_list_high[128];
+w32 * color_modify_list_high[128];
 sw32 num_color_modifies_high=0;
 
-void insert_color_modify_address_low(w32 *address)
+void insert_color_modify_address_low(w32 * address)
 {
 	if (num_color_modifies_low>=128)
 	{
@@ -26,7 +26,7 @@ void insert_color_modify_address_low(w32 *address)
 	num_color_modifies_low++;
 }
 
-void insert_color_modify_address_high(w32 *address)
+void insert_color_modify_address_high(w32 * address)
 {
 	if (num_color_modifies_high>=128)
 	{
@@ -37,9 +37,10 @@ void insert_color_modify_address_high(w32 *address)
 	num_color_modifies_high++;
 }
 
-void update_color_modify_addresses(w32 *color_table_ptr)
+void update_color_modify_addresses(w32 * color_table_ptr)
 {
 	sw32 i;
+
 	DEADBEEFPTR=color_table_ptr;
 	for (i=0; i<num_color_modifies_low; i++)
 	{
@@ -56,7 +57,7 @@ const int MAX_SOFTWARE_COLOR_TABLES = 16;
 software_color_table software_color_tables[MAX_SOFTWARE_COLOR_TABLES];
 sw32 num_software_color_tables=0;
 
-inline w16 light_pixel(w32 c, i4_pixel_format *s, double x,
+inline w16 light_pixel(w32 c, i4_pixel_format * s, double x,
 					   double r_factor, double g_factor, double b_factor,
 					   double &r_error, double &g_error, double &b_error)
 {
@@ -79,7 +80,7 @@ inline w16 light_pixel(w32 c, i4_pixel_format *s, double x,
 	return (w16)( (s->red_mask & (nr << s->red_shift)) | (s->green_mask & (ng << s->green_shift)) | (s->blue_mask & (nb << s->blue_shift)) );
 }
 
-void generate_color_table(software_color_table *dest_table, i4_pixel_format *fmt,
+void generate_color_table(software_color_table * dest_table, i4_pixel_format * fmt,
 						  double r_factor, double g_factor, double b_factor)
 {
 	sw32 x,y;
@@ -124,7 +125,7 @@ void generate_color_table(software_color_table *dest_table, i4_pixel_format *fmt
 	}
 }
 
-void setup_alpha_table(i4_pixel_format *fmt)
+void setup_alpha_table(i4_pixel_format * fmt)
 {
 	sw32 i;
 

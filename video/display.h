@@ -42,21 +42,21 @@
 
 class i4_display_class;
 class i4_display_list_struct;
-extern i4_display_list_struct *i4_display_list;
+extern i4_display_list_struct * i4_display_list;
 
 // display's will add themselves to this list (possibly more than once)
 // during their init if they determine they are available for use
 class i4_display_list_struct
 {
 public:
-	char *name;
+	char * name;
 	int driver_id;
 	int priority;
 	//more powerfull drivers (that probably are less compatible) should
 	//have higher priority.
 	//Not hardware accelerated devices always come after hw accel.
-	i4_display_class *display;
-	i4_display_list_struct *next;
+	i4_display_class * display;
+	i4_display_list_struct * next;
 	i4_display_list_struct()
 	{
 		name=0;
@@ -65,10 +65,10 @@ public:
 		display=0;
 		next=0;
 	}
-	void add_to_list(char *_name, int _driver_id, int _priority,
-					 i4_display_class *_display,
-					 i4_display_list_struct *_next);
-	static void remove_from_list(char *_name);
+	void add_to_list(char * _name, int _driver_id, int _priority,
+					 i4_display_class * _display,
+					 i4_display_list_struct * _next);
+	static void remove_from_list(char * _name);
 };
 
 enum i4_frame_buffer_type {
@@ -94,14 +94,14 @@ enum i4_change_type {
 };                                            //change everything
 
 
-extern i4_display_list_struct *i4_display_list;
+extern i4_display_list_struct * i4_display_list;
 
 
 class i4_display_class :
 	public i4_init_class
 {
 protected:
-	const i4_pal *pal;
+	const i4_pal * pal;
 
 public:
 	const i4_pal *get_palette()
@@ -109,8 +109,8 @@ public:
 		return pal;
 	}
 
-	static i4_display_class *first_display;  // list of all displays currently available
-	i4_display_class *next_display;
+	static i4_display_class * first_display;  // list of all displays currently available
+	i4_display_class * next_display;
 
 	virtual i4_image_class *get_screen() = 0;
 	virtual i4_draw_context_class *get_context() = 0;
@@ -180,7 +180,7 @@ public:
 
 	// changes shape of the mouse cursor, return false on failure (no mouse or unchangeable mouse)
 	// cursor will be copied, so it can be deleted after this call
-	virtual i4_bool set_mouse_shape(i4_cursor_class *cursor) = 0;
+	virtual i4_bool set_mouse_shape(i4_cursor_class * cursor) = 0;
 
 	virtual i4_bool lock_mouse_in_place(i4_bool yes_no) = 0;
 

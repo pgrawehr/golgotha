@@ -55,19 +55,20 @@
 //#include <arpa/inet.h>
 //#endif
 
-i4_temp_file_class *network_file=0;
+i4_temp_file_class * network_file=0;
 
 static w16 stank_type=0;
-i4_event_reaction_class *g1_net_window_class::create_orec(int mess_id)
+i4_event_reaction_class * g1_net_window_class::create_orec(int mess_id)
 {
-	i4_object_message_event_class *om=new i4_object_message_event_class(this, mess_id);
+	i4_object_message_event_class * om=new i4_object_message_event_class(this, mess_id);
+
 	return new i4_event_reaction_class(this, om);
 }
 
 g1_net_window_class::g1_net_window_class(w16 w, w16 h,
-										 i4_graphical_style_class *style,
-										 i4_net_protocol *protocol,
-										 char *bg_res,
+										 i4_graphical_style_class * style,
+										 i4_net_protocol * protocol,
+										 char * bg_res,
 										 int poll_delay,
 										 int poll_id)
 	: i4_parent_window_class(w,h),
@@ -82,7 +83,7 @@ g1_net_window_class::g1_net_window_class(w16 w, w16 h,
 	poll_event_id=i4_time_dev.request_event(this, &poll, poll_delay);
 }
 
-void g1_net_window_class::receive_event(i4_event *ev)
+void g1_net_window_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::OBJECT_MESSAGE)
 	{
@@ -135,8 +136,8 @@ g1_net_window_class::~g1_net_window_class()
 }
 
 g1_startup_window::g1_startup_window(w16 w, w16 h,
-									 i4_graphical_style_class *style,
-									 i4_net_protocol *protocol)
+									 i4_graphical_style_class * style,
+									 i4_net_protocol * protocol)
 	: g1_net_window_class(w,h, style, protocol, "net_bg_image", 500, POLL)
 {
 	serverip=0;
@@ -146,16 +147,16 @@ g1_startup_window::g1_startup_window(w16 w, w16 h,
 	username=new i4_text_input_class(style, *g1_resources.username, 90, 10, this);
 	add_child(g1_resources.net_username_x, g1_resources.net_username_y, username);
 
-	i4_text_window_class *start_game_text=new i4_text_window_class(i4gets("start_server"), style);
-	i4_button_class *new_game;
+	i4_text_window_class * start_game_text=new i4_text_window_class(i4gets("start_server"), style);
+	i4_button_class * new_game;
 	new_game=new i4_button_class(0,start_game_text, style, create_orec(START_SERVER));
 	add_child(g1_resources.net_start_x, g1_resources.net_start_y, new_game);
 
-	i4_text_window_class *quit_text=new i4_text_window_class(i4gets("net_main_menu"), style);
+	i4_text_window_class * quit_text=new i4_text_window_class(i4gets("net_main_menu"), style);
 	add_child(new_game->x(), new_game->y()+new_game->height()+1,
 			  new i4_button_class(0, quit_text, style, create_orec(QUIT_NET_GAME)));
 
-	i4_net_protocol *p=protocol;
+	i4_net_protocol * p=protocol;
 	if (p)
 	{
 		find=p->create_finder_socket(g1_resources.net_find_port, g1_resources.net_find_port);
@@ -190,7 +191,7 @@ void g1_startup_window::set_server_address()
 	serverip=0;
 	i4_query_text_input_class q;
 	i4_kernel.send_event(hostname, &q);
-	i4_str *setting=q.copy_of_data;
+	i4_str * setting=q.copy_of_data;
 	q.copy_of_data=0;
 	char buf[100];
 	i4_os_string(*setting,buf,100);
@@ -271,7 +272,7 @@ void g1_startup_window::poll()
 			free_buts();
 
 			t_buts=find->total_servers();
-			buts=(i4_button_class **)I4_MALLOC(sizeof(i4_button_class *)*t_buts,"but array");
+			buts=(i4_button_class * *)I4_MALLOC(sizeof(i4_button_class *)*t_buts,"but array");
 
 			int y=g1_resources.net_found_y, x=g1_resources.net_found_x1;
 
@@ -280,7 +281,7 @@ void g1_startup_window::poll()
 				i4_finder_socket::server s;
 				find->get_server(i, s);
 
-				i4_text_window_class *t=new i4_text_window_class(*s.notification_string, style);
+				i4_text_window_class * t=new i4_text_window_class(*s.notification_string, style);
 				buts[i]=new i4_button_class(0, t, style, create_orec(LAST + i));
 
 				add_child(x,y, buts[i]);
@@ -296,9 +297,9 @@ void g1_startup_window::poll()
 		free_buts();
 		i4_finder_socket::server s;
 		i4_finder_socket::get_localhost(s);
-		buts=(i4_button_class **)I4_MALLOC(sizeof(i4_button_class *),"but array");
+		buts=(i4_button_class * *)I4_MALLOC(sizeof(i4_button_class *),"but array");
 		t_buts=1;
-		i4_text_window_class *loc=new i4_text_window_class(*s.notification_string, style);
+		i4_text_window_class * loc=new i4_text_window_class(*s.notification_string, style);
 		buts[0]=new i4_button_class(0,loc,style,create_orec(LAST));
 		int y1=g1_resources.net_found_y, x1=g1_resources.net_found_x1;
 		add_child(x1,y1,buts[0]);
@@ -317,24 +318,24 @@ g1_startup_window::~g1_startup_window()
 }
 
 g1_server_start_window::g1_server_start_window(w16 w, w16 h,
-											   i4_graphical_style_class *style,
-											   i4_net_protocol *protocol)
+											   i4_graphical_style_class * style,
+											   i4_net_protocol * protocol)
 	: g1_net_window_class(w,h, style, protocol, "server_bg_image", 100, POLL)
 {
 	memset(names,0,sizeof(names));
 
-	i4_text_window_class *start_game_text=new i4_text_window_class(i4gets("start_net_game"),
-																   style);
+	i4_text_window_class * start_game_text=new i4_text_window_class(i4gets("start_net_game"),
+																	style);
 
-	i4_object_message_event_class *sng_e=new i4_object_message_event_class(this, START_NET_GAME);
-	i4_event_reaction_class *sng_r=new i4_event_reaction_class(this, sng_e);
-	i4_button_class *new_game=new i4_button_class(0, start_game_text, style, sng_r);
+	i4_object_message_event_class * sng_e=new i4_object_message_event_class(this, START_NET_GAME);
+	i4_event_reaction_class * sng_r=new i4_event_reaction_class(this, sng_e);
+	i4_button_class * new_game=new i4_button_class(0, start_game_text, style, sng_r);
 	add_child(480,20, new_game);
 
-	i4_text_window_class *quit_text=new i4_text_window_class(i4gets("net_main_menu"), style);
-	i4_object_message_event_class *q_e=new i4_object_message_event_class(this, QUIT_NET_GAME);
-	i4_event_reaction_class *q_r=new i4_event_reaction_class(this, q_e);
-	i4_button_class *q=new i4_button_class(0, quit_text, style, q_r);
+	i4_text_window_class * quit_text=new i4_text_window_class(i4gets("net_main_menu"), style);
+	i4_object_message_event_class * q_e=new i4_object_message_event_class(this, QUIT_NET_GAME);
+	i4_event_reaction_class * q_r=new i4_event_reaction_class(this, q_e);
+	i4_button_class * q=new i4_button_class(0, quit_text, style, q_r);
 	add_child(new_game->x(), new_game->y()+new_game->height()+1, q);
 
 	if (protocol)
@@ -397,7 +398,7 @@ void g1_server_start_window::poll()
 				}
 			}
 
-			i4_text_window_class *t;
+			i4_text_window_class * t;
 			int x=i4getn("net_joined_x"), y=i4getn("net_joined_y");
 
 			t=new i4_text_window_class(*g1_resources.username, style);
@@ -430,14 +431,15 @@ g1_server_start_window::~g1_server_start_window()
 
 
 g1_client_wait_window::g1_client_wait_window(w16 w, w16 h,
-											 i4_graphical_style_class *style,
-											 i4_net_protocol *protocol)
+											 i4_graphical_style_class * style,
+											 i4_net_protocol * protocol)
 	: g1_net_window_class(w,h, style, protocol, "client_wait_image", 100, POLL)
 {
-	i4_text_window_class *quit_text=new i4_text_window_class(i4gets("net_cancel"), style);
-	i4_object_message_event_class *q_e=new i4_object_message_event_class(this, QUIT_NET_GAME);
-	i4_event_reaction_class *q_r=new i4_event_reaction_class(this, q_e);
-	i4_button_class *q=new i4_button_class(0, quit_text, style, q_r);
+	i4_text_window_class * quit_text=new i4_text_window_class(i4gets("net_cancel"), style);
+	i4_object_message_event_class * q_e=new i4_object_message_event_class(this, QUIT_NET_GAME);
+	i4_event_reaction_class * q_r=new i4_event_reaction_class(this, q_e);
+	i4_button_class * q=new i4_button_class(0, quit_text, style, q_r);
+
 	add_child(i4getn("net_cancel_x"), i4getn("net_cancel_y"), q);
 
 }
@@ -490,14 +492,15 @@ g1_client_wait_window::~g1_client_wait_window()
 //the server. This particularly means that an user-controlled object
 //must not get remote-synced..
 
-g1_network_time_manager_class *g1_network_time_man_ptr=0;
+g1_network_time_manager_class * g1_network_time_man_ptr=0;
 
 g1_network_time_manager_class g1_network_time_man;
 
 i4_bool g1_network_time_manager_class::shouldupdate(w32 id, w32 totimestamp)
 {
-	net_sync_entry *cur=net_sync.get(id);
-	g1_object_class *unit=g1_global_id.get(id);
+	net_sync_entry * cur=net_sync.get(id);
+	g1_object_class * unit=g1_global_id.get(id);
+
 	if (unit && (unit->id==stank_type) && (unit->player_num==g1_player_man.local_player))
 	{
 		lasterror=OWNSUPERTANK;    //must newer sync the own stank
@@ -516,7 +519,8 @@ i4_bool g1_network_time_manager_class::shouldupdate(w32 id, w32 totimestamp)
 };
 void g1_network_time_manager_class::updatecomplete(w32 id, w32 attimestamp)
 {
-	net_sync_entry *nse=new net_sync_entry,*old;
+	net_sync_entry * nse=new net_sync_entry,* old;
+
 	nse->tickcalced=attimestamp;
 	nse->ticksynced=attimestamp;
 	old=net_sync.get(id);
@@ -533,7 +537,8 @@ void g1_network_time_manager_class::updatecomplete(w32 id, w32 attimestamp)
 };
 void g1_network_time_manager_class::deletedobject(w32 id)
 {
-	net_sync_entry *old=net_sync.remove(id);
+	net_sync_entry * old=net_sync.remove(id);
+
 	if (old)
 	{
 		delete old;
@@ -548,7 +553,7 @@ void process_data_packet(i4_file_class &r,i4_bool server)
 	r.read_32(); //skip empty field
 	w32 ticksent=r.read_32(); //to which tick does this packet belong?
 	//here follows: reading out the objects
-	g1_realtime_loader_class *rtloader=new g1_realtime_loader_class(&r,i4_F,i4_F);
+	g1_realtime_loader_class * rtloader=new g1_realtime_loader_class(&r,i4_F,i4_F);
 
 	w32 objfor=rtloader->read_32();
 	w16 typefor=0;
@@ -558,7 +563,7 @@ void process_data_packet(i4_file_class &r,i4_bool server)
 		{
 			//don't delete if object just doesn't exist locally.
 			objfor=rtloader->read_32();
-			g1_object_class *obdel=g1_global_id.checked_get(objfor);
+			g1_object_class * obdel=g1_global_id.checked_get(objfor);
 			if (obdel)
 			{
 				obdel->set_flag(g1_object_class::THINKING,1); //Perhaps was not thinking locally
@@ -570,7 +575,7 @@ void process_data_packet(i4_file_class &r,i4_bool server)
 		else
 		{
 			typefor=rtloader->read_16();
-			g1_object_class *obj=g1_global_id.checked_get(objfor);
+			g1_object_class * obj=g1_global_id.checked_get(objfor);
 			if (!obj)
 			{
 				//Object seems to be new
@@ -638,11 +643,11 @@ void process_data_packet(i4_file_class &r,i4_bool server)
 }
 
 
-g1_client_class *g1_client=0;
+g1_client_class * g1_client=0;
 
-g1_client_class::g1_client_class(i4_net_address *server_address,
+g1_client_class::g1_client_class(i4_net_address * server_address,
 								 int use_port,
-								 i4_net_protocol *protocol)
+								 i4_net_protocol * protocol)
 	: server_address(server_address->copy()),
 	  use_port(use_port)
 {
@@ -661,7 +666,7 @@ g1_client_class::g1_client_class(i4_net_address *server_address,
 	}
 }
 
-void g1_client_class::send_server(w8 *buf, i4_file_class *fp)
+void g1_client_class::send_server(w8 * buf, i4_file_class * fp)
 {
 	send->write(buf,fp->tell());
 }
@@ -708,7 +713,7 @@ i4_bool g1_client_class::poll()  // returns false if server is not responding
 	while (listen->ready_to_read() && noloops<10)
 	{
 		w8 packet[MAX_PACKET_SIZE];
-		i4_net_address *a;
+		i4_net_address * a;
 		int s=listen->read_from(packet, sizeof(packet), a);
 		if (a->equals(server_address))
 		{
@@ -738,7 +743,7 @@ i4_bool g1_client_class::poll()  // returns false if server is not responding
 							i4_warning("Loading game data");
 							//don't do this twice.
 							//i4_user_message_event_class u(G1_START_NEW_GAME);
-							i4_file_open_message_class u(G1_SAVEGAME_LOAD_OK, new i4_str (*map_name));
+							i4_file_open_message_class u(G1_SAVEGAME_LOAD_OK, new i4_str (* map_name));
 							i4_kernel.send_event(i4_current_app, &u);
 							state=LOADING;
 						}
@@ -756,8 +761,8 @@ i4_bool g1_client_class::poll()  // returns false if server is not responding
 								i4_error("ERROR: Local Golgotha version supports fewer players than this game needs. Check your version.");
 								num_ais=G1_MAX_PLAYERS;
 							}
-							i4_str *ainame=0;
-							g1_team_api_class *newai=0;
+							i4_str * ainame=0;
+							g1_team_api_class * newai=0;
 							for (int ais=0; ais<num_ais; ais++)
 							{
 								//the player the next ai is for
@@ -889,7 +894,7 @@ g1_client_class::~g1_client_class()
  ***********************************************************************/
 
 
-g1_server_class *g1_server=0;
+g1_server_class * g1_server=0;
 
 void g1_server_class::client::cleanup()
 {
@@ -908,7 +913,7 @@ void g1_server_class::client::cleanup()
 	remote_player_num=0;
 }
 
-g1_server_class::g1_server_class(int use_port, i4_net_protocol *protocol)
+g1_server_class::g1_server_class(int use_port, i4_net_protocol * protocol)
 	: protocol(protocol)
 {
 	map_name=new i4_str(i4gets("tmp_savename"));
@@ -928,7 +933,7 @@ g1_server_class::g1_server_class(int use_port, i4_net_protocol *protocol)
 	}
 }
 
-void g1_server_class::send_to(w8 *buf, i4_file_class *f,int client_id)
+void g1_server_class::send_to(w8 * buf, i4_file_class * f,int client_id)
 {
 	if (clients[client_id].addr)
 	{
@@ -937,7 +942,7 @@ void g1_server_class::send_to(w8 *buf, i4_file_class *f,int client_id)
 	}
 }
 
-void g1_server_class::send_to_all(w8 *buf,i4_file_class *f)
+void g1_server_class::send_to_all(w8 * buf,i4_file_class * f)
 {
 	for (int i=0; i<G1_MAX_PLAYERS; i++)
 	{
@@ -963,6 +968,7 @@ void g1_server_class::start_game()
 void g1_server_class::send_player_joined(int client_num)
 {
 	w8 packet[512];
+
 	i4_ram_file_class r(packet, sizeof(packet));
 
 	r.write_8(G1_PK_YOU_HAVE_JOINED);
@@ -972,7 +978,7 @@ void g1_server_class::send_player_joined(int client_num)
 	clients[client_num].send->write(packet, r.tell());
 }
 
-void g1_server_class::process_client_packet(w8 *packet,
+void g1_server_class::process_client_packet(w8 * packet,
 											int packet_length,
 											int client_num)
 {
@@ -1035,7 +1041,7 @@ void g1_server_class::process_client_packet(w8 *packet,
 							for (k=0; k<G1_MAX_PLAYERS; k++)
 							{
 								s.write_32(k);
-								g1_player_info_class *pl=g1_player_man.get(k);
+								g1_player_info_class * pl=g1_player_man.get(k);
 								i4_bool found=i4_F;
 								if (k==0) //the neutral player
 								{
@@ -1076,7 +1082,7 @@ void g1_server_class::process_client_packet(w8 *packet,
 					//finally, set the matching ai's also for the server
 					for (player=0; player<G1_MAX_PLAYERS; player++)
 					{
-						g1_team_api_class *newai=0;
+						g1_team_api_class * newai=0;
 						i4_bool found=i4_F;
 						if (player==0)
 						{
@@ -1197,11 +1203,12 @@ void g1_server_class::process_client_packet(w8 *packet,
 void g1_server_class::poll()
 {
 	int i,noloops=0;
+
 	list_changed=i4_F;
 	while (udp_port && udp_port->ready_to_read() && noloops<10)
 	{
 		w8 packet[MAX_PACKET_SIZE];
-		i4_net_address *a;
+		i4_net_address * a;
 		int len=udp_port->read_from(packet, sizeof(packet), a);
 
 		// see if this was from one of our clients
@@ -1462,7 +1469,7 @@ int i4_network_prepare_command(int command)
  \param fp  The file class associated with the buffer (for the length)
  \param send_to The receiver (server only), for server, -1 means to all. Client ignores target.
  */
-int i4_network_send(w8 *buf, i4_file_class *fp,int send_to)
+int i4_network_send(w8 * buf, i4_file_class * fp,int send_to)
 {
 	if (g1_server)
 	{

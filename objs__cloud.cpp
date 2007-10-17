@@ -22,7 +22,7 @@
 
 static i4_profile_class pf_cloud_shadow("Cloud Shadow");
 
-i4_image_class *cloud_im=0;
+i4_image_class * cloud_im=0;
 int cloud_ref=0;
 
 g1_model_ref cloud_model("cloud2");
@@ -58,7 +58,7 @@ public:
 	}
 
 
-	g1_cloud_class(g1_object_type id, g1_loader_class *fp)
+	g1_cloud_class(g1_object_type id, g1_loader_class * fp)
 		: g1_object_class(id,fp)
 	{
 
@@ -99,19 +99,19 @@ public:
 		int mw=g1_map_width, mh=g1_map_height;
 		float rx=xfract(x_offset), ry=xfract(y_offset);
 
-		g1_map_vertex_class *v=g1_verts;
+		g1_map_vertex_class * v=g1_verts;
 
 
 
 		int dy=(int)(y_offset);
-		w32 *d=(w32 *)cloud_im->data;
+		w32 * d=(w32 *)cloud_im->data;
 
 
 		for (int vy=0; vy<=mh; vy++)
 		{
 
 			int dx=(int)x_offset;
-			w32 *d=(w32 *)cloud_im->data + dx + dy*65;
+			w32 * d=(w32 *)cloud_im->data + dx + dy*65;
 
 			for (int vx=0; vx<=mw; vx++, v++)
 			{
@@ -170,7 +170,7 @@ public:
 	{
 		cloud_count--;
 
-		g1_map_vertex_class *v=g1_verts;
+		g1_map_vertex_class * v=g1_verts;
 		int mw=g1_map_width, mh=g1_map_height;
 
 		for (int vy=0; vy<mh; vy++)
@@ -191,7 +191,7 @@ public:
 		if (!ticks_till_move)
 		{
 			ticks_till_move=0;
-			g1_map_vertex_class *v=g1_verts;
+			g1_map_vertex_class * v=g1_verts;
 
 
 			y_offset+=1.0/8.0;
@@ -210,7 +210,7 @@ public:
 		request_think();
 	}
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 	{
 		// don't do anything because this is done by draw_sky
 	}

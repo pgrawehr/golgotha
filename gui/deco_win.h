@@ -16,17 +16,18 @@ class i4_deco_window_class :
 {
 	i4_bool in;
 	sw32 x1,y1;
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 
 public:
 	i4_deco_window_class(w16 w, w16 h, // size not including deco border
 						 i4_bool in,   // pressed in or out look?
-						 i4_graphical_style_class *style)
+						 i4_graphical_style_class * style)
 		: i4_parent_window_class(0,0),
 		  in(in),
 		  style(style)
 	{
 		w32 l,r,t,b;
+
 		if (in)
 		{
 			style->get_in_deco_size(l,r,t,b);
@@ -53,6 +54,7 @@ public:
 	virtual void parent_draw(i4_draw_context_class &context)
 	{
 		w32 l,r,t,b;
+
 		if (in)
 		{
 			style->get_in_deco_size(l,r,t,b);
@@ -71,7 +73,7 @@ public:
 //                      context);
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"deco_window");
 	}

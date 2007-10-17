@@ -35,9 +35,9 @@ struct m1_info_struct
 	i4_array<i4_str *> models;
 	i4_array<i4_str *> textures;
 	i4_array<i4_str *> res_files;
-	m1_poly_object_class *obj;
-	r1_render_api_class *r_api;
-	i4_font_class *r_font;
+	m1_poly_object_class * obj;
+	r1_render_api_class * r_api;
+	i4_font_class * r_font;
 
 	i4_array<w32> vertex_flags;
 

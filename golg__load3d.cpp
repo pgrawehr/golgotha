@@ -21,10 +21,10 @@
 
 #define G3DF_VERSION 3
 
-g1_quad_object_class *g1_quad_object_loader_class::allocate_object()
+g1_quad_object_class * g1_quad_object_loader_class::allocate_object()
 {
-	g1_quad_object_class *o =(g1_quad_object_class *)heap->malloc(sizeof(g1_quad_object_class),
-																  "quad_object");
+	g1_quad_object_class * o =(g1_quad_object_class *)heap->malloc(sizeof(g1_quad_object_class),
+																   "quad_object");
 
 	if (o)
 	{
@@ -57,14 +57,16 @@ void g1_quad_object_loader_class::create_animation(w16 anim, const i4_const_str 
 void g1_quad_object_loader_class::create_vertex(w16 anim, w16 frame,
 												w16 index, const i4_3d_vector& v)
 {
-	g1_vert_class *vert=obj->get_verts(anim,frame)+index;
+	g1_vert_class * vert=obj->get_verts(anim,frame)+index;
+
 	vert->v = v;
 }
 
 void g1_quad_object_loader_class::store_vertex_normal(w16 anim, w16 frame, w16 index,
 													  const i4_3d_vector& normal)
 {
-	g1_vert_class *vert=obj->get_verts(anim,frame)+index;
+	g1_vert_class * vert=obj->get_verts(anim,frame)+index;
+
 	vert->normal = normal;
 }
 
@@ -74,9 +76,9 @@ void g1_quad_object_loader_class::set_num_quads(w16 quads)
 	obj->quad=(g1_quad_class *)heap->malloc(sizeof(g1_quad_class) * quads, "obj_quads");
 }
 
-void g1_quad_object_loader_class::create_quad(w16 quad, int verts, w16 *ref, w32 flags)
+void g1_quad_object_loader_class::create_quad(w16 quad, int verts, w16 * ref, w32 flags)
 {
-	g1_quad_class *q = &obj->quad[quad];
+	g1_quad_class * q = &obj->quad[quad];
 
 	q->set(ref[0], ref[1], ref[2], (verts>3) ? ref[3] : 0xffff);
 	q->flags = flags;
@@ -84,7 +86,7 @@ void g1_quad_object_loader_class::create_quad(w16 quad, int verts, w16 *ref, w32
 
 void g1_quad_object_loader_class::store_texture_name(w32 quad, const i4_const_str &name)
 {
-	g1_quad_class *q = &obj->quad[quad];
+	g1_quad_class * q = &obj->quad[quad];
 
 	if (name.null())
 	{
@@ -98,9 +100,9 @@ void g1_quad_object_loader_class::store_texture_name(w32 quad, const i4_const_st
 }
 
 void g1_quad_object_loader_class::store_texture_params(w32 quad, i4_float scale,
-													   i4_float *u, i4_float *v)
+													   i4_float * u, i4_float * v)
 {
-	g1_quad_class *q = &obj->quad[quad];
+	g1_quad_class * q = &obj->quad[quad];
 
 	q->texture_scale = scale;
 	q->u[0] = u[0];
@@ -115,7 +117,7 @@ void g1_quad_object_loader_class::store_texture_params(w32 quad, i4_float scale,
 
 void g1_quad_object_loader_class::store_quad_normal(w16 quad, const i4_3d_vector& normal)
 {
-	g1_quad_class *q = &obj->quad[quad];
+	g1_quad_class * q = &obj->quad[quad];
 
 	q->normal = normal;
 }
@@ -147,7 +149,8 @@ void g1_quad_object_loader_class::create_texture_animation(w32 index, w16 quad,
 														   i4_float du, i4_float dv,
 														   i4_float speed)
 {
-	g1_texture_animation *p = &obj->special[index];
+	g1_texture_animation * p = &obj->special[index];
+
 	p->quad_number = quad;
 	p->max_frames = max_frames;
 	p->frames_x = frames_x;
@@ -155,7 +158,7 @@ void g1_quad_object_loader_class::create_texture_animation(w32 index, w16 quad,
 	p->dv = dv;
 	p->speed = speed;
 
-	g1_quad_class *q = &obj->quad[quad];
+	g1_quad_class * q = &obj->quad[quad];
 	for (int i=0; i<(int)q->num_verts(); i++)
 	{
 		p->u[i] = q->u[i];
@@ -166,7 +169,8 @@ void g1_quad_object_loader_class::create_texture_animation(w32 index, w16 quad,
 void g1_quad_object_loader_class::create_texture_pan(w32 index, w16 quad,
 													 i4_float du, i4_float dv, i4_float speed)
 {
-	g1_texture_animation *p = &obj->special[index];
+	g1_texture_animation * p = &obj->special[index];
+
 	p->quad_number = quad;
 	p->max_frames = 0;
 	p->frames_x = 0;
@@ -174,7 +178,7 @@ void g1_quad_object_loader_class::create_texture_pan(w32 index, w16 quad,
 	p->dv = dv;
 	p->speed = speed;
 
-	g1_quad_class *q = &obj->quad[quad];
+	g1_quad_class * q = &obj->quad[quad];
 	for (int i=0; i<(int)q->num_verts(); i++)
 	{
 		p->u[i] = q->u[i];
@@ -187,9 +191,9 @@ void g1_quad_object_loader_class::finish_object()
 	obj->calc_extents();
 }
 
-g1_quad_object_class *g1_quad_object_loader_class::load(i4_loader_class *fp,
-														const i4_const_str &_error_name,
-														r1_texture_manager_class *_tman)
+g1_quad_object_class * g1_quad_object_loader_class::load(i4_loader_class * fp,
+														 const i4_const_str &_error_name,
+														 r1_texture_manager_class * _tman)
 {
 	tman = _tman;
 	error_name = &_error_name;

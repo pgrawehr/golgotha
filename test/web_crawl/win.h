@@ -58,10 +58,10 @@ enum {
 class fb_thread_window :
 	public i4_parent_window_class
 {
-	friend void fb_thread(void *context);
+	friend void fb_thread(void * context);
 
 	void freeup_buffer();
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 
 	int last_sec;       // last timeout checked
 	int button_x;       // when we add a new button add it to the left of this position
@@ -70,10 +70,10 @@ class fb_thread_window :
 	enum cmd_type {
 		PAUSE, ABORT, BAN_DIR, BAN_SITE
 	};
-	void add_button(char *name, cmd_type cmd);
+	void add_button(char * name, cmd_type cmd);
 
-	i4_net_protocol *prot;
-	fb_url *url;            // url this crawl thread is working on
+	i4_net_protocol * prot;
+	fb_url * url;            // url this crawl thread is working on
 
 	int last_error;
 	fb_state state, last_state; // what is thread doing currently?
@@ -81,13 +81,13 @@ class fb_thread_window :
 
 	i4_time_class last_refresh; // don't redraw too much, here's the last time we redrew
 	i4_time_class last_read;   // time thread last got data, will time-out if too high
-	i4_net_socket *sock;
-	i4_file_class *save_file;  // if we are downloading a file, save to here
+	i4_net_socket * sock;
+	i4_file_class * save_file;  // if we are downloading a file, save to here
 
 
 	void parent_draw(i4_draw_context_class &context);
 
-	void receive_event(i4_event *ev);  // responds to buttons in window
+	void receive_event(i4_event * ev);  // responds to buttons in window
 
 
 	void stop_thread();
@@ -118,13 +118,13 @@ public:
 	void update();
 	void check_for_timeout();
 
-	void set_url(fb_url *new_url); // stops thread if and changes url, then starts thread
+	void set_url(fb_url * new_url); // stops thread if and changes url, then starts thread
 	fb_url *get_url()
 	{
 		return url;
 	}
 
-	fb_thread_window(w16 w, w16 h, i4_graphical_style_class *style);
+	fb_thread_window(w16 w, w16 h, i4_graphical_style_class * style);
 
 	~fb_thread_window(); // waits for thread to stop before closing the window
 

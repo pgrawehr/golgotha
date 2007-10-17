@@ -37,7 +37,7 @@ public:
 	virtual state current_state();
 	void mouse_down();
 	void mouse_move(sw32 mx, sw32 my);
-	void key_press(i4_key_press_event_class *kev);
+	void key_press(i4_key_press_event_class * kev);
 
 	virtual i4_bool select_object(sw32 mx, sw32 my,
 								  i4_float &ox, i4_float &oy, i4_float &oz,
@@ -59,7 +59,7 @@ public:
 	virtual void idle();
 	virtual void edit_selected();
 
-	g1_object_mode(g1_controller_edit_class *c);
+	g1_object_mode(g1_controller_edit_class * c);
 };
 
 
@@ -77,7 +77,7 @@ class g1_object_params :
 public:
 
 	g1_object_params();
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"OBJECT");
 	}
@@ -102,11 +102,11 @@ public:
 		refresh_picker();
 	}
 
-	void create_buttons(i4_parent_window_class *containter);
+	void create_buttons(i4_parent_window_class * containter);
 	void cleanup();
 
-	g1_mode_handler *create_mode_handler(g1_controller_edit_class *c);
-	void set_edit_window(i4_window_class *p);
+	g1_mode_handler *create_mode_handler(g1_controller_edit_class * c);
+	void set_edit_window(i4_window_class * p);
 	void close_edit_window();
 };
 

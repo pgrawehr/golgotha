@@ -34,11 +34,11 @@ public:
 	friend class g1_team_api_class;
 private:
 	g1_player_type player_num;
-	g1_team_api_class *ai;
+	g1_team_api_class * ai;
 	g1_team_type team;
 	// I want g1_player manager to call init_colors and new game on each player
 	friend class g1_player_manager_class;
-	void init_colors(w32 player_num, const i4_pixel_format *fmt);
+	void init_colors(w32 player_num, const i4_pixel_format * fmt);
 	void new_game(g1_player_type num);
 	void think();
 	int &num_points();
@@ -60,7 +60,7 @@ public:
 	{
 		return (li_class *)vars.get();
 	}
-	void set_vars(li_class *v)
+	void set_vars(li_class * v)
 	{
 		vars=(li_object *)v;
 	}
@@ -91,7 +91,7 @@ public:
 	{
 		return ai;
 	}
-	void set_ai(g1_team_api_class *ai);
+	void set_ai(g1_team_api_class * ai);
 	g1_player_type get_player_num() const
 	{
 		return player_num;
@@ -101,13 +101,13 @@ public:
 		return commander.get();
 	}
 
-	void set_commander(g1_player_piece_class *who)
+	void set_commander(g1_player_piece_class * who)
 	{
 		commander=who;
 	}
 
-	i4_bool load(g1_loader_class *fp);
-	void save(g1_saver_class *fp);
+	i4_bool load(g1_loader_class * fp);
+	void save(g1_saver_class * fp);
 
 	w16 vehicle_pal[256];
 
@@ -120,30 +120,30 @@ public:
 	int next_pad;
 	int next_location;
 
-	void supertank_died(g1_object_class *killer);
+	void supertank_died(g1_object_class * killer);
 	void add_points(int points);
 	void allow_building(g1_object_type type,
 						int cost,
 						int sfx_to_play_when_built,
-						i4_image_class *normal_button_image,
-						i4_image_class *active_button_image,
-						i4_image_class *pressed_button_image);
+						i4_image_class * normal_button_image,
+						i4_image_class * active_button_image,
+						i4_image_class * pressed_button_image);
 };
 
 
 class g1_player_manager_class :
 	public i4_init_class
 {
-	g1_player_info_class *list[G1_MAX_PLAYERS];
-	const char *default_ai;
+	g1_player_info_class * list[G1_MAX_PLAYERS];
+	const char * default_ai;
 public:
 	g1_player_type local_player;
 	g1_player_manager_class();
 	void show_message(const i4_const_str &message, w32 color, int player_for);
 
 	// set the name of the default computer ai
-	void set_default_ai(const char *ai);
-	void set_ai(w32 player_num,const char *newai);
+	void set_default_ai(const char * ai);
+	void set_ai(w32 player_num,const char * newai);
 	// the player on the local machine
 	g1_player_info_class *get_local()
 	{
@@ -159,7 +159,7 @@ public:
 		return list[player];
 	}
 
-	void save(g1_saver_class *fp)
+	void save(g1_saver_class * fp)
 	{
 		for (w32 i=0; i<G1_MAX_PLAYERS; i++)
 		{
@@ -167,16 +167,17 @@ public:
 		}
 	}
 
-	i4_bool load(g1_loader_class *fp)
+	i4_bool load(g1_loader_class * fp)
 	{
 		i4_bool ret=i4_T;
+
 		for (w32 i=0; i<G1_MAX_PLAYERS; i++)
 		{
 			ret=(i4_bool)(ret & list[i]->load(fp));
 		}
 		return ret;
 	}
-	void init_colors(const i4_pixel_format *fmt, r1_render_api_class *api);
+	void init_colors(const i4_pixel_format * fmt, r1_render_api_class * api);
 
 	void new_game()
 	{
@@ -193,12 +194,12 @@ public:
 			list[i]->think();
 		}
 	}
-	void recalc_from_map(g1_map_class *map);
+	void recalc_from_map(g1_map_class * map);
 	virtual void init();
 	virtual void uninit();
 
 	// for unloading dll AIs
-	void unload_ai(g1_team_api_definition_class *definer);
+	void unload_ai(g1_team_api_definition_class * definer);
 };
 
 

@@ -27,13 +27,13 @@ private:
 	int grab;
 	int last_but;
 
-	i4_image_class *texture;
+	i4_image_class * texture;
 	int preselect_x, preselect_y;
 	int snap_off_x, snap_off_y;
 
 	i4_bool verts_are_selected();
 	i4_bool dragging;
-	i4_text_input_class *tname_edit;
+	i4_text_input_class * tname_edit;
 	void get_point(int poly, int num, int &x, int &y);
 
 	void drag_points(int xc, int yc);
@@ -42,15 +42,15 @@ private:
 	i4_float theight() const;
 public:
 	void edit_poly_changed();
-	m1_st_edit_window_class(w16 w, w16 h, i4_text_input_class *tname_edit);
+	m1_st_edit_window_class(w16 w, w16 h, i4_text_input_class * tname_edit);
 	~m1_st_edit_window_class();
 	void draw(i4_draw_context_class &context);
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 	void change_current_texture(i4_const_str new_name);
 	void change_current_verts();
 	void select_point(int point);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"texture coord editor");
 	}

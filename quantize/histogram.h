@@ -52,13 +52,13 @@ public:
 		total_pixels=0;
 	}
 
-	void save(i4_file_class *fp);
-	void load(i4_file_class *fp);
+	void save(i4_file_class * fp);
+	void load(i4_file_class * fp);
 
 	// counts_per_pixel can be used to give smaller images more emphasis
 	// I use this to give mip maps of original images more double emphasis
 	// right now only image's of type i4_image32 will work
-	void add_image_colors(i4_image_class *image, int counts_per_pixel=1);
+	void add_image_colors(i4_image_class * image, int counts_per_pixel=1);
 
 } ;
 

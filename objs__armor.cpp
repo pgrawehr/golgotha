@@ -42,9 +42,9 @@ spin_speed("spin_speed");
 
 
 
-li_object *g1_armor_occupy(li_object *o, li_environment *env)
+li_object *g1_armor_occupy(li_object * o, li_environment * env)
 {
-	g1_dynamic_object_class *me=g1_dynamic_object_class::get(li_first(o,env),env);
+	g1_dynamic_object_class * me=g1_dynamic_object_class::get(li_first(o,env),env);
 
 	if (me->g1_object_class::occupy_location())
 	{
@@ -55,17 +55,19 @@ li_object *g1_armor_occupy(li_object *o, li_environment *env)
 }
 
 
-li_object *g1_armor_unoccupy(li_object *o, li_environment *env)
+li_object *g1_armor_unoccupy(li_object * o, li_environment * env)
 {
-	g1_dynamic_object_class *me=g1_dynamic_object_class::get(li_first(o,env),env);
+	g1_dynamic_object_class * me=g1_dynamic_object_class::get(li_first(o,env),env);
+
 	me->g1_object_class::unoccupy_location();
 	g1_player_man.get(me->player_num)->damage_multiplier() /= damage_multiplier_fraction();
 	return 0;
 }
 
-li_object *g1_armor_think(li_object *o, li_environment *env)
+li_object *g1_armor_think(li_object * o, li_environment * env)
 {
-	g1_dynamic_object_class *me=g1_dynamic_object_class::get(li_first(o,env),env);
+	g1_dynamic_object_class * me=g1_dynamic_object_class::get(li_first(o,env),env);
+
 	me->mini_objects[0].rotation.z+=spin_speed();
 	me->request_think();
 	return 0;
@@ -73,9 +75,9 @@ li_object *g1_armor_think(li_object *o, li_environment *env)
 
 
 
-li_object *g1_armor_change_player_num(li_object *o, li_environment *env)
+li_object *g1_armor_change_player_num(li_object * o, li_environment * env)
 {
-	g1_dynamic_object_class *me=g1_dynamic_object_class::get(li_first(o,env),env);
+	g1_dynamic_object_class * me=g1_dynamic_object_class::get(li_first(o,env),env);
 	int new_team=li_int::get(li_second(o,env),env)->value();
 
 	if (new_team!=me->player_num)

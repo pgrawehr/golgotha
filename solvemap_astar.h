@@ -55,7 +55,7 @@ public:
 protected:
 	w16 wx, wy;
 	w16 dest_x, dest_y;
-	g1_block_map_class *block;
+	g1_block_map_class * block;
 
 
 	// Breadth first Queue
@@ -87,13 +87,13 @@ public:
 		flags=IS_MAP_SOLVER|IS_ASTAR_MAP_SOLVER;
 		block=0;
 	}
-	void set_block_map(g1_block_map_class *_block)
+	void set_block_map(g1_block_map_class * _block)
 	{
 		block=_block;
 	};
 	i4_bool path_solve(i4_float startx, i4_float starty,
 					   i4_float destx, i4_float desty,
-					   w8 sizex, w8 sizey, w8 grade, i4_float *point, w16 &points);
+					   w8 sizex, w8 sizey, w8 grade, i4_float * point, w16 &points);
 };
 
 #endif

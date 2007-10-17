@@ -6,6 +6,6 @@
    golgotha_source@usa.net (Subject should have "GOLG" in it)
  ***********************************************************************/
 
-void g1_demo_script_add(char *command);
+void g1_demo_script_add(char * command);
 i4_bool g1_playing_demo();
 void g1_demo_tick();

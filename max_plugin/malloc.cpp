@@ -47,13 +47,13 @@ int i4_mem_break=-1;
 
 #if (__linux && i4_NEW_CHECK)
 
-void *operator new( size_t size, char *file, w32 line)
+void * operator new( size_t size, char * file, w32 line)
 {
 	return i4_malloc(size, file, line);
 }
 
 
-void *operator new [] (size_t size, char *file, w32 line)
+void * operator new [] (size_t size, char * file, w32 line)
 {
 	return i4_malloc(size, file, line);
 }
@@ -64,12 +64,12 @@ void *operator new [] (size_t size, char *file, w32 line)
 #undef new
 
 
-void *operator new( size_t size)
+void * operator new( size_t size)
 {
 	return i4_malloc(size,"unknown",0);
 }
 
-void operator delete(void *ptr)
+void operator delete(void * ptr)
 {
 	i4_free(ptr);
 }
@@ -98,7 +98,7 @@ void break_mem_fun()
 // can set this memory range to check for mem copies over memory
 w32 i4_check_min=0, i4_check_max=0;
 
-extern "C" void *memcpy(void *dest, const void *src,size_t n)
+extern "C" void *memcpy(void * dest, const void * src,size_t n)
 {
 	if (((w32)dest)<i4_check_max && ((w32)dest)+n>i4_check_min)
 	{
@@ -130,6 +130,7 @@ void inspect_memory()
 void small_allocation_summary(int &total, int *&list)
 {
 	int size=1;
+
 	total=JM_SMALL_SIZE/4;
 	list=(int *)i4_malloc(total*sizeof(int), __FILE__, __LINE__);
 
@@ -139,7 +140,7 @@ void small_allocation_summary(int &total, int *&list)
 		int i,x;
 		for (i=0; i<bmanage_total; i++)
 		{
-			small_block *s=bmanage[i].sblocks[size];
+			small_block * s=bmanage[i].sblocks[size];
 			while (s)
 			{
 				for (x=0; x<32; x++)
@@ -174,7 +175,7 @@ void i4_malloc_uninit()
 }
 
 
-void i4_mem_cleanup(int ret, void *arg)
+void i4_mem_cleanup(int ret, void * arg)
 {
 	i4_malloc_uninit();
 }
@@ -183,7 +184,7 @@ void i4_mem_cleanup(int ret, void *arg)
 int i4_malloc_max_size=20000000;
 int i4_malloc_min_size=0x1000;
 
-char *not_enough_total_memory_message=
+char * not_enough_total_memory_message=
 	"Memory manager : Sorry you do not have enough memory available to\n"
 	"                 run this program.\n";
 
@@ -211,7 +212,7 @@ void i4_malloc_init()
 	}
 	else
 	{
-		void *mem;
+		void * mem;
 
 		sw32 size=i4_malloc_max_size;
 		for (mem=NULL; !mem && size>=i4_malloc_min_size;)
@@ -303,7 +304,7 @@ long i4_allocated()
 }
 
 
-void *i4_malloc(w32 size, char *file, int line)
+void *i4_malloc(w32 size, char * file, int line)
 {
 	pf_malloc.start();
 
@@ -323,7 +324,7 @@ void *i4_malloc(w32 size, char *file, int line)
 
 	sprintf(reason, "%s:%d (inst=%d)", file, line, i4_m_instance);
 #else
-	char *reason="unknown";
+	char * reason="unknown";
 #endif
 
 //   printf("Instance %d: %s\n", i4_m_instance, reason);
@@ -332,7 +333,7 @@ void *i4_malloc(w32 size, char *file, int line)
 
 	if (!bmanage_total)
 	{
-		void *ret=malloc(size);
+		void * ret=malloc(size);
 		return ret;
 	}
 
@@ -343,7 +344,7 @@ void *i4_malloc(w32 size, char *file, int line)
 	{
 		for (int i=0; i<bmanage_total; i++)
 		{
-			void *a=bmanage[i].alloc(size, reason);
+			void * a=bmanage[i].alloc(size, reason);
 			if (a)
 			{
 				mem_lock.unlock();
@@ -360,11 +361,12 @@ void *i4_malloc(w32 size, char *file, int line)
 		mem_lock.unlock();
 		i4_error("Out of memory!");
 		//    free_up_memory();
-	} while (1);
+	}
+	while (1);
 }
 
 
-void i4_free(void *ptr)
+void i4_free(void * ptr)
 {
 	pf_free.start();
 
@@ -403,7 +405,7 @@ void i4_free(void *ptr)
 }
 
 
-void *i4_realloc(void *ptr, w32 size, char *file, int line)
+void *i4_realloc(void * ptr, w32 size, char * file, int line)
 {
 	if (!ptr)
 	{
@@ -416,7 +418,7 @@ void *i4_realloc(void *ptr, w32 size, char *file, int line)
 	{
 		// thread protect the c library realloc
 		mem_lock.lock();
-		void *ret=realloc(ptr,size);
+		void * ret=realloc(ptr,size);
 		mem_lock.unlock();
 		return ret;
 	}
@@ -437,7 +439,7 @@ void *i4_realloc(void *ptr, w32 size, char *file, int line)
 			old_size=bmanage[i].pointer_size(ptr);
 			if (ptr<=(void *)bmanage[i].slast)
 			{
-				void *nptr=i4_malloc(size, file, line);
+				void * nptr=i4_malloc(size, file, line);
 				if ((sw32)size>old_size)
 				{
 					memcpy(nptr,ptr,old_size);
@@ -467,9 +469,9 @@ void dmem_report()
 
 static i4_static_file_class mem_report;
 
-void i4_mem_report(char *filename)
+void i4_mem_report(char * filename)
 {
-	i4_file_class *fp=mem_report.open(filename);
+	i4_file_class * fp=mem_report.open(filename);
 
 	if (fp)
 	{
@@ -483,13 +485,13 @@ void i4_mem_report(char *filename)
 }
 
 
-long small_ptr_size(void *ptr)
+long small_ptr_size(void * ptr)
 {
 	return ((small_block *)(((long *)ptr)[-1]))->size;
 }
 
 
-int valid_ptr(void *ptr)
+int valid_ptr(void * ptr)
 {
 	if (!bmanage_total)
 	{
@@ -513,7 +515,7 @@ int valid_ptr(void *ptr)
 
 
 
-int valid_memory(void *ptr)
+int valid_memory(void * ptr)
 {
 	for (int i=0; i<bmanage_total; i++)
 	{

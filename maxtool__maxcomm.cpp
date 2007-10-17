@@ -15,6 +15,7 @@ int m1_mail_slot_class::create(const i4_const_str &name)
 //{{{
 {
 	char buf[256];
+
 	slot = CreateMailslot(i4_os_string(name,buf,sizeof(buf)),  // mail slot name
 						  0,                   // maximum message size (0 == NO_LIMIT)
 						  MAILSLOT_WAIT_FOREVER, // read timeout status
@@ -41,6 +42,7 @@ int m1_mail_slot_class::open(const i4_const_str &name)
 //{{{
 {
 	char buf[256];
+
 	slot = CreateFile(i4_os_string(name,buf,sizeof(buf)),  // mail slot name
 					  GENERIC_WRITE,       // needs GENERIC_WRITE to send to slot
 					  FILE_SHARE_READ,     // required for mail slots
@@ -82,7 +84,7 @@ int m1_mail_slot_class::read_ready()
 //}}}
 
 
-w32 m1_mail_slot_class::write(char *buff, w32 size)
+w32 m1_mail_slot_class::write(char * buff, w32 size)
 //{{{
 {
 	w32 r;
@@ -105,7 +107,7 @@ w32 m1_mail_slot_class::write(char *buff, w32 size)
 //}}}
 
 
-w32 m1_mail_slot_class::read(char *buff, w32 maxsize)
+w32 m1_mail_slot_class::read(char * buff, w32 maxsize)
 //{{{
 {
 	w32 size, number, r;

@@ -49,8 +49,8 @@ public:
 	// this function will also add the rocket to the map and do a request_think()
 	virtual void fire_at(i4_float sx, i4_float sy, i4_float sz,
 						 i4_float angle,
-						 g1_map_piece_class *kill_target,
-						 g1_map_piece_class *owner,
+						 g1_map_piece_class * kill_target,
+						 g1_map_piece_class * owner,
 						 w32 damage);
 
 	// fire is called to setup the rocket if the rocket is not being fired at anything in
@@ -58,16 +58,16 @@ public:
 	// if owner is not 0, then owner will be notified when the rocket hits or misses
 	// this function will also add the rocket to the map and do a request_think()
 	virtual void fire(i4_float sx, i4_float sy, i4_float sz, i4_angle angle,
-					  g1_map_piece_class *owner,
+					  g1_map_piece_class * owner,
 					  w32 damage);
 
-	g1_rocket_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	virtual void load(g1_loader_class *fp);
-	virtual void skipload(g1_loader_class *fp);
+	g1_rocket_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	virtual void load(g1_loader_class * fp);
+	virtual void skipload(g1_loader_class * fp);
 
 	virtual void think();
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 
 	virtual i4_bool move(i4_float x_amount,
 						 i4_float y_amount,

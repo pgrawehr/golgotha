@@ -59,9 +59,9 @@ class r1_opengl_render_window_class :
 	public r1_render_window_class
 {
 public:
-	r1_opengl_render_window_class *next_rw;
+	r1_opengl_render_window_class * next_rw;
 	i4_bool need_flip_update;
-	r1_opengl_render_window_class(w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class *api);
+	r1_opengl_render_window_class(w16 w, w16 h, r1_expand_type expand_type, r1_render_api_class * api);
 	~r1_opengl_render_window_class();
 	void draw(i4_draw_context_class &context);
 	void request_redraw(i4_bool for_a_child)
@@ -86,7 +86,7 @@ public:
 
 r1_opengl_render_window_class::r1_opengl_render_window_class(w16 w, w16 h,
 															 r1_expand_type expand_type,
-															 r1_render_api_class *api)
+															 r1_render_api_class * api)
 	: r1_render_window_class(w,h,expand_type, api)
 {
 	need_flip_update = i4_T;
@@ -148,7 +148,7 @@ class r1_opengl_render_class :
 {
 private:
 
-	static i4_display_class *display;
+	static i4_display_class * display;
 	float oo_half_width, oo_half_height; // inverse of half display dimensions
 
 	r1_alpha_type pre_holy_alpha_mode;
@@ -157,9 +157,10 @@ private:
 	i4_bool texture_mode;
 	i4_bool holy_mode;
 
-	i4_bool pass_verticies(int t_verts, r1_vert *src)
+	i4_bool pass_verticies(int t_verts, r1_vert * src)
 	{
 		float x, y, z, r=0, g=0, b=0, a,w;
+
 		while (t_verts--)
 		{
 			x = src->px + static_info.xoff;
@@ -225,7 +226,7 @@ public:
 
 	void disable_texture();
 	void enable_texture();
-	void check_error(char *file, int line);
+	void check_error(char * file, int line);
 
 	void set_write_mode(r1_write_mask_type mask)
 	{
@@ -284,7 +285,8 @@ public:
 
 	virtual r1_texture_manager_class *install_new_tmanager(w32 &index)
 	{
-		r1_texture_manager_class *new_tman=0;
+		r1_texture_manager_class * new_tman=0;
+
 		new_tman=new r1_opengl_texture_manager_class(tmanager->get_pal());
 		new_tman->is_master_tman=i4_F;
 		for (int k=0; k<tmanagers.size(); k++)
@@ -343,7 +345,7 @@ public:
 	}
 
 	// return false if display not compatible with render api
-	virtual i4_bool init(i4_display_class *display);
+	virtual i4_bool init(i4_display_class * display);
 
 	void enable_holy();
 
@@ -391,6 +393,7 @@ public:
 	{
 
 		w32 old_constant_color = get_constant_color();
+
 		if (z<r1_near_clip_z)
 		{
 			z=r1_near_clip_z;
@@ -513,7 +516,7 @@ public:
 
 
 
-	virtual void render_poly(int t_verts, r1_vert *verts)
+	virtual void render_poly(int t_verts, r1_vert * verts)
 	{
 		glBegin(GL_TRIANGLE_FAN);
 		pass_verticies(t_verts,verts);
@@ -521,7 +524,7 @@ public:
 		OGL_ERROR_CHECK();
 	}
 
-	virtual void render_lines(int t_lines, r1_vert *verts)
+	virtual void render_lines(int t_lines, r1_vert * verts)
 	{
 		glBegin(GL_LINE_STRIP);
 		//Since the argument to render_lines is number of lines, we add one
@@ -531,14 +534,14 @@ public:
 		OGL_ERROR_CHECK();
 	}
 
-	virtual void render_pixel(r1_vert *pixel)
+	virtual void render_pixel(r1_vert * pixel)
 	{
 		glBegin(GL_POINTS);
 		pass_verticies(1,pixel);
 		glEnd();
 		OGL_ERROR_CHECK();
 	}
-	void render_pixel(int t_points, r1_vert *pixel)
+	void render_pixel(int t_points, r1_vert * pixel)
 	{
 		glBegin(GL_POINTS);
 		pass_verticies(t_points,pixel);
@@ -562,7 +565,7 @@ public:
 		return "Golgotha OpenGL render class";
 	}
 
-	void copy_part(i4_image_class *im, int x, int y, int x1, int y1, int x2, int y2);
+	void copy_part(i4_image_class * im, int x, int y, int x1, int y1, int x2, int y2);
 
 	void use_texture(r1_texture_handle material_ref, sw32 desired_width, w32 frame);
 	void use_texture(w32 index, r1_texture_handle material_ref, sw32 desired_width, w32 frame);
@@ -571,9 +574,9 @@ public:
 };
 
 r1_opengl_render_class r1_opengl_render;
-i4_display_class *r1_opengl_render_class::display=0;
+i4_display_class * r1_opengl_render_class::display=0;
 
-void r1_opengl_render_class::copy_part(i4_image_class *im,
+void r1_opengl_render_class::copy_part(i4_image_class * im,
 									   int x, int y, // position on screen
 									   int x1, int y1, // image area to copy
 									   int x2, int y2)
@@ -586,7 +589,7 @@ void r1_opengl_render_class::copy_part(i4_image_class *im,
 		int width = x2 - x1 + 1;
 		int height = y2 - y1 + 1;
 
-		i4_image_class *dst_im = i4_create_image( width, height, display->get_palette());
+		i4_image_class * dst_im = i4_create_image( width, height, display->get_palette());
 
 		if (dst_im)
 		{
@@ -623,14 +626,15 @@ void r1_opengl_render_class::copy_part(i4_image_class *im,
 	}
 }
 
-void r1_opengl_render_class::check_error(char *file, int line)
+void r1_opengl_render_class::check_error(char * file, int line)
 {
 	GLenum e=glGetError();
+
 	if (e==GL_NO_ERROR)
 	{
 		return;
 	}
-	char *s="";
+	char * s="";
 	switch(e)
 	{
 		case GL_INVALID_ENUM:
@@ -685,7 +689,7 @@ void r1_opengl_render_class::enable_texture()
 
 }
 
-i4_bool r1_opengl_render_class::init(i4_display_class *_display)
+i4_bool r1_opengl_render_class::init(i4_display_class * _display)
 {
 	if (_display == i4_opengl_display)
 	{
@@ -768,7 +772,7 @@ void r1_opengl_render_class::use_texture(w32 index, r1_texture_handle handle, sw
 	enable_texture();
 
 	sw32 w, h;
-	r1_miplevel_t *mip = (tmanagers[index])->get_texture(handle,frame,desired_width,w,h);
+	r1_miplevel_t * mip = (tmanagers[index])->get_texture(handle,frame,desired_width,w,h);
 
 	if (mip && mip != last_node)
 	{
@@ -818,7 +822,7 @@ void r1_opengl_render_class::use_texture(r1_texture_handle handle,
 	enable_texture();
 
 	sw32 w, h;
-	r1_miplevel_t *mip = tmanager->get_texture(handle,frame,desired_width,w,h);
+	r1_miplevel_t * mip = tmanager->get_texture(handle,frame,desired_width,w,h);
 
 	if (mip && mip != last_node)
 	{

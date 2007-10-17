@@ -97,8 +97,8 @@ struct bandInfoStruct bandInfo[7] = {
 static int mapbuf0[7][152];
 static int mapbuf1[7][156];
 static int mapbuf2[7][44];
-static int *map[7][3];
-static int *mapend[7][3];
+static int * map[7][3];
+static int * mapend[7][3];
 
 static unsigned int n_slen2[512]; /* MPEG 2.0 slen for 'normal' mode */
 static unsigned int i_slen2[256]; /* MPEG 2.0 slen for intensity stereo */
@@ -143,16 +143,16 @@ void init_layer3(int down_samp)
 
 	for(i=0; i<18; i++)
 	{
-		win[0][i]    = win[1][i]    = 0.5 *sin( M_PI / 72.0 *(double) (2 *(i+0) +1) ) / cos( M_PI * (double) (2*(i+0) +19) / 72.0 );
-		win[0][i+18] = win[3][i+18] = 0.5 *sin( M_PI / 72.0 *(double) (2 *(i+18)+1) ) / cos( M_PI * (double) (2*(i+18)+19) / 72.0 );
+		win[0][i]    = win[1][i]    = 0.5 *sin( M_PI / 72.0 * (double) (2 * (i+0) +1) ) / cos( M_PI * (double) (2*(i+0) +19) / 72.0 );
+		win[0][i+18] = win[3][i+18] = 0.5 *sin( M_PI / 72.0 * (double) (2 * (i+18)+1) ) / cos( M_PI * (double) (2*(i+18)+19) / 72.0 );
 	}
 	for(i=0; i<6; i++)
 	{
 		win[1][i+18] = 0.5 / cos( M_PI * (double) (2*(i+18)+19) / 72.0 );
 		win[3][i+12] = 0.5 / cos( M_PI * (double) (2*(i+12)+19) / 72.0 );
-		win[1][i+24] = 0.5 *sin( M_PI / 24.0 *(double) (2 *i+13) ) / cos( M_PI * (double) (2*(i+24)+19) / 72.0 );
+		win[1][i+24] = 0.5 *sin( M_PI / 24.0 * (double) (2 * i+13) ) / cos( M_PI * (double) (2*(i+24)+19) / 72.0 );
 		win[1][i+30] = win[3][i] = 0.0;
-		win[3][i+6 ] = 0.5 *sin( M_PI / 24.0 *(double) (2 *i+1) )  / cos( M_PI * (double) (2*(i+6 )+19) / 72.0 );
+		win[3][i+6 ] = 0.5 *sin( M_PI / 24.0 * (double) (2 * i+1) )  / cos( M_PI * (double) (2*(i+6 )+19) / 72.0 );
 	}
 
 	for(i=0; i<9; i++)
@@ -183,7 +183,7 @@ void init_layer3(int down_samp)
 
 	for(i=0; i<12; i++)
 	{
-		win[2][i]  = 0.5 *sin( M_PI / 24.0 *(double) (2 *i+1) ) / cos( M_PI * (double) (2*i+7) / 24.0 );
+		win[2][i]  = 0.5 *sin( M_PI / 24.0 * (double) (2 * i+1) ) / cos( M_PI * (double) (2*i+7) / 24.0 );
 		for(j=0; j<6; j++)
 		{
 			COS1[i][j] = cos( M_PI / 24.0 * (double) ((2*i+7)*(2*j+1)) );
@@ -237,10 +237,10 @@ void init_layer3(int down_samp)
 
 	for(j=0; j<7; j++)
 	{
-		struct bandInfoStruct *bi = &bandInfo[j];
-		int *mp;
+		struct bandInfoStruct * bi = &bandInfo[j];
+		int * mp;
 		int cb,lwin;
-		int *bdf;
+		int * bdf;
 
 		mp = map[j][0] = mapbuf0[j];
 		bdf = bi->longDiff;
@@ -375,7 +375,7 @@ void init_layer3(int down_samp)
 /*
  * read additional side information
  */
-static void III_get_side_info_1(struct III_sideinfo *si,int stereo,
+static void III_get_side_info_1(struct III_sideinfo * si,int stereo,
 								int ms_stereo,long sfreq,int single)
 {
 	int ch, gr;
@@ -401,7 +401,7 @@ static void III_get_side_info_1(struct III_sideinfo *si,int stereo,
 	{
 		for (ch=0; ch<stereo; ch++)
 		{
-			III_sideinfo::what_the::gr_info_s *gr_info = (III_sideinfo::what_the::gr_info_s *)(&(si->ch[ch].gr[gr]));
+			III_sideinfo::what_the::gr_info_s * gr_info = (III_sideinfo::what_the::gr_info_s *)(&(si->ch[ch].gr[gr]));
 
 			gr_info->part2_3_length = getbits(12);
 			gr_info->big_values = getbits_fast(9);
@@ -461,7 +461,7 @@ static void III_get_side_info_1(struct III_sideinfo *si,int stereo,
 /*
  * Side Info for MPEG 2.0 / LSF
  */
-static void III_get_side_info_2(struct III_sideinfo *si,int stereo,
+static void III_get_side_info_2(struct III_sideinfo * si,int stereo,
 								int ms_stereo,long sfreq,int single)
 {
 	int ch;
@@ -479,7 +479,7 @@ static void III_get_side_info_2(struct III_sideinfo *si,int stereo,
 
 	for (ch=0; ch<stereo; ch++)
 	{
-		III_sideinfo::what_the::gr_info_s *gr_info = (III_sideinfo::what_the::gr_info_s *)&(si->ch[ch].gr[0]);
+		III_sideinfo::what_the::gr_info_s * gr_info = (III_sideinfo::what_the::gr_info_s *)&(si->ch[ch].gr[0]);
 
 		gr_info->part2_3_length = getbits(12);
 		gr_info->big_values = getbits_fast(9);
@@ -545,7 +545,7 @@ static void III_get_side_info_2(struct III_sideinfo *si,int stereo,
 /*
  * read scalefactors
  */
-static int III_get_scale_factors_1(int *scf,struct III_sideinfo::what_the::gr_info_s *gr_info)
+static int III_get_scale_factors_1(int * scf,struct III_sideinfo::what_the::gr_info_s * gr_info)
 {
 	static unsigned char slen[2][16] = {
 		{0, 0, 0, 0, 3, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4},
@@ -678,9 +678,9 @@ static int III_get_scale_factors_1(int *scf,struct III_sideinfo::what_the::gr_in
 	return numbits;
 }
 
-static int III_get_scale_factors_2(int *scf, III_sideinfo::what_the::gr_info_s *gr_info,int i_stereo)
+static int III_get_scale_factors_2(int * scf, III_sideinfo::what_the::gr_info_s * gr_info,int i_stereo)
 {
-	unsigned char *pnt;
+	unsigned char * pnt;
 	int i,j;
 	unsigned int slen;
 	int n = 0;
@@ -759,14 +759,14 @@ static int pretab2[22] = {
 /*
  * don't forget to apply the same changes to III_dequantize_sample_ms() !!!
  */
-static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int *scf,
-								 III_sideinfo::what_the::gr_info_s *gr_info,int sfreq,int part2bits)
+static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int * scf,
+								 III_sideinfo::what_the::gr_info_s * gr_info,int sfreq,int part2bits)
 {
 	int shift = 1 + gr_info->scalefac_scale;
-	real *xrpnt = (real *) xr;
+	real * xrpnt = (real *) xr;
 	int l[3],l3;
 	int part2remain = gr_info->part2_3_length - part2bits;
-	int *me;
+	int * me;
 
 	{
 		int bv       = gr_info->big_values;
@@ -808,7 +808,7 @@ static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int *scf,
 		int i,max[4];
 		int step=0,lwin=0,cb=0;
 		register real v = 0.0;
-		register int *m,mc;
+		register int * m,mc;
 
 		if(gr_info->mixed_block_flag)
 		{
@@ -829,7 +829,7 @@ static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int *scf,
 		for(i=0; i<2; i++)
 		{
 			int lp = l[i];
-			struct newhuff *h = ht+gr_info->table_select[i];
+			struct newhuff * h = ht+gr_info->table_select[i];
 			for(; lp; lp--,mc--)
 			{
 				register int x,y;
@@ -851,7 +851,7 @@ static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int *scf,
 					}
 				}
 				{
-					register short *val = h->table;
+					register short * val = h->table;
 					while((y=*val++)<0)
 					{
 						if (get1bit())
@@ -931,8 +931,8 @@ static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int *scf,
 		}
 		for(; l3 && (part2remain > 0); l3--)
 		{
-			struct newhuff *h = htc+gr_info->count1table_select;
-			register short *val = h->table,a;
+			struct newhuff * h = htc+gr_info->count1table_select;
+			register short * val = h->table,a;
 
 			while((a=*val++)<0)
 			{
@@ -1043,10 +1043,10 @@ static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int *scf,
 		/*
 		 * decoding with 'long' BandIndex table (block_type != 2)
 		 */
-		int *pretab = gr_info->preflag ? pretab1 : pretab2;
+		int * pretab = gr_info->preflag ? pretab1 : pretab2;
 		int i,max = -1;
 		int cb = 0;
-		register int *m = map[sfreq][2];
+		register int * m = map[sfreq][2];
 		register real v = 0.0;
 		register int mc = 0;
 #if 0
@@ -1059,7 +1059,7 @@ static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int *scf,
 		for(i=0; i<3; i++)
 		{
 			int lp = l[i];
-			struct newhuff *h = ht+gr_info->table_select[i];
+			struct newhuff * h = ht+gr_info->table_select[i];
 
 			for(; lp; lp--,mc--)
 			{
@@ -1072,7 +1072,7 @@ static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int *scf,
 					cb = *m++;
 				}
 				{
-					register short *val = h->table;
+					register short * val = h->table;
 					while((y=*val++)<0)
 					{
 						if (get1bit())
@@ -1155,8 +1155,8 @@ static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int *scf,
 		 */
 		for(; l3 && (part2remain > 0); l3--)
 		{
-			struct newhuff *h = htc+gr_info->count1table_select;
-			register short *val = h->table,a;
+			struct newhuff * h = htc+gr_info->count1table_select;
+			register short * val = h->table,a;
 
 			while((a=*val++)<0)
 			{
@@ -1239,15 +1239,15 @@ static int III_dequantize_sample(real xr[SBLIMIT][SSLIMIT],int *scf,
 	return 0;
 }
 
-static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int *scf,
-									III_sideinfo::what_the::gr_info_s *gr_info,int sfreq,int part2bits)
+static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int * scf,
+									III_sideinfo::what_the::gr_info_s * gr_info,int sfreq,int part2bits)
 {
 	int shift = 1 + gr_info->scalefac_scale;
-	real *xrpnt = (real *) xr[1];
-	real *xr0pnt = (real *) xr[0];
+	real * xrpnt = (real *) xr[1];
+	real * xr0pnt = (real *) xr[0];
 	int l[3],l3;
 	int part2remain = gr_info->part2_3_length - part2bits;
-	int *me;
+	int * me;
 
 	{
 		int bv       = gr_info->big_values;
@@ -1286,7 +1286,7 @@ static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int *scf,
 		int i,max[4];
 		int step=0,lwin=0,cb=0;
 		register real v = 0.0;
-		register int *m,mc = 0;
+		register int * m,mc = 0;
 
 		if(gr_info->mixed_block_flag)
 		{
@@ -1306,7 +1306,7 @@ static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int *scf,
 		for(i=0; i<2; i++)
 		{
 			int lp = l[i];
-			struct newhuff *h = ht+gr_info->table_select[i];
+			struct newhuff * h = ht+gr_info->table_select[i];
 			for(; lp; lp--,mc--)
 			{
 				int x,y;
@@ -1330,7 +1330,7 @@ static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int *scf,
 					}
 				}
 				{
-					register short *val = h->table;
+					register short * val = h->table;
 					while((y=*val++)<0)
 					{
 						if (get1bit())
@@ -1430,8 +1430,8 @@ static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int *scf,
 
 		for(; l3 && (part2remain > 0); l3--)
 		{
-			struct newhuff *h = htc+gr_info->count1table_select;
-			register short *val = h->table,a;
+			struct newhuff * h = htc+gr_info->count1table_select;
+			register short * val = h->table,a;
 
 			while((a=*val++)<0)
 			{
@@ -1545,10 +1545,10 @@ static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int *scf,
 	}
 	else
 	{
-		int *pretab = gr_info->preflag ? pretab1 : pretab2;
+		int * pretab = gr_info->preflag ? pretab1 : pretab2;
 		int i,max = -1;
 		int cb = 0;
-		register int mc=0,*m = map[sfreq][2];
+		register int mc=0,* m = map[sfreq][2];
 		register real v = 0.0;
 #if 0
 		me = mapend[sfreq][2];
@@ -1557,7 +1557,7 @@ static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int *scf,
 		for(i=0; i<3; i++)
 		{
 			int lp = l[i];
-			struct newhuff *h = ht+gr_info->table_select[i];
+			struct newhuff * h = ht+gr_info->table_select[i];
 
 			for(; lp; lp--,mc--)
 			{
@@ -1569,7 +1569,7 @@ static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int *scf,
 					v = gr_info->pow2gain[((*scf++) + (*pretab++)) << shift];
 				}
 				{
-					register short *val = h->table;
+					register short * val = h->table;
 					while((y=*val++)<0)
 					{
 						if (get1bit())
@@ -1665,8 +1665,8 @@ static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int *scf,
 
 		for(; l3 && (part2remain > 0); l3--)
 		{
-			struct newhuff *h = htc+gr_info->count1table_select;
-			register short *val = h->table,a;
+			struct newhuff * h = htc+gr_info->count1table_select;
+			register short * val = h->table,a;
 
 			while((a=*val++)<0)
 			{
@@ -1750,12 +1750,12 @@ static int III_dequantize_sample_ms(real xr[2][SBLIMIT][SSLIMIT],int *scf,
 /*
  * III_stereo: calculate real channel values for Joint-I-Stereo-mode
  */
-static void III_i_stereo(real xr_buf[2][SBLIMIT][SSLIMIT],int *scalefac,
-						 III_sideinfo::what_the::gr_info_s *gr_info,int sfreq,int ms_stereo,int lsf)
+static void III_i_stereo(real xr_buf[2][SBLIMIT][SSLIMIT],int * scalefac,
+						 III_sideinfo::what_the::gr_info_s * gr_info,int sfreq,int ms_stereo,int lsf)
 {
-	real(*xr)[SBLIMIT *SSLIMIT] = (real(*)[SBLIMIT*SSLIMIT] )xr_buf;
-	struct bandInfoStruct *bi = &bandInfo[sfreq];
-	real *tab1,*tab2;
+	real(*xr)[SBLIMIT * SSLIMIT] = (real(*)[SBLIMIT*SSLIMIT] )xr_buf;
+	struct bandInfoStruct * bi = &bandInfo[sfreq];
+	real * tab1,* tab2;
 
 	if(lsf)
 	{
@@ -1919,7 +1919,7 @@ static void III_i_stereo(real xr_buf[2][SBLIMIT][SSLIMIT],int *scalefac,
 	}   /* ... */
 }
 
-static void III_antialias(real xr[SBLIMIT][SSLIMIT], III_sideinfo::what_the::gr_info_s *gr_info)
+static void III_antialias(real xr[SBLIMIT][SSLIMIT], III_sideinfo::what_the::gr_info_s * gr_info)
 {
 	int sblim;
 
@@ -1941,13 +1941,13 @@ static void III_antialias(real xr[SBLIMIT][SSLIMIT], III_sideinfo::what_the::gr_
 
 	{
 		int sb;
-		real *xr1=(real *) xr[1];
+		real * xr1=(real *) xr[1];
 
 		for(sb=sblim; sb; sb--,xr1+=10)
 		{
 			int ss;
-			real *cs=aa_cs,*ca=aa_ca;
-			real *xr2 = xr1;
+			real * cs=aa_cs,* ca=aa_ca;
+			real * xr2 = xr1;
 
 			for(ss=7; ss>=0; ss--)
 			{
@@ -2001,14 +2001,14 @@ static void III_antialias(real xr[SBLIMIT][SSLIMIT], III_sideinfo::what_the::gr_
 /*                                                                  */
 /*------------------------------------------------------------------*/
 
-static void dct36(real *inbuf,real *o1,real *o2,real *wintab,real *tsbuf)
+static void dct36(real * inbuf,real * o1,real * o2,real * wintab,real * tsbuf)
 {
 #ifdef NEW_DCT9
 	real tmp[18];
 #endif
 
 	{
-		register real *in = inbuf;
+		register real * in = inbuf;
 
 		in[17]+=in[16];
 		in[16]+=in[15];
@@ -2135,10 +2135,10 @@ static void dct36(real *inbuf,real *o1,real *o2,real *wintab,real *tsbuf)
 								}
 
 		{
-			register real *out2 = o2;
-			register real *w = wintab;
-			register real *out1 = o1;
-			register real *ts = tsbuf;
+			register real * out2 = o2;
+			register real * w = wintab;
+			register real * out1 = o1;
+			register real * ts = tsbuf;
 
 			MACRO(0);
 			MACRO(1);
@@ -2173,11 +2173,11 @@ static void dct36(real *inbuf,real *o1,real *o2,real *wintab,real *tsbuf)
 		sum1 = (tmp2b - tmp1b) * tfcos36[(v)]; \
 		MACRO0(v); }
 
-			register const real *c = COS9;
-			register real *out2 = o2;
-			register real *w = wintab;
-			register real *out1 = o1;
-			register real *ts = tsbuf;
+			register const real * c = COS9;
+			register real * out2 = o2;
+			register real * w = wintab;
+			register real * out1 = o1;
+			register real * ts = tsbuf;
 
 			real ta33,ta66,tb33,tb66;
 
@@ -2245,7 +2245,7 @@ static void dct36(real *inbuf,real *o1,real *o2,real *wintab,real *tsbuf)
 /*
  * new DCT12
  */
-static void dct12(real *in,real *rawout1,real *rawout2,register real *wi,register real *ts)
+static void dct12(real * in,real * rawout1,real * rawout2,register real * wi,register real * ts)
 {
 #define DCT12_PART1                                                                               \
 	in5 = in[5*3];                                                                                \
@@ -2280,7 +2280,7 @@ static void dct12(real *in,real *rawout1,real *rawout2,register real *wi,registe
 
 	{
 		real in0,in1,in2,in3,in4,in5;
-		register real *out1 = rawout1;
+		register real * out1 = rawout1;
 		ts[SBLIMIT*0] = out1[0];
 		ts[SBLIMIT*1] = out1[1];
 		ts[SBLIMIT*2] = out1[2];
@@ -2320,7 +2320,7 @@ static void dct12(real *in,real *rawout1,real *rawout2,register real *wi,registe
 
 	{
 		real in0,in1,in2,in3,in4,in5;
-		register real *out2 = rawout2;
+		register real * out2 = rawout2;
 
 		DCT12_PART1
 
@@ -2354,7 +2354,7 @@ static void dct12(real *in,real *rawout1,real *rawout2,register real *wi,registe
 
 	{
 		real in0,in1,in2,in3,in4,in5;
-		register real *out2 = rawout2;
+		register real * out2 = rawout2;
 		out2[12]=out2[13]=out2[14]=out2[15]=out2[16]=out2[17]=0.0;
 
 		DCT12_PART1
@@ -2390,10 +2390,10 @@ static void dct12(real *in,real *rawout1,real *rawout2,register real *wi,registe
  * III_hybrid
  */
 static void III_hybrid(real fsIn[SBLIMIT][SSLIMIT],real tsOut[SSLIMIT][SBLIMIT],
-					   int ch, III_sideinfo::what_the::gr_info_s *gr_info)
+					   int ch, III_sideinfo::what_the::gr_info_s * gr_info)
 {
-	real *tspnt = (real *) tsOut;
-	real *rawout1,*rawout2;
+	real * tspnt = (real *) tsOut;
+	real * rawout1,* rawout2;
 	int bt;
 	unsigned int sb = 0;
 
@@ -2448,7 +2448,7 @@ static void III_hybrid(real fsIn[SBLIMIT][SSLIMIT],real tsOut[SSLIMIT][SBLIMIT],
 /*
  * main layer3 handler
  */
-int do_layer3(struct frame *fr,int outmode,struct audio_info_struct *ai)
+int do_layer3(struct frame * fr,int outmode,struct audio_info_struct * ai)
 {
 	int gr, ch, ss,clip=0;
 	int scalefacs[39];/* max 39 for short[13][3] mode, mixed: 38, long: 22 */
@@ -2495,7 +2495,7 @@ int do_layer3(struct frame *fr,int outmode,struct audio_info_struct *ai)
 		static real hybridOut[2][SSLIMIT][SBLIMIT];
 
 		{
-			III_sideinfo::what_the::gr_info_s *gr_info = (III_sideinfo::what_the::gr_info_s *)&(sideinfo.ch[0].gr[gr]);
+			III_sideinfo::what_the::gr_info_s * gr_info = (III_sideinfo::what_the::gr_info_s *)&(sideinfo.ch[0].gr[gr]);
 			long part2bits;
 			if(fr->lsf)
 			{
@@ -2512,7 +2512,7 @@ int do_layer3(struct frame *fr,int outmode,struct audio_info_struct *ai)
 		}
 		if(stereo == 2)
 		{
-			III_sideinfo::what_the::gr_info_s *gr_info = (III_sideinfo::what_the::gr_info_s *)&(sideinfo.ch[1].gr[gr]);
+			III_sideinfo::what_the::gr_info_s * gr_info = (III_sideinfo::what_the::gr_info_s *)&(sideinfo.ch[1].gr[gr]);
 			long part2bits;
 			if(fr->lsf)
 			{
@@ -2560,7 +2560,7 @@ int do_layer3(struct frame *fr,int outmode,struct audio_info_struct *ai)
 				case 3:
 					{
 						unsigned int i;
-						register real *in0 = (real *) hybridIn[0],*in1 = (real *) hybridIn[1];
+						register real * in0 = (real *) hybridIn[0],* in1 = (real *) hybridIn[1];
 						for(i=0; i<SSLIMIT*gr_info->maxb; i++,in0++)
 						{
 							*in0 = (*in0 + *in1++);
@@ -2570,7 +2570,7 @@ int do_layer3(struct frame *fr,int outmode,struct audio_info_struct *ai)
 				case 1:
 					{
 						unsigned int i;
-						register real *in0 = (real *) hybridIn[0],*in1 = (real *) hybridIn[1];
+						register real * in0 = (real *) hybridIn[0],* in1 = (real *) hybridIn[1];
 						for(i=0; i<SSLIMIT*gr_info->maxb; i++)
 						{
 							*in0++ = *in1++;
@@ -2582,7 +2582,7 @@ int do_layer3(struct frame *fr,int outmode,struct audio_info_struct *ai)
 
 		for(ch=0; ch<stereo1; ch++)
 		{
-			III_sideinfo::what_the::gr_info_s *gr_info = (III_sideinfo::what_the::gr_info_s *)&(sideinfo.ch[ch].gr[gr]);
+			III_sideinfo::what_the::gr_info_s * gr_info = (III_sideinfo::what_the::gr_info_s *)&(sideinfo.ch[ch].gr[gr]);
 			III_antialias(hybridIn[ch],gr_info);
 			III_hybrid(hybridIn[ch], hybridOut[ch], ch,gr_info);
 		}

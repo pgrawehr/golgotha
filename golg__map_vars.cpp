@@ -15,7 +15,7 @@
 #include "lisp/li_init.h"
 #include "lisp/li_dialog.h"
 
-void g1_map_vars_class::load(g1_loader_class *fp, w32 sections)
+void g1_map_vars_class::load(g1_loader_class * fp, w32 sections)
 {
 	if ((sections & G1_MAP_VARS) && fp)
 	{
@@ -36,7 +36,7 @@ void g1_map_vars_class::load(g1_loader_class *fp, w32 sections)
 }
 
 
-void g1_map_vars_class::save(g1_saver_class *fp, w32 sections)
+void g1_map_vars_class::save(g1_saver_class * fp, w32 sections)
 {
 	if (sections & G1_MAP_VARS)
 	{
@@ -48,7 +48,7 @@ void g1_map_vars_class::save(g1_saver_class *fp, w32 sections)
 
 g1_map_vars_class g1_map_vars;
 
-li_object *g1_set_level_vars(li_object *o, li_environment *env)
+li_object *g1_set_level_vars(li_object * o, li_environment * env)
 {
 	if (o==0)
 	{
@@ -62,7 +62,7 @@ li_object *g1_set_level_vars(li_object *o, li_environment *env)
 
 
 
-li_object *g1_edit_level_vars(li_object *o, li_environment *env)
+li_object *g1_edit_level_vars(li_object * o, li_environment * env)
 {
 	li_create_dialog("Level Vars", g1_map_vars.var_ptr.get(), 0, g1_set_level_vars);
 	return 0;

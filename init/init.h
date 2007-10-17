@@ -40,8 +40,8 @@ enum {
 class i4_init_class
 {
 public:
-	static i4_init_class *first_init;
-	i4_init_class *next_init;
+	static i4_init_class * first_init;
+	i4_init_class * next_init;
 
 	virtual int init_type()
 	{

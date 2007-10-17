@@ -35,7 +35,7 @@ public:
 public:
 	virtual BOOL OnApply();
 protected:
-	virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV-Unterstützung
+	virtual void DoDataExchange(CDataExchange * pDX);    // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
 
 // Implementierung

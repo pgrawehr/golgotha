@@ -16,16 +16,16 @@
 class i4_text_window_class :
 	public i4_window_class
 {
-	i4_str *text;
-	i4_graphical_style_class *hint;
-	i4_font_class *font;
+	i4_str * text;
+	i4_graphical_style_class * hint;
+	i4_font_class * font;
 	int wrap_width;
 	int numlines;
 
 public:
 	i4_text_window_class(const i4_const_str &_text,
-						 i4_graphical_style_class *hint,
-						 i4_font_class *_font=0)
+						 i4_graphical_style_class * hint,
+						 i4_font_class * _font=0)
 		: i4_window_class(0, 0),
 		  hint(hint),
 		  text(new i4_str(_text)),
@@ -42,8 +42,8 @@ public:
 	}
 
 	i4_text_window_class(const i4_const_str &_text,
-						 i4_graphical_style_class *hint,
-						 i4_font_class *_font,int _wrap_width) :
+						 i4_graphical_style_class * hint,
+						 i4_font_class * _font,int _wrap_width) :
 		i4_window_class(0,0),
 		hint(hint),
 		text(new i4_str(_text)),
@@ -144,7 +144,7 @@ public:
 		delete text;
 	}
 
-	void set_text(i4_str *new_text)
+	void set_text(i4_str * new_text)
 	{
 		if (text)
 		{
@@ -160,7 +160,7 @@ public:
 		return text;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"text_window");
 	}

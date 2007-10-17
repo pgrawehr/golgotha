@@ -15,22 +15,22 @@ class g1_peon_tank_class :
 	public g1_map_piece_class
 {
 protected:
-	g1_mini_object *turret;
+	g1_mini_object * turret;
 	i4_float guard_angle;
 	int guard_time;
 public:
-	g1_peon_tank_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	void load(g1_loader_class *fp);
-	void skipload(g1_loader_class *fp);
+	g1_peon_tank_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	void load(g1_loader_class * fp);
+	void skipload(g1_loader_class * fp);
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 
 	virtual void fire();
 	virtual void think();
 
 	i4_float turret_kick,lturret_kick; //just an aesthetic thing, the turret kicks back when fired
-	int get_chunk_names(char **&list);
+	int get_chunk_names(char * *&list);
 };
 
 #endif

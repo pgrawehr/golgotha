@@ -33,21 +33,21 @@ pf_dx5_lock("dx5::lock");
 
 i4_dx5_display_class i4_dx5_display_class_instance;
 
-i4_dx5_display_class *i4_dx5_display=0;
+i4_dx5_display_class * i4_dx5_display=0;
 
 struct gr_buf_status_type
 {
 	sw8 state;           // -1 = not locked, else
 						 //    I4_FRAME_BUFFER_READ,
 						 // or I4_FRAME_BUFFER_WRITE
-	i4_image_class *im;
+	i4_image_class * im;
 
 
 } dx_buf[2];    // I4_FRONT_FRAME_BUFFER=0, I4_BACK_FRAME_BUFFER=1
 
 
 
-int dx5_error_function(const char *str)
+int dx5_error_function(const char * str)
 {
 	dx5_common.cleanup();
 	i4_dx5_display->error_handler.old_error_handler(str);
@@ -67,8 +67,8 @@ i4_refresh_type i4_dx5_display_class::update_model()
 
 }
 
-i4_image_class *i4_dx5_display_class::lock_frame_buffer(i4_frame_buffer_type type,
-														i4_frame_access_type access)
+i4_image_class * i4_dx5_display_class::lock_frame_buffer(i4_frame_buffer_type type,
+														 i4_frame_access_type access)
 {
 	if (access==dx_buf[type].state)
 	{
@@ -85,8 +85,8 @@ i4_image_class *i4_dx5_display_class::lock_frame_buffer(i4_frame_buffer_type typ
 	memset(&cur_dx5_lock_info,0,sizeof(DDSURFACEDESC));
 	cur_dx5_lock_info.dwSize = sizeof(DDSURFACEDESC);
 
-	IDirectDrawSurface3 *surf=type==I4_FRONT_FRAME_BUFFER ?
-							   dx5_common.front_surface : dx5_common.back_surface;
+	IDirectDrawSurface3 * surf=type==I4_FRONT_FRAME_BUFFER ?
+								dx5_common.front_surface : dx5_common.back_surface;
 
 	int flags=access==I4_FRAME_BUFFER_READ ? DDLOCK_READONLY :
 			   DDLOCK_WRITEONLY;
@@ -115,8 +115,8 @@ i4_image_class *i4_dx5_display_class::lock_frame_buffer(i4_frame_buffer_type typ
 
 void i4_dx5_display_class::unlock_frame_buffer(i4_frame_buffer_type type)
 {
-	IDirectDrawSurface3 *surf=type==I4_FRONT_FRAME_BUFFER ?
-							   dx5_common.front_surface : dx5_common.back_surface;
+	IDirectDrawSurface3 * surf=type==I4_FRONT_FRAME_BUFFER ?
+								dx5_common.front_surface : dx5_common.back_surface;
 
 //#ifndef DEBUG
 	if (surf)
@@ -181,7 +181,7 @@ i4_dx5_display_class::i4_dx5_display_class() :
 }
 
 
-i4_image_class *i4_dx5_display_class::get_screen()
+i4_image_class * i4_dx5_display_class::get_screen()
 {
 	return fake_screen;
 }
@@ -202,18 +202,18 @@ void i4_dx5_display_class::uninit()
 void i4_dx5_display_class::init()
 {
 	int id=0;
-	dx5_driver *list=dx5_common.get_driver_list();
-	char *n=name_buffer;
+	dx5_driver * list=dx5_common.get_driver_list();
+	char * n=name_buffer;
 
-	for (dx5_driver *d=list; d; d=d->next, id++)
+	for (dx5_driver * d=list; d; d=d->next, id++)
 	{
-		IDirectDraw2 *ddraw=dx5_common.initialize_driver(d);
+		IDirectDraw2 * ddraw=dx5_common.initialize_driver(d);
 		if (ddraw)
 		{
 			if (dx5_common.get_driver_hardware_info(ddraw,DRIVER_MODE_ENUMERATE))
 			{
 				sprintf(n, "%s : 3d Accelerated", d->DriverName);
-				i4_display_list_struct *s=new i4_display_list_struct;
+				i4_display_list_struct * s=new i4_display_list_struct;
 				s->add_to_list(n, id | 0x8000, 200, this, i4_display_list);
 				//s->add_to_list(n, id, this, i4_display_list);     // << JJ 2000.04.12
 				n+=strlen(n)+1;
@@ -222,7 +222,7 @@ void i4_dx5_display_class::init()
 			if (!stricmp(d->DriverName,"display"))
 			{
 				sprintf(n, "%s : Software Rendered", d->DriverName);
-				i4_display_list_struct *s=new i4_display_list_struct;
+				i4_display_list_struct * s=new i4_display_list_struct;
 				s->add_to_list(n, id, 190, this, i4_display_list);
 				n+=strlen(n)+1;
 			}
@@ -234,7 +234,7 @@ void i4_dx5_display_class::init()
 }
 
 // find the driver, then get it's modes and return the first one
-i4_display_class::mode *i4_dx5_display_class::get_first_mode(int driver_id)
+i4_display_class::mode * i4_dx5_display_class::get_first_mode(int driver_id)
 {
 	int find_id = driver_id & (~0x8000);  // top bit indicates hardware accelerated
 
@@ -244,12 +244,12 @@ i4_display_class::mode *i4_dx5_display_class::get_first_mode(int driver_id)
 		mode_list=0;
 	}
 
-	dx5_driver *driver_list=dx5_common.get_driver_list(), *d; //?
+	dx5_driver * driver_list=dx5_common.get_driver_list(), * d; //?
 	for (d=driver_list; find_id && d; d=d->next, find_id--)
 	{
 		;
 	}                                                     //Wie wird das Gerät gewählt?
-	IDirectDraw2 *ddraw=dx5_common.initialize_driver(d);
+	IDirectDraw2 * ddraw=dx5_common.initialize_driver(d);
 	dx5_common.free_driver_list(driver_list);
 	driver_list=0;
 	if (!ddraw)
@@ -277,7 +277,7 @@ i4_dx5_display_class::~i4_dx5_display_class()
 	i4_display_list=0;
 }
 
-i4_display_class::mode *i4_dx5_display_class::get_next_mode()
+i4_display_class::mode * i4_dx5_display_class::get_next_mode()
 {
 	if (!amode.dx5)
 	{
@@ -285,7 +285,7 @@ i4_display_class::mode *i4_dx5_display_class::get_next_mode()
 	}
 
 
-	DDSURFACEDESC *desc=&amode.dx5->desc;
+	DDSURFACEDESC * desc=&amode.dx5->desc;
 
 	sprintf(amode.name, "%d X %d %dbit", desc->dwWidth, desc->dwHeight,
 			desc->ddpfPixelFormat.dwRGBBitCount);
@@ -308,7 +308,7 @@ i4_display_class::mode *i4_dx5_display_class::get_next_mode()
 	return &amode;
 }
 
-li_object *show_gdi_surface5(li_object *o, li_environment *env)
+li_object *show_gdi_surface5(li_object * o, li_environment * env)
 {
 	i4_dx5_display_class_instance.FlipToGDISurface();
 	return 0;
@@ -348,7 +348,7 @@ i4_bool i4_dx5_display_class::initialize_mode()
 	// find the driver and initialize it
 	int find_id = last_mode.driver_id & (~0x8000);
 
-	dx5_driver *driver_list=dx5_common.get_driver_list(), *d;
+	dx5_driver * driver_list=dx5_common.get_driver_list(), * d;
 	for (d=driver_list; find_id && d; d=d->next, find_id--)
 	{
 		;
@@ -470,6 +470,7 @@ i4_bool i4_dx5_display_class::change_mode(w16 newwidth, w16 newheight,
 										  w32 newbitdepth, i4_change_type change_type)
 {
 	w32 retcode;
+
 	if ((!dx5_common.ddraw)||(!fake_screen))
 	{
 		return i4_F;
@@ -651,7 +652,7 @@ i4_bool i4_dx5_display_class::close()
 }
 
 
-i4_bool i4_dx5_display_class::set_mouse_shape(i4_cursor_class *cursor)
+i4_bool i4_dx5_display_class::set_mouse_shape(i4_cursor_class * cursor)
 {
 	if (mouse)
 	{
@@ -672,6 +673,7 @@ extern w32 g1_disable_all_drawing;
 void i4_dx5_display_class::flush()
 {
 	RECT src;
+
 	if (g1_disable_all_drawing>1)
 	{
 		return;
@@ -747,7 +749,7 @@ void i4_dx5_display_class::flush()
 	// Step 1 : copy middle buffer information to the back-buffer
 
 	i4_rect_list_class::area_iter a,b;
-	i4_rect_list_class *use_list;
+	i4_rect_list_class * use_list;
 
 	// if page flipped we need to make add the current dirty to the stuff left over from last frame
 #ifdef DX5_NOREALPAGEFLIP
@@ -1063,7 +1065,7 @@ void i4_dx5_display_class::FlipToGDISurface()
 	return;
 }
 
-li_object *show_gdi_surface_null(li_object *o, li_environment *env)
+li_object *show_gdi_surface_null(li_object * o, li_environment * env)
 {
 	return 0;
 }

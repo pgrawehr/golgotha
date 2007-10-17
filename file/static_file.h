@@ -16,13 +16,13 @@ class i4_static_file_class :
 	public i4_file_class
 {
 public:
-	FILE *f;
+	FILE * f;
 
 	i4_static_file_class() :
 		f(0)
 	{
 	}
-	i4_static_file_class(const char *name) :
+	i4_static_file_class(const char * name) :
 		f(0)
 	{
 	}
@@ -34,7 +34,7 @@ public:
 		}
 	}
 
-	i4_static_file_class *open(const char *name)
+	i4_static_file_class *open(const char * name)
 	{
 		if (f)
 		{
@@ -60,11 +60,11 @@ public:
 		f=0;
 	}
 
-	virtual w32 read(void *buffer, w32 size)
+	virtual w32 read(void * buffer, w32 size)
 	{
 		return 0;
 	}
-	virtual w32 write(const void *buffer, w32 size)
+	virtual w32 write(const void * buffer, w32 size)
 	{
 		return fwrite(buffer, size, 1, f);
 	}

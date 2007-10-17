@@ -15,7 +15,7 @@
 struct i4_profile_stack_item
 {
 	w64 start_clock;
-	i4_profile_class *item;
+	i4_profile_class * item;
 };
 
 enum {
@@ -36,7 +36,7 @@ struct i4_profile_stack_struct
 		return i4_profile_stack_top;
 	}
 
-	void push(i4_profile_class *item, w64 current_clock)
+	void push(i4_profile_class * item, w64 current_clock)
 	{
 		if (top()==I4_MAX_PROFILE_STACK_DEPTH)
 		{
@@ -74,7 +74,8 @@ struct i4_profile_stack_struct
 	// called before reports are formed
 	void flush_stack()
 	{
-		i4_profile_stack_item *t=get_top();
+		i4_profile_stack_item * t=get_top();
+
 		if (t)
 		{
 			w64 current_clock=i4_get_system_clock();

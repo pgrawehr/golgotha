@@ -18,7 +18,7 @@
 #include "error/alert.h"
 
 
-static void g1_add_to_list(i4_array<i4_str *> &t_arr, i4_str *tname)
+static void g1_add_to_list(i4_array<i4_str *> &t_arr, i4_str * tname)
 {
 	if (!tname || tname->null())
 	{
@@ -54,7 +54,7 @@ static void g1_add_to_list(i4_array<i4_str *> &t_arr, i4_str *tname)
 //}
 
 
-static void g1_add_to_list(i4_array<i4_str *> &t_arr, li_object *name)
+static void g1_add_to_list(i4_array<i4_str *> &t_arr, li_object * name)
 {
 	g1_add_to_list(t_arr, new i4_str(li_string::get(name,0)->value()));
 }
@@ -63,11 +63,11 @@ static void g1_add_to_list(i4_array<i4_str *> &t_arr, li_object *name)
 void g1_make_texture_list_for_model(const i4_const_str model_name,
 									i4_array<i4_str *> &t_arr)
 {
-	i4_file_class *fp=i4_open(model_name);
+	i4_file_class * fp=i4_open(model_name);
 
 	if (fp)
 	{
-		i4_loader_class *gfp=i4_open_save_file(fp);
+		i4_loader_class * gfp=i4_open_save_file(fp);
 		if (gfp)
 		{
 			if (gfp->goto_section(G1_SECTION_MODEL_TEXTURE_NAMES))
@@ -75,7 +75,7 @@ void g1_make_texture_list_for_model(const i4_const_str model_name,
 				w16 quads=gfp->read_16();
 				for (int i=0; i<quads; i++)
 				{
-					i4_str *tname=gfp->read_counted_str();
+					i4_str * tname=gfp->read_counted_str();
 					if (tname->null())
 					{
 						i4_alert("Model %S has a face with no name!", 100, &model_name);
@@ -92,15 +92,15 @@ void g1_make_texture_list_for_model(const i4_const_str model_name,
 	}
 }
 
-static i4_array<i4_str *> *g1_current_tnames=0;
-static i4_array<i4_str *> *g1_current_model_names=0;
+static i4_array<i4_str *> * g1_current_tnames=0;
+static i4_array<i4_str *> * g1_current_model_names=0;
 static int g1_current_t_tiles=0;
 //Warn: This definition on itself would be a weak reference (subject to gc)
 //so there must always be another pointer with the same contents.
 //static li_string* g1_post_load_execute_script;
 
 
-li_object *g1_get_model_names(li_object *o, li_environment *env)
+li_object *g1_get_model_names(li_object * o, li_environment * env)
 {
 	//li_object *fmt=li_eval(li_car(o,env),env);
 
@@ -114,7 +114,7 @@ li_object *g1_get_model_names(li_object *o, li_environment *env)
 }
 
 
-li_object *g1_get_tile_textures(li_object *o, li_environment *env)
+li_object *g1_get_tile_textures(li_object * o, li_environment * env)
 {
 	//li_object *fmt=li_eval(li_car(o,env),env);
 
@@ -122,7 +122,7 @@ li_object *g1_get_tile_textures(li_object *o, li_environment *env)
 
 	for (o=li_cdr(o,env); o; o=li_cdr(o,env))  // skip path at start
 	{
-		char *name;
+		char * name;
 		if (li_car(o,env)->type()==LI_STRING)
 		{
 			name=li_string::get(li_eval(li_car(o,env),env),env)->value();
@@ -148,8 +148,8 @@ li_object *g1_get_tile_textures(li_object *o, li_environment *env)
 }
 
 // definition from golg__sky.cpp
-li_object *g1_def_skys(li_object *o, li_environment *env);
-li_object *g1_sky_textures(li_object *o, li_environment *env)
+li_object *g1_def_skys(li_object * o, li_environment * env);
+li_object *g1_sky_textures(li_object * o, li_environment * env)
 {
 	//li_object *fmt=li_eval(li_car(o,env),env);
 
@@ -161,7 +161,7 @@ li_object *g1_sky_textures(li_object *o, li_environment *env)
 
 	for (o=li_cdr(o,env); o; o=li_cdr(o,env))  // skip path at start
 	{
-		char *name;
+		char * name;
 		if (li_car(o,env)->type()==LI_STRING)
 		{
 			name=li_string::get(li_eval(li_car(o,env),env),env)->value();
@@ -188,16 +188,16 @@ li_object *g1_sky_textures(li_object *o, li_environment *env)
 }
 
 
-static li_symbol *s_model_name=0, *s_mini_object=0;
+static li_symbol * s_model_name=0, * s_mini_object=0;
 
-li_object *g1_get_building_textures(li_object *o, li_environment *env)
+li_object *g1_get_building_textures(li_object * o, li_environment * env)
 {
 	//li_object *fmt=li_get_value("building_format", env);
 	li_set_value("def_buildings_list",new li_list(o,li_get_value("def_buildings_list",env)),env);
 
 	for (; o; o=li_cdr(o,env))
 	{
-		li_object *obj=li_car(o,env);
+		li_object * obj=li_car(o,env);
 		if (obj->type()!=LI_STRING) //may be a list of (name flags)
 		{
 			obj=li_car(obj,env);
@@ -209,15 +209,15 @@ li_object *g1_get_building_textures(li_object *o, li_environment *env)
 }
 
 
-li_object *g1_get_object_textures(li_object *o, li_environment *env)
+li_object *g1_get_object_textures(li_object * o, li_environment * env)
 {
 	//li_object *fmt=li_get_value("object_format", env);
 
 	li_set_value("def_object_list",new li_list(o,li_get_value("def_object_list",env)),env);
 
-	for (li_object *p=li_cdr(o,env); p; p=li_cdr(p,env))
+	for (li_object * p=li_cdr(o,env); p; p=li_cdr(p,env))
 	{
-		li_symbol *sym=li_symbol::get(li_car(li_car(p,env),env),env);
+		li_symbol * sym=li_symbol::get(li_car(li_car(p,env),env),env);
 
 		if (sym==li_get_symbol("model_name",s_model_name))
 		{
@@ -225,7 +225,7 @@ li_object *g1_get_object_textures(li_object *o, li_environment *env)
 		}
 		else if (sym==li_get_symbol("mini_object",s_mini_object))
 		{
-			li_object *s=li_cdr(li_car(p,env),env); // s = ("gunport_barrel")
+			li_object * s=li_cdr(li_car(p,env),env); // s = ("gunport_barrel")
 			for (; s; s=li_cdr(s,env))
 			{
 				if (li_symbol::get(li_car(li_car(s,env),env),env)==
@@ -240,15 +240,15 @@ li_object *g1_get_object_textures(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_get_movable_object_textures(li_object *o, li_environment *env)
+li_object *g1_get_movable_object_textures(li_object * o, li_environment * env)
 {
 	//li_object *fmt=li_get_value("object_format", env);
 
 	li_set_value("def_movable_object_list",new li_list(o,li_get_value("def_movable_object_list",env)),env);
 
-	for (li_object *p=li_cdr(o,env); p; p=li_cdr(p,env))
+	for (li_object * p=li_cdr(o,env); p; p=li_cdr(p,env))
 	{
-		li_symbol *sym=li_symbol::get(li_car(li_car(p,env),env),env);
+		li_symbol * sym=li_symbol::get(li_car(li_car(p,env),env),env);
 
 		if (sym==li_get_symbol("model_name",s_model_name))
 		{
@@ -256,7 +256,7 @@ li_object *g1_get_movable_object_textures(li_object *o, li_environment *env)
 		}
 		else if (sym==li_get_symbol("mini_object",s_mini_object))
 		{
-			li_object *s=li_cdr(li_car(p,env),env); // s = ("gunport_barrel")
+			li_object * s=li_cdr(li_car(p,env),env); // s = ("gunport_barrel")
 			for (; s; s=li_cdr(s,env))
 			{
 				if (li_symbol::get(li_car(li_car(s,env),env),env)==
@@ -280,8 +280,8 @@ static int defaults_set=0;
 //!Returns the remainder of the script to be executed.
 //!This returns the def_object part, which can be interpreted only
 //!when the model names have been preprocessed once.
-li_object *g1_get_load_info(g1_loader_class *map_file,
-							i4_file_class **fp, int t_files,
+li_object *g1_get_load_info(g1_loader_class * map_file,
+							i4_file_class * * fp, int t_files,
 							i4_array<i4_str *> &texture_name_array,
 							i4_array<i4_str *> &model_name_array,
 							int &total_tiles,
@@ -290,7 +290,7 @@ li_object *g1_get_load_info(g1_loader_class *map_file,
 	//this is needed, because functions are overwritten, just to get the texture names. The
 	//functions with the real implementation (def_*) are called just after g1_get_load_info
 	//in golg_level_load.cpp
-	li_environment *env=new li_environment(0,i4_T);
+	li_environment * env=new li_environment(0,i4_T);
 
 
 	li_set_value("texture_format", new li_string("textures/%s.tga"));
@@ -335,7 +335,7 @@ li_object *g1_get_load_info(g1_loader_class *map_file,
 				//Don't delete str after usage here, it is added to the
 				//texture_name_array bellow and deleted after *that*
 				//has been used.
-				i4_str *str=map_file->read_counted_str();
+				i4_str * str=map_file->read_counted_str();
 				w32 flags=map_file->read_32();
 				i4_float friction=map_file->read_float();
 				w16 damage=map_file->read_16();
@@ -356,13 +356,13 @@ li_object *g1_get_load_info(g1_loader_class *map_file,
 			int num_add_t=map_file->read_32();
 			for(int k=0; k<num_add_t; k++)
 			{
-				i4_str *str=map_file->read_counted_str();
+				i4_str * str=map_file->read_counted_str();
 				w32 flags=map_file->read_32();
 				i4_float friction=map_file->read_float();
 				w16 damage=map_file->read_16();
 				w32 chksum=map_file->read_32();
 				map_file->read_32(); //reserved
-				i4_str *res_str=map_file->read_counted_str();
+				i4_str * res_str=map_file->read_counted_str();
 				delete res_str;
 				texture_name_array.add(str);
 				li_set_value("texture_object_list",new li_list(
@@ -385,7 +385,7 @@ li_object *g1_get_load_info(g1_loader_class *map_file,
 				//First check wheter an object of this name already exists.
 				//If not, we need to def_building on this new model also, otherwise
 				//just add the model. (was added directly in the editor and is certainly only deco)
-				i4_str *new_model=map_file->read_counted_str();
+				i4_str * new_model=map_file->read_counted_str();
 				bool bFound=false;
 
 				for(int i=0; i<model_name_array.size(); i++)
@@ -414,7 +414,7 @@ li_object *g1_get_load_info(g1_loader_class *map_file,
 
 	if (include_model_textures)
 	{
-		i4_status_class *stat=i4_create_status(i4gets("scanning_models"));
+		i4_status_class * stat=i4_create_status(i4gets("scanning_models"));
 
 		for (int i=0; i<model_name_array.size(); i++)
 		{

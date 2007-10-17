@@ -31,11 +31,11 @@
 //! \param[out] hit_normal The normal of the face we hit.
 //! \param[out] minimum_t Nearest intersection point distance.
 //! \return True if an object was hit (and ray was modified somehow)
-i4_bool g1_model_collide_polygonal_ex(g1_object_class *_this,
-									  g1_object_class *source,
+i4_bool g1_model_collide_polygonal_ex(g1_object_class * _this,
+									  g1_object_class * source,
 									  i4_3d_vector &ray,
 									  i4_3d_vector &hit_normal,
-									  i4_float *minimum_t=0);
+									  i4_float * minimum_t=0);
 
 //! Check for ray-to-object intersections.
 //! This function checks wheter the object \a _this described by
@@ -48,12 +48,12 @@ i4_bool g1_model_collide_polygonal_ex(g1_object_class *_this,
 //! \param[out] hit_normal The normal of the face we hit.
 //! \param[out] minimum_t Nearest intersection point distance.
 //! \return True if an object was hit (and ray was modified somehow)
-i4_bool g1_model_collide_polygonal(g1_object_class *_this,
+i4_bool g1_model_collide_polygonal(g1_object_class * _this,
 								   g1_model_draw_parameters &params,
 								   const i4_3d_vector &start,
 								   i4_3d_vector &ray,
 								   i4_3d_vector &hit_normal,
-								   i4_float *minimum_t=0);
+								   i4_float * minimum_t=0);
 
 //! Check for ray-to-object intersection (the fast way).
 //! This function checks wheter the \a ray starting at \a start will intersect with the bounding
@@ -67,7 +67,7 @@ i4_bool g1_model_collide_polygonal(g1_object_class *_this,
 //! \param[in,out] ray The desired movement vector. Might be changed by the function to something
 //! that works without colliding.
 //! \return True if an object was hit (and ray was modified somehow)
-i4_bool g1_model_collide_radial(g1_object_class *_this,
+i4_bool g1_model_collide_radial(g1_object_class * _this,
 								g1_model_draw_parameters &params,
 								const i4_3d_vector &start,
 								i4_3d_vector &ray);

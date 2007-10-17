@@ -41,8 +41,9 @@
 
 void Path::cleanup()
 {
-	struct NODE *Node,*prev;
-	struct STACK *prstack;
+	struct NODE * Node,* prev;
+	struct STACK * prstack;
+
 	Node=OPEN->NextNode;
 	while (Node != NULL)
 	{
@@ -145,7 +146,7 @@ Path::~Path()
 //struct NODE* Path::FindPath(int sx, int sy, int dx, int dy)
 i4_bool Path::path_solve(i4_float startx, i4_float starty,
 						 i4_float destx, i4_float desty,
-						 w8 sizex, w8 sizey, w8 grade, i4_float *point, w16 &points)
+						 w8 sizex, w8 sizey, w8 grade, i4_float * point, w16 &points)
 {
 	lPropagateDown=lPropLoop=lGenerateSuccessors=lGenerateSucc=lCheckOpen=lOpenLoop = 0;
 	lCheckClosed=lClosedLoop=lInsert=lInsertLoop=lPush=lPop=lReturnBestNode = 0;
@@ -154,7 +155,7 @@ i4_bool Path::path_solve(i4_float startx, i4_float starty,
 	int sy=(int)starty;
 	int dx=(int)destx;
 	int dy=(int)desty;
-	struct NODE *Node, *BestNode;
+	struct NODE * Node, * BestNode;
 	//CApp* pApp = (CApp*) AfxGetApp();
 	w32 deltaX, deltaY;
 	m_pMap=g1_get_map();
@@ -171,7 +172,7 @@ i4_bool Path::path_solve(i4_float startx, i4_float starty,
 	//Stack=new STACK;
 
 	//Node=new NODE;
-	fastmap=(struct FASTMAP *)calloc(mapxsize *mapysize,sizeof(struct FASTMAP));
+	fastmap=(struct FASTMAP *)calloc(mapxsize * mapysize,sizeof(struct FASTMAP));
 
 	Node=(struct NODE *)calloc(1,sizeof( struct NODE ));
 	Node->g = 0;
@@ -202,7 +203,7 @@ i4_bool Path::path_solve(i4_float startx, i4_float starty,
 		cleanup();
 		return i4_F;
 	}
-	struct NODE *current=BestNode->Parent;
+	struct NODE * current=BestNode->Parent;
 	if (!current)
 	{
 		points=0;
@@ -235,10 +236,10 @@ i4_bool Path::path_solve(i4_float startx, i4_float starty,
 	return i4_T;
 }
 
-struct NODE *Path::ReturnBestNode(void)
+struct NODE * Path::ReturnBestNode(void)
 {
 	lReturnBestNode += 1;
-	struct NODE *tmp;
+	struct NODE * tmp;
 
 	if (OPEN->NextNode == NULL)
 	{
@@ -266,7 +267,7 @@ struct NODE *Path::ReturnBestNode(void)
 	return(tmp);
 }
 
-void Path::GenerateSuccessors(struct NODE *BestNode, int dx, int dy)
+void Path::GenerateSuccessors(struct NODE * BestNode, int dx, int dy)
 {
 	lGenerateSuccessors += 1;
 	int x, y;
@@ -315,19 +316,20 @@ void Path::GenerateSuccessors(struct NODE *BestNode, int dx, int dy)
 
 w32 Path::MovementPenalty(int x, int y)
 {
-	g1_map_cell_class *cell_on=m_pMap->cell((w16)x,(w16)y);
-	g1_tile_class *t=g1_tile_man.get(cell_on->type);
+	g1_map_cell_class * cell_on=m_pMap->cell((w16)x,(w16)y);
+	g1_tile_class * t=g1_tile_man.get(cell_on->type);
+
 	return (w32) t->friction_fraction*5;
 }
 
-void Path::GenerateSucc(struct NODE *BestNode, int x, int y, int dx, int dy)
+void Path::GenerateSucc(struct NODE * BestNode, int x, int y, int dx, int dy)
 {
 	lGenerateSucc += 1;
 	float g;  // total path cost - as stored in the linked lists.
 	int c = 0;
 	w32 nTerrainCost;   // Movement cost of this terrain.
 	w32 deltaX, deltaY;
-	struct NODE *Old, *Successor;
+	struct NODE * Old, * Successor;
 
 	// g(Successor)=g(BestNode)+cost of getting from BestNode to Successor
 	//nTerrainCost = m_nMovementPenalty[m_pMap->GetLocation(x, y)->GetTerrainType()];
@@ -421,13 +423,13 @@ void Path::GenerateSucc(struct NODE *BestNode, int x, int y, int dx, int dy)
 	}
 }
 
-struct NODE *Path::CheckOPEN(int x, int y)
+struct NODE * Path::CheckOPEN(int x, int y)
 {
 	lCheckOpen += 1;
 	//struct NODE *tmp;
 
 	//tmp = OPEN->NextNode;
-	return fastmap[y *mapxsize+x].on_open;
+	return fastmap[y * mapxsize+x].on_open;
 	//while (tmp != NULL)
 	//{
 	//	lOpenLoop += 1;
@@ -439,14 +441,14 @@ struct NODE *Path::CheckOPEN(int x, int y)
 	//return (NULL);
 }
 
-struct NODE *Path::CheckCLOSED(int x, int y)
+struct NODE * Path::CheckCLOSED(int x, int y)
 {
 	lCheckClosed += 1;
 	//struct NODE *tmp;
 
 	//tmp = CLOSED->NextNode;
 
-	return fastmap[y *mapxsize+x].on_closed;
+	return fastmap[y * mapxsize+x].on_closed;
 	//while (tmp != NULL)
 	//{
 	//	lClosedLoop += 1;
@@ -458,10 +460,10 @@ struct NODE *Path::CheckCLOSED(int x, int y)
 	//return (NULL);
 }
 
-void Path::Insert(struct NODE *Successor)
+void Path::Insert(struct NODE * Successor)
 {
 	lInsert += 1;
-	struct NODE *tmp1, *tmp2;
+	struct NODE * tmp1, * tmp2;
 	float f;
 
 	if (OPEN->NextNode == NULL)
@@ -485,13 +487,13 @@ void Path::Insert(struct NODE *Successor)
 	tmp1->NextNode = Successor;
 }
 
-void Path::PropagateDown(struct NODE *Old)
+void Path::PropagateDown(struct NODE * Old)
 {
 	lPropagateDown += 1;
 	int c;
 	float g;
 	float nTerrainCost;
-	struct NODE *Child, *Father;
+	struct NODE * Child, * Father;
 
 	g = Old->g;            // alias.
 	for(c = 0; c < 8; c++)
@@ -540,7 +542,7 @@ void Path::PropagateDown(struct NODE *Old)
 // STACK Functions
 ///////////////////////////////////////////////////////////////////////////
 
-void Path::Push(struct NODE *Node)
+void Path::Push(struct NODE * Node)
 {
 	lPush += 1;
 	lStackSize++;
@@ -548,7 +550,7 @@ void Path::Push(struct NODE *Node)
 	{
 		lMaxStackSize=lStackSize;
 	}
-	struct STACK *tmp;
+	struct STACK * tmp;
 
 	//tmp = (struct STACK *) calloc(1,sizeof(struct STACK));
 	tmp = (struct STACK *) malloc(sizeof(struct STACK));
@@ -562,12 +564,12 @@ void Path::Push(struct NODE *Node)
 	Stack->NextStackPtr = tmp;
 }
 
-struct NODE *Path::Pop()
+struct NODE * Path::Pop()
 {
 	lPop += 1;
 	lStackSize--;
-	struct NODE *tmp;
-	struct STACK *tmpSTK;
+	struct NODE * tmp;
+	struct STACK * tmpSTK;
 
 	tmpSTK = Stack->NextStackPtr;
 	tmp = tmpSTK->NodePtr;

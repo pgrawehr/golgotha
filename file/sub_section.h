@@ -22,20 +22,20 @@
 class i4_sub_section_file :
 	public i4_file_class
 {
-	i4_file_class *fp;
+	i4_file_class * fp;
 	int fstart, fsize, foffset;
 public:
-	virtual w32 read(void *buffer, w32 size);
-	virtual w32 write(const void *buffer, w32 size);
+	virtual w32 read(void * buffer, w32 size);
+	virtual w32 write(const void * buffer, w32 size);
 	virtual w32 seek(w32 offset);
 	virtual w32 size();
 	virtual w32 tell();
 
-	virtual i4_bool async_read(void *buffer, w32 size,
+	virtual i4_bool async_read(void * buffer, w32 size,
 							   async_callback call,
-							   void *context, w32 priority, int caller_id);
+							   void * context, w32 priority, int caller_id);
 
-	i4_sub_section_file(i4_file_class *fp, int start, int size);
+	i4_sub_section_file(i4_file_class * fp, int start, int size);
 	~i4_sub_section_file();
 };
 

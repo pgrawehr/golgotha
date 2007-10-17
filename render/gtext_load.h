@@ -9,4 +9,4 @@
 #include "arch.h"
 
 class i4_image_class;
-int r1_load_gtext(w32 id, i4_image_class **images);
+int r1_load_gtext(w32 id, i4_image_class * * images);

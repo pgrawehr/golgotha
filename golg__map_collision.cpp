@@ -29,6 +29,7 @@ public:
 	virtual void init()
 	{
 		int i;
+
 		for(i=0; i<nc; i++)
 		{
 			radcostable[i]=float (rad*cos(2.0*i4_pi()*(0.5+i)/nc));
@@ -431,7 +432,7 @@ i4_profile_class g1_map_pf_check_collision("map::check_collision");
    	}
  */
 
-i4_bool g1_map_class::check_collision(g1_object_class *obj,
+i4_bool g1_map_class::check_collision(g1_object_class * obj,
 									  i4_float &dx, i4_float &dy,
 									  i4_float &dz,
 									  g1_object_class *&hit) const
@@ -445,18 +446,18 @@ i4_bool g1_map_class::check_collision(g1_object_class *obj,
 	//for now, it should be safe to assume that this cast is
 	//always possible, since non-map-piece objects cannot move and
 	//therefore also cannot collide.
-	g1_map_piece_class *mp=g1_map_piece_class::cast(obj);
+	g1_map_piece_class * mp=g1_map_piece_class::cast(obj);
 	if (!mp)
 	{
 		g1_map_pf_check_collision.stop();
 		return i4_F;
 	}
 	i4_bool this_is_on_path=mp->get_next_object() ? i4_T : i4_F;
-	g1_object_class *other=0;
-	g1_map_piece_class *other_mp=0;
+	g1_object_class * other=0;
+	g1_map_piece_class * other_mp=0;
 	i4_bool other_is_on_path=i4_F;
 	i4_float occupancy_radius=mp->occupancy_radius();
-	g1_object_class *objs_arr[20];
+	g1_object_class * objs_arr[20];
 	sw32 num_objs=get_objects_in_range(mp->x,mp->y,
 									   occupancy_radius*2+1,objs_arr,20);
 	i4_3d_vector start(mp->x,mp->y,mp->h);
@@ -485,7 +486,7 @@ i4_bool g1_map_class::check_collision(g1_object_class *obj,
 }
 
 
-int g1_map_class::check_non_player_collision(g1_object_class *source,
+int g1_map_class::check_non_player_collision(g1_object_class * source,
 											 g1_player_type player_num,
 											 const i4_3d_vector &point,
 											 i4_3d_vector &ray,
@@ -556,7 +557,7 @@ int g1_map_class::check_non_player_collision(g1_object_class *source,
 	{
 		for (iy=y_top;  iy<=y_bottom; iy++)
 		{
-			g1_object_chain_class *p = cell(ix,iy)->get_solid_list();
+			g1_object_chain_class * p = cell(ix,iy)->get_solid_list();
 
 			while (p)
 			{
@@ -628,8 +629,8 @@ int g1_map_class::check_terrain_location(i4_float x, i4_float y, i4_float z,
 	sw32 yt = i4_f_to_i(y_top);
 	sw32 yb = i4_f_to_i(y_bottom);
 //code bellow mainly for old maps
-	g1_map_cell_class *c;
-	const g1_block_map_class *block = get_block_map(grade);
+	g1_map_cell_class * c;
+	const g1_block_map_class * block = get_block_map(grade);
 	c = cell(xl,yt);
 
 	if (c->is_blocking() || block->is_blocked((w16)xl,(w16)yt,dir))

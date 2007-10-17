@@ -66,20 +66,20 @@ class i4_lisp_interaction_class :
 //I don't really like multiple inheritance, but here it's really usefull
 {
 	i4_bool update_stats;
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	i4_time_device_class::id poll_id;
-	i4_event_reaction_class *on_close;
+	i4_event_reaction_class * on_close;
 	w64 last_clock;
 
 protected:
-	i4_text_scroll_window_class *output;
-	i4_text_input_class *input;
-	li_environment *window_env;
+	i4_text_scroll_window_class * output;
+	i4_text_input_class * input;
+	li_environment * window_env;
 
 
 public:
-	i4_lisp_interaction_class(w16 w, w16 h, i4_graphical_style_class *style,
-							  i4_event_reaction_class *on_close)
+	i4_lisp_interaction_class(w16 w, w16 h, i4_graphical_style_class * style,
+							  i4_event_reaction_class * on_close)
 		: i4_parent_window_class(w,h),
 		  style(style),
 		  on_close(on_close),
@@ -139,7 +139,7 @@ public:
 		//pf_lispinteraction_draw.stop();
 	}
 
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 
 	~i4_lisp_interaction_class()
 	{
@@ -161,15 +161,15 @@ public:
 		//li_gc_object_marker_class::~li_gc_object_marker_class();//called implicitly by compiler
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"Lisp_Interaction_Window");
 	}
 };
 
-i4_parent_window_class *i4_lisp_int_win=0;
+i4_parent_window_class * i4_lisp_int_win=0;
 
-void i4_lisp_interaction_class::receive_event(i4_event *ev)
+void i4_lisp_interaction_class::receive_event(i4_event * ev)
 {
 
 
@@ -204,16 +204,16 @@ void i4_lisp_interaction_class::receive_event(i4_event *ev)
 			CAST_PTR(tc,i4_text_change_notify_event,ev);
 			if (output&&tc->new_text)
 			{
-				char *s;
+				char * s;
 				int l=input->get_edit_string()->length();
-				char *buf=(char *)I4_MALLOC(l+1,"Lisp_Eval_Buf");
+				char * buf=(char *)I4_MALLOC(l+1,"Lisp_Eval_Buf");
 				buf[l]=0;
-				i4_str *str=input->get_edit_string();
+				i4_str * str=input->get_edit_string();
 				i4_os_string(*str,buf,1001);
 				s=buf;
 				output->printf(buf);
 				output->printf("\n");
-				li_object *exp,*ret;
+				li_object * exp,* ret;
 				do
 				{
 					exp=li_get_expression(s, window_env);
@@ -230,7 +230,8 @@ void i4_lisp_interaction_class::receive_event(i4_event *ev)
 						li_set_value("*",ret,window_env);
 						li_print(ret,window_env);
 					}
-				} while (exp);
+				}
+				while (exp);
 
 				i4_free(buf);
 				request_redraw();
@@ -265,12 +266,12 @@ void i4_lisp_interaction_class::receive_event(i4_event *ev)
 	}
 }
 
-void i4_lisp_interaction_window(i4_graphical_style_class *style,
-								i4_parent_window_class *parent,
+void i4_lisp_interaction_window(i4_graphical_style_class * style,
+								i4_parent_window_class * parent,
 								sw32 &win_x, sw32 &win_y,
 								w32 w, w32 h,
 								int open_type, // 0==close, 1==open, 2==toggle window
-								i4_event_reaction_class *on_close)
+								i4_event_reaction_class * on_close)
 {
 	if (i4_lisp_int_win && (open_type==0 || open_type==2))
 	{
@@ -282,9 +283,9 @@ void i4_lisp_interaction_window(i4_graphical_style_class *style,
 	}
 	else if (!i4_lisp_int_win && (open_type==1 || open_type==2))
 	{
-		i4_lisp_interaction_class *p=new i4_lisp_interaction_class((w16)w,(w16)h, style, on_close);
+		i4_lisp_interaction_class * p=new i4_lisp_interaction_class((w16)w,(w16)h, style, on_close);
 
-		i4_event_reaction_class *re;
+		i4_event_reaction_class * re;
 		re=new i4_event_reaction_class(p, new i4_object_message_event_class(p,CLOSE_WIN,i4_event::NOW));
 
 		i4_lisp_int_win=style->create_mp_window((short) win_x, (short) win_y,(w16) w,(w16)h,
@@ -295,12 +296,12 @@ void i4_lisp_interaction_window(i4_graphical_style_class *style,
 }
 
 //An empty function
-li_object *ignore_comment(li_object *o,li_environment *env)
+li_object *ignore_comment(li_object * o,li_environment * env)
 {
 	return li_nil;
 }
 extern int i4_show_events;
-li_object *toggle_kernel_debug(li_object *o,li_environment *env)
+li_object *toggle_kernel_debug(li_object * o,li_environment * env)
 {
 	i4_show_events=(i4_show_events+1)%3; //cycle var
 	return new li_int(i4_show_events);

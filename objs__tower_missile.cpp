@@ -63,12 +63,12 @@ class g1_tower_missile_class :
 	public g1_map_piece_class
 {
 protected:
-	g1_mini_object *launcher,*bottom;
+	g1_mini_object * launcher,* bottom;
 	i4_float guard_angle, guard_pitch;
 	int guard_time;
 	int missiles;
 public:
-	g1_tower_missile_class(g1_object_type id, g1_loader_class *fp)
+	g1_tower_missile_class(g1_object_type id, g1_loader_class * fp)
 	//{{{
 		: g1_map_piece_class(id,fp)
 	{
@@ -105,7 +105,7 @@ public:
 	}
 	//}}}
 
-	virtual void save(g1_saver_class *fp)
+	virtual void save(g1_saver_class * fp)
 	//{{{
 	{
 		g1_map_piece_class::save(fp);
@@ -258,16 +258,17 @@ public:
 	//}}}
 
 	i4_bool check_collision(
-		g1_object_class *source,
+		g1_object_class * source,
 		const i4_3d_vector &start, i4_3d_vector &ray)
 	//{{{
 	{
 		i4_3d_vector normal;
+
 		return g1_model_collide_polygonal(this, draw_params, start, ray, normal);
 	}
 	//}}}
 
-	virtual void damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir)
+	virtual void damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir)
 	//{{{
 	{
 		health -= hp;

@@ -1,4 +1,4 @@
-#ifndef __OCTREETRAVERSAL_H_
+#ifndef__OCTREETRAVERSAL_H_
 #define __OCTREETRAVERSAL_H_
 
 //-------------------------------------------------------------------------------
@@ -39,17 +39,17 @@
 //  than the level of the specified cell. Upon termination, cell is the leaf cell
 //  and nextLevel is one less than the level of the leaf cell.
 //-------------------------------------------------------------------------------
-#define OT_TRAVERSE(cell,nextLevel,xLocCode,yLocCode,zLocCode)                    \
-{                                                                                 \
-    while ((cell)->IsSubdivided()) {                                                    \
-        unsigned int childBranchBit = 1 << (nextLevel);                           \
-        unsigned int childIndex = ((((xLocCode) & childBranchBit) >> (nextLevel)) \
-		+ (((yLocCode) & childBranchBit) >> ((nextLevel - 1)))                    \
-        + (((zLocCode) & childBranchBit) >> ((nextLevel - 2))));				  \
-		nextLevel--;															  \
-		(cell) = (((cell)->m_pOctreeNodes)[childIndex]);								  \
-    }                                                                             \
-}
+#define OT_TRAVERSE(cell,nextLevel,xLocCode,yLocCode,zLocCode)                                                   \
+	{                                                                                                            \
+		while ((cell)->IsSubdivided()) {                                                                         \
+			unsigned int childBranchBit = 1 << (nextLevel);                                                      \
+			unsigned int childIndex = ((((xLocCode) & childBranchBit) >> (nextLevel))                            \
+									   + (((yLocCode) & childBranchBit) >> ((nextLevel - 1)))                    \
+									   + (((zLocCode) & childBranchBit) >> ((nextLevel - 2))));                  \
+			nextLevel--;                                                                                         \
+			(cell) = (((cell)->m_pOctreeNodes)[childIndex]);                                                     \
+		}                                                                                                        \
+	}
 
 
 //-------------------------------------------------------------------------------
@@ -61,19 +61,19 @@
 //  termination, cell is the offspring cell and nextLevel is one less than the
 //  level of the offspring cell.
 //-------------------------------------------------------------------------------
-#define OT_TRAVERSE_TO_LEVEL(cell,nextLevel,xLocCode,yLocCode, zLocCode,level)    \
-{                                                                                 \
-    unsigned int n = (nextLevel) - (level) + 1;                                   \
-    while (n--) {                                                                 \
-        unsigned int childBranchBit = 1 << (nextLevel);                           \
-        unsigned int childIndex = ((((xLocCode) & childBranchBit) >> (nextLevel)) \
-		+ (((yLocCode) & childBranchBit) >> ((nextLevel - 1)))                    \
-        + (((zLocCode) & childBranchBit) >> ((nextLevel - 2))));				  \
-		nextLevel--;															  \
-		(cell) = (((cell)->m_pOctreeNodes)[childIndex]);								  \
-		if ((cell)->isLeaf()) break;                                             \
-    }                                                                             \
-}
+#define OT_TRAVERSE_TO_LEVEL(cell,nextLevel,xLocCode,yLocCode, zLocCode,level)                                   \
+	{                                                                                                            \
+		unsigned int n = (nextLevel) - (level) + 1;                                                              \
+		while (n--) {                                                                                            \
+			unsigned int childBranchBit = 1 << (nextLevel);                                                      \
+			unsigned int childIndex = ((((xLocCode) & childBranchBit) >> (nextLevel))                            \
+									   + (((yLocCode) & childBranchBit) >> ((nextLevel - 1)))                    \
+									   + (((zLocCode) & childBranchBit) >> ((nextLevel - 2))));                  \
+			nextLevel--;                                                                                         \
+			(cell) = (((cell)->m_pOctreeNodes)[childIndex]);                                                     \
+			if ((cell)->isLeaf()) break;                                                                         \
+		}                                                                                                        \
+	}
 
 
 //-------------------------------------------------------------------------------
@@ -84,12 +84,12 @@
 //  specified cell and cellLevel is the cell's level. Upon termination, cell is
 //  the common ancestor and cellLevel is the common ancestor's level.
 //-------------------------------------------------------------------------------
-#define OT_GET_COMMON_ANCESTOR(cell,cellLevel,binaryDiff)                         \
-{                                                                                 \
-    while ((binaryDiff) & (1 << (cellLevel))) {                                   \
-        (cell) = (cell)->m_pParent;                                                  \
-        (cellLevel)++;                                                            \
-    }                                                                             \
-}
+#define OT_GET_COMMON_ANCESTOR(cell,cellLevel,binaryDiff)                                \
+	{                                                                                    \
+		while ((binaryDiff) & (1 << (cellLevel))) {                                      \
+			(cell) = (cell)->m_pParent;                                                  \
+			(cellLevel)++;                                                               \
+		}                                                                                \
+	}
 
-#endif	// __OCTREETRAVERSAL_H_
+#endif  // __OCTREETRAVERSAL_H_

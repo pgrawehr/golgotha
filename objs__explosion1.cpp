@@ -49,7 +49,8 @@ g1_inv_explosion_def("inv_explosion",0);
 
 void g1_explosion1_class::create_light()
 {
-	g1_light_object_class *l = (g1_light_object_class *)g1_create_object(lightbulb);
+	g1_light_object_class * l = (g1_light_object_class *)g1_create_object(lightbulb);
+
 	if (l)
 	{
 		l->setup(x,y,h, 1.0f, 0.7f, 0, 1);
@@ -72,7 +73,7 @@ void g1_explosion1_class::destroy_light()
 }
 
 g1_explosion1_class::g1_explosion1_class(g1_object_type id,
-										 g1_loader_class *fp)
+										 g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	light   = 0;
@@ -132,13 +133,13 @@ void g1_explosion1_class::think()
 	}
 }
 
-void fast_transform(i4_transform_class *t,const i4_3d_vector &src, r1_3d_point_class &dst);
+void fast_transform(i4_transform_class * t,const i4_3d_vector &src, r1_3d_point_class &dst);
 
-void g1_explosion1_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_explosion1_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	if (model_id && exp_frame<num_exp_frames)
 	{
-		g1_quad_object_class *obj = g1_model_list_man.get_model(model_id);
+		g1_quad_object_class * obj = g1_model_list_man.get_model(model_id);
 
 		i4_transform_class world_transform;
 		calc_world_transform(g1_render.frame_ratio, &world_transform);
@@ -160,20 +161,20 @@ void g1_explosion1_class::draw(g1_draw_context_class *context, i4_3d_vector& vie
 		int i,j /*,k*/,num_vertices;
 		g1_render.ensure_capacity(obj->num_vertex);
 		r1_vert clip_buf_1[64], clip_buf_2[64];
-		r1_vert *t_vertices=g1_render.t_vertices;
+		r1_vert * t_vertices=g1_render.t_vertices;
 		int src_quad[4];
 		i4_transform_class view_transform;
 
-		r1_render_api_class *r_api = g1_render.r_api;
+		r1_render_api_class * r_api = g1_render.r_api;
 
 		num_vertices            = obj->num_vertex;
-		r1_vert *v              = t_vertices;
-		g1_vert_class *src_vert = obj->get_verts(0,0);
+		r1_vert * v              = t_vertices;
+		g1_vert_class * src_vert = obj->get_verts(0,0);
 
 		w8 ANDCODE = 0xFF;
 		w8 ORCODE  = 0;
 
-		g1_vert_class *src_v=src_vert;
+		g1_vert_class * src_v=src_vert;
 
 		//get this vector before we warp the transform
 
@@ -256,7 +257,7 @@ void g1_explosion1_class::draw(g1_draw_context_class *context, i4_3d_vector& vie
 			v->a = 1-(growth_ratio*growth_ratio);
 		}
 
-		g1_quad_class *q_ptr = obj->quad, *q;
+		g1_quad_class * q_ptr = obj->quad, * q;
 		for (i=0; i<obj->num_quad; i++, q_ptr++)
 		{
 			i4_3d_vector cam_to_pt = src_vert[q_ptr->vertex_ref[0]].v;
@@ -286,7 +287,7 @@ void g1_explosion1_class::draw(g1_draw_context_class *context, i4_3d_vector& vie
 				else
 				{
 					sw32 num_poly_verts = 4;
-					r1_vert *clipped_poly;
+					r1_vert * clipped_poly;
 
 					clipped_poly = r_api->clip_poly(&num_poly_verts,
 													t_vertices,
@@ -298,7 +299,7 @@ void g1_explosion1_class::draw(g1_draw_context_class *context, i4_3d_vector& vie
 
 					if (clipped_poly && num_poly_verts>=3)
 					{
-						r1_vert *temp_vert = clipped_poly;
+						r1_vert * temp_vert = clipped_poly;
 
 						for (j=0; j<num_poly_verts; j++, temp_vert++)
 						{

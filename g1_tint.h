@@ -36,7 +36,7 @@ extern g1_tint_struct g1_hurt_tint_data[G1_NUM_HURT_TINTS];
 
 // this will register the color tints with the rendering api, afterwards you can call
 // api->set_color_tint(player_tint_handles[player_num]);
-void g1_init_color_tints(r1_render_api_class *api);
+void g1_init_color_tints(r1_render_api_class * api);
 
 
 

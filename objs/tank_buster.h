@@ -21,16 +21,16 @@ protected:
 	w8 rack_state;
 	sw8 explode_delay;
 
-	g1_mini_object *missile;
+	g1_mini_object * missile;
 
 public:
 
-	g1_tank_buster_class(g1_object_type id, g1_loader_class *fp);
-	void save(g1_saver_class *fp);
-	virtual void load(g1_loader_class *fp);
-	virtual void skipload(g1_loader_class *fp);
+	g1_tank_buster_class(g1_object_type id, g1_loader_class * fp);
+	void save(g1_saver_class * fp);
+	virtual void load(g1_loader_class * fp);
+	virtual void skipload(g1_loader_class * fp);
 
-	i4_bool can_attack(g1_object_class *who)
+	i4_bool can_attack(g1_object_class * who)
 	{
 		//g1_player_piece_class *o = g1_player_piece_class::cast(who);
 

@@ -38,7 +38,7 @@
 
 i4_list_pick::i4_list_pick(w16 my_width, w16 my_height,
 						   w32 total_items,
-						   i4_window_class **my_items,
+						   i4_window_class * * my_items,
 						   w32 my_scroll_event_id,
 						   i4_color background,
 						   i4_bool free_items)
@@ -91,7 +91,7 @@ i4_list_pick::i4_list_pick(w16 my_width, w16 my_height,
 	reposition_start(0);
 }
 
-void i4_list_pick::update(w32 new_total_items,i4_window_class **new_items)
+void i4_list_pick::update(w32 new_total_items,i4_window_class * * new_items)
 {
 	total_items=new_total_items;
 	items=new_items;
@@ -140,7 +140,7 @@ void i4_list_pick::reposition_start(sw32 new_start)
 		need_draw_all=i4_T;
 	}
 
-	i4_window_class *c;
+	i4_window_class * c;
 
 	for (i=new_start; x1<x2 && y1<y2 && i<(sw32)total_items;)
 	{
@@ -229,7 +229,7 @@ void i4_list_pick::parent_draw(i4_draw_context_class &context)
 }
 
 
-void i4_list_pick::receive_event(i4_event *ev)
+void i4_list_pick::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{
@@ -266,15 +266,16 @@ void i4_list_pick::receive_event(i4_event *ev)
 	}
 }
 
-void i4_list_pick_cpitems::receive_event(i4_event *ev)
+void i4_list_pick_cpitems::receive_event(i4_event * ev)
 {
 	i4_list_pick::receive_event(ev);
 }
 
 void i4_list_pick_cpitems::update(w32 new_total_items,
-								  i4_window_class **new_items)
+								  i4_window_class * * new_items)
 {
 	w32 i;
+
 	for (i=0; i<total_items; i++)
 	{
 		if (items[i]->get_parent()==this)
@@ -292,7 +293,7 @@ void i4_list_pick_cpitems::update(w32 new_total_items,
 	}
 	if (new_items!=0)
 	{
-		items=(i4_window_class **)realloc(items,new_total_items*sizeof(i4_window_class*));
+		items=(i4_window_class * *)realloc(items,new_total_items*sizeof(i4_window_class*));
 		total_items=new_total_items;
 		memcpy(items,new_items,new_total_items*sizeof(i4_window_class*));
 	}

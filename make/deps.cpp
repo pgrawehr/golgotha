@@ -14,7 +14,7 @@ enum {
 name_table src_files;
 name_table src_deps[MAX_SRC];
 
-int find_src(char *filename)
+int find_src(char * filename)
 {
 	for (int i=0; i<src_files.size(); i++)
 	{
@@ -26,16 +26,17 @@ int find_src(char *filename)
 	return -1;
 }
 
-name_table *get_deps(char *filename, name_table *includes)
+name_table *get_deps(char * filename, name_table * includes)
 {
 	int f=find_src(filename);
+
 	if (f!=-1)
 	{
 		return &src_deps[f];
 	}
 	else
 	{
-		FILE *fp=fopen(filename,"rb");
+		FILE * fp=fopen(filename,"rb");
 		if (!fp)
 		{
 			return 0;
@@ -44,7 +45,7 @@ name_table *get_deps(char *filename, name_table *includes)
 		int size=ftell(fp);
 		fseek(fp, 0, SEEK_SET);
 
-		char *mem=(char *)malloc(size+1);
+		char * mem=(char *)malloc(size+1);
 		fread(mem, 1, size, fp);
 		fclose(fp);
 		mem[size]=0;
@@ -53,7 +54,7 @@ name_table *get_deps(char *filename, name_table *includes)
 		int x = src_files.add(strdup(filename));
 		src_deps[x].add(strdup(filename));
 
-		char *p=mem, name2[100], *s;
+		char * p=mem, name2[100], * s;
 
 		while (*p)
 		{
@@ -71,6 +72,7 @@ name_table *get_deps(char *filename, name_table *includes)
 
 				while (*p==' ') p++;
 
+
 				if (*p=='"')
 				{
 					p++;
@@ -79,13 +81,14 @@ name_table *get_deps(char *filename, name_table *includes)
 						p++;
 
 
+
 					if (*p)
 					{
 						*p=0;
 						p++;
 					}
 
-					name_table *ret=get_deps(s, includes);
+					name_table * ret=get_deps(s, includes);
 
 					for (int j=0; !ret && j<includes->size(); j++)
 					{
@@ -115,7 +118,7 @@ name_table *get_deps(char *filename, name_table *includes)
 					{
 						// ignore files with a '~' because they are for name mangled 8.3 systems
 						int t=0;
-						for (char *q=s; *q; q++)
+						for (char * q=s; *q; q++)
 						{
 							if (*q=='~')
 							{

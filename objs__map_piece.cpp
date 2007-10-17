@@ -52,7 +52,7 @@
 
 
 int g1_show_list=0;
-li_object *g1_toggle_show_list(li_object *o, li_environment *env)
+li_object *g1_toggle_show_list(li_object * o, li_environment * env)
 {
 	g1_show_list=!g1_show_list;
 	return 0;
@@ -85,7 +85,7 @@ i4_float position_table[battle_step] = {
 };
 
 
-i4_bool g1_map_piece_class::can_attack(g1_object_class *who)
+i4_bool g1_map_piece_class::can_attack(g1_object_class * who)
 {
 	return (i4_bool)(who->get_team()!=get_team() &&
 					 who->get_flag(TARGETABLE) &&
@@ -109,7 +109,7 @@ static g1_quad_class mp_tmp_quad;
 
 
 // this is the default function for handling tinted polygons
-g1_quad_class *g1_map_piece_tint_modify(g1_quad_class *in, g1_player_type player)
+g1_quad_class *g1_map_piece_tint_modify(g1_quad_class * in, g1_player_type player)
 {
 	mp_tmp_quad=*in;
 
@@ -123,7 +123,7 @@ g1_quad_class *g1_map_piece_tint_modify(g1_quad_class *in, g1_player_type player
 }
 
 
-void g1_dead_ambient(i4_transform_class *object_to_world,
+void g1_dead_ambient(i4_transform_class * object_to_world,
 					 i4_float &ar, i4_float &ag, i4_float &ab)
 {
 	g1_get_map()->get_illumination_light(object_to_world->t.x, object_to_world->t.y, ar,ag,ab);
@@ -133,7 +133,7 @@ void g1_dead_ambient(i4_transform_class *object_to_world,
 	ab *=0.4f;
 }
 
-void g1_map_piece_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_map_piece_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	if (g1_show_list)
 	{
@@ -167,7 +167,7 @@ void g1_map_piece_class::draw(g1_draw_context_class *context, i4_3d_vector& view
 	}
 }
 
-void g1_map_piece_class::save(g1_saver_class *fp)
+void g1_map_piece_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 
@@ -198,7 +198,7 @@ void g1_map_piece_class::save(g1_saver_class *fp)
 	next_path.save(fp);
 	if (path_to_follow)
 	{
-		g1_id_ref *r;
+		g1_id_ref * r;
 		int t=0;
 		for (r=path_to_follow; r->id; r++, t++)
 		{
@@ -235,14 +235,15 @@ void g1_map_piece_class::add_team_flag()
 	}
 }
 
-g1_map_solver_class *g1_map_piece_class::prefered_solver()
+g1_map_solver_class * g1_map_piece_class::prefered_solver()
 {
-	g1_map_solver_class *ms=0;
+	g1_map_solver_class * ms=0;
+
 	if (my_solver&&(solveparams&SF_OK))
 	{
 		return my_solver;
 	}
-	g1_map_class *map=g1_get_map();
+	g1_map_class * map=g1_get_map();
 	ms=map->get_prefered_solver();
 	if (!(solveparams&SF_OK))
 	{
@@ -281,7 +282,7 @@ g1_map_piece_class::~g1_map_piece_class()
 }
 
 g1_map_piece_class::g1_map_piece_class(g1_object_type id,
-									   g1_loader_class *fp)
+									   g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	rumble_type=G1_RUMBLE_GROUND;
@@ -415,7 +416,7 @@ g1_map_piece_class::g1_map_piece_class(g1_object_type id,
 	}
 }
 
-void g1_map_piece_class::load(g1_loader_class *fp)
+void g1_map_piece_class::load(g1_loader_class * fp)
 {
 	g1_object_class::load(fp);
 	w16 ver,ds;
@@ -457,7 +458,7 @@ void g1_map_piece_class::load(g1_loader_class *fp)
 	fp->end_version(I4_LF);
 }
 
-void g1_map_piece_class::skipload(g1_loader_class *fp)
+void g1_map_piece_class::skipload(g1_loader_class * fp)
 {
 	g1_object_class::skipload(fp);
 	w16 v,d;
@@ -542,6 +543,7 @@ w32 g1_map_piece_class::follow_path()
 inline void check_on_map(const i4_3d_vector &v)
 {
 	int vx=i4_f_to_i(v.x), vy=i4_f_to_i(v.y);
+
 	if (vx<0 || vy<0 || vx>=g1_get_map()->width() || vy>=g1_get_map()->height())
 	{
 		i4_error("off map");
@@ -550,7 +552,7 @@ inline void check_on_map(const i4_3d_vector &v)
 
 
 
-void g1_map_piece_class::damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir)
+void g1_map_piece_class::damage(g1_object_class * obj, int hp, i4_3d_vector _damage_dir)
 {
 
 
@@ -605,7 +607,7 @@ void g1_map_piece_class::find_target(i4_bool unfog)
 		return;
 	}
 
-	g1_map_class *map = g1_get_map();
+	g1_map_class * map = g1_get_map();
 
 	//find a target in range
 	sw32 ix,iy,x_left,x_right,y_top,y_bottom;
@@ -644,7 +646,7 @@ void g1_map_piece_class::find_target(i4_bool unfog)
 	}
 
 
-	g1_object_class *potential_target=0;
+	g1_object_class * potential_target=0;
 	i4_float dist,target_dist=r*r;
 
 	int fog_rect_x1=10000, fog_rect_y1=10000,
@@ -653,7 +655,7 @@ void g1_map_piece_class::find_target(i4_bool unfog)
 
 	for (iy=y_top;  iy<=y_bottom; iy++)
 	{
-		g1_map_cell_class *c=map->cell((w16)x_left,(w16)iy);
+		g1_map_cell_class * c=map->cell((w16)x_left,(w16)iy);
 		for (ix=x_left; ix<=x_right;  ix++)
 		{
 			if (unfog && (c->flags & g1_map_cell_class::FOGGED))
@@ -680,11 +682,11 @@ void g1_map_piece_class::find_target(i4_bool unfog)
 
 			if (!attack_target.valid()&&r>0.0)
 			{
-				g1_object_chain_class *p = c->get_obj_list();
+				g1_object_chain_class * p = c->get_obj_list();
 
 				while (p)
 				{
-					g1_object_class *o = p->object;
+					g1_object_class * o = p->object;
 
 					if (can_attack(o))
 					{
@@ -732,7 +734,7 @@ void g1_map_piece_class::lead_target(i4_3d_point_class &lead, i4_float shot_spee
 
 	lead.set(attack_target->x, attack_target->y, attack_target->h);
 
-	g1_map_piece_class *mp = g1_map_piece_class::cast(attack_target.get());
+	g1_map_piece_class * mp = g1_map_piece_class::cast(attack_target.get());
 
 	if (!mp)
 	{
@@ -764,6 +766,7 @@ void g1_map_piece_class::calc_action_cam(g1_camera_info_struct &cam,
 	i4_transform_class cam_transform;
 
 	i4_3d_vector interp_pos,tmp;
+
 	interp_pos.interpolate(i4_3d_vector(lx,ly,lh), i4_3d_vector(x,y,h), fr);
 
 	cam.ground_rotate = i4_interpolate_angle(ltheta,theta, fr);
@@ -828,8 +831,8 @@ static li_symbol_ref reached("reached");
 
 void g1_map_piece_class::unlink()
 {
-	g1_path_object_class *path;
-	g1_map_piece_class *mp;
+	g1_path_object_class * path;
+	g1_map_piece_class * mp;
 
 	if ((path = g1_path_object_class::cast(prev_object.get()))!=0)
 	{
@@ -883,11 +886,11 @@ void g1_map_piece_class::unlink()
 	next_object=0;
 }
 
-void g1_map_piece_class::link(g1_object_class *origin)
+void g1_map_piece_class::link(g1_object_class * origin)
 {
-	g1_object_class *origin_next=0;
-	g1_path_object_class *path;
-	g1_map_piece_class *mp;
+	g1_object_class * origin_next=0;
+	g1_path_object_class * path;
+	g1_map_piece_class * mp;
 
 	if ((path = g1_path_object_class::cast(origin))!=0)
 	{
@@ -978,7 +981,7 @@ void g1_map_piece_class::think()
 	//non-air units.
 	i4_float dist, dtheta, dx, dy, old_pathpos=path_pos,dz=0;
 	suggest_move(dist, dtheta, dx, dy, 0);
-	g1_object_class *blocking=0;
+	g1_object_class * blocking=0;
 	if (check_move(dx,dy,dz,blocking))
 	{
 		if ((g1_rand(62)&63)==0)
@@ -1092,12 +1095,12 @@ void g1_map_piece_class::advance_path()
 
 		unlink();
 
-		g1_path_object_class *from = g1_path_object_class::cast(next_path.get());
+		g1_path_object_class * from = g1_path_object_class::cast(next_path.get());
 
 		// find next path node to go to
 		if (path_to_follow)
 		{
-			g1_id_ref *r;
+			g1_id_ref * r;
 			for (r=path_to_follow; r->id && r->id!=next_path.id; r++)
 			{
 				;
@@ -1121,7 +1124,7 @@ void g1_map_piece_class::advance_path()
 
 		if (next_path.valid())
 		{
-			g1_path_object_class *next=(g1_path_object_class *)next_path.get();
+			g1_path_object_class * next=(g1_path_object_class *)next_path.get();
 
 			path_cos = next->x - x; //from->x;
 			path_sin = next->y - y; //from->y;
@@ -1161,7 +1164,7 @@ void g1_map_piece_class::advance_path()
 				stagger=0.01f; //can we use this to drive on the
 				//righthand side of the road?
 				path_pos=0;
-				g2_link *ln=g2_link_man()->get_link(curlink);
+				g2_link * ln=g2_link_man()->get_link(curlink);
 				path_len=ln->get_length();
 				i4_float dist_w=1.0f/path_len;
 				path_cos *=dist_w;
@@ -1199,7 +1202,8 @@ void g1_map_piece_class::return_to_path()
 {
 	//g1_team_type type=g1_player_man.get(player_num)->get_team();
 	//i4_bool unlinked=i4_F;
-	g1_path_object_class *from = 0;
+	g1_path_object_class * from = 0;
+
 	/*if (next_path.valid()
 	   	&&(fabs(next_path->x-x)<1.0f)//are we far off the path?
 	   	&&(fabs(next_path->y-y)<1.0f))
@@ -1227,7 +1231,7 @@ void g1_map_piece_class::return_to_path()
 
 	if (next_path.valid())
 	{
-		g1_path_object_class *next=(g1_path_object_class *)next_path.get();
+		g1_path_object_class * next=(g1_path_object_class *)next_path.get();
 
 		path_cos = next->x - x; //cheat and calculate path from current position
 		path_sin = next->y - y;
@@ -1316,7 +1320,7 @@ i4_bool g1_map_piece_class::grab_user_controls(i4_float &accel,
 											   i4_float &right,
 											   i4_float &up)
 {
-	g1_team_api_class *ta=g1_player_man.get(player_num)->get_ai();
+	g1_team_api_class * ta=g1_player_man.get(player_num)->get_ai();
 
 	accel=ta->user_accel;
 	ta->user_accel=0;
@@ -1362,6 +1366,7 @@ i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
 {
 	i4_bool ctrl=controled();
 	i4_float c_accel=0,c_angle=0,c_height=0,c_right;
+
 	if (path|| (ctrl && grab_user_controls(c_accel,c_angle,c_right,c_height))
 		||(!(solveparams&SF_OK) && prefered_solver()))
 	{
@@ -1572,7 +1577,7 @@ i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
 	path_pos += speed;
 	if (on_road)
 	{
-		g1_id_ref *r;
+		g1_id_ref * r;
 		for (r=path_to_follow; r->id && r->id!=next_path.id; r++)
 		{
 			;
@@ -1580,8 +1585,8 @@ i4_bool g1_map_piece_class::suggest_move(i4_float &dist,
 		if (r->id)
 		{
 			r--;
-			g1_path_object_class *pr=(g1_path_object_class *)r->get(),
-			*nx=(g1_path_object_class *)next_path.get();
+			g1_path_object_class * pr=(g1_path_object_class *)r->get(),
+			* nx=(g1_path_object_class *)next_path.get();
 			//float reallen= sqrt((pr->x-nx->x)*(pr->x-nx->x)+(pr->y-nx->y)*(pr->y-nx->y));
 			float distx=(nx->x - pr->x);
 			float disty=(nx->y - pr->y);
@@ -2047,7 +2052,7 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
 		dist=1.0f;    //just in case...
 		if (next_path.valid())
 		{
-			g1_path_object_class *next=(g1_path_object_class *)next_path.get();
+			g1_path_object_class * next=(g1_path_object_class *)next_path.get();
 
 			path_cos = next->x - x;    //cheat and calculate path from current position
 			path_sin = next->y - y;
@@ -2105,10 +2110,11 @@ i4_bool g1_map_piece_class::suggest_air_move(i4_float &dist,
    	return (g1_map_piece_class*)obj;
    }
  */
-i4_bool g1_map_piece_class::can_enter_link(g1_path_object_class *from, g1_path_object_class *to)
+i4_bool g1_map_piece_class::can_enter_link(g1_path_object_class * from, g1_path_object_class * to)
 {
 	int i=from->get_path_index(to);
-	g1_map_piece_class *v;
+	g1_map_piece_class * v;
+
 	if (i>=0)
 	{
 		v=g1_map_piece_class::cast(from->link[i].object.get());
@@ -2122,13 +2128,14 @@ i4_bool g1_map_piece_class::can_enter_link(g1_path_object_class *from, g1_path_o
 	return i4_F; //shan't happen...
 }
 
-g2_link *g1_map_piece_class::link_on()
+g2_link * g1_map_piece_class::link_on()
 {
-	g1_path_object_class *last;
-	g1_id_ref *r=path_to_follow;
+	g1_path_object_class * last;
+	g1_id_ref * r=path_to_follow;
 	//if (!g2_link_man() || path_to_follow->id==0)
 	//	return 0;
 	w32 searchid=next_path.id;
+
 	//for (;r->id && r->id != next_path.id;r++);
 	for (; r->id!=searchid; r++)
 	{
@@ -2167,8 +2174,8 @@ i4_bool g1_map_piece_class::check_move(i4_float &dx,i4_float &dy, i4_float &dz, 
 	//g2_link *own, *other;
 	if (next_object.valid())
 	{
-		g1_path_object_class *path;
-		g1_map_piece_class *mp;
+		g1_path_object_class * path;
+		g1_map_piece_class * mp;
 
 		if ((path = g1_path_object_class::cast(next_object.get()))!=0)
 		{
@@ -2382,6 +2389,7 @@ i4_bool g1_map_piece_class::deploy_to(float destx, float desty, g1_path_handle p
 {
 	i4_float points[MAX_SOLVEPOINTS*2];
 	w16 t_points;
+
 	//g1_path_handle ph=0;
 
 	//if (g1_get_map()->find_path(x,y, destx,desty, points,t_points) && t_points>1)
@@ -2391,7 +2399,7 @@ i4_bool g1_map_piece_class::deploy_to(float destx, float desty, g1_path_handle p
 	//it is disconnected from the path
 	solveparams&=~SF_USE_PATHS;
 	unlink(); //does this hurt if we are already unlinked?
-	g1_map_solver_class *ps=prefered_solver();
+	g1_map_solver_class * ps=prefered_solver();
 	if (ps&&!ph)
 	{
 		if (ps->path_solve(x,y,destx,desty,1,1,GRADE(solveparams),points,
@@ -2406,7 +2414,7 @@ i4_bool g1_map_piece_class::deploy_to(float destx, float desty, g1_path_handle p
 
 	return (ph!=0);
 }
-void g1_map_piece_class::set_path(g1_id_ref *list)
+void g1_map_piece_class::set_path(g1_id_ref * list)
 {
 	if (path_to_follow)
 	{
@@ -2456,16 +2464,16 @@ void g1_map_piece_class::get_terrain_info()
 
 	ix=i4_f_to_i(x);
 	iy=i4_f_to_i(y);
-	g1_map_cell_class *cell_on=g1_get_map()->cell((w16)ix,(w16)iy);
+	g1_map_cell_class * cell_on=g1_get_map()->cell((w16)ix,(w16)iy);
 
 	w16 handle=cell_on->type;
 //  i4_float newheight;
 
 	g1_get_map()->calc_height_pitch_roll(this, x,y,h, terrain_height, groundpitch, groundroll);
 
-	g1_tile_class *t = g1_tile_man.get(handle);
+	g1_tile_class * t = g1_tile_man.get(handle);
 	damping_fraction = t->friction_fraction;
-	g1_block_map_class *bmc=g1_get_map()->get_block_map(GRADE(solveparams));
+	g1_block_map_class * bmc=g1_get_map()->get_block_map(GRADE(solveparams));
 	if (bmc->ready()&&bmc->is_blocked(ix,iy,G1_ALL_DIRS))
 	{
 		damping_fraction=damping_fraction*1.7f;
@@ -2480,7 +2488,7 @@ void g1_map_piece_class::fire()
 
 }
 
-void g1_map_piece_class::calc_world_transform(i4_float ratio, i4_transform_class *t)
+void g1_map_piece_class::calc_world_transform(i4_float ratio, i4_transform_class * t)
 {
 	if (!t)
 	{
@@ -2510,7 +2518,7 @@ void g1_map_piece_class::calc_world_transform(i4_float ratio, i4_transform_class
 static li_symbol_ref commands_ask("commands-ask"),
 commands_exec("commands-exec"),command_control("command-control"),
 command_stop("command-stop");
-li_object *g1_map_piece_class::message(li_symbol *message_cmd, li_object *message_param, li_environment *env)
+li_object * g1_map_piece_class::message(li_symbol * message_cmd, li_object * message_param, li_environment * env)
 {
 	if (message_cmd==commands_ask.get())
 	{

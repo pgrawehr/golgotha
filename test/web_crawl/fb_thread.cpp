@@ -11,9 +11,10 @@
 #include "url.h"
 #include "threads/threads.h"
 
-void fb_thread(void *context)
+void fb_thread(void * context)
 {
-	fb_thread_window *w=(fb_thread_window *)context;
+	fb_thread_window * w=(fb_thread_window *)context;
+
 	w->state=FB_WAITING;
 
 

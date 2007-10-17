@@ -18,15 +18,15 @@ class i4_color_window_class :
 {
 protected:
 	i4_color color;
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"color_window");
 	}
 
-	i4_color_window_class(w16 w, w16 h, i4_color color, i4_graphical_style_class *style) :
+	i4_color_window_class(w16 w, w16 h, i4_color color, i4_graphical_style_class * style) :
 		i4_parent_window_class(w,h),
 		color(color),
 		style(style)
@@ -38,8 +38,8 @@ public:
 
 } ;
 
-i4_parent_window_class *i4_add_color_window(i4_parent_window_class *parent, i4_color color,
-											i4_graphical_style_class *style,
+i4_parent_window_class *i4_add_color_window(i4_parent_window_class * parent, i4_color color,
+											i4_graphical_style_class * style,
 											i4_coord x, i4_coord y, w16 w, w16 h);
 
 

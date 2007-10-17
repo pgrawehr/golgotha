@@ -14,10 +14,10 @@
 #include "lisp/li_vect.h"
 #include "lisp/li_optr.h"
 
-int li_read_token(char *&s, char *buffer);
-int li_get_int(li_object *o, li_environment *env);
-li_object *li_read_number_in_radix(int rd, char *tk);
-double li_get_float(li_object *o, li_environment *env);
+int li_read_token(char *&s, char * buffer);
+int li_get_int(li_object * o, li_environment * env);
+li_object *li_read_number_in_radix(int rd, char * tk);
+double li_get_float(li_object * o, li_environment * env);
 extern int li_last_line;
 extern char li_last_file[150];
 

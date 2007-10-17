@@ -17,24 +17,25 @@ int G1_HZ=10; //To please the linker (from golg__main)
 struct cd_file
 {
 
-	i4_str *name;
+	i4_str * name;
 	w32 length;
 	w32 checksum;
 
 	void add(const i4_const_str &str)
 	{
 		char tmp[256];
+
 		i4_os_string(str, tmp,256);
-		for (char *c=tmp; *c; c++)
+		for (char * c=tmp; * c; c++)
 		{
-			if (*c=='\\')
+			if (* c=='\\')
 			{
-				*c='/';
+				* c='/';
 			}
 		}
 
 		name=new i4_str(tmp);
-		i4_file_class *fp=i4_open(str);
+		i4_file_class * fp=i4_open(str);
 		I4_ASSERT(fp,"no fp");
 		length=fp->size();
 		delete fp;
@@ -43,7 +44,7 @@ struct cd_file
 } flist[10000];
 
 
-int flist_compare(const void *a, const void *b)
+int flist_compare(const void * a, const void * b)
 {
 	if (((cd_file *)a)->checksum > ((cd_file *)b)->checksum)
 	{
@@ -60,7 +61,7 @@ int flist_compare(const void *a, const void *b)
 
 }
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	i4_init();
 
@@ -78,7 +79,7 @@ void i4_main(w32 argc, i4_const_str *argv)
 	i4_debug->printf("Building CD image golgotha.cd");
 
 
-	i4_const_str *files=i4_string_man.get_array("cd_files");
+	i4_const_str * files=i4_string_man.get_array("cd_files");
 
 
 
@@ -91,7 +92,7 @@ void i4_main(w32 argc, i4_const_str *argv)
 		{
 			for (j=0; j<d.tfiles; j++)
 			{
-				i4_str *r=i4_const_str("%S/%S").sprintf(150,&files[i],d.files[j]);
+				i4_str * r=i4_const_str("%S/%S").sprintf(150,&files[i],d.files[j]);
 
 				flist[tfiles++].add(*r);
 				delete r;
@@ -111,7 +112,7 @@ void i4_main(w32 argc, i4_const_str *argv)
 		}
 	}
 
-	i4_file_class *out=i4_open("golgotha.cd", I4_WRITE);
+	i4_file_class * out=i4_open("golgotha.cd", I4_WRITE);
 	if (!out)
 	{
 		i4_error("could not open output file");
@@ -148,7 +149,7 @@ void i4_main(w32 argc, i4_const_str *argv)
 	int tsize=0;
 	for (i=0; i<tfiles; i++)
 	{
-		i4_file_class *fp=i4_open(*flist[i].name);
+		i4_file_class * fp=i4_open(*flist[i].name);
 
 		if(fp)
 		{

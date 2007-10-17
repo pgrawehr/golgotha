@@ -35,7 +35,7 @@ protected:
 	friend class g1_realtime_saver_class;
 	friend class g1_loader_class;
 	friend class g1_realtime_loader_class;
-	g1_object_class *ref;
+	g1_object_class * ref;
 
 	void remove_ref();
 
@@ -44,19 +44,19 @@ protected:
 		next(0)
 	{
 	}
-	g1_reference_class(g1_object_class *object_being_referenced) :
+	g1_reference_class(g1_object_class * object_being_referenced) :
 		ref(0),
 		next(0)
 	{
 		reference_object(object_being_referenced);
 	}
 
-	void reference_object(g1_object_class *object_being_referenced);
+	void reference_object(g1_object_class * object_being_referenced);
 public:
-	g1_reference_class *next;
+	g1_reference_class * next;
 
-	void save(g1_saver_class *fp);
-	void load(g1_loader_class *fp);
+	void save(g1_saver_class * fp);
+	void load(g1_loader_class * fp);
 
 	i4_bool valid() const
 	{
@@ -88,7 +88,7 @@ public:
 	{
 		return *((T *)ref);
 	}
-	T *operator->() const
+	T * operator->() const
 	{
 		return (T *)ref;
 	}
@@ -99,7 +99,7 @@ public:
 	g1_typed_reference_class<T>(const g1_typed_reference_class<T> &r) :
 		g1_reference_class(r.ref) {
 	}
-	g1_typed_reference_class<T>(T *ref) :
+	g1_typed_reference_class<T>(T * ref) :
 		g1_reference_class(ref) {
 	};
 
@@ -109,7 +109,7 @@ public:
 		return *this;
 	}
 
-	g1_typed_reference_class<T>& operator=(const T *ref)
+	g1_typed_reference_class<T>& operator=(const T * ref)
 	{
 		g1_reference_class::reference_object((g1_object_class *)ref);
 		return *this;

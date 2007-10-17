@@ -14,7 +14,7 @@
 #include "map.h"
 #include "map_cell.h"
 
-void g1_breadth_first_graph_solver_class::set_graph(g1_critical_graph_class *_graph)
+void g1_breadth_first_graph_solver_class::set_graph(g1_critical_graph_class * _graph)
 {
 	graph=_graph;
 	if (!graph || !solve_graph || graph->criticals!=nodes)
@@ -38,8 +38,8 @@ g1_breadth_first_graph_solver_class::~g1_breadth_first_graph_solver_class()
 }
 
 
-int compare_nodes(const g1_breadth_first_graph_solver_class::solve_node *a,
-				  const g1_breadth_first_graph_solver_class::solve_node *b)
+int compare_nodes(const g1_breadth_first_graph_solver_class::solve_node * a,
+				  const g1_breadth_first_graph_solver_class::solve_node * b)
 {
 	// smallest length last
 	if (b->length > a->length)
@@ -108,7 +108,7 @@ i4_bool g1_breadth_first_graph_solver_class::get_next_node(g1_graph_node &node, 
 i4_bool g1_breadth_first_graph_solver_class::path_solve_nodes(g1_graph_node start_node,
 															  g1_graph_node end_node,
 															  w8 group_size, w8 grade,
-															  i4_float *point, w16 &points)
+															  i4_float * point, w16 &points)
 {
 	g1_graph_node node;
 	i4_float len;
@@ -125,7 +125,7 @@ i4_bool g1_breadth_first_graph_solver_class::path_solve_nodes(g1_graph_node star
 
 	while (get_next_node(node, len))
 	{
-		g1_critical_graph_class::connection_class *c = graph->critical[node].connection;
+		g1_critical_graph_class::connection_class * c = graph->critical[node].connection;
 		for (int i=0; i<graph->critical[node].connections; i++, c++)
 		{
 			if (group_size<=c->size[grade])
@@ -164,10 +164,11 @@ i4_bool g1_breadth_first_graph_solver_class::path_solve_nodes(g1_graph_node star
 
 i4_bool g1_graph_solver_class::path_solve(i4_float startx, i4_float starty, i4_float destx, i4_float desty,
 										  w8 sizex, w8 sizey, w8 grade,
-										  i4_float *point, w16 &points)
+										  i4_float * point, w16 &points)
 {
-	g1_block_map_class *block=g1_get_map()->get_block_map(grade);
+	g1_block_map_class * block=g1_get_map()->get_block_map(grade);
 	w32 block_type;
+
 	block_type=unblocked(block, startx,starty,destx,desty);
 	if (block_type==BLOCK_NO_WAY)
 	{

@@ -37,7 +37,7 @@ typedef struct tag_ERRLIST
 	HRESULT hResult;
 	LPSTR lpszError;
 } ERRLIST;
-typedef ERRLIST *LPERRLIST;
+typedef ERRLIST * LPERRLIST;
 
 /*—————————————————————————————————————————————————————————————————————————*
 *                                                                         *
@@ -47,8 +47,8 @@ typedef ERRLIST *LPERRLIST;
 int   OpenDebugLogFile(LPSTR lpszFileName);
 int   WriteDebugLogFile(LPSTR lpszComment);
 void  CloseDebugLogFile( void );
-void  DUMP_O( char *fmt, ... ); // Dump to output device
-void  DUMP_F( char *fmt, ... ); // Dump to file
+void  DUMP_O( char * fmt, ... ); // Dump to output device
+void  DUMP_F( char * fmt, ... ); // Dump to file
 void  TRY_DX( HRESULT hResult );
 LPSTR GetDirectXStatusString(HRESULT DDStatus);
 

@@ -14,12 +14,12 @@
 
 //#include <stdlib.h>
 
-static i4_image_loader_class *loader_list=NULL;
+static i4_image_loader_class * loader_list=NULL;
 static w16 max_header_need=0;
 
 void i4_image_loader_class::init()
 {
-	i4_image_loader_class *who=this;
+	i4_image_loader_class * who=this;
 
 	who->next=loader_list;
 	loader_list=who;
@@ -30,15 +30,16 @@ void i4_image_loader_class::init()
 	}
 }
 
-void close_file(i4_file_class *fp)
+void close_file(i4_file_class * fp)
 {
 	delete fp;
 }
 
 i4_image_class *i4_load_image(const i4_const_str &filename,
-							  i4_status_class *status)
+							  i4_status_class * status)
 {
-	i4_file_class *fp;
+	i4_file_class * fp;
+
 	fp=i4_open(filename);
 
 	if (!fp)
@@ -46,7 +47,7 @@ i4_image_class *i4_load_image(const i4_const_str &filename,
 		return NULL;
 	}
 
-	i4_image_class *im=i4_load_image(fp, status);
+	i4_image_class * im=i4_load_image(fp, status);
 	if (!im)
 	{
 		i4_alert(i4gets("load_failed"),200,&filename);
@@ -57,8 +58,8 @@ i4_image_class *i4_load_image(const i4_const_str &filename,
 }
 
 
-i4_image_class *i4_load_image(i4_file_class *fp,
-							  i4_status_class *status)
+i4_image_class *i4_load_image(i4_file_class * fp,
+							  i4_status_class * status)
 {
 	if (max_header_need==0)
 	{
@@ -66,11 +67,11 @@ i4_image_class *i4_load_image(i4_file_class *fp,
 		return NULL;
 	}
 
-	i4_image_loader_class *il=loader_list;
-	i4_image_class *im=0;
+	i4_image_loader_class * il=loader_list;
+	i4_image_class * im=0;
 
 
-	w8 *buf=(w8 *)I4_MALLOC(max_header_need,"sig buf");
+	w8 * buf=(w8 *)I4_MALLOC(max_header_need,"sig buf");
 	w16 size_read=(w16)fp->read(buf,max_header_need);
 
 	for (; !im && il; il=il->next)

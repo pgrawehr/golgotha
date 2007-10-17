@@ -35,8 +35,8 @@ class i4_finder_socket
 public:
 	struct server
 	{
-		i4_str *notification_string;
-		i4_net_address *addr;
+		i4_str * notification_string;
+		i4_net_address * addr;
 	};
 
 

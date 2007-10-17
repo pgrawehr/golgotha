@@ -40,8 +40,8 @@ build_triangle_span_lists_func intel_build_triangle_span_lists;
 extern build_triangle_span_lists_func_ptr cur_build_span_lists_function;
 
 //texturemapping function types
-typedef void (texture_scanline_func)(w16 *scanline, sw32 offset, void *span_info, sw32 width);
-typedef void (*texture_scanline_func_ptr)(w16 *scanline, sw32 offset, void *span_info, sw32 width);
+typedef void (texture_scanline_func)(w16 * scanline, sw32 offset, void * span_info, sw32 width);
+typedef void (*texture_scanline_func_ptr)(w16 * scanline, sw32 offset, void * span_info, sw32 width);
 
 extern texture_scanline_func_ptr texture_scanline_functions[];
 extern texture_scanline_func_ptr cur_scanline_texture_func;
@@ -89,8 +89,8 @@ texture_scanline_func texture_scanline_affine_unlit_true_alpha;
 #define SPAN_TRI_LAST                           ((w8)14)
 
 //poly setup functions
-typedef void (poly_setup_func)(s_vert *v, sw32 t_verts);
-typedef void (*poly_setup_func_ptr)(s_vert *v, sw32 t_verts);
+typedef void (poly_setup_func)(s_vert * v, sw32 t_verts);
+typedef void (*poly_setup_func_ptr)(s_vert * v, sw32 t_verts);
 
 poly_setup_func poly_setup_affine_lit;
 poly_setup_func poly_setup_perspective_lit;
@@ -102,8 +102,8 @@ poly_setup_func sprite_setup_affine_unlit_alpha;
 extern poly_setup_func_ptr poly_setup_functions[];
 
 //spanning functions (steps through the list of spans for the tri)
-typedef void (span_draw_func)(span_tri_info *tri);
-typedef void (*span_draw_func_ptr)(span_tri_info *tri);
+typedef void (span_draw_func)(span_tri_info * tri);
+typedef void (*span_draw_func_ptr)(span_tri_info * tri);
 
 span_draw_func span_draw_affine_unlit;
 span_draw_func span_draw_affine_lit;

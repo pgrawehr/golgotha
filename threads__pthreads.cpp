@@ -42,10 +42,10 @@ struct thread_node
 {
 	pthread_t handle;
 	w32 thread_id;
-	thread_node *next;
-	void *base, *top;
-	thread_node(pthread_t handle, w32 thread_id, void *base, void *top,
-				thread_node *next) :
+	thread_node * next;
+	void * base, * top;
+	thread_node(pthread_t handle, w32 thread_id, void * base, void * top,
+				thread_node * next) :
 		handle(handle),
 		thread_id(thread_id),
 		next(next),
@@ -53,7 +53,7 @@ struct thread_node
 		top(top) {
 	}
 };
-static volatile thread_node *thread_list=0;
+static volatile thread_node * thread_list=0;
 //volatile thread_node *p=0;
 int i4_main_thread_id;
 static int i4_thread_size;
@@ -65,11 +65,12 @@ void i4_wait_threads()  // waits for all threads to terminate
 	while (i4_thread_count!=0)
 		i4_thread_yield();
 
+
 }
 void remove_thread(int id)
 {
 	i4_thread_start_lock.lock();
-	volatile thread_node *p=0;
+	volatile thread_node * p=0;
 	if (thread_list->thread_id==id)
 	{
 		p=thread_list;
@@ -77,7 +78,7 @@ void remove_thread(int id)
 	}
 	else
 	{
-		volatile thread_node *q;
+		volatile thread_node * q;
 		for (q=thread_list; q->next->thread_id!=id; q=q->next)
 		{
 			;
@@ -90,20 +91,21 @@ void remove_thread(int id)
 	i4_thread_start_lock.unlock();
 }
 
-void *i4_thread_starter(void *arg)
+void *i4_thread_starter(void * arg)
 {
 	//i4_warning("Inside thread");
 	i4_thread_func_type start=i4_thread_to_start;
 	int size=i4_thread_size; //not very safe...
+
 	size-=200;
 	i4_thread_to_start=0;
 	i4_thread_start_lock.lock();
 	w32 thread_id=(w32)pthread_self(); //under some os's, this returns a handle
 	pthread_t handle;
-	thread_node *p=new thread_node(handle, thread_id,
-								   (void *)&size,
-								   (void *)(((char *)&size)-size),
-								   (thread_node *) thread_list);
+	thread_node * p=new thread_node(handle, thread_id,
+									(void *)&size,
+									(void *)(((char *)&size)-size),
+									(thread_node *) thread_list);
 	thread_list=p;
 	i4_thread_start_lock.unlock();
 
@@ -118,10 +120,11 @@ void *i4_thread_starter(void *arg)
 
 	return 0;
 }
-void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void *arg_list)
+void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void * arg_list)
 {
 	while (i4_thread_to_start!=0)
 		i4_thread_yield();
+
 
 	//i4_warning("Add thread");
 	i4_thread_to_start=fun;
@@ -131,7 +134,7 @@ void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void *arg_list)
 	i4_thread_lock.unlock();
 	//i4_warning("Creating thread");
 	pthread_t temphandle;
-	volatile thread_node *old=thread_list;
+	volatile thread_node * old=thread_list;
 	pthread_create(&temphandle, 0, i4_thread_starter, arg_list);
 	while(thread_list==old)
 	{
@@ -139,8 +142,8 @@ void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void *arg_list)
 		i4_thread_sleep(1);
 	}
 	; //wait until p is modified (only means thread
-	//is doing something, the write to it might not be atomic, but
-	//that thread now at least has got the lock, so we wait for the lock)
+	  //is doing something, the write to it might not be atomic, but
+	  //that thread now at least has got the lock, so we wait for the lock)
 	i4_thread_start_lock.lock();
 	thread_list->handle=temphandle; //write back (now p is valid)
 	i4_thread_start_lock.unlock();
@@ -154,6 +157,7 @@ int i4_exec(const i4_const_str &cmdline, const i4_bool modal,
 			const i4_const_str &title)
 {
 	int i;
+
 	i=fork();
 	char buf[MAX_PATH];
 	i4_os_string(cmdline,buf,MAX_PATH);
@@ -192,7 +196,7 @@ i4_bool i4_get_next_thread_id(int last_id, int &id);
 i4_bool i4_get_next_thread_id(int last_id, int &id)
 {
 	//i4_warning("Get next thread id");
-	for (volatile thread_node *p=thread_list; p; p=p->next)
+	for (volatile thread_node * p=thread_list; p; p=p->next)
 	{
 		if (p->thread_id==last_id)
 		{
@@ -214,7 +218,7 @@ void i4_suspend_other_threads()
 	//i4_warning("Suspend other threads");
 	i4_thread_start_lock.lock();
 	w32 thread_id=(w32)pthread_self();
-	for (volatile thread_node *p=thread_list; p; p=p->next)
+	for (volatile thread_node * p=thread_list; p; p=p->next)
 	{
 		if (p->thread_id!=thread_id)
 		{
@@ -228,7 +232,7 @@ void i4_resume_other_threads()
 	//i4_warning("Resume other threads");
 	i4_thread_start_lock.lock();
 	w32 thread_id=(w32)pthread_self();
-	for (volatile thread_node *p=thread_list; p; p=p->next)
+	for (volatile thread_node * p=thread_list; p; p=p->next)
 	{
 		if (p->thread_id!=thread_id)
 		{
@@ -255,7 +259,7 @@ void i4_get_thread_stack(int thread_id, void *&base, void *&top)
 	}
 	else
 	{
-		for (volatile thread_node *p=thread_list; p; p=p->next)
+		for (volatile thread_node * p=thread_list; p; p=p->next)
 		{
 			if (p->thread_id==thread_id)
 			{
@@ -333,7 +337,7 @@ void i4_set_thread_priority(int thread_id, i4_thread_priority_type priority)
  */
 
 #ifndef __USE_UNIX98
-extern "C" int pthread_mutexattr_settype(pthread_mutexattr_t *m,int kind);
+extern "C" int pthread_mutexattr_settype(pthread_mutexattr_t * m,int kind);
 #endif
 
 
@@ -342,6 +346,7 @@ i4_critical_section_class::i4_critical_section_class(void)
 //  i4_warning("Init mutex");
 //#ifdef __sgi
 	pthread_mutexattr_t attr;
+
 	pthread_mutexattr_init(&attr);
 //pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 	I4_MUTEX_SETTYPE(&attr,I4_MUTEX_RECURSIVE);
@@ -377,7 +382,7 @@ void i4_critical_section_class::unlock(void)
 };
 // Signals
 //sem_t semaphore; //this is now included in the objects
-i4_signal_object::i4_signal_object(char *name,
+i4_signal_object::i4_signal_object(char * name,
 								   w32 dwMaxCount,
 								   w32 dwInitialCount)
 {
@@ -392,7 +397,7 @@ i4_signal_object::i4_signal_object(char *name,
 		dwInitialCount++;
 	}
 }
-i4_signal_object::i4_signal_object(char *name)
+i4_signal_object::i4_signal_object(char * name)
 {
 	//i4_warning("Create signal object");
 	sem_init(&semaphore, 0, 0);

@@ -26,8 +26,8 @@ struct g1_light_info
 	void set_ambient_intensity(float v);
 	void set_directional_intensity(float v);
 
-	void save(i4_saver_class *fp);
-	i4_bool load(i4_loader_class *fp);
+	void save(i4_saver_class * fp);
+	i4_bool load(i4_loader_class * fp);
 	void defaults();
 	g1_light_info();
 } ;

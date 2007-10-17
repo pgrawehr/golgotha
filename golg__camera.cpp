@@ -58,7 +58,7 @@ enum {
 };
 
 
-char *cmd_names[]={
+char * cmd_names[]={
 	"Pan Left",
 	"Pan Right",
 	"Pan Forward",
@@ -83,27 +83,29 @@ char *cmd_names[]={
 w32 g1_scroll_bits=0;
 
 
-li_object *g1_camera_key_press(li_object *o, li_environment *env)
+li_object *g1_camera_key_press(li_object * o, li_environment * env)
 {
 	w32 flag=li_get_int(li_eval(env->current_function()),env);
+
 	g1_scroll_bits|=flag;
 	return 0;
 }
 
-li_object *g1_camera_key_depress(li_object *o, li_environment *env)
+li_object *g1_camera_key_depress(li_object * o, li_environment * env)
 {
 	w32 flag=li_get_int(li_eval(env->current_function()),env);
+
 	g1_scroll_bits&=~flag;
 	return 0;
 }
 
-li_object *g1_toggle_follow_mode(li_object *_o, li_environment *env)
+li_object *g1_toggle_follow_mode(li_object * _o, li_environment * env)
 {
 	if (!g1_current_controller.get() )
 	{
 		return 0;
 	}
-	g1_object_class *o=g1_player_man.get_local()->get_commander();
+	g1_object_class * o=g1_player_man.get_local()->get_commander();
 
 	if (g1_current_controller->view.get_following_object())
 	{
@@ -130,8 +132,9 @@ class g1_add_camera_funs_initer :
 public:
 	void init()
 	{
-		char **cmd;
+		char * * cmd;
 		int f=1;
+
 		for (cmd=cmd_names; *cmd; cmd++)
 		{
 			li_set_value(*cmd, new li_int(f));
@@ -149,7 +152,7 @@ public:
 
 
 //Warn: These don't really set the mode, they only set the camera
-li_object *g1_action_mode(li_object *o, li_environment *env)
+li_object *g1_action_mode(li_object * o, li_environment * env)
 {
 	if (g1_current_view_state())
 	{
@@ -158,7 +161,7 @@ li_object *g1_action_mode(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_strategy_mode(li_object *o, li_environment *env)
+li_object *g1_strategy_mode(li_object * o, li_environment * env)
 {
 	if (g1_current_view_state())
 	{
@@ -167,9 +170,10 @@ li_object *g1_strategy_mode(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_follow_mode(li_object *o, li_environment *env)
+li_object *g1_follow_mode(li_object * o, li_environment * env)
 {
-	g1_player_piece_class *com=g1_player_man.get_local()->get_commander();
+	g1_player_piece_class * com=g1_player_man.get_local()->get_commander();
+
 	if (g1_current_view_state() && com)
 	{
 		g1_current_view_state()->suggest_camera_mode(G1_FOLLOW_MODE, 0);
@@ -177,9 +181,10 @@ li_object *g1_follow_mode(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_goto_stank(li_object *o, li_environment *env)
+li_object *g1_goto_stank(li_object * o, li_environment * env)
 {
-	g1_player_piece_class *com=g1_player_man.get_local()->get_commander();
+	g1_player_piece_class * com=g1_player_man.get_local()->get_commander();
+
 	if (!com)
 	{
 		return 0;
@@ -192,7 +197,7 @@ li_object *g1_goto_stank(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_camera_mode(li_object *o, li_environment *env)
+li_object *g1_camera_mode(li_object * o, li_environment * env)
 {
 	if (g1_current_view_state())
 	{
@@ -211,11 +216,11 @@ li_object *g1_camera_mode(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_set_current_camera(li_object *o, li_environment *env)
+li_object *g1_set_current_camera(li_object * o, li_environment * env)
 {
 	if (g1_current_view_state() && g1_current_controller.get())
 	{
-		g1_object_class *c=g1_find_named_camera(li_get_string(li_eval(li_car(o,env),env),env));
+		g1_object_class * c=g1_find_named_camera(li_get_string(li_eval(li_car(o,env),env),env));
 		if (c)
 		{
 			g1_camera_event evt;
@@ -229,7 +234,7 @@ li_object *g1_set_current_camera(li_object *o, li_environment *env)
 }
 
 
-li_object *g1_set_camera_position(li_object *o, li_environment *env)
+li_object *g1_set_camera_position(li_object * o, li_environment * env)
 {
 	if (g1_current_view_state())
 	{
@@ -255,13 +260,13 @@ void g1_camera_info_struct::defaults()
 }
 
 
-void g1_camera_info_struct::load(g1_loader_class *fp)
+void g1_camera_info_struct::load(g1_loader_class * fp)
 {
 	fp->read_format("ffffff", &gx, &gy, &gz, &ground_rotate, &horizon_rotate, &roll);
 	scale_x=scale_y=scale_z=1.0f; //should update the version of this data
 }
 
-void g1_camera_info_struct::save(g1_saver_class *fp)
+void g1_camera_info_struct::save(g1_saver_class * fp)
 {
 	fp->write_format("ffffff", &gx, &gy, &gz, &ground_rotate, &horizon_rotate, &roll);
 }
@@ -279,7 +284,7 @@ g1_camera_event::g1_camera_event()
 };
 
 
-void g1_view_state_class::save(g1_saver_class *fp)
+void g1_view_state_class::save(g1_saver_class * fp)
 {
 	fp->start_version(1);
 
@@ -325,7 +330,7 @@ void g1_camera_event::object_ids_changed()   // call after level is reloaded
 	follow_object=0;
 }
 
-void g1_view_state_class::load(g1_loader_class *fp)
+void g1_view_state_class::load(g1_loader_class * fp)
 {
 	if (fp && fp->check_version(1))
 	{
@@ -358,9 +363,10 @@ g1_view_state_class::g1_view_state_class()
 
 
 // calculates current and returns a pointer to it
-g1_camera_info_struct *g1_view_state_class::get_camera()
+g1_camera_info_struct * g1_view_state_class::get_camera()
 {
 	float fr=g1_render.frame_ratio;
+
 	if (fr>1.0)
 	{
 		fr=1.0;
@@ -393,11 +399,11 @@ void g1_view_state_class::update_follow_mode()
 {
 	start=end;
 
-	g1_object_class *follow = g1_global_id.check_id(follow_object_id) ?
-							  g1_global_id.get(follow_object_id) : 0;
+	g1_object_class * follow = g1_global_id.check_id(follow_object_id) ?
+							   g1_global_id.get(follow_object_id) : 0;
 	if (follow)
 	{
-		g1_player_piece_class *stank=g1_player_man.get_local()->get_commander();
+		g1_player_piece_class * stank=g1_player_man.get_local()->get_commander();
 
 		i4_float fr = g1_render.frame_ratio;
 
@@ -448,7 +454,8 @@ void g1_view_state_class::update_follow_mode()
 
 void g1_view_state_class::update_action_mode()
 {
-	g1_player_piece_class *stank=g1_player_man.get_local()->get_commander();
+	g1_player_piece_class * stank=g1_player_man.get_local()->get_commander();
+
 	//if the id was previously unassigned, use the stank.
 	if (stank&&!follow_object_id)
 	{
@@ -456,7 +463,7 @@ void g1_view_state_class::update_action_mode()
 	}
 	if (!stank||(stank->global_id!= follow_object_id))
 	{
-		g1_map_piece_class *obj=
+		g1_map_piece_class * obj=
 			g1_map_piece_class::cast(g1_global_id.checked_get(follow_object_id));
 		if (!obj)
 		{
@@ -520,11 +527,11 @@ void g1_view_state_class::use_next_cam()
 	next_cam.type=G1_WATCH_INVALID;
 	if (current_cam.type!=G1_WATCH_INVALID)
 	{
-		g1_object_class *watch_obj=current_cam.follow_object.get();
+		g1_object_class * watch_obj=current_cam.follow_object.get();
 		if (watch_obj)
 		{
 			i4_3d_vector pos=i4_3d_vector(watch_obj->x, watch_obj->y, watch_obj->h);
-			g1_object_class *cam_object=g1_find_closest_field_camera(pos);
+			g1_object_class * cam_object=g1_find_closest_field_camera(pos);
 			if (cam_object)
 			{
 				current_cam.camera_at=cam_object;
@@ -534,7 +541,7 @@ void g1_view_state_class::use_next_cam()
 		{
 			i4_transform_class t;
 
-			g1_object_class *cam=next_cam.camera_at.get();
+			g1_object_class * cam=next_cam.camera_at.get();
 			cam->world_transform=&t;
 			cam->calc_world_transform(0, &t);
 
@@ -603,8 +610,8 @@ void g1_view_state_class::update_watch_mode()
 	}
 
 
-	g1_object_class *obj_to_watch=current_cam.follow_object.get();
-	g1_object_class *camera_at=current_cam.camera_at.get();
+	g1_object_class * obj_to_watch=current_cam.follow_object.get();
+	g1_object_class * camera_at=current_cam.camera_at.get();
 
 	if (camera_at)
 	{
@@ -962,8 +969,9 @@ void g1_view_state_class::update_edit_mode()
 
 void g1_view_state_class::update_camera_mode()
 {
-	g1_movie_flow_class *m=g1_get_map()->current_movie;
-	g1_cut_scene_class *cut=m ? m->current() : 0;
+	g1_movie_flow_class * m=g1_get_map()->current_movie;
+	g1_cut_scene_class * cut=m ? m->current() : 0;
+
 	if (cut)
 	{
 		i4_float cx, cy, cz, tx, ty, tz, xy_theta, z_theta, xy_dist;
@@ -1063,10 +1071,11 @@ void g1_view_state_class::update()
 
 void g1_view_state_class::calc_transform(i4_transform_class &transform)
 {
-	g1_camera_info_struct *c=get_camera();
+	g1_camera_info_struct * c=get_camera();
 
 	// now calculate our actual transform
 	i4_transform_class tmp;
+
 	transform.identity(); //load the identity
 	i4_float eyediffx=0;
 	if (stereomode==STEREO_LEFT)
@@ -1165,7 +1174,7 @@ void g1_view_state_class::suggest_camera_mode(g1_view_mode_type mode,
 {
 	if (mode==G1_CIRCLE_WAIT)
 	{
-		g1_object_class *o=g1_global_id.checked_get(follow_object_global_id);
+		g1_object_class * o=g1_global_id.checked_get(follow_object_global_id);
 		if (o)
 		{
 			circle.zvel=circle.theta=0;
@@ -1253,7 +1262,7 @@ void g1_view_state_class::suggest_camera_event(g1_camera_event &event)
 	{
 		i4_bool current_dead=i4_F;
 		// object we are watching is dead
-		g1_map_piece_class *mp;
+		g1_map_piece_class * mp;
 		mp=g1_map_piece_class::cast(current_cam.follow_object.get());
 		if (mp && mp->health<=0)
 		{
@@ -1263,11 +1272,11 @@ void g1_view_state_class::suggest_camera_event(g1_camera_event &event)
 		if ((current_dead || event.type==next_cam.type) &&
 			next_cam.camera_at.get()!=current_cam.camera_at.get())
 		{
-			g1_object_class *watch_obj=next_cam.follow_object.get();
+			g1_object_class * watch_obj=next_cam.follow_object.get();
 			if (watch_obj)
 			{
 				i4_3d_vector pos=i4_3d_vector(watch_obj->x, watch_obj->y, watch_obj->h);
-				g1_object_class *cam_object=g1_find_closest_field_camera(pos);
+				g1_object_class * cam_object=g1_find_closest_field_camera(pos);
 				if (cam_object && cam_object==current_cam.camera_at.get())
 				{
 					current_cam.camera_at=cam_object;
@@ -1293,6 +1302,7 @@ float g1_view_state_class::dist_sqrd(const i4_3d_vector &v)
 	float d=(end.gx-v.x)*(end.gx-v.x) +
 			 (end.gy-v.y)*(end.gy-v.y) +
 			 (end.gz-v.z)*(end.gz-v.z);
+
 	return d;
 }
 

@@ -18,10 +18,10 @@ class i4_rle_class
 	T raw[256];
 	int run_count;
 	int raw_count;
-	i4_file_class *fp;
+	i4_file_class * fp;
 
 public:
-	i4_rle_class(i4_file_class *fp) :
+	i4_rle_class(i4_file_class * fp) :
 		fp(fp)
 	{
 		run_count=0;

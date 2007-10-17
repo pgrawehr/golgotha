@@ -18,7 +18,7 @@ class i4_dir_string :
 	public i4_str
 {
 public:
-	i4_dir_string(char *st) :
+	i4_dir_string(char * st) :
 		i4_str(strlen(st)+1)
 	{
 		strcpy(ptr,st);
@@ -36,9 +36,9 @@ public:
 };
 
 i4_bool i4_get_directory(const i4_const_str &path,
-						 i4_str **&files, w32 &tfiles,
-						 i4_str **&dirs, w32 &tdirs,
-						 i4_file_status_struct **file_status)
+						 i4_str * *&files, w32 &tfiles,
+						 i4_str * *&dirs, w32 &tdirs,
+						 i4_file_status_struct * * file_status)
 {
 	files=NULL;
 	dirs=NULL;
@@ -62,23 +62,24 @@ i4_bool i4_get_directory(const i4_const_str &path,
 		if (fdat.attrib & _A_SUBDIR)
 		{
 			tdirs++;
-			dirs=(i4_str **)i4_realloc(dirs,sizeof(i4_str *)*tdirs,"dir list");
+			dirs=(i4_str * *)i4_realloc(dirs,sizeof(i4_str *)*tdirs,"dir list");
 			dirs[tdirs-1]=new i4_dir_string(fdat.name);
 		}
 		else
 		{
-			i4_file_status_struct *s=stats.add();
+			i4_file_status_struct * s=stats.add();
 			s->last_accessed=fdat.time_access;
 			s->last_modified=fdat.time_write;
 			s->created=fdat.time_create;
 
 			tfiles++;
-			files=(i4_str **)i4_realloc(files,sizeof(i4_str *)*tfiles,"dir list");
+			files=(i4_str * *)i4_realloc(files,sizeof(i4_str *)*tfiles,"dir list");
 			files[tfiles-1]=new i4_dir_string(fdat.name);
 		}
 
 		done=_findnext(handle, &fdat);
-	} while (done!=-1);
+	}
+	while (done!=-1);
 
 
 	if (file_status)
@@ -89,7 +90,7 @@ i4_bool i4_get_directory(const i4_const_str &path,
 		}
 		else
 		{
-			i4_file_status_struct *sa;
+			i4_file_status_struct * sa;
 			sa=(i4_file_status_struct *)I4_MALLOC(sizeof(i4_file_status_struct) * tfiles, "stat array");
 			for (int j=0; j<tfiles; j++)
 			{

@@ -42,7 +42,7 @@ void g1_critical_graph_class::clear_critical_graph()
 	pool = (connection_class *)I4_MALLOC(size, "critical_connections");
 	memset(pool,0,size);
 
-	connection_class *current = pool;
+	connection_class * current = pool;
 
 	for (w32 j=1; j<MAX_CRITICALS; j++)
 	{
@@ -57,9 +57,10 @@ void g1_critical_graph_class::clear_critical_graph()
 void g1_critical_graph_class::compact_critical_graph()
 //{{{
 {
-	connection_class *old_pool = pool;
+	connection_class * old_pool = pool;
 
 	w32 count=0, i,j;
+
 	for (j=1; j<criticals; j++)
 	{
 		count += critical[j].connections;
@@ -68,7 +69,7 @@ void g1_critical_graph_class::compact_critical_graph()
 	w32 size = sizeof(connection_class)*count;
 	pool = (connection_class *)I4_MALLOC(size, "critical_connections");
 
-	connection_class *current = pool;
+	connection_class * current = pool;
 	pool_connections = 0;
 
 	for (j=1; j<criticals; j++)
@@ -92,13 +93,14 @@ void g1_critical_graph_class::compact_critical_graph()
 void g1_critical_graph_class::expand_critical_graph()
 //{{{
 {
-	connection_class *old_pool = pool;
+	connection_class * old_pool = pool;
 
 	w32 size = sizeof(connection_class)*MAX_CRITICALS*MAX_CONNECTIONS;
+
 	pool = (connection_class *)I4_MALLOC(size, "critical_connections");
 	memset(pool,0,size);
 
-	connection_class *current = pool;
+	connection_class * current = pool;
 	pool_connections = 0;
 
 	for (w32 j=1; j<MAX_CRITICALS; j++)
@@ -173,7 +175,7 @@ void g1_critical_graph_class::remove_critical_point(i4_float atx, i4_float aty)
 	criticals--;
 }
 
-void g1_critical_graph_class::save_points(g1_saver_class *f)
+void g1_critical_graph_class::save_points(g1_saver_class * f)
 //{{{
 {
 	*f << criticals;
@@ -186,10 +188,11 @@ void g1_critical_graph_class::save_points(g1_saver_class *f)
 //}}}
 
 
-void g1_critical_graph_class::save_graph(g1_saver_class *f)
+void g1_critical_graph_class::save_graph(g1_saver_class * f)
 //{{{
 {
 	w32 count=0, i,j;
+
 	for (j=1; j<criticals; j++)
 	{
 		count += critical[j].connections;
@@ -198,7 +201,7 @@ void g1_critical_graph_class::save_graph(g1_saver_class *f)
 	*f << (w32)count;
 	for (j=1; j<criticals; j++)
 	{
-		connection_class *conn = &critical[j].connection[0];
+		connection_class * conn = &critical[j].connection[0];
 
 		*f << critical[j].connections;
 		for (i=0; i<critical[j].connections; i++, conn++)
@@ -214,7 +217,7 @@ void g1_critical_graph_class::save_graph(g1_saver_class *f)
 //}}}
 
 
-void g1_critical_graph_class::load_points(g1_loader_class *f)
+void g1_critical_graph_class::load_points(g1_loader_class * f)
 //{{{
 {
 	*f >> criticals;
@@ -238,7 +241,7 @@ void g1_critical_graph_class::load_points(g1_loader_class *f)
 //}}}
 
 
-void g1_critical_graph_class::load_graph(g1_loader_class *f)
+void g1_critical_graph_class::load_graph(g1_loader_class * f)
 //{{{
 {
 	if (pool)
@@ -261,7 +264,7 @@ void g1_critical_graph_class::load_graph(g1_loader_class *f)
 		pool=0;
 	}
 
-	connection_class *conn = pool;
+	connection_class * conn = pool;
 
 	for (w32 j=1; j<criticals; j++)
 	{

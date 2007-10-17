@@ -45,16 +45,16 @@ class i4_scroll_bar :
 {
 protected:
 	friend class i4_scroll_button;
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 	w32 total_scroll_objects, total_visible_objects;
-	i4_button_class *up_but, *down_but, *left_but, *right_but;
-	i4_scroll_button *scroll_but;
-	i4_parent_window_class *scroll_area;
+	i4_button_class * up_but, * down_but, * left_but, * right_but;
+	i4_scroll_button * scroll_but;
+	i4_parent_window_class * scroll_area;
 	w32 id,pos;
-	i4_event_handler_class *send_to;
+	i4_event_handler_class * send_to;
 	i4_bool vertical;
 
-	i4_button_class *create_button(i4_button_class *&b, i4_image_class *im);
+	i4_button_class *create_button(i4_button_class *&b, i4_image_class * im);
 protected:
 	void send_position();
 	void set_bar_pos(sw32 pos);
@@ -75,12 +75,12 @@ public:
 				  int total_visible_objects, // used to determine scroll bar dragger size
 				  int total_scroll_objects,  // total number of objects that will be scrolled
 				  w32 message_id,
-				  i4_event_handler_class *send_to,
-				  i4_graphical_style_class *style);
+				  i4_event_handler_class * send_to,
+				  i4_graphical_style_class * style);
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"scroll_bar");
 	}

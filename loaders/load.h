@@ -25,24 +25,24 @@ public:
 	virtual w16 max_header_size() = 0;
 
 	// return true if you recognize your header signature
-	virtual i4_bool recognize_header(w8 *buf) = 0;
+	virtual i4_bool recognize_header(w8 * buf) = 0;
 
 	// assume fp is at the start of the file
 	// if status is non-null, then it should updated as the load progresses
-	virtual i4_image_class *load(i4_file_class *fp,
-								 i4_status_class *status) = 0;
+	virtual i4_image_class *load(i4_file_class * fp,
+								 i4_status_class * status) = 0;
 
 	virtual void init();
 
-	i4_image_loader_class *next;
+	i4_image_loader_class * next;
 } ;
 
 
 i4_image_class *i4_load_image(const i4_const_str &filename,
-							  i4_status_class *status=0);
+							  i4_status_class * status=0);
 
-i4_image_class *i4_load_image(i4_file_class *fp,
-							  i4_status_class *status=0);
+i4_image_class *i4_load_image(i4_file_class * fp,
+							  i4_status_class * status=0);
 
 
 #endif

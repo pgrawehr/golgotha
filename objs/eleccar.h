@@ -40,10 +40,10 @@ public:
 
 	~g1_electric_car_class();
 
-	g1_electric_car_class(g1_object_type id, g1_loader_class *fp);
-	virtual void save(g1_saver_class *fp);
-	virtual void load(g1_loader_class *fp);
-	virtual void skipload(g1_loader_class *fp);
+	g1_electric_car_class(g1_object_type id, g1_loader_class * fp);
+	virtual void save(g1_saver_class * fp);
+	virtual void load(g1_loader_class * fp);
+	virtual void skipload(g1_loader_class * fp);
 
 	enum electric_car_strategy {
 		SIT,RELOAD,REFUEL,ATTACK,KAMIKAZE
@@ -53,15 +53,15 @@ public:
 	virtual void fire(); //FIRE FIRE FIRE!!!!
 	virtual void post_think();
 
-	virtual void draw(g1_draw_context_class *context, i4_3d_vector& viewer_position);
+	virtual void draw(g1_draw_context_class * context, i4_3d_vector& viewer_position);
 
 	electric_car_strategy strategy;
-	g1_mini_object *wheel;
-	g1_mini_object *gun_left;
-	g1_mini_object *gun_right;
+	g1_mini_object * wheel;
+	g1_mini_object * gun_left;
+	g1_mini_object * gun_right;
 
 
-	i4_bool can_attack(g1_object_class *who);
+	i4_bool can_attack(g1_object_class * who);
 };
 
 #endif

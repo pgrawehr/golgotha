@@ -54,9 +54,9 @@ class i4_net_protocol;
 
 class g1_client_class
 {
-	i4_net_address *server_address;
-	i4_net_socket *listen;
-	i4_net_socket *send;
+	i4_net_address * server_address;
+	i4_net_socket * listen;
+	i4_net_socket * send;
 
 	i4_time_class last_responce_time;
 	int use_port;
@@ -72,11 +72,11 @@ class g1_client_class
 
 	g1_player_type player_num;
 	w32 num_players;
-	i4_str *map_name;
+	i4_str * map_name;
 
 public:
-	g1_client_class(i4_net_address *server_address, int use_port, i4_net_protocol *protocol);
-	void send_server(w8 *buf,i4_file_class *fp);
+	g1_client_class(i4_net_address * server_address, int use_port, i4_net_protocol * protocol);
+	void send_server(w8 * buf,i4_file_class * fp);
 	int prepare_command(int command);
 	int prepare_thinking(int for_who);
 	int done_thinking();
@@ -85,6 +85,6 @@ public:
 	~g1_client_class();
 };
 
-extern g1_client_class *g1_client;
+extern g1_client_class * g1_client;
 
 #endif

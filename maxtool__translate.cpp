@@ -21,7 +21,7 @@ class m1_translate_state_class :
 public:
 	virtual i4_bool mouse_drag()
 	{
-		g1_quad_object_class *obj=m1_info.obj;
+		g1_quad_object_class * obj=m1_info.obj;
 
 		if (obj)
 		{
@@ -38,7 +38,7 @@ public:
 			m1_render_window->transform.inverse_transform(i4_3d_vector(px,py,1.0), ray);
 			ray -= point;
 
-			g1_vert_class *src_vert = obj->get_verts(m1_info.current_animation, m1_info.current_frame);
+			g1_vert_class * src_vert = obj->get_verts(m1_info.current_animation, m1_info.current_frame);
 
 			for (int i=0; i<obj->num_vertex; i++)
 			{
@@ -86,7 +86,7 @@ public:
 
 static m1_translate_state_class translate_state_class_instance;
 
-li_object *m1_translate(li_object *o, li_environment *env)
+li_object *m1_translate(li_object * o, li_environment * env)
 {
 	if (m1_info.obj && m1_info.preselect_point)
 	{

@@ -47,7 +47,7 @@ i4_bool g1_global_id_manager_class::preassigned(w32 id) const
 	return obj[id&ID_MASK]==PREASSIGN_SIG;
 }
 
-g1_global_id_reset_notifier *g1_global_id_reset_notifier::first=0;
+g1_global_id_reset_notifier * g1_global_id_reset_notifier::first=0;
 
 g1_global_id_reset_notifier::g1_global_id_reset_notifier()
 {
@@ -64,7 +64,7 @@ g1_global_id_reset_notifier::~g1_global_id_reset_notifier()
 	}
 	else
 	{
-		g1_global_id_reset_notifier *p;
+		g1_global_id_reset_notifier * p;
 		for (p=first; p->next!=this; p=p->next)
 		{
 			;
@@ -92,12 +92,12 @@ void g1_global_id_manager_class::init()
 	}
 
 	//sizeof(pointertype) != sizeof(w32) on 64Bit architectures!
-	obj=(g1_object_class **) malloc(num_reserved*sizeof(g1_object_class*));
+	obj=(g1_object_class * *) malloc(num_reserved*sizeof(g1_object_class*));
 	memset(obj, 0, num_reserved*sizeof(g1_object_class*));
 	first_free=num_reserved;
 
 	g1_cur_num_map_objects=0;
-	g1_global_id_reset_notifier *p;
+	g1_global_id_reset_notifier * p;
 	for (p=g1_global_id_reset_notifier::first; p; p=p->next)
 	{
 		p->reset();
@@ -167,11 +167,11 @@ i4_bool g1_global_id_manager_class::poll()
 #endif
 };
 
-int g1_global_id_manager_class::receive_packet(i4_file_class *pkt)
+int g1_global_id_manager_class::receive_packet(i4_file_class * pkt)
 {
 #ifdef NETWORK_INCLUDED
 	w32 msg=pkt->read_8();
-	i4_temp_file_class *f;
+	i4_temp_file_class * f;
 	w32 ackid,from,anid,idm;
 	switch (msg)
 	{
@@ -320,8 +320,9 @@ void g1_global_id_manager_class::free_objects()
 void g1_global_id_manager_class::check_size()
 {
 	w32 old_res=num_reserved;
+
 	num_reserved*=2;
-	obj=(g1_object_class **)realloc(obj,num_reserved*sizeof(g1_object_class*));
+	obj=(g1_object_class * *)realloc(obj,num_reserved*sizeof(g1_object_class*));
 	obj_id=(w32 *)realloc(obj_id,num_reserved*sizeof(w32));
 	if (!obj || !obj_id)
 	{
@@ -360,10 +361,11 @@ void g1_global_id_manager_class::claim_freespace()
 	}
 }
 
-void g1_global_id_manager_class::assign(w32 id, g1_object_class *for_who)
+void g1_global_id_manager_class::assign(w32 id, g1_object_class * for_who)
 {
 
 	w32 index = id&ID_MASK;
+
 	if (id==0)
 	{
 		//we loaded an object without an id, so stay without.
@@ -392,7 +394,7 @@ void g1_global_id_manager_class::assign(w32 id, g1_object_class *for_who)
 	//return i4_T;
 }
 
-w32 g1_global_id_manager_class::alloc(g1_object_class *for_who)
+w32 g1_global_id_manager_class::alloc(g1_object_class * for_who)
 {
 	if (netflags&ID_NET_CLIENT)
 	{
@@ -450,7 +452,7 @@ void g1_global_id_manager_class::free(w32 id)
 	g1_cur_num_map_objects--;
 }
 
-g1_global_id_manager_class::remapper::remapper(g1_global_id_manager_class *gid) :
+g1_global_id_manager_class::remapper::remapper(g1_global_id_manager_class * gid) :
 	gid(gid)
 {
 	map = (w32 *)I4_MALLOC(G1_MAX_OBJECTS*sizeof(w32), "global_id_remapping");
@@ -481,7 +483,7 @@ g1_global_id_manager_class g1_global_id;
 //	}
 
 //Cannot inline these due to circular reference problems
-g1_id_ref::g1_id_ref(g1_object_class *o)
+g1_id_ref::g1_id_ref(g1_object_class * o)
 {
 	if (o->get_flag(g1_object_class::EXT_GLOBAL_ID))
 	{
@@ -494,7 +496,7 @@ g1_id_ref::g1_id_ref(g1_object_class *o)
 }
 
 
-g1_id_ref& g1_id_ref::operator=(g1_object_class *o)
+g1_id_ref& g1_id_ref::operator=(g1_object_class * o)
 {
 	if (o)
 	{

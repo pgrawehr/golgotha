@@ -10,7 +10,7 @@
 #include "init/init.h"
 #include "lisp/lisp.h"
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	i4_init();
 

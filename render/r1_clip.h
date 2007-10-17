@@ -20,7 +20,7 @@ struct r1_clip_vert_array
 {
 	int buf_size;
 	int total;
-	r1_vert *buf;
+	r1_vert * buf;
 
 	r1_vert *add()
 	{
@@ -38,34 +38,34 @@ struct r1_clip_vert_array
 };
 
 // clips a a polygon, returns an array indexs to new verts (contained in the orignal v array)
-int *r1_clip(r1_clip_vert_array *v_array,
-			 int *src, int t_src,             // indexes into vertex array for initial verts
-			 int *dst1, int *dst2,            // destination index arrays
+int *r1_clip(r1_clip_vert_array * v_array,
+			 int * src, int t_src,             // indexes into vertex array for initial verts
+			 int * dst1, int * dst2,            // destination index arrays
 			 int &t_dst,
 			 float center_x, float center_y,
 			 i4_bool clip_code_and_project_done);
 
-void r1_clip_render_lines(int t_lines, r1_vert *verts,
+void r1_clip_render_lines(int t_lines, r1_vert * verts,
 						  float center_x, float center_y,
-						  r1_render_api_class *api);
+						  r1_render_api_class * api);
 
 void r1_clip_clear_area(int x1, int y1, int x2, int y2, w32 color, float z,
 						i4_draw_context_class &context,
-						r1_render_api_class *api);
+						r1_render_api_class * api);
 
 void r1_clip_render_point(int x, int y, float z, w32 color,
-						  r1_render_api_class *api);
-void r1_clip_render_points(int t_points, r1_vert *points,
-						   r1_render_api_class *api);
+						  r1_render_api_class * api);
+void r1_clip_render_points(int t_points, r1_vert * points,
+						   r1_render_api_class * api);
 
-void r1_set_color(r1_vert *v, w32 color);
+void r1_set_color(r1_vert * v, w32 color);
 
 /// clips to window dimensions, but leaves clip list to the z buffer
 void r1_clip_render_textured_rect(float x1, float y1, float x2, float y2, float z, float a,
 								  int win_width, int win_height,
 								  r1_texture_handle handle,
 								  int frame,
-								  r1_render_api_class *api,
+								  r1_render_api_class * api,
 								  float s1=0, float t1=0,
 								  float s2=1, float t2=1);
 
@@ -153,7 +153,7 @@ enum {
 	R1_CLIP_NO_CALC_OUTCODE=1, R1_CLIP_ORTHO=128, R1_CLIP_PROJECT_CLIPPED_POINTS=2
 };
 
-inline w8 r1_calc_outcode(r1_vert *v)
+inline w8 r1_calc_outcode(r1_vert * v)
 {
 	w8 clip_code=0;
 
@@ -191,7 +191,7 @@ inline w8 r1_calc_outcode(r1_vert *v)
 	return clip_code;
 }
 
-inline w8 r1_calc_ortho_outcode(r1_vert *v)
+inline w8 r1_calc_ortho_outcode(r1_vert * v)
 {
 	w8 clip_code=0;
 

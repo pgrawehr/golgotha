@@ -17,22 +17,22 @@ class i4_button_box_class :
 	public i4_menu_item_parent_class
 {
 protected:
-	i4_event_handler_class *receiver;
-	i4_menu_item_class *current_down;
+	i4_event_handler_class * receiver;
+	i4_menu_item_class * current_down;
 	i4_bool require_one_down;
 
 	void expand_if_needed();
 
 	// I made this private so you have to call add_button
-	virtual void add_child(i4_coord x, i4_coord y, i4_window_class *child);
+	virtual void add_child(i4_coord x, i4_coord y, i4_window_class * child);
 
 public:
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"button_box");
 	}
 
-	i4_button_box_class(i4_event_handler_class *receiver,
+	i4_button_box_class(i4_event_handler_class * receiver,
 						i4_bool require_one_down=i4_T);
 
 	void parent_draw(i4_draw_context_class &context);
@@ -40,14 +40,14 @@ public:
 	{
 		return current_down;
 	};
-	virtual void add_button(i4_coord x, i4_coord y, i4_button_class *child);
+	virtual void add_button(i4_coord x, i4_coord y, i4_button_class * child);
 
-	virtual void note_reaction_sent(i4_menu_item_class *who,     // this is who sent it
-									i4_event_reaction_class *ev, // who it was to
+	virtual void note_reaction_sent(i4_menu_item_class * who,     // this is who sent it
+									i4_event_reaction_class * ev, // who it was to
 									i4_menu_item_class::reaction_type type);
 
 
-	virtual void push_button(i4_button_class *which, i4_bool send_event);
+	virtual void push_button(i4_button_class * which, i4_bool send_event);
 
 	// arranges child windows from left to right then down, also enlarges self to
 	// fit this arrangement order
@@ -74,16 +74,16 @@ public:
 	//virtual void receive_event(i4_event *ev);
 	i4_button_group_class(i4_const_str &text,
 						  w16 width,w16 height,
-						  i4_event_handler_class *receiver, w32 flags);
-	virtual void note_reaction_sent(i4_menu_item_class *who,       // this is who sent it
-									i4_event_reaction_class *ev, // who it was to
+						  i4_event_handler_class * receiver, w32 flags);
+	virtual void note_reaction_sent(i4_menu_item_class * who,       // this is who sent it
+									i4_event_reaction_class * ev, // who it was to
 									i4_menu_item_class::reaction_type type);
 
 	//virtual void add_button(i4_coord x, i4_coord y, i4_button_class *child);
-	virtual void push_button(i4_button_class *which,i4_bool send_event);
+	virtual void push_button(i4_button_class * which,i4_bool send_event);
 	//virtual void arrange_right_down();
 	//virtual void arrange_down_right();
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"i4_button_group_class");
 	};

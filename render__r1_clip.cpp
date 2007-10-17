@@ -16,9 +16,9 @@
 
 #define FPDIV_CORRECTION 0.0001
 
-int *r1_clip(r1_clip_vert_array *v_array,
-			 int *src, int t_src,             // indexes into vertex array for initial verts
-			 int *dst1, int *dst2,            // destination index arrays
+int *r1_clip(r1_clip_vert_array * v_array,
+			 int * src, int t_src,             // indexes into vertex array for initial verts
+			 int * dst1, int * dst2,            // destination index arrays
 			 int &t_dst,
 			 float center_x, float center_y,
 			 i4_bool clip_code_and_project_done)
@@ -32,8 +32,8 @@ int *r1_clip(r1_clip_vert_array *v_array,
 
 	t_dst=0;
 
-	r1_vert *vbuf=v_array->buf, *v;
-	int *sv=src;
+	r1_vert * vbuf=v_array->buf, * v;
+	int * sv=src;
 
 	if (clip_code_and_project_done)
 	{
@@ -77,7 +77,7 @@ int *r1_clip(r1_clip_vert_array *v_array,
 	}
 
 
-	int *dst=dst1;
+	int * dst=dst1;
 
 	for (bitmask=16; bitmask; bitmask=bitmask>>1)
 	{
@@ -93,7 +93,7 @@ int *r1_clip(r1_clip_vert_array *v_array,
 					j=0;
 				}
 
-				r1_vert *vi=vbuf + src[i], *vj=vbuf + src[j], *cp;
+				r1_vert * vi=vbuf + src[i], * vj=vbuf + src[j], * cp;
 
 				c0 = bitmask & vi->outcode;
 				c1 = bitmask & vj->outcode;
@@ -240,9 +240,9 @@ int *r1_clip(r1_clip_vert_array *v_array,
 }
 
 
-void r1_clip_render_lines(int t_lines, r1_vert *verts,
+void r1_clip_render_lines(int t_lines, r1_vert * verts,
 						  float center_x, float center_y,
-						  r1_render_api_class *api)
+						  r1_render_api_class * api)
 {
 	r1_vert v[2];
 
@@ -514,7 +514,7 @@ void r1_clip_render_lines(int t_lines, r1_vert *verts,
 
 void r1_clip_clear_area(int x1, int y1, int x2, int y2, w32 color, float z,
 						i4_draw_context_class &context,
-						r1_render_api_class *api)
+						r1_render_api_class * api)
 {
 	api->set_alpha_mode(R1_ALPHA_DISABLED);
 	api->set_constant_color(color);
@@ -565,9 +565,10 @@ void r1_clip_clear_area(int x1, int y1, int x2, int y2, w32 color, float z,
 }
 
 void r1_clip_render_point(int x, int y, float z, w32 color,
-						  r1_render_api_class *api)
+						  r1_render_api_class * api)
 {
 	r1_vert v;
+
 	v.v.x=x;
 	v.v.y=y;
 	v.px=x;
@@ -582,15 +583,15 @@ void r1_clip_render_point(int x, int y, float z, w32 color,
 	api->render_pixel(1,&v);
 };
 
-void r1_set_color(r1_vert *v, w32 color)
+void r1_set_color(r1_vert * v, w32 color)
 {
 	v->r=g1_table_0_255_to_0_1[(color&0xff0000)>>16];
 	v->g=g1_table_0_255_to_0_1[(color&0xff00)>>8];
 	v->b=g1_table_0_255_to_0_1[(color&0xff)>>0];
 }
 
-void r1_clip_render_points(int t_points, r1_vert *points,
-						   r1_render_api_class *api)
+void r1_clip_render_points(int t_points, r1_vert * points,
+						   r1_render_api_class * api)
 {
 	api->set_shading_mode(R1_COLORED_SHADING);
 	api->render_pixel(t_points, points);
@@ -601,7 +602,7 @@ void r1_clip_render_textured_rect(float x1, float y1, float x2, float y2, float 
 								  int win_width, int win_height,
 								  r1_texture_handle handle,
 								  int frame,
-								  r1_render_api_class *api,
+								  r1_render_api_class * api,
 								  float s1, float t1,
 								  float s2, float t2)
 {

@@ -70,7 +70,7 @@ public:
 		}
 	}
 
-	g1_path_class(w32 t_positions, i4_float *positions)
+	g1_path_class(w32 t_positions, i4_float * positions)
 	{
 		nodes = (w8)t_positions;
 		current = 0;
@@ -83,7 +83,7 @@ public:
 		}
 	}
 
-	g1_path_class(g1_loader_class *fp)
+	g1_path_class(g1_loader_class * fp)
 	{
 		w16 ver=0,data_size=0;
 
@@ -110,7 +110,7 @@ public:
 		}
 	}
 
-	void save(g1_saver_class *fp)
+	void save(g1_saver_class * fp)
 	{
 		//Since this is saved trough an object, we must not use start_version/end_version,
 		//because that mechanism does not support recursion.
@@ -143,7 +143,7 @@ public:
 };
 
 g1_path_handle g1_path_manager_class::alloc_path(w32 t_positions,
-												 i4_float *positions)
+												 i4_float * positions)
 {
 	return new g1_path_class(t_positions,positions);
 }
@@ -194,12 +194,12 @@ void g1_path_manager_class::free_path(g1_path_handle &path)
 	delete path;
 }
 
-void g1_path_manager_class::save(g1_saver_class *fp, g1_path_handle path)
+void g1_path_manager_class::save(g1_saver_class * fp, g1_path_handle path)
 {
 	path->save(fp);
 }
 
-g1_path_handle g1_path_manager_class::load(g1_loader_class *fp)
+g1_path_handle g1_path_manager_class::load(g1_loader_class * fp)
 {
 	return new g1_path_class(fp);
 }

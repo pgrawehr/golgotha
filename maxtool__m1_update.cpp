@@ -21,7 +21,8 @@
 w32 m1_get_file_id(const i4_const_str &fname)
 {
 	int x;
-	char st[30], *s;
+	char st[30], * s;
+
 	s=st;
 
 	i4_const_str::iterator l=fname.begin();
@@ -62,7 +63,7 @@ int m1_find_texture(i4_array<m1_texture> &t, int id)
 	return -1;
 }
 
-int m1_texture_compare(const m1_texture *a, const m1_texture *b)
+int m1_texture_compare(const m1_texture * a, const m1_texture * b)
 {
 	if (a->id < b->id)
 	{
@@ -79,9 +80,9 @@ int m1_texture_compare(const m1_texture *a, const m1_texture *b)
 	}
 }
 
-inline char *remove_paths(char *src)
+inline char *remove_paths(char * src)
 {
-	char *ret = src;
+	char * ret = src;
 
 	while (*src)
 	{
@@ -100,7 +101,7 @@ void m1_copy_update(i4_bool all)
 {
 	w32 i;
 	int t=0;
-	i4_status_class *stat=i4_create_status(i4gets("updating_textures"));
+	i4_status_class * stat=i4_create_status(i4gets("updating_textures"));
 
 	i4_array<i4_str *> tlist(64,64);
 
@@ -227,11 +228,11 @@ void m1_copy_update(i4_bool all)
 			i4_os_string(*tlist[i],s1,256);
 			i4_os_string(i4gets("default_tga_dir"),tga_dir,256);
 
-			char *filename = remove_paths(s1);
+			char * filename = remove_paths(s1);
 
 			sprintf(s2,"Texture Missing: %s\\%s",tga_dir,filename);
 
-			i4_str *n = i4_from_ascii(s2);
+			i4_str * n = i4_from_ascii(s2);
 			i4_alert(*n,256);
 			delete n;
 		}
@@ -245,14 +246,14 @@ void m1_copy_update(i4_bool all)
 	}
 }
 
-li_object *m1_update_all_textures(li_object *o, li_environment *env)
+li_object *m1_update_all_textures(li_object * o, li_environment * env)
 {
 	m1_copy_update(i4_T);
 	return 0;
 }
 li_automatic_add_function(m1_update_all_textures, "update_all_textures");
 
-li_object *m1_update_textures(li_object *o, li_environment *env)
+li_object *m1_update_textures(li_object * o, li_environment * env)
 {
 	m1_info.texture_list_changed();
 	return 0;

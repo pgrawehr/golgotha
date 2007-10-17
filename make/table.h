@@ -15,7 +15,7 @@ template <class T>
 class table
 {
 protected:
-	T *entry;
+	T * entry;
 	int used,entries,grow;
 public:
 
@@ -71,7 +71,7 @@ public:
 			{
 				entries += grow;
 
-				T *new_entry = (T *)realloc(entry, sizeof(T *)*entries);
+				T * new_entry = (T *)realloc(entry, sizeof(T *)*entries);
 
 				assert(new_entry, "table::out of memory");
 
@@ -115,7 +115,7 @@ public:
 					entries += grow;
 				}
 
-				T *new_entry = (T *)realloc(entry, sizeof(T *)*entries);
+				T * new_entry = (T *)realloc(entry, sizeof(T *)*entries);
 
 				assert(new_entry, "table::out of memory");
 
@@ -175,7 +175,7 @@ public:
 		add_table(other);
 	}
 
-	name_table& operator=(char *item)
+	name_table& operator=(char * item)
 	{
 		clear();
 		add(item);
@@ -187,7 +187,7 @@ public:
 		add_table(tab);
 		return *this;
 	}
-	name_table& operator+(char *item)
+	name_table& operator+(char * item)
 	{
 		add(item);
 		return *this;
@@ -197,7 +197,7 @@ public:
 		add_table(tab);
 		return *this;
 	}
-	name_table& operator+=(char *item)
+	name_table& operator+=(char * item)
 	{
 		add(item);
 		return *this;
@@ -212,7 +212,7 @@ public:
 		table<char *>::clear();
 		return *this;
 	}
-	int find(char *item)
+	int find(char * item)
 	{
 		for (int i=0; i<size(); i++)
 		{

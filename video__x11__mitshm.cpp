@@ -48,12 +48,12 @@ class x11_shm_image_actual_class :
 public:
 
 	XShmSegmentInfo X_shminfo;
-	XImage *im;
-	Display *display;
+	XImage * im;
+	Display * display;
 	GC gc;
 	Window window;
 
-	x11_shm_image_actual_class(Display *display, Window window, GC gc) :
+	x11_shm_image_actual_class(Display * display, Window window, GC gc) :
 		display(display),
 		gc(gc),
 		window(window)
@@ -61,7 +61,7 @@ public:
 		;
 	}
 
-	i4_bool copy_part_to_vram(x11_shm_extension_class *use,
+	i4_bool copy_part_to_vram(x11_shm_extension_class * use,
 							  i4_coord x, i4_coord y,
 							  i4_coord x1, i4_coord y1,
 							  i4_coord x2, i4_coord y2);
@@ -88,17 +88,17 @@ public:
 		}
 	}
 
-	virtual i4_bool available(Display *display, char *display_name);
+	virtual i4_bool available(Display * display, char * display_name);
 
 	// actual width and height set by X are returned
-	x11_shm_image_class *create_shm_image(Display *display,
+	x11_shm_image_class *create_shm_image(Display * display,
 										  Window window,
 										  GC gc,
-										  Visual *X_visual,
+										  Visual * X_visual,
 										  int visual_depth,
 										  w16 &width, w16 &height);
 
-	virtual void shutdown(Display *display)
+	virtual void shutdown(Display * display)
 	{
 		XFlush(display);
 		XSync(display,False); // maker sure anything with this image is drawn!
@@ -106,7 +106,7 @@ public:
 	}
 
 
-	void destroy_shm_image(Display *display, x11_shm_image_class *im);
+	void destroy_shm_image(Display * display, x11_shm_image_class * im);
 } shm_instance;
 
 x11_shm_extension_class::x11_shm_extension_class()
@@ -114,7 +114,7 @@ x11_shm_extension_class::x11_shm_extension_class()
 	need_sync_event=i4_F;
 }
 
-i4_bool x11_shm_extension_actual_class::available(Display *display, char *display_name)
+i4_bool x11_shm_extension_actual_class::available(Display * display, char * display_name)
 {
 	int major_op;
 
@@ -123,8 +123,9 @@ i4_bool x11_shm_extension_actual_class::available(Display *display, char *displa
 
 	if (XQueryExtension(display,"MIT-SHM",&major_op,&shm_base,&shm_error_base))
 	{
-		char *d = display_name;         // make sure the display is local
+		char * d = display_name;         // make sure the display is local
 		while (*d && (*d != ':')) d++;
+
 
 		if (*d)
 		{
@@ -143,7 +144,7 @@ i4_bool x11_shm_extension_actual_class::available(Display *display, char *displa
 	}
 }
 
-void x11_shm_extension_actual_class::destroy_shm_image(Display *display, x11_shm_image_class *im)
+void x11_shm_extension_actual_class::destroy_shm_image(Display * display, x11_shm_image_class * im)
 {
 	XFlush(display);
 	XSync(display,False); // maker sure anything with this image is drawn!
@@ -157,15 +158,15 @@ void x11_shm_extension_actual_class::destroy_shm_image(Display *display, x11_shm
 	delete im;
 }
 
-x11_shm_image_class *x11_shm_extension_actual_class::create_shm_image(Display *display,
-																	  Window window,
-																	  GC gc,
-																	  Visual *X_visual,
-																	  int visual_depth,
-																	  w16 &width, w16 &height) // actual width and height set by X are returned
+x11_shm_image_class * x11_shm_extension_actual_class::create_shm_image(Display * display,
+																	   Window window,
+																	   GC gc,
+																	   Visual * X_visual,
+																	   int visual_depth,
+																	   w16 &width, w16 &height) // actual width and height set by X are returned
 {
 	width=(width+3)&(~3);
-	x11_shm_image_actual_class *im=new x11_shm_image_actual_class(display,window,gc);
+	x11_shm_image_actual_class * im=new x11_shm_image_actual_class(display,window,gc);
 
 
 	im->im = XShmCreateImage(display,
@@ -242,12 +243,13 @@ x11_shm_image_actual_class::~x11_shm_image_actual_class()
 
 #include <stdio.h>
 
-i4_bool x11_shm_image_actual_class::copy_part_to_vram(x11_shm_extension_class *use,
+i4_bool x11_shm_image_actual_class::copy_part_to_vram(x11_shm_extension_class * use,
 													  i4_coord x, i4_coord y,
 													  i4_coord x1, i4_coord y1,
 													  i4_coord x2, i4_coord y2)
 {
 	XEvent ev;
+
 	XSync(display,False);
 
 	if (y1>y2 || x1>x2)
@@ -261,6 +263,7 @@ i4_bool x11_shm_image_actual_class::copy_part_to_vram(x11_shm_extension_class *u
 		XEvent ev;
 		while (XCheckTypedEvent(display,use->shm_base+ShmCompletion,&ev)==False)
 			XSync(display,False);
+
 
 		use->need_sync_event=i4_F;
 	}

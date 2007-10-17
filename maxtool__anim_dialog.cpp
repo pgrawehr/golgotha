@@ -36,11 +36,11 @@ protected:
 		ITEMS
 	};
 	//}}}
-	i4_text_window_class *caption[ITEMS];
-	i4_text_input_class *input[ITEMS];
+	i4_text_window_class * caption[ITEMS];
+	i4_text_input_class * input[ITEMS];
 public:
-	g1_texture_animation *special;
-	void name(char *buffer)
+	g1_texture_animation * special;
+	void name(char * buffer)
 	{
 		static_name(buffer,"animation dialog");
 	}
@@ -143,7 +143,7 @@ public:
 	void find_special()
 	//{{{
 	{
-		m1_poly_object_class *obj = m1_info.obj;
+		m1_poly_object_class * obj = m1_info.obj;
 		int i,found=-1;
 
 		special=0;
@@ -202,7 +202,7 @@ public:
 	}
 	//}}}
 
-	m1_animation_dialog_class(i4_graphical_style_class *style)
+	m1_animation_dialog_class(i4_graphical_style_class * style)
 		: i4_color_window_class(400,200,style->color_hint->neutral(),style)
 
 	{
@@ -246,7 +246,7 @@ public:
 		}
 	}
 
-	virtual void receive_event(i4_event *ev)
+	virtual void receive_event(i4_event * ev)
 	//{{{
 	{
 		switch (ev->type())
@@ -318,7 +318,7 @@ public:
 
 static i4_event_handler_reference_class<m1_animation_dialog_class> m1_animation_dialog;
 
-li_object *m1_edit_special(li_object *o, li_environment *env)
+li_object *m1_edit_special(li_object * o, li_environment * env)
 //{{{
 {
 	if (m1_animation_dialog.get())
@@ -327,7 +327,7 @@ li_object *m1_edit_special(li_object *o, li_environment *env)
 	}
 	else
 	{
-		i4_graphical_style_class *style = i4_current_app->get_style();
+		i4_graphical_style_class * style = i4_current_app->get_style();
 		m1_animation_dialog = new m1_animation_dialog_class(style);
 
 		style->create_mp_window(-1,-1,
@@ -339,7 +339,7 @@ li_object *m1_edit_special(li_object *o, li_environment *env)
 	return 0;
 }
 //}}}
-li_object *m1_update_special(li_object *o, li_environment *env)
+li_object *m1_update_special(li_object * o, li_environment * env)
 {
 	//update window if it is visible
 	if (m1_animation_dialog.get())

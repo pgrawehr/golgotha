@@ -15,7 +15,7 @@ class g1_moneycrate_class :
 	public g1_object_class
 {
 public:
-	g1_moneycrate_class(g1_object_type id, g1_loader_class *fp);
+	g1_moneycrate_class(g1_object_type id, g1_loader_class * fp);
 
 	void setup(i4_3d_vector pos, w32 val);
 	void follow(i4_3d_vector pos, i4_3d_vector rot);

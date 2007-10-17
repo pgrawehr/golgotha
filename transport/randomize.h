@@ -16,7 +16,7 @@ class g2_random_data
 protected:
 	w32 seed;
 	w32 seed2;
-	w32 *data;
+	w32 * data;
 	w32 datasize;
 	w32 lower, upper;
 public:
@@ -33,8 +33,8 @@ public:
 	}
 	~g2_random_data();
 	w32 rnd();
-	i4_bool save(g1_saver_class *fp);
-	i4_bool load(g1_loader_class *fp);
+	i4_bool save(g1_saver_class * fp);
+	i4_bool load(g1_loader_class * fp);
 
 };
 /*if an instance of this class exists, the think que will be
@@ -55,8 +55,8 @@ public:
 	g2_scramble_thinkers(w32 initialseed);
 	~g2_scramble_thinkers();
 	void think();
-	i4_bool save(g1_saver_class *fp);
-	i4_bool load(g1_loader_class *fp);
+	i4_bool save(g1_saver_class * fp);
+	i4_bool load(g1_loader_class * fp);
 };
 
 

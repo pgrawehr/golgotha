@@ -12,21 +12,21 @@
 #include "render/r1_api.h"
 #include "render/tmanage.h"
 
-li_object *g1_wireframe(li_object *o, li_environment *env)
+li_object *g1_wireframe(li_object * o, li_environment * env)
 {
 	g1_render.draw_mode=g1_render_class::WIREFRAME;
 	li_call("redraw");
 	return 0;
 }
 
-li_object *g1_textured(li_object *o, li_environment *env)
+li_object *g1_textured(li_object * o, li_environment * env)
 {
 	g1_render.draw_mode=g1_render_class::TEXTURED;
 	li_call("redraw");
 	return 0;
 }
 
-li_object *g1_solid_color(li_object *o, li_environment *env)
+li_object *g1_solid_color(li_object * o, li_environment * env)
 {
 	g1_render.draw_mode=g1_render_class::SOLID;
 	li_call("redraw");
@@ -35,7 +35,7 @@ li_object *g1_solid_color(li_object *o, li_environment *env)
 
 
 
-li_object *g1_toggle_texture_loading(li_object *o, li_environment *env)
+li_object *g1_toggle_texture_loading(li_object * o, li_environment * env)
 {
 	g1_render.r_api->get_tmanager()->toggle_texture_loading();
 

@@ -6,4 +6,4 @@
    golgotha_source@usa.net (Subject should have "GOLG" in it)
  ***********************************************************************/
 
-void fb_thread(void *context);
+void fb_thread(void * context);

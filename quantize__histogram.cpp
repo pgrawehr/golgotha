@@ -46,7 +46,7 @@ i4_histogram_class::i4_histogram_class()
 	total_pixels=0;
 }
 
-void i4_histogram_class::add_image_colors(i4_image_class *im, int counts_per_pixel)
+void i4_histogram_class::add_image_colors(i4_image_class * im, int counts_per_pixel)
 {
 	if (im->get_pal()->source.pixel_depth!=I4_32BIT)
 	{
@@ -59,7 +59,7 @@ void i4_histogram_class::add_image_colors(i4_image_class *im, int counts_per_pix
 	w32 loop_count=im->width()*im->height();
 
 	// this will iterate through all the pixels
-	w32 *pixel=(w32 *)im->data;
+	w32 * pixel=(w32 *)im->data;
 
 	for (; loop_count; loop_count--)
 	{
@@ -79,9 +79,10 @@ void i4_histogram_class::add_image_colors(i4_image_class *im, int counts_per_pix
 
 }
 
-void i4_histogram_class::save(i4_file_class *fp)
+void i4_histogram_class::save(i4_file_class * fp)
 {
 	w32 i;
+
 	fp->write_32(tcolors);
 	fp->write_32(total_pixels);
 
@@ -101,9 +102,10 @@ void i4_histogram_class::save(i4_file_class *fp)
 	}
 }
 
-void i4_histogram_class::load(i4_file_class *fp)
+void i4_histogram_class::load(i4_file_class * fp)
 {
 	w32 i;
+
 	tcolors=fp->read_32();
 	total_pixels=fp->read_32();
 

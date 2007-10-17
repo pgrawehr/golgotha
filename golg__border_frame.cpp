@@ -80,7 +80,7 @@ void g1_amount_display_class::draw(i4_draw_context_class &context)
 	if (refresh_as_text)
 	{
 		local_image->clear(0, context);
-		i4_font_class *fnt=i4_current_app->get_style()->font_hint->normal_font;
+		i4_font_class * fnt=i4_current_app->get_style()->font_hint->normal_font;
 		fnt->set_color(0x00ff00);
 		char str[30];
 		sprintf(str, "%d", last_amount);
@@ -116,8 +116,8 @@ void g1_amount_display_class::draw(i4_draw_context_class &context)
 		}
 	}
 }
-void g1_amount_display_class::change_icon(i4_image_class *new_im,
-										  i4_image_class *new_dark)
+void g1_amount_display_class::change_icon(i4_image_class * new_im,
+										  i4_image_class * new_dark)
 {
 
 	if (own_im)
@@ -152,18 +152,18 @@ class g1_object_stats_window_class :
 	public i4_window_class
 {
 public:
-	const char *object_name;
-	i4_image_class *logo;
+	const char * object_name;
+	i4_image_class * logo;
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"g1_object_stats");
 	}
-	i4_graphical_style_class *style;
+	i4_graphical_style_class * style;
 
-	g1_object_stats_window_class(const char *object_name,
-								 i4_image_class *logo,
-								 i4_graphical_style_class *style)
+	g1_object_stats_window_class(const char * object_name,
+								 i4_image_class * logo,
+								 i4_graphical_style_class * style)
 		: object_name(object_name),
 		  logo(logo),
 		  style(style),
@@ -195,12 +195,12 @@ public:
 		}
 
 
-		g1_object_defaults_struct *odef=g1_get_object_defaults(object_name, i4_F);
+		g1_object_defaults_struct * odef=g1_get_object_defaults(object_name, i4_F);
 		if (odef)
 		{
-			i4_font_class *fnt=style->font_hint->normal_font;
+			i4_font_class * fnt=style->font_hint->normal_font;
 
-			char *fmt="Name\nCost\nArmor\nSpeed\nDamage\nRange\nRate";
+			char * fmt="Name\nCost\nArmor\nSpeed\nDamage\nRange\nRate";
 
 			int x=-20,y=10,w=97;
 
@@ -250,7 +250,7 @@ public:
 			sprintf(fmt2+strlen(fmt2), "%4.4g ft\n%3.3g shots/s",
 					odef->detection_range * 100.0, (double)G1_HZ/(1.0+odef->fire_delay));
 
-			i4_const_str *st=new i4_const_str(fmt2);
+			i4_const_str * st=new i4_const_str(fmt2);
 
 			fnt->set_color(0);
 			fnt->put_paragraph(local_image, x+w+6+1,y+1, *st, context);
@@ -268,27 +268,28 @@ class g1_build_but :
 	public i4_button_class
 {
 public:
-	i4_image_class *norm_im, *act_im, *press_im;
+	i4_image_class * norm_im, * act_im, * press_im;
 
-	const char *object_name;
-	i4_graphical_style_class *style;
+	const char * object_name;
+	i4_graphical_style_class * style;
 
-	g1_build_but(const char *object_name,
-				 i4_event_reaction_class *press,
-				 i4_event_reaction_class *active,
-				 i4_graphical_style_class *style,
-				 i4_image_class *_norm_im,
-				 i4_image_class *_act_im,
-				 i4_image_class *_press_im)
+	g1_build_but(const char * object_name,
+				 i4_event_reaction_class * press,
+				 i4_event_reaction_class * active,
+				 i4_graphical_style_class * style,
+				 i4_image_class * _norm_im,
+				 i4_image_class * _act_im,
+				 i4_image_class * _press_im)
 
 		: i4_button_class(0, 0, style, press, 0, active, 0),
 		  object_name(object_name),
 		  style(style)
 	{
 		char image_name[256];
+
 		sprintf(image_name, "bitmaps/build/build_%s.tga", object_name);
 
-		i4_image_class *button_image = i4_load_image(image_name);
+		i4_image_class * button_image = i4_load_image(image_name);
 		norm_im=_norm_im->copy();
 		act_im=_act_im->copy();
 		press_im=_press_im->copy();
@@ -329,7 +330,7 @@ public:
 		}
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"g1_build_but");
 	}
@@ -359,11 +360,11 @@ public:
 			return ;
 		}
 
-		i4_str *fn=i4gets("object_logo_fmt").sprintf(100,object_name);
-		i4_file_class *fp=i4_open(*fn);
+		i4_str * fn=i4gets("object_logo_fmt").sprintf(100,object_name);
+		i4_file_class * fp=i4_open(*fn);
 		delete fn;
 
-		i4_image_class *im=0;
+		i4_image_class * im=0;
 		if (fp)
 		{
 			im=i4_load_image(fp);
@@ -373,7 +374,7 @@ public:
 		context_help_window=new g1_object_stats_window_class(object_name, im, style);
 		sw16 xw=x();
 		sw16 yw=y();
-		i4_parent_window_class *rt=i4_current_app->get_root_window();
+		i4_parent_window_class * rt=i4_current_app->get_root_window();
 		//make shure context help is completely visible
 		//asumes screen is larger than window.
 		if (xw+context_help_window->width()>rt->width())
@@ -400,18 +401,19 @@ public:
 //}
 
 
-void g1_border_frame_class::relocate(i4_parent_window_class *w, char *loc,
+void g1_border_frame_class::relocate(i4_parent_window_class * w, char * loc,
 									 int dx, int dy)
 {
 
 	int i=0;
-	for (li_object *o=li_get_value(loc); o; o=li_cdr(o,0), i++)
+
+	for (li_object * o=li_get_value(loc); o; o=li_cdr(o,0), i++)
 	{
 		if (o==NULL)
 		{
 			break;
 		}     //no more entries in list.
-		li_object *v=li_car(o,0);
+		li_object * v=li_car(o,0);
 
 		int x=li_get_int(li_first(v,0),0), y=li_get_int(li_second(v,0),0);
 
@@ -487,13 +489,13 @@ g1_border_frame_class::g1_border_frame_class()
 
 
 	// create the main 3d view window
-	r1_render_window_class *rwin;
+	r1_render_window_class * rwin;
 	r1_expand_type expand=(r1_expand_type) g1_resources.render_window_expand_mode;
 
 	int cw=width(), ch=height()-frame->height();
 	rwin=g1_render.r_api->create_render_window(cw,ch, expand);
 
-	g1_object_controller_class *view=new g1_object_controller_class(cw,ch, style);
+	g1_object_controller_class * view=new g1_object_controller_class(cw,ch, style);
 
 	g1_current_controller=view;
 
@@ -533,7 +535,7 @@ void g1_border_frame_class::resize(w16 w, w16 h)
 	}
 }
 
-void g1_border_frame_class::reparent(i4_image_class *draw_area, i4_parent_window_class *parent)
+void g1_border_frame_class::reparent(i4_image_class * draw_area, i4_parent_window_class * parent)
 {
 	i4_parent_window_class::reparent(draw_area, parent);
 	/*if (parent)//this gives trouble if resizing window in strategy mode.
@@ -577,9 +579,10 @@ void g1_border_frame_class::set_strategy_on_top(i4_bool v)
 }
 
 
-void g1_border_frame_class::receive_event(i4_event *ev)
+void g1_border_frame_class::receive_event(i4_event * ev)
 {
 	static i4_bool resize_event_in_progress=i4_F;
+
 	CAST_PTR(uev, i4_user_message_event_class, ev);
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{
@@ -710,7 +713,7 @@ void g1_border_frame_class::parent_draw(i4_draw_context_class &context)
 static int first_start=1;
 static int first_strategy=1;
 
-g1_amount_display_class::g1_amount_display_class(char *image_name)
+g1_amount_display_class::g1_amount_display_class(char * image_name)
 	: i4_window_class(0,0)
 {
 	if (image_name)
@@ -758,7 +761,7 @@ void g1_border_frame_class::update()   // check for changes in the game
 		return ;
 	}
 
-	g1_player_info_class *p=g1_player_man.get_local();
+	g1_player_info_class * p=g1_player_man.get_local();
 
 
 
@@ -766,7 +769,7 @@ void g1_border_frame_class::update()   // check for changes in the game
 	amount_windows[LIVES]->update(p->num_stank_lives(), 5);
 
 	i4_str new_frame_name;
-	g1_object_class *frame_for_obj=0;
+	g1_object_class * frame_for_obj=0;
 	w32 fid=g1_current_controller->view.get_following_object();
 	if (fid)
 	{
@@ -898,7 +901,7 @@ g1_border_frame_class::~g1_border_frame_class()
 
 
 g1_help_screen_class::g1_help_screen_class(w16 w, w16 h,
-										   i4_graphical_style_class *style,
+										   i4_graphical_style_class * style,
 										   const i4_const_str &image_name,
 										   w32 mess_id_to_send)
 	: i4_parent_window_class(w,h),
@@ -910,9 +913,9 @@ g1_help_screen_class::g1_help_screen_class(w16 w, w16 h,
 }
 
 g1_win_screen_class::g1_win_screen_class(w16 w, w16 h,
-										 i4_graphical_style_class *style,
+										 i4_graphical_style_class * style,
 										 const i4_const_str &image_name,
-										 i4_str *filename)
+										 i4_str * filename)
 	: g1_help_screen_class(w,h,
 						   style,image_name,0),
 	  fname(*filename)
@@ -946,7 +949,7 @@ void g1_win_screen_class::parent_draw(i4_draw_context_class &context)
 	g1_help_screen_class::parent_draw(context);
 }
 
-void g1_help_screen_class::receive_event(i4_event *ev)
+void g1_help_screen_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::MOUSE_BUTTON_DOWN || ev->type()==i4_event::KEY_PRESS)
 	{
@@ -958,7 +961,7 @@ void g1_help_screen_class::receive_event(i4_event *ev)
 	}
 }
 
-void g1_win_screen_class::receive_event(i4_event *ev)
+void g1_win_screen_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::MOUSE_BUTTON_DOWN || ev->type()==i4_event::KEY_PRESS)
 	{
@@ -983,7 +986,7 @@ g1_help_screen_class::~g1_help_screen_class()
 w32 g1_get_upgrade_color(int upgrade_level)  // used for font colors & border edges
 {
 	upgrade_level++;
-	li_object *o=li_get_value("upgrade_colors");
+	li_object * o=li_get_value("upgrade_colors");
 	while (li_cdr(o,0) && upgrade_level)
 	{
 		upgrade_level--;
@@ -994,7 +997,7 @@ w32 g1_get_upgrade_color(int upgrade_level)  // used for font colors & border ed
 }
 
 
-li_object *g1_redraw(li_object *o, li_environment *env)
+li_object *g1_redraw(li_object * o, li_environment * env)
 {
 	if (g1_current_controller.get())
 	{
@@ -1003,7 +1006,7 @@ li_object *g1_redraw(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_redraw_all(li_object *o, li_environment *env)
+li_object *g1_redraw_all(li_object * o, li_environment * env)
 {
 	if (g1_current_controller.get())
 	{
@@ -1032,7 +1035,7 @@ li_automatic_add_function(g1_redraw, "redraw");
 li_automatic_add_function(g1_redraw_all, "redraw_all");
 
 
-li_object *g1_strategy_on_top(li_object *o, li_environment *env)
+li_object *g1_strategy_on_top(li_object * o, li_environment * env)
 {
 	if (first_strategy)
 	{
@@ -1076,7 +1079,7 @@ li_object *g1_strategy_on_top(li_object *o, li_environment *env)
 }
 
 
-li_object *g1_strategy_on_bottom(li_object *o, li_environment *env)
+li_object *g1_strategy_on_bottom(li_object * o, li_environment * env)
 {
 	if (!g1_border.get() || !g1_border->strategy_on_top)
 	{
@@ -1084,7 +1087,7 @@ li_object *g1_strategy_on_bottom(li_object *o, li_environment *env)
 	}
 
 	g1_demo_script_add("(strategy_on_bottom)");
-	i4_window_class *cw=g1_border->controller_window;
+	i4_window_class * cw=g1_border->controller_window;
 
 
 	g1_border->remove_child(g1_strategy_screen.get());
@@ -1110,7 +1113,7 @@ li_object *g1_strategy_on_bottom(li_object *o, li_environment *env)
 	return 0;
 }
 
-li_object *g1_strategy_toggle(li_object *o, li_environment *env)
+li_object *g1_strategy_toggle(li_object * o, li_environment * env)
 {
 	if (g1_border.get())
 	{
@@ -1219,9 +1222,9 @@ void g1_strategy_screen_class::create_build_buttons()
 	build_buttons.uninit();
 
 
-	i4_image_class *build_back=i4_load_image("bitmaps/build/build_button.tga");
-	i4_image_class *build_active=i4_load_image("bitmaps/build/build_button_highlight.tga");
-	i4_image_class *build_selected=i4_load_image("bitmaps/build/build_button_select.tga");
+	i4_image_class * build_back=i4_load_image("bitmaps/build/build_button.tga");
+	i4_image_class * build_active=i4_load_image("bitmaps/build/build_button_highlight.tga");
+	i4_image_class * build_selected=i4_load_image("bitmaps/build/build_button_select.tga");
 
 	//int x1=g1_resources.build_buttons.x1, y1=g1_resources.build_buttons.y1,
 	//    x2=g1_resources.build_buttons.x2, y2=g1_resources.build_buttons.y2;
@@ -1234,7 +1237,7 @@ void g1_strategy_screen_class::create_build_buttons()
 	int y2=y+max_line_height*4;
 	int bw=build_back->width();
 
-	for (li_object *o=li_get_value("player_buildable"); o; o=li_cdr(o,0))
+	for (li_object * o=li_get_value("player_buildable"); o; o=li_cdr(o,0))
 	{
 		int type=g1_get_object_type(li_symbol::get(li_car(o,0),0));
 
@@ -1242,13 +1245,13 @@ void g1_strategy_screen_class::create_build_buttons()
 			g1_object_type_array[type]->defaults &&
 			g1_object_type_array[type]->defaults->cost)
 		{
-			i4_event_reaction_class *re=new i4_event_reaction_class(this, BUILD+type);
-			i4_event_reaction_class *cost_re=new i4_event_reaction_class(this, ACTIVE+type);
+			i4_event_reaction_class * re=new i4_event_reaction_class(this, BUILD+type);
+			i4_event_reaction_class * cost_re=new i4_event_reaction_class(this, ACTIVE+type);
 
 
-			g1_build_but *b = new g1_build_but(g1_object_type_array[type]->name(), re, cost_re,
-											   i4_current_app->get_style(),
-											   build_back, build_active, build_selected);
+			g1_build_but * b = new g1_build_but(g1_object_type_array[type]->name(), re, cost_re,
+												i4_current_app->get_style(),
+												build_back, build_active, build_selected);
 			build_buttons.add(b);
 
 			b->set_popup(i4_T);
@@ -1269,10 +1272,10 @@ void g1_strategy_screen_class::create_build_buttons()
 	// add blank buttons for the rest to even out the screen
 	while (x+bw<=x2)
 	{
-		i4_event_reaction_class *re=new i4_event_reaction_class(this, 0xffff);
-		g1_build_but *b = new g1_build_but("no_vehicle", re, 0,
-										   i4_current_app->get_style(),
-										   build_back, build_active, build_selected);
+		i4_event_reaction_class * re=new i4_event_reaction_class(this, 0xffff);
+		g1_build_but * b = new g1_build_but("no_vehicle", re, 0,
+											i4_current_app->get_style(),
+											build_back, build_active, build_selected);
 		build_buttons.add(b);
 		b->set_popup(i4_T);
 		add_child(x,y,b);
@@ -1288,7 +1291,7 @@ void g1_strategy_screen_class::create_build_buttons()
 }
 
 
-void g1_strategy_screen_class::receive_event(i4_event *ev)
+void g1_strategy_screen_class::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{
@@ -1367,7 +1370,7 @@ void g1_border_frame_class::resize_controller(int shrink_add)
 }
 
 
-li_object *g1_shrink_screen(li_object *o, li_environment *env)
+li_object *g1_shrink_screen(li_object * o, li_environment * env)
 {
 	if (!g1_border.get())
 	{
@@ -1397,7 +1400,7 @@ li_object *g1_shrink_screen(li_object *o, li_environment *env)
 
 
 
-li_object *g1_grow_screen(li_object *o, li_environment *env)
+li_object *g1_grow_screen(li_object * o, li_environment * env)
 {
 	if (!g1_border.get())
 	{

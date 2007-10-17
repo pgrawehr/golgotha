@@ -19,18 +19,19 @@
 #include "status/status.h"
 #include <stdio.h>
 
-i4_file_class *decomp_script=0;
+i4_file_class * decomp_script=0;
 
-void copy_file(char *f1, char *f2)
+void copy_file(char * f1, char * f2)
 {
-	i4_file_class *out=i4_open(f2, I4_WRITE);
+	i4_file_class * out=i4_open(f2, I4_WRITE);
+
 	if (!out)
 	{
 		i4_warning("Could not open output file %s", f2);
 		return;
 	}
 
-	i4_file_class *in=i4_open(f1);
+	i4_file_class * in=i4_open(f1);
 	if (!in)
 	{
 		i4_warning("Could not open output file %s", f1);
@@ -53,9 +54,10 @@ void copy_file(char *f1, char *f2)
 	delete out;
 }
 
-void encode_mp3(char *s, char *d)
+void encode_mp3(char * s, char * d)
 {
 	char cmd[256];
+
 	printf("encoding %s -> %s\n", s,d);
 
 	if (decomp_script)
@@ -77,7 +79,7 @@ void mcopy(const i4_const_str &s, const i4_const_str &d)
 		i4_os_string(s, src_path, 256);
 		i4_os_string(d, dest_path, 256);
 
-		w8 *up_to_date=0;
+		w8 * up_to_date=0;
 		if (sf.tfiles)
 		{
 			up_to_date=(w8 *)I4_MALLOC(sf.tfiles * sizeof(w8), "");
@@ -147,7 +149,7 @@ void mcopy(const i4_const_str &s, const i4_const_str &d)
 	}
 }
 
-void i4_main(w32 argc, i4_const_str *argv)
+void i4_main(w32 argc, i4_const_str * argv)
 {
 	i4_init();
 

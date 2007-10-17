@@ -30,7 +30,7 @@ class g1_draw_context_class
 	enum {
 		TRANS_STACK_SIZE=8
 	};
-	i4_transform_class *stack[TRANS_STACK_SIZE];
+	i4_transform_class * stack[TRANS_STACK_SIZE];
 	int top;
 
 public:
@@ -47,13 +47,13 @@ public:
 
 	i4_bool draw_editor_stuff;
 
-	i4_transform_class *transform;
+	i4_transform_class * transform;
 
-	i4_dtransform_class *dtransform; //nonzero if a double-precision transform is available
-	i4_image_class *screen;
-	i4_draw_context_class *context;
-	i4_graphical_style_class *style;
-	g1_light_set *light;
+	i4_dtransform_class * dtransform; //nonzero if a double-precision transform is available
+	i4_image_class * screen;
+	i4_draw_context_class * context;
+	i4_graphical_style_class * style;
+	g1_light_set * light;
 	w32 default_render_bits;     // see polylist.hh, controls wireframe, texture, light rendering
 
 	// this should be how much to scale the camera to fit window (maximum dimension of window)

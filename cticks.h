@@ -9,6 +9,7 @@
 __inline w32 get_clock()
 {
 	w32 res;
+
 	__asm   {
 		push eax
 		push edx

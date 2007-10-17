@@ -67,16 +67,16 @@
 //#include <stdio.h>
 
 
-r1_render_api_class *api=0;
+r1_render_api_class * api=0;
 
 #ifdef MAXCOMM_HH
 m1_mail_slot_class slot;
 #endif
 
-i4_str *current_model_name=0;
+i4_str * current_model_name=0;
 
 
-i4_text_scroll_window_class *m1_warn_window=0;
+i4_text_scroll_window_class * m1_warn_window=0;
 
 int m1_max_mip_level=64;
 /*
@@ -113,9 +113,10 @@ int m1_max_mip_level=64;
    return 0;
    }*/
 
-void m1_add_to_list(i4_array<i4_str *> &t_arr, i4_str *tname)
+void m1_add_to_list(i4_array<i4_str *> &t_arr, i4_str * tname)
 {
 	int found=0;
+
 	for (int j=0; !found && j<t_arr.size(); j++)
 	{
 		if ( (*t_arr[j])==(*tname))
@@ -155,25 +156,25 @@ public:
 	}
 } m1_utility_init_class_instance;
 
-g1_cwin_man_class *m1_maxtool_man=0;
+g1_cwin_man_class * m1_maxtool_man=0;
 class m1_utility_app_class :
 	public g1_cwin_man_class
 //public i4_application_class
 {
 protected:
-	m1_poly_object_class *obj;
+	m1_poly_object_class * obj;
 	i4_float theta,phi,dist;
-	m1_utility_window_class *util_win;
-	i4_text_input_class *tname_edit;
-	i4_button_class *browse_button;
-	r1_render_window_class *rwin;
-	i4_display_class *display;
+	m1_utility_window_class * util_win;
+	i4_text_input_class * tname_edit;
+	i4_button_class * browse_button;
+	r1_render_window_class * rwin;
+	i4_display_class * display;
 	i4_bool maxtool_mode;
-	r1_render_api_class *api;
-	i4_window_class *st_edit;
-	i4_parent_window_class *deco,*deco2;
-	i4_window_manager_class *wm;
-	i4_pull_menu_class *menu;
+	r1_render_api_class * api;
+	i4_window_class * st_edit;
+	i4_parent_window_class * deco,* deco2;
+	i4_window_manager_class * wm;
+	i4_pull_menu_class * menu;
 	i4_bool need_save;
 
 public:
@@ -193,7 +194,7 @@ public:
 //   }
 
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"m1_utility_app_class");
 	}
@@ -215,10 +216,10 @@ public:
 
 		m1_st_edit=new m1_st_edit_window_class(256,256, tname_edit);
 
-		i4_deco_window_class *st_deco=new i4_deco_window_class(m1_st_edit->width(),
-															   m1_st_edit->height(),
-															   i4_F,
-															   style);
+		i4_deco_window_class * st_deco=new i4_deco_window_class(m1_st_edit->width(),
+																m1_st_edit->height(),
+																i4_F,
+																style);
 
 		st_deco->add_child((sw16)st_deco->get_x1(), (sw16)st_deco->get_y1(), m1_st_edit.get());
 
@@ -234,11 +235,11 @@ public:
 		tname_edit->resize(st_deco->width()-browse_button->width(), tname_edit->height());
 
 
-		i4_deco_window_class *tname_deco=new i4_deco_window_class(st_deco->width(),
-																  st_deco->height() +
-																  tname_edit->height(),
-																  i4_T,
-																  style);
+		i4_deco_window_class * tname_deco=new i4_deco_window_class(st_deco->width(),
+																   st_deco->height() +
+																   tname_edit->height(),
+																   i4_T,
+																   style);
 
 		tname_deco->add_child((sw16)tname_deco->get_x1(), (sw16)tname_deco->get_y1(), tname_edit);
 		tname_deco->add_child((sw16)tname_deco->get_x1() + tname_edit->width(),
@@ -250,7 +251,7 @@ public:
 		return tname_deco;
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		switch (ev->type())
 		{
@@ -288,7 +289,7 @@ public:
 					//  quit();
 					//else
 					//{
-					li_object *f=li_get_fun(li_get_symbol(dev->command), 0);
+					li_object * f=li_get_fun(li_get_symbol(dev->command), 0);
 					if (f)
 					{
 						li_function_type fun=li_function::get(f,0)->value();
@@ -328,7 +329,7 @@ public:
 							case M1_BUTTON_BROWSE_OK:
 								{
 									CAST_PTR(file,i4_file_open_message_class,ev);
-									i4_str *shortrelname=i4_relative_path(*file->filename);
+									i4_str * shortrelname=i4_relative_path(*file->filename);
 
 									tname_edit->change_text(*shortrelname,i4_T);
 									delete shortrelname;
@@ -388,11 +389,11 @@ public:
 		g1_cwin_man_class::receive_event(ev);
 	}
 
-	virtual void init(i4_parent_window_class *_parent,
-					  i4_graphical_style_class *_style,
-					  i4_image_class *_root_image,
-					  i4_display_class *_display,
-					  i4_window_manager_class *_wm)
+	virtual void init(i4_parent_window_class * _parent,
+					  i4_graphical_style_class * _style,
+					  i4_image_class * _root_image,
+					  i4_display_class * _display,
+					  i4_window_manager_class * _wm)
 	{
 		g1_cwin_man_class::init(_parent,_style,_root_image,_display,_wm);
 		display=_display;
@@ -401,7 +402,7 @@ public:
 		api=r1_render_api_class_instance;
 		api->install_new_tmanager(m1_info.tman_index);
 		g1_init_color_tints(api);
-		i4_image_class *im=i4_load_image("bitmaps/golg_font_18.tga");
+		i4_image_class * im=i4_load_image("bitmaps/golg_font_18.tga");
 		if (!im)
 		{
 			i4_error("CRITICAL: Unable to load required font file: bitmaps/golg_font_18.tga. Maxtool may show unexspected behaviour.");
@@ -791,7 +792,7 @@ public:
 
 		if (m1_info.tman_index!=-1)
 		{
-			r1_texture_manager_class *tman=api->get_tmanager(m1_info.tman_index);
+			r1_texture_manager_class * tman=api->get_tmanager(m1_info.tman_index);
 
 			tman->reset();
 		}
@@ -836,7 +837,7 @@ public:
 				name[0] = 0;
 				slot.read(name,sizeof(name));
 
-				i4_str *new_name = i4gets("name_format").sprintf(128,name);
+				i4_str * new_name = i4gets("name_format").sprintf(128,name);
 
 				m1_info.set_current_filename(*new_name);
 				update_fly(*new_name, i4_T);
@@ -939,7 +940,7 @@ public:
 
 } g1_maxtool_instance;
 
-li_object *m1_show_maxtool(li_object *o, li_environment *env)
+li_object *m1_show_maxtool(li_object * o, li_environment * env)
 {
 	li_call("Hide_Main_Menu"); //delete the menu behind.
 	g1_maxtool_instance.set_edit_mode(!g1_maxtool_instance.is_active());

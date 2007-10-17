@@ -31,7 +31,7 @@
 #include "loaders/load.h"
 
 
-g1_cwin_man_class *g1_cwin_man=0;
+g1_cwin_man_class * g1_cwin_man=0;
 
 
 
@@ -71,13 +71,13 @@ void g1_change_key_context(w8 view_mode)
 
 
 
-void g1_cwin_man_class::save_views(g1_saver_class *fp)
+void g1_cwin_man_class::save_views(g1_saver_class * fp)
 {
 	fp->mark_section("Game view setting V1");
 	view_state.save(fp);
 }
 
-void g1_cwin_man_class::load_views(g1_loader_class *fp)
+void g1_cwin_man_class::load_views(g1_loader_class * fp)
 {
 	if (fp && !fp->goto_section("Game view setting V1"))
 	{
@@ -86,13 +86,13 @@ void g1_cwin_man_class::load_views(g1_loader_class *fp)
 
 	view_state.load(fp);
 }
-i4_window_class *blank_screen=0;
+i4_window_class * blank_screen=0;
 
-void g1_cwin_man_class::init(i4_parent_window_class *_parent,
-							 i4_graphical_style_class *_style,
-							 i4_image_class *_root_image,
-							 i4_display_class *display,
-							 i4_window_manager_class *wm)
+void g1_cwin_man_class::init(i4_parent_window_class * _parent,
+							 i4_graphical_style_class * _style,
+							 i4_image_class * _root_image,
+							 i4_display_class * display,
+							 i4_window_manager_class * wm)
 {
 	style=_style;
 	parent=_parent;
@@ -144,7 +144,7 @@ void g1_cwin_man_class::destroy_views()
 	blank_screen=0;
 }
 
-void g1_cwin_man_class::receive_event(i4_event *ev)
+void g1_cwin_man_class::receive_event(i4_event * ev)
 {
 //   if (view.get())
 //     g1_input.receive_event(ev);
@@ -154,5 +154,6 @@ void g1_cwin_man_class::receive_event(i4_event *ev)
 void g1_cwin_man_class::map_changed()
 {
 	g1_player_type p=g1_default_player;
+
 	g1_radar_recalculate_backgrounds();
 }

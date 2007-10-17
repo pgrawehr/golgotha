@@ -104,7 +104,7 @@ void g1_player_info_class::remove_object(w32 global_id)
 		ai->object_lost(global_id);
 	}
 
-	g1_object_class *o=g1_global_id.checked_get(global_id);
+	g1_object_class * o=g1_global_id.checked_get(global_id);
 
 	if (o==commander.get())
 	{
@@ -129,7 +129,8 @@ void g1_player_info_class::add_object(w32 global_id)
 	//if (ai)
 	//  ai->object_added(global_id);
 
-	g1_object_class *o=g1_global_id.get(global_id);
+	g1_object_class * o=g1_global_id.get(global_id);
+
 	if (!commander.get() && o->id==g1_get_object_type(stank.get()))
 	{
 		set_commander(g1_player_piece_class::cast(o));
@@ -152,6 +153,7 @@ int g1_player_info_class::num_valid_objects()
 {
 	int t=owned_objects.size();
 	int valid_num=0;
+
 	for (int i=0; i<t; i++)
 	{
 		if (!g1_global_id.check_id(owned_objects[i]))
@@ -166,7 +168,7 @@ int g1_player_info_class::num_valid_objects()
 	return valid_num;
 }
 
-g1_object_class *g1_player_info_class::get_owned_object(int idx)
+g1_object_class * g1_player_info_class::get_owned_object(int idx)
 {
 	if (idx<0 || idx>=owned_objects.size())
 	{
@@ -183,6 +185,7 @@ void g1_player_info_class::clear_owned_objects()
 float g1_player_info_class::kill_ratio()
 {
 	int d=num_stank_deaths();
+
 	if (!d)
 	{
 		d=1;
@@ -199,7 +202,7 @@ void g1_player_info_class::calc_upgrade_level()
 
 	int points=i4_f_to_i(kill_ratio());
 
-	li_object *l = li_get_value(li_upgrade_kill_ratio.get());
+	li_object * l = li_get_value(li_upgrade_kill_ratio.get());
 
 	while (l)
 	{
@@ -223,9 +226,10 @@ void g1_player_info_class::calc_upgrade_level()
 
 
 static w32 convert_color_to_player(w32 player_number, i4_color color,
-								   const i4_pixel_format *fmt)
+								   const i4_pixel_format * fmt)
 {
 	sw32 r,g,b;
+
 	r=(color>>16)&0xff;
 	g=(color>>8)&0xff;
 	b=(color>>0)&0xff;
@@ -257,7 +261,7 @@ g1_player_manager_class::g1_player_manager_class()
 {
 }
 
-void g1_player_info_class::init_colors(w32 player_num, const i4_pixel_format *fmt)
+void g1_player_info_class::init_colors(w32 player_num, const i4_pixel_format * fmt)
 {
 	map_player_building=convert_color_to_player(player_num, 0x404040, fmt);
 	map_player_color=convert_color_to_player(player_num, 0xffffff, fmt);
@@ -279,7 +283,7 @@ void g1_player_info_class::new_game(g1_player_type num)
 	}
 }
 
-void g1_player_info_class::set_ai(g1_team_api_class *_ai)
+void g1_player_info_class::set_ai(g1_team_api_class * _ai)
 {
 	if (ai&&ai!=g1_human) //newer delete the human interface, it is singleton
 	{
@@ -310,7 +314,7 @@ void g1_player_info_class::set_ai(g1_team_api_class *_ai)
 	li_class_context c(li_class::get(vars.get(),0));
 	if (ai)
 	{
-		i4_const_str *a=ai->ai_name();
+		i4_const_str * a=ai->ai_name();
 		char buf[100];
 		i4_os_string(*a,buf,100);
 		li_class::get(vars.get(),0)->set(aiv,new li_string(buf));
@@ -330,7 +334,7 @@ void g1_player_info_class::add_points(int points)
 	calc_upgrade_level();
 }
 
-void g1_player_info_class::supertank_died(g1_object_class *guy_who_killed_him)
+void g1_player_info_class::supertank_died(g1_object_class * guy_who_killed_him)
 {
 	num_stank_deaths()++;
 	calc_upgrade_level();
@@ -366,10 +370,11 @@ void g1_player_info_class::think()
 }
 
 
-i4_bool g1_player_info_class::load(g1_loader_class *fp)
+i4_bool g1_player_info_class::load(g1_loader_class * fp)
 {
 	w16 ver=0,data_size=0;
 	i4_bool ret=i4_F;
+
 	vars=0;
 	//continue_wait=i4_F;
 
@@ -415,7 +420,7 @@ i4_bool g1_player_info_class::load(g1_loader_class *fp)
 	return ret;
 }
 
-void g1_player_info_class::save(g1_saver_class *fp)
+void g1_player_info_class::save(g1_saver_class * fp)
 {
 	fp->start_version(DATA_VERSION);
 	li_save_object(fp, vars.get(), 0);
@@ -425,7 +430,7 @@ void g1_player_info_class::save(g1_saver_class *fp)
 
 //(OLI) temporary hack to allow DLL reloading of AI
 //{{{
-extern void (*g1_reload_dll)(void);
+extern void (* g1_reload_dll)(void);
 
 void reload_ais()
 {
@@ -433,7 +438,7 @@ void reload_ais()
 }
 //}}}
 
-void g1_player_manager_class::set_default_ai(const char *name)
+void g1_player_manager_class::set_default_ai(const char * name)
 {
 	default_ai=name;
 
@@ -449,7 +454,7 @@ void g1_player_manager_class::set_default_ai(const char *name)
 	}
 }
 
-void g1_player_manager_class::set_ai(w32 player_num, const char *name)
+void g1_player_manager_class::set_ai(w32 player_num, const char * name)
 {
 	if (player_num<G1_MAX_PLAYERS)
 	{
@@ -500,7 +505,7 @@ void g1_player_manager_class::uninit()
 	g1_human=0;
 }
 
-void g1_player_manager_class::unload_ai(g1_team_api_definition_class *definer)
+void g1_player_manager_class::unload_ai(g1_team_api_definition_class * definer)
 {
 	for (int i=0; i<G1_MAX_PLAYERS; i++)
 	{
@@ -513,8 +518,8 @@ void g1_player_manager_class::unload_ai(g1_team_api_definition_class *definer)
 	}
 }
 
-void g1_player_manager_class::init_colors(const i4_pixel_format *fmt,
-										  r1_render_api_class *api)
+void g1_player_manager_class::init_colors(const i4_pixel_format * fmt,
+										  r1_render_api_class * api)
 {
 	g1_init_color_tints(api);
 	for (w32 i=0; i<G1_MAX_PLAYERS; i++)
@@ -523,13 +528,13 @@ void g1_player_manager_class::init_colors(const i4_pixel_format *fmt,
 	}
 }
 
-li_object *g1_set_default_ai(li_object *o, li_environment *env)
+li_object *g1_set_default_ai(li_object * o, li_environment * env)
 {
 	g1_player_man.set_default_ai(li_string::get(li_car(o,env),env)->value());
 	return 0;
 }
 
-li_object *g1_set_ai(li_object *o,li_environment *env)
+li_object *g1_set_ai(li_object * o,li_environment * env)
 {
 	g1_player_man.set_ai(li_int::get(li_car(o,env),env)->value(),
 						 li_string::get(li_second(o,env),env)->value());

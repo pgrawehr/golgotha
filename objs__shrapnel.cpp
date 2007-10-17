@@ -45,7 +45,7 @@ g1_object_definer<g1_shrapnel_class>
 g1_shrapnel_def("shrapnel", 0, g1_shrapnel_init);
 
 g1_shrapnel_class::g1_shrapnel_class(g1_object_type id,
-									 g1_loader_class *fp)
+									 g1_loader_class * fp)
 	: g1_object_class(id,fp)
 {
 
@@ -57,7 +57,7 @@ g1_shrapnel_class::g1_shrapnel_class(g1_object_type id,
 	x = -1;
 }
 
-void g1_shrapnel_class::save(g1_saver_class *fp)
+void g1_shrapnel_class::save(g1_saver_class * fp)
 {
 	// save data associated with base classes
 	g1_object_class::save(fp);
@@ -68,11 +68,12 @@ void g1_shrapnel_class::save(g1_saver_class *fp)
 
 i4_float t_grad_width=0.2f;
 
-void g1_shrapnel_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_shrapnel_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	w32 i;
 
-	shrapnel_piece *p=shrapnel_pieces;
+	shrapnel_piece * p=shrapnel_pieces;
+
 	p = shrapnel_pieces;
 
 	i4_3d_vector i_pos;
@@ -164,7 +165,7 @@ void g1_shrapnel_class::think()
 	if (shrapnel_time<MAX_SHRAPNEL_TIME)
 	{
 		shrapnel_time++;
-		shrapnel_piece *p = shrapnel_pieces;
+		shrapnel_piece * p = shrapnel_pieces;
 		for (i=0; i<num_shrapnel_pieces; i++,p++)
 		{
 			p->lposition = p->position;
@@ -202,7 +203,7 @@ void g1_shrapnel_class::setup(i4_float sx, i4_float sy, i4_float sz,
 		num_shrapnel_pieces=MAX_SHRAPNEL_PIECES;
 	}
 
-	shrapnel_piece *p = shrapnel_pieces;
+	shrapnel_piece * p = shrapnel_pieces;
 
 	for (int i=0; i<(int)num_shrapnel_pieces; i++,p++)
 	{

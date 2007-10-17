@@ -11,6 +11,6 @@
 
 #include "table.h"
 
-name_table *get_deps(char *filename, name_table *includes);
+name_table *get_deps(char * filename, name_table * includes);
 
 #endif

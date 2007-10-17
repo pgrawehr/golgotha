@@ -39,7 +39,7 @@ g1_base_launcher_def("base_launcher",
 
 
 g1_base_launcher_class::g1_base_launcher_class(g1_object_type id,
-											   g1_loader_class *fp)
+											   g1_loader_class * fp)
 	: g1_map_piece_class(id,fp)
 {
 	defaults = g1_base_launcher_def.defaults;
@@ -75,13 +75,13 @@ g1_base_launcher_class::g1_base_launcher_class(g1_object_type id,
 			 DANGEROUS, 1);
 }
 
-i4_bool g1_base_launcher_class::can_attack(g1_object_class *who)
+i4_bool g1_base_launcher_class::can_attack(g1_object_class * who)
 {
 //bad: was attacking ANY stank.
 	return (who->id == stank && who->player_num!=player_num);
 }
 
-void g1_base_launcher_class::save(g1_saver_class *fp)
+void g1_base_launcher_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 

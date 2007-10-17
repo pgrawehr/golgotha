@@ -18,7 +18,7 @@ public:
 	{
 		;
 	}
-	virtual void *find_function(const char *name) = 0;
+	virtual void *find_function(const char * name) = 0;
 };
 
 i4_dll_file *i4_open_dll(const i4_const_str &name);

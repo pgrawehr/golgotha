@@ -19,7 +19,7 @@
 g1_remove_manager_class g1_remove_man;
 
 
-void g1_remove_manager_class::request_remove(g1_object_class *obj)
+void g1_remove_manager_class::request_remove(g1_object_class * obj)
 {
 	//if (removes==(MAX_REMOVES-1))
 	//	return; //Ignore request, will process it later.
@@ -84,7 +84,7 @@ void g1_remove_manager_class::uninit()
 	//i4_free(remove_list);
 }
 
-int objs_sorter(g1_object_class *const *a,g1_object_class *const *b)
+int objs_sorter(g1_object_class * const * a,g1_object_class * const * b)
 //no I do NOT know what exactly the above const's mean, but the compiler wants it like this
 {
 	if (*a>*b)
@@ -108,7 +108,7 @@ void g1_remove_manager_class::process_requests()
 	remove_array.sort(objs_sorter);
 	for (w32 j=0; j<(w32)remove_array.size(); j++)
 	{
-		g1_object_class *remobj=remove_array[j];
+		g1_object_class * remobj=remove_array[j];
 		if (j>0&& remobj==remove_array[j-1])
 		{
 			continue;

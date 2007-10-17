@@ -31,8 +31,8 @@ class i4_application_class :
 {
 protected:
 	i4_bool finished;
-	i4_display_class *display;
-	i4_window_manager_class *wm;
+	i4_display_class * display;
+	i4_window_manager_class * wm;
 
 	i4_application_class()
 	{
@@ -47,7 +47,7 @@ public:
 
 	virtual void handle_no_displays();
 protected:
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 public:
 	virtual void get_input();
 	virtual void calc_model();
@@ -59,8 +59,8 @@ protected:
 
 	void memory_init();
 
-	void resource_init(char *resource_file,
-					   void *resource_buffer);
+	void resource_init(char * resource_file,
+					   void * resource_buffer);
 
 	void display_init();
 	void display_uninit();
@@ -68,7 +68,7 @@ protected:
 	// normal the app use the registry to decide which display
 	// to use. if no registry item available it uses the first display
 public:
-	virtual i4_bool get_display_name(char *name, int max_len);
+	virtual i4_bool get_display_name(char * name, int max_len);
 
 
 	virtual void quit()
@@ -101,6 +101,6 @@ public:
 	}
 };
 
-extern i4_application_class *i4_current_app;
+extern i4_application_class * i4_current_app;
 
 #endif

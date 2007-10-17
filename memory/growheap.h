@@ -26,10 +26,10 @@ public:
 	class heap
 	{
 public:
-		heap *next;
-		void *data;
+		heap * next;
+		void * data;
 		//heap(w32 size, char *name) { data=i4_malloc(size,name); name=0; }
-		heap(w32 size, char *name)
+		heap(w32 size, char * name)
 		{
 			data=I4_MALLOC(size,name);
 			name=0;
@@ -47,7 +47,7 @@ public:
 	w32 current_offset,increment,current_size;
 
 	i4_grow_heap_class(w32 initial_size, w32 grow_increment);
-	void *malloc(w32 size, char *description);         // description not used right now
+	void *malloc(w32 size, char * description);         // description not used right now
 	~i4_grow_heap_class()
 	{
 		list.destroy_all();

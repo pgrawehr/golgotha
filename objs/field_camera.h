@@ -7,4 +7,4 @@
  ***********************************************************************/
 
 g1_object_class *g1_find_closest_field_camera(const i4_3d_vector &pos);
-g1_object_class *g1_find_named_camera(char *name);
+g1_object_class *g1_find_named_camera(char * name);

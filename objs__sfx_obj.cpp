@@ -35,13 +35,13 @@ public:
 	w32 selected_objects[G1_MAX_OBJECTS];
 	int t_sel;
 
-	i4_str *filename;
-	i4_text_input_class *ti_filename,
-	*ti_max_volume,
-	*ti_max_hearable,
-	*ti_restart,
-	*ti_random_restart,
-	*ti_current_delay;
+	i4_str * filename;
+	i4_text_input_class * ti_filename,
+	* ti_max_volume,
+	* ti_max_hearable,
+	* ti_restart,
+	* ti_random_restart,
+	* ti_current_delay;
 
 	enum {
 		SET_SONG_CANCEL,
@@ -50,17 +50,17 @@ public:
 		BROWSE
 	};
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"sfx_obj editor");
 	}
-	g1_sfx_obj_edit_class(i4_graphical_style_class *style)
+	g1_sfx_obj_edit_class(i4_graphical_style_class * style)
 
 		: i4_color_window_class(400, 200, style->color_hint->neutral(), style)
 	{
 		t_sel=g1_get_map()->make_selected_objects_list(selected_objects, G1_MAX_OBJECTS);
 
-		g1_sfx_obj_class *sfx;
+		g1_sfx_obj_class * sfx;
 		if (t_sel && (sfx=g1_sfx_obj_class::cast(g1_global_id.get(selected_objects[0]))))
 		{
 			if (sfx->filename)
@@ -84,7 +84,7 @@ public:
 		}
 	}
 
-	void receive_event(i4_event *ev)
+	void receive_event(i4_event * ev)
 	{
 		i4_color_window_class::receive_event(ev);
 
@@ -135,7 +135,7 @@ public:
 							int restart=ti_restart->get_number();
 							int random_restart=ti_random_restart->get_number();
 							int cur_delay=ti_current_delay->get_number();
-							g1_sfx_obj_class *sfx;
+							g1_sfx_obj_class * sfx;
 
 							for (int i=0; i<t_sel; i++)
 							{
@@ -172,7 +172,7 @@ class g1_sfx_obj_def_class :
 	public g1_object_definer<g1_sfx_obj_class>
 {
 public:
-	g1_sfx_obj_def_class(char *_name)
+	g1_sfx_obj_def_class(char * _name)
 		: g1_object_definer<g1_sfx_obj_class>(_name,
 											  g1_object_definition_class::EDITOR_SELECTABLE
 		)
@@ -195,7 +195,7 @@ public:
 
 
 g1_sfx_obj_class::g1_sfx_obj_class(g1_object_type id,
-								   g1_loader_class *fp)
+								   g1_loader_class * fp)
 	: g1_object_class(id, fp)
 {
 	draw_params.setup("speaker");
@@ -238,7 +238,7 @@ g1_sfx_obj_class::~g1_sfx_obj_class()
 }
 
 
-void g1_sfx_obj_class::save(g1_saver_class *fp)
+void g1_sfx_obj_class::save(g1_saver_class * fp)
 {
 	g1_object_class::save(fp);
 
@@ -263,7 +263,7 @@ void g1_sfx_obj_class::save(g1_saver_class *fp)
 }
 
 
-void g1_sfx_obj_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_sfx_obj_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 {
 	g1_editor_model_draw(this, draw_params, context,viewer_position);
 }
@@ -305,7 +305,7 @@ void g1_sfx_obj_class::set_filename(const i4_const_str &fname)
 
 }
 
-i4_str *g1_sfx_obj_class::get_context_string()
+i4_str * g1_sfx_obj_class::get_context_string()
 {
 	return i4gets("sfx_obj_fmt").sprintf(120,filename, max_volume,
 										 max_hearable_distance,

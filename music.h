@@ -18,7 +18,7 @@ class g1_music_manager_class
 	sw32 song_on;
 	sw32 total_songs;
 	sw32 total_missing;
-	i4_stream_wav_player *stream;
+	i4_stream_wav_player * stream;
 	i4_bool playing;
 
 	void next_song();

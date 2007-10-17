@@ -43,7 +43,7 @@
 template <class T>
 class i4_binary_tree
 {
-	void recursive_delete(T *node)
+	void recursive_delete(T * node)
 	{
 		if (node->right)
 		{
@@ -57,7 +57,7 @@ class i4_binary_tree
 	}
 
 public:
-	T *root;
+	T * root;
 
 	i4_binary_tree()
 	{
@@ -66,7 +66,7 @@ public:
 
 
 	// insert return a previous instance if already in tree
-	T *insert(T *x)
+	T *insert(T * x)
 	{
 		x->left=x->right=0;
 
@@ -76,7 +76,7 @@ public:
 		}
 		else
 		{
-			T *p=root;
+			T * p=root;
 
 			for(;;)
 			{
@@ -115,9 +115,10 @@ public:
 		return x;
 	}
 
-	T *find(const T *x)
+	T *find(const T * x)
 	{
-		T *p=root;
+		T * p=root;
+
 		for(;;) //same as while(1), but causes no warning
 		{
 			if (!p)

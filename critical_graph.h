@@ -37,13 +37,13 @@ public:
 	{
 public:
 		i4_float x,y;
-		connection_class *connection;
+		connection_class * connection;
 		w8 connections;
 		w8 selected;
 	};
 
 protected:
-	connection_class *pool;
+	connection_class * pool;
 	w32 pool_connections;
 public:
 	critical_point_class critical[MAX_CRITICALS];
@@ -56,7 +56,7 @@ public:
 		pool(0)
 	{
 	}
-	g1_critical_graph_class(g1_loader_class *f) :
+	g1_critical_graph_class(g1_loader_class * f) :
 		pool(0)
 	{
 		load_points(f);
@@ -70,10 +70,10 @@ public:
 	i4_bool add_critical_point(i4_float x, i4_float y);
 	void remove_critical_point(i4_float atx, i4_float aty);
 
-	void save_points(g1_saver_class *f);
-	void save_graph(g1_saver_class *f);
-	void load_points(g1_loader_class *f);
-	void load_graph(g1_loader_class *f);
+	void save_points(g1_saver_class * f);
+	void save_graph(g1_saver_class * f);
+	void load_points(g1_loader_class * f);
+	void load_graph(g1_loader_class * f);
 };
 
 #endif

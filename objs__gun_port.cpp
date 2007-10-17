@@ -55,15 +55,15 @@ class g1_gunport_class :
 {
 
 protected:
-	g1_mini_object *barrel;
+	g1_mini_object * barrel;
 public:
 	enum {
 		DATA_VERSION=1
 	};
 	g1_gunport_class(g1_object_type id,
-					 g1_loader_class *fp);
+					 g1_loader_class * fp);
 	virtual void think();
-	virtual void save(g1_saver_class *fp);
+	virtual void save(g1_saver_class * fp);
 
 };
 g1_object_definer<g1_gunport_class>
@@ -71,7 +71,7 @@ g1_gunport_def("gunport", g1_object_definition_class::EDITOR_SELECTABLE|
 			   g1_object_definition_class::TO_MAP_PIECE,
 			   g1_gunport_init);
 
-g1_gunport_class::g1_gunport_class(g1_object_type id, g1_loader_class *fp)
+g1_gunport_class::g1_gunport_class(g1_object_type id, g1_loader_class * fp)
 	: g1_map_piece_class(id,fp)
 {
 	defaults=g1_gunport_def.defaults;
@@ -119,7 +119,7 @@ g1_gunport_class::g1_gunport_class(g1_object_type id, g1_loader_class *fp)
 //  return 0;
 //}
 
-void g1_gunport_class::save(g1_saver_class *fp)
+void g1_gunport_class::save(g1_saver_class * fp)
 {
 	g1_map_piece_class::save(fp);
 	fp->start_version(DATA_VERSION);

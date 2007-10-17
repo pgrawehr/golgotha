@@ -13,6 +13,6 @@
 #include "render/tmanage.h"
 
 extern m1_poly_object_class *m1_load_model(const i4_const_str &name,
-										   r1_texture_manager_class *tman);
+										   r1_texture_manager_class * tman);
 
 #endif

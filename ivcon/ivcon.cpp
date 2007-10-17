@@ -237,17 +237,17 @@ int vertex_faceindex[ORDER_MAX][FACE_MAX]; //which vertices make up which faces?
 
 /******************************************************************************/
 
-int                main( int argc, char **argv );
-int                ase_read( FILE *filein );
-int                ase_write( FILE *fileout );
-int                byu_read( FILE *filein );
-int                byu_write( FILE *fileout );
-int                char_index_last( char *string, char c );
-int                char_pad( int *char_index, int *null_index, char *string,
+int                main( int argc, char * * argv );
+int                ase_read( FILE * filein );
+int                ase_write( FILE * fileout );
+int                byu_read( FILE * filein );
+int                byu_write( FILE * fileout );
+int                char_index_last( char * string, char c );
+int                char_pad( int * char_index, int * null_index, char * string,
 							int STRING_MAX );
-char               char_read( FILE *filein );
-int                char_write( FILE *fileout, char c );
-int                command_line( char **argv );
+char               char_read( FILE * filein );
+int                char_write( FILE * fileout, char c );
+int                command_line( char * * argv );
 void               cor3_normal_set( void );
 void               cor3_range( void );
 void               data_check( void );
@@ -255,8 +255,8 @@ void               data_init( void );
 int                data_read( void );
 void               data_report( void );
 int                data_write( void );
-int                dxf_read( FILE *filein );
-int                dxf_write( FILE *fileout );
+int                dxf_read( FILE * filein );
+int                dxf_write( FILE * fileout );
 void               edge_null_delete( void );
 void               face_area_set(bool domodifications);
 void               face_normal_ave( void );
@@ -266,75 +266,75 @@ void               face_reverse_order( void );
 int                face_subset( void );
 void               face_to_line( void );
 void               face_to_vertex_material( void );
-char *file_ext( char *file_name );
-float              float_read( FILE *filein );
+char *file_ext( char * file_name );
+float              float_read( FILE * filein );
 float              float_reverse_bytes( float x );
-int                float_write( FILE *fileout, float float_val );
+int                float_write( FILE * fileout, float float_val );
 int                gmod_arch_check( void );
-int                gmod_read( FILE *filein );
-float              gmod_read_float( FILE *filein );
-unsigned short     gmod_read_w16( FILE *filein );
-unsigned long      gmod_read_w32( FILE *filein );
-int                gmod_write( FILE *fileout );
-void               gmod_write_float( float Val, FILE *fileout );
-void               gmod_write_w16( unsigned short Val, FILE *fileout );
-void               gmod_write_w32( unsigned long Val, FILE *fileout );
+int                gmod_read( FILE * filein );
+float              gmod_read_float( FILE * filein );
+unsigned short     gmod_read_w16( FILE * filein );
+unsigned long      gmod_read_w32( FILE * filein );
+int                gmod_write( FILE * fileout );
+void               gmod_write_float( float Val, FILE * fileout );
+void               gmod_write_w16( unsigned short Val, FILE * fileout );
+void               gmod_write_w32( unsigned long Val, FILE * fileout );
 void               hello( void );
 void               help( void );
-int                hrc_read( FILE *filein );
-int                hrc_write( FILE *fileout );
+int                hrc_read( FILE * filein );
+int                hrc_write( FILE * fileout );
 void               init_program_data( void );
 int                interact( void );
-int                iv_read( FILE *filein );
-int                iv_write( FILE *fileout );
-int                ivec_max( int n, int *a );
-int                leqi( char *string1, char *string2 );
-long int           long_int_read( FILE *filein );
-int                long_int_write( FILE *fileout, long int int_val );
+int                iv_read( FILE * filein );
+int                iv_write( FILE * fileout );
+int                ivec_max( int n, int * a );
+int                leqi( char * string1, char * string2 );
+long int           long_int_read( FILE * filein );
+int                long_int_write( FILE * fileout, long int int_val );
 void               news( void );
 void               node_to_vertex_material( void );
-int                obj_read( FILE *filein );
-int                obj_write( FILE *fileout );
-int                pov_write( FILE *fileout );
+int                obj_read( FILE * filein );
+int                obj_write( FILE * fileout );
+int                pov_write( FILE * fileout );
 int                rcol_find( float a[][COR3_MAX], int m, int n, float r[] );
 float              rgb_to_hue( float r, float g, float b );
-short int          short_int_read( FILE *filein );
-int                short_int_write( FILE *fileout, unsigned short int int_val );
-int                smf_read( FILE *filein );
-int                smf_write( FILE *fileout );
-int                stla_read( FILE *filein );
-int                stla_write( FILE *fileout );
-int                stlb_read( FILE *filein );
-int                stlb_write( FILE *fileout );
+short int          short_int_read( FILE * filein );
+int                short_int_write( FILE * fileout, unsigned short int int_val );
+int                smf_read( FILE * filein );
+int                smf_write( FILE * fileout );
+int                stla_read( FILE * filein );
+int                stla_write( FILE * fileout );
+int                stlb_read( FILE * filein );
+int                stlb_write( FILE * fileout );
 void               tds_pre_process( void );
-int                tds_read( FILE *filein );
-unsigned long int  tds_read_ambient_section( FILE *filein, unsigned long matindex);
-unsigned long int  tds_read_background_section( FILE *filein );
-unsigned long int  tds_read_boolean( unsigned char *boolean, FILE *filein );
-unsigned long int  tds_read_camera_section( FILE *filein );
-unsigned long int  tds_read_edit_section( FILE *filein, int *views_read );
-unsigned long int  tds_read_keyframe_section( FILE *filein, int *views_read );
-unsigned long int  tds_read_keyframe_objdes_section( FILE *filein );
-unsigned long int  tds_read_light_section( FILE *filein );
-unsigned long int  tds_read_u_long_int( FILE *filein );
-int                tds_read_long_name( FILE *filein );
-unsigned long int  tds_read_matdef_section( FILE *filein );
-unsigned long int  tds_read_material_section( FILE *filein );
-int                tds_read_name( FILE *filein );
-unsigned long int  tds_read_obj_section( FILE *filein );
-unsigned long int  tds_read_object_section( FILE *filein );
-unsigned long int  tds_read_tex_verts_section( FILE *filein );
-unsigned long int  tds_read_texmap_section( FILE *filein );
-unsigned short int tds_read_u_short_int( FILE *filein );
-unsigned long int  tds_read_spot_section( FILE *filein );
-unsigned long int  tds_read_unknown_section( FILE *filein );
-unsigned long int  tds_read_view_section( FILE *filein, int *views_read );
-unsigned long int  tds_read_vp_section( FILE *filein, int *views_read );
-int                tds_write( FILE *fileout );
-int                tds_write_string( FILE *fileout, char *string );
-int                tds_write_u_short_int( FILE *fileout,
+int                tds_read( FILE * filein );
+unsigned long int  tds_read_ambient_section( FILE * filein, unsigned long matindex);
+unsigned long int  tds_read_background_section( FILE * filein );
+unsigned long int  tds_read_boolean( unsigned char * boolean, FILE * filein );
+unsigned long int  tds_read_camera_section( FILE * filein );
+unsigned long int  tds_read_edit_section( FILE * filein, int * views_read );
+unsigned long int  tds_read_keyframe_section( FILE * filein, int * views_read );
+unsigned long int  tds_read_keyframe_objdes_section( FILE * filein );
+unsigned long int  tds_read_light_section( FILE * filein );
+unsigned long int  tds_read_u_long_int( FILE * filein );
+int                tds_read_long_name( FILE * filein );
+unsigned long int  tds_read_matdef_section( FILE * filein );
+unsigned long int  tds_read_material_section( FILE * filein );
+int                tds_read_name( FILE * filein );
+unsigned long int  tds_read_obj_section( FILE * filein );
+unsigned long int  tds_read_object_section( FILE * filein );
+unsigned long int  tds_read_tex_verts_section( FILE * filein );
+unsigned long int  tds_read_texmap_section( FILE * filein );
+unsigned short int tds_read_u_short_int( FILE * filein );
+unsigned long int  tds_read_spot_section( FILE * filein );
+unsigned long int  tds_read_unknown_section( FILE * filein );
+unsigned long int  tds_read_view_section( FILE * filein, int * views_read );
+unsigned long int  tds_read_vp_section( FILE * filein, int * views_read );
+int                tds_write( FILE * fileout );
+int                tds_write_string( FILE * fileout, char * string );
+int                tds_write_u_short_int( FILE * fileout,
 										 unsigned short int int_val );
-int                tec_write( FILE *fileout );
+int                tec_write( FILE * fileout );
 void               tmat_init( float a[4][4] );
 void               tmat_mxm( float a[4][4], float b[4][4], float c[4][4] );
 void               tmat_mxp( float a[4][4], float x[4], float y[4] );
@@ -346,27 +346,27 @@ void               tmat_rot_vector( float a[4][4], float b[4][4], float angle,
 								   float v1, float v2, float v3 );
 void               tmat_scale( float a[4][4], float b[4][4], float sx, float sy,
 							  float sz );
-void               tmat_shear( float a[4][4], float b[4][4], char *axis,
+void               tmat_shear( float a[4][4], float b[4][4], char * axis,
 							  float s );
 void               tmat_trans( float a[4][4], float b[4][4], float x, float y,
 							  float z );
-int                tria_read( FILE *filein );
-int                tria_write( FILE *fileout );
-int                trib_read( FILE *filein );
-int                trib_write( FILE *fileout );
-int                txt_write( FILE *fileout );
-int                ucd_write( FILE *fileout );
+int                tria_read( FILE * filein );
+int                tria_write( FILE * fileout );
+int                trib_read( FILE * filein );
+int                trib_write( FILE * fileout );
+int                txt_write( FILE * fileout );
+int                ucd_write( FILE * fileout );
 void               vertex_normal_set( void );
 void               vertex_to_face_material( void );
 void               vertex_to_node_material( void );
-int                vla_read( FILE *filein );
-int                vla_write( FILE *fileout );
-int                wrl_write( FILE *filout );
-int                xgl_write( FILE *fileout );
-void tga_write_materials(char *filename);
+int                vla_read( FILE * filein );
+int                vla_write( FILE * fileout );
+int                wrl_write( FILE * filout );
+int                xgl_write( FILE * fileout );
+void tga_write_materials(char * filename);
 /******************************************************************************/
 
-int main( int argc, char **argv )
+int main( int argc, char * * argv )
 
 /******************************************************************************/
 
@@ -385,6 +385,7 @@ int main( int argc, char **argv )
  */
 {
 	int result;
+
 /*
    Initialize the program data.
  */
@@ -406,7 +407,7 @@ int main( int argc, char **argv )
 }
 /******************************************************************************/
 
-int ase_read( FILE *filein )
+int ase_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -432,7 +433,7 @@ int ase_read( FILE *filein )
 	int ivert=0;
 	int iword;
 	int level;
-	char *next;
+	char * next;
 	int nlbrack;
 	int nrbrack;
 	int cor3_num_old;
@@ -1212,7 +1213,7 @@ int ase_read( FILE *filein )
 }
 /******************************************************************************/
 
-int ase_write( FILE *fileout )
+int ase_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -1408,7 +1409,7 @@ int ase_write( FILE *fileout )
 }
 /**********************************************************************/
 
-int byu_read( FILE *filein )
+int byu_read( FILE * filein )
 
 /**********************************************************************/
 
@@ -1459,7 +1460,7 @@ int byu_read( FILE *filein )
 	int ival;
 	int ivert;
 	int j;
-	char *next;
+	char * next;
 	int np;
 	int np1;
 	int np2;
@@ -1555,7 +1556,7 @@ int byu_read( FILE *filein )
 }
 /**********************************************************************/
 
-int byu_write( FILE *fileout )
+int byu_write( FILE * fileout )
 
 /**********************************************************************/
 
@@ -1643,7 +1644,7 @@ int byu_write( FILE *fileout )
 }
 /******************************************************************************/
 
-int char_index_last( char *string, char c )
+int char_index_last( char * string, char c )
 
 /******************************************************************************/
 
@@ -1678,7 +1679,7 @@ int char_index_last( char *string, char c )
 }
 /******************************************************************************/
 
-int char_pad( int *char_index, int *null_index, char *string,
+int char_pad( int * char_index, int * null_index, char * string,
 			 int STRING_MAX )
 
 /******************************************************************************/
@@ -1739,7 +1740,7 @@ int char_pad( int *char_index, int *null_index, char *string,
 }
 /******************************************************************************/
 
-char char_read( FILE *filein )
+char char_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -1765,7 +1766,7 @@ char char_read( FILE *filein )
 }
 /******************************************************************************/
 
-int char_write( FILE *fileout, char c )
+int char_write( FILE * fileout, char c )
 
 /******************************************************************************/
 
@@ -1789,7 +1790,7 @@ int char_write( FILE *fileout, char c )
 }
 /******************************************************************************/
 
-int command_line( char **argv )
+int command_line( char * * argv )
 
 /******************************************************************************/
 
@@ -1832,6 +1833,7 @@ int command_line( char **argv )
 	int ivert;
 	int reverse_faces;
 	int reverse_normals;
+
 /*
    Initialize local data.
  */
@@ -2470,14 +2472,15 @@ int data_read( void )
    	John Burkardt
  */
 {
-	FILE *filein;
-	char *filein_type;
+	FILE * filein;
+	char * filein_type;
 	int icor3;
 	int ierror;
 	int iface;
 	int iline;
 	int ivert;
 	int ntemp;
+
 /*
    Retrieve the input file type.
  */
@@ -2835,8 +2838,8 @@ int data_write( void )
    	John Burkardt
  */
 {
-	FILE *fileout;
-	char *fileout_type;
+	FILE * fileout;
+	char * fileout_type;
 	int line_num_save;
 	int result;
 
@@ -3054,7 +3057,7 @@ int data_write( void )
 }
 /******************************************************************************/
 
-int dxf_read( FILE *filein )
+int dxf_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -3304,7 +3307,7 @@ int dxf_read( FILE *filein )
 }
 /******************************************************************************/
 
-int dxf_write( FILE *fileout )
+int dxf_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -3635,7 +3638,7 @@ void edge_null_delete( void )
 
 /**********************************************************************/
 
-int conv_3_to_4(int facea,int faceb, int *nface, bool printmsg)
+int conv_3_to_4(int facea,int faceb, int * nface, bool printmsg)
 
 /**********************************************************************/
 
@@ -3663,6 +3666,7 @@ int conv_3_to_4(int facea,int faceb, int *nface, bool printmsg)
 	int found,done;
 	double a1,a2,a3,b1,b2,b3,len1,len2,r1,r2,r3,lenr; //double for higher accuracy
 	double add1,add2,add3;
+
 	if (printmsg)
 	{
 		printf("Attempt to combine %d and %d...\n",facea,faceb);
@@ -4141,6 +4145,7 @@ void face_null_delete( void )
 	int ivert;
 	int j;
 	int face_num2;
+
 /*
    FACE_NUM2 is the number of faces we'll keep.
  */
@@ -4580,6 +4585,7 @@ void face_to_line( void )
 	int ivert;
 	int jcor3;
 	int jvert;
+
 /*
    Case 0:
    No line pruning.
@@ -4716,7 +4722,7 @@ void face_to_vertex_material( void )
 }
 /******************************************************************************/
 
-char *file_ext( char *file_name )
+char *file_ext( char * file_name )
 
 /******************************************************************************/
 
@@ -4749,7 +4755,7 @@ char *file_ext( char *file_name )
 }
 /******************************************************************************/
 
-float float_read( FILE *filein )
+float float_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -4806,6 +4812,7 @@ float float_reverse_bytes( float x )
  */
 {
 	char c;
+
 	union {
 		float yfloat;
 		char ychar[4];
@@ -4825,7 +4832,7 @@ float float_reverse_bytes( float x )
 }
 /******************************************************************************/
 
-int float_write( FILE *fileout, float float_val )
+int float_write( FILE * fileout, float float_val )
 
 /******************************************************************************/
 
@@ -4904,7 +4911,7 @@ int gmod_arch_check( void )
 }
 /******************************************************************************/
 
-int gmod_read( FILE *filein )
+int gmod_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -5238,7 +5245,7 @@ int gmod_read( FILE *filein )
 }
 /******************************************************************************/
 
-float gmod_read_float( FILE *filein )
+float gmod_read_float( FILE * filein )
 
 /******************************************************************************/
 
@@ -5257,7 +5264,7 @@ float gmod_read_float( FILE *filein )
  */
 {
 	int endian = 1;
-	unsigned char *out_pos;
+	unsigned char * out_pos;
 	int i;
 	float Val;
 
@@ -5280,7 +5287,7 @@ float gmod_read_float( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned short gmod_read_w16( FILE *filein )
+unsigned short gmod_read_w16( FILE * filein )
 
 /******************************************************************************/
 
@@ -5308,7 +5315,7 @@ unsigned short gmod_read_w16( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long gmod_read_w32( FILE *filein )
+unsigned long gmod_read_w32( FILE * filein )
 
 /******************************************************************************/
 
@@ -5341,7 +5348,7 @@ unsigned long gmod_read_w32( FILE *filein )
 
 /******************************************************************************/
 
-int gmod_write( FILE *fileout )
+int gmod_write( FILE * fileout )
 {
 
 /******************************************************************************/
@@ -5367,7 +5374,7 @@ int gmod_write( FILE *fileout )
 	unsigned long TextureNameSectionPos;
 	unsigned long ModelSectionPos;
 	unsigned long VertexSectionPos;
-	char *texname;
+	char * texname;
 	int VertexCount;
 	int FaceCount;
 	int TextureCount;
@@ -5378,6 +5385,7 @@ int gmod_write( FILE *fileout )
 	int CorNumber;
 	int DimensionCount;
 	float MaxWidth;
+
 /*
    Check if we can handle this architecture.
  */
@@ -5666,7 +5674,7 @@ int gmod_write( FILE *fileout )
 
 /******************************************************************************/
 
-void gmod_write_float( float Val, FILE *fileout )
+void gmod_write_float( float Val, FILE * fileout )
 
 /******************************************************************************/
 
@@ -5685,7 +5693,7 @@ void gmod_write_float( float Val, FILE *fileout )
  */
 {
 	int endian = 1;
-	unsigned char *out_pos;
+	unsigned char * out_pos;
 	int i;
 
 	if (*(char *)&endian == 1)
@@ -5705,7 +5713,7 @@ void gmod_write_float( float Val, FILE *fileout )
 }
 /******************************************************************************/
 
-void gmod_write_w16( unsigned short Val, FILE *fileout )
+void gmod_write_w16( unsigned short Val, FILE * fileout )
 
 /******************************************************************************/
 
@@ -5732,7 +5740,7 @@ void gmod_write_w16( unsigned short Val, FILE *fileout )
 }
 /******************************************************************************/
 
-void gmod_write_w32( unsigned long Val, FILE *fileout )
+void gmod_write_w32( unsigned long Val, FILE * fileout )
 
 /******************************************************************************/
 
@@ -5878,7 +5886,7 @@ void help( void )
 }
 /******************************************************************************/
 
-int hrc_read( FILE *filein )
+int hrc_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -6046,7 +6054,7 @@ int hrc_read( FILE *filein )
 	int iword;
 	int jval;
 	int level;
-	char *next;
+	char * next;
 	int nlbrack;
 	int nrbrack;
 	int cor3_num_old;
@@ -6917,7 +6925,7 @@ int hrc_read( FILE *filein )
 }
 /******************************************************************************/
 
-int hrc_write( FILE *fileout )
+int hrc_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -7387,7 +7395,7 @@ int interact( void )
 	int j,k,l;
 	int jvert;
 	int m;
-	char *next;
+	char * next;
 	char c;
 	float temp;
 	float x;
@@ -7577,7 +7585,8 @@ int interact( void )
 						 */
 					}
 
-				} while(!finished);
+				}
+				while(!finished);
 				printf("Converted %d faces.\n",a);
 
 			}
@@ -8129,7 +8138,7 @@ int interact( void )
 }
 /******************************************************************************/
 
-int iv_read( FILE *filein )
+int iv_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -8320,7 +8329,7 @@ int iv_read( FILE *filein )
 	int j;
 	int jval;
 	int level;
-	char *next;
+	char * next;
 	int nlbrack;
 	int nrbrack;
 	int nu;
@@ -9637,7 +9646,8 @@ int iv_read( FILE *filein )
 							texture_name[texture_num][j] = c;
 							j = j + 1;
 						}
-					} while ( c != '\0' );
+					}
+					while ( c != '\0' );
 
 				}
 				else if ( leqi( word, "IMAGE" ) == TRUE )
@@ -9942,7 +9952,7 @@ int iv_read( FILE *filein )
 }
 /******************************************************************************/
 
-int iv_write( FILE *fileout )
+int iv_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -10336,7 +10346,7 @@ int iv_write( FILE *fileout )
 }
 /******************************************************************************/
 
-int ivec_max( int n, int *a )
+int ivec_max( int n, int * a )
 
 /******************************************************************************/
 
@@ -10355,7 +10365,7 @@ int ivec_max( int n, int *a )
  */
 {
 	int i;
-	int *ia;
+	int * ia;
 	int imax;
 
 	if ( n <= 0 )
@@ -10379,7 +10389,7 @@ int ivec_max( int n, int *a )
 }
 /******************************************************************************/
 
-int leqi( char *string1, char *string2 )
+int leqi( char * string1, char * string2 )
 
 /******************************************************************************/
 
@@ -10452,7 +10462,7 @@ int leqi( char *string1, char *string2 )
 }
 /******************************************************************************/
 
-long int long_int_read( FILE *filein )
+long int long_int_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -10494,7 +10504,7 @@ long int long_int_read( FILE *filein )
 }
 /******************************************************************************/
 
-int long_int_write( FILE *fileout, long int int_val )
+int long_int_write( FILE * fileout, long int int_val )
 
 /******************************************************************************/
 
@@ -10734,7 +10744,7 @@ void node_to_vertex_material( void )
 }
 /******************************************************************************/
 
-int obj_read( FILE *filein )
+int obj_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -10774,9 +10784,9 @@ int obj_read( FILE *filein )
 	int count;
 	int i;
 	int ivert;
-	char *next;
-	char *next2;
-	char *next3;
+	char * next;
+	char * next2;
+	char * next3;
 	int node;
 	int vertex_normal_num;
 	float r1;
@@ -10785,6 +10795,7 @@ int obj_read( FILE *filein )
 	char token[LINE_MAX_LEN];
 	char token2[LINE_MAX_LEN];
 	int width;
+
 /*
    Initialize.
  */
@@ -11242,7 +11253,7 @@ int obj_read( FILE *filein )
 }
 /******************************************************************************/
 
-int obj_write( FILE *fileout )
+int obj_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -11287,6 +11298,7 @@ int obj_write( FILE *fileout )
 	int newval;
 	int text_num;
 	float w;
+
 /*
    Initialize.
  */
@@ -11399,7 +11411,7 @@ int obj_write( FILE *fileout )
 }
 /******************************************************************************/
 
-int pov_write( FILE *fileout )
+int pov_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -11701,6 +11713,7 @@ float rgb_to_hue( float r, float g, float b )
 	float h=0;
 	float rgbmax=0;
 	float rgbmin=0;
+
 /*
    Make sure the colors are between 0 and 1.
  */
@@ -11797,7 +11810,7 @@ float rgb_to_hue( float r, float g, float b )
 }
 /******************************************************************************/
 
-short int short_int_read( FILE *filein )
+short int short_int_read( FILE * filein )
 
 /******************************************************************************/
 /*
@@ -11827,7 +11840,7 @@ short int short_int_read( FILE *filein )
 }
 /******************************************************************************/
 
-int short_int_write( FILE *fileout, unsigned short int short_int_val )
+int short_int_write( FILE * fileout, unsigned short int short_int_val )
 
 /******************************************************************************/
 
@@ -11867,7 +11880,7 @@ int short_int_write( FILE *fileout, unsigned short int short_int_val )
 }
 /******************************************************************************/
 
-int smf_read( FILE *filein )
+int smf_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -11979,7 +11992,7 @@ int smf_read( FILE *filein )
 	int imat;
 	int ivert;
 	int level;
-	char *next;
+	char * next;
 	int node;
 	int node_count;
 	float r;
@@ -11987,7 +12000,7 @@ int smf_read( FILE *filein )
 	float r2;
 	float r3;
 	float rgba[4];
-	char *string=0;
+	char * string=0;
 	float sx;
 	float sy;
 	float sz;
@@ -12541,7 +12554,7 @@ int smf_read( FILE *filein )
 }
 /******************************************************************************/
 
-int smf_write( FILE *fileout )
+int smf_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -12643,6 +12656,7 @@ int smf_write( FILE *fileout )
 	int imat;
 	int ivert;
 	int text_num;
+
 /*
    Initialize.
  */
@@ -12754,7 +12768,7 @@ int smf_write( FILE *fileout )
 }
 /******************************************************************************/
 
-int stla_read( FILE *filein )
+int stla_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -12796,7 +12810,7 @@ int stla_read( FILE *filein )
 	int i;
 	int icor3;
 	int ivert;
-	char *next;
+	char * next;
 	float r1;
 	float r2;
 	float r3;
@@ -12804,6 +12818,7 @@ int stla_read( FILE *filein )
 	float temp[3];
 	char token[LINE_MAX_LEN];
 	int width;
+
 /*
    Read the next line of the file into INPUT.
  */
@@ -12959,7 +12974,7 @@ int stla_read( FILE *filein )
 }
 /******************************************************************************/
 
-int stla_write( FILE *fileout )
+int stla_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -13009,6 +13024,7 @@ int stla_write( FILE *fileout )
 	int jvert;
 	int face_num2;
 	int text_num;
+
 /*
    Initialize.
  */
@@ -13070,7 +13086,7 @@ int stla_write( FILE *fileout )
 }
 /******************************************************************************/
 
-int stlb_read( FILE *filein )
+int stlb_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -13109,6 +13125,7 @@ int stlb_read( FILE *filein )
 	int i;
 	int iface;
 	int ivert;
+
 /*
    80 byte Header.
  */
@@ -13193,7 +13210,7 @@ int stlb_read( FILE *filein )
 }
 /******************************************************************************/
 
-int stlb_write( FILE *fileout )
+int stlb_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -13239,6 +13256,7 @@ int stlb_write( FILE *fileout )
 	int iface;
 	int jvert;
 	int face_num2;
+
 /*
    80 byte Header.
  */
@@ -13345,7 +13363,7 @@ void tds_pre_process( void )
 }
 /******************************************************************************/
 
-int tds_read( FILE *filein )
+int tds_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -13371,6 +13389,7 @@ int tds_read( FILE *filein )
 	unsigned short int temp_int;
 	int version;
 	int views_read;
+
 /*
    Initialize.
  */
@@ -13477,7 +13496,7 @@ int tds_read( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long tds_read_ambient_section( FILE *filein, unsigned long matindex)
+unsigned long tds_read_ambient_section( FILE * filein, unsigned long matindex)
 
 /******************************************************************************/
 
@@ -13569,7 +13588,7 @@ unsigned long tds_read_ambient_section( FILE *filein, unsigned long matindex)
 }
 /******************************************************************************/
 
-unsigned long tds_read_background_section( FILE *filein )
+unsigned long tds_read_background_section( FILE * filein )
 
 /******************************************************************************/
 
@@ -13660,7 +13679,7 @@ unsigned long tds_read_background_section( FILE *filein )
 
 /******************************************************************************/
 
-unsigned long tds_read_alpha_section( FILE *filein, unsigned long matindex)
+unsigned long tds_read_alpha_section( FILE * filein, unsigned long matindex)
 
 /******************************************************************************/
 
@@ -13733,7 +13752,7 @@ unsigned long tds_read_alpha_section( FILE *filein, unsigned long matindex)
 }
 /******************************************************************************/
 
-unsigned long tds_read_boolean( unsigned char *boolean, FILE *filein )
+unsigned long tds_read_boolean( unsigned char * boolean, FILE * filein )
 
 /******************************************************************************/
 
@@ -13754,7 +13773,7 @@ unsigned long tds_read_boolean( unsigned char *boolean, FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long tds_read_camera_section( FILE *filein )
+unsigned long tds_read_camera_section( FILE * filein )
 
 /******************************************************************************/
 {
@@ -13830,7 +13849,7 @@ unsigned long tds_read_camera_section( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long tds_read_edit_section( FILE *filein, int *views_read )
+unsigned long tds_read_edit_section( FILE * filein, int * views_read )
 
 /******************************************************************************/
 
@@ -14005,7 +14024,7 @@ unsigned long tds_read_edit_section( FILE *filein, int *views_read )
 }
 /******************************************************************************/
 
-unsigned long tds_read_keyframe_section( FILE *filein, int *views_read )
+unsigned long tds_read_keyframe_section( FILE * filein, int * views_read )
 
 /******************************************************************************/
 {
@@ -14083,7 +14102,7 @@ unsigned long tds_read_keyframe_section( FILE *filein, int *views_read )
 }
 /******************************************************************************/
 
-unsigned long tds_read_keyframe_objdes_section( FILE *filein )
+unsigned long tds_read_keyframe_objdes_section( FILE * filein )
 
 /******************************************************************************/
 
@@ -14222,7 +14241,7 @@ unsigned long tds_read_keyframe_objdes_section( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long tds_read_light_section( FILE *filein )
+unsigned long tds_read_light_section( FILE * filein )
 
 /******************************************************************************/
 {
@@ -14347,7 +14366,7 @@ unsigned long tds_read_light_section( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long int tds_read_u_long_int( FILE *filein )
+unsigned long int tds_read_u_long_int( FILE * filein )
 
 /******************************************************************************/
 
@@ -14385,7 +14404,7 @@ unsigned long int tds_read_u_long_int( FILE *filein )
 }
 /******************************************************************************/
 
-int tds_read_long_name( FILE *filein )
+int tds_read_long_name( FILE * filein )
 
 /******************************************************************************/
 {
@@ -14411,7 +14430,8 @@ int tds_read_long_name( FILE *filein )
 		letter = fgetc( filein );
 		temp_name[teller] = letter;
 		teller = teller + 1;
-	} while ( letter != 0 );
+	}
+	while ( letter != 0 );
 
 	temp_name[teller-1] = 0;
 
@@ -14424,7 +14444,7 @@ int tds_read_long_name( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long tds_read_matdef_section( FILE *filein )
+unsigned long tds_read_matdef_section( FILE * filein )
 
 /******************************************************************************/
 {
@@ -14463,7 +14483,7 @@ unsigned long tds_read_matdef_section( FILE *filein )
 
 /******************************************************************************/
 
-unsigned long tds_read_material_section( FILE *filein )
+unsigned long tds_read_material_section( FILE * filein )
 
 /******************************************************************************/
 {
@@ -14758,7 +14778,7 @@ unsigned long tds_read_material_section( FILE *filein )
 }
 /******************************************************************************/
 
-int tds_read_name( FILE *filein )
+int tds_read_name( FILE * filein )
 
 /******************************************************************************/
 {
@@ -14785,7 +14805,8 @@ int tds_read_name( FILE *filein )
 		letter = fgetc( filein );
 		temp_name[teller] = letter;
 		teller = teller + 1;
-	} while (letter != 0);
+	}
+	while (letter != 0);
 
 	temp_name[teller-1] = 0;
 
@@ -14798,7 +14819,7 @@ int tds_read_name( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long tds_read_obj_section( FILE *filein )
+unsigned long tds_read_obj_section( FILE * filein )
 
 /******************************************************************************/
 
@@ -14983,7 +15004,8 @@ unsigned long tds_read_obj_section( FILE *filein )
 							}
 						}
 						temp_int = tds_read_u_short_int( filein );
-					} while (temp_int==0x4130);
+					}
+					while (temp_int==0x4130);
 				}
 				if ( temp_int == 0x4150 )
 				{
@@ -15108,7 +15130,7 @@ unsigned long tds_read_obj_section( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long tds_read_object_section( FILE *filein )
+unsigned long tds_read_object_section( FILE * filein )
 
 /******************************************************************************/
 {
@@ -15202,7 +15224,7 @@ unsigned long tds_read_object_section( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long int tds_read_tex_verts_section( FILE *filein )
+unsigned long int tds_read_tex_verts_section( FILE * filein )
 
 /******************************************************************************/
 
@@ -15251,7 +15273,7 @@ unsigned long int tds_read_tex_verts_section( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long tds_read_texmap_section( FILE *filein )
+unsigned long tds_read_texmap_section( FILE * filein )
 
 /******************************************************************************/
 
@@ -15322,7 +15344,7 @@ unsigned long tds_read_texmap_section( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned short int tds_read_u_short_int( FILE *filein )
+unsigned short int tds_read_u_short_int( FILE * filein )
 
 /******************************************************************************/
 {
@@ -15339,7 +15361,7 @@ unsigned short int tds_read_u_short_int( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long tds_read_spot_section( FILE *filein )
+unsigned long tds_read_spot_section( FILE * filein )
 
 /******************************************************************************/
 {
@@ -15375,7 +15397,7 @@ unsigned long tds_read_spot_section( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long int tds_read_unknown_section( FILE *filein )
+unsigned long int tds_read_unknown_section( FILE * filein )
 
 /******************************************************************************/
 {
@@ -15394,7 +15416,7 @@ unsigned long int tds_read_unknown_section( FILE *filein )
 }
 /******************************************************************************/
 
-unsigned long tds_read_view_section( FILE *filein, int *views_read )
+unsigned long tds_read_view_section( FILE * filein, int * views_read )
 
 /******************************************************************************/
 {
@@ -15461,7 +15483,7 @@ unsigned long tds_read_view_section( FILE *filein, int *views_read )
 }
 /******************************************************************************/
 
-unsigned long tds_read_vp_section( FILE *filein, int *views_read )
+unsigned long tds_read_vp_section( FILE * filein, int * views_read )
 
 /******************************************************************************/
 {
@@ -15472,7 +15494,7 @@ unsigned long tds_read_vp_section( FILE *filein, int *views_read )
 	long int pointer;
 	unsigned int port;
 	unsigned long int temp_pointer;
-	char *viewports[11] = {
+	char * viewports[11] = {
 		"Bogus",
 		"Top",
 		"Bottom",
@@ -15554,7 +15576,7 @@ unsigned long tds_read_vp_section( FILE *filein, int *views_read )
 }
 /******************************************************************************/
 
-int tds_write( FILE *fileout )
+int tds_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -15964,7 +15986,7 @@ int tds_write( FILE *fileout )
 }
 /******************************************************************************/
 
-int tds_write_string( FILE *fileout, char *string )
+int tds_write_string( FILE * fileout, char * string )
 
 /******************************************************************************/
 
@@ -15978,7 +16000,7 @@ int tds_write_string( FILE *fileout, char *string )
    	John Burkardt
  */
 {
-	char *c;
+	char * c;
 	int nchar;
 
 	nchar = 0;
@@ -16000,7 +16022,7 @@ int tds_write_string( FILE *fileout, char *string )
 }
 /******************************************************************************/
 
-int tds_write_u_short_int( FILE *fileout, unsigned short int short_int_val )
+int tds_write_u_short_int( FILE * fileout, unsigned short int short_int_val )
 
 /******************************************************************************/
 
@@ -16036,7 +16058,7 @@ int tds_write_u_short_int( FILE *fileout, unsigned short int short_int_val )
 }
 /**********************************************************************/
 
-int tec_write( FILE *fileout )
+int tec_write( FILE * fileout )
 
 /**********************************************************************/
 
@@ -16095,6 +16117,7 @@ int tec_write( FILE *fileout )
 	int face_num2;
 	int text_num;
 	float r;
+
 /*
    Determine the number of triangular faces.
  */
@@ -16708,7 +16731,7 @@ void tmat_scale( float a[4][4], float b[4][4], float sx, float sy,
 }
 /*********************************************************************/
 
-void tmat_shear( float a[4][4], float b[4][4], char *axis, float s )
+void tmat_shear( float a[4][4], float b[4][4], char * axis, float s )
 
 /*********************************************************************/
 
@@ -16857,7 +16880,7 @@ void tmat_trans( float a[4][4], float b[4][4], float x, float y,
 }
 /******************************************************************************/
 
-int tria_read( FILE *filein )
+int tria_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -16901,6 +16924,7 @@ int tria_read( FILE *filein )
 	float r4;
 	float r5;
 	float r6;
+
 /*
    Get the number of triangles.
  */
@@ -16978,7 +17002,7 @@ int tria_read( FILE *filein )
 }
 /**********************************************************************/
 
-int tria_write( FILE *fileout )
+int tria_write( FILE * fileout )
 
 /**********************************************************************/
 
@@ -17089,7 +17113,7 @@ int tria_write( FILE *fileout )
 }
 /******************************************************************************/
 
-int trib_read( FILE *filein )
+int trib_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -17128,6 +17152,7 @@ int trib_read( FILE *filein )
 	int iface_lo;
 	int ivert;
 	int face_num2;
+
 /*
    Read the number of triangles in the file.
  */
@@ -17206,7 +17231,7 @@ int trib_read( FILE *filein )
 }
 /**********************************************************************/
 
-int trib_write( FILE *fileout )
+int trib_write( FILE * fileout )
 
 /**********************************************************************/
 
@@ -17324,7 +17349,7 @@ int trib_write( FILE *fileout )
 }
 /******************************************************************************/
 
-int txt_write( FILE *fileout )
+int txt_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -17666,7 +17691,7 @@ int txt_write( FILE *fileout )
 }
 /**********************************************************************/
 
-int ucd_write( FILE *fileout )
+int ucd_write( FILE * fileout )
 
 /**********************************************************************/
 
@@ -18050,7 +18075,7 @@ void vertex_to_node_material( void )
 
 /******************************************************************************/
 
-int vla_read( FILE *filein )
+int vla_read( FILE * filein )
 
 /******************************************************************************/
 
@@ -18094,7 +18119,7 @@ int vla_read( FILE *filein )
 	int i;
 	int icor3;
 	int dup_num;
-	char *next;
+	char * next;
 	int text_num;
 	float r1;
 	float r2;
@@ -18102,6 +18127,7 @@ int vla_read( FILE *filein )
 	float temp[3];
 	char token[LINE_MAX_LEN];
 	int width;
+
 /*
    Initialize.
  */
@@ -18229,7 +18255,7 @@ int vla_read( FILE *filein )
 }
 /******************************************************************************/
 
-int vla_write( FILE *fileout )
+int vla_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -18283,6 +18309,7 @@ int vla_write( FILE *fileout )
 	float intense = 1.0;
 	int k;
 	int text_num;
+
 /*
    Initialize.
  */
@@ -18339,7 +18366,7 @@ int vla_write( FILE *fileout )
 
 /**********************************************************************/
 
-int wrl_write( FILE *fileout )
+int wrl_write( FILE * fileout )
 
 /**********************************************************************/
 
@@ -18671,7 +18698,7 @@ int wrl_write( FILE *fileout )
 }
 /******************************************************************************/
 
-int xgl_write( FILE *fileout )
+int xgl_write( FILE * fileout )
 
 /******************************************************************************/
 
@@ -18842,6 +18869,7 @@ int xgl_write( FILE *fileout )
 	float transform_position[3];
 	float transform_scale[3];
 	float transform_up[3];
+
 /*
    Make up some placeholder values for now.
  */
@@ -19035,6 +19063,7 @@ unsigned long int get_pos_matcolor(int index)
 {
 	int j; //rounded down
 	int line=index/64;
+
 	line=line/8;
 	int row=index%64;
 	row=row/8;
@@ -19052,7 +19081,7 @@ unsigned long int get_pos_matcolor(int index)
 }
 /******************************************************************************/
 
-void tga_write_materials(char *filename)
+void tga_write_materials(char * filename)
 
 /******************************************************************************/
 
@@ -19064,7 +19093,8 @@ void tga_write_materials(char *filename)
 {
 	int i;
 	unsigned long int c;
-	FILE *fp=fopen(filename,"wb");
+	FILE * fp=fopen(filename,"wb");
+
 	char_write(fp,0);
 	char_write(fp,0);
 	char_write(fp,2); //rgb, uncompressed

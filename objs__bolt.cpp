@@ -39,7 +39,7 @@ static li_symbol_ref light_type("lightbulb");
 g1_object_definer<g1_bolt_class>
 g1_bolt_def("bolt");
 
-g1_bolt_class::g1_bolt_class(g1_object_type id, g1_loader_class *fp)
+g1_bolt_class::g1_bolt_class(g1_object_type id, g1_loader_class * fp)
 	: g1_object_class(id,fp),
 	  sfx_loop()
 //{{{
@@ -58,8 +58,8 @@ g1_bolt_class::g1_bolt_class(g1_object_type id, g1_loader_class *fp)
 
 void g1_bolt_class::setup(const i4_3d_vector &start_pos,
 						  const i4_3d_vector &_target_pos,
-						  g1_object_class *_originator,
-						  g1_object_class *_target)
+						  g1_object_class * _originator,
+						  g1_object_class * _target)
 //{{{
 {
 	move(start_pos);
@@ -97,14 +97,14 @@ g1_bolt_class::~g1_bolt_class()
 }
 //}}}
 
-void g1_bolt_class::save(g1_saver_class *fp)
+void g1_bolt_class::save(g1_saver_class * fp)
 //{{{
 {
 	g1_object_class::save(fp);
 }
 //}}}
 
-void g1_bolt_class::draw(g1_draw_context_class *context, i4_3d_vector& viewer_position)
+void g1_bolt_class::draw(g1_draw_context_class * context, i4_3d_vector& viewer_position)
 //{{{
 {
 	int i;
@@ -125,6 +125,7 @@ void g1_bolt_class::copy_old_points()
 //{{{
 {
 	sw32 i;
+
 	for (i=0; i<NUM_ARCS; i++)
 	{
 		arc[i].lposition = arc[i].position;

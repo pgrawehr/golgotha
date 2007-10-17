@@ -23,10 +23,10 @@ struct thread_node
 {
 	HANDLE h;
 	w32 thread_id;
-	thread_node *next;
-	void *base, *top;
+	thread_node * next;
+	void * base, * top;
 
-	thread_node(HANDLE h, w32 thread_id, void *base, void *top, thread_node *next)
+	thread_node(HANDLE h, w32 thread_id, void * base, void * top, thread_node * next)
 		: h(h),
 		  thread_id(thread_id),
 		  next(next),
@@ -36,7 +36,7 @@ struct thread_node
 
 };
 
-static thread_node *thread_list=0;
+static thread_node * thread_list=0;
 
 int i4_main_thread_id;
 
@@ -44,6 +44,7 @@ void i4_wait_threads()  // waits for all threads to terminate (don't call from a
 {
 	while (i4_thread_count!=0)
 		i4_thread_yield();
+
 
 }
 
@@ -56,7 +57,7 @@ void remove_thread(int id)
 {
 	thread_list_lock.lock();
 
-	thread_node *p=0;
+	thread_node * p=0;
 	if (thread_list->thread_id==(w32)id)
 	{
 		p=thread_list;
@@ -64,7 +65,7 @@ void remove_thread(int id)
 	}
 	else
 	{
-		for (thread_node *q=thread_list; q->next->thread_id!=(w32)id; q=q->next)
+		for (thread_node * q=thread_list; q->next->thread_id!=(w32)id; q=q->next)
 		{
 			;
 		}
@@ -78,10 +79,11 @@ void remove_thread(int id)
 }
 
 
-void i4_thread_starter(void *arg)
+void i4_thread_starter(void * arg)
 {
 	i4_thread_func_type start=i4_thread_to_start;
 	int size=i4_thread_size;
+
 	size-=200;
 	i4_thread_to_start=0;
 
@@ -98,10 +100,10 @@ void i4_thread_starter(void *arg)
 					DUPLICATE_SAME_ACCESS);
 
 
-	thread_node *p=new thread_node(h, thread_id,
-								   (void *)&size,
-								   (void *)(((char *)&size)-size),
-								   thread_list);
+	thread_node * p=new thread_node(h, thread_id,
+									(void *)&size,
+									(void *)(((char *)&size)-size),
+									thread_list);
 
 
 	thread_list=p;
@@ -120,11 +122,12 @@ void i4_thread_starter(void *arg)
 	_endthread();
 }
 
-void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void *arg_list)
+void i4_add_thread(i4_thread_func_type fun, w32 stack_size, void * arg_list)
 
 {
 	while (i4_thread_to_start!=0)
 		i4_thread_yield();
+
 
 
 	i4_thread_to_start=fun;
@@ -156,7 +159,7 @@ void i4_suspend_other_threads()
 	thread_list_lock.lock();
 
 	w32 thread_id=GetCurrentThreadId();
-	for (thread_node *p=thread_list; p; p=p->next)
+	for (thread_node * p=thread_list; p; p=p->next)
 	{
 		if (p->thread_id!=thread_id)
 		{
@@ -172,7 +175,7 @@ void i4_resume_other_threads()
 	thread_list_lock.lock();
 
 	w32 thread_id=GetCurrentThreadId();
-	for (thread_node *p=thread_list; p; p=p->next)
+	for (thread_node * p=thread_list; p; p=p->next)
 	{
 		if (p->thread_id!=thread_id)
 		{
@@ -199,7 +202,7 @@ int i4_get_first_thread_id()
 
 i4_bool i4_get_next_thread_id(int last_id, int &id)
 {
-	for (thread_node *p=thread_list; p; p=p->next)
+	for (thread_node * p=thread_list; p; p=p->next)
 	{
 		if (p->thread_id==(w32)last_id)
 		{
@@ -236,7 +239,7 @@ void i4_get_thread_stack(int thread_id, void *&base, void *&top)
 	}
 	else
 	{
-		for (thread_node *p=thread_list; p; p=p->next)
+		for (thread_node * p=thread_list; p; p=p->next)
 		{
 			if (p->thread_id==(w32)thread_id)
 			{
@@ -320,9 +323,10 @@ i4_critical_section_class::~i4_critical_section_class()
 
 
 ///////////// signal stuff
-i4_signal_object::i4_signal_object(char *name)
+i4_signal_object::i4_signal_object(char * name)
 {
 	char buf[100];
+
 	sprintf(buf,"%s-%d",name,_getpid());  // make sure name doesn't interfere with other
 	*((HANDLE *)data)=CreateSemaphore(0, 0, 1, buf); // processes using this library
 }
@@ -340,7 +344,7 @@ void i4_signal_object::signal()
 
 i4_signal_object::~i4_signal_object()
 {
-	CloseHandle(*((HANDLE *)data));
+	CloseHandle(* ((HANDLE *)data));
 }
 
 i4_bool i4_threads_supported()
@@ -353,7 +357,7 @@ void i4_set_thread_priority(int thread_id, i4_thread_priority_type priority)
 {
 	thread_list_lock.lock();
 
-	for (thread_node *p=thread_list; p && p->thread_id!=(w32)thread_id; p=p->next)
+	for (thread_node * p=thread_list; p && p->thread_id!=(w32)thread_id; p=p->next)
 	{
 		;
 	}

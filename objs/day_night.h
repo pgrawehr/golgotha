@@ -18,12 +18,12 @@ class g1_mapsingle_class :
 {
 	i4_bool needsdeleteonnexttick;
 public:
-	g1_mapsingle_class(g1_object_type id, g1_loader_class *fp);
+	g1_mapsingle_class(g1_object_type id, g1_loader_class * fp);
 	virtual void think();
 	//singleton objects don't take damage
-	virtual void damage(g1_object_class *who_is_hurting,
+	virtual void damage(g1_object_class * who_is_hurting,
 						int how_much_hurt, i4_3d_vector damage_dir);
-	virtual void draw(g1_draw_context_class *context,
+	virtual void draw(g1_draw_context_class * context,
 					  i4_3d_vector &viewer_position);
 };
 
@@ -34,7 +34,7 @@ class g1_day_night_class :
 	i4_float currentpos;
 	i4_bool first;
 public:
-	g1_day_night_class(g1_object_type id, g1_loader_class *fp);
+	g1_day_night_class(g1_object_type id, g1_loader_class * fp);
 	//all variables are defined in the lisp class, so no specific
 	//safe and load code is needed.
 	//virtual void save(g1_saver_class *fp);
@@ -43,7 +43,7 @@ public:
 
 	virtual void think();
 	//void damage(g1_object_class *obj, int hp, i4_3d_vector _damage_dir);
-	void object_changed_by_editor(g1_object_class *who, li_class *old_values);
+	void object_changed_by_editor(g1_object_class * who, li_class * old_values);
 	i4_float calc_intensity(i4_bool atday, i4_float pos);
 	i4_bool isday(int tick);
 };

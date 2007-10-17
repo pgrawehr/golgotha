@@ -16,12 +16,13 @@
 //#include <string.h>
 
 
-i4_bool i4_insert_sections(i4_file_class *in, i4_file_class *out,
+i4_bool i4_insert_sections(i4_file_class * in, i4_file_class * out,
 						   int total_sections_to_insert,
-						   i4_file_class **section_data,
-						   char **section_names)
+						   i4_file_class * * section_data,
+						   char * * section_names)
 {
 	w32 sig=in->read_32();
+
 	if (sig!=i4_check_sum32("GOLG_SECTION_ID=32",17))
 	{
 		i4_error("doesn't work on this");
@@ -76,9 +77,9 @@ i4_bool i4_insert_sections(i4_file_class *in, i4_file_class *out,
 }
 
 
-i4_loader_class *i4_open_save_file(i4_file_class *in, i4_bool close_on_delete_or_fail)
+i4_loader_class *i4_open_save_file(i4_file_class * in, i4_bool close_on_delete_or_fail)
 {
-	i4_loader_class *l=new i4_loader_class(in, close_on_delete_or_fail);
+	i4_loader_class * l=new i4_loader_class(in, close_on_delete_or_fail);
 
 	if (l->error())
 	{
@@ -90,12 +91,12 @@ i4_loader_class *i4_open_save_file(i4_file_class *in, i4_bool close_on_delete_or
 }
 
 
-int i4_loader_section_compare(const i4_loader_section_type *a, const i4_loader_section_type *b)
+int i4_loader_section_compare(const i4_loader_section_type * a, const i4_loader_section_type * b)
 {
 	return a->section_id>b->section_id ? 1 : (a->section_id<b->section_id ? -1 : 0);
 }
 
-i4_loader_class::i4_loader_class(i4_file_class *_in, i4_bool close_on_delete, i4_bool use_buffer)
+i4_loader_class::i4_loader_class(i4_file_class * _in, i4_bool close_on_delete, i4_bool use_buffer)
 	: close_on_delete(close_on_delete),
 	  sections(512,512)
 {
@@ -142,7 +143,7 @@ i4_loader_class::i4_loader_class(i4_file_class *_in, i4_bool close_on_delete, i4
 
 	for (i=0; i<t_sections; i++)
 	{
-		i4_loader_section_type *t=sections.add();
+		i4_loader_section_type * t=sections.add();
 		if (use_16)
 		{
 			t->section_id=in->read_16();
@@ -214,6 +215,7 @@ int i4_loader_class::find_section(w32 section_id)
 i4_bool i4_loader_class::goto_section(w32 section_id)
 {
 	int mid=find_section(section_id);
+
 	if (mid==-1)
 	{
 		return i4_F;
@@ -227,10 +229,11 @@ i4_bool i4_loader_class::goto_section(w32 section_id)
 	return i4_T;
 }
 
-i4_bool i4_loader_class::get_section_info(char *section_name, w32 &offset, w32 &size)
+i4_bool i4_loader_class::get_section_info(char * section_name, w32 &offset, w32 &size)
 {
 	w32 id=i4_check_sum32(section_name, strlen(section_name));
 	int mid=find_section(id);
+
 	if (mid!=-1)
 	{
 		offset=sections[mid].section_offset;
@@ -244,7 +247,7 @@ i4_bool i4_loader_class::get_section_info(char *section_name, w32 &offset, w32 &
 
 }
 
-i4_bool i4_loader_class::goto_section(char *section_name)
+i4_bool i4_loader_class::goto_section(char * section_name)
 {
 	return goto_section(i4_check_sum32(section_name, strlen(section_name)));
 }
@@ -275,6 +278,7 @@ void i4_loader_class::get_version(w16 &version, w16 &data_size)
 i4_bool i4_loader_class::check_version(w16 version)
 {
 	w16 ver,add;
+
 	ver=in->read_16();
 	add=in->read_16();
 
@@ -322,13 +326,13 @@ w32 i4_loader_class::seek(w32 offset)
 }
 
 
-w32 i4_loader_class::read(void *buffer, w32 size)
+w32 i4_loader_class::read(void * buffer, w32 size)
 {
 	return in->read(buffer, size);
 }
 
 
-w32 i4_loader_class::write(const void *buffer, w32 size)
+w32 i4_loader_class::write(const void * buffer, w32 size)
 {
 	i4_error("ERROR: Attempting to write to a file being loaded");
 	return 0;

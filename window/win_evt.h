@@ -61,13 +61,13 @@ public:
 
 
 	win_sub_type sub_type;
-	i4_window_class *from_window;
+	i4_window_class * from_window;
 
 	i4_window_class *from()
 	{
 		return from_window;
 	}
-	i4_window_message_class(win_sub_type win_message, i4_window_class *From)
+	i4_window_message_class(win_sub_type win_message, i4_window_class * From)
 	{
 		from_window=From;
 		sub_type=win_message;
@@ -85,7 +85,7 @@ public:
 	{
 		return new i4_window_message_class(sub_type,from_window);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"window_message");
 	}
@@ -104,13 +104,13 @@ public:
 		y+=yoff;
 	}
 
-	i4_window_got_mouse_focus_class(i4_window_class *from, int x, int y)
+	i4_window_got_mouse_focus_class(i4_window_class * from, int x, int y)
 		: i4_window_message_class(GOT_MOUSE_FOCUS, from),
 		  x(x),
 		  y(y)
 	{
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"got_mouse_focus");
 	}
@@ -129,15 +129,15 @@ class i4_window_lost_mouse_focus_class :
 	public i4_window_message_class
 {
 public:
-	i4_window_class *lost_to;
+	i4_window_class * lost_to;
 
-	i4_window_lost_mouse_focus_class(i4_window_class *from,
-									 i4_window_class *lost_to)
+	i4_window_lost_mouse_focus_class(i4_window_class * from,
+									 i4_window_class * lost_to)
 		: i4_window_message_class(LOST_MOUSE_FOCUS, from),
 		  lost_to(lost_to)
 	{
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"lost_mouse_focus");
 	}
@@ -155,11 +155,11 @@ class i4_window_request_drag_drop_end_class :
 	public i4_window_message_class
 {
 public:
-	i4_window_request_drag_drop_end_class(i4_window_class *from)
+	i4_window_request_drag_drop_end_class(i4_window_class * from)
 		: i4_window_message_class(REQUEST_DRAG_DROP_END, from)
 	{
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"request_drag_drop_end");
 	}
@@ -172,7 +172,7 @@ class i4_window_drag_drop_move_class :
 public:
 	i4_coord x,y;
 	w32 reference_id;
-	void *further_info;
+	void * further_info;
 
 	virtual void move(int xoff, int yoff)
 	{
@@ -180,11 +180,11 @@ public:
 		y+=yoff;
 	}
 
-	i4_window_drag_drop_move_class(i4_window_class *from,
+	i4_window_drag_drop_move_class(i4_window_class * from,
 								   i4_coord x,
 								   i4_coord y,
 								   w32 reference_id,
-								   void *further_info)
+								   void * further_info)
 		: i4_window_message_class(DRAG_DROP_MOVE, from),
 		  x(x),
 		  y(y),
@@ -197,7 +197,7 @@ public:
 	{
 		return new i4_window_drag_drop_move_class(from_window, x,y, reference_id, further_info);
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"drag_drop_move");
 	}
@@ -210,14 +210,14 @@ class i4_window_request_drag_drop_start_class :
 {
 public:
 	i4_bool return_result;
-	i4_cursor_class *drag_cursor;
+	i4_cursor_class * drag_cursor;
 	w32 reference_id;
-	i4_event *drop_event;
-	void *further_info;
-	i4_window_request_drag_drop_start_class(i4_window_class *from,
-											i4_cursor_class *drag_cursor, // this will be destoryed
+	i4_event * drop_event;
+	void * further_info;
+	i4_window_request_drag_drop_start_class(i4_window_class * from,
+											i4_cursor_class * drag_cursor, // this will be destoryed
 											w32 reference_id,            // a unique number
-											void *further_info=0)
+											void * further_info=0)
 
 		:  i4_window_message_class(REQUEST_DRAG_DROP_START,from),
 		  drag_cursor(drag_cursor),
@@ -237,7 +237,7 @@ public:
 	{
 		return NOW;
 	}                                           // send now because a result is expected
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"request_drag_drop_start");
 	}
@@ -254,7 +254,7 @@ struct i4_drag_info_struct
 
 
 	int t_filenames;
-	i4_str **filenames;
+	i4_str * * filenames;
 	void copy_to(i4_drag_info_struct &drag_struct);
 	i4_drag_info_struct() {
 		t_filenames=0;
@@ -275,19 +275,20 @@ public:
 		drag_info.y+=yoff;
 	}
 
-	i4_window_got_drag_drop_focus_class(i4_window_class *from)
+	i4_window_got_drag_drop_focus_class(i4_window_class * from)
 		: i4_window_message_class(DRAG_DROP_MOVE, from)
 	{
 	}
 
 	virtual i4_event *copy()
 	{
-		i4_window_got_drag_drop_focus_class *dg=new i4_window_got_drag_drop_focus_class(from());
+		i4_window_got_drag_drop_focus_class * dg=new i4_window_got_drag_drop_focus_class(from());
+
 		drag_info.copy_to(dg->drag_info);
 		return dg;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"got_drag_drop_focus");
 	}
@@ -305,19 +306,20 @@ public:
 		drag_info.y+=yoff;
 	}
 
-	i4_window_got_drop_class(i4_window_class *from)
+	i4_window_got_drop_class(i4_window_class * from)
 		: i4_window_message_class(GOT_DROP, from)
 	{
 	}
 
 	virtual i4_event *copy()
 	{
-		i4_window_got_drop_class *dg=new i4_window_got_drop_class(from());
+		i4_window_got_drop_class * dg=new i4_window_got_drop_class(from());
+
 		drag_info.copy_to(dg->drag_info);
 		return dg;
 	}
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"got_drop");
 	}
@@ -328,11 +330,11 @@ class i4_window_lost_drag_drop_focus_class :
 	public i4_window_message_class
 {
 public:
-	i4_window_lost_drag_drop_focus_class(i4_window_class *from)
+	i4_window_lost_drag_drop_focus_class(i4_window_class * from)
 		: i4_window_message_class(LOST_DROP_FOCUS, from)
 	{
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"lost_drop_focus");
 	}
@@ -345,7 +347,7 @@ class i4_window_request_key_grab_class :
 {
 public:
 	i4_bool return_result;
-	i4_window_request_key_grab_class(i4_window_class *from)
+	i4_window_request_key_grab_class(i4_window_class * from)
 		:  i4_window_message_class(REQUEST_KEY_GRAB,from)
 	{
 		return_result=i4_F;
@@ -359,7 +361,7 @@ public:
 	{
 		return NOW;
 	}                                           // send now because a result is expected
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"request_key_grab");
 	}
@@ -373,7 +375,7 @@ class i4_window_request_mouse_grab_class :
 public:
 	i4_bool return_result;
 
-	i4_window_request_mouse_grab_class(i4_window_class *from)
+	i4_window_request_mouse_grab_class(i4_window_class * from)
 		:  i4_window_message_class(REQUEST_MOUSE_GRAB,from)
 	{
 		return_result=i4_F;
@@ -388,7 +390,7 @@ public:
 	{
 		return NOW;
 	}                                           // send now because a result is expected
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"request_mouse_grab");
 	}
@@ -401,7 +403,7 @@ class i4_window_request_mouse_ungrab_class :
 {
 public:
 	i4_bool return_result;
-	i4_window_request_mouse_ungrab_class(i4_window_class *from)
+	i4_window_request_mouse_ungrab_class(i4_window_class * from)
 		:  i4_window_message_class(REQUEST_MOUSE_UNGRAB,from)
 	{
 		return_result=i4_F;
@@ -415,7 +417,7 @@ public:
 	{
 		return NOW;
 	}                                           // send now because a result is expected
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"request_mouse_ungrab");
 	}
@@ -427,7 +429,7 @@ class i4_window_request_drag_start_class :
 {
 public:
 	i4_bool return_result;
-	i4_window_request_drag_start_class(i4_window_class *from) :
+	i4_window_request_drag_start_class(i4_window_class * from) :
 		i4_window_message_class(REQUEST_DRAG_START,from)
 	{
 		return_result=i4_F;
@@ -442,7 +444,7 @@ public:
 	{
 		return NOW;
 	}              // send now because a result is expected
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"request_drag_start");
 	}
@@ -454,7 +456,7 @@ class i4_window_request_drag_end_class :
 	public i4_window_message_class
 {
 public:
-	i4_window_request_drag_end_class(i4_window_class *from) :
+	i4_window_request_drag_end_class(i4_window_class * from) :
 		i4_window_message_class(REQUEST_DRAG_END,from)
 	{
 	}
@@ -469,7 +471,7 @@ public:
 		return NOW;
 	}              // send now because a result is expected
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"request_drag_end");
 	}
@@ -481,10 +483,10 @@ class i4_window_change_cursor_class :
 	public i4_window_message_class
 {
 public:
-	i4_cursor_class *cursor;   // if cursor is 0, then default cursor is used
+	i4_cursor_class * cursor;   // if cursor is 0, then default cursor is used
 	i4_bool only_if_active;    // if window is not active (mouse focus) then cursor will not loaded
-	i4_window_change_cursor_class(i4_window_class *From,
-								  i4_cursor_class *cursor,
+	i4_window_change_cursor_class(i4_window_class * From,
+								  i4_cursor_class * cursor,
 								  i4_bool only_if_active=i4_F) :
 		i4_window_message_class(CHANGE_CURSOR,From),
 		cursor(cursor),
@@ -503,7 +505,7 @@ public:
 	{
 		return NOW;
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"change_cursor");
 	}
@@ -517,7 +519,7 @@ class i4_window_notify_resize_class :
 public:
 	w16 new_width,new_height;
 	i4_bool draw_covered;
-	i4_window_notify_resize_class(i4_window_class *from, w16 new_width, w16 new_height) :
+	i4_window_notify_resize_class(i4_window_class * from, w16 new_width, w16 new_height) :
 		i4_window_message_class(NOTIFY_RESIZE,from),
 		new_width(new_width),
 		new_height(new_height)
@@ -535,7 +537,7 @@ public:
 	{
 		return NOW;
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"notify_resize");
 	}
@@ -548,7 +550,7 @@ class i4_window_notify_redepth_class :
 public:
 	w16 new_bitdepth;
 	i4_bool draw_covered;
-	i4_window_notify_redepth_class(i4_window_class *from, w16 new_bitdepth) :
+	i4_window_notify_redepth_class(i4_window_class * from, w16 new_bitdepth) :
 		i4_window_message_class(NOTIFY_REDEPTH,from),
 		new_bitdepth(new_bitdepth)
 	{
@@ -558,7 +560,7 @@ public:
 	{
 		return NOW;
 	}
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"notify_redepth");
 	}
@@ -573,7 +575,7 @@ class i4_window_notify_move_class :
 public:
 	i4_coord x_offset,y_offset;
 	i4_bool draw_covered;
-	i4_window_notify_move_class(i4_window_class *from,
+	i4_window_notify_move_class(i4_window_class * from,
 								i4_coord x_offset, i4_coord y_offset,
 								i4_bool draw_covered=i4_T) :
 		i4_window_message_class(NOTIFY_MOVE,from),
@@ -592,7 +594,7 @@ public:
 	{
 		return NOW;
 	}              // send now so reciever doesn't draw incorrectly before it arrives
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"notify_move");
 	}

@@ -28,10 +28,10 @@ class g1_net_window_class :
 	public i4_parent_window_class
 {
 protected:
-	i4_image_class *bg;
+	i4_image_class * bg;
 	i4_time_device_class::id poll_event_id;
-	i4_graphical_style_class *style;
-	i4_net_protocol *protocol;
+	i4_graphical_style_class * style;
+	i4_net_protocol * protocol;
 	int poll_delay, poll_id;
 
 	i4_event_reaction_class *create_orec(int mess_id);
@@ -46,12 +46,12 @@ public:
 	}
 
 	g1_net_window_class(w16 w, w16 h,
-						i4_graphical_style_class *style,
-						i4_net_protocol *protocol,
-						char *bg_res,
+						i4_graphical_style_class * style,
+						i4_net_protocol * protocol,
+						char * bg_res,
 						int poll_delay, int poll_event_id);
 
-	virtual void receive_event(i4_event *ev);
+	virtual void receive_event(i4_event * ev);
 	virtual void parent_draw(i4_draw_context_class &context);
 
 	virtual ~g1_net_window_class();
@@ -60,10 +60,10 @@ public:
 class g1_startup_window :
 	public g1_net_window_class
 {
-	i4_button_class **buts;
+	i4_button_class * * buts;
 	int t_buts;
-	i4_text_input_class *hostname, *username;
-	i4_finder_socket *find;
+	i4_text_input_class * hostname, * username;
+	i4_finder_socket * find;
 	w32 serverip;
 
 	enum {
@@ -78,10 +78,10 @@ public:
 	virtual void poll();
 
 	g1_startup_window(w16 w, w16 h,
-					  i4_graphical_style_class *style,
-					  i4_net_protocol *protocol);
+					  i4_graphical_style_class * style,
+					  i4_net_protocol * protocol);
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"net_startup");
 	}
@@ -91,21 +91,21 @@ public:
 class g1_server_start_window :
 	public g1_net_window_class
 {
-	i4_notifier_socket *note;
-	i4_window_class *names[G1_MAX_PLAYERS];
+	i4_notifier_socket * note;
+	i4_window_class * names[G1_MAX_PLAYERS];
 
 	enum {
 		START_NET_GAME=1, QUIT_NET_GAME, POLL
 	};
 public:
 	g1_server_start_window(w16 w, w16 h,
-						   i4_graphical_style_class *style,
-						   i4_net_protocol *protocol);
+						   i4_graphical_style_class * style,
+						   i4_net_protocol * protocol);
 
 	virtual void object_message(int id);
 	virtual void poll();
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"server_menu");
 	}
@@ -122,13 +122,13 @@ class g1_client_wait_window :
 
 public:
 	g1_client_wait_window(w16 w, w16 h,
-						  i4_graphical_style_class *style,
-						  i4_net_protocol *protocol);
+						  i4_graphical_style_class * style,
+						  i4_net_protocol * protocol);
 
 	virtual void object_message(int id);
 	virtual void poll();
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"client_wait");
 	}

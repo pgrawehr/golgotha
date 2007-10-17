@@ -11,6 +11,6 @@ class i4_parent_window_class;
 #include "string/string.h"
 
 void i4_create_dialog(const i4_const_str &fmt,
-					  i4_parent_window_class *parent,
-					  i4_graphical_style_class *style,
+					  i4_parent_window_class * parent,
+					  i4_graphical_style_class * style,
 					  ...);

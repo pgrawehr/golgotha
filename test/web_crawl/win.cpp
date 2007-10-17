@@ -20,48 +20,61 @@
 #include <ctype.h>
 
 
-char *fb_thread_window::get_error_string()
+char * fb_thread_window::get_error_string()
 {
 	switch (last_error)
 	{
 		case FB_NO_ERROR:
 			return "ok";
+
 			break;
 		case FB_TIMED_OUT:
 			return "timeout";
+
 			break;
 		case FB_URL_TOO_BIG:
 			return "url too big";
+
 			break;
 		case FB_END_OF_STREAM:
 			return "end of stream";
+
 			break;
 		case FB_NOT_IN_INCLUDE_LIST:
 			return "not in include list";
+
 			break;
 		case FB_NO_EXTENSION:
 			return "no file extension";
+
 			break;
 		case FB_NO_FILENAME:
 			return "no filename";
+
 			break;
 		case FB_FILE_EXSIST:
 			return "file exsist";
+
 			break;
 		case FB_NO_WRITE_OPEN:
 			return "couldn't open write file";
+
 			break;
 		case FB_IN_EXCLUDE_LIST:
 			return "in exclusion list";
+
 			break;
 		case FB_NO_CONNECT:
 			return "connect failed";
+
 			break;
 		case FB_USER_ABORTED:
 			return "user aborted";
+
 			break;
 		default:
 			return "unknown error";
+
 			break;
 	}
 	last_error=FB_NO_ERROR;
@@ -79,14 +92,16 @@ void fb_thread_window::stop_thread()
 	while (state!=FB_WAITING && state!=FB_DONE_READING)
 		i4_thread_yield();
 
+
 }
 
-void fb_thread_window::add_button(char *name, cmd_type cmd)
+void fb_thread_window::add_button(char * name, cmd_type cmd)
 {
-	i4_text_window_class *tw=new i4_text_window_class(name, style,
-													  style->font_hint->small_font);
+	i4_text_window_class * tw=new i4_text_window_class(name, style,
+													   style->font_hint->small_font);
 
-	i4_button_class *b;
+	i4_button_class * b;
+
 	b=new i4_button_class(0, tw, style, new i4_event_reaction_class(this, cmd));
 	b->set_popup(i4_T);
 	button_x-=(int)b->width();
@@ -100,6 +115,7 @@ void fb_thread_window::read_data()
 {
 	w8 packet[1024];
 	int s=sock->read(packet,1024);
+
 	last_read.get();
 
 	if (s>0)  // read 0 or less, assume end of stream
@@ -148,11 +164,11 @@ void fb_thread_window::read_data()
 	}
 }
 
-char *nocase_strstr(char *hay, char *needle)
+char *nocase_strstr(char * hay, char * needle)
 {
 	while (*hay)
 	{
-		char *a1, *a2;
+		char * a1, * a2;
 		int not_equal=0;
 
 		for (a1=hay, a2=needle; *a1 && *a2; )
@@ -180,7 +196,7 @@ char *nocase_strstr(char *hay, char *needle)
 	return 0;
 }
 
-void fb_thread_window::set_url(fb_url *new_url)
+void fb_thread_window::set_url(fb_url * new_url)
 {
 	stop_thread();
 	save_buffer_size=0;
@@ -201,7 +217,7 @@ void fb_thread_window::set_url(fb_url *new_url)
 
 	url=new_url;
 
-	li_object *o;
+	li_object * o;
 
 	for (o=li_get_value("exclude_sub_strings",0); o; o=li_cdr(o,0))
 	{
@@ -214,7 +230,7 @@ void fb_thread_window::set_url(fb_url *new_url)
 	}
 
 	int save=0;
-	char *ext=url->get_extension();
+	char * ext=url->get_extension();
 	if (ext)
 	{
 
@@ -225,7 +241,7 @@ void fb_thread_window::set_url(fb_url *new_url)
 
 			while (o && !ok)
 			{
-				li_object *i=li_car(o,0);
+				li_object * i=li_car(o,0);
 				if (fb_strneq( li_get_string(li_car(i,0),0), ext, strlen(ext)))
 				{
 					i=li_cdr(i,0);
@@ -276,7 +292,7 @@ void fb_thread_window::set_url(fb_url *new_url)
 
 	if (save)
 	{
-		char *fn=url->get_filename();
+		char * fn=url->get_filename();
 		if (!fn)
 		{
 			last_error=FB_NO_FILENAME;
@@ -309,7 +325,7 @@ void fb_thread_window::set_url(fb_url *new_url)
 }
 
 
-void fb_thread_window::receive_event(i4_event *ev)
+void fb_thread_window::receive_event(i4_event * ev)
 {
 	if (ev->type()==i4_event::USER_MESSAGE)
 	{
@@ -339,7 +355,7 @@ void fb_thread_window::receive_event(i4_event *ev)
 	i4_parent_window_class::receive_event(ev);
 }
 
-fb_thread_window::fb_thread_window(w16 w, w16 h, i4_graphical_style_class *style)
+fb_thread_window::fb_thread_window(w16 w, w16 h, i4_graphical_style_class * style)
 	: i4_parent_window_class(w,h),
 	  style(style)
 {
@@ -388,10 +404,10 @@ void fb_thread_window::parent_draw(i4_draw_context_class &context)
 {
 	style->deco_neutral_fill(local_image, 0,0, width()-1, height()-1, context);
 
-	i4_font_class *font=style->font_hint->small_font;
-	i4_font_class *bfont=style->font_hint->normal_font;
+	i4_font_class * font=style->font_hint->small_font;
+	i4_font_class * bfont=style->font_hint->normal_font;
 
-	char *state_names[]={
+	char * state_names[]={
 		"Thread Init",
 		"Idle",
 		"Connecting",
@@ -437,8 +453,10 @@ void fb_thread_window::parent_draw(i4_draw_context_class &context)
 fb_thread_window::~fb_thread_window()
 {
 	state=FB_THREAD_QUITING;
+
 	while (state!=FB_THREAD_DONE)
 		i4_thread_yield();
+
 
 }
 
@@ -452,7 +470,7 @@ void fb_thread_window::check_for_timeout()
 	{
 		last_sec=secs;
 
-		for (li_object *o=li_get_value("timeouts",0); o; o=li_cdr(o,0))
+		for (li_object * o=li_get_value("timeouts",0); o; o=li_cdr(o,0))
 		{
 			int size=li_int::get(li_first(li_car(o,0),0),0)->value();
 			int tout=li_int::get(li_second(li_car(o,0),0),0)->value();

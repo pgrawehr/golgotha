@@ -19,16 +19,18 @@
 
 g1_resource_class g1_resources;
 
-float f_get(char *rname)
+float f_get(char * rname)
 {
 	i4_const_str::iterator s=i4gets(rname).begin();
+
 	return (float)s.read_float();
 }
 
 
-void g1_resource_class::g_float(i4_float &f, char *res_name)
+void g1_resource_class::g_float(i4_float &f, char * res_name)
 {
 	i4_const_str st=use->get(res_name);
+
 	if (st.null())
 	{
 		i4_error("Constant missing %s",res_name);
@@ -37,16 +39,17 @@ void g1_resource_class::g_float(i4_float &f, char *res_name)
 	f=(float)i.read_float();
 }
 
-void g1_resource_class::g_cursor(i4_cursor_class *&c, char *res_name, int big, int color)
+void g1_resource_class::g_cursor(i4_cursor_class *&c, char * res_name, int big, int color)
 {
 	i4_const_str st=use->get(res_name);
+
 	if (st.null())
 	{
 		i4_error("Constant missing from resource/constants.res %s",res_name);
 	}
 
 	i4_const_str::iterator i=st.begin();
-	i4_str *fmt=i.read_string();
+	i4_str * fmt=i.read_string();
 
 	w32 tcolor=i.read_number();
 	int hx=i.read_number();
@@ -60,10 +63,10 @@ void g1_resource_class::g_cursor(i4_cursor_class *&c, char *res_name, int big, i
 		hy/=2;
 	}
 
-	i4_str *fn=fmt->sprintf(100,big ? "big" : "small", color ? 16 : 2);
+	i4_str * fn=fmt->sprintf(100,big ? "big" : "small", color ? 16 : 2);
 	delete fmt;
 
-	i4_image_class *im=i4_load_image(*fn);
+	i4_image_class * im=i4_load_image(*fn);
 	if (!im)
 	{
 		char buf[100];
@@ -78,9 +81,10 @@ void g1_resource_class::g_cursor(i4_cursor_class *&c, char *res_name, int big, i
 	delete im;
 }
 
-void g1_resource_class::g_w32(w32 &x, char *res_name)
+void g1_resource_class::g_w32(w32 &x, char * res_name)
 {
 	i4_const_str st=use->get(res_name);
+
 	if (st.null())
 	{
 		i4_error("Constant missing %s",res_name);
@@ -89,9 +93,10 @@ void g1_resource_class::g_w32(w32 &x, char *res_name)
 	x=i.read_number();
 }
 
-void g1_resource_class::g_sw32(sw32 &x, char *res_name)
+void g1_resource_class::g_sw32(sw32 &x, char * res_name)
 {
 	i4_const_str st=use->get(res_name);
+
 	if (st.null())
 	{
 		i4_error("Constant missing %s",res_name);
@@ -100,9 +105,10 @@ void g1_resource_class::g_sw32(sw32 &x, char *res_name)
 	x=i.read_number();
 }
 
-void g1_resource_class::g_w16(w16 &x, char *res_name)
+void g1_resource_class::g_w16(w16 &x, char * res_name)
 {
 	i4_const_str st=use->get(res_name);
+
 	if (st.null())
 	{
 		i4_error("Constant missing %s",res_name);
@@ -111,9 +117,10 @@ void g1_resource_class::g_w16(w16 &x, char *res_name)
 	x=(w16)i.read_number();
 }
 
-void g1_resource_class::g_sw16(sw16 &x, char *res_name)
+void g1_resource_class::g_sw16(sw16 &x, char * res_name)
 {
 	i4_const_str st=use->get(res_name);
+
 	if (st.null())
 	{
 		i4_error("Constant missing %s",res_name);
@@ -122,9 +129,9 @@ void g1_resource_class::g_sw16(sw16 &x, char *res_name)
 	x=(short)i.read_number();
 }
 
-void g1_resource_class::g_point(i4_3d_point_class &p, char *res_name)
+void g1_resource_class::g_point(i4_3d_point_class &p, char * res_name)
 {
-	i4_const_str *s,*x=use->get_array(res_name);
+	i4_const_str * s,* x=use->get_array(res_name);
 
 	s=x;
 	i4_const_str::iterator i=x->begin();
@@ -141,9 +148,9 @@ void g1_resource_class::g_point(i4_3d_point_class &p, char *res_name)
 	i4_free(s);
 }
 
-void g1_resource_class::g_rect(rect &r, char *res_name)
+void g1_resource_class::g_rect(rect &r, char * res_name)
 {
-	i4_const_str *s,*x=use->get_array(res_name);
+	i4_const_str * s,* x=use->get_array(res_name);
 
 	s=x;
 	i4_const_str::iterator i=x->begin();
@@ -167,6 +174,7 @@ void g1_resource_class::g_rect(rect &r, char *res_name)
 void g1_resource_class::cleanup()
 {
 	int i;
+
 	for (i=0; i<G1_TOTAL_CURSORS; i++)
 	{
 		if (big_cursors[i])
@@ -207,6 +215,7 @@ void g1_resource_class::cleanup()
 void g1_resource_class::load()
 {
 	int i;
+
 	try{
 		i4_string_manager_class constants;
 		constants.init();
@@ -220,7 +229,7 @@ void g1_resource_class::load()
 
 		draw_flags=DRAW_ALL;
 
-		char *cursors[]={
+		char * cursors[]={
 			"default_cursor",
 			"select_cursor", "move_cursor",
 			"target_cursor", "follow_cursor", "x_cursor",
@@ -353,14 +362,14 @@ void g1_resource_class::load()
 
 		g_w32(lock_cheat,                                "lock_cheat");
 
-		i4_const_str *im_array=constants.get_array("images");
+		i4_const_str * im_array=constants.get_array("images");
 		t_images=0;
 		for (i=0; !im_array[i].null(); i++)
 		{
 			t_images++;
 		}
 
-		images=(i4_image_class **)I4_MALLOC(sizeof(i4_image_class **) * t_images, "image array");
+		images=(i4_image_class * *)I4_MALLOC(sizeof(i4_image_class **) * t_images, "image array");
 
 		for (i=0; i<t_images && !im_array[i].null(); i++)
 		{
@@ -385,7 +394,7 @@ void g1_resource_class::load()
 		}
 
 		t_build_context_helps=0;
-		for (i4_const_str *str=build_context_help; !str->null(); str++)
+		for (i4_const_str * str=build_context_help; !str->null(); str++)
 		{
 			t_build_context_helps++;
 		}

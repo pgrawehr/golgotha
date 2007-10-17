@@ -11,10 +11,10 @@
 #include "string/string.h"
 #include "debug.h"
 
-char *gmod_sig = "GMOD";
+char * gmod_sig = "GMOD";
 
 HINSTANCE hInstance;
-extern void *my_instance;
+extern void * my_instance;
 
 int controlsInit = FALSE;
 
@@ -87,14 +87,14 @@ TCHAR *GetString(int id)
 	return NULL;
 }
 
-int i4_crkutil_error(const char *st)
+int i4_crkutil_error(const char * st)
 {
 	dbg("Error: %s\n",st);
 	return 0;
 }
 
 
-int i4_crkutil_warning(const char *st)
+int i4_crkutil_warning(const char * st)
 {
 	dbg("Warning: %s\n",st);
 	return 0;

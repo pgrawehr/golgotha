@@ -58,23 +58,23 @@ class g1_time_line :
 public:
 	~g1_time_line();
 
-	g1_edit_state_class *state;
+	g1_edit_state_class * state;
 
 
-	void name(char *buffer)
+	void name(char * buffer)
 	{
 		static_name(buffer,"time_line");
 	}
 
 
 
-	i4_button_class *create_img_win(char *icon_res_name,
+	i4_button_class *create_img_win(char * icon_res_name,
 									w32 mess_id,
-									i4_graphical_style_class *style);
+									i4_graphical_style_class * style);
 
-	g1_time_line(i4_parent_window_class *parent,
-				 i4_graphical_style_class *style,
-				 g1_edit_state_class *state);
+	g1_time_line(i4_parent_window_class * parent,
+				 i4_graphical_style_class * style,
+				 g1_edit_state_class * state);
 
 
 	sw32 height()
@@ -88,9 +88,9 @@ public:
 	w32 current_frame();
 	w32 total_frames();
 
-	void receive_event(i4_event *ev);
+	void receive_event(i4_event * ev);
 
-	void create_time_win(i4_graphical_style_class *style);
+	void create_time_win(i4_graphical_style_class * style);
 
 	i4_spline_class *selected_spline();
 

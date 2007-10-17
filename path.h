@@ -20,13 +20,13 @@ class g1_loader_class;
 // the path manager to find out info about your path
 class g1_path_class;
 
-typedef g1_path_class *g1_path_handle;
+typedef g1_path_class * g1_path_handle;
 
 class g1_path_manager_class
 {
 public:
 	g1_path_handle alloc_path(w32 t_positions,
-							  i4_float *positions);
+							  i4_float * positions);
 
 	void get_position(g1_path_handle path, i4_float &x, i4_float &y);
 	i4_bool get_nth_position(g1_path_handle path, int n, i4_float &x, i4_float &y);
@@ -39,8 +39,8 @@ public:
 
 	void free_path(g1_path_handle &path);
 
-	void save(g1_saver_class *fp, g1_path_handle path);
-	g1_path_handle load(g1_loader_class *fp);
+	void save(g1_saver_class * fp, g1_path_handle path);
+	g1_path_handle load(g1_loader_class * fp);
 };
 
 extern g1_path_manager_class g1_path_manager;

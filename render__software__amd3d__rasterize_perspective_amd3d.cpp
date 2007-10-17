@@ -17,16 +17,16 @@
 
 #ifndef USE_AMD3D
 
-void span_draw_perspective_lit_amd3d(span_tri_info *tri)
+void span_draw_perspective_lit_amd3d(span_tri_info * tri)
 {
 }
-void span_draw_perspective_unlit_amd3d(span_tri_info *tri)
+void span_draw_perspective_unlit_amd3d(span_tri_info * tri)
 {
 }
 
 #else
 
-void span_draw_perspective_lit_amd3d(span_tri_info *tri)
+void span_draw_perspective_lit_amd3d(span_tri_info * tri)
 {
 	//setup some of the global variables
 	r1_software_class_instance.set_color_tint(tri->color_tint);
@@ -49,7 +49,7 @@ void span_draw_perspective_lit_amd3d(span_tri_info *tri)
 		emms // JJ function contains MMX instructions, so we use EMMS instruction to empty the multimedia state
 	}
 
-	span_entry *s = &global_span_list[tri->span_list_head];
+	span_entry * s = &global_span_list[tri->span_list_head];
 
 	perspective_span left;
 	while (s!=global_span_list)
@@ -99,7 +99,7 @@ void span_draw_perspective_lit_amd3d(span_tri_info *tri)
 	}
 }
 
-void span_draw_perspective_unlit_amd3d(span_tri_info *tri)
+void span_draw_perspective_unlit_amd3d(span_tri_info * tri)
 {
 	//setup some of the global variables
 	r1_software_class_instance.set_color_tint(tri->color_tint);
@@ -113,7 +113,7 @@ void span_draw_perspective_unlit_amd3d(span_tri_info *tri)
 	s_mask = ((r1_software_texture_width -1)<<16) | 0xFFFF;
 	t_mask = ((r1_software_texture_height-1)<<16) | 0xFFFF;
 
-	span_entry *s = &global_span_list[tri->span_list_head];
+	span_entry * s = &global_span_list[tri->span_list_head];
 
 	perspective_span left;
 	while (s!=global_span_list)

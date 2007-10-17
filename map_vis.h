@@ -19,12 +19,12 @@ class i4_image16;
 class g1_visible_projection
 {
 	i4_float cx1,cy1,cx2,cy2;
-	i4_transform_class *trans;
+	i4_transform_class * trans;
 
 public:
 	// used by poly_clip template function
-	i4_float intersect(i4_vertex_class *v1, i4_vertex_class *v2, int plane);
-	void project(i4_vertex_class *v)
+	i4_float intersect(i4_vertex_class * v1, i4_vertex_class * v2, int plane);
+	void project(i4_vertex_class * v)
 	{
 		v->px=v->v.x;
 		v->py=v->v.y;
@@ -85,7 +85,7 @@ public:
 	class screen_pointer
 	{
 		int x,y;
-		g1_visible_projection *v;
+		g1_visible_projection * v;
 
 public:
 		void move_to(int _x, int _y, g1_visible_projection &vp)
@@ -139,7 +139,7 @@ public:
 
 	g1_visible_projection(i4_transform_class &t,
 						  w32 n_points,
-						  point *p,
+						  point * p,
 						  w32 map_w, w32 map_h);
 };
 

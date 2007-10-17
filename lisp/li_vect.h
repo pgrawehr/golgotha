@@ -37,7 +37,7 @@ public:
 	{
 		return v;
 	}
-	static li_vect *get(li_object *o, li_environment *env)
+	static li_vect *get(li_object * o, li_environment * env)
 	{
 		check_type(o, LI_VECT, env);
 		return ((li_vect *)o);
@@ -60,12 +60,12 @@ public:
 
 struct li_vect_class_member : public li_class_member
 {
-	li_vect_class_member(char *name) :
+	li_vect_class_member(char * name) :
 		li_class_member(name) {
 	}
 	i4_3d_vector &operator()()
 	{
-		return li_vect::get(li_this->get(*this),0)->value();
+		return li_vect::get(li_this->get(* this),0)->value();
 	}
 };
 

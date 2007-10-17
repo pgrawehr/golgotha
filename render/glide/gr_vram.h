@@ -20,7 +20,7 @@
 class r1_glide_vram_class :
 	public r1_texture_manager_class
 {
-	friend void glide_async_callback(w32 count, void *context);
+	friend void glide_async_callback(w32 count, void * context);
 
 	class free_node
 	{
@@ -29,8 +29,8 @@ public:
 		i4_float smul, tmul;
 
 		//used when loading asynchronously from disk
-		i4_file_class *async_fp;
-		w8 *data;
+		i4_file_class * async_fp;
+		w8 * data;
 
 		w8 lod, aspect, tmu;
 	};
@@ -48,8 +48,8 @@ public:
 
 	w8 scratch_texture[scratch_texture_size]; // used (shared) to load in textures off disk
 
-	r1_texture_heap_class *tex_heap_man;
-	r1_texture_heap_class *tex_heap_man_2;
+	r1_texture_heap_class * tex_heap_man;
+	r1_texture_heap_class * tex_heap_man_2;
 	int heap1_address;
 	int heap2_address;
 
@@ -61,7 +61,7 @@ public:
 						float &smul, float &tmul, i4_bool holy, i4_bool alpha);
 
 
-	r1_glide_vram_class(const i4_pal *pal);
+	r1_glide_vram_class(const i4_pal * pal);
 
 	void init();
 	void uninit();
@@ -71,8 +71,8 @@ public:
 		uninit();
 	}
 
-	i4_bool immediate_mip_load(r1_mip_load_info *load_info);
-	i4_bool async_mip_load(r1_mip_load_info *load_info);
+	i4_bool immediate_mip_load(r1_mip_load_info * load_info);
+	i4_bool async_mip_load(r1_mip_load_info * load_info);
 
 	void free_mip(r1_vram_handle_type vram_handle);
 
@@ -85,7 +85,7 @@ public:
 
 	i4_array<used_node *> finished_array;
 
-	void async_load_finished(used_node *u);
+	void async_load_finished(used_node * u);
 
 	sw32 bytes_loaded;
 	sw32 textures_loaded;
