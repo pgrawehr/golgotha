@@ -167,141 +167,105 @@ void fast_transform(i4_transform_class * t,const i4_3d_vector &src, r1_3d_point_
 
 		//optimized transformation: 34 cycles
 		//compute t->x.x*src.x, t->x.y*src.x, t->x.z*src.x
-		fld dword ptr  [ecx+0]     ;
-		starts & ends on cycle 0
-		fmul dword ptr [eax+0]     ;
-		starts on cycle 1
-		fld dword ptr  [ecx+0]     ;
-		starts & ends on cycle 2
-		fmul dword ptr [eax+4]     ;
-		starts on cycle 3
-		fld dword ptr  [ecx+0]     ;
-		starts & ends on cycle 4
-		fmul dword ptr [eax+8]     ;
-		starts on cycle 5
+		fld dword ptr  [ecx+0]     ;		starts & ends on cycle 0
+		fmul dword ptr [eax+0]     ;		starts on cycle 1
+		fld dword ptr  [ecx+0]     ;		starts & ends on cycle 2
+		fmul dword ptr [eax+4]     ;		starts on cycle 3
+		fld dword ptr  [ecx+0]     ;		starts & ends on cycle 4
+		fmul dword ptr [eax+8]     ;		starts on cycle 5
 
 		//compute t->y.x*src.y, t->y.y*src.y, t->y.z*src.y
-		fld dword ptr  [ecx+4]     ;
-		starts & ends on cycle 6
-		fmul dword ptr [eax+12]    ;
-		starts on cycle 7
-		fld dword ptr  [ecx+4]     ;
-		starts & ends on cycle 8
-		fmul dword ptr [eax+16]    ;
-		starts on cycle 9
-		fld dword ptr  [ecx+4]     ;
-		starts & ends on cycle 10
-		fmul dword ptr [eax+20]    ;
-		starts on cycle 11
+		fld dword ptr  [ecx+4]     ;		starts & ends on cycle 6
+		fmul dword ptr [eax+12]    ;		starts on cycle 7
+		fld dword ptr  [ecx+4]     ;		starts & ends on cycle 8
+		fmul dword ptr [eax+16]    ;		starts on cycle 9
+		fld dword ptr  [ecx+4]     ;		starts & ends on cycle 10
+		fmul dword ptr [eax+20]    ;		starts on cycle 11
 
 		//st0           st1           st2           st3           st4           st5
 		//t->y.z*src.y  t->y.y*src.y  t->y.x*src.y  t->x.z*src.x  t->x.y*src.x  t->x.x*src.x
 
-		fxch           st(2)       ;
-		no cost
+		fxch           st(2)       ;		no cost
 		//st0           st1           st2           st3           st4           st5
 		//t->y.x*src.y  t->y.y*src.y  t->y.z*src.y  t->x.z*src.x  t->x.y*src.x  t->x.x*src.x
 
-		faddp          st(5),st(0) ;
-		starts on cycle 12
+		faddp          st(5),st(0) ;		starts on cycle 12
 		//st0           st1           st2           st3           st4
 		//t->y.y*src.y  t->y.z*src.y  t->x.z*src.x  t->x.y*src.x  t->x.x*src.x+
 		//                                                        t->y.x*src.y
 
-		faddp          st(3),st(0) ;
-		starts on cycle 13
+		faddp          st(3),st(0) ;		starts on cycle 13
 		//st0           st1           st2           st3
 		//t->y.z*src.y  t->x.z*src.x  t->x.y*src.x+ t->x.x*src.x+
 		//                            t->y.y*src.y  t->y.x*src.y
 
-		faddp          st(1),st(0) ;
-		starts on cycle 14
+		faddp          st(1),st(0) ;		starts on cycle 14
 		//st0           st1           st2
 		//t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
 		//t->y.z*src.y  t->y.y*src.y  t->y.x*src.y
 
 		//compute t->z.x*src.z, t->z.y*src.z, t->z.z*src.z
-		fld dword ptr  [ecx+8]     ;
-		starts & ends on cycle 15
-		fmul dword ptr [eax+24]    ;
-		starts on cycle 16
-		fld dword ptr  [ecx+8]     ;
-		starts & ends on cycle 17
-		fmul dword ptr [eax+28]    ;
-		starts on cycle 18
-		fld dword ptr  [ecx+8]     ;
-		starts & ends on cycle 19
-		fmul dword ptr [eax+32]    ;
-		starts on cycle 20
+		fld dword ptr  [ecx+8]     ;		starts & ends on cycle 15
+		fmul dword ptr [eax+24]    ;		starts on cycle 16
+		fld dword ptr  [ecx+8]     ;		starts & ends on cycle 17
+		fmul dword ptr [eax+28]    ;		starts on cycle 18
+		fld dword ptr  [ecx+8]     ;		starts & ends on cycle 19
+		fmul dword ptr [eax+32]    ;		starts on cycle 20
 
 		//st0           st1           st2           st3           st4           st5
 		//t->z.z*src.z  t->z.y*src.z  t->z.x*src.z  t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
 		//                                          t->y.z*src.y  t->y.y*src.y  t->y.x*src.y
-		fxch           st(2)       ;
-		no cost
+		fxch           st(2)       ;		no cost
 
-		faddp          st(5),st(0) ;
-		starts on cycle 21
+		faddp          st(5),st(0) ;		starts on cycle 21
 		//st0           st1           st2           st3           st4
 		//t->z.y*src.z  t->z.z*src.z  t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
 		//                            t->y.z*src.y  t->y.y*src.y  t->y.x*src.y+
 		//                                                        t->z.x*src.z
 
-		faddp          st(3),st(0) ;
-		starts on cycle 22
+		faddp          st(3),st(0) ;		starts on cycle 22
 
 		//st0           st1           st2           st3
 		//t->z.z*src.z  t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
 		//              t->y.z*src.y  t->y.y*src.y+ t->y.x*src.y+
 		//                            t->z.y*src.z  t->z.x*src.z
 
-		faddp          st(1),st(0) ;
-		starts on cycle 23
+		faddp          st(1),st(0) ;		starts on cycle 23
 		//st0           st1           st2
 		//t->x.z*src.x+ t->x.y*src.x+ t->x.x*src.x+
 		//t->y.z*src.y+ t->y.y*src.y+ t->y.x*src.y+
 		//t->z.z*src.z  t->z.y*src.z  t->z.x*src.z
 
-		fxch           st(2)       ;
-		no cost
+		fxch           st(2)       ;		no cost
 		//st0            st1           st2
 		//t->x.x*src.x+  t->x.y*src.x+ t->x.z*src.x+
 		//t->y.x*src.y+  t->y.y*src.y+ t->y.z*src.y+
 		//t->z.x*src.z   t->z.y*src.z  t->z.z*src.z
 
-		fadd dword ptr [eax+36]    ;
-		starts on cycle 24
-		fxch           st(1)       ;
-		starts on cycle 25
+		fadd dword ptr [eax+36]    ;		starts on cycle 24
+		fxch           st(1)       ;		starts on cycle 25
 
 		//st0            st1           st2
 		//t->x.y*src.x+  dest_x        t->x.z*src.x+
 		//t->y.y*src.y+                t->y.z*src.y+
 		//t->z.y*src.z                 t->z.z*src.z
 
-		fadd dword ptr [eax+40]    ;
-		starts on cycle 26
-		fxch           st(2)       ;
-		no cost
+		fadd dword ptr [eax+40]    ;		starts on cycle 26
+		fxch           st(2)       ;		no cost
 
 		//st0            st1    st2
 		//t->x.z*src.x+  dest_x dest_y
 		//t->y.z*src.y+
 		//t->z.z*src.z
-		fadd dword ptr [eax+44]    ;
-		starts on cycle 27
-		fxch           st(1)       ;
-		no cost
+		fadd dword ptr [eax+44]    ;		starts on cycle 27
+		fxch           st(1)       ;		no cost
 
 		//st0     st1    st2
 		//dest_x  dest_z dest_y
 
-		fstp dword ptr [edx+0]     ;
-		starts on cycle 28, ends on cycle 29
-		fstp dword ptr [edx+8]     ;
-		starts on cycle 30, ends on cycle 31
-		fstp dword ptr [edx+4]     ;
-		starts on cycle 32, ends on cycle 33
+		fstp dword ptr [edx+0]     ;		starts on cycle 28, ends on cycle 29
+		fstp dword ptr [edx+8]     ;		starts on cycle 30, ends on cycle 31
+		fstp dword ptr [edx+4]     ;		starts on cycle 32, ends on cycle 33
 	}
 #endif
 }

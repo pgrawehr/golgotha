@@ -231,29 +231,17 @@ public:
 			mov ecx, b
 			mov eax, this
 
-			;
-			optimized dot product;
-			15 cycles
-			fld dword ptr   [eax+0]     ;
-			starts & ends on cycle 0
-			fmul dword ptr  [ecx+0]     ;
-			starts on cycle 1
-			fld dword ptr   [eax+4]     ;
-			starts & ends on cycle 2
-			fmul dword ptr  [ecx+4]     ;
-			starts on cycle 3
-			fld dword ptr   [eax+8]     ;
-			starts & ends on cycle 4
-			fmul dword ptr  [ecx+8]     ;
-			starts on cycle 5
-			fxch            st(1)       ;
-			no cost
-			faddp           st(2),st(0) ;
-			starts on cycle 6, stalls for cycles 7-8
-			faddp           st(1),st(0) ;
-			starts on cycle 9, stalls for cycles 10-12
-			fstp dword ptr  [dotret]    ;
-			starts on cycle 13, ends on cycle 14
+			;	optimized dot product;			15 cycles
+			fld dword ptr   [eax+0]     ;			starts & ends on cycle 0
+			fmul dword ptr  [ecx+0]     ;			starts on cycle 1
+			fld dword ptr   [eax+4]     ;			starts & ends on cycle 2
+			fmul dword ptr  [ecx+4]     ;			starts on cycle 3
+			fld dword ptr   [eax+8]     ;			starts & ends on cycle 4
+			fmul dword ptr  [ecx+8]     ;			starts on cycle 5
+			fxch            st(1)       ;			no cost
+			faddp           st(2),st(0) ;			starts on cycle 6, stalls for cycles 7-8
+			faddp           st(1),st(0) ;			starts on cycle 9, stalls for cycles 10-12
+			fstp dword ptr  [dotret]    ;			starts on cycle 13, ends on cycle 14
 		}
 		return dotret;
 
@@ -296,45 +284,26 @@ public:
 			   fstp dword ptr  [eax+4]     ;starts on cycle 18, ends on cycle 19
 			   fstp dword ptr  [eax+8]     ;starts on cycle 20, ends on cycle 21
 			 */
-			fld dword ptr   [ecx+4]     ;
-			starts & ends on cycle 0
-			fmul dword ptr  [edx+8]     ;
-			starts on cycle 1
-			fld dword ptr   [ecx+8]     ;
-			starts & ends on cycle 2
-			fmul dword ptr  [edx+0]     ;
-			starts on cycle 3
-			fld dword ptr   [ecx+0]     ;
-			starts & ends on cycle 4
-			fmul dword ptr  [edx+4]     ;
-			starts on cycle 5
-			fld dword ptr   [ecx+8]     ;
-			starts & ends on cycle 6
-			fmul dword ptr  [edx+4]     ;
-			starts on cycle 7
-			fld dword ptr   [ecx+0]     ;
-			starts & ends on cycle 8
-			fmul dword ptr  [edx+8]     ;
-			starts on cycle 9
-			fld dword ptr   [ecx+4]     ;
-			starts & ends on cycle 10
-			fmul dword ptr  [edx+0]     ;
-			starts on cycle 11
-			fxch            st(2)       ;
-			no cost
-			fsubp           st(5),st(0) ;
-			starts on cycle 12
-			fsubp           st(3),st(0) ;
-			starts on cycle 13
-			fsubp           st(1),st(0) ;
-			starts on cycle 14
+			fld dword ptr   [ecx+4]     ;			starts & ends on cycle 0
+			fmul dword ptr  [edx+8]     ;			starts on cycle 1
+			fld dword ptr   [ecx+8]     ;			starts & ends on cycle 2
+			fmul dword ptr  [edx+0]     ;			starts on cycle 3
+			fld dword ptr   [ecx+0]     ;			starts & ends on cycle 4
+			fmul dword ptr  [edx+4]     ;			starts on cycle 5
+			fld dword ptr   [ecx+8]     ;			starts & ends on cycle 6
+			fmul dword ptr  [edx+4]     ;			starts on cycle 7
+			fld dword ptr   [ecx+0]     ;			starts & ends on cycle 8
+			fmul dword ptr  [edx+8]     ;			starts on cycle 9
+			fld dword ptr   [ecx+4]     ;			starts & ends on cycle 10
+			fmul dword ptr  [edx+0]     ;			starts on cycle 11
+			fxch            st(2)       ;			no cost
+			fsubp           st(5),st(0) ;			starts on cycle 12
+			fsubp           st(3),st(0) ;			starts on cycle 13
+			fsubp           st(1),st(0) ;			starts on cycle 14
 			//fxch            st(2)       ;no cost, stalls for cycle 15
-			fstp dword ptr  [eax+8]     ;
-			starts on cycle 16, ends on cycle 17
-			fstp dword ptr  [eax+4]     ;
-			starts on cycle 18, ends on cycle 19
-			fstp dword ptr  [eax+0]     ;
-			starts on cycle 20, ends on cycle 21
+			fstp dword ptr  [eax+8]     ;			starts on cycle 16, ends on cycle 17
+			fstp dword ptr  [eax+4]     ;			starts on cycle 18, ends on cycle 19
+			fstp dword ptr  [eax+0]     ;			starts on cycle 20, ends on cycle 21
 		}
 #else
 		x = a.y*b.z - a.z*b.y;

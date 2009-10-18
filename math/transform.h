@@ -264,80 +264,43 @@ public:
 			mov ecx, src_vector
 			mov edx, dst_vector
 
-			;
-			optimized transformation : 34 cycles
-			fld dword ptr  [ecx+0]     ;
-			starts & ends on cycle 0
-			fmul dword ptr [eax+0]     ;
-			starts on cycle 1
-			fld dword ptr  [ecx+0]     ;
-			starts & ends on cycle 2
-			fmul dword ptr [eax+4]     ;
-			starts on cycle 3
-			fld dword ptr  [ecx+0]     ;
-			starts & ends on cycle 4
-			fmul dword ptr [eax+8]     ;
-			starts on cycle 5
-			fld dword ptr  [ecx+4]     ;
-			starts & ends on cycle 6
-			fmul dword ptr [eax+12]    ;
-			starts on cycle 7
-			fld dword ptr  [ecx+4]     ;
-			starts & ends on cycle 8
-			fmul dword ptr [eax+16]    ;
-			starts on cycle 9
-			fld dword ptr  [ecx+4]     ;
-			starts & ends on cycle 10
-			fmul dword ptr [eax+20]    ;
-			starts on cycle 11
-			fxch           st(2)       ;
-			no cost
-			faddp          st(5),st(0) ;
-			starts on cycle 12
-			faddp          st(3),st(0) ;
-			starts on cycle 13
-			faddp          st(1),st(0) ;
-			starts on cycle 14
-			fld dword ptr  [ecx+8]     ;
-			starts & ends on cycle 15
-			fmul dword ptr [eax+24]    ;
-			starts on cycle 16
-			fld dword ptr  [ecx+8]     ;
-			starts & ends on cycle 17
-			fmul dword ptr [eax+28]    ;
-			starts on cycle 18
-			fld dword ptr  [ecx+8]     ;
-			starts & ends on cycle 19
-			fmul dword ptr [eax+32]    ;
-			starts on cycle 20
-			fxch           st(2)       ;
-			no cost
-			faddp          st(5),st(0) ;
-			starts on cycle 21
-			faddp          st(3),st(0) ;
-			starts on cycle 22
-			faddp          st(1),st(0) ;
-			starts on cycle 23
-			fxch           st(2)       ;
-			no cost
-			fadd dword ptr [eax+36]    ;
-			starts on cycle 24
-			fxch           st(1)       ;
-			starts on cycle 25
-			fadd dword ptr [eax+40]    ;
-			starts on cycle 26
-			fxch           st(2)       ;
-			no cost
-			fadd dword ptr [eax+44]    ;
-			starts on cycle 27
-			fxch           st(1)       ;
-			no cost
-			fstp dword ptr [edx+0]     ;
-			starts on cycle 28, ends on cycle 29
-			fstp dword ptr [edx+8]     ;
-			starts on cycle 30, ends on cycle 31
-			fstp dword ptr [edx+4]     ;
-			starts on cycle 32, ends on cycle 33
+			; optimized transformation : 34 cycles
+			fld dword ptr  [ecx+0]     ;	 		starts & ends on cycle 0
+			fmul dword ptr [eax+0]     ;			starts on cycle 1
+			fld dword ptr  [ecx+0]     ;			starts & ends on cycle 2
+			fmul dword ptr [eax+4]     ;			starts on cycle 3
+			fld dword ptr  [ecx+0]     ;			starts & ends on cycle 4
+			fmul dword ptr [eax+8]     ;			starts on cycle 5
+			fld dword ptr  [ecx+4]     ;			starts & ends on cycle 6
+			fmul dword ptr [eax+12]    ;			starts on cycle 7
+			fld dword ptr  [ecx+4]     ;			starts & ends on cycle 8
+			fmul dword ptr [eax+16]    ;			starts on cycle 9
+			fld dword ptr  [ecx+4]     ;			starts & ends on cycle 10
+			fmul dword ptr [eax+20]    ;			starts on cycle 11
+			fxch           st(2)       ;			no cost
+			faddp          st(5),st(0) ;			starts on cycle 12
+			faddp          st(3),st(0) ;			starts on cycle 13
+			faddp          st(1),st(0) ;			starts on cycle 14
+			fld dword ptr  [ecx+8]     ;			starts & ends on cycle 15
+			fmul dword ptr [eax+24]    ;			starts on cycle 16
+			fld dword ptr  [ecx+8]     ;			starts & ends on cycle 17
+			fmul dword ptr [eax+28]    ;			starts on cycle 18
+			fld dword ptr  [ecx+8]     ;			starts & ends on cycle 19
+			fmul dword ptr [eax+32]    ;			starts on cycle 20
+			fxch           st(2)       ;			no cost
+			faddp          st(5),st(0) ;			starts on cycle 21
+			faddp          st(3),st(0) ;			starts on cycle 22
+			faddp          st(1),st(0) ;			starts on cycle 23
+			fxch           st(2)       ;			no cost
+			fadd dword ptr [eax+36]    ;			starts on cycle 24
+			fxch           st(1)       ;			starts on cycle 25
+			fadd dword ptr [eax+40]    ;			starts on cycle 26
+			fxch           st(2)       ;			no cost
+			fadd dword ptr [eax+44]    ;			starts on cycle 27
+			fxch           st(1)       ;			no cost
+			fstp dword ptr [edx+0]     ;			starts on cycle 28, ends on cycle 29
+			fstp dword ptr [edx+8]     ;			starts on cycle 30, ends on cycle 31
+			fstp dword ptr [edx+4]     ;			starts on cycle 32, ends on cycle 33
 		}
 	}
 
@@ -349,62 +312,34 @@ public:
 			mov ecx, src_vector
 			mov edx, dst_vector
 
-			;
-			optimized transformation : 34 cycles
-			fld dword ptr  [ecx+0]     ;
-			starts & ends on cycle 0
-			fmul dword ptr [eax+0]     ;
-			starts on cycle 1
-			fld dword ptr  [ecx+0]     ;
-			starts & ends on cycle 2
-			fmul dword ptr [eax+4]     ;
-			starts on cycle 3
-			fld dword ptr  [ecx+0]     ;
-			starts & ends on cycle 4
-			fmul dword ptr [eax+8]     ;
-			starts on cycle 5
-			fld dword ptr  [ecx+4]     ;
-			starts & ends on cycle 6
-			fmul dword ptr [eax+12]    ;
-			starts on cycle 7
-			fld dword ptr  [ecx+4]     ;
-			starts & ends on cycle 8
-			fmul dword ptr [eax+16]    ;
-			starts on cycle 9
-			fld dword ptr  [ecx+4]     ;
-			starts & ends on cycle 10
-			fmul dword ptr [eax+20]    ;
-			starts on cycle 11
-			fxch           st(2)       ;
-			no cost
-			faddp          st(5),st(0) ;
-			starts on cycle 12
-			faddp          st(3),st(0) ;
-			starts on cycle 13
-			faddp          st(1),st(0) ;
-			starts on cycle 14
-			fld dword ptr  [ecx+8]     ;
-			starts & ends on cycle 15
-			fmul dword ptr [eax+24]    ;
-			starts on cycle 16
-			fld dword ptr  [ecx+8]     ;
-			starts & ends on cycle 17
-			fmul dword ptr [eax+28]    ;
-			starts on cycle 18
-			fld dword ptr  [ecx+8]     ;
-			starts & ends on cycle 19
-			fmul dword ptr [eax+32]    ;
-			starts on cycle 20
-			fxch           st(2)       ;
-			no cost
-			faddp          st(5),st(0) ;
-			starts on cycle 21
-			faddp          st(3),st(0) ;
-			starts on cycle 22
-			faddp          st(1),st(0) ;
-			starts on cycle 23
-			fxch           st(2)       ;
-			no cost
+			;	optimized transformation : 34 cycles
+			fld dword ptr  [ecx+0]     ;			starts & ends on cycle 0
+			fmul dword ptr [eax+0]     ;			starts on cycle 1
+			fld dword ptr  [ecx+0]     ;			starts & ends on cycle 2
+			fmul dword ptr [eax+4]     ;			starts on cycle 3
+			fld dword ptr  [ecx+0]     ;			starts & ends on cycle 4
+			fmul dword ptr [eax+8]     ;			starts on cycle 5
+			fld dword ptr  [ecx+4]     ;			starts & ends on cycle 6
+			fmul dword ptr [eax+12]    ;			starts on cycle 7
+			fld dword ptr  [ecx+4]     ;			starts & ends on cycle 8
+			fmul dword ptr [eax+16]    ;			starts on cycle 9
+			fld dword ptr  [ecx+4]     ;			starts & ends on cycle 10
+			fmul dword ptr [eax+20]    ;			starts on cycle 11
+			fxch           st(2)       ;			no cost
+			faddp          st(5),st(0) ;			starts on cycle 12
+			faddp          st(3),st(0) ;			starts on cycle 13
+			faddp          st(1),st(0) ;			starts on cycle 14
+			fld dword ptr  [ecx+8]     ;			starts & ends on cycle 15
+			fmul dword ptr [eax+24]    ;			starts on cycle 16
+			fld dword ptr  [ecx+8]     ;			starts & ends on cycle 17
+			fmul dword ptr [eax+28]    ;			starts on cycle 18
+			fld dword ptr  [ecx+8]     ;			starts & ends on cycle 19
+			fmul dword ptr [eax+32]    ;			starts on cycle 20
+			fxch           st(2)       ;			no cost
+			faddp          st(5),st(0) ;			starts on cycle 21
+			faddp          st(3),st(0) ;			starts on cycle 22
+			faddp          st(1),st(0) ;			starts on cycle 23
+			fxch           st(2)       ;			no cost
 			fstp dword ptr [edx+0]
 			fstp dword ptr [edx+4]
 			fstp dword ptr [edx+8]

@@ -1,4 +1,4 @@
-#ifndef__OCTREETRAVERSAL_H_
+#ifndef __OCTREETRAVERSAL_H_
 #define __OCTREETRAVERSAL_H_
 
 //-------------------------------------------------------------------------------
