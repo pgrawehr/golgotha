@@ -574,7 +574,7 @@ bool g1_human_class::prepare_to_build_building(g1_object_type type)
 	g1_object_class * o=g1_object_type_array[type]->create_object(type,0);
 	if (o)
 	{
-		//call o->set_flag(NEES_SYNC,1); and o->request_think(); when the object is actually
+		//call o->set_flag(NEEDS_SYNC,1); and o->request_think(); when the object is actually
 		//going to be used.
 		prepared_building=o;
 	}
