@@ -67,7 +67,8 @@ void remove_thread(int id)
 	}
 	else
 	{
-		for (thread_node * q=thread_list; q->next->thread_id!=(w32)id; q=q->next)
+		thread_node * q;
+		for (q=thread_list; q->next->thread_id!=(w32)id; q=q->next)
 		{
 			;
 		}
@@ -422,7 +423,8 @@ void i4_set_thread_priority(int thread_id, i4_thread_priority_type priority)
 {
 	thread_list_lock.lock();
 
-	for (thread_node * p=thread_list; p && p->thread_id!=(w32)thread_id; p=p->next)
+	thread_node * p;
+	for (p=thread_list; p && p->thread_id!=(w32)thread_id; p=p->next)
 	{
 		;
 	}

@@ -461,7 +461,7 @@ li_object *li_dir(li_object * o, li_environment * env)
 	{
 		i4_os_string(*ds.files[i],fname_buf,MAX_PATH);
 		w32 _32bitsize=(w32)ds.file_status[i].size;
-		char * _time=ctime((long *)&ds.file_status[i].last_modified);
+		char * _time=ctime((time_t *)&ds.file_status[i].last_modified);
 		if (ds.file_status[i].size>0xffffffff)
 		{
 			i4_warning("%s   >4GB  %s",fname_buf,_time);

@@ -681,7 +681,7 @@ void OptionsDialog::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar * pScrollBar)
 
 	if ((CSliderCtrl *)pScrollBar==&m_texture_quality)
 	{
-		d=pow(2,m_texture_quality.GetPos());
+		d=pow(2.0,m_texture_quality.GetPos());
 		m_texture_qual_text.SetWindowText(_itoa((int) d,s,10));
 	}
 	if ((CSliderCtrl *)pScrollBar==&m_view_range)

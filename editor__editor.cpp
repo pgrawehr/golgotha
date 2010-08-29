@@ -7940,7 +7940,9 @@ public:
 		text.clear();
 
 		// create text fields so we know how many items fit on the screen
-		for (int t=0, y=deco->height()+2; y < height() && t < (w16)selectable.size(); y++)
+		int t;
+		int y; 
+		for (t=0, y=deco->height()+2; y < height() && t < (w16)selectable.size(); y++)
 		{
 			text.add(new i4_text_item_class(g1_object_type_array[selectable[t]]->name(),
 											style, style->color_hint, style->font_hint->small_font,

@@ -124,8 +124,9 @@ public:
 		HDC hdcMem = CreateCompatibleDC(dc);
 		bitmap = (HBITMAP)SelectObject(hdcMem,bitmap);
 
+		i4_rect_list_class::area_iter a;
 
-		for (i4_rect_list_class::area_iter a=context->single_dirty->list.begin();
+		for (a=context->single_dirty->list.begin();
 			 a!=context->single_dirty->list.end();
 			 ++a)
 		{

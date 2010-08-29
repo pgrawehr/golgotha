@@ -587,7 +587,7 @@ int split_dir_file(const char * path, char * * dname, char * * fname)
 {
 	char * slashpos;
 
-	if ((slashpos = strrchr(path, '/')))
+	if ((slashpos = const_cast<char*>(strrchr(path, '/'))))
 	{
 		*fname = slashpos + 1;
 		*dname = strndup(path, 1 + slashpos - path);

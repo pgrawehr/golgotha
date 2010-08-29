@@ -86,16 +86,18 @@ void COptionsheet::OnOK()
 	{
 		strcpy(buf,"Set this mode right now?");
 	}
-	if (MessageBox(buf,NULL,MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2|
+	
+	MessageBox(buf,NULL,MB_OK|MB_TOPMOST);
+	return; 
+
+	/*if (MessageBox(buf,NULL,MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2|
 				   MB_TOPMOST)==IDNO)
 	{
 		return;
-	}
-
-
-	i4_current_app->get_display()->change_mode(i4_win32_startup_options.xres,
-											   i4_win32_startup_options.yres,i4_win32_startup_options.bits,
-											   I4_CHANGE_RESOLUTION); //Apply resolution change immediatelly.
+	}*/
+	//i4_current_app->get_display()->change_mode(i4_win32_startup_options.xres,
+	//										   i4_win32_startup_options.yres,i4_win32_startup_options.bits,
+	//										   I4_CHANGE_RESOLUTION); //Apply resolution change immediatelly.
 }
 
 void COptionsheet::Apply()
