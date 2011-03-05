@@ -10,7 +10,7 @@
 #define __R1_DX5_TEXTURE_HH__
 
 #include <ddraw.h>
-#include <d3d.h>
+#include <d3d9.h>
 #include "memory/lalloc.h"
 #include "render/tmanage.h"
 #include "render/dx5/r1_dx5.h"

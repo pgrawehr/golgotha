@@ -7,8 +7,8 @@
  ***********************************************************************/
 #include "pch.h"
 #include "video/win32/dd_cursor.h"
-#include "video/win32/dx5_util.h"
-#include "video/win32/dx5_error.h"
+#include "video/win32/dx9_util.h"
+#include "video/win32/dx9_error.h"
 #include "image/context.h"
 
 ddraw_thread_cursor_class::ddraw_thread_cursor_class(const i4_pal * screen_pal,
@@ -55,26 +55,26 @@ void ddraw_thread_cursor_class::set_cursor(i4_cursor_class * c)
 
 		i4_draw_context_class context(0,0, cw-1, ch-1);
 
-		i4_dx5_image_class * dx5_image = new i4_dx5_image_class(cw, ch, DX5_VRAM);
+		i4_dx9_image_class * dx9_image = new i4_dx9_image_class(cw, ch, DX9_VRAM);
 		cursor_version=5;
 		//setup room for the mouse save
-		mouse_save = new i4_dx5_image_class(cw,ch,DX5_VRAM);
+		mouse_save = new i4_dx9_image_class(cw,ch,DX9_VRAM);
 
 		//setup the color-key value for the mouse (black)
-		DDCOLORKEY colorkey;
+		/*DDCOLORKEY colorkey;
 		memset(&colorkey,0,sizeof(DDCOLORKEY));
 
 		colorkey.dwColorSpaceLowValue  = c->trans;
 		colorkey.dwColorSpaceHighValue = c->trans;
 
-		dx5_image->surface->SetColorKey(DDCKEY_SRCBLT,&colorkey);
+		dx9_image->surface->SetColorKey(DDCKEY_SRCBLT,&colorkey);*/
 
 		cursor      = *c;
-		cursor.pict = dx5_image;
+		cursor.pict = dx9_image;
 
-		dx5_image->lock();
-		c->pict->put_image(cursor.pict, 0,0, context);
-		dx5_image->unlock();
+		dx9_image->lock();
+		c->pict->put_image_trans(cursor.pict, 0,0, c->trans, context);
+		dx9_image->unlock();
 
 		display();
 	}
@@ -98,9 +98,9 @@ void ddraw_thread_cursor_class::save()
 
 
 
-	IDirectDrawSurface3 * framebuffer = (use_back_buffer) ? (dx5_common.back_surface) : (dx5_common.primary_surface);
+	IDirect3DSurface9 * framebuffer = (use_back_buffer) ? (dx9_common.back_surface) : (dx9_common.front_surface);
 
-	i4_dx5_image_class * im5=(i4_dx5_image_class *)mouse_save;
+	i4_dx9_image_class * im5=(i4_dx9_image_class *)mouse_save;
 	HRESULT res =
 		im5->surface->BltFast(0,
 							  0,

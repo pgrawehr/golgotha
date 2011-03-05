@@ -5,8 +5,8 @@
 #include "resource.h"
 #include "Optionsdialog.h"
 #include "main/win_main.h"
-#include "video/win32/dx5_error.h"
-#include "render/dx5/r1_dx5.h"
+#include "video/win32/dx9_error.h"
+//#include "render/dx5/r1_dx5.h"
 //#include "render/dx9/render.h"
 #include "app/registry.h"
 
@@ -193,24 +193,24 @@ BOOL WINAPI EnumDisplayModes( LPDDSURFACEDESC lpDDSurfaceDesc,
 	return DDENUMRET_OK;
 }
 
-
-HRESULT WINAPI d3denumdevicescallback(LPGUID lpGuid,
-									  LPSTR lpDeviceDescription,
-									  LPSTR lpDeviceName,
-									  LPD3DDEVICEDESC lpD3DHWDeviceDesc,
-									  LPD3DDEVICEDESC lpD3DHELDeviceDesc,
-									  LPVOID lpUserArg
-)
-{
-	CComboBox * list=(CComboBox *)lpUserArg;
-	char buf[500];
-	int index=0;
-
-	sprintf(buf,"%s (%s)",lpDeviceDescription,lpDeviceName);
-	index=list->AddString(buf);
-	list->SetItemDataPtr(index,lpDeviceName);
-	return DDENUMRET_OK;
-}
+//
+//HRESULT WINAPI d3denumdevicescallback(LPGUID lpGuid,
+//									  LPSTR lpDeviceDescription,
+//									  LPSTR lpDeviceName,
+//									  LPD3DDEVICEDESC lpD3DHWDeviceDesc,
+//									  LPD3DDEVICEDESC lpD3DHELDeviceDesc,
+//									  LPVOID lpUserArg
+//)
+//{
+//	CComboBox * list=(CComboBox *)lpUserArg;
+//	char buf[500];
+//	int index=0;
+//
+//	sprintf(buf,"%s (%s)",lpDeviceDescription,lpDeviceName);
+//	index=list->AddString(buf);
+//	list->SetItemDataPtr(index,lpDeviceName);
+//	return DDENUMRET_OK;
+//}
 
 void OptionsDialog::Apply()
 {
@@ -388,21 +388,16 @@ BOOL OptionsDialog::OnInitDialog()
 	m_render_device.SetItemData(index,ENTRY_AUTO_SELECT);
 	index=m_render_device.AddString("Golgotha plain Software");
 	m_render_device.SetItemData(index,ENTRY_PLAIN_SOFTWARE);
-	if (r1_dx5_class_instance.d3d)
-	{
-		r1_dx5_class_instance.d3d->EnumDevices((LPD3DENUMDEVICESCALLBACK) d3denumdevicescallback,&m_render_device);
-	}
-	else
-	{
-		//We can't really test this here, since including both
-		//dx5 and dx9 headers doesn't work.
-		index=m_render_device.AddString("DX9 HAL (default)");
-		m_render_device.SetItemData(index,ENTRY_DX9_HAL);
-		index=m_render_device.AddString("DX9 Reference (slow)");
-		m_render_device.SetItemData(index,ENTRY_DX9_REF);
-		//index=m_render_device.AddString("DX9 Software (medium)");
-		//m_render_device.SetItemData(index,ENTRY_DX9_SW);
-	}
+	
+	//We can't really test this here, since including both
+	//dx5 and dx9 headers doesn't work.
+	index=m_render_device.AddString("DX9 HAL (default)");
+	m_render_device.SetItemData(index,ENTRY_DX9_HAL);
+	index=m_render_device.AddString("DX9 Reference (slow)");
+	m_render_device.SetItemData(index,ENTRY_DX9_REF);
+	//index=m_render_device.AddString("DX9 Software (medium)");
+	//m_render_device.SetItemData(index,ENTRY_DX9_SW);
+
 	m_render_device.SetCurSel(0);
 	if (i4_win32_startup_options.render==R1_RENDER_DIRECTX5_SOFTWARE)
 	{
@@ -517,7 +512,7 @@ void OptionsDialog::OnBtnCreate()
 	   }else lpourdevice=NULL;
 	 */
 	// DirectDraw-Objekt anlegen, lpDevice kann wie gesagt NULL sein
-	if ( !i4_dx5_check(DirectDrawCreate( lpDevice, &lpDD, NULL ) ) )
+	if ( !i4_dx9_check(DirectDrawCreate( lpDevice, &lpDD, NULL ) ) )
 	{
 		int a=MessageBox("Sorry, there's currently a problem creating a DirectDraw object for this device.\n"
 						 "Would you like to use it anyway? If you choose yes, it will be used upon next restart with the current resolution.",

@@ -34,6 +34,7 @@ void tri_draw_perspective_lit(tri_edge &top_to_middle,tri_edge &top_to_bottom, t
 	tri_edge * last_left=0;
 
 	perspective_span cps; //(cur_perspective_span)
+	memset(&cps,0,sizeof(cps));
 
 	//rasterize top to middle / top to bottom
 	float cur_l=0;

@@ -13,8 +13,24 @@
 #include <ddraw.h>
 #define DIRECTINPUT_VERSION 0x0500
 #include <dinput.h>
-#include <dmusici.h>
-#include "video/win32/dx5_util.h"
+//#include <dmusici.h>
+
+// #include "video/win32/dx5_util.h" // DX5 is no longer supported in the SDK. Win XP basically comes with DX9 off-the-shelf.
+
+// We need these guids for the tests, although we expect any of this to work anyway on XP or later
+DEFINE_GUID(CLSID_DirectMusic,0x636b9f10,0x0c7d,0x11d1,0x95,0xb2,0x00,0x20,0xaf,0xdc,0x74,0x21);
+DEFINE_GUID(CLSID_DirectMusicCollection,0x480ff4b0, 0x28b2, 0x11d1, 0xbe, 0xf7, 0x0, 0xc0, 0x4f, 0xbf, 0x8f, 0xef);
+DEFINE_GUID(CLSID_DirectMusicSynth,0x58C2B4D0,0x46E7,0x11D1,0x89,0xAC,0x00,0xA0,0xC9,0x05,0x41,0x29);
+
+DEFINE_GUID(IID_IDirectMusic,0x6536115a,0x7b2d,0x11d2,0xba,0x18,0x00,0x00,0xf8,0x75,0xac,0x12);
+DEFINE_GUID(IID_IDirectMusicBuffer,0xd2ac2878, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
+DEFINE_GUID(IID_IDirectMusicPort, 0x08f2d8c9,0x37c2,0x11d2,0xb9,0xf9,0x00,0x00,0xf8,0x75,0xac,0x12);
+DEFINE_GUID(IID_IDirectMusicThru, 0xced153e7, 0x3606, 0x11d2, 0xb9, 0xf9, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
+DEFINE_GUID(IID_IDirectMusicPortDownload,0xd2ac287a, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
+DEFINE_GUID(IID_IDirectMusicDownload,0xd2ac287b, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
+DEFINE_GUID(IID_IDirectMusicCollection,0xd2ac287c, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
+DEFINE_GUID(IID_IDirectMusicInstrument,0xd2ac287d, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
+DEFINE_GUID(IID_IDirectMusicDownloadedInstrument,0xd2ac287e, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
 
 
@@ -263,88 +279,88 @@ VOID CheckDXVersion()
 	// Can do checks for 3a vs 3b here
 
 
-	///////////////////////////////////////////////////////////////////////////
-	// DirectX 5.0 Checks
-	///////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	//// DirectX 5.0 Checks
+	/////////////////////////////////////////////////////////////////////////////
 
-	// We can tell if DX5 is present by checking for the existence of
-	// IDirectDrawSurface3. First, we need a surface to QI off of.
-	DDSURFACEDESC ddsd;
-	ZeroMemory( &ddsd, sizeof(ddsd) );
-	ddsd.dwSize         = sizeof(ddsd);
-	ddsd.dwFlags        = DDSD_CAPS;
-	ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
+	//// We can tell if DX5 is present by checking for the existence of
+	//// IDirectDrawSurface3. First, we need a surface to QI off of.
+	//DDSURFACEDESC ddsd;
+	//ZeroMemory( &ddsd, sizeof(ddsd) );
+	//ddsd.dwSize         = sizeof(ddsd);
+	//ddsd.dwFlags        = DDSD_CAPS;
+	//ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
 
-	hr = pDDraw->SetCooperativeLevel( NULL, DDSCL_NORMAL );
-	if( FAILED(hr) )
-	{
-		// Failure. This means DDraw isn't properly installed.
-		pDDraw->Release();
-		FreeLibrary( DDHinst );
-		(*pdwDXVersion) = 0;
-		OutputDebugString( "Couldn't Set coop level\r\n" );
-		return;
-	}
-	int surfcreated=0;
-	if (dx5_common.primary_surface) //already inited? (Cannot get primary surface twice)
-	{
-		//we know, that we are dx5 at least, as the engine works
-		pSurf3=dx5_common.primary_surface;
-		surfcreated=0;
-	}
-	else
-	{
-		hr = pDDraw->CreateSurface( &ddsd, &pSurf, NULL );
-		if( FAILED(hr) )
-		{
-			// Failure. This means DDraw isn't properly installed.
-			pDDraw->Release();
-			FreeLibrary( DDHinst );
-			*pdwDXVersion = 0;
-			OutputDebugString( "Couldn't CreateSurface\r\n" );
-			return;
-		}
-		surfcreated=1;
+	//hr = pDDraw->SetCooperativeLevel( NULL, DDSCL_NORMAL );
+	//if( FAILED(hr) )
+	//{
+	//	// Failure. This means DDraw isn't properly installed.
+	//	pDDraw->Release();
+	//	FreeLibrary( DDHinst );
+	//	(*pdwDXVersion) = 0;
+	//	OutputDebugString( "Couldn't Set coop level\r\n" );
+	//	return;
+	//}
+	//int surfcreated=0;
+	//if (dx5_common.primary_surface) //already inited? (Cannot get primary surface twice)
+	//{
+	//	//we know, that we are dx5 at least, as the engine works
+	//	pSurf3=dx5_common.primary_surface;
+	//	surfcreated=0;
+	//}
+	//else
+	//{
+	//	hr = pDDraw->CreateSurface( &ddsd, &pSurf, NULL );
+	//	if( FAILED(hr) )
+	//	{
+	//		// Failure. This means DDraw isn't properly installed.
+	//		pDDraw->Release();
+	//		FreeLibrary( DDHinst );
+	//		*pdwDXVersion = 0;
+	//		OutputDebugString( "Couldn't CreateSurface\r\n" );
+	//		return;
+	//	}
+	//	surfcreated=1;
 
 
-		// Query for the IDirectDrawSurface3 interface
-		if( FAILED( pSurf->QueryInterface( IID_IDirectDrawSurface3,
-										  (VOID * *)&pSurf3 ) ) )
-		{
-			pDDraw->Release();
-			FreeLibrary( DDHinst );
-			return;
-		}
-		pSurf->Release();
-		pSurf=0;
-	}
+	//	// Query for the IDirectDrawSurface3 interface
+	//	if( FAILED( pSurf->QueryInterface( IID_IDirectDrawSurface3,
+	//									  (VOID * *)&pSurf3 ) ) )
+	//	{
+	//		pDDraw->Release();
+	//		FreeLibrary( DDHinst );
+	//		return;
+	//	}
+	//	pSurf->Release();
+	//	pSurf=0;
+	//}
 
-	// QI for IDirectDrawSurface3 succeeded. We must be at least DX5
-	(*pdwDXVersion) = 0x500;
+	//// QI for IDirectDrawSurface3 succeeded. We must be at least DX5
+	//(*pdwDXVersion) = 0x500;
 
 
 	///////////////////////////////////////////////////////////////////////////
 	// DirectX 6.0 Checks
 	///////////////////////////////////////////////////////////////////////////
 
-	// The IDirectDrawSurface4 interface was introduced with DX 6.0
-	if( FAILED( pSurf3->QueryInterface( IID_IDirectDrawSurface4,
-									   (VOID * *)&pSurf4 ) ) )
-	{
-		pDDraw->Release();
-		FreeLibrary( DDHinst );
-		return;
-	}
+	//// The IDirectDrawSurface4 interface was introduced with DX 6.0
+	//if( FAILED( pSurf3->QueryInterface( IID_IDirectDrawSurface4,
+	//								   (VOID * *)&pSurf4 ) ) )
+	//{
+	//	pDDraw->Release();
+	//	FreeLibrary( DDHinst );
+	//	return;
+	//}
 
-	// IDirectDrawSurface4 was create successfully. We must be at least DX6
-	(*pdwDXVersion) = 0x600;
-	if (surfcreated=1)
-	{
-		pSurf3->Release();
-	}
-	pSurf3=0;
-	pSurf4->Release();
-	pDDraw->Release();
+	//// IDirectDrawSurface4 was create successfully. We must be at least DX6
+	//(*pdwDXVersion) = 0x600;
+	//if (surfcreated=1)
+	//{
+	//	pSurf3->Release();
+	//}
+	//pSurf3=0;
+	//pSurf4->Release();
+	//pDDraw->Release();
 
 
 	///////////////////////////////////////////////////////////////////////////
@@ -352,7 +368,7 @@ VOID CheckDXVersion()
 	///////////////////////////////////////////////////////////////////////////
 
 	// Check for DMusic, which was introduced with DX6.1
-	LPDIRECTMUSIC pDMusic = NULL;
+	LPUNKNOWN pDMusic = NULL;
 	CoInitialize( NULL );
 	hr = CoCreateInstance( CLSID_DirectMusic, NULL, CLSCTX_INPROC_SERVER,
 						  IID_IDirectMusic, (VOID * *)&pDMusic );
@@ -441,6 +457,20 @@ VOID CheckDXVersion()
 	{
 		return;
 	}
+
+	// DirectX 10? We don't use it, but we can test for it. 
+	HINSTANCE dx10lib=0;
+	dx9lib=LoadLibrary("d3d10.dll");
+	if (dx9lib)
+	{
+		(*pdwDXVersion)=0x1000;
+		FreeLibrary(dx10lib);
+	}
+	else
+	{
+		return;
+	}
+
 
 
 	///////////////////////////////////////////////////////////////////////////

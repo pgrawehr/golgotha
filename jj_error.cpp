@@ -13,14 +13,15 @@
 *=========================================================================*/
 #define DIRECTINPUT_VERSION 0x0500
 #include <mmsystem.h>
-#include <D3D.H>
-#include <DSOUND.H>
+#include <d3d9.h>
+#include <dsound.h>
 //#include "DSOUND.H"
-#include <DPLAY.H>
-#include <DINPUT.H>
-#include "DXFILE.H"
-#include "DXERR9.H"
-#include "JJ_ERROR.H"
+#include <d3dcommon.h>
+#include <dinput.h>
+#include <DxErr.h>
+#include "dxfile.h"
+#include "dxerr9.h"
+#include "jj_error.h"
 
 //—————————————————————————————————
 //#ifdef _DEBUG
@@ -167,7 +168,7 @@ const int ERRLISTLEN =  (sizeof(elDDErrors)/sizeof(ERRLIST))    ;
 *———————————————————————————————————————————————————————————————————————————*/
 
 static ERRLIST elD3DErrors[] = {
-	{D3DERR_BADMAJORVERSION,            "D3DERR_BADMAJORVERSION"},              // 700
+/*	{D3DERR_BADMAJORVERSION,            "D3DERR_BADMAJORVERSION"},              // 700
 	{D3DERR_BADMINORVERSION,            "D3DERR_BADMINORVERSION"},              // 701
 	{D3DERR_INVALID_DEVICE,             "D3DERR_INVALID_DEVICE"},               // 705
 	{D3DERR_INITFAILED,                 "D3DERR_INITFAILED"},                   // 706
@@ -228,7 +229,7 @@ static ERRLIST elD3DErrors[] = {
 	{D3DERR_VERTEXBUFFERLOCKED,         "D3DERR_VERTEXBUFFERLOCKED"},           //2062 ( DirectX 6.0 )
 	{D3DERR_VERTEXBUFFERUNLOCKFAILED,   "D3DERR_VERTEXBUFFERUNLOCKFAILED"},     //2063 ( DirectX 7.0 )
 	{D3DERR_ZBUFFER_NOTPRESENT,         "D3DERR_ZBUFFER_NOTPRESENT"},           //2070 ( DirectX 6.0 )
-	{D3DERR_STENCILBUFFER_NOTPRESENT,   "D3DERR_STENCILBUFFER_NOTPRESENT"},     //2071 ( DirectX 6.0 )
+	{D3DERR_STENCILBUFFER_NOTPRESENT,   "D3DERR_STENCILBUFFER_NOTPRESENT"},     //2071 ( DirectX 6.0 ) */
 	{D3DERR_WRONGTEXTUREFORMAT,         "D3DERR_WRONGTEXTUREFORMAT"},           //2072 ( DirectX 6.0 )
 	{D3DERR_UNSUPPORTEDCOLOROPERATION,  "D3DERR_UNSUPPORTEDCOLOROPERATION"},    //2073 ( DirectX 6.0 )
 	{D3DERR_UNSUPPORTEDCOLORARG,        "D3DERR_UNSUPPORTEDCOLORARG"},          //2074 ( DirectX 6.0 )
@@ -239,13 +240,13 @@ static ERRLIST elD3DErrors[] = {
 	{D3DERR_UNSUPPORTEDFACTORVALUE,     "D3DERR_UNSUPPORTEDFACTORVALUE"},       //2079 ( DirectX 6.0 )
 	{D3DERR_CONFLICTINGRENDERSTATE,     "D3DERR_CONFLICTINGRENDERSTATE"},       //2081 ( DirectX 6.0 )
 	{D3DERR_UNSUPPORTEDTEXTUREFILTER,   "D3DERR_UNSUPPORTEDTEXTUREFILTER"},     //2082 ( DirectX 6.0 )
-	{D3DERR_TOOMANYPRIMITIVES,          "D3DERR_TOOMANYPRIMITIVES"},            //2083 ( DirectX 6.0 )
+/*	{D3DERR_TOOMANYPRIMITIVES,          "D3DERR_TOOMANYPRIMITIVES"},            //2083 ( DirectX 6.0 )
 	{D3DERR_INVALIDMATRIX,              "D3DERR_INVALIDMATRIX"},                //2084 ( DirectX 6.0 )
-	{D3DERR_TOOMANYVERTICES,            "D3DERR_TOOMANYVERTICES"},              //2085 ( DirectX 6.0 )
+	{D3DERR_TOOMANYVERTICES,            "D3DERR_TOOMANYVERTICES"},              //2085 ( DirectX 6.0 ) */
 	{D3DERR_CONFLICTINGTEXTUREPALETTE,  "D3DERR_CONFLICTINGTEXTUREPALETTE"},    //2086 ( DirectX 6.0 )
-	{D3DERR_INVALIDSTATEBLOCK,          "D3DERR_INVALIDSTATEBLOCK"},            //2100 ( DirectX 7.0 )
+/*	{D3DERR_INVALIDSTATEBLOCK,          "D3DERR_INVALIDSTATEBLOCK"},            //2100 ( DirectX 7.0 )
 	{D3DERR_INBEGINSTATEBLOCK,          "D3DERR_INBEGINSTATEBLOCK"},            //2101 ( DirectX 7.0 )
-	{D3DERR_NOTINBEGINSTATEBLOCK,       "D3DERR_NOTINBEGINSTATEBLOCK"}          //2102 ( DirectX 7.0 )
+	{D3DERR_NOTINBEGINSTATEBLOCK,       "D3DERR_NOTINBEGINSTATEBLOCK"}          //2102 ( DirectX 7.0 )*/
 }; // end of "elD3DErrors[]"
 
 const int ERRD3DLISTLEN =  (sizeof(elD3DErrors)/sizeof(ERRLIST))    ;
@@ -328,9 +329,9 @@ static ERRLIST elDIErrors[] = {
 const int ERRDILISTLEN =  (sizeof(elDIErrors)/sizeof(ERRLIST));
 
 /*———————————————————————————————————————————————————————————————————————————*
-*  DIRECT PLAY ERRORS                                                       *
+*  DIRECT PLAY ERRORS (direct play seems not to exist in recent directx sdk's) *
 *———————————————————————————————————————————————————————————————————————————*/
-
+/*
 static ERRLIST elDPErrors[] = {
 	{DPERR_ALREADYINITIALIZED,          "DPERR_ALREADYINITIALIZED"},            //   5
 	{DPERR_ACCESSDENIED,                "DPERR_ACCESSDENIED"},                  //  10
@@ -400,6 +401,8 @@ static ERRLIST elDPErrors[] = {
 	{DPERR_LOGONDENIED,                 "DPERR_LOGONDENIED"}                    //2080
 }; // end of "elDPErrors[]"
 const int ERRDPLISTLEN =  (sizeof(elDPErrors)/sizeof(ERRLIST));
+
+*/
 
 static ERRLIST elXFErrors[] = {
 	{DXFILEERR_BADOBJECT,"DXFILEERR_BADOBJECT"},                 // 850
@@ -612,13 +615,13 @@ LPSTR GetDirectXStatusString(HRESULT DDStatus)
 	}
 
 	// 5. Direct Play Error
-	for(i = 0; i < ERRDPLISTLEN; i++)
-	{
-		if(DDStatus == elDPErrors[i].hResult)
-		{
-			return(elDPErrors[i].lpszError);
-		}
-	}
+	//for(i = 0; i < ERRDPLISTLEN; i++)
+	//{
+	//	if(DDStatus == elDPErrors[i].hResult)
+	//	{
+	//		return(elDPErrors[i].lpszError);
+	//	}
+	//}
 
 	// 6. Direct X File Error
 	for(i = 0; i < ERRXFLISTLEN; i++)

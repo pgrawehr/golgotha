@@ -8,6 +8,7 @@
    golgotha_source@usa.net (Subject should have "GOLG" in it)
  ***********************************************************************/
 
+// #include <d3d9.h>
 #include "render/software/r1_software.h"
 #include "render/software/r1_software_globals.h"
 
@@ -24,7 +25,7 @@ w8 r1_software_render_expand_type      = 0; //expanding type
 
 //the directdraw surface which "owns" the buffer
 #ifdef _WINDOWS
-IDirectDrawSurface3 * r1_software_render_surface = 0;
+IDirect3DSurface9 * r1_software_render_surface = 0;
 #endif
 
 //global texturemap information (describes the current

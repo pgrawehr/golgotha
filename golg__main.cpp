@@ -569,17 +569,13 @@ void golgotha_app::do_options()
 	//cwnd.Attach(current_window_handle);
 #ifdef _WINDOWS
 	ShowCursor(TRUE);
-	if (g1_app!=NULL)
-	{
-		li_call("show_gdi_surface");
-	}
+
 	COptionsheet op("Options");
 	op.EnableStackedTabs(FALSE);
 	op.DoModal();
 	if (g1_app!=NULL)
 	{
 		li_call("enable_sound");
-		li_call("hide_gdi_surface");
 	}
 	ShowCursor(FALSE);
 
@@ -1040,6 +1036,7 @@ void golgotha_app::init()
 
 	i4_endianesstest end;
 	end.anint=0x0ff;
+#pragma warning (disable:4127) // Conditional expression is constant
 	if (end.chars[0]==0xff)
 	{
 		i4_warning("Detected architecture is little endian.");
@@ -1049,7 +1046,6 @@ void golgotha_app::init()
 					 "Please rebuild Golgotha with the correct endianness setting in arch.h");
 			exit(92);
 		}
-		;
 	}
 	else
 	{
@@ -1060,8 +1056,9 @@ void golgotha_app::init()
 					 "Please rebuild Golgotha with the correct endianness setting in arch.h");
 			exit(92);
 		}
-		;
 	}
+#pragma warning(1:4127)
+
 	i4_warning("Loading resource Manager...");
 	resource_init("resource.res",0);
 	strcpy(first_level, "test.level"); //Hardcoded first level

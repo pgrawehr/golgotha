@@ -3565,9 +3565,15 @@ void li_mark_memory_region(li_list * * start, li_list * * end,
 
 		for (li_list * * s=start; s!=end; s++)
 		{
-			if ( ((wptr)(*s)&mask)==0 &&  *s>=c1 && *s<c2 && (*s)->type() && !(*s)->is_marked())
+			li_list* p=(*s);
+			wptr w=(wptr)(p);
+			if ( (w&mask)==0 &&  
+				p>=c1 && 
+				p<c2 && 
+				(p)->type() && 
+				!(p)->is_marked())
 			{
-				li_get_type( (*s)->unmarked_type() )->mark(*s,1);
+				li_get_type( (p)->unmarked_type() )->mark(p,1);
 			}
 		}
 	}

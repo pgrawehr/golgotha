@@ -17,8 +17,8 @@ extern sw32 r1_software_render_buffer_wpl;
 extern sw32 r1_software_render_buffer_height;
 
 #ifdef _WINDOWS
-struct IDirectDrawSurface3;
-extern IDirectDrawSurface3 * r1_software_render_surface;
+struct IDirect3DSurface9;
+extern IDirect3DSurface9 * r1_software_render_surface;
 #endif
 extern w16 * r1_software_texture_ptr;
 extern w8 r1_software_twidth_log2;

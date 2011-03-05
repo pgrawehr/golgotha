@@ -12,7 +12,7 @@
 #include "render/r1_api.h"
 #include "render/r1_win.h"
 #include <ddraw.h>
-#include <d3d.h>
+#include <d3d9.h>
 #include "video/win32/dx5_util.h"
 
 inline DWORD FtoDW( FLOAT f )

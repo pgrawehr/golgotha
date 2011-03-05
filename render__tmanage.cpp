@@ -1834,7 +1834,7 @@ void do_single_file(i4_file_class * dst_file, //The tex_cache.dat file
 	}
 }
 
-void reset_decompressed_cache(void);
+void reset_decompressed_cache9(void);
 
 void r1_texture_manager_class::keep_cache_current(i4_array<w32> * file_ids)
 {
@@ -2054,7 +2054,7 @@ void r1_texture_manager_class::keep_cache_current(i4_array<w32> * file_ids)
 			cache_file = 0;
 		}
 	}
-	reset_decompressed_cache();
+	reset_decompressed_cache9();
 	if (cache_file)
 	{
 		i4_warning("unhandled case: keep_cache_current");
@@ -2703,7 +2703,7 @@ i4_bool r1_texture_manager_class::load_textures()
 	//sort the list
 	texture_file_ids.sort(w32_compare);
 
-	reset_decompressed_cache();
+	reset_decompressed_cache9();
 	//update / build / rebuild the cache file
 	//for this, we need the ids of ALL textures.
 	keep_cache_current(&texture_file_ids);

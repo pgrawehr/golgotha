@@ -81,12 +81,22 @@ void remove_thread(int id)
 	thread_list_lock.unlock();
 }
 
+//! This function ensures the operating system really commited the memory for the stack.
+//! Failing to call this might cause exceptions on Windows 7 during gc runs, as the garbage collector doesn't know how far the stack really goes at that point.
+void commit_stack(int size)
+{
+	char* p=(char*)_alloca(size);
+	for (int i=0;i<size;i++)
+	{
+		*p=0;
+	}
+}
 
 void i4_thread_starter(void * arg)
 {
 	i4_thread_func_type start=i4_thread_to_start;
 	int size=i4_thread_size;
-
+	commit_stack(size);
 	size-=200;
 	i4_thread_to_start=0;
 

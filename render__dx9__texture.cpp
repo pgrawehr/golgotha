@@ -34,13 +34,14 @@ i4_profile_class pf_dx9_make_surfaces("dx9 surface alloc");
 static i4_profile_class pf_jpg_texture_decompress("decomp jpg (dx9)");
 
 
-extern DDPIXELFORMAT dd_fmt_565;
-extern DDPIXELFORMAT dd_fmt_1555;
-extern DDPIXELFORMAT dd_fmt_4444;
-extern DDPIXELFORMAT dd_fmt_8888;
-extern DDPIXELFORMAT dd_fmt_888;
-extern DDPIXELFORMAT dd_fmt_0888;
-extern w32 allowed_texture_formats;
+// Either declare these or the ones in render__dx5__r1_dx5_texture, but not both (the others must be external)
+DDPIXELFORMAT dd_fmt_565;
+DDPIXELFORMAT dd_fmt_1555;
+DDPIXELFORMAT dd_fmt_4444;
+DDPIXELFORMAT dd_fmt_8888;
+DDPIXELFORMAT dd_fmt_888;
+DDPIXELFORMAT dd_fmt_0888;
+w32 allowed_texture_formats;
 
 //no more needed (no more singleton requirements on the texture manager)
 //r1_dx9_texture_class *r1_dx9_texture_class_instance=0;

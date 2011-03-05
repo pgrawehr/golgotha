@@ -12,7 +12,7 @@
 
 
 #include <ddraw.h>
-#include <d3d.h>
+#include <d3d9.h>
 #include "image/image.h"
 #include "palette/pal.h"
 #include "threads/threads.h"

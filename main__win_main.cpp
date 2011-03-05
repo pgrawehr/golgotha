@@ -617,13 +617,6 @@ int i4_win32_error(const char * st)
 		_exit(22);
 	}
 
-	try
-	{
-		li_call("hide_gdi_surface");
-	}
-	catch(...) //most probably already out of mem
-	{
-	}
 	if (ans==-1) //there was some problem calling DialogBoxParam()
 	//i.e the template doesn't exist.
 	{
@@ -896,7 +889,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	   strcpy(hacked_args,"x:\\jc\\gdata\\obj\\test_text.gmod -no_full");
 	 */
 	w32 count, white;
-	char * s=0,* p=0,* st = strdup(lpCmdLine);
+	char * s=0,* p=0,* st = _strdup(lpCmdLine);
 
 	s = st;
 	count = 1;
