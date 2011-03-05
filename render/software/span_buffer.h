@@ -67,7 +67,7 @@ enum {
 	MAX_TRIS = 40000
 };
 enum {
-	MAX_SPANS = 60000
+	MAX_SPANS = 120000
 };
 
 enum {

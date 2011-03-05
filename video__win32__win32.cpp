@@ -188,8 +188,8 @@ public:
 		tmp_mode.yres=GetSystemMetrics(SM_CYSCREEN);
 
 		tmp_mode.bits_per_pixel=16;
-		tmp_mode.red_mask=31<<10;
-		tmp_mode.green_mask=31<<5;
+		tmp_mode.red_mask=31<<11;
+		tmp_mode.green_mask=63<<5;
 		tmp_mode.blue_mask=31<<0;
 
 		return &tmp_mode;
@@ -235,6 +235,7 @@ public:
 
 		HDC dc=GetDC(input.get_window_handle());
 
+
 		BITMAPINFOHEADER bmp;
 		memset(&bmp, 0, sizeof(bmp));
 		bmp.biSize=sizeof(bmp);
@@ -243,16 +244,22 @@ public:
 		bmp.biHeight=-h;
 		bmp.biPlanes=1;
 		bmp.biBitCount=16;
-		bmp.biCompression=BI_RGB;
+		bmp.biCompression=BI_BITFIELDS;
 		bmp.biSizeImage=w*h*2;
 
-		BITMAPINFO bmp_info;
+		BYTE bmp_info[sizeof (BITMAPINFOHEADER) + sizeof (DWORD) * 3];
+		memset(&bmp_info,0,sizeof(bmp_info));
 		memcpy(&bmp_info, &bmp, sizeof(bmp));
+		DWORD* pnBitFields = (DWORD*) (bmp_info + sizeof(BITMAPINFOHEADER));
+		pnBitFields[0] = backbuf->pal->source.red_mask;
+		pnBitFields[1] = backbuf->pal->source.green_mask;
+		pnBitFields[2] = backbuf->pal->source.blue_mask;
+
 
 		void * data_address;
 
 		bitmap=CreateDIBSection(dc,
-								&bmp_info, DIB_RGB_COLORS,
+								(BITMAPINFO*)bmp_info, DIB_RGB_COLORS,
 								&data_address,       // where bitmap's data will be stored
 								0,                       // don't use a file
 								0);
