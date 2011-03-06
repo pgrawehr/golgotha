@@ -1,0 +1,920 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C293A64C-E1FB-4E57-8B79-E674B1FB422F}</ProjectGuid>
+    <RootNamespace>Golgotha</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.obj%3b*.pdb%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b$(TargetPath)%3b*.ilk%3b$(TargetDir)Golgotha.ilk%3b$(TargetDir)Golgotha.bsc%3b</ExtensionsToDeleteOnClean>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release/Golgotha.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_AFXEXT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>.\Release/Golgotha.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <BrowseInformation>
+      </BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_AFXDLL;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0807</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>ddraw.lib;dinput.lib;dsound.lib;dxguid.lib;wsock32.lib;comctl32.lib;winmm.lib;version.lib;d3d9.lib;dxerr9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>.\Release/Golgotha.exe</OutputFile>
+      <Version>1.2</Version>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>.\Release/Golgotha.map</MapFileName>
+      <MapExports>true</MapExports>
+      <SubSystem>Windows</SubSystem>
+      <StackReserveSize>4194304</StackReserveSize>
+      <StackCommitSize>4194304</StackCommitSize>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>./Golgotha.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/Zm200  %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>d:\golgotha;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_AFXEXT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>.\Debug/Golgotha.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_AFXDLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0807</Culture>
+      <ShowProgress>false</ShowProgress>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>ddraw.lib;dinput.lib;dsound.lib;dxguid.lib;wsock32.lib;comctl32.lib;winmm.lib;version.lib;d3d9.lib;dxerr9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>./Golgotha.exe</OutputFile>
+      <Version>1.2</Version>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>./Golgotha.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>Golgotha.map</MapFileName>
+      <SubSystem>Windows</SubSystem>
+      <StackReserveSize>4194304</StackReserveSize>
+      <StackCommitSize>4194304</StackCommitSize>
+      <LinkStatus>
+      </LinkStatus>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="app__app.cpp" />
+    <ClCompile Include="area__rectlist.cpp" />
+    <ClCompile Include="checksum__checksum.cpp" />
+    <ClCompile Include="device__device.cpp" />
+    <ClCompile Include="dll__dll_man.cpp" />
+    <ClCompile Include="editor__critical_graph.cpp" />
+    <ClCompile Include="editor__critical_map.cpp" />
+    <ClCompile Include="editor__e_ai.cpp" />
+    <ClCompile Include="editor__editor.cpp" />
+    <ClCompile Include="editor__lisp_interaction.cpp" />
+    <ClCompile Include="editor__path_api.cpp" />
+    <ClCompile Include="editor__solvegraph_breadth.cpp" />
+    <ClCompile Include="editor__solvemap_astar2.cpp" />
+    <ClCompile Include="editor__solvemap_breadth.cpp" />
+    <ClCompile Include="error__error.cpp" />
+    <ClCompile Include="file__dialog.cpp" />
+    <ClCompile Include="file__file.cpp" />
+    <ClCompile Include="font__font.cpp" />
+    <ClCompile Include="golg__border_frame.cpp" />
+    <ClCompile Include="golg__camera.cpp" />
+    <ClCompile Include="golg__cheat.cpp" />
+    <ClCompile Include="golg__controller.cpp" />
+    <ClCompile Include="golg__cwin_man.cpp" />
+    <ClCompile Include="golg__demo.cpp" />
+    <ClCompile Include="golg__draw_context.cpp" />
+    <ClCompile Include="golg__f_tables.cpp" />
+    <ClCompile Include="golg__fli_load.cpp" />
+    <ClCompile Include="golg__g1_file.cpp" />
+    <ClCompile Include="golg__g1_object.cpp" />
+    <ClCompile Include="golg__g1_rand.cpp" />
+    <ClCompile Include="golg__g1_render.cpp" />
+    <ClCompile Include="golg__g1_texture_id.cpp" />
+    <ClCompile Include="golg__g1_tint.cpp" />
+    <ClCompile Include="golg__global_id.cpp" />
+    <ClCompile Include="golg__human.cpp" />
+    <ClCompile Include="golg__image_man.cpp" />
+    <ClCompile Include="golg__input.cpp" />
+    <ClCompile Include="golg__level_load.cpp" />
+    <ClCompile Include="golg__li_interface.cpp" />
+    <ClCompile Include="golg__li_objref.cpp" />
+    <ClCompile Include="golg__light.cpp" />
+    <ClCompile Include="golg__load3d.cpp" />
+    <ClCompile Include="golg__m_flow.cpp" />
+    <ClCompile Include="golg__main.cpp" />
+    <ClCompile Include="golg__make_tlist.cpp" />
+    <ClCompile Include="golg__map.cpp" />
+    <ClCompile Include="golg__map_cell.cpp" />
+    <ClCompile Include="golg__map_collision.cpp" />
+    <ClCompile Include="golg__map_data.cpp" />
+    <ClCompile Include="golg__map_light.cpp" />
+    <ClCompile Include="golg__map_lod.cpp" />
+    <ClCompile Include="golg__map_man.cpp" />
+    <ClCompile Include="golg__map_movi.cpp" />
+    <ClCompile Include="golg__map_save.cpp" />
+    <ClCompile Include="golg__map_vars.cpp" />
+    <ClCompile Include="golg__map_vert.cpp" />
+    <ClCompile Include="golg__map_view.cpp" />
+    <ClCompile Include="golg__map_vis.cpp" />
+    <ClCompile Include="golg__menu.cpp" />
+    <ClCompile Include="golg__obj3d.cpp" />
+    <ClCompile Include="golg__octree.cpp" />
+    <ClCompile Include="golg__options.cpp" />
+    <ClCompile Include="golg__overhead.cpp" />
+    <ClCompile Include="golg__path.cpp" />
+    <ClCompile Include="golg__player.cpp" />
+    <ClCompile Include="golg__reference.cpp" />
+    <ClCompile Include="golg__remove_man.cpp" />
+    <ClCompile Include="golg__resources.cpp" />
+    <ClCompile Include="golg__saver.cpp" />
+    <ClCompile Include="golg__screen_shot.cpp" />
+    <ClCompile Include="golg__selection.cpp" />
+    <ClCompile Include="golg__sky.cpp" />
+    <ClCompile Include="golg__solvemap_astar.cpp" />
+    <ClCompile Include="golg__sound_man.cpp" />
+    <ClCompile Include="golg__statistics.cpp" />
+    <ClCompile Include="golg__team_api.cpp" />
+    <ClCompile Include="golg__tick_count.cpp" />
+    <ClCompile Include="golg__tile.cpp" />
+    <ClCompile Include="golg__vert_table.cpp" />
+    <ClCompile Include="golg__visible.cpp" />
+    <ClCompile Include="gui__browse_tree.cpp" />
+    <ClCompile Include="gui__butbox.cpp" />
+    <ClCompile Include="gui__list_pick.cpp" />
+    <ClCompile Include="image__image.cpp" />
+    <ClCompile Include="inc__search.cpp" />
+    <ClCompile Include="init__init.cpp" />
+    <ClCompile Include="jj_error.cpp" />
+    <ClCompile Include="lisp__file.cpp" />
+    <ClCompile Include="lisp__functions.cpp" />
+    <ClCompile Include="lisp__lisp.cpp" />
+    <ClCompile Include="lisp__math.cpp" />
+    <ClCompile Include="lisp__setup.cpp" />
+    <ClCompile Include="loaders__bmp_load.cpp" />
+    <ClCompile Include="loaders__bmp_write.cpp" />
+    <ClCompile Include="loaders__dir_load.cpp" />
+    <ClCompile Include="loaders__dir_save.cpp" />
+    <ClCompile Include="loaders__jpg__jcapistd.cpp" />
+    <ClCompile Include="loaders__jpg__jdapistd.cpp" />
+    <ClCompile Include="loaders__jpg__jdatasrc.cpp" />
+    <ClCompile Include="loaders__jpg__jerror.cpp" />
+    <ClCompile Include="loaders__jpg__jfdctflt.cpp" />
+    <ClCompile Include="loaders__jpg__jfdctfst.cpp" />
+    <ClCompile Include="loaders__jpg__jfdctint.cpp" />
+    <ClCompile Include="loaders__jpg__jidctflt.cpp" />
+    <ClCompile Include="loaders__jpg__jidctfst.cpp" />
+    <ClCompile Include="loaders__jpg__jidctint.cpp" />
+    <ClCompile Include="loaders__jpg__jidctred.cpp" />
+    <ClCompile Include="loaders__jpg__jmemmgr.cpp" />
+    <ClCompile Include="loaders__jpg__jmemnobs.cpp" />
+    <ClCompile Include="loaders__jpg__jquant1.cpp" />
+    <ClCompile Include="loaders__jpg__jquant2.cpp" />
+    <ClCompile Include="loaders__jpg__jutils.cpp" />
+    <ClCompile Include="loaders__jpg__wrtarga.cpp" />
+    <ClCompile Include="loaders__jpg_load.cpp" />
+    <ClCompile Include="loaders__jpg_write.cpp" />
+    <ClCompile Include="loaders__load.cpp" />
+    <ClCompile Include="loaders__mp3__common.cpp" />
+    <ClCompile Include="loaders__mp3__dct64.cpp" />
+    <ClCompile Include="loaders__mp3__decode.cpp" />
+    <ClCompile Include="loaders__mp3__decode_2to1.cpp" />
+    <ClCompile Include="loaders__mp3__decode_4to1.cpp" />
+    <ClCompile Include="loaders__mp3__equalizer.cpp" />
+    <ClCompile Include="loaders__mp3__getlopt.cpp" />
+    <ClCompile Include="loaders__mp3__layer1.cpp" />
+    <ClCompile Include="loaders__mp3__layer2.cpp" />
+    <ClCompile Include="loaders__mp3__layer3.cpp" />
+    <ClCompile Include="loaders__mp3__tabinit.cpp" />
+    <ClCompile Include="loaders__mp3_load.cpp" />
+    <ClCompile Include="loaders__pcx_load.cpp" />
+    <ClCompile Include="loaders__tga_load.cpp" />
+    <ClCompile Include="loaders__tga_write.cpp" />
+    <ClCompile Include="loaders__wav_load.cpp" />
+    <ClCompile Include="main__win_main.cpp" />
+    <ClCompile Include="math__random.cpp" />
+    <ClCompile Include="math__spline.cpp" />
+    <ClCompile Include="math__transform.cpp" />
+    <ClCompile Include="maxtool__anim_dialog.cpp" />
+    <ClCompile Include="maxtool__animate.cpp" />
+    <ClCompile Include="maxtool__drag_select.cpp" />
+    <ClCompile Include="maxtool__draw_modes.cpp" />
+    <ClCompile Include="maxtool__m1_commands.cpp" />
+    <ClCompile Include="maxtool__m1_info.cpp" />
+    <ClCompile Include="maxtool__m1_test.cpp" />
+    <ClCompile Include="maxtool__max_load.cpp" />
+    <ClCompile Include="maxtool__max_object.cpp" />
+    <ClCompile Include="maxtool__maxcomm.cpp" />
+    <ClCompile Include="maxtool__maxtool.cpp" />
+    <ClCompile Include="maxtool__mount_win.cpp" />
+    <ClCompile Include="maxtool__navigate.cpp" />
+    <ClCompile Include="maxtool__pan.cpp" />
+    <ClCompile Include="maxtool__render.cpp" />
+    <ClCompile Include="maxtool__saveas.cpp" />
+    <ClCompile Include="maxtool__st_edit.cpp" />
+    <ClCompile Include="maxtool__translate.cpp" />
+    <ClCompile Include="memory__malloc.cpp" />
+    <ClCompile Include="menu__menu.cpp" />
+    <ClCompile Include="music__stream.cpp" />
+    <ClCompile Include="net__startup.cpp" />
+    <ClCompile Include="network__tcpip.cpp" />
+    <ClCompile Include="objs__ai_builder.cpp" />
+    <ClCompile Include="objs__ai_jim.cpp" />
+    <ClCompile Include="objs__ai_joe.cpp" />
+    <ClCompile Include="objs__armor.cpp" />
+    <ClCompile Include="objs__bank.cpp" />
+    <ClCompile Include="objs__base_launcher.cpp" />
+    <ClCompile Include="objs__bases.cpp" />
+    <ClCompile Include="objs__beam_weapon.cpp" />
+    <ClCompile Include="objs__bird.cpp" />
+    <ClCompile Include="objs__bolt.cpp" />
+    <ClCompile Include="objs__bomb_truck.cpp" />
+    <ClCompile Include="objs__bomber.cpp" />
+    <ClCompile Include="objs__bridger.cpp" />
+    <ClCompile Include="objs__bullet.cpp" />
+    <ClCompile Include="objs__buster_rocket.cpp" />
+    <ClCompile Include="objs__car.cpp" />
+    <ClCompile Include="objs__carcass.cpp" />
+    <ClCompile Include="objs__chunk_explosion.cpp" />
+    <ClCompile Include="objs__cloud.cpp" />
+    <ClCompile Include="objs__cobra_tank.cpp" />
+    <ClCompile Include="objs__controllers.cpp" />
+    <ClCompile Include="objs__convoy.cpp" />
+    <ClCompile Include="objs__crate.cpp" />
+    <ClCompile Include="objs__damager.cpp" />
+    <ClCompile Include="objs__day_night.cpp" />
+    <ClCompile Include="objs__debris.cpp" />
+    <ClCompile Include="objs__def_object.cpp" />
+    <ClCompile Include="objs__defaults.cpp" />
+    <ClCompile Include="objs__dropped_bomb.cpp" />
+    <ClCompile Include="objs__eleccar.cpp" />
+    <ClCompile Include="objs__engineer.cpp" />
+    <ClCompile Include="objs__explode_model.cpp" />
+    <ClCompile Include="objs__explosion1.cpp" />
+    <ClCompile Include="objs__field_camera.cpp" />
+    <ClCompile Include="objs__fire.cpp" />
+    <ClCompile Include="objs__fire_angle.cpp" />
+    <ClCompile Include="objs__flak.cpp" />
+    <ClCompile Include="objs__goal.cpp" />
+    <ClCompile Include="objs__guided_missile.cpp" />
+    <ClCompile Include="objs__gun_port.cpp" />
+    <ClCompile Include="objs__helicopter.cpp" />
+    <ClCompile Include="objs__jet.cpp" />
+    <ClCompile Include="objs__lawfirm.cpp" />
+    <ClCompile Include="objs__light_o.cpp" />
+    <ClCompile Include="objs__map_piece.cpp" />
+    <ClCompile Include="objs__miracle.cpp" />
+    <ClCompile Include="objs__miscobjs.cpp" />
+    <ClCompile Include="objs__model_collide.cpp" />
+    <ClCompile Include="objs__model_draw.cpp" />
+    <ClCompile Include="objs__model_id.cpp" />
+    <ClCompile Include="objs__moneycrate.cpp" />
+    <ClCompile Include="objs__moneyplane.cpp" />
+    <ClCompile Include="objs__old_ids.cpp" />
+    <ClCompile Include="objs__particle_emitter.cpp" />
+    <ClCompile Include="objs__path_object.cpp" />
+    <ClCompile Include="objs__peontank.cpp" />
+    <ClCompile Include="objs__popup_turret.cpp" />
+    <ClCompile Include="objs__repairer.cpp" />
+    <ClCompile Include="objs__rocket.cpp" />
+    <ClCompile Include="objs__rocktank.cpp" />
+    <ClCompile Include="objs__sfx_obj.cpp" />
+    <ClCompile Include="objs__shockwave.cpp" />
+    <ClCompile Include="objs__shrapnel.cpp" />
+    <ClCompile Include="objs__smoke_trail.cpp" />
+    <ClCompile Include="objs__sprite.cpp" />
+    <ClCompile Include="objs__sprite_object.cpp" />
+    <ClCompile Include="objs__stank.cpp" />
+    <ClCompile Include="objs__stank_factory.cpp" />
+    <ClCompile Include="objs__structure_death.cpp" />
+    <ClCompile Include="objs__super_mortar.cpp" />
+    <ClCompile Include="objs__supergun.cpp" />
+    <ClCompile Include="objs__takeover_pad.cpp" />
+    <ClCompile Include="objs__tank_buster.cpp" />
+    <ClCompile Include="objs__target.cpp" />
+    <ClCompile Include="objs__tower_electric.cpp" />
+    <ClCompile Include="objs__tower_missile.cpp" />
+    <ClCompile Include="objs__trike.cpp" />
+    <ClCompile Include="objs__turret.cpp" />
+    <ClCompile Include="objs__vehic_sounds.cpp" />
+    <ClCompile Include="objs__verybiggun.cpp" />
+    <ClCompile Include="OptionExtras.cpp" />
+    <ClCompile Include="OptionGetDXVer.cpp" />
+    <ClCompile Include="OptionInfo.cpp" />
+    <ClCompile Include="OptionMFCInit.cpp" />
+    <ClCompile Include="OptionProcessor.cpp" />
+    <ClCompile Include="Optionsdialog.cpp" />
+    <ClCompile Include="Optionsheet.cpp" />
+    <ClCompile Include="OptionSound.cpp" />
+    <ClCompile Include="palette_pal.cpp" />
+    <ClCompile Include="quantize__dither_quantize.cpp" />
+    <ClCompile Include="quantize__histogram.cpp" />
+    <ClCompile Include="quantize__median.cpp" />
+    <ClCompile Include="render__dx5__r1_dx5.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="render__dx5__r1_dx5_texture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="render__dx9__render.cpp" />
+    <ClCompile Include="render__dx9__texture.cpp" />
+    <ClCompile Include="render__gtext_load.cpp" />
+    <ClCompile Include="render__mip.cpp" />
+    <ClCompile Include="render__mip_average.cpp" />
+    <ClCompile Include="render__r1_api.cpp" />
+    <ClCompile Include="render__r1_clip.cpp" />
+    <ClCompile Include="render__r1_font.cpp" />
+    <ClCompile Include="render__r1_res.cpp" />
+    <ClCompile Include="render__r1_win.cpp" />
+    <ClCompile Include="render__software__software_dd.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="render__software__draw_line.cpp" />
+    <ClCompile Include="render__software__mappers.cpp" />
+    <ClCompile Include="render__software__r1_software.cpp" />
+    <ClCompile Include="render__software__r1_software_globals.cpp" />
+    <ClCompile Include="render__software__r1_software_texture.cpp" />
+    <ClCompile Include="render__software__rasterize_affine.cpp" />
+    <ClCompile Include="render__software__rasterize_perspective.cpp" />
+    <ClCompile Include="render__software__span_buffer.cpp" />
+    <ClCompile Include="render__software__tint_manage.cpp" />
+    <ClCompile Include="render__software__tri_setup.cpp" />
+    <ClCompile Include="render__software__win32_specific.cpp" />
+    <ClCompile Include="render__tex_id.cpp" />
+    <ClCompile Include="render__tmanage.cpp" />
+    <ClCompile Include="sound__dsound__direct_sound.cpp" />
+    <ClCompile Include="sound__sfx_id.cpp" />
+    <ClCompile Include="sound__sound.cpp" />
+    <ClCompile Include="status__status.cpp" />
+    <ClCompile Include="string__string.cpp" />
+    <ClCompile Include="threads__win32_threads.cpp" />
+    <ClCompile Include="time__timedev.cpp" />
+    <ClCompile Include="transport__loader.cpp" />
+    <ClCompile Include="transport__randomize.cpp" />
+    <ClCompile Include="transport__transport.cpp" />
+    <ClCompile Include="video__display.cpp" />
+    <ClCompile Include="video__movie_engine.cpp" />
+    <ClCompile Include="video__win32__dd_cursor.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="video__win32__dx5.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="video__win32__dx5_error.cpp" />
+    <ClCompile Include="video__win32__dx5_mouse.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="video__win32__dx5_util.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="video__win32__dx9.cpp" />
+    <ClCompile Include="video__win32__dx9_mouse.cpp" />
+    <ClCompile Include="video__win32__dx9_util.cpp" />
+    <ClCompile Include="video__win32__dx_cursor.cpp" />
+    <ClCompile Include="video__win32__win32.cpp" />
+    <ClCompile Include="video__win32__win32_input.cpp" />
+    <ClCompile Include="window__window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lisp\abuse.h" />
+    <ClInclude Include="error\alert.h" />
+    <ClInclude Include="render\software\amd3d\amd3d.h" />
+    <ClInclude Include="math\angle.h" />
+    <ClInclude Include="font\anti_prop.h" />
+    <ClInclude Include="app\app.h" />
+    <ClInclude Include="arch.h" />
+    <ClInclude Include="memory\array.h" />
+    <ClInclude Include="file\async.h" />
+    <ClInclude Include="loaders\mp3\audio.h" />
+    <ClInclude Include="objs\bank.h" />
+    <ClInclude Include="objs\base_launcher.h" />
+    <ClInclude Include="objs\bases.h" />
+    <ClInclude Include="objs\beam_weapon.h" />
+    <ClInclude Include="memory\binary_tree.h" />
+    <ClInclude Include="memory\bmanage.h" />
+    <ClInclude Include="loaders\bmp_write.h" />
+    <ClInclude Include="objs\bolt.h" />
+    <ClInclude Include="objs\bomber.h" />
+    <ClInclude Include="border_frame.h" />
+    <ClInclude Include="menu\boxmenu.h" />
+    <ClInclude Include="gui\browse_tree.h" />
+    <ClInclude Include="file\buf_file.h" />
+    <ClInclude Include="objs\bullet.h" />
+    <ClInclude Include="objs\buster_rocket.h" />
+    <ClInclude Include="gui\butbox.h" />
+    <ClInclude Include="gui\button.h" />
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="objs\car.h" />
+    <ClInclude Include="objs\carcass.h" />
+    <ClInclude Include="loaders\jpg\cderror.h" />
+    <ClInclude Include="loaders\jpg\cdjpeg.h" />
+    <ClInclude Include="checksum\checksum.h" />
+    <ClInclude Include="objs\chunk_explosion.h" />
+    <ClInclude Include="net\client.h" />
+    <ClInclude Include="image\color.h" />
+    <ClInclude Include="window\colorwin.h" />
+    <ClInclude Include="editor\contedit.h" />
+    <ClInclude Include="image\context.h" />
+    <ClInclude Include="controller.h" />
+    <ClInclude Include="objs\convoy.h" />
+    <ClInclude Include="objs\crate.h" />
+    <ClInclude Include="gui\create_dialog.h" />
+    <ClInclude Include="critical_graph.h" />
+    <ClInclude Include="critical_map.h" />
+    <ClInclude Include="window\cursor.h" />
+    <ClInclude Include="cwin_man.h" />
+    <ClInclude Include="video\win32\d3denumeration.h" />
+    <ClInclude Include="editor\dialogs\d_light.h" />
+    <ClInclude Include="math\d_point.h" />
+    <ClInclude Include="editor\dialogs\d_time.h" />
+    <ClInclude Include="math\d_transform.h" />
+    <ClInclude Include="math\d_vector.h" />
+    <ClInclude Include="objs\damager.h" />
+    <ClInclude Include="objs\day_night.h" />
+    <ClInclude Include="video\win32\dd_cursor.h" />
+    <ClInclude Include="objs\debris.h" />
+    <ClInclude Include="editor\dialogs\debug_win.h" />
+    <ClInclude Include="gui\deco_win.h" />
+    <ClInclude Include="objs\def_object.h" />
+    <ClInclude Include="objs\defaults.h" />
+    <ClInclude Include="demo.h" />
+    <ClInclude Include="device\device.h" />
+    <ClInclude Include="loaders\dir_load.h" />
+    <ClInclude Include="loaders\dir_save.h" />
+    <ClInclude Include="sound\dsound\direct_sound.h" />
+    <ClInclude Include="video\display.h" />
+    <ClInclude Include="quantize\dither_quantize.h" />
+    <ClInclude Include="gui\divider.h" />
+    <ClInclude Include="dll\dll.h" />
+    <ClInclude Include="dll_export.h" />
+    <ClInclude Include="dll\dll_man.h" />
+    <ClInclude Include="window\dragwin.h" />
+    <ClInclude Include="draw_context.h" />
+    <ClInclude Include="objs\dropped_bomb.h" />
+    <ClInclude Include="sound\dsound\ds_error.h" />
+    <ClInclude Include="video\win32\dx5.h" />
+    <ClInclude Include="video\win32\dx5_error.h" />
+    <ClInclude Include="video\win32\dx5_mouse.h" />
+    <ClInclude Include="video\win32\dx5_util.h" />
+    <ClInclude Include="video\win32\dx9.h" />
+    <ClInclude Include="video\win32\dx9_error.h" />
+    <ClInclude Include="video\win32\dx9_mouse.h" />
+    <ClInclude Include="video\win32\dx9_util.h" />
+    <ClInclude Include="video\win32\dx_cursor.h" />
+    <ClInclude Include="memory\dynque.h" />
+    <ClInclude Include="editor\mode\e_ai.h" />
+    <ClInclude Include="editor\mode\e_camera.h" />
+    <ClInclude Include="editor\mode\e_light.h" />
+    <ClInclude Include="editor\mode\e_mode.h" />
+    <ClInclude Include="editor\mode\e_object.h" />
+    <ClInclude Include="editor\e_res.h" />
+    <ClInclude Include="editor\e_state.h" />
+    <ClInclude Include="editor\mode\e_tile.h" />
+    <ClInclude Include="editor\dialogs\e_time.h" />
+    <ClInclude Include="editor\edit_id.h" />
+    <ClInclude Include="editor\editor.h" />
+    <ClInclude Include="objs\eleccar.h" />
+    <ClInclude Include="objs\engineer.h" />
+    <ClInclude Include="device\event.h" />
+    <ClInclude Include="objs\explode_model.h" />
+    <ClInclude Include="objs\explosion1.h" />
+    <ClInclude Include="f_tables.h" />
+    <ClInclude Include="objs\field_camera.h" />
+    <ClInclude Include="file\file.h" />
+    <ClInclude Include="file\file_man.h" />
+    <ClInclude Include="file\file_open.h" />
+    <ClInclude Include="editor\commands\fill.h" />
+    <ClInclude Include="objs\fire.h" />
+    <ClInclude Include="objs\fire_angle.h" />
+    <ClInclude Include="memory\fixed_array.h" />
+    <ClInclude Include="objs\flak.h" />
+    <ClInclude Include="flare.h" />
+    <ClInclude Include="font\font.h" />
+    <ClInclude Include="g1_limits.h" />
+    <ClInclude Include="g1_object.h" />
+    <ClInclude Include="g1_rand.h" />
+    <ClInclude Include="g1_render.h" />
+    <ClInclude Include="g1_speed.h" />
+    <ClInclude Include="g1_texture_id.h" />
+    <ClInclude Include="g1_tint.h" />
+    <ClInclude Include="g1_vert.h" />
+    <ClInclude Include="file\get_filename.h" />
+    <ClInclude Include="loaders\mp3\getlopt.h" />
+    <ClInclude Include="global_id.h" />
+    <ClInclude Include="objs\goal.h" />
+    <ClInclude Include="gui\gradiant.h" />
+    <ClInclude Include="memory\growarry.h" />
+    <ClInclude Include="memory\growheap.h" />
+    <ClInclude Include="render\gtext_load.h" />
+    <ClInclude Include="time\gui_prof.h" />
+    <ClInclude Include="status\gui_stat.h" />
+    <ClInclude Include="objs\guided_missile.h" />
+    <ClInclude Include="memory\hashtable.h" />
+    <ClInclude Include="height_info.h" />
+    <ClInclude Include="objs\helicopter.h" />
+    <ClInclude Include="quantize\histogram.h" />
+    <ClInclude Include="loaders\mp3\huffman.h" />
+    <ClInclude Include="human.h" />
+    <ClInclude Include="sound\dsound\ia3d.h" />
+    <ClInclude Include="maxtool\id.h" />
+    <ClInclude Include="image\image.h" />
+    <ClInclude Include="image\image16.h" />
+    <ClInclude Include="image\image24.h" />
+    <ClInclude Include="image\image32.h" />
+    <ClInclude Include="image\image8.h" />
+    <ClInclude Include="menu\image_item.h" />
+    <ClInclude Include="image_man.h" />
+    <ClInclude Include="gui\image_win.h" />
+    <ClInclude Include="init\init.h" />
+    <ClInclude Include="render\software\inline_fpu.h" />
+    <ClInclude Include="maxtool\sdk_inc\inode.h" />
+    <ClInclude Include="input.h" />
+    <ClInclude Include="install.h" />
+    <ClInclude Include="isllist.h" />
+    <ClInclude Include="loaders\jpg\jchuff.h" />
+    <ClInclude Include="loaders\jpg\jconfig.h" />
+    <ClInclude Include="loaders\jpg\jdct.h" />
+    <ClInclude Include="loaders\jpg\jdhuff.h" />
+    <ClInclude Include="loaders\jpg\jerror.h" />
+    <ClInclude Include="objs\jet.h" />
+    <ClInclude Include="loaders\jpg\jinclude.h" />
+    <ClInclude Include="jj_error.h" />
+    <ClInclude Include="loaders\jpg\jmemsys.h" />
+    <ClInclude Include="loaders\jpg\jmorecfg.h" />
+    <ClInclude Include="loaders\jpg\jpegint.h" />
+    <ClInclude Include="loaders\jpg\jpeglib.h" />
+    <ClInclude Include="loaders\jpg_load.h" />
+    <ClInclude Include="loaders\jpg_write.h" />
+    <ClInclude Include="loaders\jpg\jversion.h" />
+    <ClInclude Include="device\kernel.h" />
+    <ClInclude Include="menu\key_item.h" />
+    <ClInclude Include="device\key_man.h" />
+    <ClInclude Include="device\keys.h" />
+    <ClInclude Include="memory\lalloc.h" />
+    <ClInclude Include="level_load.h" />
+    <ClInclude Include="lisp\li_all.h" />
+    <ClInclude Include="lisp\li_alloc.h" />
+    <ClInclude Include="lisp\li_class.h" />
+    <ClInclude Include="lisp\li_dialog.h" />
+    <ClInclude Include="lisp\li_error.h" />
+    <ClInclude Include="lisp\li_file.h" />
+    <ClInclude Include="lisp\li_init.h" />
+    <ClInclude Include="lisp\li_load.h" />
+    <ClInclude Include="li_objref.h" />
+    <ClInclude Include="lisp\li_optr.h" />
+    <ClInclude Include="gui\li_pull_menu.h" />
+    <ClInclude Include="lisp\li_types.h" />
+    <ClInclude Include="lisp\li_vect.h" />
+    <ClInclude Include="light.h" />
+    <ClInclude Include="objs\light_o.h" />
+    <ClInclude Include="lisp\lisp.h" />
+    <ClInclude Include="editor\lisp_interaction.h" />
+    <ClInclude Include="gui\list_box.h" />
+    <ClInclude Include="gui\list_pick.h" />
+    <ClInclude Include="loaders\load.h" />
+    <ClInclude Include="load3d.h" />
+    <ClInclude Include="network\login.h" />
+    <ClInclude Include="maxtool\m1_info.h" />
+    <ClInclude Include="maxtool\m1_menu.h" />
+    <ClInclude Include="m_flow.h" />
+    <ClInclude Include="main\main.h" />
+    <ClInclude Include="make_tlist.h" />
+    <ClInclude Include="memory\malloc.h" />
+    <ClInclude Include="map.h" />
+    <ClInclude Include="map_cell.h" />
+    <ClInclude Include="map_collision.h" />
+    <ClInclude Include="map_data.h" />
+    <ClInclude Include="map_light.h" />
+    <ClInclude Include="map_man.h" />
+    <ClInclude Include="objs\map_piece.h" />
+    <ClInclude Include="map_singleton.h" />
+    <ClInclude Include="map_vars.h" />
+    <ClInclude Include="map_vert.h" />
+    <ClInclude Include="map_view.h" />
+    <ClInclude Include="render\software\mappers.h" />
+    <ClInclude Include="math\matrix.h" />
+    <ClInclude Include="maxtool\max_load.h" />
+    <ClInclude Include="maxtool\max_object.h" />
+    <ClInclude Include="maxtool\maxcomm.h" />
+    <ClInclude Include="quantize\median.h" />
+    <ClInclude Include="menu\menu.h" />
+    <ClInclude Include="menu\menuitem.h" />
+    <ClInclude Include="mess_id.h" />
+    <ClInclude Include="render\mip.h" />
+    <ClInclude Include="render\mip_average.h" />
+    <ClInclude Include="objs\miracle.h" />
+    <ClInclude Include="objs\miscobjs.h" />
+    <ClInclude Include="objs\model_collide.h" />
+    <ClInclude Include="objs\model_draw.h" />
+    <ClInclude Include="objs\model_id.h" />
+    <ClInclude Include="objs\moneycrate.h" />
+    <ClInclude Include="objs\moneyplane.h" />
+    <ClInclude Include="video\movie_engine.h" />
+    <ClInclude Include="loaders\mp3_load.h" />
+    <ClInclude Include="loaders\mp3\mpg123.h" />
+    <ClInclude Include="maxtool\sdk_inc\mtl.h" />
+    <ClInclude Include="maxtool\sdk_inc\nametab.h" />
+    <ClInclude Include="network\net_addr.h" />
+    <ClInclude Include="network\net_find.h" />
+    <ClInclude Include="network\net_prot.h" />
+    <ClInclude Include="network\net_sock.h" />
+    <ClInclude Include="memory\new.h" />
+    <ClInclude Include="math\num_type.h" />
+    <ClInclude Include="obj3d.h" />
+    <ClInclude Include="editor\dialogs\obj_win.h" />
+    <ClInclude Include="object_definer.h" />
+    <ClInclude Include="editor\dialogs\object_picker.h" />
+    <ClInclude Include="octree.h" />
+    <ClInclude Include="octreetraversal.h" />
+    <ClInclude Include="objs\old_ids.h" />
+    <ClInclude Include="OptionExtras.h" />
+    <ClInclude Include="OptionInfo.h" />
+    <ClInclude Include="options.h" />
+    <ClInclude Include="Optionsdialog.h" />
+    <ClInclude Include="Optionsheet.h" />
+    <ClInclude Include="OptionSound.h" />
+    <ClInclude Include="palette\pal.h" />
+    <ClInclude Include="objs\particle_emitter.h" />
+    <ClInclude Include="path.h" />
+    <ClInclude Include="path_api.h" />
+    <ClInclude Include="objs\path_object.h" />
+    <ClInclude Include="editor\dialogs\path_win.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="objs\peontank.h" />
+    <ClInclude Include="math\pi.h" />
+    <ClInclude Include="editor\dialogs\pick_win.h" />
+    <ClInclude Include="font\plain.h" />
+    <ClInclude Include="playback.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="player_type.h" />
+    <ClInclude Include="editor\pmenu.h" />
+    <ClInclude Include="math\point.h" />
+    <ClInclude Include="poly\poly.h" />
+    <ClInclude Include="poly\polyclip.h" />
+    <ClInclude Include="poly\polydraw.h" />
+    <ClInclude Include="objs\popup_turret.h" />
+    <ClInclude Include="pragma.h" />
+    <ClInclude Include="device\processor.h" />
+    <ClInclude Include="time\profile.h" />
+    <ClInclude Include="time\profile_stack.h" />
+    <ClInclude Include="menu\pull.h" />
+    <ClInclude Include="memory\que.h" />
+    <ClInclude Include="render\r1_api.h" />
+    <ClInclude Include="render\r1_clip.h" />
+    <ClInclude Include="render\dx5\r1_dx5.h" />
+    <ClInclude Include="render\dx5\r1_dx5_texture.h" />
+    <ClInclude Include="render\r1_font.h" />
+    <ClInclude Include="render\r1_res.h" />
+    <ClInclude Include="render\software\r1_software.h" />
+    <ClInclude Include="render\software\r1_software_globals.h" />
+    <ClInclude Include="render\software\r1_software_texture.h" />
+    <ClInclude Include="render\software\r1_software_types.h" />
+    <ClInclude Include="render\r1_vert.h" />
+    <ClInclude Include="render\r1_win.h" />
+    <ClInclude Include="file\ram_file.h" />
+    <ClInclude Include="file\ram_file_man.h" />
+    <ClInclude Include="math\random.h" />
+    <ClInclude Include="transport\randomize.h" />
+    <ClInclude Include="range.h" />
+    <ClInclude Include="area\rectlist.h" />
+    <ClInclude Include="reference.h" />
+    <ClInclude Include="app\registry.h" />
+    <ClInclude Include="remove_man.h" />
+    <ClInclude Include="render\dx9\render.h" />
+    <ClInclude Include="maxtool\render2.h" />
+    <ClInclude Include="objs\repairer.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resources.h" />
+    <ClInclude Include="compress\rle.h" />
+    <ClInclude Include="objs\road_object.h" />
+    <ClInclude Include="objs\rocket.h" />
+    <ClInclude Include="objs\rocktank.h" />
+    <ClInclude Include="rotation.h" />
+    <ClInclude Include="saver.h" />
+    <ClInclude Include="saver_id.h" />
+    <ClInclude Include="editor\dialogs\scene.h" />
+    <ClInclude Include="objs\scream.h" />
+    <ClInclude Include="gui\scroll_bar.h" />
+    <ClInclude Include="editor\dialogs\scroll_picker.h" />
+    <ClInclude Include="search.h" />
+    <ClInclude Include="selection.h" />
+    <ClInclude Include="gui\seperate.h" />
+    <ClInclude Include="net\server.h" />
+    <ClInclude Include="sound\sfx_id.h" />
+    <ClInclude Include="objs\sfx_obj.h" />
+    <ClInclude Include="objs\shockwave.h" />
+    <ClInclude Include="objs\shrapnel.h" />
+    <ClInclude Include="sky.h" />
+    <ClInclude Include="gui\slider.h" />
+    <ClInclude Include="objs\smoke_trail.h" />
+    <ClInclude Include="gui\smp_dial.h" />
+    <ClInclude Include="solvegraph.h" />
+    <ClInclude Include="solvegraph_breadth.h" />
+    <ClInclude Include="solvemap.h" />
+    <ClInclude Include="solvemap_astar.h" />
+    <ClInclude Include="solvemap_astar2.h" />
+    <ClInclude Include="solvemap_breadth.h" />
+    <ClInclude Include="sound\sound.h" />
+    <ClInclude Include="sound_man.h" />
+    <ClInclude Include="sound\sound_types.h" />
+    <ClInclude Include="render\software\span_buffer.h" />
+    <ClInclude Include="math\spline.h" />
+    <ClInclude Include="objs\sprite.h" />
+    <ClInclude Include="objs\sprite_id.h" />
+    <ClInclude Include="objs\sprite_object.h" />
+    <ClInclude Include="maxtool\st_edit.h" />
+    <ClInclude Include="memory\stack.h" />
+    <ClInclude Include="objs\stank.h" />
+    <ClInclude Include="net\startup.h" />
+    <ClInclude Include="file\static_file.h" />
+    <ClInclude Include="statistics.h" />
+    <ClInclude Include="status\status.h" />
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="string\str_checksum.h" />
+    <ClInclude Include="music\stream.h" />
+    <ClInclude Include="string\string.h" />
+    <ClInclude Include="objs\structure_death.h" />
+    <ClInclude Include="window\style.h" />
+    <ClInclude Include="file\sub_section.h" />
+    <ClInclude Include="objs\super_mortar.h" />
+    <ClInclude Include="objs\supergun.h" />
+    <ClInclude Include="gui\tab_bar.h" />
+    <ClInclude Include="loaders\mp3\tables.h" />
+    <ClInclude Include="objs\tank_buster.h" />
+    <ClInclude Include="objs\target.h" />
+    <ClInclude Include="team_api.h" />
+    <ClInclude Include="render\tex_cache.h" />
+    <ClInclude Include="render\tex_heap.h" />
+    <ClInclude Include="render\tex_id.h" />
+    <ClInclude Include="render\tex_no_heap.h" />
+    <ClInclude Include="gui\text.h" />
+    <ClInclude Include="gui\text_input.h" />
+    <ClInclude Include="gui\text_scroll.h" />
+    <ClInclude Include="menu\textitem.h" />
+    <ClInclude Include="render\dx9\texture.h" />
+    <ClInclude Include="loaders\tga_write.h" />
+    <ClInclude Include="threads\threads.h" />
+    <ClInclude Include="tick_count.h" />
+    <ClInclude Include="tile.h" />
+    <ClInclude Include="editor\dialogs\tile_picker.h" />
+    <ClInclude Include="editor\dialogs\tile_win.h" />
+    <ClInclude Include="time\time.h" />
+    <ClInclude Include="time\timedev.h" />
+    <ClInclude Include="render\tmanage.h" />
+    <ClInclude Include="render\tnode.h" />
+    <ClInclude Include="math\transform.h" />
+    <ClInclude Include="transport\transport.h" />
+    <ClInclude Include="math\trig.h" />
+    <ClInclude Include="objs\trike.h" />
+    <ClInclude Include="maxtool\tupdate.h" />
+    <ClInclude Include="objs\turret.h" />
+    <ClInclude Include="math\vector.h" />
+    <ClInclude Include="objs\vehic_sounds.h" />
+    <ClInclude Include="version.h" />
+    <ClInclude Include="objs\verybiggun.h" />
+    <ClInclude Include="visible.h" />
+    <ClInclude Include="loaders\wav_load.h" />
+    <ClInclude Include="video\win32\win32_input.h" />
+    <ClInclude Include="render\software\win32_specific.h" />
+    <ClInclude Include="window\win_evt.h" />
+    <ClInclude Include="main\win_main.h" />
+    <ClInclude Include="window\window.h" />
+    <ClInclude Include="window\wmanager.h" />
+    <ClInclude Include="loaders\write.h" />
+    <ClInclude Include="x86_proc.h" />
+    <ClInclude Include="loaders\mp3\xfermem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource\3dcheck.bmp" />
+    <None Include="resource\95check.bmp" />
+    <None Include="resource\cur00001.cur" />
+    <None Include="resource\cur00002.cur" />
+    <None Include="resource\error.ico" />
+    <None Include="resource\help.cur" />
+    <None Include="resource\ico00001.ico" />
+    <None Include="resource\ico102.ico" />
+    <None Include="resource\mfctest.rc2" />
+    <None Include="resource\minifwnd.bmp" />
+    <None Include="resource\move4way.cur" />
+    <None Include="resource\nodrop.cur" />
+    <None Include="resource\ntcheck.bmp" />
+    <None Include="resource\pointer.cur" />
+    <None Include="resource\sarrows.cur" />
+    <None Include="resource\splith.cur" />
+    <None Include="resource\splitv.cur" />
+    <None Include="resource\trck4way.cur" />
+    <None Include="resource\trcknesw.cur" />
+    <None Include="resource\trckns.cur" />
+    <None Include="resource\trcknwse.cur" />
+    <None Include="resource\trckwe.cur" />
+    <None Include="Hints.txt" />
+    <None Include="Manual.doc" />
+    <None Include="Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="golgotha.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="Golgotha.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
