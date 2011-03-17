@@ -23,13 +23,13 @@ extern "C" {
 //
 //  Return: Converted string
 //
-const char * WINAPI DXGetErrorString9A(HRESULT hr);
-const WCHAR * WINAPI DXGetErrorString9W(HRESULT hr);
+const char * WINAPI DXGetErrorStringA(HRESULT hr);
+const WCHAR * WINAPI DXGetErrorStringW(HRESULT hr);
 
 #ifdef UNICODE
-#define DXGetErrorString9 DXGetErrorString9W
+#define DXGetErrorString DXGetErrorStringW
 #else
-#define DXGetErrorString9 DXGetErrorString9A
+#define DXGetErrorString DXGetErrorStringA
 #endif
 
 
@@ -43,13 +43,13 @@ const WCHAR * WINAPI DXGetErrorString9W(HRESULT hr);
 //
 //  Return: String description
 //
-const char * WINAPI DXGetErrorDescription9A(HRESULT hr);
-const WCHAR * WINAPI DXGetErrorDescription9W(HRESULT hr);
+const char * WINAPI DXGetErrorDescriptionA(HRESULT hr);
+const WCHAR * WINAPI DXGetErrorDescriptionW(HRESULT hr);
 
 #ifdef UNICODE
-    #define DXGetErrorDescription9 DXGetErrorDescription9W
+    #define DXGetErrorDescription DXGetErrorDescriptionW
 #else
-    #define DXGetErrorDescription9 DXGetErrorDescription9A
+    #define DXGetErrorDescription DXGetErrorDescriptionA
 #endif
 
 

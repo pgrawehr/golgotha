@@ -18,7 +18,7 @@
 //#include "DSOUND.H"
 #include <d3dcommon.h>
 #include <dinput.h>
-#include <DxErr.h>
+//#include <DxErr.h>
 #include "dxfile.h"
 #include "dxerr9.h"
 #include "jj_error.h"
@@ -632,7 +632,7 @@ LPSTR GetDirectXStatusString(HRESULT DDStatus)
 		}
 	}
 	//FAKE: We always use plain ascii character sets here.
-	return (LPSTR) DXGetErrorDescription9A(DDStatus);
+	return (LPSTR) DXGetErrorDescriptionA(DDStatus);
 
 	//return(dxerr_unknown);
 }

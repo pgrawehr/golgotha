@@ -2214,7 +2214,6 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Hints.txt" />
-    <None Include="Manual.doc" />
     <None Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>

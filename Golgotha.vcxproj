@@ -98,6 +98,7 @@
       <SubSystem>Windows</SubSystem>
       <StackReserveSize>4194304</StackReserveSize>
       <StackCommitSize>4194304</StackCommitSize>
+      <AdditionalLibraryDirectories>lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -137,7 +138,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>ddraw.lib;dinput.lib;dsound.lib;dxguid.lib;wsock32.lib;comctl32.lib;winmm.lib;version.lib;d3d9.lib;dxerr9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lib/x86/ddraw.lib;lib/x86/dinput8.lib;lib/x86/dsound.lib;lib/x86/dxguid.lib;wsock32.lib;comctl32.lib;winmm.lib;version.lib;d3d9.lib;lib/x86/dxerr.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>./Golgotha.exe</OutputFile>
       <Version>1.2</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -151,6 +152,8 @@
       <LinkStatus>
       </LinkStatus>
       <DataExecutionPrevention>true</DataExecutionPrevention>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -903,7 +906,6 @@
     <None Include="resource\trcknwse.cur" />
     <None Include="resource\trckwe.cur" />
     <None Include="Hints.txt" />
-    <None Include="Manual.doc" />
     <None Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -212,9 +212,10 @@ void dx_threaded_mouse_class::uninit_mouse()
 
 void dx_threaded_mouse_class::init_mouse(HWND hwnd)
 {
-	HRESULT hr;
+	HRESULT hr=E_FAIL;
 
-	hr = DirectInputCreate(i4_win32_instance, DIRECTINPUT_VERSION, &direct_input_driver, NULL);
+	//hr = DirectInputCreate(i4_win32_instance, DIRECTINPUT_VERSION, &direct_input_driver, NULL);
+	direct_input_driver=NULL;
 	if (hr !=DI_OK)
 	{
 		i4_error("DirectInputCreate failed.");

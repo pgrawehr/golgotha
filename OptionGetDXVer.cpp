@@ -68,11 +68,11 @@ int GetOsVersion(LPSTR s)
 			break;
 	}
 	strcat(s," Version ");
-	strcat(s,itoa(vinfo.dwMajorVersion,buffer,10));
+	strcat(s,_itoa(vinfo.dwMajorVersion,buffer,10));
 	strcat(s,".");
-	strcat(s,itoa(vinfo.dwMinorVersion,buffer,10));
+	strcat(s,_itoa(vinfo.dwMinorVersion,buffer,10));
 	strcat(s,".");
-	strcat(s,itoa(LOWORD(vinfo.dwBuildNumber),buffer,10));
+	strcat(s,_itoa(LOWORD(vinfo.dwBuildNumber),buffer,10));
 	strcat(s," ");
 	strcat(s,vinfo.szCSDVersion);
 	return TRUE;
@@ -368,21 +368,21 @@ VOID CheckDXVersion()
 	///////////////////////////////////////////////////////////////////////////
 
 	// Check for DMusic, which was introduced with DX6.1
-	LPUNKNOWN pDMusic = NULL;
-	CoInitialize( NULL );
-	hr = CoCreateInstance( CLSID_DirectMusic, NULL, CLSCTX_INPROC_SERVER,
-						  IID_IDirectMusic, (VOID * *)&pDMusic );
-	if( FAILED(hr) )
-	{
-		OutputDebugString( "Couldn't create CLSID_DirectMusic\r\n" );
-		FreeLibrary( DDHinst );
-		return;
-	}
+	//LPUNKNOWN pDMusic = NULL;
+	//CoInitialize( NULL );
+	//hr = CoCreateInstance( CLSID_DirectMusic, NULL, CLSCTX_INPROC_SERVER,
+	//					  IID_IDirectMusic, (VOID * *)&pDMusic );
+	//if( FAILED(hr) )
+	//{
+	//	OutputDebugString( "Couldn't create CLSID_DirectMusic\r\n" );
+	//	FreeLibrary( DDHinst );
+	//	return;
+	//}
 
-	// DirectMusic was created successfully. We must be at least DX6.1
-	(*pdwDXVersion) = 0x601;
-	pDMusic->Release();
-	CoUninitialize();
+	//// DirectMusic was created successfully. We must be at least DX6.1
+	//(*pdwDXVersion) = 0x601;
+	//pDMusic->Release();
+	//CoUninitialize();
 
 
 	///////////////////////////////////////////////////////////////////////////

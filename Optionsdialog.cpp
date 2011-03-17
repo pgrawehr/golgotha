@@ -344,7 +344,7 @@ BOOL OptionsDialog::OnInitDialog()
 	m_windowed= (!i4_win32_startup_options.fullscreen);
 	CheckDlgButton(IDC_WINDOWED,m_windowed ? BST_CHECKED : BST_UNCHECKED);
 
-	//
+	// Get List of devices
 	int gdi_id=m_devices.AddString("Windows GDI (compatible but slow)");
 	m_devices.SetItemData(gdi_id,1);
 	if ( FAILED( DirectDrawEnumerateEx( ( LPDDENUMCALLBACKEX )EnumDDrawDevice,
