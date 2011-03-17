@@ -2178,7 +2178,8 @@ public:
 
 		while (i<=26)
 		{
-			if (Drives[i]==DRIVE_CDROM)
+			UINT t=Drives[i-1];
+			if (t==DRIVE_CDROM)
 			{
 				currentcd=i;
 				sprintf(str,"%c:\\",(currentcd-1+'A'));
