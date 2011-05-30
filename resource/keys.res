@@ -271,7 +271,8 @@ editor maxtool menu)
 (def_key  "Alt+`"                  "read-eval"                  maxtool)
 (def_key  "Alt+;"                  "test"                       maxtool)
 
-(def_key  "Ctrl+Y"                 "translate_point"            maxtool)
+(def_key  "Y"                 "translate_point"            maxtool)
+(def_key  "X"			"m1_move_point"		   maxtool)
 (def_key  "Space"                  "navigate"                   maxtool)
 (def_key  "Ctrl+Space"             "pan"                        maxtool)
 

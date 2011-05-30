@@ -439,6 +439,34 @@ li_object *m1_move_object(li_object * o, li_environment * env)
 }
 
 
+li_object *m1_move_point(li_object * o, li_environment * env)
+{
+	if (!m1_info.obj)
+	{
+		return 0;
+	}
+	if (m1_info.selected_index!=1)
+		return 0;
+
+	g1_vert_class * v=m1_info.obj->get_verts(m1_info.current_animation,
+											 m1_info.current_frame);
+	int idx=m1_info.selected_points[0];
+	
+	i4_3d_vector move=m1_vector_input(
+		"Enter the new location of the selected point",
+		i4_3d_vector(v[idx].v.x,v[idx].v.y,v[idx].v.z));
+	//This one needs to be regenerated afterwards.
+	li_call("remove_octree",0,0);
+	
+	v[idx].v.x=move.x;
+	v[idx].v.y=move.y;
+	v[idx].v.z=move.z;
+
+	m1_render_window->request_redraw();
+	return li_true_sym;
+}
+
+
 
 li_object *m1_delete_anim(li_object * o, li_environment * env)
 {
@@ -570,7 +598,11 @@ li_object *m1_add_quad(li_object * o, li_environment * env)
 	obj->calc_vert_normals();
 	obj->calc_extents();
 
-	m1_info.texture_list_changed();
+	r1_texture_manager_class * tman=m1_info.r_api->get_tmanager(m1_info.tman_index);
+	i4_bool bLoaded=i4_F;
+	r1_texture_handle handle=tman->query_texture("solid_white", &bLoaded);
+	if (handle<0 || !bLoaded)
+		m1_info.texture_list_changed();
 	for (int i=0; i<obj->num_quad; i++)
 	{
 		obj->quad[i].set_flags(g1_quad_class::SELECTED,0);
@@ -1125,6 +1157,7 @@ class li_add_m1_commands_class :
 
 		li_add_function("m1_scale_object",m1_scale_object);
 		li_add_function("m1_move_object",m1_move_object);
+		li_add_function("m1_move_point", m1_move_point);
 
 		li_add_function("reload_max_textures", m1_reload_textures);
 		li_add_function("reload_main_textures", g1_reload_textures);

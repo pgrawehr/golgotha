@@ -46,6 +46,7 @@
               ;;This moves the entire object relative to the origin. 
               ("Resize object"         "m1_scale_object")
               ("Move object"           "m1_move_object")
+              ("Move point"            "m1_move_point")
               )
 
 
