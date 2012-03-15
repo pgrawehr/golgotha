@@ -45,6 +45,7 @@
               ("Edit Mount-Points"     "m1_edit_mount_points")
               ;;This moves the entire object relative to the origin. 
               ("Resize object"         "m1_scale_object")
+	      ("Rotate object"         "m1_rotate_object")
               ("Move object"           "m1_move_object")
               ("Move point"            "m1_move_point")
               )

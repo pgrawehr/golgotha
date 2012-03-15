@@ -438,6 +438,33 @@ li_object *m1_move_object(li_object * o, li_environment * env)
 	return li_true_sym;
 }
 
+li_object* m1_rotate_object(li_object * o, li_environment *env)
+{
+	if (!m1_info.obj)
+	{
+		return 0;
+	}
+	i4_3d_vector move=m1_vector_input(
+		"Enter the rotation angles (x, y, z)",
+		i4_3d_vector(0,0,0));
+	//This one needs to be regenerated afterwards.
+	li_call("remove_octree",0,0);
+	g1_vert_class * v=m1_info.obj->get_verts(m1_info.current_animation,
+		m1_info.current_frame);
+
+	i4_transform_class transform;
+	transform.rotate_x_y_z(move.x,move.y,move.z);
+	for (int i=0; i<m1_info.obj->num_vertex; i++,v++)
+	{
+		i4_3d_vector result;
+		transform.trans_3x3(v->v, result);
+		v->v.x=result.x;
+		v->v.y=result.y;
+		v->v.z=result.z;
+	}
+	return li_true_sym;
+}
+
 
 li_object *m1_move_point(li_object * o, li_environment * env)
 {
@@ -1156,6 +1183,7 @@ class li_add_m1_commands_class :
 		li_add_function("toggle_octree", m1_toggle_octree);
 
 		li_add_function("m1_scale_object",m1_scale_object);
+		li_add_function("m1_rotate_object",m1_rotate_object);
 		li_add_function("m1_move_object",m1_move_object);
 		li_add_function("m1_move_point", m1_move_point);
 
