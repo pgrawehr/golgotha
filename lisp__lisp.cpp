@@ -5275,7 +5275,7 @@ void li_class::mark(int set)
 
 		li_object * o=object_value(i);
 		// int's and - floats no more - are stored directly and don't need marking
-		if (type!=LI_INT && type!=LI_FLOAT && o->is_marked()!=set)
+		if (o != NULL && type!=LI_INT && type!=LI_FLOAT && o->is_marked()!=set)
 		{
 			li_get_type(o->unmarked_type())->mark(o, set);
 		}
