@@ -45,14 +45,14 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.obj%3b*.pdb%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b$(TargetPath)%3b*.ilk%3b$(TargetDir)Golgotha.ilk%3b$(TargetDir)Golgotha.bsc%3b</ExtensionsToDeleteOnClean>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">$(SolutionDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">true</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -103,14 +103,17 @@
       <ProgramDatabaseFile>$(TargetDir)$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /D *.level $(OutDir) 
-xcopy /D *.scm $(OutDir) 
-xcopy /E /I textures $(OutDir)\textures
-xcopy /E /I sfx $(OutDir)\sfx
-xcopy /E /I objects $(OutDir)\objects
-xcopy /E /I bitmaps $(OutDir)\bitmaps
-xcopy /E /I scheme $(OutDir)\scheme
-</Command>
+      <Command>mkdir "$(OutDir)\plugins"
+xcopy /D *.level "$(OutDir)"
+xcopy /D *.scm "$(OutDir)" 
+xcopy /E /I /D textures "$(OutDir)\textures"
+xcopy /E /I /D sfx "$(OutDir)\sfx"
+xcopy /E /I  /D objects "$(OutDir)\objects"
+xcopy /E /I /D bitmaps "$(OutDir)\bitmaps"
+xcopy /E /I /D scheme "$(OutDir)\scheme"
+xcopy /E /I /D resource "$(OutDir)\resource"
+xcopy /E /I /D transport "$(OutDir)\transport"
+xcopy /D resource.res "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -165,24 +168,32 @@ xcopy /E /I scheme $(OutDir)\scheme
       </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\plugins
-xcopy /D *.level $(OutDir) 
-xcopy /D *.scm $(OutDir) 
-xcopy /E /I /D textures $(OutDir)\textures
-xcopy /E /I /D sfx $(OutDir)\sfx
-xcopy /E /I  /D objects $(OutDir)\objects
-xcopy /E /I /D bitmaps $(OutDir)\bitmaps
-xcopy /E /I /D scheme $(OutDir)\scheme
-xcopy /E /I /D resource $(OutDir)\resource
-xcopy /E /I /D transport $(OutDir)\transport
-xcopy /D resource.res $(OutDir)</Command>
+      <Command>mkdir "$(OutDir)\plugins"
+xcopy /D *.level "$(OutDir)"
+xcopy /D *.scm "$(OutDir)" 
+xcopy /E /I /D textures "$(OutDir)\textures"
+xcopy /E /I /D sfx "$(OutDir)\sfx"
+xcopy /E /I  /D objects "$(OutDir)\objects"
+xcopy /E /I /D bitmaps "$(OutDir)\bitmaps"
+xcopy /E /I /D scheme "$(OutDir)\scheme"
+xcopy /E /I /D resource "$(OutDir)\resource"
+xcopy /E /I /D transport "$(OutDir)\transport"
+xcopy /D resource.res "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
     <PostBuildEvent>
-      <Command>xcopy *.level $(OutDir)
-xcopy *.scm $(OutDir)
-xcopy /E textures $(OutDir) textures</Command>
+      <Command>mkdir "$(OutDir)\plugins"
+xcopy /D *.level "$(OutDir)"
+xcopy /D *.scm "$(OutDir)" 
+xcopy /E /I /D textures "$(OutDir)\textures"
+xcopy /E /I /D sfx "$(OutDir)\sfx"
+xcopy /E /I  /D objects "$(OutDir)\objects"
+xcopy /E /I /D bitmaps "$(OutDir)\bitmaps"
+xcopy /E /I /D scheme "$(OutDir)\scheme"
+xcopy /E /I /D resource "$(OutDir)\resource"
+xcopy /E /I /D transport "$(OutDir)\transport"
+xcopy /D resource.res "$(OutDir)"</Command>
     </PostBuildEvent>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
