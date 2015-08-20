@@ -135,10 +135,10 @@ public:
 		if (tocopy.used>0)
 		{
 			entries=tocopy.entries;
-			entry=(T *)I4_MALLOC(sizeof(T)*entries,"copied grow array");
-			memcpy(entry,tocopy.entry,sizeof(T)*used); //copy all the used elements (rest will be left uninitalized)
-			I4_ASSERT(entry, "SEVERE: i4_array::copy.ctor(): Out of memory");
 			used=tocopy.used;
+			entry=(T *)I4_MALLOC(sizeof(T) * entries,"copied grow array");
+			I4_ASSERT(entry, "SEVERE: i4_array::copy.ctor(): Out of memory");
+			memcpy(entry, tocopy.entry, sizeof(T) * used); //copy all the used elements (rest will be left uninitalized)
 		}
 	}
 
