@@ -324,6 +324,7 @@ g1_octree::g1_octree(g1_quad_object_class * pWorld, i4_loader_class * fp)
 	m_zLocCode=0;
 	m_level=0;
 	m_flags=0;
+	m_pParent = 0;
 	m_bSubDivided=false;
 	m_xWidth=m_yWidth=m_zWidth=0;
 	m_vCenter=i4_3d_vector(0,0,0);
