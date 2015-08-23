@@ -4,3 +4,4 @@ obj/
 *.user
 Golgotha.opensdf
 Golgotha.sdf
+ipch/
