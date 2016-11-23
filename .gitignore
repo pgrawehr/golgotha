@@ -5,3 +5,5 @@ obj/
 Golgotha.opensdf
 Golgotha.sdf
 ipch/
+g_decompressed/
+undo/
