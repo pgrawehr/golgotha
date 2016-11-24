@@ -242,16 +242,13 @@ void g1_bird_class::unoccupy_location()
 
 void g1_bird_class::think()
 {
-
 	grab_old();
 	unoccupy_location();
-
-
-
+	
 	x += cos(theta) * xy_v;
 	y += sin(theta) * xy_v;
 
-	if ((abs(x-dest_x)>=0.4)&&(abs(y-dest_y)>=0.4))
+	if ((fabs(x-dest_x)>=0.4)&&(fabs(y-dest_y)>=0.4))
 	{
 		float desired_theta=atan2(dest_y-y, dest_x-x);
 		//theta = i4_interpolate_angle(theta, desired_theta, 0.1);
