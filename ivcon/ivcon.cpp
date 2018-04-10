@@ -137,14 +137,14 @@
 
 #undef COR3_MAX
 #define COLOR_MAX 1000
-#define COR3_MAX 10000
-#define FACE_MAX 10000
+#define COR3_MAX 60000
+#define FACE_MAX 60000
 #define LINE_MAX_LEN 256
 #define LEVEL_MAX 10
 #define LINE_MAX 5000
 #define MATERIAL_MAX 1000
 #define ORDER_MAX 10
-#define TEXTURE_MAX 1000
+#define TEXTURE_MAX 60000
 
 #define FACE_FLAGS_UNKNOWN 0xff //don't use these (do not know what they are for)
 #define FACE_FLAGS_BOTHSIDED 0x100
@@ -174,7 +174,7 @@ int face_flags[FACE_MAX];
 int face_material[FACE_MAX];
 float face_normal[3][FACE_MAX];
 int face_num;
-bool face_ignoresides=false;
+bool face_ignoresides=true;
 int face_object[FACE_MAX];
 int face_order[FACE_MAX];
 int face_smooth[FACE_MAX];
@@ -197,7 +197,6 @@ int line_num;
 int line_prune;
 
 int list[COR3_MAX];
-bool material_use=false; //uses textures per default
 char material_binding[80];
 char material_name[MATERIAL_MAX][LINE_MAX_LEN];
 int material_num;
@@ -2437,9 +2436,28 @@ void data_init( void )
 	{
 		for ( ivert = 0; ivert < ORDER_MAX; ivert++ )
 		{
-			for ( i = 0; i < 2; i++ )
+			// Standard distribution 
+			if (ivert == 0 || ivert > 3)
 			{
-				vertex_tex_uv[i][ivert][iface] = 0.0;
+				for (i = 0; i < 2; i++)
+				{
+					vertex_tex_uv[i][ivert][iface] = 0.0;
+				}
+			}
+			else if (ivert == 1)
+			{
+				vertex_tex_uv[0][ivert][iface] = 1.0;
+				vertex_tex_uv[1][ivert][iface] = 0.0;
+			}
+			else if (ivert == 2)
+			{
+				vertex_tex_uv[0][ivert][iface] = 1.0;
+				vertex_tex_uv[1][ivert][iface] = 1.0;
+			}
+			else if (ivert == 3)
+			{
+				vertex_tex_uv[0][ivert][iface] = 0.0;
+				vertex_tex_uv[1][ivert][iface] = 1.0;
 			}
 		}
 	}
@@ -5440,7 +5458,7 @@ int gmod_write( FILE * fileout )
  */
 	for ( TextureCount = 0; TextureCount < face_num; TextureCount++ )
 	{
-		texname=texture_name[face_material[face_num]];
+		texname=texture_name[face_material[TextureCount]];
 		gmod_write_w16( ( unsigned short ) strlen( texname),
 					   fileout );
 
@@ -7365,6 +7383,26 @@ void init_program_data( void )
 	return;
 
 }
+
+void ConvertMaterialToTexture()
+{
+	texture_num = material_num;
+	for (i = 0; i<material_num; i++)
+	{
+		strcpy(texture_name[i], material_name[i]);
+		for (int j = 0; j<(int)strlen(texture_name[i]); j++)
+		{
+			char c = texture_name[i][j];
+			// replace some characters with underscores
+			if (c == ' ' || c == '.' || c == ':' || c == '\\' || c == '/')
+			{
+				c = '_';
+			}
+			texture_name[i][j] = c;
+		}
+	}
+	printf("\nCopied material names to textures\n");
+}
 /******************************************************************************/
 
 int interact( void )
@@ -7396,7 +7434,6 @@ int interact( void )
 	int jvert;
 	int m;
 	char * next;
-	char c;
 	float temp;
 	float x;
 	float y;
@@ -7729,37 +7766,13 @@ int interact( void )
 			}
 			else if (*next=='c' || *next=='C')
 			{
-				material_use=!material_use;
-				if (material_use)
-				{
-					texture_num=material_num;
-					for (i=0; i<material_num; i++)
-					{
-						strcpy(texture_name[i],material_name[i]);
-						for(j=0; j<(int)strlen(texture_name[i]); j++)
-						{
-							c=texture_name[i][j];
-							//replace some characters with underscores
-							if (c==' '||c=='.'||c==':'||c=='\\'||c=='/')
-							{
-								c='_';
-							}
-							texture_name[i][j]=c;
-						}
-					}
-					printf("\nCopied material names to textures\n");
-				}
-				else
-				{
-					printf("\nNot doing anything\n");
-				}
+				ConvertMaterialToTexture();
 			}
 			else if (*next=='t'|| *next=='T')
 			{
 				printf("\n");
 				printf("   Enter texture filename (.tga): ");
 				scanf("%s",texture_file_name);
-				material_use=true;
 				texture_num=material_num;
 				for (iface=0; iface<face_num; iface++)
 				{
@@ -10972,6 +10985,8 @@ int obj_read( FILE * filein )
 					face[ivert][face_num] = node-1;
 					vertex_material[ivert][face_num] = 0;
 					face_order[face_num] = face_order[face_num] + 1;
+					face_material[face_num] = material_num - 1 > 0 ? material_num - 1 : 0;
+					face_flags[face_num] = FACE_FLAGS_MATERIAL_ASSIGNED | FACE_FLAGS_BOTHSIDED;
 				}
 /*
    If there's a slash, skip to the next slash, and extract the
@@ -11182,6 +11197,11 @@ int obj_read( FILE * filein )
  */
 		else if ( leqi( token, "USEMTL" ) == TRUE )
 		{
+			char current_material_name[FILENAME_MAX];
+			char* ptrToNewLine = strchr(next + 1, '\n');
+			strncpy_s(current_material_name, FILENAME_MAX -1, next + 1, ptrToNewLine - next - 1);
+			strcpy(material_name[material_num], current_material_name);
+			material_num++;
 			continue;
 		}
 /*
@@ -11249,6 +11269,7 @@ int obj_read( FILE * filein )
 		}
 
 	}
+	ConvertMaterialToTexture();
 	return SUCCESS;
 }
 /******************************************************************************/
@@ -12886,7 +12907,7 @@ int stla_read( FILE * filein )
 				temp[1] = r2;
 				temp[2] = r3;
 
-				if ( cor3_num < 1000 )
+				if ( cor3_num < COR3_MAX )
 				{
 					icor3 = rcol_find( cor3, 3, cor3_num, temp );
 				}
@@ -14977,7 +14998,7 @@ unsigned long tds_read_obj_section( FILE * filein )
 						}
 						if (matoffset==-1) //not found
 						{
-							printf("WARNING: Material %s was not expicitly defined.\n");
+							printf("WARNING: Material %s was not expicitly defined.\n", temp_name);
 							material_num++;
 							matoffset=material_num-1;
 							strcpy(material_name[matoffset],temp_name);
