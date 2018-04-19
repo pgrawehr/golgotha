@@ -207,6 +207,7 @@ int max_order2;
 
 char normal_binding[80];
 float normal_temp[3][ORDER_MAX*FACE_MAX];
+float vertex_uv_temp[2][ORDER_MAX*FACE_MAX];
 
 char object_name[81];
 int object_num;
@@ -293,6 +294,7 @@ int                long_int_write( FILE * fileout, long int int_val );
 void               news( void );
 void               node_to_vertex_material( void );
 int                obj_read( FILE * filein );
+float normalize_texture_coordinates(float vt);
 int                obj_write( FILE * fileout );
 int                pov_write( FILE * fileout );
 int                rcol_find( float a[][COR3_MAX], int m, int n, float r[] );
@@ -4323,6 +4325,14 @@ int face_print( int iface )
 			   vertex_normal[1][ivert][iface], vertex_normal[2][ivert][iface] );
 	}
 
+	printf("\n");
+	printf("  Vertex texture coordinates:\n");
+	printf("\n");
+	for (ivert = 0; ivert < face_order[iface]; ivert++)
+	{
+		printf(" %d %f %f\n", ivert, vertex_tex_uv[0][ivert][iface],
+			 vertex_tex_uv[1][ivert][iface]);
+	}
 	return SUCCESS;
 
 }
@@ -10792,6 +10802,8 @@ int obj_read( FILE * filein )
    Author:
 
    	John Burkardt
+
+   See http://www.martinreddy.net/gfx/3d/OBJ.spec for a detailed description of the format
  */
 {
 	int count;
@@ -10802,6 +10814,7 @@ int obj_read( FILE * filein )
 	char * next3;
 	int node;
 	int vertex_normal_num;
+	int vertex_uv_num;
 	float r1;
 	float r2;
 	float r3;
@@ -10813,6 +10826,7 @@ int obj_read( FILE * filein )
    Initialize.
  */
 	vertex_normal_num = 0;
+	vertex_uv_num = 0;
 /*
    Read the next line of the file into INPUT.
  */
@@ -10994,10 +11008,9 @@ int obj_read( FILE * filein )
  */
 				if ( *next2 == '/' )
 				{
-
+					bool vtFound = false;
 					for ( next3 = next2 + 1; next3 < token2 + LINE_MAX_LEN; next3++ )
 					{
-
 						if ( *next3 == '/' )
 						{
 							next3 = next3 + 1;
@@ -11012,6 +11025,31 @@ int obj_read( FILE * filein )
 								}
 							}
 							break;
+						}
+						else if (!vtFound) // Only if we haven't processed the vt entry yet, otherwise it would re-read it for every digit chopped off
+						{
+							vtFound = true;
+							char* next4 = next3; // there's a vt reference here
+							sscanf(next4, "%d%n", &node, &width);
+							node = node - 1;
+							if (0 <= node && node < vertex_uv_num)
+							{
+								if (ivert == 1 || ivert == 2 || ivert == 0 || ivert == 3)
+								{
+									float vt = normalize_texture_coordinates(vertex_uv_temp[0][node]);
+									vertex_tex_uv[0][ivert][face_num] = vt;
+									vt = normalize_texture_coordinates(vertex_uv_temp[1][node]);
+									vertex_tex_uv[1][ivert][face_num] = vt;
+								}
+								else
+								{
+									// For vertexes 3 and 4, we swap the two
+									float vt = normalize_texture_coordinates(vertex_uv_temp[1][node]);
+									vertex_tex_uv[0][ivert][face_num] = vt;
+									vt = normalize_texture_coordinates(vertex_uv_temp[0][node]);
+									vertex_tex_uv[1][ivert][face_num] = vt;
+								}
+							}
 						}
 					}
 				}
@@ -11246,11 +11284,19 @@ int obj_read( FILE * filein )
 		}
 /*
    VT
-   Vertex texture.
+   Vertex texture (texture coordinates per vertex)
  */
 		else if ( leqi( token, "VT" ) == TRUE )
 		{
-			continue;
+			sscanf(next, "%e %e", &r1, &r2);
+
+			if (vertex_uv_num < ORDER_MAX * FACE_MAX)
+			{
+				vertex_uv_temp[0][vertex_uv_num] = r1;
+				vertex_uv_temp[1][vertex_uv_num] = r2;
+			}
+
+			vertex_uv_num = vertex_uv_num + 1;
 		}
 /*
    VP
@@ -11271,6 +11317,30 @@ int obj_read( FILE * filein )
 	}
 	ConvertMaterialToTexture();
 	return SUCCESS;
+}
+
+float normalize_texture_coordinates(float vt)
+{
+	// for some reason, these values can be < 0 and > 1 as well. Normalize them here, as we can't really use them that way
+	// The normalization is a mirroring approach: values 1 to 2 are mapped to 1..0 while 2 to 3 are 0..1 again etc
+	if (vt < 0)
+	{
+		vt = fabs(vt);
+	}
+	if ( vt > 1)
+	{
+		double mod = fmod(vt, 2.0);
+		if (mod > 1)
+		{
+			vt = 1.0 - (vt - 1.0);
+		}
+		else
+		{
+			vt = mod;
+		}
+	}
+	
+	return vt;
 }
 /******************************************************************************/
 
