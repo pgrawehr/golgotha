@@ -23,7 +23,7 @@ public:
 	float pad;
 };
 
-typedef struct //dont reorder this stuff
+typedef struct _r1_vert //dont reorder this stuff
 {
 	r1_3d_point_class v;        // 3d position (not used for rendering)
 
