@@ -983,7 +983,7 @@ void * i4_block_manager_class::alloc(long size, char * name)
 		}
 		if (!s)
 		{
-			s=(small_block *)i4_block_manager_class::alloc((size+4)*32+sizeof(small_block),"small_block");
+			s=(small_block *)i4_block_manager_class::alloc((size+sizeof(void*))*32+sizeof(small_block),"small_block");
 			if (!s)
 			{
 				return NULL;
@@ -1013,11 +1013,11 @@ void * i4_block_manager_class::alloc(long size, char * name)
 #endif
 					*((swptr *)addr)=(swptr)s;
 
-					return (void *)(addr+4);
+					return (void *)(addr+sizeof(void*));
 				}
 				i++;
 				bit=bit<<1;
-				addr+=size+4;
+				addr+=size+sizeof(void*);
 			}
 		}
 	}
@@ -1028,17 +1028,23 @@ void * i4_block_manager_class::alloc(long size, char * name)
 	{
 		return NULL;
 	}
-	for (; s && -s->size<size; s=s->next)
+	while (s)
 	{
-		;
+		sw64 bsize = s->size;
+		if (bsize < 0 && -bsize > size)
+		{
+			break;
+		}
+		s = s->next;
 	}
+	
 	if (!s)
 	{
 		return NULL;
 	}
 	s->size=-s->size;
 
-	if (s->size-size>sizeof(memory_node)+4) // is there enough space to split the block?
+	if (s->size-size>sizeof(memory_node)+sizeof(void*)) // is there enough space to split the block?
 	{
 		memory_node * p=(memory_node *)((char *)s+sizeof(memory_node)+size);
 		if (s==slast)

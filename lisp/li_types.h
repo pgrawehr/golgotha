@@ -124,23 +124,12 @@ public:
 
 	void * operator new(size_t size)
 	{
-#ifdef _DEBUG
-		if (size>16)
-		{
-			i4_error(0, "li_objects should be <=16 bytes");
-		}
-#endif
 		return li_cell_alloc(size);
 	}
 
 	void * operator new(size_t size, char * file, int line)
 	{
-#ifdef _DEBUG
-		if (size>16)
-		{
-			i4_error(0, "li_objects should be <=16 bytes");
-		}
-#endif
+
 		return li_cell_alloc(size);
 	}
 

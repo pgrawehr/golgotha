@@ -82,7 +82,7 @@ protected:
 	virtual w32 read(sw32 fd, void * buffer, w32 count) = 0;
 
 #ifdef _WINDOWS
-	DWORD hPRIVATE_thread;
+	HANDLE hPRIVATE_thread;
 #else
 	w32 hPRIVATE_thread;
 #endif

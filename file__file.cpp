@@ -938,10 +938,10 @@ void i4_async_reader::uninit()
 		{
 			i4_thread_yield();
 #ifdef _WINDOWS
-			if (WaitForSingleObject((HANDLE)hPRIVATE_thread,5000)==WAIT_TIMEOUT)
+			if (WaitForSingleObject(hPRIVATE_thread,5000)==WAIT_TIMEOUT)
 			{
 				//if it doesn't go down on his own, kill it.
-				TerminateThread((HANDLE)hPRIVATE_thread,99);
+				TerminateThread(hPRIVATE_thread,99);
 			}
 			break;
 #else
@@ -1008,7 +1008,7 @@ void i4_async_reader::PRIVATE_thread()
 
 	stop=i4_F;
 #ifdef _WINDOWS
-	hPRIVATE_thread=GetCurrentThreadId();
+	hPRIVATE_thread=(HANDLE)GetCurrentThreadId();
 	//This clearly reduces the time the game stays in the jpg loader
 	//at startup, but unfortunatelly (due to the quite strange scheduling
 	//algo of windows) the textures get loaded unacceptably slow.
@@ -2038,7 +2038,7 @@ public:
 
 		sprintf(os_str,"%s/*.*",i4_os_string(path,buf,sizeof(buf)));
 
-		long handle=_findfirst(os_str,&fdat),done;
+		intptr_t handle=_findfirst(os_str,&fdat),done;
 		if (handle==-1)
 		{
 			i4_error("WARNING: Directory %s not accessible.",os_str);

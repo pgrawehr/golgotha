@@ -197,7 +197,7 @@ xcopy /D resource.res "$(OutDir)"</Command>
       <Culture>0x0807</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>ddraw.lib;dinput.lib;dsound.lib;dxguid.lib;wsock32.lib;comctl32.lib;winmm.lib;version.lib;d3d9.lib;dxerr9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <Version>1.2</Version>
@@ -323,8 +323,8 @@ xcopy /D resource.res "$(OutDir)"</Command>
       <ShowProgress>false</ShowProgress>
     </ResourceCompile>
     <Link>
-      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>lib/x64/ddraw.lib;lib/x64/dinput8.lib;lib/x64/dsound.lib;lib/x64/dxguid.lib;wsock32.lib;comctl32.lib;winmm.lib;version.lib;d3d9.lib;lib/x64/dxerr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>lib/x64/dinput8.lib;lib/x64/dsound.lib;lib/x64/dxguid.lib;wsock32.lib;comctl32.lib;winmm.lib;version.lib;d3d9.lib;lib/x64/dxerr.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <Version>1.2</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>

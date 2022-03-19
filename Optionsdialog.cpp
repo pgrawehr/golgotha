@@ -347,6 +347,9 @@ BOOL OptionsDialog::OnInitDialog()
 	// Get List of devices
 	int gdi_id=m_devices.AddString("Windows GDI (compatible but slow)");
 	m_devices.SetItemData(gdi_id,1);
+#if I4_64BITCPU
+	// ddraw.lib doesn't exist for 64 bit (although the functionality is there - Need to use LoadLibrary etc. to get this to work
+#else 
 	if ( FAILED( DirectDrawEnumerateEx( ( LPDDENUMCALLBACKEX )EnumDDrawDevice,
 									   ( LPVOID )&m_devices,
 									   DDENUM_ATTACHEDSECONDARYDEVICES|
@@ -357,6 +360,7 @@ BOOL OptionsDialog::OnInitDialog()
 		//Just ignore this warning...
 		//return FALSE;
 	}
+#endif
 	m_devices.SetCurSel(0);
 	char buf[256];
 	ZeroMemory(buf,256);
@@ -512,6 +516,10 @@ void OptionsDialog::OnBtnCreate()
 	   }else lpourdevice=NULL;
 	 */
 	// DirectDraw-Objekt anlegen, lpDevice kann wie gesagt NULL sein
+#if I4_64BITCPU
+	i4_warning("Enumerating modes is not implemented for 64 bit yet");
+	return;
+#else
 	if ( !i4_dx9_check(DirectDrawCreate( lpDevice, &lpDD, NULL ) ) )
 	{
 		int a=MessageBox("Sorry, there's currently a problem creating a DirectDraw object for this device.\n"
@@ -558,7 +566,7 @@ void OptionsDialog::OnBtnCreate()
 	   EnableWindow( GetDlgItem(hWnd,1021),TRUE);
 	   CheckDlgButton(hWnd,1021,BST_CHECKED);
 	 */
-
+#endif
 }
 
 void OptionsDialog::OnDeleteItem(int nIDCtl, LPDELETEITEMSTRUCT lpDeleteItemStruct)

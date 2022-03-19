@@ -4151,7 +4151,7 @@ public:
 				big_cells_end=(li_list *)(((swptr)big_cells+blocksize-16));
 			}
 			num_cells=(swptr)big_cells_end-(swptr)big_cells;
-			num_cells/=16;
+			num_cells/=sizeof(li_list);
 			num_cells_free=num_cells;
 			swptr i;
 			for (i=num_cells_free-1; i>0; i--)
@@ -4184,7 +4184,7 @@ public:
 				small_cells_end=(li_free8_list *)(((swptr)small_cells+blocksize-8));
 			}
 			num_cells=(swptr)small_cells_end-(swptr)small_cells;
-			num_cells/=8;
+			num_cells/=sizeof(li_free8_list);
 			num_cells_free=num_cells;
 			swptr j;
 			for (j=num_cells_free-1; j>0; j--)
@@ -4237,7 +4237,7 @@ public:
 	{
 		int bailout=0;
 
-		if (size==8)
+		if (size<=sizeof(li_free8_list))
 		{
 			if (!small_cells)
 			{
@@ -4403,11 +4403,14 @@ void li_memory_manager_class::init()
 	//Warning C4127 "Conditional Expression is constant" is normal
 	//on the following line.
 	//You should be alarmed if it does NOT show up... See what the code does in that case ;-)
+#if !defined I4_64BITCPU
+
 	if (sizeof(li_list)!=16 || sizeof(li_free8_list)!=8)
 	{
 		li_error(0, "FATAL: Lisp-Engine memory init: Data size mismatch error, cannot continue.");
 		exit(95);
 	}
+#endif
 	strcpy(li_last_file,"None (The error occured inside an internal function).");
 
 	//create the first two blocks.
@@ -4795,7 +4798,13 @@ void li_memory_manager_class::free_cell(li_list * l)
 
 li_object * li_memory_manager_class::alloc_cell(size_t size)
 {
-	if (size<=8)
+	// Up to sizeof(li_list) they go to the big list, up to sizeof(li_free8_list) to the small list. 
+	if (size > sizeof(li_list))
+	{
+		i4_error("lisp objects must be smaller than sizeof(li_list)");
+	}
+
+	if (size<=sizeof(li_free8_list))
 	{
 		memory_block_list * curr=small_blocks;
 		li_object * sret=0;
@@ -4858,7 +4867,7 @@ li_object * li_memory_manager_class::alloc_cell(size_t size)
 			}
 		}
 		cell_lock.lock();
-		curr=new memory_block_list(memory_block_list::BIG,50000,this);
+		curr=new memory_block_list(memory_block_list::BIG,100000,this);
 		curr->next=big_blocks;
 		big_blocks=curr;
 		cell_lock.unlock();
