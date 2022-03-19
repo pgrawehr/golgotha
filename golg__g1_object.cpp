@@ -1127,21 +1127,7 @@ void g1_init_trig_tables()
 
 inline sw32 f_to_i(float x)
 {
-	sw32 result;
-
-#ifdef _WINDOWS
-
-	_asm {
-		fld x ;
-		fistp result ;
-	}
-
-#else
-
-	result = (sw32)x;
-
-#endif
-
+	sw32 result = (sw32)x;
 	return result;
 }
 
@@ -1417,7 +1403,7 @@ public:
 		for (j=0; j<g1_global_id.num_reserved; j++)
 		{
 			g1_object_class * o=g1_global_id.get(j);
-			if (!g1_global_id.preassigned(j) && ((w32)o>G1_MAX_OBJECTS))
+			if (!g1_global_id.preassigned(j) && o != nullptr)
 			{
 				li_class * c=o->vars;
 

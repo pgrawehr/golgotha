@@ -268,7 +268,12 @@ i4_time_class::i4_time_class(sw32 milli_sec)
 	time.win32_time.overflow=0;
 }
 
-
+#if defined I4_64BITCPU
+w64 i4_get_system_clock()
+{
+	return GetTickCount64();
+}
+#else
 w64 i4_get_system_clock()
 {
 	w32 lo, hi;
@@ -282,7 +287,7 @@ w64 i4_get_system_clock()
 	};
 	return (((w64)hi)<<32) | lo;
 }
-
+#endif
 int i4_win_clocks_per_sec = -1;
 
 int i4_get_clocks_per_second()

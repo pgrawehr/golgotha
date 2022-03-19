@@ -353,7 +353,7 @@ void average_4x4_alpha(w16 * dst, w8 * dst_24, w8 *&p0, w8 * p1, w8 * p2, w8 * p
 
 void average_4x4_normal(w16 * dst, w8 * dst_24, w8 * p0, w32 bpl)
 {
-#ifndef WIN32
+#if !defined WIN32 || defined I4_64BITCPU
 
 	sw32 ir,ig,ib;
 
@@ -452,7 +452,7 @@ void average_4x4_normal(w16 * dst, w8 * dst_24, w8 * p0, w32 bpl)
 
 void average_4x4_normal(w8 * dst_24, w8 * p0, w32 bpl)
 {
-#ifndef WIN32
+#if !defined WIN32 || defined I4_64BITCPU
 	sw32 ir,ig,ib;
 
 	ir = (p0[0]);

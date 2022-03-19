@@ -18,7 +18,7 @@
 //#define new new(__FILE__,__LINE__)
 #ifdef _WINDOWS
 #ifndef new
-void * __cdecl operator new(unsigned int nSize, char * lpszFileName, int nLine);
+void * __cdecl operator new(size_t nSize, char * lpszFileName, int nLine);
 void __cdecl operator delete(void * p, char * lpszFileName, int nLine);
 #define new new (__FILE__,__LINE__)
 #endif

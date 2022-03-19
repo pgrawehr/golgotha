@@ -296,6 +296,11 @@ li_int *new_lisp_number(int x)
 	return new li_int(x);
 }
 
+li_int *new_lisp_number(long long x)
+{
+	return new li_int((int)x);
+}
+
 li_float *new_lisp_number(float x)
 {
 	return new li_float(x);
@@ -578,7 +583,6 @@ long lnumber_value(void * lnumber)
 			{
 				lprint(lnumber);
 				lbreak(" is not a number\n");
-
 			}
 	}
 	return 0;

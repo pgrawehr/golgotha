@@ -132,7 +132,7 @@ i4_bool win32_input_class::process_events()
 	return ret;
 }
 
-long FAR PASCAL WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+LRESULT FAR PASCAL WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
 
 
 /*
@@ -329,12 +329,9 @@ void win32_input_class::destroy_window()
 			ShowCursor(TRUE);
 		}
 	}
-
-
-
 }
 
-long FAR PASCAL WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+LRESULT FAR PASCAL WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
 
 	if (win32_current_input)
@@ -385,9 +382,9 @@ void win32_input_class::set_async_mouse(dx_threaded_mouse_class * m)
 	//}
 }
 
-w16 win32_input_class::translate_windows_key(w16 wkey, w32 &m)
+WPARAM win32_input_class::translate_windows_key(WPARAM wkey, w32 &m)
 {
-	w16 key;
+	WPARAM key;
 
 	m=0;
 
@@ -742,7 +739,7 @@ void win32_input_class::update_mouse_buttons(i4_mouse_button_event_class::btype 
 }
 
 
-sw32 win32_input_class::process(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, DWORD time)
+LRESULT win32_input_class::process(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, DWORD time)
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
@@ -813,7 +810,7 @@ sw32 win32_input_class::process(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 			{
 
 				hdc = GetDC(hWnd);
-				TextOut(hdc,0,0,window_message,strlen(window_message));
+				TextOut(hdc,0,0,window_message, strlen(window_message));
 				ReleaseDC(hWnd,hdc);
 			}
 			EndPaint(hWnd,&ps);
@@ -1068,11 +1065,11 @@ sw32 win32_input_class::process(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 			{
 				w32 m;
 				//i4_warning("Got WM_KEYDOWN %i.",wParam);
-				w16 key_code=translate_windows_key(wParam, m);
+				WPARAM key_code=translate_windows_key(wParam, m);
 				modifier_state|=m;
 				//if (key_code==0) break;//Nothing useful for now->Wait for WM_CHAR
 				//Problem with WM_CHAR: There's no WM_UPCHAR message...
-				w16 key=i4_key_translate(key_code, 1, modifier_state);
+				w16 key=i4_key_translate((w16)key_code, 1, modifier_state);
 				i4_time_class t(time);
 				if ((key_code==0) && (key==0))
 				{

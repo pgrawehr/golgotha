@@ -98,7 +98,7 @@ public:
 		w32 ms=atol(ret);
 		w32 currms=0;
 		MSG msg;
-		if (error=mciSendString("play golgothaplaybackfile from 0",ret,MAX_PATH*2,i4_win32_window_handle))
+		if (error = mciSendString("play golgothaplaybackfile from 0",ret,MAX_PATH*2,i4_win32_window_handle))
 		{
 			mciGetErrorString(error,ret,MAX_PATH*2);
 			i4_warning("ERROR: Playback of %s failed: %s",buf,ret);

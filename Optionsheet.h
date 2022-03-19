@@ -23,7 +23,6 @@ public:
 // Attribute
 public:
 	OptionsDialog graphics;
-	COptionInfo info;
 	COptionSound sound;
 	OptionExtras extras;
 

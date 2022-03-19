@@ -56,9 +56,9 @@ inline void *i4_realloc(void * ptr,w32 size)
 }
 
 void i4_mem_report(char * filename);
-long i4_allocated();
-long i4_available();
-long i4_largest_free_block();
+swptr i4_allocated();
+swptr i4_available();
+swptr i4_largest_free_block();
 
 // for debugging purposes only...
 int valid_ptr(void * ptr);        // returns 1 if is an address returned by i4_malloc

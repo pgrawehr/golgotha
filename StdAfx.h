@@ -11,8 +11,8 @@
 #endif // _MSC_VER > 1000
 
 #define WIN32_LEAN_AND_MEAN     // Exclude rarely-used stuff from Windows headers
-#define WINVER 0x501
-#define _WIN32_WINNT 0x501      // Require at least Windows XP
+#define WINVER 0x0600
+#define _WIN32_WINNT 0x0600      // Require at least Windows 8
 //StdAfx.h is included BY pch.h.
 //#include "pch.h"
 #include <stdio.h>

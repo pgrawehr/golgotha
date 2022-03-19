@@ -531,7 +531,7 @@ i4_bool i4_set_registry(i4_registry_type type,
 					 path,
 					 &key)==ERROR_SUCCESS)
 	{
-		RegSetValueEx(key, key_name, 0, REG_SZ, (w8 *)buffer, strlen(buffer)+1);
+		RegSetValueEx(key, key_name, 0, REG_SZ, (w8 *)buffer, (DWORD)strlen(buffer)+1);
 		RegCloseKey(key);
 		return i4_T;
 	}

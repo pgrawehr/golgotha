@@ -742,13 +742,7 @@
     <ClCompile Include="OptionGetDXVer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OptionInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OptionMFCInit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OptionProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Optionsdialog.cpp">
@@ -1680,9 +1674,6 @@
     <ClInclude Include="OptionExtras.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OptionInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="options.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -2137,9 +2128,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="loaders\write.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="x86_proc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="loaders\mp3\xfermem.h">

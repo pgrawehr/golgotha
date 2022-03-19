@@ -771,7 +771,10 @@ void i4_get_cpu_info(i4_cpu_info_struct * s)
 	s->cpu_flags = 0;
 #endif
 
-#if (_WINDOWS)
+#if (I4_64BITCPU)
+	s->cpu_flags = 0;
+	s->cpu_type = i4_cpu_info_struct::UNKNOWN_X64;
+#else (_WINDOWS)
 	i4_win32_get_cpu_info(s);
 #endif
 }
@@ -784,7 +787,7 @@ void i4_get_cpu_info(i4_cpu_info_struct * s)
    golgotha_source@usa.net (Subject should have "GOLG" in it)
  ***********************************************************************/
 
-#ifdef _WINDOWS
+#if defined _WINDOWS && !defined I4_64BITCPU
 w32 x86_can_do_cpuid()
 {
 	w32 result;

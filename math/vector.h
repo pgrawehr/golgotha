@@ -12,7 +12,7 @@
 #include "math/num_type.h"
 #include <math.h>
 
-#ifdef _WINDOWS
+#if defined _WINDOWS && !defined I4_64BITCPU
 #define G1_WIN32_VECTOR_ASM
 #endif
 

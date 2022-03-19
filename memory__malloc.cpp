@@ -36,7 +36,7 @@
 #undef new
 #ifdef _DEBUG
 //AfxAllocMemoryDebug is not defined for release builds
-void * __cdecl operator new(unsigned int nSize, char * lpszFileName, int nLine)
+void * __cdecl operator new(size_t nSize, char * lpszFileName, int nLine)
 {
 	return AfxAllocMemoryDebug(nSize,FALSE,lpszFileName,nLine);
 }
@@ -183,7 +183,7 @@ void small_allocation_summary(int &total, int *&list)
 	for (; size<total; size++)
 	{
 		list[size]=0;
-		int i,x;
+		int64_t i,x;
 		for (i=0; i<bmanage_total; i++)
 		{
 			small_block * s=bmanage[i].sblocks[size];
@@ -191,7 +191,7 @@ void small_allocation_summary(int &total, int *&list)
 			{
 				for (x=0; x<32; x++)
 				{
-					if (s->alloc_list&(1<<x))
+					if (s->alloc_list & (static_cast<int64_t>(1) << x))
 					{
 						list[size]++;
 					}
@@ -995,7 +995,7 @@ void * i4_block_manager_class::alloc(long size, char * name)
 #ifdef i4_MEM_CHECK
 			s->name[0]=str_alloc(name);
 #endif
-			swptr * addr=(long *)(((char *)s)+sizeof(small_block));
+			swptr * addr=(swptr *)(((char *)s)+sizeof(small_block));
 			*addr=(swptr)s;
 			return (void *)(addr+1); // return first block
 		}

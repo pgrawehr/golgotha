@@ -457,7 +457,7 @@ li_object* m1_rotate_object(li_object * o, li_environment *env)
 	for (int i=0; i<m1_info.obj->num_vertex; i++,v++)
 	{
 		i4_3d_vector result;
-		transform.trans_3x3(v->v, result);
+		transform.transform_3x3(v->v, result);
 		v->v.x=result.x;
 		v->v.y=result.y;
 		v->v.z=result.z;

@@ -13,7 +13,7 @@
 
 #define bit(i) (1<<i)
 
-#ifdef _WINDOWS
+#if defined _WINDOWS && !defined I4_64BITCPU
 inline void start_ceil()
 {
 	//keep these bits, set all others to 0

@@ -904,6 +904,20 @@ void r1_dx9_class::disable_texture()
 
 static i4_float f_0_1_to_i_0_255_255 = 255.f;
 
+#if defined I4_64BITCPU
+sw32 inline f_0_1_to_i_0_255(float f)
+{
+	float fscaled = f * f_0_1_to_i_0_255_255;
+	return (sw32)fscaled;
+}
+
+i4_float inline i_to_f(sw32 i)
+{
+	return (i4_float)i;
+}
+
+#else
+
 sw32 inline f_0_1_to_i_0_255(float f) {
 	sw32 res;
 
@@ -927,7 +941,7 @@ i4_float inline i_to_f(sw32 i) {
 	}
 	return res;
 }
-
+#endif
 w32 inline make_d3d_color(i4_float r, i4_float g, i4_float b) {
 	return (f_0_1_to_i_0_255(r) << 16) |
 		   (f_0_1_to_i_0_255(g) <<  8) |

@@ -18,7 +18,8 @@ struct i4_cpu_info_struct
 		NON_X86     = 0,
 		UNKNOWN_X86 = 1,
 		INTEL_X86   = 2,
-		AMD_X86     = 3
+		AMD_X86     = 3,
+		UNKNOWN_X64 = 4
 	};
 
 	enum

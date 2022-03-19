@@ -42,7 +42,7 @@ class win32_input_class :
 
 //  BOOL CreateKeyboard(GUID &guid, LPDIRECTINPUTDEVICE& lpdiKey, DWORD dwAccess);
 //  BOOL InitDInput(void);
-	w16 translate_windows_key(w16 wkey, w32 &modifer);
+	WPARAM translate_windows_key(WPARAM wkey, w32 &modifer);
 	i4_bool have_window;
 	w16 modifier_state;
 	volatile i4_bool active;
@@ -106,7 +106,7 @@ public:
 		}
 	} confine;
 
-	sw32 process(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, DWORD time);
+	LRESULT process(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, DWORD time);
 
 	win32_input_class(char * extra_message);
 

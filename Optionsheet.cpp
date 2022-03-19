@@ -5,7 +5,6 @@
 //#include "display.h"
 #include "resource.h"
 #include "optionsdialog.h"
-#include "optioninfo.h"
 #include "optionsound.h"
 #include "optionextras.h"
 #include "Optionsheet.h"
@@ -35,7 +34,6 @@ COptionsheet::COptionsheet(LPCTSTR pszCaption, CWnd * pParentWnd, UINT iSelectPa
 	AddPage(&graphics);
 	AddPage(&sound);
 	AddPage(&extras);
-	AddPage(&info);
 }
 
 COptionsheet::~COptionsheet()

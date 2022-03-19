@@ -35,7 +35,7 @@ inline i4_float i4_fabs(const i4_float &x)
 	}
 }
 
-#ifdef WIN32
+#if defined WIN32 && !defined I4_64BITCPU
 inline sw32 i4_f_to_i(i4_float f)
 {
 	w16 i4_f_to_i_control_word_1;

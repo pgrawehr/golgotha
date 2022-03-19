@@ -56,7 +56,6 @@
 
 #ifdef _WINDOWS
 #include "options.h"
-#include "optioninfo.h"
 #include "optionsound.h"
 #include "optionsdialog.h"
 #include "optionextras.h"
