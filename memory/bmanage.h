@@ -41,13 +41,6 @@ class i4_block_manager_class
 {
 public:
 
-	swptr block_size;                           // size of this memory_block
-	small_block * sblocks[JM_SMALL_SIZE];
-	void * addr;
-
-	memory_node * sfirst,* slast;
-
-
 	void init(void * block, long Block_size);
 	void *alloc(long size, char * name);
 	void free(void * ptr);
@@ -58,8 +51,6 @@ public:
 	swptr pointer_size(void * ptr);
 	void report(i4_file_class * fp);
 	void inspect();
-
-	int valid_ptr(void * ptr);   // only called from within debugger
 };
 
 #endif

@@ -1403,7 +1403,7 @@ public:
 		for (j=0; j<g1_global_id.num_reserved; j++)
 		{
 			g1_object_class * o=g1_global_id.get(j);
-			if (!g1_global_id.preassigned(j) && o != nullptr)
+			if (!g1_global_id.preassigned(j) && ((w32)o>G1_MAX_OBJECTS))
 			{
 				li_class * c=o->vars;
 

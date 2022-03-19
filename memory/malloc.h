@@ -60,8 +60,5 @@ swptr i4_allocated();
 swptr i4_available();
 swptr i4_largest_free_block();
 
-// for debugging purposes only...
-int valid_ptr(void * ptr);        // returns 1 if is an address returned by i4_malloc
-int valid_memory(void * ptr);     // returns 1 if address is in memory space managed by i4
 #include "memory/new.h"
 #endif
