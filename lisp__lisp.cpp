@@ -4233,7 +4233,7 @@ public:
 	}
 
 	//(needs update)
-	li_object *alloc_cell(size_t size)    //assumes size is newer >16 (checked by new)
+	li_object *alloc_cell(size_t size)    //assumes size is never >16 (checked by new)
 	{
 		int bailout=0;
 
