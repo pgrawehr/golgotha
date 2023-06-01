@@ -569,7 +569,7 @@ int mtl_read(FILE* filein)
 {
 	char input[LINE_MAX_LEN];
 	char* next;
-	char* token = nullptr;
+	char token[LINE_MAX_LEN];
 	int width = 0;
 	char currentMtl[LINE_MAX_LEN];
 	currentMtl[0] = '\0';
@@ -658,6 +658,8 @@ int mtl_read(FILE* filein)
 			}
 		}
 	}
+
+	return SUCCESS;
 }
 
 
