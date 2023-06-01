@@ -33,23 +33,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "ivcon.h"
+#include "gmod.h"
+#include "objFormat.h"
+
+
 #if _MSC_VER>1100
 #pragma warning(disable : 4244 ; disable : 4305)
 #endif
-#define FALSE 0
-#define TRUE 1
-
-#define ERROR 0
-#define G1_SECTION_MODEL_QUADS 18
-#define G1_SECTION_MODEL_TEXTURE_NAMES 19
-#define G1_SECTION_MODEL_VERT_ANIMATION 20
-#define GMOD_MAX_SECTIONS 32
-#define GMOD_UNUSED_VERTEX 65535
-#define PI 3.141592653589793238462643
-#define SUCCESS 1
-
-#define DEG_TO_RAD   ( PI / 180.0 )
-#define RAD_TO_DEG   ( 180.0 / PI )
 
 /******************************************************************************/
 
@@ -135,21 +126,8 @@
 //#define ORDER_MAX 10
 //#define TEXTURE_MAX 100
 
-#undef COR3_MAX
-#define COLOR_MAX 1000
-#define COR3_MAX 60000
-#define FACE_MAX 60000
-#define LINE_MAX_LEN 256
-#define LEVEL_MAX 10
-#define LINE_MAX 5000
-#define MATERIAL_MAX 1000
-#define ORDER_MAX 10
-#define TEXTURE_MAX 60000
 
-#define FACE_FLAGS_UNKNOWN 0xff //don't use these (do not know what they are for)
-#define FACE_FLAGS_BOTHSIDED 0x100
-#define FACE_FLAGS_MATERIAL_ASSIGNED 0x200
-
+// Global variables (YUK!!!)
 char anim_name[LINE_MAX_LEN];
 float background_rgb[3];
 int bad_num;
@@ -174,7 +152,7 @@ int face_flags[FACE_MAX];
 int face_material[FACE_MAX];
 float face_normal[3][FACE_MAX];
 int face_num;
-bool face_ignoresides=true;
+bool face_ignoresides = true;
 int face_object[FACE_MAX];
 int face_order[FACE_MAX];
 int face_smooth[FACE_MAX];
@@ -198,14 +176,14 @@ int list[COR3_MAX];
 char material_binding[80];
 char material_name[MATERIAL_MAX][LINE_MAX_LEN];
 int material_num;
-float material_rgba[4][MATERIAL_MAX];
+color material_rgba[MATERIAL_MAX];
 
 char mat_name[LINE_MAX_LEN];
 int max_order2;
 
 char normal_binding[80];
-float normal_temp[3][ORDER_MAX*FACE_MAX];
-float vertex_uv_temp[2][ORDER_MAX*FACE_MAX];
+float normal_temp[3][ORDER_MAX * FACE_MAX];
+float vertex_uv_temp[2][ORDER_MAX * FACE_MAX];
 
 char object_name[81];
 int object_num;
@@ -220,7 +198,7 @@ int text_num;
 char texture_binding[80];
 char texture_name[TEXTURE_MAX][LINE_MAX_LEN];
 int texture_num;
-float texture_temp[2][ORDER_MAX*FACE_MAX];
+float texture_temp[2][ORDER_MAX * FACE_MAX];
 
 float transform_matrix[4][4];
 
@@ -229,141 +207,6 @@ float vertex_normal[3][ORDER_MAX][FACE_MAX];
 float vertex_rgb[3][ORDER_MAX][FACE_MAX];
 float vertex_tex_uv[2][ORDER_MAX][FACE_MAX];
 int vertex_faceindex[ORDER_MAX][FACE_MAX]; //which vertices make up which faces?
-/******************************************************************************/
-
-/* FUNCTION PROTOTYPES */
-
-/******************************************************************************/
-
-int                main( int argc, char * * argv );
-int                ase_read( FILE * filein );
-int                ase_write( FILE * fileout );
-int                byu_read( FILE * filein );
-int                byu_write( FILE * fileout );
-int                char_index_last( char * string, char c );
-int                char_pad( int * char_index, int * null_index, char * string,
-							int STRING_MAX );
-char               char_read( FILE * filein );
-int                char_write( FILE * fileout, char c );
-int                command_line( char * * argv );
-void               cor3_normal_set( void );
-void               cor3_range( void );
-void               data_check( void );
-void               data_init( void );
-int                data_read( void );
-void               data_report( void );
-int                data_write( void );
-int                dxf_read( FILE * filein );
-int                dxf_write( FILE * fileout );
-void               edge_null_delete( void );
-void               face_area_set(bool domodifications);
-void               face_normal_ave( void );
-void               face_null_delete( void );
-int                face_print( int iface );
-void               face_reverse_order( void );
-int                face_subset( void );
-void               face_to_line( void );
-void               face_to_vertex_material( void );
-char *file_ext( char * file_name );
-float              float_read( FILE * filein );
-float              float_reverse_bytes( float x );
-int                float_write( FILE * fileout, float float_val );
-int                gmod_arch_check( void );
-int                gmod_read( FILE * filein );
-float              gmod_read_float( FILE * filein );
-unsigned short     gmod_read_w16( FILE * filein );
-unsigned long      gmod_read_w32( FILE * filein );
-int                gmod_write( FILE * fileout );
-void               gmod_write_float( float Val, FILE * fileout );
-void               gmod_write_w16( unsigned short Val, FILE * fileout );
-void               gmod_write_w32( unsigned long Val, FILE * fileout );
-void               hello( void );
-void               help( void );
-int                hrc_read( FILE * filein );
-int                hrc_write( FILE * fileout );
-void               init_program_data( void );
-int                interact( void );
-int                iv_read( FILE * filein );
-int                iv_write( FILE * fileout );
-int                ivec_max( int n, int * a );
-int                leqi( char * string1, char * string2 );
-long int           long_int_read( FILE * filein );
-int                long_int_write( FILE * fileout, long int int_val );
-void               news( void );
-void               node_to_vertex_material( void );
-int                obj_read( FILE * filein );
-float normalize_texture_coordinates(float vt);
-int                obj_write( FILE * fileout );
-int                pov_write( FILE * fileout );
-int                rcol_find( float a[][COR3_MAX], int m, int n, float r[] );
-float              rgb_to_hue( float r, float g, float b );
-short int          short_int_read( FILE * filein );
-int                short_int_write( FILE * fileout, unsigned short int int_val );
-int                smf_read( FILE * filein );
-int                smf_write( FILE * fileout );
-int                stla_read( FILE * filein );
-int                stla_write( FILE * fileout );
-int                stlb_read( FILE * filein );
-int                stlb_write( FILE * fileout );
-void               tds_pre_process( void );
-int                tds_read( FILE * filein );
-unsigned long int  tds_read_ambient_section( FILE * filein, unsigned long matindex);
-unsigned long int  tds_read_background_section( FILE * filein );
-unsigned long int  tds_read_boolean( unsigned char * boolean, FILE * filein );
-unsigned long int  tds_read_camera_section( FILE * filein );
-unsigned long int  tds_read_edit_section( FILE * filein, int * views_read );
-unsigned long int  tds_read_keyframe_section( FILE * filein, int * views_read );
-unsigned long int  tds_read_keyframe_objdes_section( FILE * filein );
-unsigned long int  tds_read_light_section( FILE * filein );
-unsigned long int  tds_read_u_long_int( FILE * filein );
-int                tds_read_long_name( FILE * filein );
-unsigned long int  tds_read_matdef_section( FILE * filein );
-unsigned long int  tds_read_material_section( FILE * filein );
-int                tds_read_name( FILE * filein );
-unsigned long int  tds_read_obj_section( FILE * filein );
-unsigned long int  tds_read_object_section( FILE * filein );
-unsigned long int  tds_read_tex_verts_section( FILE * filein );
-unsigned long int  tds_read_texmap_section( FILE * filein );
-unsigned short int tds_read_u_short_int( FILE * filein );
-unsigned long int  tds_read_spot_section( FILE * filein );
-unsigned long int  tds_read_unknown_section( FILE * filein );
-unsigned long int  tds_read_view_section( FILE * filein, int * views_read );
-unsigned long int  tds_read_vp_section( FILE * filein, int * views_read );
-int                tds_write( FILE * fileout );
-int                tds_write_string( FILE * fileout, char * string );
-int                tds_write_u_short_int( FILE * fileout,
-										 unsigned short int int_val );
-int                tec_write( FILE * fileout );
-void               tmat_init( float a[4][4] );
-void               tmat_mxm( float a[4][4], float b[4][4], float c[4][4] );
-void               tmat_mxp( float a[4][4], float x[4], float y[4] );
-void               tmat_mxp2( float a[4][4], float x[][3], float y[][3], int n );
-void               tmat_mxv( float a[4][4], float x[4], float y[4] );
-void               tmat_rot_axis( float a[4][4], float b[4][4], float angle,
-								 char axis );
-void               tmat_rot_vector( float a[4][4], float b[4][4], float angle,
-								   float v1, float v2, float v3 );
-void               tmat_scale( float a[4][4], float b[4][4], float sx, float sy,
-							  float sz );
-void               tmat_shear( float a[4][4], float b[4][4], char * axis,
-							  float s );
-void               tmat_trans( float a[4][4], float b[4][4], float x, float y,
-							  float z );
-int                tria_read( FILE * filein );
-int                tria_write( FILE * fileout );
-int                trib_read( FILE * filein );
-int                trib_write( FILE * fileout );
-int                txt_write( FILE * fileout );
-int                ucd_write( FILE * fileout );
-void               vertex_normal_set( void );
-void               vertex_to_face_material( void );
-void               vertex_to_node_material( void );
-int                vla_read( FILE * filein );
-int                vla_write( FILE * fileout );
-int                wrl_write( FILE * filout );
-int                xgl_write( FILE * fileout );
-void tga_write_materials(char * filename);
-void ConvertTextureToMaterial();
 
 /******************************************************************************/
 
@@ -728,10 +571,7 @@ int ase_read( FILE * filein )
 
 					if ( material_num < MATERIAL_MAX )
 					{
-						material_rgba[0][material_num] = rval;
-						material_rgba[1][material_num] = gval;
-						material_rgba[2][material_num] = bval;
-						material_rgba[3][material_num] = 1.0;
+						material_rgba[material_num] = color(rval, gval, bval, 1.0f);
 					}
 
 					material_num = material_num + 1;
@@ -2354,7 +2194,7 @@ void data_init( void )
 	{
 		for ( j = 0; j < MATERIAL_MAX; j++ )
 		{
-			material_rgba[i][j] = 0.0;
+			material_rgba[j] = color();
 		}
 	}
 
@@ -2623,6 +2463,10 @@ int data_read( void )
 		ierror = smf_read( filein );
 
 	}
+	else if (leqi(filein_type, "MTL" ) == TRUE)
+	{
+		ierror = mtl_read(filein);
+	}
 	else if (
 		leqi( filein_type, "STL" ) == TRUE ||
 		leqi( filein_type, "STLA") == TRUE )
@@ -2717,10 +2561,7 @@ int data_read( void )
 	{
 		material_num = 1;
 		strcpy( material_name[0], "Material_0000" );
-		material_rgba[0][0] = 0.7f;
-		material_rgba[1][0] = 0.7f;
-		material_rgba[2][0] = 0.7f;
-		material_rgba[3][0] = 1.0f;
+		material_rgba[0] = color(0.7f, 0.7f, 0.7f, 1.0f);
 	}
 /*
    If a node has not been assigned a material, set it to material 0.
@@ -4230,14 +4071,12 @@ int material_print(int imat)
    Purpose: Print information about materials
  */
 {
-	printf("\n");
 	if (imat<material_num)
 	{
 		int k=imat;
 		printf("  Material Index: %i, Name: %s, ColorRGBA: (%f,%f,%f,%f)",
 			   k,material_name[k],
-			   material_rgba[0][k],material_rgba[1][k],material_rgba[2][k],
-			   material_rgba[3][k]);
+			   material_rgba[k].R,material_rgba[k].G,material_rgba[k].B, material_rgba[k].A);
 	}
 	else
 	{
@@ -4302,8 +4141,7 @@ int face_print( int iface )
 		k=face_material[iface];
 		printf("  Face Material Index: %i, Name: %s, ColorRGBA: (%f,%f,%f,%f)",
 			   k,material_name[k],
-			   material_rgba[0][k],material_rgba[1][k],material_rgba[2][k],
-			   material_rgba[3][k]);
+			   material_rgba[k].R,material_rgba[k].B,material_rgba[k].G, material_rgba[k].A);
 	}
 	else
 	{
@@ -4891,927 +4729,6 @@ int float_write( FILE * fileout, float float_val )
 	return nbyte;
 }
 
-
-/******************************************************************************/
-
-int gmod_arch_check( void )
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	GMOD_ARCH_CHECK inquires into some features of the computer architecture.
-
-   Modified:
-
-   	19 May 1999
-
-   Author:
-
-   	Zik Saleeba (zik@zikzak.net)
- */
-{
-	static unsigned char one[4];
-	int temp;
-
-	temp = sizeof( float );
-	if ( temp != 4 )
-	{
-		return FALSE;
-	}
-
-	*(float *)&one = 1.0;
-
-	if (one[0] == 0 && one[1] == 0 && one[2] == 128 && one[3] == 63)
-	{
-		/* little endian IEEE floats */
-		return TRUE;
-	}
-
-	if (one[0] == 63 && one[1] == 128 && one[2] == 0 && one[3] == 0)
-	{
-		/* big endian IEEE floats */
-		return TRUE;
-	}
-
-	return FALSE;
-}
-/******************************************************************************/
-
-int material_list_index(const char* name)
-{
-	for (int j = 0; j < material_num; j++)
-	{
-		if (strcmp(material_name[j], name) == 0)
-		{
-			return j;
-		}
-	}
-
-	return -1;
-}
-
-int gmod_read( FILE * filein )
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	GMOD_READ reads a golgotha GMOD file.
-
-   Modified:
-
-   	19 May 1999
-
-   Author:
-
-   	Zik Saleeba (zik@zikzak.net)
- */
-
-/*
-   golgotha GMOD file format:
-
-
-   		FILE HEADER
-
-   w32     magic number           f9 fa 63 1e
-   w32     number of sections
-   [ number of sections
-   	w32     section id
-   	w32     section offset
-   ]
-
-
-   		TEXTURE NAME SECTION - section id = 0x13 (19)
-
-   w16     number of faces
-   [ number of faces
-   	w16     texture name length
-   	[ texture name length
-   		w8      texture name character
-   	]
-   ]
-
-
-
-   		MODEL QUADS SECTION - section id = 0x12 (18)
-
-   w16     number of faces
-   [ number of faces
-   	[ four vertices
-   		w16     vertex index
-   		float   xpos (0.0-1.0)
-   		float   ypos (0.0-1.0)
-   	]
-   	float   scale
-   	w16     flags
-   	float   xnormal     (normal should be normalised)
-   	float   ynormal
-   	float   znormal
-   ]
-
-
-   		VERTEX ARRAY SECTION - section id = 0x14 (20)
-
-   w16     number of vertices
-   w16     number of animations
-   w16     length of animation name
-   [ length of animation name
-   	w8      animation name character
-   ]
-   w16     number of frames in animation
-   [ number of frames in animation
-   	[ number of vertices
-   		float   xpos
-   		float   ypos
-   		float   zpos
-   		float   xnormal
-   		float   ynormal
-   		float   znormal
-   	]
-   ]
- */
-{
-	unsigned char MagicNumber[4];
-	unsigned long int NumSections;
-	int SectionCount;
-	unsigned long int SectionID[GMOD_MAX_SECTIONS];
-	unsigned long int SectionOffset[GMOD_MAX_SECTIONS];
-
-	unsigned short NumAnimations;
-	unsigned short NumFrames;
-	unsigned short FaceCount;
-	unsigned short TextureCount;
-	int VertexCount;
-
-	float Scale;
-	unsigned short Flags;
-	unsigned short TextureNameLen;
-	unsigned short AnimationNameLen;
-	int Order;
-	int MaxCor = 0;
-
-	/*
-	 * check if we can handle this architecture
-	 */
-
-	if (!gmod_arch_check())
-	{
-		printf("GMOD_READ - This architecture not supported.\n");
-		return ERROR;
-	}
-
-	/*
-	 * read the file header
-	 */
-
-	/* read the magic number */
-	fread(MagicNumber, 1, 4, filein);
-	if (MagicNumber[0] != 0xf9 ||
-		MagicNumber[1] != 0xfa ||
-		MagicNumber[2] != 0x63 ||
-		MagicNumber[3] != 0x1e)
-	{
-		printf("GMOD_READ - Bad magic number on GMOD file.\n");
-		return ERROR;
-	}
-
-	NumSections = gmod_read_w32(filein);
-	if (NumSections >= GMOD_MAX_SECTIONS)
-	{
-		printf("GMOD_READ - Too many sections (%ld) in GMOD file - please increase static limit GMOD_MAX_SECTIONS\n", NumSections);
-		return ERROR;
-	}
-
-/*
-   Read the sections.
- */
-
-	for ( SectionCount = 0; SectionCount < ( int ) NumSections; SectionCount++ )
-	{
-		SectionID[SectionCount] = gmod_read_w32(filein);
-		SectionOffset[SectionCount] = gmod_read_w32(filein);
-	}
-/*
-   Read each successive section.
- */
-	for ( SectionCount = 0; SectionCount < ( int ) NumSections; SectionCount++ )
-	{
-/*
-   Go to the start of the section.
- */
-		fseek( filein, ( long int ) SectionOffset[SectionCount], SEEK_SET );
-/*
-   What type of section is it?
- */
-		switch (SectionID[SectionCount])
-		{
-
-/*
-   Model section.
- */
-			case G1_SECTION_MODEL_QUADS:
-/*
-   Get the number of faces.
- */
-				face_num = gmod_read_w16( filein );
-
-				if (face_num > FACE_MAX)
-				{
-					printf("GMOD_READ - Too many faces (%d) in GMOD file - please increase static limit FACE_MAX.\n", face_num);
-					return ERROR;
-				}
-/*
-   Get the information on each face.
- */
-				for ( FaceCount = 0; FaceCount < ( unsigned short ) face_num; FaceCount++ )
-				{
-
-					Order = 0;
-					for ( VertexCount = 0; VertexCount < 4; VertexCount++ )
-					{
-
-						/* read the vertex index */
-
-						face[VertexCount][FaceCount] = gmod_read_w16(filein);
-
-						if (face[VertexCount][FaceCount] != GMOD_UNUSED_VERTEX)
-						{
-							Order = VertexCount+1;
-							if (MaxCor < face[VertexCount][FaceCount])
-							{
-								MaxCor = face[VertexCount][FaceCount];
-							}
-						}
-
-						/* read the texture position */
-
-						vertex_tex_uv[0][VertexCount][FaceCount] = gmod_read_float(filein);
-						vertex_tex_uv[1][VertexCount][FaceCount] = gmod_read_float(filein);
-					}
-
-					/* scale and flags */
-
-					fread(&Scale, sizeof(Scale), 1, filein);
-					Flags = gmod_read_w16(filein);
-
-					if ( debug )
-					{
-						printf( "Flags = %d\n", Flags );
-					}
-
-					/* normal vector */
-
-					face_normal[0][FaceCount] = gmod_read_float(filein);
-					face_normal[1][FaceCount] = gmod_read_float(filein);
-					face_normal[2][FaceCount] = gmod_read_float(filein);
-
-					/* the order is the number of used vertices */
-
-					face_order[FaceCount] = Order;
-				}
-				break;
-
-
-/*
-   Texture name section.
- */
-
-			case G1_SECTION_MODEL_TEXTURE_NAMES:
-
-				/* get the number of textures */
-
-				texture_num = gmod_read_w16(filein);
-				if (texture_num > TEXTURE_MAX)
-				{
-					printf( "GMOD_READ - Too many texture maps (%d) in GMOD file.\n", texture_num );
-					printf( "  Increase static limit TEXTURE_MAX.\n" );
-					return ERROR;
-				}
-				face_num = texture_num;
-
-				for (TextureCount = 0; TextureCount < ( unsigned short ) texture_num;
-					 TextureCount++)
-				{
-
-					/* read the texture name */
-
-					TextureNameLen = gmod_read_w16(filein);
-					fread(&texture_name[TextureCount], sizeof(char), TextureNameLen, filein);
-					texture_name[TextureCount][TextureNameLen] = '\0';
-				}
-
-				ConvertTextureToMaterial();
-				
-				break;
-
-
-				/*
-				 * vertex section
-				 */
-
-			case G1_SECTION_MODEL_VERT_ANIMATION:
-
-				/* get the number of vertices */
-
-				cor3_num = gmod_read_w16(filein);
-				if (cor3_num > COR3_MAX)
-				{
-					printf("GMOD_READ - Too many vertices (%d) in GMOD file - please increase static limit COR3_MAX.\n", cor3_num);
-					return ERROR;
-				}
-
-/*
-   Get the number of animations.
- */
-
-				NumAnimations = gmod_read_w16(filein);
-
-				if (NumAnimations > 1)
-				{
-					printf( "GMOD_READ - Fatal error!\n" );
-					printf( "  GMOD files can only handle one animation.\n" );
-					printf( "  This file contains %d.\n", NumAnimations );
-					return ERROR;
-				}
-
-				/* read the animation name */
-				AnimationNameLen = gmod_read_w16(filein);
-				fread(&anim_name, sizeof(char), AnimationNameLen, filein);
-				anim_name[AnimationNameLen] = '\0';
-
-				/* get the number of frames of animation */
-				NumFrames = gmod_read_w16(filein);
-				if (NumFrames > 1)
-				{
-					printf("GMOD_READ - Too many frames of animation (%d) in GMOD file - will only use 1.\n", NumFrames);
-				}
-
-				/* go through all the vertices, reading each one */
-				for (VertexCount = 0; VertexCount < cor3_num; VertexCount++)
-				{
-
-					/* read the vertex */
-					cor3[0][VertexCount] = gmod_read_float(filein);
-					cor3[1][VertexCount] = gmod_read_float(filein);
-					cor3[2][VertexCount] = gmod_read_float(filein);
-
-					/* read the normal */
-					cor3_normal[0][VertexCount] = gmod_read_float(filein);
-					cor3_normal[1][VertexCount] = gmod_read_float(filein);
-					cor3_normal[2][VertexCount] = gmod_read_float(filein);
-				}
-				break;
-
-			default:
-				continue;
-		}
-	}
-
-/*
-   Set some other stray info.
- */
-	line_num = 0;
-
-/*
-   Check for sanity.
- */
-	if ( MaxCor >= cor3_num )
-	{
-		printf( "GMOD_READ - Maximum coordinate index (%d)\n", MaxCor );
-		printf( "  exceeded number of coordinates (%d) in GMOD file.\n", cor3_num );
-		return ERROR;
-	}
-
-	return SUCCESS;
-}
-/******************************************************************************/
-
-float gmod_read_float( FILE * filein )
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	GMOD_READ_FLOAT reads a float from a Golgotha GMOD file.
-
-   Modified:
-
-   	19 May 1999
-
-   Author:
-
-   	Zik Saleeba (zik@zikzak.net)
- */
-{
-	int endian = 1;
-	unsigned char * out_pos;
-	int i;
-	float Val;
-
-	if (*(char *)&endian == 1)
-	{
-		/* we're little-endian, which is native for GMOD floats */
-		fread(&Val, sizeof(Val), 1, filein);
-	}
-	else
-	{
-		/* we're big-endian, flip `em */
-		out_pos = (unsigned char *)&Val;
-		for ( i = sizeof(Val)-1; i >= 0; i-- )
-		{
-			*(out_pos+i) = fgetc(filein);
-		}
-	}
-
-	return Val;
-}
-/******************************************************************************/
-
-unsigned short gmod_read_w16( FILE * filein )
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	GMOD_READ_W16 reads a 16 bit word from a Golgotha GMOD file.
-
-   Modified:
-
-   	19 May 1999
-
-   Author:
-
-   	Zik Saleeba (zik@zikzak.net)
- */
-{
-	unsigned char Byte1;
-	unsigned char Byte2;
-
-	Byte1 = fgetc( filein );
-	Byte2 = fgetc( filein );
-
-	return Byte1 | (((unsigned short)Byte2) << 8);
-}
-/******************************************************************************/
-
-unsigned long gmod_read_w32( FILE * filein )
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	GMOD_READ_W32 reads a 32 bit word from a Golgotha GMOD file.
-
-   Modified:
-
-   	19 May 1999
-
-   Author:
-
-   	Zik Saleeba (zik@zikzak.net)
- */
-{
-	unsigned char Byte1, Byte2, Byte3, Byte4;
-
-	Byte1 = fgetc(filein);
-	Byte2 = fgetc(filein);
-	Byte3 = fgetc(filein);
-	Byte4 = fgetc(filein);
-
-	return Byte1 |
-		   (((unsigned long)Byte2) << 8) |
-		   (((unsigned long)Byte3) << 16) |
-		   (((unsigned long)Byte4) << 24);
-}
-
-/******************************************************************************/
-
-int gmod_write( FILE * fileout )
-{
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	GMOD_WRITE writes a Golgotha GMOD file.
-
-   Modified:
-
-   	19 May 1999
-
-   Author:
-
-   	Zik Saleeba (zik@zikzak.net)
- */
-	static unsigned char MagicNumber[4] = {
-		0xf9, 0xfa, 0x63, 0x1e
-	};
-	unsigned long NumSections;
-	unsigned long SectionHeaderPos;
-	unsigned long TextureNameSectionPos;
-	unsigned long ModelSectionPos;
-	unsigned long VertexSectionPos;
-	char * texname;
-	int VertexCount;
-	int FaceCount;
-	int TextureCount;
-	unsigned long SectionCount;
-	float Scale;
-	float Min[3];
-	float Max[3];
-	int CorNumber;
-	int DimensionCount;
-	float MaxWidth;
-
-/*
-   Check if we can handle this architecture.
- */
-
-	if ( !gmod_arch_check() )
-	{
-		printf("GMOD_WRITE - This architecture not supported.\n");
-		return ERROR;
-	}
-
-	printf("GMOD - Starting to write file, please wait...\n");
-/*
-   Write the file header.
- */
-
-/*
-   Write the magic number.
- */
-	fwrite( MagicNumber, sizeof(char), 4, fileout );
-
-/*
-   Write the number of sections.
- */
-	NumSections = 3;
-	gmod_write_w32( NumSections, fileout );
-
-/*
-   Write a dummy section header which we'll overwrite later.
- */
-	SectionHeaderPos = ftell( fileout );
-	for (SectionCount = 0; SectionCount < NumSections; SectionCount++)
-	{
-		gmod_write_w32( 0, fileout );
-		gmod_write_w32( 0, fileout );
-	}
-/*
-   Texture name section.
- */
-
-/*
-   Take note of where we are in the file.
- */
-	TextureNameSectionPos = ftell( fileout );
-
-/*
-   Write the number of textures.
- */
-
-	gmod_write_w16( ( unsigned short ) face_num, fileout );
-/*
-   Write the texture names.
- */
-	for ( TextureCount = 0; TextureCount < face_num; TextureCount++ )
-	{
-		texname=texture_name[face_material[TextureCount]];
-		gmod_write_w16( ( unsigned short ) strlen( texname),
-					   fileout );
-
-		fwrite( texname, strlen(texname),
-			   1, fileout );
-	}
-
-/*
-   Model section.
- */
-
-/*
-   Take note of where we are in the file.
- */
-
-	ModelSectionPos = ftell(fileout);
-
-/*
-   Write the number of faces.
- */
-
-	gmod_write_w16( ( unsigned short ) face_num, fileout );
-
-/*
-   Write the information on each face.
- */
-	for ( FaceCount =0 ; FaceCount < face_num; FaceCount++)
-	{
-		VertexCount=face_order[FaceCount];
-		if (VertexCount<3 || VertexCount>4)
-		{
-			printf("Face %i contains %i vertices. Target file might not be readable\n",FaceCount,VertexCount);
-		}
-	}
-
-	for ( FaceCount = 0; FaceCount < face_num; FaceCount++ )
-	{
-
-		for (VertexCount = 0; VertexCount < ((face_order[FaceCount] < 4) ? face_order[FaceCount] : 4); VertexCount++)
-		{
-
-/*
-   Write the vertex index.
- */
-			gmod_write_w16( ( unsigned short ) face[VertexCount][FaceCount], fileout );
-
-/*
-   Write the texture position.
- */
-
-			gmod_write_float( vertex_tex_uv[0][VertexCount][FaceCount], fileout );
-			gmod_write_float( vertex_tex_uv[1][VertexCount][FaceCount], fileout );
-		}
-
-/*
-   Write any extra vertices which are unused.
- */
-
-		for ( ; VertexCount < 4; VertexCount++ )
-		{
-
-/*
-   Write the vertex index.
- */
-			gmod_write_w16( GMOD_UNUSED_VERTEX, fileout );
-/*
-   Write the texture position.
- */
-			gmod_write_float( vertex_tex_uv[0][VertexCount][FaceCount], fileout );
-
-			gmod_write_float( vertex_tex_uv[1][VertexCount][FaceCount], fileout );
-		}
-
-/*
-   Scale and flags.
- */
-
-/*
-   Find the bounding box.
- */
-
-		for ( DimensionCount = 0; DimensionCount < 3; DimensionCount++ )
-		{
-
-			CorNumber = face[0][FaceCount];
-			Min[DimensionCount] = cor3[DimensionCount][CorNumber];
-			Max[DimensionCount] = cor3[DimensionCount][CorNumber];
-
-			for (VertexCount = 1; VertexCount < ((face_order[FaceCount] < 4) ? face_order[FaceCount] : 4); VertexCount++)
-			{
-
-				CorNumber = face[VertexCount][FaceCount];
-
-				if (Min[DimensionCount] > cor3[DimensionCount][CorNumber])
-				{
-					Min[DimensionCount] = cor3[DimensionCount][CorNumber];
-				}
-
-				if (Max[DimensionCount] < cor3[DimensionCount][CorNumber])
-				{
-					Max[DimensionCount] = cor3[DimensionCount][CorNumber];
-				}
-			}
-		}
-
-/*
-   The scale is the "width" of the face for mipmapping -
-   I just take the maximum bounding box dimension.
- */
-		MaxWidth = Max[0] - Min[0];
-		for ( DimensionCount = 1; DimensionCount < 3; DimensionCount++ )
-		{
-
-			if ( MaxWidth < Max[DimensionCount] - Min[DimensionCount] )
-			{
-				MaxWidth = Max[DimensionCount] - Min[DimensionCount];
-			}
-		}
-
-		Scale = MaxWidth;
-		//fwrite ( &Scale, sizeof(Scale), 1, fileout );
-		//gmod_write_float(Scale,fileout);
-		gmod_write_float(1.0f,fileout);
-
-/*
-   Most flags are only used for rendering, except bit 7 which indicates
-   that the normal vector should be ignored for backface culling
-   (effectivelly showing both sides)
- */
-		if (face_ignoresides)
-		{
-			gmod_write_w16(1<<7,fileout);
-		}
-		else
-		{
-			gmod_write_w16( 0, fileout );
-		}
-/*
-   Normal vector.
- */
-		gmod_write_float( face_normal[0][FaceCount], fileout );
-		gmod_write_float( face_normal[1][FaceCount], fileout );
-		gmod_write_float( face_normal[2][FaceCount], fileout );
-	}
-
-/*
-   Vertex section.
- */
-
-/*
-   Take note of where we are in the file.
- */
-
-	VertexSectionPos = ftell( fileout );
-
-/*
-   Write the number of vertices.
- */
-
-	gmod_write_w16( ( unsigned short ) cor3_num, fileout );
-
-/*
-   Write the number of animations.
- */
-
-	gmod_write_w16( 1, fileout );
-
-/*
-   Write the animation name.
- */
-
-	gmod_write_w16( 0, fileout );
-
-/*
-   Write the number of frames of animation.
- */
-
-	gmod_write_w16( 1, fileout );
-
-/*
-   Go through all the vertices, writing each one.
- */
-
-	for ( VertexCount = 0; VertexCount < cor3_num; VertexCount++ )
-	{
-
-/*
-   Write the vertex.
- */
-		gmod_write_float( cor3[0][VertexCount], fileout );
-		gmod_write_float( cor3[1][VertexCount], fileout );
-		gmod_write_float( cor3[2][VertexCount], fileout );
-
-/*
-   Write the normal.
- */
-		gmod_write_float( cor3_normal[0][VertexCount], fileout );
-		gmod_write_float( cor3_normal[1][VertexCount], fileout );
-		gmod_write_float( cor3_normal[2][VertexCount], fileout );
-	}
-/*
-   Now rewrite the section header.
- */
-
-/*
-   Go back to the section header.
- */
-	fseek( fileout, ( long int ) SectionHeaderPos, SEEK_SET );
-
-/*
-   Write the texture name section header.
- */
-	gmod_write_w32( G1_SECTION_MODEL_TEXTURE_NAMES, fileout );
-	gmod_write_w32( TextureNameSectionPos, fileout );
-
-/*
-   Write the model section header.
- */
-	gmod_write_w32( G1_SECTION_MODEL_QUADS, fileout );
-	gmod_write_w32( ModelSectionPos, fileout );
-
-/*
-   Write the vertex section header.
- */
-	gmod_write_w32( G1_SECTION_MODEL_VERT_ANIMATION, fileout );
-	gmod_write_w32( VertexSectionPos, fileout );
-
-	printf(" GMOD - Successfully wrote %i faces and %i vertices.\n", face_num, cor3_num);
-	return SUCCESS;
-}
-
-/******************************************************************************/
-
-void gmod_write_float( float Val, FILE * fileout )
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	GMOD_WRITE_FLOAT writes a float to a Golgotha GMOD file.
-
-   Modified:
-
-   	19 May 1999
-
-   Author:
-
-   	Zik Saleeba (zik@zikzak.net)
- */
-{
-	int endian = 1;
-	unsigned char * out_pos;
-	int i;
-
-	if (*(char *)&endian == 1)
-	{
-		/* we're little-endian, which is native for GMOD floats */
-		fwrite(&Val, sizeof(Val), 1, fileout);
-	}
-	else
-	{
-		/* we're big-endian, flip `em */
-		out_pos = (unsigned char *)&Val;
-		for ( i = sizeof(Val)-1; i >= 0; i-- )
-		{
-			fputc(*(out_pos+i), fileout);
-		}
-	}
-}
-/******************************************************************************/
-
-void gmod_write_w16( unsigned short Val, FILE * fileout )
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	GMOD_WRITE_W16 writes a 16 bit word to a Golgotha GMOD file.
-
-   Modified:
-
-   	19 May 1999
-
-   Author:
-
-   	Zik Saleeba (zik@zikzak.net)
- */
-{
-	unsigned char OutByte[2];
-
-	OutByte[0] = (unsigned char)(Val & 0xff);
-	OutByte[1] = (unsigned char)(Val >> 8);
-
-	fwrite(&OutByte, sizeof(unsigned char), 2, fileout);
-}
-/******************************************************************************/
-
-void gmod_write_w32( unsigned long Val, FILE * fileout )
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	GMOD_WRITE writes a 32 bit word to a Golgotha GMOD file.
-
-   Modified:
-
-   	19 May 1999
-
-   Author:
-
-   	Zik Saleeba (zik@zikzak.net)
- */
-{
-	unsigned char OutByte[4];
-
-	OutByte[0] = (unsigned char)(Val & 0xff);
-	OutByte[1] = (unsigned char)((Val >> 8) & 0xff);
-	OutByte[2] = (unsigned char)((Val >> 16) & 0xff);
-	OutByte[3] = (unsigned char)((Val >> 24) & 0xff);
-
-	fwrite(&OutByte, sizeof(unsigned char), 4, fileout);
-}
-
 /******************************************************************************/
 
 void hello( void )
@@ -6368,15 +5285,15 @@ int hrc_read( FILE * filein )
 
 					count = sscanf( next, "%f%n", &r, &width );
 					next = next + width;
-					material_rgba[0][material_num-1] = r;
+					material_rgba[material_num-1].R = r;
 
 					count = sscanf( next, "%f%n", &g, &width );
 					next = next + width;
-					material_rgba[0][material_num-1] = g;
+					material_rgba[material_num-1].G = g;
 
 					count = sscanf( next, "%f%n", &b, &width );
 					next = next + width;
-					material_rgba[0][material_num-1] = b;
+					material_rgba[material_num-1].B = b;
 
 				}
 				else if ( strcmp( word, "exponent" ) == 0 )
@@ -6404,7 +5321,7 @@ int hrc_read( FILE * filein )
 				{
 					count = sscanf( next, "%f%n", &t, &width );
 					next = next + width;
-					material_rgba[3][material_num-1] = 1.0 - t;
+					material_rgba[material_num-1].A = 1.0 - t;
 				}
 				else if ( strcmp( word, "type" ) == 0 )
 				{
@@ -7311,15 +6228,11 @@ int hrc_write( FILE * fileout )
 		fprintf( fileout, "  {\n" );
 		fprintf( fileout, "    name           \"%s\"\n", material_name[i] );
 		fprintf( fileout, "    type           PHONG\n" );
-		fprintf( fileout, "    ambient        %f %f %f\n", material_rgba[0][i],
-				material_rgba[1][i], material_rgba[2][i] );
-		fprintf( fileout, "    diffuse        %f %f %f\n", material_rgba[0][i],
-				material_rgba[1][i], material_rgba[2][i] );
-		fprintf( fileout, "    specular       %f %f %f\n", material_rgba[0][i],
-				material_rgba[1][i], material_rgba[2][i] );
+		fprintf( fileout, "    diffuse        %f %f %f\n", material_rgba[i].R,
+				material_rgba[i].G, material_rgba[i].B );
 		fprintf( fileout, "    exponent      50.0\n" );
 		fprintf( fileout, "    reflectivity   0.0\n" );
-		fprintf( fileout, "    transparency   %f\n", 1.0 - material_rgba[3][i] );
+		fprintf( fileout, "    transparency   %f\n", 1.0 - material_rgba[i].A );
 		fprintf( fileout, "    refracIndex    1.0\n" );
 		fprintf( fileout, "    glow           0\n" );
 		fprintf( fileout, "    coc            0.0\n" );
@@ -7809,7 +6722,8 @@ int interact( void )
 				printf("\n");
 				for (iface=0; iface<material_num; iface++)
 				{
-					printf("%i: %s\n",iface,material_name[iface]);
+					material_print(iface);
+					printf("\n");
 				}
 			}
 			else if (*next=='c' || *next=='C')
@@ -7865,6 +6779,7 @@ int interact( void )
 			}
 			else if (sscanf(next,"%d",&iface)>0)
 			{
+				printf("\n");
 				material_print(iface);
 			}
 			else
@@ -7872,6 +6787,7 @@ int interact( void )
 				printf("\n");
 				printf("  Enter a material index between 0 and %d:", material_num-1);
 				scanf("%d",&iface);
+				printf("\n");
 				material_print(iface);
 			}
 		}
@@ -10803,559 +9719,6 @@ void node_to_vertex_material( void )
 
 	return;
 }
-/******************************************************************************/
-
-int obj_read( FILE * filein )
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	OBJ_READ reads a Wavefront OBJ file.
-
-   Example:
-
- #  magnolia.obj
-
-   	mtllib ./vp.mtl
-
-   	g
-   	v -3.269770 -39.572201 0.876128
-   	v -3.263720 -39.507999 2.160890
-   	...
-   	v 0.000000 -9.988540 0.000000
-   	g stem
-   	s 1
-   	usemtl brownskn
-   	f 8 9 11 10
-   	f 12 13 15 14
-   	...
-   	f 788 806 774
-
-   Modified:
-
-   	20 October 1998
-
-   Author:
-
-   	John Burkardt
-
-   See http://www.martinreddy.net/gfx/3d/OBJ.spec for a detailed description of the format
- */
-{
-	int count;
-	int i;
-	int ivert;
-	char * next;
-	char * next2;
-	char * next3;
-	int node;
-	int vertex_normal_num;
-	int vertex_uv_num;
-	float r1;
-	float r2;
-	float r3;
-	char token[LINE_MAX_LEN];
-	char token2[LINE_MAX_LEN];
-	int width;
-
-/*
-   Initialize.
- */
-	vertex_normal_num = 0;
-	vertex_uv_num = 0;
-/*
-   Read the next line of the file into INPUT.
- */
-	while ( fgets( input, LINE_MAX_LEN, filein ) != NULL )
-	{
-
-		text_num = text_num + 1;
-/*
-   Advance to the first nonspace character in INPUT.
- */
-		for ( next = input; *next != '\0' && isspace(*next); next++ )
-		{
-		}
-/*
-   Skip blank lines and comments.
- */
-
-		if ( *next == '\0' )
-		{
-			continue;
-		}
-
-		if ( *next == '#' || *next == '$' )
-		{
-			comment_num = comment_num + 1;
-			continue;
-		}
-/*
-   Extract the first word in this line.
- */
-		sscanf( next, "%s%n", token, &width );
-/*
-   Set NEXT to point to just after this token.
- */
-
-		next = next + width;
-/*
-   BEVEL
-   Bevel interpolation.
- */
-		if ( leqi( token, "BEVEL" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   BMAT
-   Basis matrix.
- */
-		else if ( leqi( token, "BMAT" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   C_INTERP
-   Color interpolation.
- */
-		else if ( leqi( token, "C_INTERP" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   CON
-   Connectivity between free form surfaces.
- */
-		else if ( leqi( token, "CON" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   CSTYPE
-   Curve or surface type.
- */
-		else if ( leqi( token, "CSTYPE" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   CTECH
-   Curve approximation technique.
- */
-		else if ( leqi( token, "CTECH" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   CURV
-   Curve.
- */
-		else if ( leqi( token, "CURV" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   CURV2
-   2D curve.
- */
-		else if ( leqi( token, "CURV2" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   D_INTERP
-   Dissolve interpolation.
- */
-		else if ( leqi( token, "D_INTERP" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   DEG
-   Degree.
- */
-		else if ( leqi( token, "DEG" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   END
-   End statement.
- */
-		else if ( leqi( token, "END" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   F V1 V2 V3
-   	or
-   F V1/VT1/VN1 V2/VT2/VN2 ...
-   	or
-   F V1//VN1 V2//VN2 ...
-
-   Face.
-   A face is defined by the vertices.
-   Optionally, slashes may be used to include the texture vertex
-   and vertex normal indices.
-
-   OBJ line node indices are 1 based rather than 0 based.
-   So we have to decrement them before loading them into FACE.
- */
-		else if ( leqi( token, "F" ) == TRUE )
-		{
-
-			ivert = 0;
-			face_order[face_num] = 0;
-/*
-   Read each item in the F definition as a token, and then
-   take it apart.
- */
-			for ( ;; )
-			{
-
-				count = sscanf( next, "%s%n", token2, &width );
-				next = next + width;
-
-				if ( count != 1 )
-				{
-					break;
-				}
-
-				count = sscanf( token2, "%d%n", &node, &width );
-				next2 = token2 + width;
-
-				if ( count != 1 )
-				{
-					break;
-				}
-
-				if ( ivert < ORDER_MAX && face_num < FACE_MAX )
-				{
-					face[ivert][face_num] = node-1;
-					vertex_material[ivert][face_num] = 0;
-					face_order[face_num] = face_order[face_num] + 1;
-					face_material[face_num] = material_num - 1 > 0 ? material_num - 1 : 0;
-					face_flags[face_num] = FACE_FLAGS_MATERIAL_ASSIGNED | FACE_FLAGS_BOTHSIDED;
-				}
-/*
-   If there's a slash, skip to the next slash, and extract the
-   index of the normal vector.
- */
-				if ( *next2 == '/' )
-				{
-					bool vtFound = false;
-					for ( next3 = next2 + 1; next3 < token2 + LINE_MAX_LEN; next3++ )
-					{
-						if ( *next3 == '/' )
-						{
-							next3 = next3 + 1;
-							count = sscanf( next3, "%d%n", &node, &width );
-
-							node = node - 1;
-							if ( 0 <= node && node < vertex_normal_num )
-							{
-								for ( i = 0; i < 3; i++ )
-								{
-									vertex_normal[i][ivert][face_num] = normal_temp[i][node];
-								}
-							}
-							break;
-						}
-						else if (!vtFound) // Only if we haven't processed the vt entry yet, otherwise it would re-read it for every digit chopped off
-						{
-							vtFound = true;
-							char* next4 = next3; // there's a vt reference here
-							sscanf(next4, "%d%n", &node, &width);
-							node = node - 1;
-							if (0 <= node && node < vertex_uv_num)
-							{
-								if (ivert == 1 || ivert == 2 || ivert == 0 || ivert == 3)
-								{
-									float vt = normalize_texture_coordinates(vertex_uv_temp[0][node]);
-									vertex_tex_uv[0][ivert][face_num] = vt;
-									vt = normalize_texture_coordinates(vertex_uv_temp[1][node]);
-									vertex_tex_uv[1][ivert][face_num] = vt;
-								}
-								else
-								{
-									// For vertexes 3 and 4, we swap the two
-									float vt = normalize_texture_coordinates(vertex_uv_temp[1][node]);
-									vertex_tex_uv[0][ivert][face_num] = vt;
-									vt = normalize_texture_coordinates(vertex_uv_temp[0][node]);
-									vertex_tex_uv[1][ivert][face_num] = vt;
-								}
-							}
-						}
-					}
-				}
-				ivert = ivert + 1;
-			}
-			face_num = face_num + 1;
-		}
-/*
-   G
-   Group name.
- */
-		else if ( leqi( token, "G" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   HOLE
-   Inner trimming hole.
- */
-		else if ( leqi( token, "HOLE" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   L
-   I believe OBJ line node indices are 1 based rather than 0 based.
-   So we have to decrement them before loading them into LINE_DEX.
- */
-		else if ( leqi( token, "L" ) == TRUE )
-		{
-
-			for ( ;; )
-			{
-
-				count = sscanf( next, "%d%n", &node, &width );
-				next = next + width;
-
-				if ( count != 1 )
-				{
-					break;
-				}
-
-				if ( line_num < LINE_MAX  )
-				{
-					line_dex[line_num] = node-1;
-					line_material[line_num] = 0;
-				}
-				line_num = line_num + 1;
-
-			}
-
-			if ( line_num < LINE_MAX )
-			{
-				line_dex[line_num] = -1;
-				line_material[line_num] = -1;
-			}
-			line_num = line_num + 1;
-
-		}
-/*
-   LOD
-   Level of detail.
- */
-		else if ( leqi( token, "LOD" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   MG
-   Merging group.
- */
-		else if ( leqi( token, "MG" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   MTLLIB
-   Material library.
- */
-		else if ( leqi( token, "MTLLIB" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   O
-   Object name.
- */
-		else if ( leqi( token, "O" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   P
-   Point.
- */
-		else if ( leqi( token, "P" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   PARM
-   Parameter values.
- */
-		else if ( leqi( token, "PARM" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   S
-   Smoothing group
- */
-		else if ( leqi( token, "S" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   SCRV
-   Special curve.
- */
-		else if ( leqi( token, "SCRV" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   SHADOW_OBJ
-   Shadow casting.
- */
-		else if ( leqi( token, "SHADOW_OBJ" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   SP
-   Special point.
- */
-		else if ( leqi( token, "SP" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   STECH
-   Surface approximation technique.
- */
-		else if ( leqi( token, "STECH" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   STEP
-   Stepsize.
- */
-		else if ( leqi( token, "CURV" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   SURF
-   Surface.
- */
-		else if ( leqi( token, "SURF" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   TRACE_OBJ
-   Ray tracing.
- */
-		else if ( leqi( token, "TRACE_OBJ" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   TRIM
-   Outer trimming loop.
- */
-		else if ( leqi( token, "TRIM" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   USEMTL
-   Material name.
- */
-		else if ( leqi( token, "USEMTL" ) == TRUE )
-		{
-			char current_material_name[FILENAME_MAX];
-			char* ptrToNewLine = strchr(next + 1, '\n');
-			strncpy_s(current_material_name, FILENAME_MAX -1, next + 1, ptrToNewLine - next - 1);
-			strcpy(material_name[material_num], current_material_name);
-			material_num++;
-			continue;
-		}
-/*
-   V X Y Z W
-   Geometric vertex.
-   W is optional, a weight for rational curves and surfaces.
-   The default for W is 1.
- */
-		else if ( leqi( token, "V" ) == TRUE )
-		{
-
-			sscanf( next, "%e %e %e", &r1, &r2, &r3 );
-
-			if ( cor3_num < COR3_MAX )
-			{
-				cor3[0][cor3_num] = r1;
-				cor3[1][cor3_num] = r2;
-				cor3[2][cor3_num] = r3;
-			}
-
-			cor3_num = cor3_num + 1;
-
-		}
-/*
-   VN
-   Vertex normals.
- */
-		else if ( leqi( token, "VN" ) == TRUE )
-		{
-
-			sscanf( next, "%e %e %e", &r1, &r2, &r3 );
-
-			if ( vertex_normal_num < ORDER_MAX * FACE_MAX )
-			{
-				normal_temp[0][vertex_normal_num] = r1;
-				normal_temp[1][vertex_normal_num] = r2;
-				normal_temp[2][vertex_normal_num] = r3;
-			}
-
-			vertex_normal_num = vertex_normal_num + 1;
-
-		}
-/*
-   VT
-   Vertex texture (texture coordinates per vertex)
- */
-		else if ( leqi( token, "VT" ) == TRUE )
-		{
-			sscanf(next, "%e %e", &r1, &r2);
-
-			if (vertex_uv_num < ORDER_MAX * FACE_MAX)
-			{
-				vertex_uv_temp[0][vertex_uv_num] = r1;
-				vertex_uv_temp[1][vertex_uv_num] = r2;
-			}
-
-			vertex_uv_num = vertex_uv_num + 1;
-		}
-/*
-   VP
-   Parameter space vertices.
- */
-		else if ( leqi( token, "VP" ) == TRUE )
-		{
-			continue;
-		}
-/*
-   Unrecognized
- */
-		else
-		{
-			bad_num = bad_num + 1;
-		}
-
-	}
-	ConvertMaterialToTexture();
-	return SUCCESS;
-}
 
 float normalize_texture_coordinates(float vt)
 {
@@ -11382,162 +9745,6 @@ float normalize_texture_coordinates(float vt)
 }
 /******************************************************************************/
 
-int obj_write( FILE * fileout )
-
-/******************************************************************************/
-
-/*
-   Purpose:
-
-   	OBJ_WRITE writes a Wavefront OBJ file.
-
-   Example:
-
- #  magnolia.obj
-
-   	mtllib ./vp.mtl
-
-   	g
-   	v -3.269770 -39.572201 0.876128
-   	v -3.263720 -39.507999 2.160890
-   	...
-   	v 0.000000 -9.988540 0.000000
-   	g stem
-   	s 1
-   	usemtl brownskn
-   	f 8 9 11 10
-   	f 12 13 15 14
-   	...
-   	f 788 806 774
-
-   Modified:
-
-   	01 September 1998
-
-   Author:
-
-   	John Burkardt
- */
-{
-	int i;
-	int iface;
-	int indexvn;
-	int ivert;
-	int k;
-	int newval;
-	int text_num;
-	float w;
-
-/*
-   Initialize.
- */
-	text_num = 0;
-	w = 1.0;
-
-	fprintf( fileout, "# %s created by IVCON.\n", fileout_name );
-	fprintf( fileout, "# Original data in %s.\n", filein_name );
-	fprintf( fileout, "\n" );
-	fprintf( fileout, "g %s\n", object_name );
-	fprintf( fileout, "\n" );
-
-	text_num = text_num + 5;
-/*
-   V: vertex coordinates.
- */
-	for ( i = 0; i < cor3_num; i++ )
-	{
-		fprintf( fileout, "v %f %f %f %f\n",
-				cor3[0][i], cor3[1][i], cor3[2][i], w );
-		text_num = text_num + 1;
-	}
-
-/*
-   VN: Vertex face normal vectors.
- */
-	if ( face_num > 0 )
-	{
-		fprintf( fileout, "\n" );
-		text_num = text_num + 1;
-	}
-
-	for ( iface = 0; iface < face_num; iface++ )
-	{
-
-		for ( ivert = 0; ivert < face_order[iface]; ivert++ )
-		{
-
-			fprintf( fileout, "vn %f %f %f\n", vertex_normal[0][ivert][iface],
-					vertex_normal[1][ivert][iface], vertex_normal[2][ivert][iface] );
-			text_num = text_num + 1;
-		}
-	}
-/*
-   F: faces.
- */
-	if ( face_num > 0 )
-	{
-		fprintf( fileout, "\n" );
-		text_num = text_num + 1;
-	}
-
-	indexvn = 0;
-
-	for ( iface = 0; iface < face_num; iface++ )
-	{
-
-		fprintf( fileout, "f" );
-		for ( ivert = 0; ivert < face_order[iface]; ivert++ )
-		{
-			indexvn = indexvn + 1;
-			fprintf( fileout, " %d//%d", face[ivert][iface]+1, indexvn );
-		}
-		fprintf( fileout, "\n" );
-		text_num = text_num + 1;
-	}
-/*
-   L: lines.
- */
-	if ( line_num > 0 )
-	{
-		fprintf( fileout, "\n" );
-		text_num = text_num + 1;
-	}
-
-	newval = TRUE;
-
-	for ( i = 0; i < line_num; i++ )
-	{
-
-		k = line_dex[i];
-
-		if ( k == -1 )
-		{
-			fprintf( fileout, "\n" );
-			text_num = text_num + 1;
-			newval = TRUE;
-		}
-		else
-		{
-			if ( newval == TRUE )
-			{
-				fprintf( fileout, "l" );
-				newval = FALSE;
-			}
-			fprintf( fileout, " %d", k+1 );
-		}
-
-	}
-
-	fprintf( fileout, "\n" );
-	text_num = text_num + 1;
-/*
-   Report.
- */
-	printf( "\n" );
-	printf( "OBJ_WRITE - Wrote %d text lines.\n", text_num );
-
-	return SUCCESS;
-}
 /******************************************************************************/
 
 int pov_write( FILE * fileout )
@@ -12128,7 +10335,6 @@ int smf_read( FILE * filein )
 	float r1;
 	float r2;
 	float r3;
-	float rgba[4];
 	char * string=0;
 	float sx;
 	float sy;
@@ -12300,18 +10506,9 @@ int smf_read( FILE * filein )
    	  a matching material already in.
    	Assign the material of the node or face to this index.
  */
-			rgba[0] = r;
-			rgba[1] = g;
-			rgba[2] = b;
-			rgba[3] = 1.0;
-
 			if ( material_num < MATERIAL_MAX )
 			{
-
-				for (int k = 0; k < 4; k++ )
-				{
-					material_rgba[k][material_num] = rgba[k];
-				}
+				material_rgba[material_num] = color(r, g, b, 1.0f);
 
 				imat = material_num;
 				material_num = material_num + 1;
@@ -12842,8 +11039,8 @@ int smf_write( FILE * fileout )
 
 		imat = cor3_material[icor3];
 
-		fprintf( fileout, "c %f %f %f\n", material_rgba[0][imat],
-				material_rgba[1][imat], material_rgba[2][imat] );
+		fprintf( fileout, "c %f %f %f\n", material_rgba[imat].R,
+				material_rgba[imat].G, material_rgba[imat].B);
 
 		text_num = text_num + 1;
 	}
@@ -13706,10 +11903,10 @@ unsigned long tds_read_ambient_section( FILE * filein, unsigned long matindex)
 
 	}
 
-	material_rgba[0][matindex]=rgb_val[0];
-	material_rgba[1][matindex]=rgb_val[1];
-	material_rgba[2][matindex]=rgb_val[2];
-	material_rgba[3][matindex]=1.0f; //opaque
+	material_rgba[matindex].R=rgb_val[0];
+	material_rgba[matindex].G=rgb_val[1];
+	material_rgba[matindex].B=rgb_val[2];
+	material_rgba[matindex].A=1.0f; //opaque
 	pointer = ( long ) ( current_pointer + temp_pointer );
 	fseek( filein, pointer, SEEK_SET );
 
@@ -13848,7 +12045,7 @@ unsigned long tds_read_alpha_section( FILE * filein, unsigned long matindex)
 				c=fgetc(filein);
 				if (!hadf)
 				{
-					material_rgba[3][matindex]=(float)c/255;
+					material_rgba[matindex].A=(float)c/255;
 				}
 				teller = teller + 1 * sizeof( short );
 				break;
@@ -13859,7 +12056,7 @@ unsigned long tds_read_alpha_section( FILE * filein, unsigned long matindex)
 						   temp_int );
 				}
 
-				material_rgba[3][matindex]=float_read(filein);
+				material_rgba[matindex].A=float_read(filein);
 				hadf=true;
 				teller = teller + 4;
 				break;
@@ -14653,9 +12850,9 @@ unsigned long tds_read_material_section( FILE * filein )
 				}
 				teller = teller + tds_read_matdef_section( filein );
 				strcpy(material_name[material_num-1],mat_name);
-				material_rgba[0][material_num-1]=1.0f;
-				material_rgba[1][material_num-1]=1.0f;
-				material_rgba[2][material_num-1]=1.0f;
+				material_rgba[material_num-1].R=1.0f;
+				material_rgba[material_num-1].G=1.0f;
+				material_rgba[material_num-1].B=1.0f;
 				break;
 			case 0xa010:
 				if ( debug )
@@ -16274,9 +14471,9 @@ int tec_write( FILE * fileout )
 	for ( icor3 = 0; icor3 < cor3_num; icor3++ )
 	{
 		imat = cor3_material[icor3];
-		r = material_rgba[0][imat];
-		g = material_rgba[1][imat];
-		b = material_rgba[2][imat];
+		r = material_rgba[imat].R;
+		g = material_rgba[imat].G;
+		b = material_rgba[imat].B;
 		fprintf( fileout, "%f %f %f %f %f %f\n", cor3[0][icor3], cor3[1][icor3],
 				cor3[2][icor3], r, g, b );
 		text_num = text_num + 1;
@@ -17788,8 +15985,8 @@ int txt_write( FILE * fileout )
 	for ( imat = 0; imat < material_num; imat++ )
 	{
 		fprintf( fileout, "%d %s %f %f %f %f\n", imat, material_name[imat],
-				material_rgba[0][imat], material_rgba[1][imat], material_rgba[2][imat],
-				material_rgba[3][imat] );
+				material_rgba[imat].R, material_rgba[imat].G, material_rgba[imat].B,
+				material_rgba[imat].A );
 		text_num = text_num + 1;
 	}
 /*
@@ -17905,10 +16102,10 @@ int ucd_write( FILE * fileout )
 
 	for ( j = 0; j < material_num; j++ )
 	{
-		r = material_rgba[0][j];
-		g = material_rgba[1][j];
-		b = material_rgba[2][j];
-		a = material_rgba[3][j];
+		r = material_rgba[j].R;
+		g = material_rgba[j].G;
+		b = material_rgba[j].B;
+		a = material_rgba[j].A;
 		h = rgb_to_hue( r, g, b );
 		fprintf( fileout, "#  %d %f %f %f %f %f\n", j, r, g, b, a, h );
 		text_num = text_num + 1;
@@ -17970,10 +16167,10 @@ int ucd_write( FILE * fileout )
 	for ( j = 0; j < cor3_num; j++ )
 	{
 		imat = cor3_material[j];
-		r = material_rgba[0][imat];
-		g = material_rgba[1][imat];
-		b = material_rgba[2][imat];
-		a = material_rgba[3][imat];
+		r = material_rgba[imat].R;
+		g = material_rgba[imat].G;
+		b = material_rgba[imat].B;
+		a = material_rgba[imat].A;
 		h = rgb_to_hue( r, g, b );
 
 		fprintf( fileout, "%d %d %f %f %f %f %f\n", j, imat, r, g, b, a, h );
@@ -18656,8 +16853,7 @@ int wrl_write( FILE * fileout )
 
 		for ( j = 0; j < material_num; j++ )
 		{
-			fprintf( fileout, "              %f %f %f\n", material_rgba[0][j],
-					material_rgba[1][j], material_rgba[2][j] );
+			fprintf( fileout, "              %f %f %f\n", material_rgba[j].R, material_rgba[j].G, material_rgba[j].B );
 			text_num = text_num + 1;
 		}
 
@@ -19202,10 +17398,10 @@ unsigned long int get_pos_matcolor(int index)
 	{
 		return 0;
 	}            //pad image with black
-	r=material_rgba[0][j]*255;
-	g=material_rgba[1][j]*255;
-	b=material_rgba[2][j]*255;
-	a=material_rgba[3][j]*255;
+	r=material_rgba[j].R*255;
+	g=material_rgba[j].G*255;
+	b=material_rgba[j].B*255;
+	a=material_rgba[j].A*255;
 	return (a<<24)|(r<<16)|(g<<8)|b;
 }
 /******************************************************************************/

@@ -115,13 +115,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="gmod.cpp" />
     <ClCompile Include="ivcon.cpp" />
+    <ClCompile Include="objFormat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ivcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ivcon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gmod.h" />
+    <ClInclude Include="ivcon.h" />
+    <ClInclude Include="objFormat.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
