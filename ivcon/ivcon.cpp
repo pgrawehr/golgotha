@@ -186,9 +186,7 @@ char texture_file_name[LINE_MAX_LEN]; //for autogenerating textures
 
 int group_num;
 
-int i;
 char input[LINE_MAX_LEN];
-int k;
 char level_name[LEVEL_MAX][LINE_MAX_LEN];
 
 int line_dex[LINE_MAX];
@@ -365,6 +363,8 @@ int                vla_write( FILE * fileout );
 int                wrl_write( FILE * filout );
 int                xgl_write( FILE * fileout );
 void tga_write_materials(char * filename);
+void ConvertTextureToMaterial();
+
 /******************************************************************************/
 
 int main( int argc, char * * argv )
@@ -2198,7 +2198,7 @@ void data_check( void )
 		if ( (material_num>0) && ((face_flags[iface] & FACE_FLAGS_MATERIAL_ASSIGNED)==0) )
 		{
 			//if (debug)
-			printf("Warning: Face %i was newer assigned a Material, using default.\n",iface);
+			printf("Warning: Face %i was never assigned a Material, using default.\n",iface);
 		}
 
 	}
@@ -2211,7 +2211,7 @@ void data_check( void )
 			   nfix, ORDER_MAX );
 	}
 
-	for ( i = 0; i < material_num; i++ )
+	for (int i = 0; i < material_num; i++ )
 	{
 		if ( strcmp( material_name[i], "" ) == 0 )
 		{
@@ -2219,7 +2219,7 @@ void data_check( void )
 		}
 	}
 
-	for ( i = 0; i < texture_num; i++ )
+	for (int i = 0; i < texture_num; i++ )
 	{
 		if ( strcmp( texture_name[i], "" ) == 0 )
 		{
@@ -4233,7 +4233,7 @@ int material_print(int imat)
 	printf("\n");
 	if (imat<material_num)
 	{
-		k=imat;
+		int k=imat;
 		printf("  Material Index: %i, Name: %s, ColorRGBA: (%f,%f,%f,%f)",
 			   k,material_name[k],
 			   material_rgba[0][k],material_rgba[1][k],material_rgba[2][k],
@@ -4939,6 +4939,19 @@ int gmod_arch_check( void )
 }
 /******************************************************************************/
 
+int material_list_index(const char* name)
+{
+	for (int j = 0; j < material_num; j++)
+	{
+		if (strcmp(material_name[j], name) == 0)
+		{
+			return j;
+		}
+	}
+
+	return -1;
+}
+
 int gmod_read( FILE * filein )
 
 /******************************************************************************/
@@ -5189,6 +5202,9 @@ int gmod_read( FILE * filein )
 					fread(&texture_name[TextureCount], sizeof(char), TextureNameLen, filein);
 					texture_name[TextureCount][TextureNameLen] = '\0';
 				}
+
+				ConvertTextureToMaterial();
+				
 				break;
 
 
@@ -7288,7 +7304,7 @@ int hrc_write( FILE * fileout )
 /*
    MATERIALS
  */
-	for ( i = 0; i < material_num; i++ )
+	for (int i = 0; i < material_num; i++ )
 	{
 
 		fprintf( fileout, "  material [%d]\n", i );
@@ -7315,7 +7331,7 @@ int hrc_write( FILE * fileout )
 /*
    TEXTURES
  */
-	for ( i = 0; i < texture_num; i++ )
+	for (int i = 0; i < texture_num; i++ )
 	{
 
 		fprintf( fileout, "  texture [%d]\n", i );
@@ -7397,7 +7413,7 @@ void init_program_data( void )
 void ConvertMaterialToTexture()
 {
 	texture_num = material_num;
-	for (i = 0; i<material_num; i++)
+	for (int i = 0; i<material_num; i++)
 	{
 		strcpy(texture_name[i], material_name[i]);
 		for (int j = 0; j<(int)strlen(texture_name[i]); j++)
@@ -7413,6 +7429,28 @@ void ConvertMaterialToTexture()
 	}
 	printf("\nCopied material names to textures\n");
 }
+
+void ConvertTextureToMaterial()
+{
+	material_num = 0;
+	for (int i = 0; i < texture_num; i++)
+	{
+		int index = material_list_index(texture_name[i]);
+		if (index == -1)
+		{
+			strcpy(material_name[material_num], texture_name[i]);
+			face_material[i] = material_num;
+			material_num++;
+		}
+		else
+		{
+			face_material[index] = material_num;
+		}
+
+		face_flags[i] |= FACE_FLAGS_MATERIAL_ASSIGNED;
+	}
+}
+
 /******************************************************************************/
 
 int interact( void )
@@ -12270,7 +12308,7 @@ int smf_read( FILE * filein )
 			if ( material_num < MATERIAL_MAX )
 			{
 
-				for ( k = 0; k < 4; k++ )
+				for (int k = 0; k < 4; k++ )
 				{
 					material_rgba[k][material_num] = rgba[k];
 				}
@@ -12544,7 +12582,7 @@ int smf_read( FILE * filein )
 
 			sscanf( next, "%s%n", string, &width );
 
-			for ( i = 0; i < LINE_MAX_LEN; i++ )
+			for (int i = 0; i < LINE_MAX_LEN; i++ )
 			{
 				texture_name[texture_num][i] = string[i];
 				if ( string[i] == '\0' )
@@ -12594,7 +12632,7 @@ int smf_read( FILE * filein )
 
 			if ( cor3_num < COR3_MAX )
 			{
-				for ( i = 0; i < 3; i++ )
+				for (int i = 0; i < 3; i++ )
 				{
 					cor3[i][cor3_num] = xvec[i];
 				}
