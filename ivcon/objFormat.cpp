@@ -622,19 +622,6 @@ int mtl_read(FILE* filein)
 			continue;
 		}
 
-		if (leqi(token, "Ka")) // Ambient color (is this the right one?)
-		{
-			if (matIndex >= 0)
-			{
-				float r, g, b;
-				sscanf(next, "%e %e %e", &r, &g, &b);
-				material_rgba[matIndex].R = r;
-				material_rgba[matIndex].G = g;
-				material_rgba[matIndex].B = b;
-				material_rgba[matIndex].A = 1.0f;
-			}
-		}
-
 		if (leqi(token, "Kd")) // Diffuse color (is this the right one?)
 		{
 			if (matIndex >= 0)

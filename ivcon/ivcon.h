@@ -112,7 +112,7 @@ int                char_pad(int* char_index, int* null_index, char* string,
 	int STRING_MAX);
 char               char_read(FILE* filein);
 int                char_write(FILE* fileout, char c);
-int                command_line(char** argv);
+int command_line(char** argv, int argc);
 void               cor3_normal_set(void);
 void               cor3_range(void);
 void               data_check(void);

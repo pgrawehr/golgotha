@@ -208,6 +208,7 @@ float vertex_rgb[3][ORDER_MAX][FACE_MAX];
 float vertex_tex_uv[2][ORDER_MAX][FACE_MAX];
 int vertex_faceindex[ORDER_MAX][FACE_MAX]; //which vertices make up which faces?
 
+int process_command(bool& isQuitCommand);
 /******************************************************************************/
 
 int main( int argc, char * * argv )
@@ -240,7 +241,7 @@ int main( int argc, char * * argv )
  */
 	if ( argc >= 2 )
 	{
-		result = command_line( argv );
+		result = command_line(argv, argc);
 	}
 	else
 	{
@@ -1631,7 +1632,7 @@ int char_write( FILE * fileout, char c )
 }
 /******************************************************************************/
 
-int command_line( char * * argv )
+int command_line(char ** argv, int argc)
 
 /******************************************************************************/
 
@@ -1691,6 +1692,23 @@ int command_line( char * * argv )
  */
 	iarg = iarg + 1;
 	strcpy( filein_name, argv[iarg] );
+
+	if (leqi (filein_name, "-C") == TRUE)
+	{
+		// A set of commands in quotes
+		for (int i = iarg + 1; i < argc; i++)
+		{
+			strcpy(input, argv[i]);
+			printf("Command: %s\n", input);
+			bool isQuitCommand = false;
+			if (process_command(isQuitCommand) != SUCCESS)
+			{
+				return ERROR;
+			}
+		}
+
+		return SUCCESS;
+	}
 
 	if ( leqi( filein_name, "-RN" ) == TRUE )
 	{
@@ -6366,6 +6384,723 @@ void ConvertTextureToMaterial()
 
 /******************************************************************************/
 
+int process_command(bool& isQuitCommand)
+{
+	int i;
+	int icor3;
+	int ierror;
+	int iface;
+	int face_mat;
+	int itemp;
+	int ivert;
+	int j, k, l;
+	int jvert;
+	int m;
+	char* next;
+	float temp;
+	float x;
+	float y;
+	float z;
+	float f1, f2, f3;
+	int finished;
+	int a = 0, b = 0, n = 0;
+	int result;
+	isQuitCommand = false;
+
+	for ( next = input; *next != '\0' && isspace(*next); next++ )
+	{
+	}
+	/*
+   Skip blank lines and comments.
+ */
+	if ( *next == '\0' )
+	{
+		return SUCCESS;
+	}
+	/*
+   Command: << FILENAME
+   Append new data to current graphics information.
+ */
+	if ( *next == '<' && *(next+1) == '<' )
+	{
+
+		next = next + 2;
+		sscanf( next, "%s", filein_name );
+
+		ierror = data_read();
+
+		if ( ierror == ERROR )
+		{
+			printf( "\n" );
+			printf( "INTERACT - Fatal error!\n" );
+			printf( "  DATA_READ failed to read input data.\n" );
+		}
+	}
+	/*
+   Command: < FILENAME
+ */
+	else if ( *next == '<' )
+	{
+
+		next = next + 1;
+		sscanf( next, "%s", filein_name );
+
+		data_init();
+
+		ierror = data_read();
+
+		if ( ierror == ERROR )
+		{
+			printf( "\n" );
+			printf( "INTERACT - Fatal error!\n" );
+			printf( "  DATA_READ failed to read input data.\n" );
+		}
+	}
+	/*
+   Command: > FILENAME
+ */
+	else if ( *next == '>' )
+	{
+
+		next = next + 1;
+		sscanf( next, "%s", fileout_name );
+
+		ierror = data_write();
+
+		if ( ierror == ERROR )
+		{
+			printf( "\n" );
+			printf( "INTERACT - Fatal error!\n" );
+			printf( "  OUTPUT_DATA failed to write output data.\n" );
+		}
+
+	}
+	/*
+   A: Get Report on data
+ */
+	else if ( *next == 'A' || *next== 'a' )
+	{
+
+		data_report();
+
+	}
+	/*
+   B: Switch byte swapping option.
+ */
+	else if ( *next == 'B' || *next == 'b' )
+	{
+
+		if ( byte_swap == TRUE )
+		{
+			byte_swap = FALSE;
+			printf( "Byte_swapping reset to FALSE.\n" );
+		}
+		else
+		{
+			byte_swap = TRUE;
+			printf( "Byte_swapping reset to TRUE.\n" );
+		}
+
+	}
+	/*
+   C[all]: Convert 2 matching 3 sided faces to one 4 sided face
+ */
+	else if ( *next =='C' || *next== 'c')
+	{
+		next=next+1;
+		if (*next=='A' || *next== 'a')
+		{
+			//'Call'
+			for (i=0; i<FACE_MAX; i++)
+			{
+				for(j=0; j<ORDER_MAX; j++)
+				{
+					vertex_faceindex[j][i]=-1;
+				}
+			}
+			for (i=0; i<face_num; i++)
+			{
+				for (j=0; j<face_order[i]; j++)
+				{
+					k=face[j][i]; //some edge of this face
+					l=0;
+					while (vertex_faceindex[l][k]!=-1&&vertex_faceindex[l][k]!=i&&l<ORDER_MAX)
+					{
+						l++;
+					}
+					vertex_faceindex[l][k]=i;
+				}
+			}
+			a=0;
+			do
+			{
+				finished=1;
+				for (i=0; i<face_num; i++)
+				{
+					if (face_order[i]!=3)
+					{
+						continue;
+					}
+					l=0;
+					while(vertex_faceindex[l][i]!=-1 && l<10)
+					{
+						if (conv_3_to_4(i,vertex_faceindex[l][i],0,debug ? true : false)==SUCCESS)
+						{
+							finished=0;
+							a++;
+						}
+						l++;
+					}
+					/*
+						   for (j=i+1;j<face_num;j++)
+						   	{
+						   	if (face_order[j]!=3)
+						   		continue;
+						   	if (conv_3_to_4(i,j,0,debug?true:false)==SUCCESS)
+						   		{
+						   		finished=0;
+						   		//i=face_num+1;
+						   		i=i>0?i-1:0;
+						   		a++;
+						   		break;//quit both loops and restart
+						   		}
+						   	}
+						 */
+				}
+
+			}
+			while(!finished);
+			printf("Converted %d faces.\n",a);
+
+		}
+		else
+		{
+
+			printf("Enter first face number (Range 0 to %i): ",face_num-1);
+			scanf("%d",&a);
+			if (a>=0&&a<face_num)
+			{
+				printf("Enter second face number: ");
+				scanf("%d",&b);
+				if (b>=0&&b<face_num)
+				{
+
+					result=conv_3_to_4(a,b,&n,true);
+					if (result==SUCCESS)
+					{
+						printf("Done - %d and %d where converted to one single face %d.\n",a,b,n);
+					}
+					else
+					{
+						printf("Fail - %d and %d could not be converted, they don't match.\n",a,b);
+					}
+				}
+				else
+				{
+					printf("Fail - Invalid second face entered.\n");
+				}
+			}
+			else
+			{
+				printf("Fail - Invalid first face entered.\n");
+			}
+		}
+
+		//recalc normals, (same as 'N' command)
+		for ( iface = 0; iface < face_num; iface++ )
+		{
+			for ( i = 0; i < 3; i++ )
+			{
+				face_normal[i][iface] = 0.0;
+			}
+		}
+
+
+
+		for ( iface = 0; iface < face_num; iface++ )
+		{
+			for ( ivert = 0; ivert < face_order[iface]; ivert++ )
+			{
+				for ( i = 0; i < 3; i++ )
+				{
+					vertex_normal[i][ivert][iface] = 0.0;
+				}
+			}
+		}
+
+		face_area_set( false );
+
+		vertex_normal_set();
+
+		cor3_normal_set();
+
+		face_normal_ave();
+
+		data_report();
+
+
+	}
+	/*
+   D: Switch debug option.
+ */
+	else if ( *next == 'D' || *next == 'd' )
+	{
+		if ( debug )
+		{
+			debug = 0;
+			printf( "Debug reset to FALSE.\n" );
+		}
+		else
+		{
+			debug = 1;
+			printf( "Debug reset to TRUE.\n" );
+		}
+	}
+	/*
+   F: Check a face.
+   Fi Toggle face_ignoresides flag to display both sides of faces
+ */
+	else if ( *next == 'f' || *next == 'F' )
+	{
+		next++;
+		if ( *next =='i' || *next=='I')
+		{
+			face_ignoresides=!face_ignoresides;
+			if (face_ignoresides)
+			{
+				printf("\n Now ignoring the face order for output.\n");
+			}
+			else
+			{
+				printf("\n Now considering the face order.\n");
+			}
+		}
+		else
+		{
+			printf( "\n" );
+			if (sscanf(next,"%d", &iface)>0)
+			{
+				face_print(iface);
+			}
+			else
+			{
+				printf( "  Enter a face index between 0 and %d:", face_num-1 );
+				scanf( "%d", &iface );
+				face_print( iface );
+			}
+		}
+	}
+	/*
+   M[list|<Id>|conv]: Check a material, list all materials
+   	M allone asks for material number
+   	Mlist lists the names of all materials
+   	Mid, where id is a number, prints the material with the given id
+   	Mconv copies material names to texture names and removes spaces and other problematic characters
+   	Mtex  writes all materials to a texture (64x64pixels, 8x8 pixels per color, tga file)
+   		  also generates matching texture coordinates.
+ */
+	else if ( *next == 'm' || *next=='M')
+	{
+		next=next+1;
+		if (*next=='l' || *next=='L')
+		{
+			printf("\n");
+			for (iface=0; iface<material_num; iface++)
+			{
+				material_print(iface);
+				printf("\n");
+			}
+		}
+		else if (*next=='c' || *next=='C')
+		{
+			ConvertMaterialToTexture();
+		}
+		else if (*next=='t'|| *next=='T')
+		{
+			printf("\n");
+			printf("   Enter texture filename (.tga): ");
+			scanf("%s",texture_file_name);
+			texture_num=material_num;
+			for (iface=0; iface<face_num; iface++)
+			{
+				strcpy(texture_name[iface],texture_file_name);
+				face_mat=face_material[iface];
+				if (face_mat>=64)
+				{
+					continue;
+				}        //skip these
+				f3=0.125f;
+				f1=floor(((double)face_mat)/8)*f3; //y coordinate (u)
+				f2=(face_mat%8); //x coordinate (v)
+				f2=f2*f3;
+				f1+=0.06;
+				f2+=0.06;
+				vertex_tex_uv[0][0][iface]=f2;
+				vertex_tex_uv[1][0][iface]=f1;
+
+				vertex_tex_uv[0][1][iface]=f2;
+				vertex_tex_uv[1][1][iface]=f1;
+
+				vertex_tex_uv[0][2][iface]=f2;
+				vertex_tex_uv[1][2][iface]=f1;
+
+				vertex_tex_uv[0][3][iface]=f2;
+				vertex_tex_uv[1][3][iface]=f1;
+				/*
+					   vertex_tex_uv[0][1][iface]=f2+f3;
+					   vertex_tex_uv[1][1][iface]=f1;
+
+					   vertex_tex_uv[0][2][iface]=f2+f3;//f2;
+					   vertex_tex_uv[1][2][iface]=f1+f3;//f1+f3;
+
+					   vertex_tex_uv[0][3][iface]=f2;//f2+f3;
+					   vertex_tex_uv[1][3][iface]=f1+f3;//f1+f3;
+					 */
+			}
+
+			tga_write_materials(texture_file_name);
+			printf("Successfully wrote %i materials.\n",material_num>64 ? 64 : material_num);
+
+		}
+		else if (sscanf(next,"%d",&iface)>0)
+		{
+			printf("\n");
+			material_print(iface);
+		}
+		else
+		{
+			printf("\n");
+			printf("  Enter a material index between 0 and %d:", material_num-1);
+			scanf("%d",&iface);
+			printf("\n");
+			material_print(iface);
+		}
+
+		ierror = SUCCESS;
+	}
+	/*
+   E: Edge null delete.
+ */
+	else if ( *next == 'e' || *next == 'E' )
+	{
+
+		edge_null_delete();
+
+		face_area_set( false );
+
+		vertex_normal_set();
+
+		cor3_normal_set();
+
+		face_normal_ave();
+
+		cor3_range();
+	}
+	/*
+   G: Face null delete.
+ */
+	else if ( *next == 'g' || *next == 'G' )
+	{
+
+		face_area_set( true );
+
+		face_null_delete();
+
+		vertex_normal_set();
+
+		cor3_normal_set();
+
+		face_normal_ave();
+
+		cor3_range();
+	}
+	/*
+   H: Help
+ */
+	else if ( *next == 'h' || *next == 'H' )
+	{
+		help();
+	}
+	/*
+   I: Print change information.
+ */
+	else if ( *next == 'i' || *next == 'I')
+	{
+		news();
+	}
+	/*
+   LINES:
+   Convert face information to lines.
+ */
+	else if ( *next == 'l' || *next == 'L')
+	{
+
+		if ( face_num > 0 )
+		{
+
+			printf( "\n" );
+			printf( "INTERACT - Note:\n" );
+			printf( "  Face information will be converted\n" );
+			printf( "  to line information.\n" );
+
+			face_to_line();
+
+			if ( line_num > LINE_MAX )
+			{
+
+				printf( "\n" );
+				printf( "INTERACT - Note:\n" );
+				printf( "  Some face information was lost.\n" );
+				printf( "  The maximum number of lines is %d,\n", LINE_MAX );
+				printf( "  but we would need at least %d.\n", line_num );
+
+				line_num = LINE_MAX;
+
+			}
+
+			face_num = 0;
+		}
+		else
+		{
+
+			printf( "\n" );
+			printf( "INTERACT - Note:\n" );
+			printf( "  There were no faces to convert.\n" );
+
+		}
+
+	}
+	/*
+   N: Recompute normal vectors.
+ */
+	else if ( *next == 'n' || *next == 'N')
+	{
+
+		for ( iface = 0; iface < face_num; iface++ )
+		{
+			for ( i = 0; i < 3; i++ )
+			{
+				face_normal[i][iface] = 0.0;
+			}
+		}
+
+		for ( iface = 0; iface < face_num; iface++ )
+		{
+			for ( ivert = 0; ivert < face_order[iface]; ivert++ )
+			{
+				for ( i = 0; i < 3; i++ )
+				{
+					vertex_normal[i][ivert][iface] = 0.0;
+				}
+			}
+		}
+
+		vertex_normal_set();
+
+		cor3_normal_set();
+
+		face_normal_ave();
+	}
+	/*
+   P: Line pruning option
+ */
+	else if ( *next == 'p' || *next == 'P' )
+	{
+
+		printf( "\n" );
+		printf( "INTERACT - SET LINE PRUNING OPTION.\n" );
+		printf( "\n" );
+		printf( "  LINE_PRUNE = 0 means no line pruning.\n" );
+		printf( "               nonzero means line pruning.\n" );
+		printf( "\n" );
+		printf( "  Current value is LINE_PRUNE = %d.\n", line_prune );
+		printf( "\n" );
+		printf( "  Enter new value for LINE_PRUNE.\n" );
+
+		if ( fgets( input, LINE_MAX_LEN, stdin ) == NULL )
+		{
+			printf( "  ??? Error trying to read input.\n" );
+		}
+		else
+		{
+			sscanf( input, "%d", &line_prune );
+			printf( "  New value is LINE_PRUNE = %d.\n", line_prune );
+		}
+	}
+	/*
+   Q: Quit
+ */
+	else if ( *next == 'q' || *next == 'Q' )
+	{
+		printf( "\n" );
+		printf( "INTERACT - Normal end of execution.\n" );
+		ierror = SUCCESS;
+		isQuitCommand = true;
+	}
+	/*
+   R: Reverse normal vectors.
+ */
+	else if ( *next == 'r' || *next == 'R' )
+	{
+
+		for ( icor3 = 0; icor3 < cor3_num; icor3++ )
+		{
+			for ( i = 0; i < 3; i++ )
+			{
+				cor3_normal[i][icor3] = -cor3_normal[i][icor3];
+			}
+		}
+
+		for ( iface = 0; iface < face_num; iface++ )
+		{
+			for ( i = 0; i < 3; i++ )
+			{
+				face_normal[i][iface] = -face_normal[i][iface];
+			}
+		}
+
+		for ( iface = 0; iface < face_num; iface++ )
+		{
+			for ( ivert = 0; ivert < face_order[iface]; ivert++ )
+			{
+				for ( i = 0; i < 3; i++ )
+				{
+					vertex_normal[i][ivert][iface] =
+						-vertex_normal[i][ivert][iface];
+				}
+			}
+		}
+		printf( "\n" );
+		printf( "INTERACT - Note:\n" );
+		printf( "  Reversed node, face and vertex normals.\n" );
+	}
+	/*
+   S: Select a few faces, discard the rest.
+ */
+	else if ( *next == 's' || *next == 'S' )
+	{
+		face_subset();
+	}
+	/*
+   T: Transform the data.
+ */
+	else if ( *next == 't' || *next == 'T' )
+	{
+
+		printf( "\n" );
+		printf( "For now, we only offer point scaling.\n" );
+		printf( "Enter X, Y, Z scale factors:\n" );
+
+		scanf( "%f %f %f", &x, &y, &z );
+
+		for ( j = 0; j < cor3_num; j++ )
+		{
+			cor3[0][j] = x * cor3[0][j];
+			cor3[1][j] = y * cor3[1][j];
+			cor3[2][j] = z * cor3[2][j];
+		}
+
+		for ( iface = 0; iface < face_num; iface++ )
+		{
+			for ( i = 0; i < 3; i++ )
+			{
+				face_normal[i][iface] = 0.0;
+			}
+		}
+
+		for ( iface = 0; iface < face_num; iface++ )
+		{
+			for ( ivert = 0; ivert < face_order[iface]; ivert++ )
+			{
+				for ( i = 0; i < 3; i++ )
+				{
+					vertex_normal[i][ivert][iface] = 0.0;
+				}
+			}
+		}
+
+		vertex_normal_set();
+
+		cor3_normal_set();
+
+		face_normal_ave();
+	}
+	/*
+   U: Renumber faces, count objects:
+ */
+	else if ( *next == 'u' || *next == 'U' )
+	{
+	}
+	/*
+   V: Convert polygons to triangles:
+ */
+	else if ( *next == 'v' || *next == 'V' )
+	{
+	}
+	/*
+   O: Display info about supported formats:
+ */
+	else if ( *next == 'o' || *next == 'O')
+	{
+		hello();
+	}
+	/*
+   W: Reverse the face node ordering.
+ */
+	else if ( *next == 'w' || *next == 'W' )
+	{
+
+		if ( face_num > 0 )
+		{
+
+			for ( iface = 0; iface < face_num; iface++ )
+			{
+
+				m = face_order[iface];
+
+				for ( ivert = 0; ivert < m/2; ivert++ )
+				{
+
+					jvert = m - ivert - 1;
+
+					itemp = face[ivert][iface];
+					face[ivert][iface] = face[jvert][iface];
+					face[jvert][iface] = itemp;
+
+					itemp = vertex_material[ivert][iface];
+					vertex_material[ivert][iface] = vertex_material[jvert][iface];
+					vertex_material[jvert][iface] = itemp;
+
+					for ( i = 0; i < 3; i++ )
+					{
+						temp = vertex_normal[i][ivert][iface];
+						vertex_normal[i][ivert][iface] =
+							vertex_normal[i][jvert][iface];
+						vertex_normal[i][jvert][iface] = temp;
+					}
+				}
+			}
+			printf( "\n" );
+			printf( "INTERACT - Note:\n" );
+			printf( "  Reversed face node ordering.\n" );
+		}
+	}
+	/*
+   Command: ???
+ */
+	else
+	{
+		printf( "\n" );
+		printf( "INTERACT: Warning!\n" );
+		printf( "  Your command was not recognized.\n" );
+		ierror = EINVAL;
+	}
+
+	printf( "\n" );
+	printf( "Enter command (H for help)\n" );
+	return ierror;
+}
+
 int interact( void )
 
 /******************************************************************************/
@@ -6384,26 +7119,6 @@ int interact( void )
    	John Burkardt
  */
 {
-	int i;
-	int icor3;
-	int ierror;
-	int iface;
-	int face_mat;
-	int itemp;
-	int ivert;
-	int j,k,l;
-	int jvert;
-	int m;
-	char * next;
-	float temp;
-	float x;
-	float y;
-	float z;
-	float f1,f2,f3;
-	int finished;
-	int a=0,b=0,n=0;
-	int result;
-
 	strcpy( filein_name, "NO_IN_NAME" );
 	strcpy( fileout_name, "NO_OUT_NAME" );
 
@@ -6422,694 +7137,13 @@ int interact( void )
 /*
    Advance to the first nonspace character in INPUT.
  */
-		for ( next = input; *next != '\0' && isspace(*next); next++ )
+		bool isQuitCommand = false;
+		process_command(isQuitCommand);
+		if (isQuitCommand)
 		{
-		}
-/*
-   Skip blank lines and comments.
- */
-		if ( *next == '\0' )
-		{
-			continue;
-		}
-/*
-   Command: << FILENAME
-   Append new data to current graphics information.
- */
-		if ( *next == '<' && *(next+1) == '<' )
-		{
-
-			next = next + 2;
-			sscanf( next, "%s", filein_name );
-
-			ierror = data_read();
-
-			if ( ierror == ERROR )
-			{
-				printf( "\n" );
-				printf( "INTERACT - Fatal error!\n" );
-				printf( "  DATA_READ failed to read input data.\n" );
-			}
-		}
-/*
-   Command: < FILENAME
- */
-		else if ( *next == '<' )
-		{
-
-			next = next + 1;
-			sscanf( next, "%s", filein_name );
-
-			data_init();
-
-			ierror = data_read();
-
-			if ( ierror == ERROR )
-			{
-				printf( "\n" );
-				printf( "INTERACT - Fatal error!\n" );
-				printf( "  DATA_READ failed to read input data.\n" );
-			}
-		}
-/*
-   Command: > FILENAME
- */
-		else if ( *next == '>' )
-		{
-
-			next = next + 1;
-			sscanf( next, "%s", fileout_name );
-
-			ierror = data_write();
-
-			if ( ierror == ERROR )
-			{
-				printf( "\n" );
-				printf( "INTERACT - Fatal error!\n" );
-				printf( "  OUTPUT_DATA failed to write output data.\n" );
-			}
-
-		}
-/*
-   A: Get Report on data
- */
-		else if ( *next == 'A' || *next== 'a' )
-		{
-
-			data_report();
-
-		}
-/*
-   B: Switch byte swapping option.
- */
-		else if ( *next == 'B' || *next == 'b' )
-		{
-
-			if ( byte_swap == TRUE )
-			{
-				byte_swap = FALSE;
-				printf( "Byte_swapping reset to FALSE.\n" );
-			}
-			else
-			{
-				byte_swap = TRUE;
-				printf( "Byte_swapping reset to TRUE.\n" );
-			}
-
-		}
-/*
-   C[all]: Convert 2 matching 3 sided faces to one 4 sided face
- */
-		else if ( *next =='C' || *next== 'c')
-		{
-			next=next+1;
-			if (*next=='A' || *next== 'a')
-			{
-				//'Call'
-				for (i=0; i<FACE_MAX; i++)
-				{
-					for(j=0; j<ORDER_MAX; j++)
-					{
-						vertex_faceindex[j][i]=-1;
-					}
-				}
-				for (i=0; i<face_num; i++)
-				{
-					for (j=0; j<face_order[i]; j++)
-					{
-						k=face[j][i]; //some edge of this face
-						l=0;
-						while (vertex_faceindex[l][k]!=-1&&vertex_faceindex[l][k]!=i&&l<ORDER_MAX)
-						{
-							l++;
-						}
-						vertex_faceindex[l][k]=i;
-					}
-				}
-				a=0;
-				do
-				{
-					finished=1;
-					for (i=0; i<face_num; i++)
-					{
-						if (face_order[i]!=3)
-						{
-							continue;
-						}
-						l=0;
-						while(vertex_faceindex[l][i]!=-1 && l<10)
-						{
-							if (conv_3_to_4(i,vertex_faceindex[l][i],0,debug ? true : false)==SUCCESS)
-							{
-								finished=0;
-								a++;
-							}
-							l++;
-						}
-						/*
-						   for (j=i+1;j<face_num;j++)
-						   	{
-						   	if (face_order[j]!=3)
-						   		continue;
-						   	if (conv_3_to_4(i,j,0,debug?true:false)==SUCCESS)
-						   		{
-						   		finished=0;
-						   		//i=face_num+1;
-						   		i=i>0?i-1:0;
-						   		a++;
-						   		break;//quit both loops and restart
-						   		}
-						   	}
-						 */
-					}
-
-				}
-				while(!finished);
-				printf("Converted %d faces.\n",a);
-
-			}
-			else
-			{
-
-				printf("Enter first face number (Range 0 to %i): ",face_num-1);
-				scanf("%d",&a);
-				if (a>=0&&a<face_num)
-				{
-					printf("Enter second face number: ");
-					scanf("%d",&b);
-					if (b>=0&&b<face_num)
-					{
-
-						result=conv_3_to_4(a,b,&n,true);
-						if (result==SUCCESS)
-						{
-							printf("Done - %d and %d where converted to one single face %d.\n",a,b,n);
-						}
-						else
-						{
-							printf("Fail - %d and %d could not be converted, they don't match.\n",a,b);
-						}
-					}
-					else
-					{
-						printf("Fail - Invalid second face entered.\n");
-					}
-				}
-				else
-				{
-					printf("Fail - Invalid first face entered.\n");
-				}
-			}
-
-			//recalc normals, (same as 'N' command)
-			for ( iface = 0; iface < face_num; iface++ )
-			{
-				for ( i = 0; i < 3; i++ )
-				{
-					face_normal[i][iface] = 0.0;
-				}
-			}
-
-
-
-			for ( iface = 0; iface < face_num; iface++ )
-			{
-				for ( ivert = 0; ivert < face_order[iface]; ivert++ )
-				{
-					for ( i = 0; i < 3; i++ )
-					{
-						vertex_normal[i][ivert][iface] = 0.0;
-					}
-				}
-			}
-
-			face_area_set( false );
-
-			vertex_normal_set();
-
-			cor3_normal_set();
-
-			face_normal_ave();
-
-			data_report();
-
-
-		}
-/*
-   D: Switch debug option.
- */
-		else if ( *next == 'D' || *next == 'd' )
-		{
-			if ( debug )
-			{
-				debug = 0;
-				printf( "Debug reset to FALSE.\n" );
-			}
-			else
-			{
-				debug = 1;
-				printf( "Debug reset to TRUE.\n" );
-			}
-		}
-/*
-   F: Check a face.
-   Fi Toggle face_ignoresides flag to display both sides of faces
- */
-		else if ( *next == 'f' || *next == 'F' )
-		{
-			next++;
-			if ( *next =='i' || *next=='I')
-			{
-				face_ignoresides=!face_ignoresides;
-				if (face_ignoresides)
-				{
-					printf("\n Now ignoring the face order for output.\n");
-				}
-				else
-				{
-					printf("\n Now considering the face order.\n");
-				}
-			}
-			else
-			{
-				printf( "\n" );
-				if (sscanf(next,"%d", &iface)>0)
-				{
-					face_print(iface);
-				}
-				else
-				{
-					printf( "  Enter a face index between 0 and %d:", face_num-1 );
-					scanf( "%d", &iface );
-					face_print( iface );
-				}
-			}
-		}
-/*
-   M[list|<Id>|conv]: Check a material, list all materials
-   	M allone asks for material number
-   	Mlist lists the names of all materials
-   	Mid, where id is a number, prints the material with the given id
-   	Mconv copies material names to texture names and removes spaces and other problematic characters
-   	Mtex  writes all materials to a texture (64x64pixels, 8x8 pixels per color, tga file)
-   		  also generates matching texture coordinates.
- */
-		else if ( *next == 'm' || *next=='M')
-		{
-			next=next+1;
-			if (*next=='l' || *next=='L')
-			{
-				printf("\n");
-				for (iface=0; iface<material_num; iface++)
-				{
-					material_print(iface);
-					printf("\n");
-				}
-			}
-			else if (*next=='c' || *next=='C')
-			{
-				ConvertMaterialToTexture();
-			}
-			else if (*next=='t'|| *next=='T')
-			{
-				printf("\n");
-				printf("   Enter texture filename (.tga): ");
-				scanf("%s",texture_file_name);
-				texture_num=material_num;
-				for (iface=0; iface<face_num; iface++)
-				{
-					strcpy(texture_name[iface],texture_file_name);
-					face_mat=face_material[iface];
-					if (face_mat>=64)
-					{
-						continue;
-					}        //skip these
-					f3=0.125f;
-					f1=floor(((double)face_mat)/8)*f3; //y coordinate (u)
-					f2=(face_mat%8); //x coordinate (v)
-					f2=f2*f3;
-					f1+=0.06;
-					f2+=0.06;
-					vertex_tex_uv[0][0][iface]=f2;
-					vertex_tex_uv[1][0][iface]=f1;
-
-					vertex_tex_uv[0][1][iface]=f2;
-					vertex_tex_uv[1][1][iface]=f1;
-
-					vertex_tex_uv[0][2][iface]=f2;
-					vertex_tex_uv[1][2][iface]=f1;
-
-					vertex_tex_uv[0][3][iface]=f2;
-					vertex_tex_uv[1][3][iface]=f1;
-					/*
-					   vertex_tex_uv[0][1][iface]=f2+f3;
-					   vertex_tex_uv[1][1][iface]=f1;
-
-					   vertex_tex_uv[0][2][iface]=f2+f3;//f2;
-					   vertex_tex_uv[1][2][iface]=f1+f3;//f1+f3;
-
-					   vertex_tex_uv[0][3][iface]=f2;//f2+f3;
-					   vertex_tex_uv[1][3][iface]=f1+f3;//f1+f3;
-					 */
-				}
-
-				tga_write_materials(texture_file_name);
-				printf("Successfully wrote %i materials.\n",material_num>64 ? 64 : material_num);
-
-			}
-			else if (sscanf(next,"%d",&iface)>0)
-			{
-				printf("\n");
-				material_print(iface);
-			}
-			else
-			{
-				printf("\n");
-				printf("  Enter a material index between 0 and %d:", material_num-1);
-				scanf("%d",&iface);
-				printf("\n");
-				material_print(iface);
-			}
-		}
-/*
-   E: Edge null delete.
- */
-		else if ( *next == 'e' || *next == 'E' )
-		{
-
-			edge_null_delete();
-
-			face_area_set( false );
-
-			vertex_normal_set();
-
-			cor3_normal_set();
-
-			face_normal_ave();
-
-			cor3_range();
-		}
-/*
-   G: Face null delete.
- */
-		else if ( *next == 'g' || *next == 'G' )
-		{
-
-			face_area_set( true );
-
-			face_null_delete();
-
-			vertex_normal_set();
-
-			cor3_normal_set();
-
-			face_normal_ave();
-
-			cor3_range();
-		}
-/*
-   H: Help
- */
-		else if ( *next == 'h' || *next == 'H' )
-		{
-			help();
-		}
-/*
-   I: Print change information.
- */
-		else if ( *next == 'i' || *next == 'I')
-		{
-			news();
-		}
-/*
-   LINES:
-   Convert face information to lines.
- */
-		else if ( *next == 'l' || *next == 'L')
-		{
-
-			if ( face_num > 0 )
-			{
-
-				printf( "\n" );
-				printf( "INTERACT - Note:\n" );
-				printf( "  Face information will be converted\n" );
-				printf( "  to line information.\n" );
-
-				face_to_line();
-
-				if ( line_num > LINE_MAX )
-				{
-
-					printf( "\n" );
-					printf( "INTERACT - Note:\n" );
-					printf( "  Some face information was lost.\n" );
-					printf( "  The maximum number of lines is %d,\n", LINE_MAX );
-					printf( "  but we would need at least %d.\n", line_num );
-
-					line_num = LINE_MAX;
-
-				}
-
-				face_num = 0;
-			}
-			else
-			{
-
-				printf( "\n" );
-				printf( "INTERACT - Note:\n" );
-				printf( "  There were no faces to convert.\n" );
-
-			}
-
-		}
-/*
-   N: Recompute normal vectors.
- */
-		else if ( *next == 'n' || *next == 'N')
-		{
-
-			for ( iface = 0; iface < face_num; iface++ )
-			{
-				for ( i = 0; i < 3; i++ )
-				{
-					face_normal[i][iface] = 0.0;
-				}
-			}
-
-			for ( iface = 0; iface < face_num; iface++ )
-			{
-				for ( ivert = 0; ivert < face_order[iface]; ivert++ )
-				{
-					for ( i = 0; i < 3; i++ )
-					{
-						vertex_normal[i][ivert][iface] = 0.0;
-					}
-				}
-			}
-
-			vertex_normal_set();
-
-			cor3_normal_set();
-
-			face_normal_ave();
-		}
-/*
-   P: Line pruning option
- */
-		else if ( *next == 'p' || *next == 'P' )
-		{
-
-			printf( "\n" );
-			printf( "INTERACT - SET LINE PRUNING OPTION.\n" );
-			printf( "\n" );
-			printf( "  LINE_PRUNE = 0 means no line pruning.\n" );
-			printf( "               nonzero means line pruning.\n" );
-			printf( "\n" );
-			printf( "  Current value is LINE_PRUNE = %d.\n", line_prune );
-			printf( "\n" );
-			printf( "  Enter new value for LINE_PRUNE.\n" );
-
-			if ( fgets( input, LINE_MAX_LEN, stdin ) == NULL )
-			{
-				printf( "  ??? Error trying to read input.\n" );
-			}
-			else
-			{
-				sscanf( input, "%d", &line_prune );
-				printf( "  New value is LINE_PRUNE = %d.\n", line_prune );
-			}
-		}
-/*
-   Q: Quit
- */
-		else if ( *next == 'q' || *next == 'Q' )
-		{
-			printf( "\n" );
-			printf( "INTERACT - Normal end of execution.\n" );
 			return SUCCESS;
 		}
-/*
-   R: Reverse normal vectors.
- */
-		else if ( *next == 'r' || *next == 'R' )
-		{
-
-			for ( icor3 = 0; icor3 < cor3_num; icor3++ )
-			{
-				for ( i = 0; i < 3; i++ )
-				{
-					cor3_normal[i][icor3] = -cor3_normal[i][icor3];
-				}
-			}
-
-			for ( iface = 0; iface < face_num; iface++ )
-			{
-				for ( i = 0; i < 3; i++ )
-				{
-					face_normal[i][iface] = -face_normal[i][iface];
-				}
-			}
-
-			for ( iface = 0; iface < face_num; iface++ )
-			{
-				for ( ivert = 0; ivert < face_order[iface]; ivert++ )
-				{
-					for ( i = 0; i < 3; i++ )
-					{
-						vertex_normal[i][ivert][iface] =
-							-vertex_normal[i][ivert][iface];
-					}
-				}
-			}
-			printf( "\n" );
-			printf( "INTERACT - Note:\n" );
-			printf( "  Reversed node, face and vertex normals.\n" );
-		}
-/*
-   S: Select a few faces, discard the rest.
- */
-		else if ( *next == 's' || *next == 'S' )
-		{
-			face_subset();
-		}
-/*
-   T: Transform the data.
- */
-		else if ( *next == 't' || *next == 'T' )
-		{
-
-			printf( "\n" );
-			printf( "For now, we only offer point scaling.\n" );
-			printf( "Enter X, Y, Z scale factors:\n" );
-
-			scanf( "%f %f %f", &x, &y, &z );
-
-			for ( j = 0; j < cor3_num; j++ )
-			{
-				cor3[0][j] = x * cor3[0][j];
-				cor3[1][j] = y * cor3[1][j];
-				cor3[2][j] = z * cor3[2][j];
-			}
-
-			for ( iface = 0; iface < face_num; iface++ )
-			{
-				for ( i = 0; i < 3; i++ )
-				{
-					face_normal[i][iface] = 0.0;
-				}
-			}
-
-			for ( iface = 0; iface < face_num; iface++ )
-			{
-				for ( ivert = 0; ivert < face_order[iface]; ivert++ )
-				{
-					for ( i = 0; i < 3; i++ )
-					{
-						vertex_normal[i][ivert][iface] = 0.0;
-					}
-				}
-			}
-
-			vertex_normal_set();
-
-			cor3_normal_set();
-
-			face_normal_ave();
-		}
-/*
-   U: Renumber faces, count objects:
- */
-		else if ( *next == 'u' || *next == 'U' )
-		{
-		}
-/*
-   V: Convert polygons to triangles:
- */
-		else if ( *next == 'v' || *next == 'V' )
-		{
-		}
-/*
-   O: Display info about supported formats:
- */
-		else if ( *next == 'o' || *next == 'O')
-		{
-			hello();
-		}
-/*
-   W: Reverse the face node ordering.
- */
-		else if ( *next == 'w' || *next == 'W' )
-		{
-
-			if ( face_num > 0 )
-			{
-
-				for ( iface = 0; iface < face_num; iface++ )
-				{
-
-					m = face_order[iface];
-
-					for ( ivert = 0; ivert < m/2; ivert++ )
-					{
-
-						jvert = m - ivert - 1;
-
-						itemp = face[ivert][iface];
-						face[ivert][iface] = face[jvert][iface];
-						face[jvert][iface] = itemp;
-
-						itemp = vertex_material[ivert][iface];
-						vertex_material[ivert][iface] = vertex_material[jvert][iface];
-						vertex_material[jvert][iface] = itemp;
-
-						for ( i = 0; i < 3; i++ )
-						{
-							temp = vertex_normal[i][ivert][iface];
-							vertex_normal[i][ivert][iface] =
-								vertex_normal[i][jvert][iface];
-							vertex_normal[i][jvert][iface] = temp;
-						}
-					}
-				}
-				printf( "\n" );
-				printf( "INTERACT - Note:\n" );
-				printf( "  Reversed face node ordering.\n" );
-			}
-		}
-/*
-   Command: ???
- */
-		else
-		{
-			printf( "\n" );
-			printf( "INTERACT: Warning!\n" );
-			printf( "  Your command was not recognized.\n" );
-		}
-
-		printf( "\n" );
-		printf( "Enter command (H for help)\n" );
-
+		
 	}
 	return SUCCESS;
 }
