@@ -772,12 +772,6 @@
     <ClCompile Include="quantize__median.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="render__dx5__r1_dx5.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="render__dx5__r1_dx5_texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="render__dx9__render.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1150,18 +1144,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sound\dsound\ds_error.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="video\win32\dx5.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="video\win32\dx5_error.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="video\win32\dx5_mouse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="video\win32\dx5_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="video\win32\dx9.h">

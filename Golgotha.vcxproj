@@ -458,12 +458,6 @@ xcopy /D resource.res "$(OutDir)"</Command>
     <ClCompile Include="quantize__dither_quantize.cpp" />
     <ClCompile Include="quantize__histogram.cpp" />
     <ClCompile Include="quantize__median.cpp" />
-    <ClCompile Include="render__dx5__r1_dx5.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="render__dx5__r1_dx5_texture.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="render__dx9__render.cpp" />
     <ClCompile Include="render__dx9__texture.cpp" />
     <ClCompile Include="render__gtext_load.cpp" />
@@ -600,10 +594,6 @@ xcopy /D resource.res "$(OutDir)"</Command>
     <ClInclude Include="draw_context.h" />
     <ClInclude Include="objs\dropped_bomb.h" />
     <ClInclude Include="sound\dsound\ds_error.h" />
-    <ClInclude Include="video\win32\dx5.h" />
-    <ClInclude Include="video\win32\dx5_error.h" />
-    <ClInclude Include="video\win32\dx5_mouse.h" />
-    <ClInclude Include="video\win32\dx5_util.h" />
     <ClInclude Include="video\win32\dx9.h" />
     <ClInclude Include="video\win32\dx9_error.h" />
     <ClInclude Include="video\win32\dx9_mouse.h" />
