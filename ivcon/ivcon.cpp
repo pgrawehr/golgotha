@@ -248,7 +248,8 @@ int main( int argc, char * * argv )
 		result = interact();
 	}
 
-	return result;
+	int returnCode = result == SUCCESS ? 0 : 1;
+	return returnCode;
 }
 /******************************************************************************/
 
