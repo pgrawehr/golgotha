@@ -93,7 +93,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>ddraw.lib;dinput.lib;dsound.lib;dxguid.lib;wsock32.lib;comctl32.lib;winmm.lib;version.lib;d3d9.lib;dxerr9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ddraw.lib;dinput8.lib;dsound.lib;dxguid.lib;wsock32.lib;comctl32.lib;winmm.lib;version.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <Version>1.2</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -468,9 +468,6 @@ xcopy /D resource.res "$(OutDir)"</Command>
     <ClCompile Include="render__r1_font.cpp" />
     <ClCompile Include="render__r1_res.cpp" />
     <ClCompile Include="render__r1_win.cpp" />
-    <ClCompile Include="render__software__software_dd.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="render__software__draw_line.cpp" />
     <ClCompile Include="render__software__mappers.cpp" />
     <ClCompile Include="render__software__r1_software.cpp" />
@@ -496,20 +493,8 @@ xcopy /D resource.res "$(OutDir)"</Command>
     <ClCompile Include="transport__transport.cpp" />
     <ClCompile Include="video__display.cpp" />
     <ClCompile Include="video__movie_engine.cpp" />
-    <ClCompile Include="video__win32__dd_cursor.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="video__win32__dx5.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="video__win32__dx5_error.cpp" />
-    <ClCompile Include="video__win32__dx5_mouse.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="video__win32__dx5_util.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="video__win32__dx9.cpp" />
+    <ClCompile Include="video__win32__dx9_error.cpp" />
     <ClCompile Include="video__win32__dx9_mouse.cpp" />
     <ClCompile Include="video__win32__dx9_util.cpp" />
     <ClCompile Include="video__win32__dx_cursor.cpp" />

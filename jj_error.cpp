@@ -558,7 +558,7 @@ void TR_DX(HRESULT hResult)
 	if( hResult != DD_OK)
 	{
 		char ach[256];
-		sprintf( ach,"DX Error: %s",GetDirectXStatusString(hResult));
+		sprintf( ach,"DX Error: %s",GetDirectXStatusString1(hResult));
 		OutputDebugString("D_LOG: ");
 		OutputDebugString(ach);
 		OutputDebugString(" \r\n");
@@ -574,7 +574,7 @@ void TR_DX(HRESULT hResult)
 * Purpose:                                                                *
 *—————————————————————————————————————————————————————————————————————————*/
 
-LPSTR GetDirectXStatusString(HRESULT DDStatus)
+LPSTR GetDirectXStatusString1(HRESULT DDStatus)
 {
 	int i = 0;
 
@@ -632,7 +632,7 @@ LPSTR GetDirectXStatusString(HRESULT DDStatus)
 		}
 	}
 	//FAKE: We always use plain ascii character sets here.
-	return (LPSTR) DXGetErrorDescriptionA(DDStatus);
+	return "Unknown error code";
 
 	//return(dxerr_unknown);
 }

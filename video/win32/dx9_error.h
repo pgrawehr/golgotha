@@ -12,20 +12,11 @@
 #include <windows.h>
 #include <ddraw.h>
 
-
-#ifdef _DEBUG
-
+// Debug mode always (we're fast enough)
 #define i4_dx5_check(res) i4_dx9_check_lineinfo(res,__FILE__,__LINE__)
-//i4_bool i4_dx5_check(HRESULT res);
 i4_bool i4_dx9_check_lineinfo(HRESULT res,char * f,int line);
 #define i4_dx9_check(res) i4_dx9_check_lineinfo(res,__FILE__,__LINE__)
 
-#else
-
-#define i4_dx5_check(a) ((a)==(DD_OK))
-#define i4_dx9_check(a) ((a)==(DD_OK))
-
-#endif
 
 
 

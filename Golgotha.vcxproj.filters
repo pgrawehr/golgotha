@@ -877,21 +877,6 @@
     <ClCompile Include="video__movie_engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="video__win32__dd_cursor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="video__win32__dx5.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="video__win32__dx5_error.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="video__win32__dx5_mouse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="video__win32__dx5_util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="video__win32__dx9.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -913,7 +898,7 @@
     <ClCompile Include="window__window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="render__software__software_dd.cpp">
+    <ClCompile Include="video__win32__dx9_error.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

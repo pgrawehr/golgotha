@@ -22,7 +22,7 @@
 /*—————————————————————————————————————————————————————————————————————————*
 * Defines                                                                 *
 *—————————————————————————————————————————————————————————————————————————*/
-#define CHECK_DX(x) {if(FAILED(hResult=(x))){ DUMP_F("%s in %s: %d",GetDirectXStatusString(hResult),__FILE__,__LINE__);} }
+#define CHECK_DX(x) {if(FAILED(hResult=(x))){ DUMP_F("%s (0x%x) in %s: %d",GetDirectXStatusString1(hResult),hResult, __FILE__,__LINE__);} }
 
 /*—————————————————————————————————————————————————————————————————————————*
 *                                                                         *
@@ -50,7 +50,7 @@ void  CloseDebugLogFile( void );
 void  DUMP_O( char * fmt, ... ); // Dump to output device
 void  DUMP_F( char * fmt, ... ); // Dump to file
 void  TRY_DX( HRESULT hResult );
-LPSTR GetDirectXStatusString(HRESULT DDStatus);
+LPSTR GetDirectXStatusString1(HRESULT DDStatus);
 
 /*—————————————————————————————————————————————————————————————————————————*
 * Globals                                                                 *
